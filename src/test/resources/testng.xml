@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+  <test name="Test">
+    <classes>
+      <class name="de.alpharogroup.file.zip.ZipperTest"/>
+      <class name="de.alpharogroup.file.csv.CsvFileUtilsTest"/>
+      <class name="de.alpharogroup.file.search.PathFinderTest"/>
+      <class name="de.alpharogroup.file.FileTestCase"/>
+      <class name="de.alpharogroup.file.zip.ZipTestCase"/>
+      <class name="de.alpharogroup.file.namefilter.SimpleFilenameFilterTest"/>
+      <class name="de.alpharogroup.file.csv.CsvToSqlUtilsTest"/>
+      <class name="de.alpharogroup.file.compare.SimpleCompareFileUtilsTest"/>
+      <class name="de.alpharogroup.file.zip.ZipUtilsTest"/>
+      <class name="de.alpharogroup.file.GeneratorUtilsTest"/>
+      <class name="de.alpharogroup.file.FileUtilsTest"/>
+      <class name="de.alpharogroup.file.compare.CompareFileUtilsTest"/>
+      <class name="de.alpharogroup.file.zip.UnzipperTest"/>
+      <class name="de.alpharogroup.file.search.FileSearchUtilsTest"/>
+      <class name="de.alpharogroup.file.copy.CopyFileUtilsTest"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
