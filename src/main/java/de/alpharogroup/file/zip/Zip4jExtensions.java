@@ -32,9 +32,9 @@ import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 
 /**
- * The Class Zip4jUtils.
+ * The class {@link Zip4jExtensions}.
  */
-public final class Zip4jUtils
+public final class Zip4jExtensions
 {
 
 	/**

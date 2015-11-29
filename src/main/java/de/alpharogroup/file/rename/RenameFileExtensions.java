@@ -34,24 +34,24 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.alpharogroup.file.FileUtils;
-import de.alpharogroup.file.copy.CopyFileUtils;
-import de.alpharogroup.file.delete.DeleteFileUtils;
+import de.alpharogroup.file.FileExtensions;
+import de.alpharogroup.file.copy.CopyFileExtensions;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
-import de.alpharogroup.file.search.FileSearchUtils;
+import de.alpharogroup.file.search.FileSearchExtensions;
 
 /**
- * The Class RenameFileUtils helps you to rename files or directories.
+ * The class {@link RenameFileExtensions} helps you to rename files or directories.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class RenameFileUtils
+public final class RenameFileExtensions
 {
 	/** The Constant LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(RenameFileUtils.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(RenameFileExtensions.class.getName());
 
 	/**
 	 * Returns the filename from the given file with the systemtime.
@@ -150,14 +150,14 @@ public final class RenameFileUtils
 		List<File> notDeletedFiles = null;
 		final String filePath = file.getAbsolutePath();
 		final String suffix[] = { oldSuffix };
-		final List<File> files = FileSearchUtils.findFiles(filePath, suffix);
+		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
 		final int fileCount = files.size();
 		for (int i = 0; i < fileCount; i++)
 		{
 			final File currentFile = files.get(i);
 			try
 			{
-				success = RenameFileUtils.changeFilenameSuffix(currentFile, newSuffix, delete);
+				success = RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete);
 			}
 			catch (final FileDoesNotExistException e)
 			{
@@ -229,10 +229,10 @@ public final class RenameFileUtils
 			final String error = "The " + file + " does not exists.";
 			throw new FileDoesNotExistException(error);
 		}
-		final String fileNamePrefix = FileUtils.getFilenamePrefix(file);
+		final String fileNamePrefix = FileExtensions.getFilenamePrefix(file);
 		final String newFilename = fileNamePrefix + newSuffix;
 		final File file2 = new File(newFilename);
-		final boolean success = RenameFileUtils.renameFile(file, file2, delete);
+		final boolean success = RenameFileExtensions.renameFile(file, file2, delete);
 		return success;
 	}
 
@@ -251,7 +251,7 @@ public final class RenameFileUtils
 		boolean moved = false;
 		try
 		{
-			moved = RenameFileUtils.renameFile(srcFile, destDir, true);
+			moved = RenameFileExtensions.renameFile(srcFile, destDir, true);
 		}
 		catch (final Exception e)
 		{
@@ -291,7 +291,7 @@ public final class RenameFileUtils
 	 */
 	public static boolean moveFile(final File srcFile, final File destDir)
 	{
-		return RenameFileUtils.renameFile(srcFile, destDir, true);
+		return RenameFileExtensions.renameFile(srcFile, destDir, true);
 	}
 
 	/**
@@ -339,7 +339,7 @@ public final class RenameFileUtils
 				System.err.println("Try to copy the content into the new file with the new name.");
 				try
 				{
-					final boolean copied = CopyFileUtils.copyFile(fileToRename, newFileName);
+					final boolean copied = CopyFileExtensions.copyFile(fileToRename, newFileName);
 					if (copied)
 					{
 						System.err.println("Sucessfully copied the old file "
@@ -364,7 +364,7 @@ public final class RenameFileUtils
 				System.err.println("Try to delete the old file " + fileToRename.getName() + ".");
 				try
 				{
-					DeleteFileUtils.delete(fileToRename);
+					DeleteFileExtensions.delete(fileToRename);
 					success = true;
 				}
 				catch (final IOException e)
@@ -405,7 +405,7 @@ public final class RenameFileUtils
 			}
 			return false;
 		}
-		final String fileNameAbsolutPathPrefix = RenameFileUtils
+		final String fileNameAbsolutPathPrefix = RenameFileExtensions
 			.getAbsolutPathWithoutFilename(fileToRename);
 		final StringBuffer sb = new StringBuffer();
 		sb.append(fileNameAbsolutPathPrefix);
@@ -438,7 +438,7 @@ public final class RenameFileUtils
 	/**
 	 * Private constructor.
 	 */
-	private RenameFileUtils()
+	private RenameFileExtensions()
 	{
 		super();
 	}

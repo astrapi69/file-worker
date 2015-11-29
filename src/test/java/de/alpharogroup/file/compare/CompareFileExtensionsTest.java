@@ -35,12 +35,12 @@ import org.testng.annotations.Test;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
-import de.alpharogroup.file.write.WriteFileUtils;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * The Class CompareFileUtilsTest.
+ * The class {@link CompareFileExtensionsTest}.
  */
-public class CompareFileUtilsTest extends FileTestCase
+public class CompareFileExtensionsTest extends FileTestCase
 {
 
 	// @Test
@@ -95,18 +95,18 @@ public class CompareFileUtilsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileUtils.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
 
-		final List<IFileCompareResultBean> found = CompareFileUtils.findEqualFiles(this.testDir);
+		final List<IFileCompareResultBean> found = CompareFileExtensions.findEqualFiles(this.testDir);
 
 		AssertJUnit.assertTrue("found.size() is not equal 1.", found.size() == 1);
 
-		final List<IFileContentResultBean> contentfound = CompareFileUtils
+		final List<IFileContentResultBean> contentfound = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir);
 
 		AssertJUnit.assertTrue("contentfound() is not equal 1.", contentfound.size() == 1);
@@ -130,9 +130,9 @@ public class CompareFileUtilsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 
 		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
 			"testFindFilesRecursive.txt");
@@ -142,17 +142,17 @@ public class CompareFileUtilsTest extends FileTestCase
 
 		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
 
-		WriteFileUtils.string2File(testFile4, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile5, "Its a beautifull evening!!!????");
-		WriteFileUtils.string2File(testFile6, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
 
-		final List<IFileCompareResultBean> found = CompareFileUtils.findEqualFiles(this.testDir,
+		final List<IFileCompareResultBean> found = CompareFileExtensions.findEqualFiles(this.testDir,
 			this.secondTestDir);
 
 		AssertJUnit.assertTrue("found.size() is not equal 3.", found.size() == 2);
 
-		final List<IFileContentResultBean> contentfound = CompareFileUtils
+		final List<IFileContentResultBean> contentfound = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir, this.secondTestDir);
 
 		AssertJUnit.assertTrue("contentfound() is not equal 3.", contentfound.size() == 2);

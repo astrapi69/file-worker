@@ -36,15 +36,15 @@ import de.alpharogroup.file.exceptions.DirectoryHasNoContentException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
-import de.alpharogroup.file.search.FileSearchUtils;
+import de.alpharogroup.file.search.FileSearchExtensions;
 
 /**
- * The Class DeleteFileUtils helps you delete files.
+ * The class {@link DeleteFileExtensions} helps you delete files.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class DeleteFileUtils
+public final class DeleteFileExtensions
 {
 	/**
 	 * Checks the File if it is a directory or if its exists or if it is empty.
@@ -113,7 +113,7 @@ public final class DeleteFileUtils
 	{
 		if (file.isDirectory())
 		{
-			DeleteFileUtils.deleteAllFiles(file);
+			DeleteFileExtensions.deleteAllFiles(file);
 		}
 		else
 		{
@@ -157,7 +157,7 @@ public final class DeleteFileUtils
 				e.printStackTrace();
 			}
 		}
-		DeleteFileUtils.deleteFiles(file);
+		DeleteFileExtensions.deleteFiles(file);
 		if (!file.delete())
 		{
 			error = "Cannot delete the File " + file.getAbsolutePath() + ".";
@@ -183,11 +183,11 @@ public final class DeleteFileUtils
 	{
 		final String filePath = file.getAbsolutePath();
 		final String suffix[] = { theSuffix };
-		final List<File> files = FileSearchUtils.findFiles(filePath, suffix);
+		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
 		final int fileCount = files.size();
 		for (int i = 0; i < fileCount; i++)
 		{
-			DeleteFileUtils.deleteFile(files.get(i));
+			DeleteFileExtensions.deleteFile(files.get(i));
 		}
 	}
 
@@ -221,7 +221,7 @@ public final class DeleteFileUtils
 		{
 			for (final File f : ff)
 			{
-				DeleteFileUtils.delete(f);
+				DeleteFileExtensions.delete(f);
 			}
 		}
 	}
@@ -246,7 +246,7 @@ public final class DeleteFileUtils
 		final FileFilter includeFileFilter) throws FileIsNotADirectoryException, IOException,
 		FileIsSecurityRestrictedException
 	{
-		DeleteFileUtils.deleteFilesWithFileFilter(source, includeFileFilter, null);
+		DeleteFileExtensions.deleteFilesWithFileFilter(source, includeFileFilter, null);
 	}
 
 	/**
@@ -362,7 +362,7 @@ public final class DeleteFileUtils
 		final FilenameFilter includeFilenameFilter) throws FileIsNotADirectoryException,
 		IOException, FileIsSecurityRestrictedException
 	{
-		DeleteFileUtils.deleteFilesWithFilenameFilter(source, includeFilenameFilter, null);
+		DeleteFileExtensions.deleteFilesWithFilenameFilter(source, includeFilenameFilter, null);
 	}
 
 	/**
@@ -462,7 +462,7 @@ public final class DeleteFileUtils
 	/**
 	 * Private constructor.
 	 */
-	private DeleteFileUtils()
+	private DeleteFileExtensions()
 	{
 		super();
 	}

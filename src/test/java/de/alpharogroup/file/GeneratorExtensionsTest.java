@@ -31,15 +31,15 @@ import java.util.List;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.csv.CsvFileUtils;
+import de.alpharogroup.file.csv.CsvFileExtensions;
 
 /**
- * Test class for the class GeneratorUtils.
+ * Test class for the class {@link GeneratorExtensions}.
  * 
  * @version 1.0
  * @author Asterios Raptis
  */
-public class GeneratorUtilsTest extends FileTestCase
+public class GeneratorExtensionsTest extends FileTestCase
 {
 
 	/** The constantlist. */
@@ -71,7 +71,7 @@ public class GeneratorUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.GeneratorUtils#newConstantsFromStringList(List, String, String, boolean)}
+	 * {@link de.alpharogroup.file.GeneratorExtensions#newConstantsFromStringList(List, String, String, boolean)}
 	 * .
 	 * 
 	 * @throws IOException
@@ -80,8 +80,8 @@ public class GeneratorUtilsTest extends FileTestCase
 	@Test
 	public void testCreateConstantsFromStringList() throws IOException
 	{
-		final List<String> cl = CsvFileUtils.readFileToList(constantlist);
-		final List<String> gcl = GeneratorUtils.newConstantsFromStringList(cl, null, "_key", true);
+		final List<String> cl = CsvFileExtensions.readFileToList(constantlist);
+		final List<String> gcl = GeneratorExtensions.newConstantsFromStringList(cl, null, "_key", true);
 		for (final String string : gcl)
 		{
 			System.out.println(string);

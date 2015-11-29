@@ -33,13 +33,13 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.delete.DeleteFileUtils;
-import de.alpharogroup.file.write.WriteFileUtils;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * The Class FileSearchUtilsTest.
+ * The class {@link FileSearchExtensionsTest}.
  */
-public class FileSearchUtilsTest extends FileTestCase
+public class FileSearchExtensionsTest extends FileTestCase
 {
 
 	@Test(enabled = true)
@@ -52,10 +52,10 @@ public class FileSearchUtilsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileUtils.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
 		// this list is kept for clean up...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);
@@ -69,7 +69,7 @@ public class FileSearchUtilsTest extends FileTestCase
 
 		// 2. run the actual method to test
 		final long start = System.currentTimeMillis();
-		final List<File> actual = FileSearchUtils.findAllFiles(this.testDir, ".*txt");
+		final List<File> actual = FileSearchExtensions.findAllFiles(this.testDir, ".*txt");
 		final long end = System.currentTimeMillis();
 		final long executionTime = end - start;
 		System.out.println("execution:" + executionTime);
@@ -80,7 +80,7 @@ public class FileSearchUtilsTest extends FileTestCase
 			AssertJUnit.assertTrue("", actual.contains(file));
 		}
 		// 4. cleanup all files from this test
-		DeleteFileUtils.delete(fileList);
+		DeleteFileExtensions.delete(fileList);
 	}
 
 	@Test(enabled = true)
@@ -93,10 +93,10 @@ public class FileSearchUtilsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileUtils.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
 		// this list is kept for clean up...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);
@@ -109,14 +109,14 @@ public class FileSearchUtilsTest extends FileTestCase
 		expected.add(testFile4);
 
 		// 2. run the actual method to test
-		List<File> actual = FileSearchUtils.findFilesWithFilter(this.testDir, ".txt");
+		List<File> actual = FileSearchExtensions.findFilesWithFilter(this.testDir, ".txt");
 		// 3. assert that expected with actual match
 		AssertJUnit.assertTrue("", expected.size() == actual.size());
 		for (final File file : expected)
 		{
 			AssertJUnit.assertTrue("", actual.contains(file));
 		}
-		actual = FileSearchUtils.findFilesWithFilter(this.testDir, "tft", "cvs");
+		actual = FileSearchExtensions.findFilesWithFilter(this.testDir, "tft", "cvs");
 		expected.clear();
 		expected.add(testFile2);
 		expected.add(testFile3);
@@ -126,7 +126,7 @@ public class FileSearchUtilsTest extends FileTestCase
 			AssertJUnit.assertTrue("", actual.contains(file));
 		}
 		// 4. cleanup all files from this test
-		DeleteFileUtils.delete(fileList);
+		DeleteFileExtensions.delete(fileList);
 	}
 
 }

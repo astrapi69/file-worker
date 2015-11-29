@@ -36,20 +36,20 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.FileUtils;
-import de.alpharogroup.file.create.CreateFileUtils;
-import de.alpharogroup.file.delete.DeleteFileUtils;
+import de.alpharogroup.file.FileExtensions;
+import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.read.ReadFileUtils;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
- * Test class for the class CsvFileUtils.
+ * Test class for the class {@link CsvFileExtensions}.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public class CsvFileUtilsTest
+public class CsvFileExtensionsTest
 {
 
 	/** The test resources. */
@@ -67,14 +67,14 @@ public class CsvFileUtilsTest
 	protected void setUp() throws Exception
 	{
 		// Get the absolut path from the current project.
-		final String absolutePath = FileUtils.getCurrentAbsolutPathWithoutDotAndSlash();
+		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		final File projectPath = new File(absolutePath);
 		AssertJUnit.assertTrue("The directory " + projectPath.getAbsolutePath()
 			+ " should be created.", projectPath.exists());
 		this.testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!this.testResources.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(this.testResources);
+			final boolean created = CreateFileExtensions.newDirectory(this.testResources);
 			AssertJUnit.assertTrue("The directory " + this.testResources.getAbsolutePath()
 				+ " should be created.", created);
 		}
@@ -98,14 +98,14 @@ public class CsvFileUtilsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#formatKommaSeperatedFileToList(java.io.File, java.lang.String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#formatKommaSeperatedFileToList(java.io.File, java.lang.String)}
 	 *             .
 	 */
 	@Test
 	public void testFormatKommaSeperatedFileToList() throws IOException
 	{
 		final File input = new File(resources, "testFormatKommaSeperatedFileToList.dat");
-		final List<String> testdata = CsvFileUtils.formatKommaSeperatedFileToList(input, null);
+		final List<String> testdata = CsvFileExtensions.formatKommaSeperatedFileToList(input, null);
 		final List<String> expected = new ArrayList<>();
 		expected.add("test1");
 		expected.add("test2");
@@ -149,7 +149,7 @@ public class CsvFileUtilsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#formatToCSV(java.io.File, java.io.File, java.lang.String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#formatToCSV(java.io.File, java.io.File, java.lang.String)}
 	 *             .
 	 */
 	@Test
@@ -157,7 +157,7 @@ public class CsvFileUtilsTest
 	{
 		final File testInputFile = new File(resources, "testFormatToCSVinput.lst");
 		final File testOutputFile = new File(this.testResources, "testFormatToCSVoutput.csf");
-		CsvFileUtils.formatToCSV(testInputFile, testOutputFile, null);
+		CsvFileExtensions.formatToCSV(testInputFile, testOutputFile, null);
 		final List<String> expected = new ArrayList<>();
 		expected.add("test1");
 		expected.add("test2");
@@ -175,7 +175,7 @@ public class CsvFileUtilsTest
 		expected.add("sim");
 		expected.add("sala");
 		expected.add("bim");
-		final List<String> testList = CsvFileUtils.formatKommaSeperatedFileToList(testOutputFile,
+		final List<String> testList = CsvFileExtensions.formatKommaSeperatedFileToList(testOutputFile,
 			null);
 		final boolean result = expected.equals(testList);
 		AssertJUnit.assertTrue("", result);
@@ -192,11 +192,11 @@ public class CsvFileUtilsTest
 	{
 		final File testFile = new File(this.testResources, "resources");
 		final File file = new File(testFile, "testSortData.lst");
-		final List<String> list = ReadFileUtils.readLinesInList(file);
+		final List<String> list = ReadFileExtensions.readLinesInList(file);
 		for (final String string2 : list)
 		{
 			final String string = string2;
-			final String[] data = CsvFileUtils.getDataFromLine(string, ",");
+			final String[] data = CsvFileExtensions.getDataFromLine(string, ",");
 			System.out.println(data);
 
 		}
@@ -207,7 +207,7 @@ public class CsvFileUtilsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#readDataFromCVSFileToList(java.io.File, int, boolean, java.lang.String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#readDataFromCVSFileToList(java.io.File, int, boolean, java.lang.String)}
 	 *             .
 	 */
 	@Test
@@ -216,7 +216,7 @@ public class CsvFileUtilsTest
 		final File res = new File(this.testResources, "resources");
 		final File input = new File(res, "testReadDataFromCVSFileToList.csv");
 		System.out.println(input.getAbsolutePath());
-		final List<String> output = CsvFileUtils.readDataFromCVSFileToList(input, 1, true, "UTF-8");
+		final List<String> output = CsvFileExtensions.readDataFromCVSFileToList(input, 1, true, "UTF-8");
 		final boolean result = output.size() == 5;
 		AssertJUnit.assertTrue("", result);
 	}
@@ -226,7 +226,7 @@ public class CsvFileUtilsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#readFilelistToProperties(File)} .
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#readFilelistToProperties(File)} .
 	 */
 	@Test
 	public void testReadFilelistToProperties() throws IOException
@@ -239,7 +239,7 @@ public class CsvFileUtilsTest
 			expectedProperties.put(i + "", expected[i]);
 		}
 		final File testFile = new File(resources, "testReadKommaSeperatedFileToProperties.lst");
-		final Properties testProperties = CsvFileUtils.readFilelistToProperties(testFile);
+		final Properties testProperties = CsvFileExtensions.readFilelistToProperties(testFile);
 		final boolean result = expectedProperties.equals(testProperties);
 		AssertJUnit.assertTrue("", result);
 	}
@@ -249,7 +249,7 @@ public class CsvFileUtilsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#readFileToList(java.io.File, java.lang.String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#readFileToList(java.io.File, java.lang.String)}
 	 *             .
 	 */
 	@Test
@@ -266,7 +266,7 @@ public class CsvFileUtilsTest
 		expected.add("you");
 		expected.add("are");
 		final File testFileList = new File(resources, "testReadFileToList.dat");
-		final List<String> fileList = CsvFileUtils.readFileToList(testFileList);
+		final List<String> fileList = CsvFileExtensions.readFileToList(testFileList);
 		boolean result = expected.size() == fileList.size();
 		AssertJUnit.assertTrue(result);
 		result = expected.equals(fileList);
@@ -278,7 +278,7 @@ public class CsvFileUtilsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#readLinesInList(java.io.File, java.lang.String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#readLinesInList(java.io.File, java.lang.String)}
 	 *             .
 	 */
 	@Test
@@ -302,7 +302,7 @@ public class CsvFileUtilsTest
 		expected.add("sala");
 		expected.add("bim");
 		final File testFile = new File(resources, "testReadLinesInList.lst");
-		final List<String> testList = CsvFileUtils.readLinesInList(testFile, null);
+		final List<String> testList = CsvFileExtensions.readLinesInList(testFile, null);
 		final boolean result = expected.equals(testList);
 		AssertJUnit.assertTrue("", result);
 
@@ -315,7 +315,7 @@ public class CsvFileUtilsTest
 	 *             the file not found exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#sortData(java.io.File, java.lang.String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#sortData(java.io.File, java.lang.String)}
 	 *             .
 	 */
 	@Test
@@ -324,7 +324,7 @@ public class CsvFileUtilsTest
 		final String[] expected = { "and", "bar", "bim", "bla", "fasel", "foo", "on", "sala",
 				"sim", "so", "test1", "test2", "test3", "test4", "test5", "test6" };
 		final File testFile = new File(resources, "testSortData.lst");
-		final String[] sortedData = CsvFileUtils.sortData(testFile, null);
+		final String[] sortedData = CsvFileExtensions.sortData(testFile, null);
 		for (int i = 0; i < sortedData.length; i++)
 		{
 			final boolean result = expected[i].equals(sortedData[i]);
@@ -339,7 +339,7 @@ public class CsvFileUtilsTest
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
 	 *             the file does not exist exception
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#storeFilelistToProperties(File, File, String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#storeFilelistToProperties(File, File, String)}
 	 *             .
 	 */
 	@Test
@@ -355,14 +355,14 @@ public class CsvFileUtilsTest
 		final File testFileInput = new File(this.resources, "testStoreFilelistToProperties.lst");
 		final File testFileOutput = new File(this.resources,
 			"testStoreFilelistToProperties.properties");
-		CsvFileUtils.storeFilelistToProperties(testFileOutput, testFileInput, "Test comment.");
+		CsvFileExtensions.storeFilelistToProperties(testFileOutput, testFileInput, "Test comment.");
 		final Properties testProperties = new Properties();
-		testProperties.load(StreamUtils.getInputStream(testFileOutput, true));
+		testProperties.load(StreamExtensions.getInputStream(testFileOutput, true));
 		final boolean result = expectedProperties.equals(testProperties);
 		AssertJUnit.assertTrue("", result);
 		try
 		{
-			DeleteFileUtils.delete(testFileOutput);
+			DeleteFileExtensions.delete(testFileOutput);
 		}
 		catch (final IOException e)
 		{
@@ -373,7 +373,7 @@ public class CsvFileUtilsTest
 	/**
 	 * Test method for.
 	 *
-	 * {@link de.alpharogroup.file.csv.CsvFileUtils#writeLines(java.io.File, java.util.Set, java.lang.String)}
+	 * {@link de.alpharogroup.file.csv.CsvFileExtensions#writeLines(java.io.File, java.util.Set, java.lang.String)}
 	 * .
 	 */
 	@Test
@@ -389,7 +389,7 @@ public class CsvFileUtilsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link de.alpharogroup.file.csv.CsvFileUtils#writeLinesToFile(java.util.Collection, java.io.File, java.lang.String)}
+	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#writeLinesToFile(java.util.Collection, java.io.File, java.lang.String)}
 	 *             .
 	 */
 	@Test
@@ -413,8 +413,8 @@ public class CsvFileUtilsTest
 		expected.add("sala");
 		expected.add("bim");
 		final File testFile = new File(this.testResources, "testWriteLinesToFile.lst");
-		CsvFileUtils.writeLinesToFile(expected, testFile, null);
-		final List<String> testList = CsvFileUtils.readLinesInList(testFile, null);
+		CsvFileExtensions.writeLinesToFile(expected, testFile, null);
+		final List<String> testList = CsvFileExtensions.readLinesInList(testFile, null);
 		final boolean result = expected.equals(testList);
 		AssertJUnit.assertTrue("", result);
 	}

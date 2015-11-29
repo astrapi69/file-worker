@@ -38,20 +38,20 @@ import java.util.zip.Checksum;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 
-import de.alpharogroup.file.read.ReadFileUtils;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class ChecksumUtils is a utility class for computing checksum from files and byte arrays.
+ * The class {@link ChecksumExtensions} is a utility class for computing checksum from files and byte arrays.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class ChecksumUtils
+public final class ChecksumExtensions
 {
 
 	/** The LOGGER. */
-	protected static final Logger LOGGER = Logger.getLogger(ChecksumUtils.class.getName());
+	protected static final Logger LOGGER = Logger.getLogger(ChecksumExtensions.class.getName());
 
 
 	/**
@@ -255,7 +255,7 @@ public final class ChecksumUtils
 			checksum = cis.getChecksum().getValue();
 		}
 		checksum = cis.getChecksum().getValue();
-		StreamUtils.closeInputStream(cis);
+		StreamExtensions.closeInputStream(cis);
 		return checksum;
 	}
 
@@ -275,7 +275,7 @@ public final class ChecksumUtils
 	public static String getChecksum(final File file, final String algorithm)
 		throws NoSuchAlgorithmException
 	{
-		return getChecksum(ReadFileUtils.toByteArray(file), algorithm);
+		return getChecksum(ReadFileExtensions.toByteArray(file), algorithm);
 	}
 
 	/**
@@ -302,7 +302,7 @@ public final class ChecksumUtils
 	 */
 	public static long getCheckSumAdler32(final File file)
 	{
-		return getCheckSumAdler32(ReadFileUtils.toByteArray(file));
+		return getCheckSumAdler32(ReadFileExtensions.toByteArray(file));
 	}
 
 	/**
@@ -329,7 +329,7 @@ public final class ChecksumUtils
 	 */
 	public static long getCheckSumCRC32(final File file)
 	{
-		return getCheckSumCRC32(ReadFileUtils.toByteArray(file));
+		return getCheckSumCRC32(ReadFileExtensions.toByteArray(file));
 	}
 
 	/**
@@ -458,7 +458,7 @@ public final class ChecksumUtils
 			checksum = getChecksum(new File(args[0]), false);
 			System.out.println("Adler32 checksum:" + checksum);
 
-			final byte[] ba = ReadFileUtils.readFileToBytearray(pom);
+			final byte[] ba = ReadFileExtensions.readFileToBytearray(pom);
 
 			checkWithByteArray(ba);
 
@@ -469,7 +469,7 @@ public final class ChecksumUtils
 	/**
 	 * Private constructor.
 	 */
-	private ChecksumUtils()
+	private ChecksumExtensions()
 	{
 	}
 

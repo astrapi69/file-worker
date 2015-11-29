@@ -40,16 +40,16 @@ import java.util.zip.ZipOutputStream;
 
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.search.FileSearchUtils;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.file.search.FileSearchExtensions;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class ZipUtils provides functionality for ziping and unzipping files.
+ * The class {@link ZipExtensions} provides functionality for ziping and unzipping files.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class ZipUtils
+public final class ZipExtensions
 {
 
 	/**
@@ -120,11 +120,11 @@ public final class ZipUtils
 		}
 		finally
 		{
-			StreamUtils.closeInputStream(bis);
-			StreamUtils.closeInputStream(is);
+			StreamExtensions.closeInputStream(bis);
+			StreamExtensions.closeInputStream(is);
 
-			StreamUtils.closeOutputStream(fos);
-			StreamUtils.closeOutputStream(bos);
+			StreamExtensions.closeOutputStream(fos);
+			StreamExtensions.closeOutputStream(bos);
 		}
 	}
 
@@ -263,8 +263,8 @@ public final class ZipUtils
 		}
 		finally
 		{
-			StreamUtils.closeOutputStream(fos);
-			StreamUtils.closeOutputStream(zos);
+			StreamExtensions.closeOutputStream(fos);
+			StreamExtensions.closeOutputStream(zos);
 		}
 	}
 
@@ -292,7 +292,7 @@ public final class ZipUtils
 			if (null != fileFilter)
 			{
 				final File[] tmpfList = file.listFiles(fileFilter);
-				final List<File> foundedDirs = FileSearchUtils.listDirs(file);
+				final List<File> foundedDirs = FileSearchExtensions.listDirs(file);
 				if (0 < foundedDirs.size())
 				{
 					final List<File> tmp = Arrays.asList(tmpfList);
@@ -325,7 +325,7 @@ public final class ZipUtils
 	/**
 	 * Private constructor.
 	 */
-	private ZipUtils()
+	private ZipExtensions()
 	{
 		super();
 	}

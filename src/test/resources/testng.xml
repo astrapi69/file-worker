@@ -4,20 +4,20 @@
   <test name="Test">
     <classes>
       <class name="de.alpharogroup.file.zip.ZipperTest"/>
-      <class name="de.alpharogroup.file.csv.CsvFileUtilsTest"/>
+      <class name="de.alpharogroup.file.csv.CsvFileExtensionsTest"/>
       <class name="de.alpharogroup.file.search.PathFinderTest"/>
       <class name="de.alpharogroup.file.FileTestCase"/>
       <class name="de.alpharogroup.file.zip.ZipTestCase"/>
       <class name="de.alpharogroup.file.namefilter.SimpleFilenameFilterTest"/>
-      <class name="de.alpharogroup.file.csv.CsvToSqlUtilsTest"/>
-      <class name="de.alpharogroup.file.compare.SimpleCompareFileUtilsTest"/>
-      <class name="de.alpharogroup.file.zip.ZipUtilsTest"/>
-      <class name="de.alpharogroup.file.GeneratorUtilsTest"/>
-      <class name="de.alpharogroup.file.FileUtilsTest"/>
-      <class name="de.alpharogroup.file.compare.CompareFileUtilsTest"/>
+      <class name="de.alpharogroup.file.csv.CsvToSqlExtensionsTest"/>
+      <class name="de.alpharogroup.file.compare.SimpleCompareFileExtensionsTest"/>
+      <class name="de.alpharogroup.file.zip.ZipExtensionsTest"/>
+      <class name="de.alpharogroup.file.GeneratorExtensionsTest"/>
+      <class name="de.alpharogroup.file.FileExtensionsTest"/>
+      <class name="de.alpharogroup.file.compare.CompareFileExtensionsTest"/>
       <class name="de.alpharogroup.file.zip.UnzipperTest"/>
-      <class name="de.alpharogroup.file.search.FileSearchUtilsTest"/>
-      <class name="de.alpharogroup.file.copy.CopyFileUtilsTest"/>
+      <class name="de.alpharogroup.file.search.FileSearchExtensionsTest"/>
+      <class name="de.alpharogroup.file.copy.CopyFileExtensionsTest"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

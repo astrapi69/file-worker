@@ -33,16 +33,16 @@ import org.apache.log4j.Logger;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 
 /**
- * The Class CreateFileUtils helps you to create files or directories.
+ * The class {@link CreateFileExtensions} helps you to create files or directories.
  *
  * @author Asterios Raptis
  * @version 1.0
  */
-public final class CreateFileUtils
+public final class CreateFileExtensions
 {
 
 	/** The Constant logger. */
-	private static final Logger logger = Logger.getLogger(CreateFileUtils.class.getName());
+	private static final Logger logger = Logger.getLogger(CreateFileExtensions.class.getName());
 
 	/**
 	 * Creates the directories.
@@ -61,7 +61,7 @@ public final class CreateFileUtils
 		boolean created = false;
 		for (final File dir : directories)
 		{
-			created = CreateFileUtils.newDirectory(dir);
+			created = CreateFileExtensions.newDirectory(dir);
 		}
 		return created;
 
@@ -80,7 +80,7 @@ public final class CreateFileUtils
 		boolean created = false;
 		for (final File dir : directories)
 		{
-			created = CreateFileUtils.newDirectoryQuietly(dir);
+			created = CreateFileExtensions.newDirectoryQuietly(dir);
 		}
 		return created;
 	}
@@ -201,7 +201,7 @@ public final class CreateFileUtils
 		boolean created = false;
 		for (final File file : files)
 		{
-			created = CreateFileUtils.newFile(file);
+			created = CreateFileExtensions.newFile(file);
 		}
 		return created;
 	}
@@ -227,7 +227,7 @@ public final class CreateFileUtils
 	/**
 	 * Private constructor.
 	 */
-	private CreateFileUtils()
+	private CreateFileExtensions()
 	{
 		super();
 	}

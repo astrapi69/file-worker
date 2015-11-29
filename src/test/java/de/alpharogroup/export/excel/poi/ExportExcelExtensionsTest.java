@@ -38,12 +38,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.delete.DeleteFileUtils;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.io.StreamExtensions;
 
 
-public class ExportExcelUtilsTest
+public class ExportExcelExtensionsTest
 {
 
 	final String twoDimArray[][] = { { "1", "a", "!" }, { "2", "b", "?" }, { "3", "c", "%" } };
@@ -81,7 +81,7 @@ public class ExportExcelUtilsTest
 
 		try
 		{
-			final OutputStream outputStream = StreamUtils.getOutputStream(emptyWorkbook);
+			final OutputStream outputStream = StreamExtensions.getOutputStream(emptyWorkbook);
 			workbook.write(outputStream);
 			outputStream.close();
 		}
@@ -109,7 +109,7 @@ public class ExportExcelUtilsTest
 				}
 			}
 		}
-		DeleteFileUtils.delete(emptyWorkbook);
+		DeleteFileExtensions.delete(emptyWorkbook);
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class ExportExcelUtilsTest
 				}
 			}
 		}
-		DeleteFileUtils.delete(emptyWorkbook);
+		DeleteFileExtensions.delete(emptyWorkbook);
 	}
 
 	@Test

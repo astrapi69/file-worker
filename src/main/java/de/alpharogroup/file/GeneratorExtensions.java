@@ -28,9 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Class GeneratorUtils.
+ * The class {@link GeneratorExtensions}.
  */
-public final class GeneratorUtils
+public final class GeneratorExtensions
 {
 	/**
 	 * Creates a String list with the String constants from the given String list. For instance:
@@ -134,7 +134,7 @@ public final class GeneratorUtils
 	/**
 	 * Private constructor.
 	 */
-	private GeneratorUtils()
+	private GeneratorExtensions()
 	{
 		super();
 	}

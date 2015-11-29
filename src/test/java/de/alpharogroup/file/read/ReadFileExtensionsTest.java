@@ -31,19 +31,19 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.write.WriteFileUtils;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
-public class ReadFileUtilsTest extends FileTestCase
+public class ReadFileExtensionsTest extends FileTestCase
 {
 
 	@Test
 	public void testReadFromFileFile() throws IOException
 	{
 		final File source = new File(this.test.getAbsoluteFile(), "testReadFileInput.txt");
-		final String sourceContent = ReadFileUtils.readFromFile(source);
+		final String sourceContent = ReadFileExtensions.readFromFile(source);
 		final File output = new File(this.test.getAbsoluteFile(), "testReadFileOutput.txt");
-		WriteFileUtils.string2File(output, sourceContent);
-		final String outputContent = ReadFileUtils.readFromFile(output);
+		WriteFileExtensions.string2File(output, sourceContent);
+		final String outputContent = ReadFileExtensions.readFromFile(output);
 		AssertJUnit.assertEquals(sourceContent, outputContent);
 
 	}

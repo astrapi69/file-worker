@@ -33,21 +33,21 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.alpharogroup.file.FileUtils;
+import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.checksum.Algorithm;
-import de.alpharogroup.file.checksum.ChecksumUtils;
+import de.alpharogroup.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
-import de.alpharogroup.file.search.FileSearchUtils;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.file.search.FileSearchExtensions;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class CompareFileUtils helps you to compare files.
+ * The class {@link CompareFileExtensions} helps you to compare files.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class CompareFileUtils
+public final class CompareFileExtensions
 {
 
 
@@ -90,8 +90,8 @@ public final class CompareFileUtils
 		if (!ignoreExtensionEquality)
 		{
 			// check the file extension...
-			final String sourceFileExtension = FileUtils.getFilenameSuffix(source);
-			final String compareFileExtension = FileUtils.getFilenameSuffix(compare);
+			final String sourceFileExtension = FileExtensions.getFilenameSuffix(source);
+			final String compareFileExtension = FileExtensions.getFilenameSuffix(compare);
 
 			final boolean extensionEquality = compareFileExtension
 				.equalsIgnoreCase(sourceFileExtension);
@@ -127,8 +127,8 @@ public final class CompareFileUtils
 		if (!ignoreNameEquality)
 		{
 			// check the filename...
-			final String sourceFilename = FileUtils.getFilenameWithoutExtension(source);
-			final String compareFilename = FileUtils.getFilenameWithoutExtension(compare);
+			final String sourceFilename = FileExtensions.getFilenameWithoutExtension(source);
+			final String compareFilename = FileExtensions.getFilenameWithoutExtension(compare);
 			final boolean nameEquality = compareFilename.equalsIgnoreCase(sourceFilename);
 			fileCompareResultBean.setNameEquality(nameEquality);
 		}
@@ -171,9 +171,9 @@ public final class CompareFileUtils
 			boolean contentEquality;
 			try
 			{
-				final String sourceChecksum = ChecksumUtils.getChecksum(source,
+				final String sourceChecksum = ChecksumExtensions.getChecksum(source,
 					Algorithm.SHA_512.getAlgorithm());
-				final String compareChecksum = ChecksumUtils.getChecksum(compare,
+				final String compareChecksum = ChecksumExtensions.getChecksum(compare,
 					Algorithm.SHA_512.getAlgorithm());
 				contentEquality = sourceChecksum.equals(compareChecksum);
 				fileContentResultBean.setContentEquality(contentEquality);
@@ -181,7 +181,7 @@ public final class CompareFileUtils
 			catch (final NoSuchAlgorithmException e)
 			{
 				// if the algorithm is not supported check it with CRC32.
-				contentEquality = ChecksumUtils.getCheckSumCRC32(source) == ChecksumUtils
+				contentEquality = ChecksumExtensions.getCheckSumCRC32(source) == ChecksumExtensions
 					.getCheckSumCRC32(compare);
 				fileContentResultBean.setContentEquality(contentEquality);
 			}
@@ -217,11 +217,11 @@ public final class CompareFileUtils
 			InputStream compareReader = null;
 			try
 			{
-				sourceReader = StreamUtils.getInputStream(sourceFile);
-				compareReader = StreamUtils.getInputStream(fileToCompare);
+				sourceReader = StreamExtensions.getInputStream(sourceFile);
+				compareReader = StreamExtensions.getInputStream(fileToCompare);
 
-				final byte[] source = StreamUtils.getByteArray(sourceReader);
-				final byte[] compare = StreamUtils.getByteArray(compareReader);
+				final byte[] source = StreamExtensions.getByteArray(sourceReader);
+				final byte[] compare = StreamExtensions.getByteArray(compareReader);
 
 				for (int i = 0; 0 < source.length; i++)
 				{
@@ -242,8 +242,8 @@ public final class CompareFileUtils
 			}
 			finally
 			{
-				StreamUtils.closeInputStream(sourceReader);
-				StreamUtils.closeInputStream(compareReader);
+				StreamExtensions.closeInputStream(sourceReader);
+				StreamExtensions.closeInputStream(compareReader);
 			}
 		}
 		fileContentResultBean.setContentEquality(contentEquality);
@@ -275,8 +275,8 @@ public final class CompareFileUtils
 			BufferedReader compareReader = null;
 			try
 			{
-				sourceReader = (BufferedReader)StreamUtils.getReader(sourceFile);
-				compareReader = (BufferedReader)StreamUtils.getReader(fileToCompare);
+				sourceReader = (BufferedReader)StreamExtensions.getReader(sourceFile);
+				compareReader = (BufferedReader)StreamExtensions.getReader(fileToCompare);
 				String sourceLine;
 				String compareLine;
 
@@ -300,8 +300,8 @@ public final class CompareFileUtils
 			}
 			finally
 			{
-				StreamUtils.closeReader(sourceReader);
-				StreamUtils.closeReader(compareReader);
+				StreamExtensions.closeReader(sourceReader);
+				StreamExtensions.closeReader(compareReader);
 			}
 		}
 		fileContentResultBean.setContentEquality(contentEquality);
@@ -387,8 +387,8 @@ public final class CompareFileUtils
 			BufferedReader compareReader = null;
 			try
 			{
-				sourceReader = (BufferedReader)StreamUtils.getReader(source);
-				compareReader = (BufferedReader)StreamUtils.getReader(compare);
+				sourceReader = (BufferedReader)StreamExtensions.getReader(source);
+				compareReader = (BufferedReader)StreamExtensions.getReader(compare);
 				String sourceLine;
 				String compareLine;
 
@@ -412,8 +412,8 @@ public final class CompareFileUtils
 			}
 			finally
 			{
-				StreamUtils.closeReader(sourceReader);
-				StreamUtils.closeReader(compareReader);
+				StreamExtensions.closeReader(sourceReader);
+				StreamExtensions.closeReader(compareReader);
 			}
 		}
 		return equal;
@@ -507,7 +507,7 @@ public final class CompareFileUtils
 	 */
 	public static List<IFileCompareResultBean> findEqualFiles(final File dirToSearch)
 	{
-		final List<File> allFiles = FileSearchUtils.findFilesRecursive(dirToSearch, "*");
+		final List<File> allFiles = FileSearchExtensions.findFilesRecursive(dirToSearch, "*");
 		final List<IFileCompareResultBean> equalFiles = new ArrayList<>();
 		for (int i = 0; i < allFiles.size(); i++)
 		{
@@ -518,9 +518,9 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileCompareResultBean compareResultBean = CompareFileUtils
+				final IFileCompareResultBean compareResultBean = CompareFileExtensions
 					.simpleCompareFiles(toCompare, file);
-				final boolean equal = CompareFileUtils.validateEquality(compareResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(compareResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(compareResultBean))
@@ -556,7 +556,7 @@ public final class CompareFileUtils
 		final boolean ignoreLengthEquality, final boolean ignoreLastModified,
 		final boolean ignoreNameEquality)
 	{
-		final List<File> allFiles = FileSearchUtils.findFilesRecursive(dirToSearch, "*");
+		final List<File> allFiles = FileSearchExtensions.findFilesRecursive(dirToSearch, "*");
 		final List<IFileCompareResultBean> equalFiles = new ArrayList<IFileCompareResultBean>();
 		for (int i = 0; i < allFiles.size(); i++)
 		{
@@ -568,10 +568,10 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileCompareResultBean compareResultBean = CompareFileUtils.compareFiles(
+				final IFileCompareResultBean compareResultBean = CompareFileExtensions.compareFiles(
 					toCompare, file, ignoreAbsolutePathEquality, ignoreExtensionEquality,
 					ignoreLengthEquality, ignoreLastModified, ignoreNameEquality);
-				final boolean equal = CompareFileUtils.validateEquality(compareResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(compareResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(compareResultBean))
@@ -595,8 +595,8 @@ public final class CompareFileUtils
 	 */
 	public static List<IFileCompareResultBean> findEqualFiles(final File source, final File compare)
 	{
-		final List<File> allSourceFiles = FileSearchUtils.findFilesRecursive(source, "*");
-		final List<File> allCompareFiles = FileSearchUtils.findFilesRecursive(compare, "*");
+		final List<File> allSourceFiles = FileSearchExtensions.findFilesRecursive(source, "*");
+		final List<File> allCompareFiles = FileSearchExtensions.findFilesRecursive(compare, "*");
 		final List<IFileCompareResultBean> equalFiles = new ArrayList<IFileCompareResultBean>();
 		for (int i = 0; i < allSourceFiles.size(); i++)
 		{
@@ -608,9 +608,9 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileCompareResultBean compareResultBean = CompareFileUtils
+				final IFileCompareResultBean compareResultBean = CompareFileExtensions
 					.simpleCompareFiles(toCompare, file);
-				final boolean equal = CompareFileUtils.validateEquality(compareResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(compareResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(compareResultBean))
@@ -647,8 +647,8 @@ public final class CompareFileUtils
 		final boolean ignoreExtensionEquality, final boolean ignoreLengthEquality,
 		final boolean ignoreLastModified, final boolean ignoreNameEquality)
 	{
-		final List<File> allSourceFiles = FileSearchUtils.findFilesRecursive(source, "*");
-		final List<File> allCompareFiles = FileSearchUtils.findFilesRecursive(compare, "*");
+		final List<File> allSourceFiles = FileSearchExtensions.findFilesRecursive(source, "*");
+		final List<File> allCompareFiles = FileSearchExtensions.findFilesRecursive(compare, "*");
 		final List<IFileCompareResultBean> equalFiles = new ArrayList<IFileCompareResultBean>();
 		for (int i = 0; i < allSourceFiles.size(); i++)
 		{
@@ -660,10 +660,10 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileCompareResultBean compareResultBean = CompareFileUtils.compareFiles(
+				final IFileCompareResultBean compareResultBean = CompareFileExtensions.compareFiles(
 					toCompare, file, ignoreAbsolutePathEquality, ignoreExtensionEquality,
 					ignoreLengthEquality, ignoreLastModified, ignoreNameEquality);
-				final boolean equal = CompareFileUtils.validateEquality(compareResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(compareResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(compareResultBean))
@@ -687,7 +687,7 @@ public final class CompareFileUtils
 	{
 		final List<IFileContentResultBean> equalFiles = new ArrayList<IFileContentResultBean>();
 
-		final List<File> allFiles = FileSearchUtils.findFilesRecursive(dirToSearch, "*");
+		final List<File> allFiles = FileSearchExtensions.findFilesRecursive(dirToSearch, "*");
 
 		for (int i = 0; i < allFiles.size(); i++)
 		{
@@ -699,9 +699,9 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileContentResultBean contentResultBean = CompareFileUtils.compareFiles(
+				final IFileContentResultBean contentResultBean = CompareFileExtensions.compareFiles(
 					toCompare, file);
-				final boolean equal = CompareFileUtils.validateEquality(contentResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(contentResultBean))
@@ -742,7 +742,7 @@ public final class CompareFileUtils
 	{
 		final List<IFileContentResultBean> equalFiles = new ArrayList<IFileContentResultBean>();
 
-		final List<File> allFiles = FileSearchUtils.findFilesRecursive(dirToSearch, "*");
+		final List<File> allFiles = FileSearchExtensions.findFilesRecursive(dirToSearch, "*");
 
 		for (int i = 0; i < allFiles.size(); i++)
 		{
@@ -754,11 +754,11 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileContentResultBean contentResultBean = CompareFileUtils.compareFiles(
+				final IFileContentResultBean contentResultBean = CompareFileExtensions.compareFiles(
 					toCompare, file, ignoreAbsolutePathEquality, ignoreExtensionEquality,
 					ignoreLengthEquality, ignoreLastModified, ignoreNameEquality,
 					ignoreContentEquality);
-				final boolean equal = CompareFileUtils.validateEquality(contentResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(contentResultBean))
@@ -784,8 +784,8 @@ public final class CompareFileUtils
 	public static List<IFileContentResultBean> findEqualFilesWithSameContent(final File source,
 		final File compare)
 	{
-		final List<File> allSourceFiles = FileSearchUtils.findFilesRecursive(source, "*");
-		final List<File> allCompareFiles = FileSearchUtils.findFilesRecursive(compare, "*");
+		final List<File> allSourceFiles = FileSearchExtensions.findFilesRecursive(source, "*");
+		final List<File> allCompareFiles = FileSearchExtensions.findFilesRecursive(compare, "*");
 		final List<IFileContentResultBean> equalFiles = new ArrayList<IFileContentResultBean>();
 		for (int i = 0; i < allSourceFiles.size(); i++)
 		{
@@ -797,9 +797,9 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileContentResultBean contentResultBean = CompareFileUtils.compareFiles(
+				final IFileContentResultBean contentResultBean = CompareFileExtensions.compareFiles(
 					toCompare, file);
-				final boolean equal = CompareFileUtils.validateEquality(contentResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(contentResultBean))
@@ -839,8 +839,8 @@ public final class CompareFileUtils
 		final boolean ignoreLastModified, final boolean ignoreNameEquality,
 		final boolean ignoreContentEquality)
 	{
-		final List<File> allSourceFiles = FileSearchUtils.findFilesRecursive(source, "*");
-		final List<File> allCompareFiles = FileSearchUtils.findFilesRecursive(compare, "*");
+		final List<File> allSourceFiles = FileSearchExtensions.findFilesRecursive(source, "*");
+		final List<File> allCompareFiles = FileSearchExtensions.findFilesRecursive(compare, "*");
 		final List<IFileContentResultBean> equalFiles = new ArrayList<IFileContentResultBean>();
 		for (int i = 0; i < allSourceFiles.size(); i++)
 		{
@@ -852,11 +852,11 @@ public final class CompareFileUtils
 				{
 					continue;
 				}
-				final IFileContentResultBean contentResultBean = CompareFileUtils.compareFiles(
+				final IFileContentResultBean contentResultBean = CompareFileExtensions.compareFiles(
 					toCompare, file, ignoreAbsolutePathEquality, ignoreExtensionEquality,
 					ignoreLengthEquality, ignoreLastModified, ignoreNameEquality,
 					ignoreContentEquality);
-				final boolean equal = CompareFileUtils.validateEquality(contentResultBean);
+				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
 				if (equal && !equalFiles.contains(contentResultBean))
@@ -919,7 +919,7 @@ public final class CompareFileUtils
 			&& fileContentResultBean.getContentEquality();
 	}
 
-	private CompareFileUtils()
+	private CompareFileExtensions()
 	{
 		super();
 	}

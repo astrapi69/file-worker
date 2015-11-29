@@ -28,12 +28,12 @@ import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 import de.alpharogroup.file.checksum.Algorithm;
-import de.alpharogroup.file.checksum.ChecksumUtils;
+import de.alpharogroup.file.checksum.ChecksumExtensions;
 
 /**
- * The Class SimpleCompareFileUtils.
+ * The class {@link SimpleCompareFileExtensions}.
  */
-public final class SimpleCompareFileUtils
+public final class SimpleCompareFileExtensions
 {
 
 	/**
@@ -47,7 +47,7 @@ public final class SimpleCompareFileUtils
 	 */
 	public static boolean compareFilesByAbsolutePath(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileUtils.compareFiles(sourceFile, fileToCompare, false, true, true, true,
+		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, false, true, true, true,
 			true, true).getAbsolutePathEquality();
 	}
 
@@ -67,8 +67,8 @@ public final class SimpleCompareFileUtils
 	public static boolean compareFilesByChecksum(final File sourceFile, final File fileToCompare,
 		final Algorithm algorithm) throws NoSuchAlgorithmException
 	{
-		final String checksumSourceFile = ChecksumUtils.getChecksum(sourceFile, algorithm);
-		final String checksumFileToCompare = ChecksumUtils.getChecksum(fileToCompare, algorithm);
+		final String checksumSourceFile = ChecksumExtensions.getChecksum(sourceFile, algorithm);
+		final String checksumFileToCompare = ChecksumExtensions.getChecksum(fileToCompare, algorithm);
 		return checksumSourceFile.equals(checksumFileToCompare);
 	}
 
@@ -84,8 +84,8 @@ public final class SimpleCompareFileUtils
 	public static boolean compareFilesByChecksumAdler32(final File sourceFile,
 		final File fileToCompare)
 	{
-		final long checksumSourceFile = ChecksumUtils.getCheckSumAdler32(sourceFile);
-		final long checksumFileToCompare = ChecksumUtils.getCheckSumAdler32(fileToCompare);
+		final long checksumSourceFile = ChecksumExtensions.getCheckSumAdler32(sourceFile);
+		final long checksumFileToCompare = ChecksumExtensions.getCheckSumAdler32(fileToCompare);
 		return checksumSourceFile == checksumFileToCompare;
 	}
 
@@ -101,8 +101,8 @@ public final class SimpleCompareFileUtils
 	public static boolean compareFilesByChecksumCRC32(final File sourceFile,
 		final File fileToCompare)
 	{
-		final long checksumSourceFile = ChecksumUtils.getCheckSumCRC32(sourceFile);
-		final long checksumFileToCompare = ChecksumUtils.getCheckSumCRC32(fileToCompare);
+		final long checksumSourceFile = ChecksumExtensions.getCheckSumCRC32(sourceFile);
+		final long checksumFileToCompare = ChecksumExtensions.getCheckSumCRC32(fileToCompare);
 		return checksumSourceFile == checksumFileToCompare;
 	}
 
@@ -118,7 +118,7 @@ public final class SimpleCompareFileUtils
 	 */
 	public static boolean compareFilesByContent(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileUtils.compareFiles(sourceFile, fileToCompare, true, true, true, true,
+		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, true, true,
 			true, false).getContentEquality();
 	}
 
@@ -133,7 +133,7 @@ public final class SimpleCompareFileUtils
 	 */
 	public static boolean compareFilesByExtension(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileUtils.compareFiles(sourceFile, fileToCompare, true, false, true, true,
+		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, false, true, true,
 			true, true).getFileExtensionEquality();
 	}
 
@@ -148,7 +148,7 @@ public final class SimpleCompareFileUtils
 	 */
 	public static boolean compareFilesByLastModified(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileUtils.compareFiles(sourceFile, fileToCompare, true, true, true, false,
+		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, true, false,
 			true, true).getLastModifiedEquality();
 	}
 
@@ -163,7 +163,7 @@ public final class SimpleCompareFileUtils
 	 */
 	public static boolean compareFilesByLength(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileUtils.compareFiles(sourceFile, fileToCompare, true, true, false, true,
+		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, false, true,
 			true, true).getLengthEquality();
 	}
 
@@ -178,14 +178,14 @@ public final class SimpleCompareFileUtils
 	 */
 	public static boolean compareFilesByName(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileUtils.compareFiles(sourceFile, fileToCompare, true, true, true, true,
+		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, true, true,
 			false, true).getNameEquality();
 	}
 
 	/**
 	 * The Constructor.
 	 */
-	private SimpleCompareFileUtils()
+	private SimpleCompareFileExtensions()
 	{
 		super();
 	}

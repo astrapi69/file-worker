@@ -34,12 +34,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import de.alpharogroup.file.copy.CopyFileUtils;
-import de.alpharogroup.file.read.ReadFileUtils;
-import de.alpharogroup.file.search.FileSearchUtils;
-import de.alpharogroup.lang.PropertiesUtils;
+import de.alpharogroup.file.copy.CopyFileExtensions;
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.file.search.FileSearchExtensions;
+import de.alpharogroup.lang.PropertiesExtensions;
 
-public class PropertiesFileUtils
+public class PropertiesFileExtensions
 {
 
 	/**
@@ -56,15 +56,15 @@ public class PropertiesFileUtils
 	public static Map<File, Map<String, List<String>>> getRedundantKeys(final File dirToSearch)
 		throws IOException
 	{
-		final List<File> foundFiles = FileSearchUtils.findAllFiles(dirToSearch,
-			FileSearchUtils.getSearchFilePattern("properties"));
+		final List<File> foundFiles = FileSearchExtensions.findAllFiles(dirToSearch,
+			FileSearchExtensions.getSearchFilePattern("properties"));
 
 		final Map<String, List<String>> linesMap = new LinkedHashMap<>();
 		final Map<File, Map<String, List<String>>> fileMap = new LinkedHashMap<>();
 		for (final File file : foundFiles)
 		{
-			final List<String> lines = PropertiesFileUtils.removeComments(file);
-			final Properties p = PropertiesUtils.loadProperties(file);
+			final List<String> lines = PropertiesFileExtensions.removeComments(file);
+			final Properties p = PropertiesExtensions.loadProperties(file);
 
 			for (final Map.Entry<Object, Object> entry : p.entrySet())
 			{
@@ -130,7 +130,7 @@ public class PropertiesFileUtils
 	 */
 	public static File newBackupOf(final File file) throws IOException
 	{
-		return CopyFileUtils.newBackupOf(file, Charset.forName("ISO-8859-1"),
+		return CopyFileExtensions.newBackupOf(file, Charset.forName("ISO-8859-1"),
 			Charset.forName("UTF-8"));
 	}
 
@@ -147,11 +147,11 @@ public class PropertiesFileUtils
 	{
 		if (propertiesFile != null
 			&& !propertiesFile.getName()
-				.matches(FileSearchUtils.getSearchFilePattern("properties")))
+				.matches(FileSearchExtensions.getSearchFilePattern("properties")))
 		{
 			throw new IllegalArgumentException("The given file is not an properties file.");
 		}
-		final List<String> lines = ReadFileUtils.readLinesInList(propertiesFile);
+		final List<String> lines = ReadFileExtensions.readLinesInList(propertiesFile);
 		for (final Iterator<String> itr = lines.iterator(); itr.hasNext();)
 		{
 			final String line = itr.next();

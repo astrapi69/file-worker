@@ -34,16 +34,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
-import de.alpharogroup.file.search.FileSearchUtils;
-import de.alpharogroup.file.write.WriteFileUtils;
+import de.alpharogroup.file.search.FileSearchExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * Test class for the class ZipUtils.
+ * Test class for the class {@link ZipExtensions}.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public class ZipUtilsTest extends ZipTestCase
+public class ZipExtensionsTest extends ZipTestCase
 {
 
 
@@ -76,7 +76,7 @@ public class ZipUtilsTest extends ZipTestCase
 	 *
 	 * @throws Exception
 	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipUtils#extractZipEntry(java.util.zip.ZipFile, java.util.zip.ZipEntry, java.io.File)}
+	 *             {@link de.alpharogroup.file.zip.ZipExtensions#extractZipEntry(java.util.zip.ZipFile, java.util.zip.ZipEntry, java.io.File)}
 	 *             .
 	 */
 	@Test(enabled = true)
@@ -105,17 +105,17 @@ public class ZipUtilsTest extends ZipTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), file9);
 		final File unzippedFile9 = new File(this.unzipDirDeeperDir, file9);
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileUtils.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileUtils.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileUtils.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileUtils.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileUtils.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileUtils.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
-		ZipUtils.zip(this.testDir, zipFile);
+		ZipExtensions.zip(this.testDir, zipFile);
 
 		final long currentLength = zipFile.length();
 		this.result = 0 < currentLength;
@@ -128,17 +128,17 @@ public class ZipUtilsTest extends ZipTestCase
 			this.unzipDirTestDir.mkdir();
 		}
 		ZipFile zf = new ZipFile(zipFile);
-		ZipUtils.extractZipEntry(zf, zipEntry, this.unzipDir);
+		ZipExtensions.extractZipEntry(zf, zipEntry, this.unzipDir);
 		zf.close();
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile8);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
 		AssertJUnit.assertTrue("", this.result);
 
 		final ZipEntry zipEntry2 = new ZipEntry("testDir" + File.separator + "deepDir"
 			+ File.separator + "deeperDir" + File.separator + file9);
 		zf = new ZipFile(zipFile);
-		ZipUtils.extractZipEntry(zf, zipEntry2, this.unzipDir);
+		ZipExtensions.extractZipEntry(zf, zipEntry2, this.unzipDir);
 		zf.close();
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile9);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
 		AssertJUnit.assertTrue("", this.result);
 
 	}
@@ -148,7 +148,7 @@ public class ZipUtilsTest extends ZipTestCase
 	 *
 	 * @throws Exception
 	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipUtils#unzip(java.util.zip.ZipFile, java.io.File)}
+	 *             {@link de.alpharogroup.file.zip.ZipExtensions#unzip(java.util.zip.ZipFile, java.io.File)}
 	 *             .
 	 */
 	@Test
@@ -188,53 +188,53 @@ public class ZipUtilsTest extends ZipTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), file9);
 		final File unzippedFile9 = new File(this.unzipDirDeeperDir, file9);
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileUtils.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileUtils.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileUtils.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileUtils.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileUtils.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileUtils.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
-		ZipUtils.zip(this.testDir, zipFile);
+		ZipExtensions.zip(this.testDir, zipFile);
 
 		final long currentLength = zipFile.length();
 		this.result = 0 < currentLength;
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.zipDir, zipFile);
+		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
 
 		AssertJUnit.assertTrue("", this.result);
 
-		ZipUtils.unzip(new ZipFile(zipFile), this.unzipDir);
+		ZipExtensions.unzip(new ZipFile(zipFile), this.unzipDir);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile1);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile1);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile2);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile2);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile3);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile3);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile4);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile4);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile5);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile5);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile6);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile6);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile7);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile7);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile8);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.unzipDir, unzippedFile9);
+		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
 		AssertJUnit.assertTrue("", this.result);
 	}
 
@@ -243,7 +243,7 @@ public class ZipUtilsTest extends ZipTestCase
 	 *
 	 * @throws Exception
 	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipUtils#zip(java.io.File, java.io.File)}.
+	 *             {@link de.alpharogroup.file.zip.ZipExtensions#zip(java.io.File, java.io.File)}.
 	 */
 	@Test
 	public void testZipFileFile() throws Exception
@@ -267,23 +267,23 @@ public class ZipUtilsTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileUtils.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileUtils.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileUtils.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileUtils.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileUtils.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileUtils.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
-		ZipUtils.zip(this.testDir, zipFile);
+		ZipExtensions.zip(this.testDir, zipFile);
 
 		final long currentLength = zipFile.length();
 		this.result = 0 < currentLength;
 		AssertJUnit.assertTrue("", this.result);
 
-		this.result = FileSearchUtils.containsFileRecursive(this.zipDir, zipFile);
+		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
 
 		AssertJUnit.assertTrue("", this.result);
 
@@ -294,7 +294,7 @@ public class ZipUtilsTest extends ZipTestCase
 	 *
 	 * @throws Exception
 	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipUtils#zip(java.io.File, java.io.File, java.io.FilenameFilter)}
+	 *             {@link de.alpharogroup.file.zip.ZipExtensions#zip(java.io.File, java.io.File, java.io.FilenameFilter)}
 	 *             .
 	 */
 	@Test
@@ -322,19 +322,19 @@ public class ZipUtilsTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileUtils.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileUtils.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileUtils.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileUtils.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileUtils.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileUtils.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		final SimpleFilenameFilter txtFilenameFilter = new SimpleFilenameFilter(".txt", false);
 
-		ZipUtils.zip(this.testDir, zipFile, txtFilenameFilter);
+		ZipExtensions.zip(this.testDir, zipFile, txtFilenameFilter);
 
 		final long currentLength = zipFile.length();
 		this.result = 0 < currentLength;

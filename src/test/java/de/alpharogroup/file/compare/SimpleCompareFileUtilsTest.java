@@ -36,8 +36,8 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.checksum.Algorithm;
-import de.alpharogroup.file.delete.DeleteFileUtils;
-import de.alpharogroup.file.write.WriteFileUtils;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 public class SimpleCompareFileUtilsTest extends FileTestCase
 {
@@ -65,14 +65,14 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.tft");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByAbsolutePath(testFile1, testFile1);
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile1);
 		AssertJUnit.assertTrue(this.result);
-		this.result = SimpleCompareFileUtils.compareFilesByAbsolutePath(testFile1, testFile2);
+		this.result = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile2);
 		AssertJUnit.assertFalse(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 
 	}
 
@@ -82,13 +82,13 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByChecksum(testFile1, testFile2,
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByChecksum(testFile1, testFile2,
 			Algorithm.MD5);
 		AssertJUnit.assertTrue(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 	@Test
@@ -97,12 +97,12 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByChecksumAdler32(testFile1, testFile2);
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByChecksumAdler32(testFile1, testFile2);
 		AssertJUnit.assertTrue(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 	@Test
@@ -111,12 +111,12 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByChecksumCRC32(testFile1, testFile2);
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByChecksumCRC32(testFile1, testFile2);
 		AssertJUnit.assertTrue(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 	@Test
@@ -128,12 +128,12 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.tft");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByContent(testFile1, testFile2);
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByContent(testFile1, testFile2);
 		AssertJUnit.assertTrue(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 	@Test
@@ -145,12 +145,12 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.txt");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByExtension(testFile1, testFile2);
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByExtension(testFile1, testFile2);
 		AssertJUnit.assertTrue(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 	@Test(enabled = true)
@@ -162,17 +162,17 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.txt");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		final Date now = new Date(System.currentTimeMillis());
 		final long tenSeconds = 1000 * 10;
 		// simulate that first file is created 10 seconds before the second file...
 		testFile1.setLastModified(now.getTime() - tenSeconds);
 		testFile2.setLastModified(now.getTime());
-		this.result = SimpleCompareFileUtils.compareFilesByLastModified(testFile1, testFile2);
+		this.result = SimpleCompareFileExtensions.compareFilesByLastModified(testFile1, testFile2);
 		AssertJUnit.assertFalse(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 	@Test
@@ -184,12 +184,12 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.txt");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByLength(testFile1, testFile2);
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByLength(testFile1, testFile2);
 		AssertJUnit.assertTrue(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 	@Test
@@ -198,12 +198,12 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileUtils.compareFilesByName(testFile1, testFile2);
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		this.result = SimpleCompareFileExtensions.compareFilesByName(testFile1, testFile2);
 		AssertJUnit.assertTrue(this.result);
-		DeleteFileUtils.delete(testFile2);
-		DeleteFileUtils.delete(testFile1);
+		DeleteFileExtensions.delete(testFile2);
+		DeleteFileExtensions.delete(testFile1);
 	}
 
 }

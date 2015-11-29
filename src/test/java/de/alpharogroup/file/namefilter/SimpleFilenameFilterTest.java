@@ -34,7 +34,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.write.WriteFileUtils;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
  * Test class for the class SimpleFilenameFilter.
@@ -84,9 +84,9 @@ public class SimpleFilenameFilterTest extends FileTestCase
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), file3);
 		expectedfiles.add(testFile3);
 
-		WriteFileUtils.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileUtils.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileUtils.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 		final SimpleFilenameFilter txtFilenameFilter = new SimpleFilenameFilter(".txt", false);
 		final File[] txtFiles = this.testDir.listFiles(txtFilenameFilter);
 		this.result = txtFiles.length == 2;

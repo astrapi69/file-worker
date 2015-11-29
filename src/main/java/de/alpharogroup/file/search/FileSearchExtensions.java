@@ -31,15 +31,15 @@ import java.util.List;
 import java.util.Stack;
 
 import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.regex.REUtils;
+import de.alpharogroup.regex.RegExExtensions;
 
 /**
- * The Class FileSearchUtils provides methods for searching in directories.
+ * The class {@link FileSearchExtensions} provides methods for searching in directories.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class FileSearchUtils
+public final class FileSearchExtensions
 {
 	/**
 	 * Checks if the given file contains only in the parent file, not in the subdirectories.
@@ -109,7 +109,7 @@ public final class FileSearchUtils
 		{
 			if (currentFile.isDirectory())
 			{
-				exists = FileSearchUtils.containsFileRecursive(currentFile, toSearch);
+				exists = FileSearchExtensions.containsFileRecursive(currentFile, toSearch);
 				if (exists)
 				{
 					return true;
@@ -219,7 +219,7 @@ public final class FileSearchUtils
 	public static List<File> findFiles(final File dir, final String filenameToSearch)
 	{
 		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = REUtils.replaceWildcardsWithRE(filenameToSearch);
+		final String regex = RegExExtensions.replaceWildcardsWithRE(filenameToSearch);
 		final String[] children = dir.list();
 		for (final String filename : children)
 		{
@@ -286,7 +286,7 @@ public final class FileSearchUtils
 	public static List<File> findFilesRecursive(final File dir, final String filenameToSearch)
 	{
 		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = REUtils.replaceWildcardsWithRE(filenameToSearch);
+		final String regex = RegExExtensions.replaceWildcardsWithRE(filenameToSearch);
 		// Get all files
 		final File[] children = dir.getAbsoluteFile().listFiles();
 		if (children == null || children.length < 1)
@@ -500,7 +500,7 @@ public final class FileSearchUtils
 	/**
 	 * Private constructor.
 	 */
-	private FileSearchUtils()
+	private FileSearchExtensions()
 	{
 		super();
 	}

@@ -46,18 +46,18 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 
 import de.alpharogroup.file.FileConst;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class ReadFileUtils helps you reading files.
+ * The class {@link ReadFileExtensions} helps you reading files.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class ReadFileUtils
+public final class ReadFileExtensions
 {
 	/** The LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(ReadFileUtils.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(ReadFileExtensions.class.getName());
 
 	/**
 	 * Get a Byte array from the given file.
@@ -94,7 +94,7 @@ public final class ReadFileUtils
 	 */
 	public static String inputStream2String(final InputStream inputStream, final Charset encoding)
 	{
-		return ReadFileUtils.reader2String(new InputStreamReader(inputStream, encoding));
+		return ReadFileExtensions.reader2String(new InputStreamReader(inputStream, encoding));
 	}
 
 	/**
@@ -110,7 +110,7 @@ public final class ReadFileUtils
 	{
 		BufferedReader bufferedReader = null;
 		final File file = new File(fileName);
-		bufferedReader = (BufferedReader)StreamUtils.getReader(file);
+		bufferedReader = (BufferedReader)StreamExtensions.getReader(file);
 		return bufferedReader;
 	}
 
@@ -139,7 +139,7 @@ public final class ReadFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeReader(reader);
+			StreamExtensions.closeReader(reader);
 		}
 		return stringBuffer.toString();
 	}
@@ -167,12 +167,20 @@ public final class ReadFileUtils
 	 */
 	public static String readFromFile(final File file) throws IOException
 	{
-		return inputStream2String(StreamUtils.getInputStream(file));
+		return inputStream2String(StreamExtensions.getInputStream(file));
 	}
 
+	/**
+	 * Read from file.
+	 *
+	 * @param file the file
+	 * @param encoding the encoding
+	 * @return the string
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static String readFromFile(final File file, final Charset encoding) throws IOException
 	{
-		return inputStream2String(StreamUtils.getInputStream(file), encoding);
+		return inputStream2String(StreamExtensions.getInputStream(file), encoding);
 	}
 
 	/**
@@ -202,7 +210,7 @@ public final class ReadFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeReader(reader);
+			StreamExtensions.closeReader(reader);
 		}
 		return headLine;
 	}
@@ -246,13 +254,9 @@ public final class ReadFileUtils
 	/**
 	 * Reads every line from the given InputStream and puts them to the List.
 	 *
-	 * @param input
-	 *            The InputStream from where the input comes.
+	 * @param input            The InputStream from where the input comes.
 	 * @return The List with all lines from the file.
-	 * @throws FileNotFoundException
-	 *             is thrown if the given file is not found.
-	 * @throws IOException
-	 *             When a io-problem occurs.
+	 * @throws IOException             When a io-problem occurs.
 	 */
 	public static List<String> readLinesInList(final InputStream input) throws IOException
 	{
@@ -305,8 +309,8 @@ public final class ReadFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeReader(isr);
-			StreamUtils.closeReader(reader);
+			StreamExtensions.closeReader(isr);
+			StreamExtensions.closeReader(reader);
 		}
 		// return the list with all lines from the file.
 		return output;
@@ -335,7 +339,7 @@ public final class ReadFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeInputStream(fis);
+			StreamExtensions.closeInputStream(fis);
 		}
 		return properties;
 	}
@@ -358,7 +362,7 @@ public final class ReadFileUtils
 			{
 				bos = new ByteArrayOutputStream(FileConst.KILOBYTE);
 				bis = new BufferedInputStream(new FileInputStream(tmpFile));
-				StreamUtils.writeInputStreamToOutputStream(bis, bos, false);
+				StreamExtensions.writeInputStreamToOutputStream(bis, bos, false);
 				data = bos.toByteArray();
 			}
 			catch (final IOException e)
@@ -368,8 +372,8 @@ public final class ReadFileUtils
 			}
 			finally
 			{
-				StreamUtils.closeInputStream(bis);
-				StreamUtils.closeOutputStream(bos);
+				StreamExtensions.closeInputStream(bis);
+				StreamExtensions.closeOutputStream(bos);
 			}
 		}
 		return data;
@@ -378,13 +382,10 @@ public final class ReadFileUtils
 	/**
 	 * Get a byte array from the given {@code InputStream}.
 	 *
-	 * @param input
-	 *            The {@code InputStream}.
+	 * @param input            The {@code InputStream}.
 	 * @return the a byte array.
-	 * @throws NullPointerException
-	 *             if the input is null
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * @throws IOException             Signals that an I/O exception has occurred.
+	 * @throws NullPointerException             if the input is null
 	 */
 	public static byte[] toByteArray(final InputStream input) throws IOException
 	{
@@ -407,7 +408,7 @@ public final class ReadFileUtils
 	/**
 	 * Private constructor.
 	 */
-	private ReadFileUtils()
+	private ReadFileExtensions()
 	{
 		super();
 	}

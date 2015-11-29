@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The Class CsvToSqlUtils.
+ * The class {@link CsvToSqlExtensions}.
  */
-public final class CsvToSqlUtils
+public final class CsvToSqlExtensions
 {
 	/**
 	 * Extract sql columns.
@@ -309,7 +309,7 @@ public final class CsvToSqlUtils
 	/**
 	 * Private constructor.
 	 */
-	private CsvToSqlUtils()
+	private CsvToSqlExtensions()
 	{
 		super();
 	}

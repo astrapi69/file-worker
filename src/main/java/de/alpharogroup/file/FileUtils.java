@@ -33,8 +33,8 @@ import java.nio.channels.FileLock;
 
 import org.apache.log4j.Logger;
 
-import de.alpharogroup.file.read.ReadFileUtils;
-import de.alpharogroup.file.rename.RenameFileUtils;
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.file.rename.RenameFileExtensions;
 
 /**
  * Utility class for the use of File object. Most methods are set to deprecated and has gone to the
@@ -42,6 +42,7 @@ import de.alpharogroup.file.rename.RenameFileUtils;
  * 
  * @version 1.0
  * @author Asterios Raptis
+ * @deprecated use instead FileExtensions.
  */
 public final class FileUtils
 {
@@ -58,7 +59,7 @@ public final class FileUtils
 	public static byte[] download(final URI uri)
 	{
 		final File tmpFile = new File(uri);
-		return ReadFileUtils.toByteArray(tmpFile);
+		return ReadFileExtensions.toByteArray(tmpFile);
 	}
 
 	/**
@@ -70,7 +71,7 @@ public final class FileUtils
 	 */
 	public static String getAbsolutPathWithoutFilename(final File file)
 	{
-		return RenameFileUtils.getAbsolutPathWithoutFilename(file);
+		return RenameFileExtensions.getAbsolutPathWithoutFilename(file);
 	}
 
 	/**
@@ -94,7 +95,7 @@ public final class FileUtils
 	 */
 	public static String getFilenamePrefix(final File file)
 	{
-		return FilenameUtils.getFilenamePrefix(file);
+		return FilenameExtensions.getFilenamePrefix(file);
 	}
 
 	/**
@@ -107,7 +108,7 @@ public final class FileUtils
 	 */
 	public static String getFilenameSuffix(final File file)
 	{
-		return FilenameUtils.getFilenameSuffix(file);
+		return FilenameExtensions.getFilenameSuffix(file);
 	}
 
 	/**
@@ -119,7 +120,7 @@ public final class FileUtils
 	 */
 	public static String getFilenameWithoutExtension(final File file)
 	{
-		return FilenameUtils.getFilenameWithoutExtension(file);
+		return FilenameExtensions.getFilenameWithoutExtension(file);
 	}
 
 	/**

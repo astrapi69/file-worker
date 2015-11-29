@@ -35,8 +35,8 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.search.FileSearchUtils;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.file.search.FileSearchExtensions;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The Class Zipper.
@@ -477,8 +477,8 @@ public class Zipper implements ZipModel
 		}
 		finally
 		{
-			StreamUtils.closeOutputStream(fos);
-			StreamUtils.closeOutputStream(this.zos);
+			StreamExtensions.closeOutputStream(fos);
+			StreamExtensions.closeOutputStream(this.zos);
 		}
 	}
 
@@ -499,7 +499,7 @@ public class Zipper implements ZipModel
 			if (null != this.fileFilter)
 			{
 				final File[] tmpfList = file.listFiles(this.fileFilter);
-				final List<File> foundedDirs = FileSearchUtils.listDirs(file);
+				final List<File> foundedDirs = FileSearchExtensions.listDirs(file);
 				if (0 < foundedDirs.size())
 				{
 					final List<File> tmp = Arrays.asList(tmpfList);

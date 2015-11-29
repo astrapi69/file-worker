@@ -49,19 +49,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.alpharogroup.file.FileConst;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class WriteFileUtils provides methods for writing in files.
+ * The class {@link WriteFileExtensions} provides methods for writing in files.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class WriteFileUtils
+public final class WriteFileExtensions
 {
 
 	/** The LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(WriteFileUtils.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(WriteFileExtensions.class.getName());
 
 
 	/**
@@ -104,10 +104,10 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeInputStream(bis);
-			StreamUtils.closeOutputStream(bos);
-			StreamUtils.closeInputStream(fis);
-			StreamUtils.closeOutputStream(fos);
+			StreamExtensions.closeInputStream(bis);
+			StreamExtensions.closeOutputStream(bos);
+			StreamExtensions.closeInputStream(fis);
+			StreamExtensions.closeOutputStream(fos);
 		}
 	}
 
@@ -141,8 +141,8 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeOutputStream(bos);
-			StreamUtils.closeOutputStream(fos);
+			StreamExtensions.closeOutputStream(bos);
+			StreamExtensions.closeOutputStream(fos);
 		}
 	}
 
@@ -204,7 +204,7 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeWriter(bufferedWriter);
+			StreamExtensions.closeWriter(bufferedWriter);
 		}
 	}
 
@@ -242,8 +242,8 @@ public final class WriteFileUtils
 		{
 			if (closeStream)
 			{
-				StreamUtils.closeReader(reader);
-				StreamUtils.closeWriter(writer);
+				StreamExtensions.closeReader(reader);
+				StreamExtensions.closeWriter(writer);
 			}
 		}
 	}
@@ -268,7 +268,7 @@ public final class WriteFileUtils
 			fos = new FileOutputStream(outputFile);
 			bis = new BufferedInputStream(fis);
 			bos = new BufferedOutputStream(fos);
-			StreamUtils.writeInputStreamToOutputStream(bis, bos, true);
+			StreamExtensions.writeInputStreamToOutputStream(bis, bos, true);
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -280,10 +280,10 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeInputStream(fis);
-			StreamUtils.closeOutputStream(fos);
-			StreamUtils.closeInputStream(bis);
-			StreamUtils.closeOutputStream(bos);
+			StreamExtensions.closeInputStream(fis);
+			StreamExtensions.closeOutputStream(fos);
+			StreamExtensions.closeInputStream(bis);
+			StreamExtensions.closeOutputStream(bos);
 		}
 	}
 
@@ -314,8 +314,8 @@ public final class WriteFileUtils
 		{
 			if (closeWriter)
 			{
-				StreamUtils.closeReader(bufferedReader);
-				StreamUtils.closeWriter(writer);
+				StreamExtensions.closeReader(bufferedReader);
+				StreamExtensions.closeWriter(writer);
 			}
 		}
 	}
@@ -336,8 +336,8 @@ public final class WriteFileUtils
 
 		try
 		{
-			inputStream = StreamUtils.getInputStream(new File(inputFile));
-			outputStream = StreamUtils.getOutputStream(new File(outputFile));
+			inputStream = StreamExtensions.getInputStream(new File(inputFile));
+			outputStream = StreamExtensions.getOutputStream(new File(outputFile));
 			int counter = 0;
 			final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
 			while ((counter = inputStream.read(byteArray)) != -1)
@@ -359,8 +359,8 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeInputStream(inputStream);
-			StreamUtils.closeOutputStream(outputStream);
+			StreamExtensions.closeInputStream(inputStream);
+			StreamExtensions.closeOutputStream(outputStream);
 		}
 	}
 
@@ -398,8 +398,8 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeOutputStream(fos);
-			StreamUtils.closeOutputStream(bos);
+			StreamExtensions.closeOutputStream(fos);
+			StreamExtensions.closeOutputStream(bos);
 		}
 	}
 
@@ -519,9 +519,9 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeOutputStream(fos);
-			StreamUtils.closeWriter(osw);
-			StreamUtils.closeWriter(out);
+			StreamExtensions.closeOutputStream(fos);
+			StreamExtensions.closeWriter(osw);
+			StreamExtensions.closeWriter(out);
 		}
 	}
 
@@ -548,7 +548,7 @@ public final class WriteFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeOutputStream(fos);
+			StreamExtensions.closeOutputStream(fos);
 		}
 	}
 
@@ -608,10 +608,10 @@ public final class WriteFileUtils
 		finally
 		{
 
-			StreamUtils.closeWriter(printWriter);
-			StreamUtils.closeWriter(osw);
-			StreamUtils.closeOutputStream(bos);
-			StreamUtils.closeOutputStream(fos);
+			StreamExtensions.closeWriter(printWriter);
+			StreamExtensions.closeWriter(osw);
+			StreamExtensions.closeOutputStream(bos);
+			StreamExtensions.closeOutputStream(fos);
 		}
 		return iswritten;
 	}
@@ -619,7 +619,7 @@ public final class WriteFileUtils
 	/**
 	 * Private constructor.
 	 */
-	private WriteFileUtils()
+	private WriteFileExtensions()
 	{
 		super();
 	}

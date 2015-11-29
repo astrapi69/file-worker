@@ -39,7 +39,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.create.CreateFileUtils;
+import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
@@ -48,18 +48,17 @@ import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
 import de.alpharogroup.file.filter.TxtFileFilter;
 import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
 import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
-import de.alpharogroup.file.read.ReadFileUtils;
-import de.alpharogroup.file.write.WriteFileUtils;
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * The Class CopyFileUtilsTest.
+ * The class {@link CopyFileExtensionsTest}.
  *
  * @version 1.0
  *
  * @author Asterios Raptis
- *
  */
-public class CopyFileUtilsTest extends FileTestCase
+public class CopyFileExtensionsTest extends FileTestCase
 {
 
 	/**
@@ -90,7 +89,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyDirectory(java.io.File, java.io.File)} .
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyDirectory(java.io.File, java.io.File)} .
 	 *
 	 * @throws DirectoryAllreadyExistsException
 	 *             Is thrown if the directory all ready exists.
@@ -122,10 +121,10 @@ public class CopyFileUtilsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDeepDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepFile, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDeepDir, deepestDirName);
@@ -133,14 +132,14 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File srcDeepestFile = new File(srcDeepestDir, deepestFilename);
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepestDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepestDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepestFile, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 		}
 
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileUtils.copyDirectory(srcDeepDir, destDir);
+		this.result = CopyFileExtensions.copyDirectory(srcDeepDir, destDir);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
 			this.result);
@@ -171,7 +170,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyDirectory(java.io.File, java.io.File, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyDirectory(java.io.File, java.io.File, boolean)}
 	 * .
 	 * 
 	 * @throws FileIsSecurityRestrictedException
@@ -205,10 +204,10 @@ public class CopyFileUtilsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcFile, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -216,14 +215,14 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File srcDeepestFile = new File(srcDeepestDir, deepestFilename);
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepestDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepestDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepestFile, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 		}
 
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileUtils.copyDirectory(srcDir, destDir, false);
+		this.result = CopyFileExtensions.copyDirectory(srcDir, destDir, false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
 			this.result);
@@ -249,7 +248,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyDirectoryWithFileFilter(java.io.File, java.io.File, java.io.FileFilter, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyDirectoryWithFileFilter(java.io.File, java.io.File, java.io.FileFilter, boolean)}
 	 * .
 	 * 
 	 * @throws FileIsSecurityRestrictedException
@@ -286,11 +285,11 @@ public class CopyFileUtilsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
 
 		}
 		final String deepestDirName = "deepest";
@@ -301,17 +300,17 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File srcDeepestFile2 = new File(srcDeepestDir, srcDeepestFileName2);
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepestDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepestDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
 		}
 
 		// define a filefilter object...
 		final FileFilter fileFilter = new TxtFileFilter();
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileUtils.copyDirectoryWithFileFilter(srcDir, destDir, fileFilter, false);
+		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir, fileFilter, false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
 			this.result);
@@ -345,7 +344,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyDirectoryWithFileFilter(java.io.File, java.io.File, java.io.FileFilter, java.io.FileFilter, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyDirectoryWithFileFilter(java.io.File, java.io.File, java.io.FileFilter, java.io.FileFilter, boolean)}
 	 * .
 	 * 
 	 * @throws FileIsSecurityRestrictedException
@@ -383,12 +382,12 @@ public class CopyFileUtilsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileUtils.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -400,12 +399,12 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File srcDeepestFile3 = new File(srcDeepestDir, srcDeepestFileName3);
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepestDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepestDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileUtils.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -416,7 +415,7 @@ public class CopyFileUtilsTest extends FileTestCase
 		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileUtils.copyDirectoryWithFileFilter(srcDir, destDir, includeFileFilter,
+		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir, includeFileFilter,
 			excludeFileFilter, false);
 
 		// Check if the destination directory was copied.
@@ -464,7 +463,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyDirectoryWithFileFilter(java.io.File, java.io.File, java.io.FileFilter, java.io.FileFilter, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyDirectoryWithFileFilter(java.io.File, java.io.File, java.io.FileFilter, java.io.FileFilter, boolean)}
 	 * .
 	 * 
 	 * @throws FileIsSecurityRestrictedException
@@ -506,13 +505,13 @@ public class CopyFileUtilsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileUtils.string2File(srcFile3, "Its a beautifull exe morning!!!");
-			WriteFileUtils.string2File(srcFile4, "Its a beautifull txt evening!!!");
+			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -524,12 +523,12 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File srcDeepestFile3 = new File(srcDeepestDir, srcDeepestFileName3);
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepestDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepestDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileUtils.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -540,7 +539,7 @@ public class CopyFileUtilsTest extends FileTestCase
 		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileUtils.copyDirectoryWithFileFilter(srcDir, destDir, includeFileFilter,
+		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir, includeFileFilter,
 			excludeFileFilter, excludeFiles, false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
@@ -596,7 +595,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyDirectoryWithFilenameFilter(java.io.File, java.io.File, java.io.FilenameFilter, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyDirectoryWithFilenameFilter(java.io.File, java.io.File, java.io.FilenameFilter, boolean)}
 	 * .
 	 *
 	 * @throws IOException
@@ -632,11 +631,11 @@ public class CopyFileUtilsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -646,17 +645,17 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File srcDeepestFile2 = new File(srcDeepestDir, srcDeepestFileName2);
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepestDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepestDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
 		}
 
 		// define a filefilter object...
 		final FilenameFilter fileFilter = new SimpleFilenameFilter(".txt", true);
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileUtils.copyDirectoryWithFilenameFilter(srcDir, destDir, fileFilter,
+		this.result = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir, fileFilter,
 			false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
@@ -691,7 +690,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyDirectoryWithFilenameFilter(java.io.File, java.io.File, java.io.FilenameFilter, java.io.FilenameFilter, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyDirectoryWithFilenameFilter(java.io.File, java.io.File, java.io.FilenameFilter, java.io.FilenameFilter, boolean)}
 	 * .
 	 *
 	 * @throws IOException
@@ -728,12 +727,12 @@ public class CopyFileUtilsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileUtils.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -745,12 +744,12 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File srcDeepestFile3 = new File(srcDeepestDir, srcDeepestFileName3);
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDeepestDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			AssertJUnit.assertTrue("The directory " + srcDeepestDir.getAbsolutePath()
 				+ " should be created.", created);
-			WriteFileUtils.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileUtils.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileUtils.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -761,7 +760,7 @@ public class CopyFileUtilsTest extends FileTestCase
 		final FilenameFilter excludeFilenameFilter = new MultiplyExtensionsFilenameFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileUtils.copyDirectoryWithFilenameFilter(srcDir, destDir,
+		this.result = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
 			includeFilenameFilter, excludeFilenameFilter, false);
 
 		// Check if the destination directory was copied.
@@ -808,7 +807,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyFile(java.io.File, java.io.File)}.
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyFile(java.io.File, java.io.File)}.
 	 *
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
@@ -822,7 +821,7 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testCopyFileOutput.tft");
 		try
 		{
-			this.result = CopyFileUtils.copyFile(source, destination);
+			this.result = CopyFileExtensions.copyFile(source, destination);
 			AssertJUnit.assertFalse("", this.result);
 		}
 		catch (final Exception fnfe)
@@ -832,14 +831,14 @@ public class CopyFileUtilsTest extends FileTestCase
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileUtils.string2File(source, inputString);
+		WriteFileExtensions.string2File(source, inputString);
 
-		this.result = CopyFileUtils.copyFile(source, destination);
+		this.result = CopyFileExtensions.copyFile(source, destination);
 		AssertJUnit
 			.assertTrue("Source file " + source.getName()
 				+ " was not copied in the destination file " + destination.getName() + ".",
 				this.result);
-		final String actual = ReadFileUtils.readFromFile(destination);
+		final String actual = ReadFileExtensions.readFromFile(destination);
 		this.result = expected.equals(actual);
 		AssertJUnit.assertTrue("The content from the source file " + source.getName()
 			+ " is not the same as the destination file " + destination.getName() + ".",
@@ -849,7 +848,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyFile(java.io.File, java.io.File, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyFile(java.io.File, java.io.File, boolean)}
 	 * .
 	 * 
 	 * @throws IOException
@@ -864,7 +863,7 @@ public class CopyFileUtilsTest extends FileTestCase
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testCopyFileOutput.tft");
 		try
 		{
-			this.result = CopyFileUtils.copyFile(source, destination, false);
+			this.result = CopyFileExtensions.copyFile(source, destination, false);
 			AssertJUnit.assertFalse("", this.result);
 		}
 		catch (final Exception fnfe)
@@ -874,14 +873,14 @@ public class CopyFileUtilsTest extends FileTestCase
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileUtils.string2File(source, inputString);
+		WriteFileExtensions.string2File(source, inputString);
 
-		this.result = CopyFileUtils.copyFile(source, destination, false);
+		this.result = CopyFileExtensions.copyFile(source, destination, false);
 		AssertJUnit
 			.assertTrue("Source file " + source.getName()
 				+ " was not copied in the destination file " + destination.getName() + ".",
 				this.result);
-		final String compare = ReadFileUtils.readFromFile(destination);
+		final String compare = ReadFileExtensions.readFromFile(destination);
 		this.result = expected.equals(compare);
 		AssertJUnit.assertTrue("The content from the source file " + source.getName()
 			+ " is not the same as the destination file " + destination.getName() + ".",
@@ -891,7 +890,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyFileToDirectory(java.io.File, java.io.File)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyFileToDirectory(java.io.File, java.io.File)}
 	 * .
 	 *
 	 * @throws DirectoryAllreadyExistsException
@@ -917,18 +916,18 @@ public class CopyFileUtilsTest extends FileTestCase
 		final String filePrefix = "testCopyFile";
 		final String txtSuffix = ".txt";
 		final File srcFile = new File(this.testDir, filePrefix + txtSuffix);
-		WriteFileUtils.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
 
 		}
 
 		// Try to copy the file srcFile into the destination directory.
-		this.result = CopyFileUtils.copyFileToDirectory(srcFile, srcDir);
+		this.result = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir);
 		final File expectedCopiedFile = new File(srcDir, filePrefix + txtSuffix);
 		AssertJUnit.assertTrue("File " + expectedCopiedFile.getAbsolutePath()
 			+ " should be copied.", expectedCopiedFile.exists());
@@ -941,7 +940,7 @@ public class CopyFileUtilsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link de.alpharogroup.file.copy.CopyFileUtils#copyFileToDirectory(java.io.File, java.io.File, boolean)}
+	 * {@link de.alpharogroup.file.copy.CopyFileExtensions#copyFileToDirectory(java.io.File, java.io.File, boolean)}
 	 * .
 	 *
 	 * @throws FileIsNotADirectoryException
@@ -966,17 +965,17 @@ public class CopyFileUtilsTest extends FileTestCase
 		final String filePrefix = "testCopyFile";
 		final String txtSuffix = ".txt";
 		final File srcFile = new File(this.testDir, filePrefix + txtSuffix);
-		WriteFileUtils.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileUtils.newDirectory(srcDir);
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
 				+ " should be created.", created);
 
 		}
 		// Try to copy the file srcFile into the destination directory.
-		this.result = CopyFileUtils.copyFileToDirectory(srcFile, srcDir, false);
+		this.result = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir, false);
 		final File expectedCopiedFile = new File(srcDir, filePrefix + txtSuffix);
 		AssertJUnit.assertTrue("File " + expectedCopiedFile.getAbsolutePath()
 			+ " should be copied.", expectedCopiedFile.exists());

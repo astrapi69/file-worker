@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.search.PathFinder;
 
-public class PropertiesFileUtilsTest extends FileTestCase
+public class PropertiesFileExtensionsTest extends FileTestCase
 {
 
 	@Test(enabled = true)
@@ -45,7 +45,7 @@ public class PropertiesFileUtilsTest extends FileTestCase
 		final File srcTestResourceDir = PathFinder.getSrcTestResourcesDir();
 		final File testDir = PathFinder.getRelativePath(srcTestResourceDir, "resources",
 			"properties");
-		final Map<File, Map<String, List<String>>> fileMap = PropertiesFileUtils
+		final Map<File, Map<String, List<String>>> fileMap = PropertiesFileExtensions
 			.getRedundantKeys(testDir);
 		for (final Map.Entry<File, Map<String, List<String>>> entry : fileMap.entrySet())
 		{
@@ -66,7 +66,7 @@ public class PropertiesFileUtilsTest extends FileTestCase
 		final File testDir = PathFinder.getRelativePath(srcTestResourceDir, "resources",
 			"properties");
 		final File propertiesFile = PathFinder.getRelativePath(testDir, "test.properties");
-		final List<String> lines = PropertiesFileUtils.removeComments(propertiesFile);
+		final List<String> lines = PropertiesFileExtensions.removeComments(propertiesFile);
 		AssertJUnit.assertTrue(lines.size() == 5);
 	}
 

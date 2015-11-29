@@ -41,20 +41,17 @@ import java.util.List;
 
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.file.FileExtension;
-import de.alpharogroup.file.create.CreateFileUtils;
+import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class CopyFileUtils helps you to copy files or directories.
- *
- * @author Asterios Raptis
- * @version 1.0
+ * The class {@link CopyFileExtensions} helps you to copy files or directories.
  */
-public final class CopyFileUtils
+public final class CopyFileExtensions
 {
 
 	/**
@@ -237,7 +234,7 @@ public final class CopyFileUtils
 		}
 		if (!destination.exists())
 		{
-			CreateFileUtils.newDirectory(destination);
+			CreateFileExtensions.newDirectory(destination);
 		}
 		boolean copied = false;
 		File[] includeFilesArray;
@@ -401,7 +398,7 @@ public final class CopyFileUtils
 		}
 		if (!destination.exists())
 		{
-			CreateFileUtils.newDirectory(destination);
+			CreateFileExtensions.newDirectory(destination);
 		}
 		boolean copied = false;
 		File[] includeFilesArray;
@@ -550,7 +547,7 @@ public final class CopyFileUtils
 				+ " should be a File but is a Directory.");
 		}
 		boolean copied = false;
-		final InputStream inputStream = StreamUtils.getInputStream(source);
+		final InputStream inputStream = StreamExtensions.getInputStream(source);
 		InputStreamReader reader;
 		if (sourceEncoding != null)
 		{
@@ -560,7 +557,7 @@ public final class CopyFileUtils
 		{
 			reader = new InputStreamReader(inputStream);
 		}
-		final OutputStream outputStream = StreamUtils.getOutputStream(destination,
+		final OutputStream outputStream = StreamExtensions.getOutputStream(destination,
 			!destination.exists());
 		final char[] charArray = new char[FileConst.BLOCKSIZE];
 		final BufferedOutputStream bos = new BufferedOutputStream(outputStream);
@@ -588,8 +585,8 @@ public final class CopyFileUtils
 		}
 		finally
 		{
-			StreamUtils.closeReader(reader);
-			StreamUtils.closeWriter(writer);
+			StreamExtensions.closeReader(reader);
+			StreamExtensions.closeWriter(writer);
 		}
 		if (lastModified)
 		{
@@ -681,14 +678,14 @@ public final class CopyFileUtils
 		final Charset destinationEncoding) throws IOException
 	{
 		final File backup = new File(file.getAbsolutePath() + FileExtension.BACKUP.getExtension());
-		CopyFileUtils.copyFile(file, backup, sourceEncoding, destinationEncoding, true);
+		CopyFileExtensions.copyFile(file, backup, sourceEncoding, destinationEncoding, true);
 		return backup;
 	}
 
 	/**
 	 * Private constructor.
 	 */
-	private CopyFileUtils()
+	private CopyFileExtensions()
 	{
 	}
 

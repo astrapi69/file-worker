@@ -37,7 +37,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import de.alpharogroup.io.StreamUtils;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The Class Unzipper.
@@ -121,9 +121,9 @@ public class Unzipper
 		}
 		finally
 		{
-			StreamUtils.closeInputStream(is);
-			StreamUtils.closeInputStream(bis);
-			StreamUtils.closeOutputStream(bos);
+			StreamExtensions.closeInputStream(is);
+			StreamExtensions.closeInputStream(bis);
+			StreamExtensions.closeOutputStream(bos);
 		}
 	}
 
