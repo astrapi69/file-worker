@@ -58,7 +58,7 @@ import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.file.zip.ZipExtensions;
 import de.alpharogroup.io.SerializedObjectExtensions;
 import de.alpharogroup.io.StreamExtensions;
-import de.alpharogroup.string.StringUtils;
+import de.alpharogroup.string.StringExtensions;
 
 /**
  * Test class for the class {@link FileExtensions}.
@@ -1471,7 +1471,7 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.writeByteArrayToFile(destination, expected);
 
 		final String compareString = ReadFileExtensions.readFromFile(destination);
-		final byte[] compare = StringUtils.convertToBytearray(compareString.toCharArray());
+		final byte[] compare = StringExtensions.convertToBytearray(compareString.toCharArray());
 
 		for (int i = 0; i < compare.length; i++)
 		{
@@ -1491,7 +1491,7 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.writeByteArrayToFile(destination.getAbsolutePath(), expected);
 
 		final String compareString = ReadFileExtensions.readFromFile(destination);
-		final byte[] compare = StringUtils.convertToBytearray(compareString.toCharArray());
+		final byte[] compare = StringExtensions.convertToBytearray(compareString.toCharArray());
 
 		for (int i = 0; i < compare.length; i++)
 		{
