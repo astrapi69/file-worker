@@ -43,6 +43,9 @@ import de.alpharogroup.file.search.PathFinder;
 import de.alpharogroup.io.StreamExtensions;
 
 
+/**
+ * The test class {@link ExportExcelExtensionsTest} is for the class {@link ExportExcelExtensions}.
+ */
 public class ExportExcelExtensionsTest
 {
 
