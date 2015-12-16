@@ -45,8 +45,8 @@ import java.io.Writer;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.io.StreamExtensions;
@@ -94,13 +94,11 @@ public final class WriteFileExtensions
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.log(Level.SEVERE, "readSourceFileAndWriteDestFile failed...\n" + e.getMessage(),
-				e);
+			LOGGER.error("readSourceFileAndWriteDestFile failed...\n" + e.getMessage(),	e);
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "readSourceFileAndWriteDestFile failed...\n" + e.getMessage(),
-				e);
+			LOGGER.error("readSourceFileAndWriteDestFile failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -133,11 +131,11 @@ public final class WriteFileExtensions
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.log(Level.SEVERE, "storeByteArrayToFile failed...\n" + e.getMessage(), e);
+			LOGGER.error("storeByteArrayToFile failed...\n" + e.getMessage(), e);
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "storeByteArrayToFile failed...\n" + e.getMessage(), e);
+			LOGGER.error("storeByteArrayToFile failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -200,7 +198,7 @@ public final class WriteFileExtensions
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "string2File failed...\n" + e.getMessage(), e);
+			LOGGER.error("string2File failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -236,7 +234,7 @@ public final class WriteFileExtensions
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "write2File failed...\n" + e.getMessage(), e);
+			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -272,11 +270,11 @@ public final class WriteFileExtensions
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.log(Level.SEVERE, "write2File failed...\n" + e.getMessage(), e);
+			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "write2File failed...\n" + e.getMessage(), e);
+			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -308,7 +306,7 @@ public final class WriteFileExtensions
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.log(Level.SEVERE, "write2File failed...\n" + e.getMessage(), e);
+			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -317,6 +315,31 @@ public final class WriteFileExtensions
 				StreamExtensions.closeReader(bufferedReader);
 				StreamExtensions.closeWriter(writer);
 			}
+		}
+	}
+
+	/**
+	 * Writes the given input stream to the output stream.
+	 *
+	 * @param inputStream the input stream
+	 * @param outputStream the output stream
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static void write(final InputStream inputStream, final OutputStream outputStream) throws FileNotFoundException, IOException {
+		try
+		{
+			int counter;
+			final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
+			while ((counter = inputStream.read(byteArray)) != -1)
+			{
+				outputStream.write(byteArray, 0, counter);
+			}
+		}
+		finally
+		{
+			StreamExtensions.closeInputStream(inputStream);
+			StreamExtensions.closeOutputStream(outputStream);
 		}
 	}
 
@@ -333,29 +356,19 @@ public final class WriteFileExtensions
 	{
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
-
 		try
 		{
 			inputStream = StreamExtensions.getInputStream(new File(inputFile));
 			outputStream = StreamExtensions.getOutputStream(new File(outputFile));
-			int counter = 0;
-			final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
-			while ((counter = inputStream.read(byteArray)) != -1)
-			{
-				outputStream.write(byteArray, 0, counter);
-			}
-			inputStream.close();
-			outputStream.close();
-			inputStream = null;
-			outputStream = null;
+			write(inputStream, outputStream);
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.log(Level.SEVERE, "write2FileWithBuffer failed...\n" + e.getMessage(), e);
+			LOGGER.error("write2FileWithBuffer failed...\n" + e.getMessage(), e);
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "write2FileWithBuffer failed...\n" + e.getMessage(), e);
+			LOGGER.error("write2FileWithBuffer failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -507,15 +520,15 @@ public final class WriteFileExtensions
 		}
 		catch (final UnsupportedEncodingException e)
 		{
-			LOGGER.log(Level.SEVERE, "writeLinesToFile failed...\n" + e.getMessage(), e);
+			LOGGER.error("writeLinesToFile failed...\n" + e.getMessage(), e);
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.log(Level.SEVERE, "writeLinesToFile failed...\n" + e.getMessage(), e);
+			LOGGER.error("writeLinesToFile failed...\n" + e.getMessage(), e);
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "writeLinesToFile failed...\n" + e.getMessage(), e);
+			LOGGER.error("writeLinesToFile failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -544,7 +557,7 @@ public final class WriteFileExtensions
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "writeProperties2File failed...\n" + e.getMessage(), e);
+			LOGGER.error("writeProperties2File failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
@@ -598,12 +611,12 @@ public final class WriteFileExtensions
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.log(Level.SEVERE, "writeStringToFile failed...\n" + e.getMessage(), e);
+			LOGGER.error("writeStringToFile failed...\n" + e.getMessage(), e);
 			iswritten = false;
 		}
 		catch (final IOException e)
 		{
-			LOGGER.log(Level.SEVERE, "writeStringToFile failed...\n" + e.getMessage(), e);
+			LOGGER.error("writeStringToFile failed...\n" + e.getMessage(), e);
 		}
 		finally
 		{
