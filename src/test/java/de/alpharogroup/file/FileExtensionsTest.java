@@ -752,7 +752,7 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.FileUtils#download(java.net.URI)}.
+	 * Test method for {@link de.alpharogroup.file.FileExtensions#download(java.net.URI)}.
 	 */
 	@Test
 	public void testDownload()
@@ -882,7 +882,7 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.FileUtils#getFilenamePrefix(File)}.
+	 * Test method for {@link de.alpharogroup.file.FileExtensions#getFilenamePrefix(File)}.
 	 */
 	@Test
 	public void testGetFilenamePrefix()
@@ -901,7 +901,7 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.FileUtils#getFilenameSuffix(File)}.
+	 * Test method for {@link de.alpharogroup.file.FileExtensions#getFilenameSuffix(File)}.
 	 */
 	@Test
 	public void testGetFilenameSuffix()
