@@ -44,8 +44,8 @@ public class ChecksumExtensionsTest
 	 *             {@link java.security.MessageDigest} object.
 	 */
 	@Test
-	public void testGetChecksumByteArrayAlgorithm() throws UnsupportedEncodingException,
-		NoSuchAlgorithmException
+	public void testGetChecksumByteArrayAlgorithm()
+		throws UnsupportedEncodingException, NoSuchAlgorithmException
 	{
 		final String secretMessage = "secret Message";
 		final byte[] secretMessageBytes = secretMessage.getBytes("UTF-8");
@@ -84,13 +84,14 @@ public class ChecksumExtensionsTest
 	 *             {@link java.security.MessageDigest} object.
 	 */
 	@Test
-	public void testGetChecksumByteArrayString() throws UnsupportedEncodingException,
-		NoSuchAlgorithmException
+	public void testGetChecksumByteArrayString()
+		throws UnsupportedEncodingException, NoSuchAlgorithmException
 	{
 		final String secretMessage = "secret Message";
 		final byte[] secretMessageBytes = secretMessage.getBytes("UTF-8");
 		String expected = "5cc16e663491726545c13ec2012f4601";
-		String actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.MD2.getAlgorithm());
+		String actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.MD2.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 
 		expected = "25659bd9db98ecc3c2077d44e69607b8";
@@ -102,15 +103,18 @@ public class ChecksumExtensionsTest
 		Assert.assertEquals(expected, actual);
 
 		expected = "8a3b3c92a8b0eb00da917c23201a9407ef7963373464076aec4c54c066e8b7aa";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.SHA_256.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.SHA_256.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 
 		expected = "b58a362687ab42b9bf0d8af0b4860ed262d1fd128e16ab0082723e7785a862cd129b03577312452cc24aecdb36d5406d";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.SHA_384.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.SHA_384.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 
 		expected = "ab29b34a26547ca4ce517d776885a5642929d9ed571a990fc764f7d0b854d6546276ca9aa45b3d88db3dc3dbf3c2f2152017d3e3e054ed6cd7a38a1f7925a746";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.SHA_512.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.SHA_512.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 	}
 
@@ -124,8 +128,8 @@ public class ChecksumExtensionsTest
 	 *             {@link java.security.MessageDigest} object.
 	 */
 	@Test
-	public void testGetChecksumByteObjectArrayAlgorithm() throws NoSuchAlgorithmException,
-		UnsupportedEncodingException
+	public void testGetChecksumByteObjectArrayAlgorithm()
+		throws NoSuchAlgorithmException, UnsupportedEncodingException
 	{
 		final String secretMessage = "secret Message";
 		final byte[] sbytes = secretMessage.getBytes("UTF-8");
@@ -166,15 +170,16 @@ public class ChecksumExtensionsTest
 	 *             {@link java.security.MessageDigest} object.
 	 */
 	@Test
-	public void testGetChecksumByteObjectArrayString() throws UnsupportedEncodingException,
-		NoSuchAlgorithmException
+	public void testGetChecksumByteObjectArrayString()
+		throws UnsupportedEncodingException, NoSuchAlgorithmException
 	{
 
 		final String secretMessage = "secret Message";
 		final byte[] sbytes = secretMessage.getBytes("UTF-8");
 		final Byte[] secretMessageBytes = ArrayUtils.toObject(sbytes);
 		String expected = "5cc16e663491726545c13ec2012f4601";
-		String actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.MD2.getAlgorithm());
+		String actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.MD2.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 
 		expected = "25659bd9db98ecc3c2077d44e69607b8";
@@ -186,15 +191,18 @@ public class ChecksumExtensionsTest
 		Assert.assertEquals(expected, actual);
 
 		expected = "8a3b3c92a8b0eb00da917c23201a9407ef7963373464076aec4c54c066e8b7aa";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.SHA_256.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.SHA_256.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 
 		expected = "b58a362687ab42b9bf0d8af0b4860ed262d1fd128e16ab0082723e7785a862cd129b03577312452cc24aecdb36d5406d";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.SHA_384.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.SHA_384.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 
 		expected = "ab29b34a26547ca4ce517d776885a5642929d9ed571a990fc764f7d0b854d6546276ca9aa45b3d88db3dc3dbf3c2f2152017d3e3e054ed6cd7a38a1f7925a746";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, Algorithm.SHA_512.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			Algorithm.SHA_512.getAlgorithm());
 		Assert.assertEquals(expected, actual);
 	}
 

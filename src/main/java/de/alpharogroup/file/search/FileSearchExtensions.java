@@ -258,8 +258,8 @@ public final class FileSearchExtensions
 			{
 				for (final String element : s)
 				{
-					final File file = new File(dirFiles.getAbsolutePath() + File.separator
-						+ element);
+					final File file = new File(
+						dirFiles.getAbsolutePath() + File.separator + element);
 					if (file.isDirectory())
 					{
 						dirs.push(file);

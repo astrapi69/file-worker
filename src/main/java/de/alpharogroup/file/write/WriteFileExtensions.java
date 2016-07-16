@@ -94,7 +94,7 @@ public final class WriteFileExtensions
 		}
 		catch (final FileNotFoundException e)
 		{
-			LOGGER.error("readSourceFileAndWriteDestFile failed...\n" + e.getMessage(),	e);
+			LOGGER.error("readSourceFileAndWriteDestFile failed...\n" + e.getMessage(), e);
 		}
 		catch (final IOException e)
 		{
@@ -321,12 +321,18 @@ public final class WriteFileExtensions
 	/**
 	 * Writes the given input stream to the output stream.
 	 *
-	 * @param inputStream the input stream
-	 * @param outputStream the output stream
-	 * @throws FileNotFoundException the file not found exception
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @param inputStream
+	 *            the input stream
+	 * @param outputStream
+	 *            the output stream
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void write(final InputStream inputStream, final OutputStream outputStream) throws FileNotFoundException, IOException {
+	public static void write(final InputStream inputStream, final OutputStream outputStream)
+		throws FileNotFoundException, IOException
+	{
 		try
 		{
 			int counter;

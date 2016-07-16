@@ -243,8 +243,8 @@ public final class DeleteFileExtensions
 	 *             Is thrown if the source file is security restricted.
 	 */
 	public static void deleteFilesWithFileFilter(final File source,
-		final FileFilter includeFileFilter) throws FileIsNotADirectoryException, IOException,
-		FileIsSecurityRestrictedException
+		final FileFilter includeFileFilter)
+		throws FileIsNotADirectoryException, IOException, FileIsSecurityRestrictedException
 	{
 		DeleteFileExtensions.deleteFilesWithFileFilter(source, includeFileFilter, null);
 	}
@@ -274,8 +274,8 @@ public final class DeleteFileExtensions
 	{
 		if (!source.isDirectory())
 		{
-			throw new FileIsNotADirectoryException("Source file '" + source.getAbsolutePath()
-				+ "' is not a directory.");
+			throw new FileIsNotADirectoryException(
+				"Source file '" + source.getAbsolutePath() + "' is not a directory.");
 		}
 		File[] includeFilesArray;
 
@@ -326,7 +326,8 @@ public final class DeleteFileExtensions
 					if (currentFile.isDirectory())
 					{
 						// delete directory recursive...
-						deleteFilesWithFileFilter(currentFile, includeFileFilter, excludeFileFilter);
+						deleteFilesWithFileFilter(currentFile, includeFileFilter,
+							excludeFileFilter);
 					}
 					else
 					{ // delete file
@@ -337,8 +338,8 @@ public final class DeleteFileExtensions
 		}
 		else
 		{
-			throw new FileIsSecurityRestrictedException("File '" + source.getAbsolutePath()
-				+ "' is security restricted.");
+			throw new FileIsSecurityRestrictedException(
+				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
 	}
 
@@ -359,8 +360,8 @@ public final class DeleteFileExtensions
 	 *             Is thrown if the source file is security restricted.
 	 */
 	public static void deleteFilesWithFilenameFilter(final File source,
-		final FilenameFilter includeFilenameFilter) throws FileIsNotADirectoryException,
-		IOException, FileIsSecurityRestrictedException
+		final FilenameFilter includeFilenameFilter)
+		throws FileIsNotADirectoryException, IOException, FileIsSecurityRestrictedException
 	{
 		DeleteFileExtensions.deleteFilesWithFilenameFilter(source, includeFilenameFilter, null);
 	}
@@ -390,8 +391,8 @@ public final class DeleteFileExtensions
 	{
 		if (!source.isDirectory())
 		{
-			throw new FileIsNotADirectoryException("Source file '" + source.getAbsolutePath()
-				+ "' is not a directory.");
+			throw new FileIsNotADirectoryException(
+				"Source file '" + source.getAbsolutePath() + "' is not a directory.");
 		}
 		File[] includeFilesArray;
 
@@ -454,8 +455,8 @@ public final class DeleteFileExtensions
 		}
 		else
 		{
-			throw new FileIsSecurityRestrictedException("File '" + source.getAbsolutePath()
-				+ "' is security restricted.");
+			throw new FileIsSecurityRestrictedException(
+				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
 	}
 

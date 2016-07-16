@@ -642,10 +642,10 @@ public final class CompareFileExtensions
 	 *
 	 * @return the list with the result beans
 	 */
-	public static List<IFileCompareResultBean> findEqualFiles(final File source,
-		final File compare, final boolean ignoreAbsolutePathEquality,
-		final boolean ignoreExtensionEquality, final boolean ignoreLengthEquality,
-		final boolean ignoreLastModified, final boolean ignoreNameEquality)
+	public static List<IFileCompareResultBean> findEqualFiles(final File source, final File compare,
+		final boolean ignoreAbsolutePathEquality, final boolean ignoreExtensionEquality,
+		final boolean ignoreLengthEquality, final boolean ignoreLastModified,
+		final boolean ignoreNameEquality)
 	{
 		final List<File> allSourceFiles = FileSearchExtensions.findFilesRecursive(source, "*");
 		final List<File> allCompareFiles = FileSearchExtensions.findFilesRecursive(compare, "*");
@@ -699,8 +699,8 @@ public final class CompareFileExtensions
 				{
 					continue;
 				}
-				final IFileContentResultBean contentResultBean = CompareFileExtensions.compareFiles(
-					toCompare, file);
+				final IFileContentResultBean contentResultBean = CompareFileExtensions
+					.compareFiles(toCompare, file);
 				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
@@ -734,11 +734,10 @@ public final class CompareFileExtensions
 	 *            the ignore content equality
 	 * @return the list with the result beans
 	 */
-	public static List<IFileContentResultBean> findEqualFilesWithSameContent(
-		final File dirToSearch, final boolean ignoreAbsolutePathEquality,
-		final boolean ignoreExtensionEquality, final boolean ignoreLengthEquality,
-		final boolean ignoreLastModified, final boolean ignoreNameEquality,
-		final boolean ignoreContentEquality)
+	public static List<IFileContentResultBean> findEqualFilesWithSameContent(final File dirToSearch,
+		final boolean ignoreAbsolutePathEquality, final boolean ignoreExtensionEquality,
+		final boolean ignoreLengthEquality, final boolean ignoreLastModified,
+		final boolean ignoreNameEquality, final boolean ignoreContentEquality)
 	{
 		final List<IFileContentResultBean> equalFiles = new ArrayList<IFileContentResultBean>();
 
@@ -797,8 +796,8 @@ public final class CompareFileExtensions
 				{
 					continue;
 				}
-				final IFileContentResultBean contentResultBean = CompareFileExtensions.compareFiles(
-					toCompare, file);
+				final IFileContentResultBean contentResultBean = CompareFileExtensions
+					.compareFiles(toCompare, file);
 				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.

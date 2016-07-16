@@ -441,8 +441,8 @@ public class Zipper implements ZipModel
 			}
 			if (!this.zipFile.exists())
 			{
-				throw new FileDoesNotExistException("Zipfile with the name "
-					+ this.zipFile.getName() + " does not exist.");
+				throw new FileDoesNotExistException(
+					"Zipfile with the name " + this.zipFile.getName() + " does not exist.");
 			}
 			fos = new FileOutputStream(this.zipFile);
 			this.zos = new ZipOutputStream(fos);

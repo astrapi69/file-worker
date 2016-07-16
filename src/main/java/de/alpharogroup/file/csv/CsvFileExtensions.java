@@ -682,8 +682,8 @@ public final class CsvFileExtensions
 	 * @throws IOException
 	 *             When a io-problem occurs.
 	 */
-	public static void writeLines(final File output, final Set<String> values, final String encoding)
-		throws IOException
+	public static void writeLines(final File output, final Set<String> values,
+		final String encoding) throws IOException
 	{
 		writeLinesToFile(values, output, encoding);
 	}

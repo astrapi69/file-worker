@@ -90,8 +90,8 @@ public class Unzipper
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public void extractZipEntry(final ZipFile zipFile, final ZipEntry target, final File toDirectory)
-		throws IOException
+	public void extractZipEntry(final ZipFile zipFile, final ZipEntry target,
+		final File toDirectory) throws IOException
 	{
 		final File fileToExtract = new File(toDirectory, target.getName());
 		BufferedInputStream bis = null;

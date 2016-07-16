@@ -36,7 +36,8 @@ import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 
 /**
- * The class {@link CreateFileExtensionsTest}  has unit test for the class {@link CreateFileExtensions}.
+ * The class {@link CreateFileExtensionsTest} has unit test for the class
+ * {@link CreateFileExtensions}.
  */
 public class CreateFileExtensionsTest
 {

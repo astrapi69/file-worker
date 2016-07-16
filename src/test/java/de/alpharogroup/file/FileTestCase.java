@@ -109,79 +109,86 @@ public abstract class FileTestCase extends BaseTestCase
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		projectPath = new File(absolutePath);
-		AssertJUnit.assertTrue("The directory " + this.projectPath.getAbsolutePath()
-			+ " should be created.", projectPath.exists());
+		AssertJUnit.assertTrue(
+			"The directory " + this.projectPath.getAbsolutePath() + " should be created.",
+			projectPath.exists());
 		this.test = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!this.test.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.test);
-			AssertJUnit.assertTrue("The directory " + this.test.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.test.getAbsolutePath() + " should be created.", created);
 		}
 		this.zipDir = new File(this.test.getAbsoluteFile(), "zipDir");
 		if (!this.zipDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.zipDir);
-			AssertJUnit.assertTrue("The directory " + this.zipDir.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.zipDir.getAbsolutePath() + " should be created.", created);
 		}
 		this.unzipDir = new File(this.test.getAbsoluteFile(), "unzipDir");
 		if (!this.unzipDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.unzipDir);
-			AssertJUnit.assertTrue("The directory " + this.unzipDir.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.unzipDir.getAbsolutePath() + " should be created.",
+				created);
 		}
 		this.resources = new File(this.test.getAbsoluteFile(), "resources");
 		if (!this.resources.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.resources);
-			AssertJUnit.assertTrue("The directory " + this.resources.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.resources.getAbsolutePath() + " should be created.",
+				created);
 		}
 		this.testResources = new File(this.test.getAbsoluteFile(), "resources");
 		if (!this.testResources.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.testResources);
-			AssertJUnit.assertTrue("The directory " + this.testResources.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.testResources.getAbsolutePath() + " should be created.",
+				created);
 		}
 		this.testDir = new File(this.testResources.getAbsoluteFile(), "testDir");
 		if (!this.testDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.testDir);
-			AssertJUnit.assertTrue("The directory " + this.testDir.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.testDir.getAbsolutePath() + " should be created.", created);
 		}
 		this.secondTestDir = new File(this.testResources.getAbsoluteFile(), "secondTestDir");
 		if (!secondTestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.secondTestDir);
-			AssertJUnit.assertTrue("The directory " + this.secondTestDir.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.secondTestDir.getAbsolutePath() + " should be created.",
+				created);
 		}
 		this.deepDir = new File(this.testDir.getAbsoluteFile(), "deepDir");
 		if (!this.deepDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.deepDir);
-			AssertJUnit.assertTrue("The directory " + this.deepDir.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.deepDir.getAbsolutePath() + " should be created.", created);
 
 		}
 		this.deepDir2 = new File(this.testDir.getAbsoluteFile(), "deepDir2");
 		if (!this.deepDir2.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.deepDir2);
-			AssertJUnit.assertTrue("The directory " + this.deepDir2.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.deepDir2.getAbsolutePath() + " should be created.",
+				created);
 
 		}
 		this.deeperDir = new File(this.deepDir.getAbsoluteFile(), "deeperDir");
 		if (!this.deeperDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.deeperDir);
-			AssertJUnit.assertTrue("The directory " + this.deeperDir.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + this.deeperDir.getAbsolutePath() + " should be created.",
+				created);
 		}
 	}
 

@@ -99,7 +99,8 @@ public class SimpleCompareFileUtilsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByChecksumAdler32(testFile1, testFile2);
+		this.result = SimpleCompareFileExtensions.compareFilesByChecksumAdler32(testFile1,
+			testFile2);
 		AssertJUnit.assertTrue(this.result);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
