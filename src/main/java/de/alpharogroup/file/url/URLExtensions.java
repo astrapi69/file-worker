@@ -29,7 +29,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 /**
- * The Class URLUtils.
+ * The class URLUtils.
  */
 public class URLExtensions
 {

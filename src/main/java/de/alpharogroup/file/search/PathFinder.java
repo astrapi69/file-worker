@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The Class PathFinder is a helper class for getting source folders from maven projects.
+ * The class PathFinder is a helper class for getting source folders from maven projects.
  */
 public final class PathFinder
 {

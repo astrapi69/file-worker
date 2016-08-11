@@ -31,7 +31,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
- * The Class PathFinderTest.
+ * The class PathFinderTest.
  */
 public class PathFinderTest
 {

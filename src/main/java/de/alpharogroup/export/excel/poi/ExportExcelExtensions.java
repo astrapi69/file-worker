@@ -43,7 +43,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import de.alpharogroup.lang.ClassExtensions;
 
 /**
- * The Class ExportExcelExtensions.
+ * The class ExportExcelExtensions.
  */
 public final class ExportExcelExtensions
 {

@@ -29,7 +29,7 @@ import java.io.File;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 
 /**
- * The Class FileCompareResultBean is pojo for comparing two files.
+ * The class FileCompareResultBean is pojo for comparing two files.
  *
  * @version 1.0
  * @author Asterios Raptis

@@ -40,7 +40,7 @@ import java.util.zip.ZipInputStream;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class Unzipper.
+ * The class Unzipper.
  *
  * @author Asterios Raptis
  * @version 1.0

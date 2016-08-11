@@ -39,7 +39,7 @@ import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class Zipper.
+ * The class Zipper.
  * 
  * @version 1.0
  * @author Asterios Raptis
