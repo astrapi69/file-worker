@@ -45,10 +45,12 @@ public final class SimpleCompareFileExtensions
 	 *            the file to compare
 	 * @return true if the absolute path are equal, otherwise false.
 	 */
-	public static boolean compareFilesByAbsolutePath(final File sourceFile, final File fileToCompare)
+	public static boolean compareFilesByAbsolutePath(final File sourceFile,
+		final File fileToCompare)
 	{
-		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, false, true, true, true,
-			true, true).getAbsolutePathEquality();
+		return CompareFileExtensions
+			.compareFiles(sourceFile, fileToCompare, false, true, true, true, true, true)
+			.getAbsolutePathEquality();
 	}
 
 	/**
@@ -68,7 +70,8 @@ public final class SimpleCompareFileExtensions
 		final Algorithm algorithm) throws NoSuchAlgorithmException
 	{
 		final String checksumSourceFile = ChecksumExtensions.getChecksum(sourceFile, algorithm);
-		final String checksumFileToCompare = ChecksumExtensions.getChecksum(fileToCompare, algorithm);
+		final String checksumFileToCompare = ChecksumExtensions.getChecksum(fileToCompare,
+			algorithm);
 		return checksumSourceFile.equals(checksumFileToCompare);
 	}
 
@@ -118,8 +121,9 @@ public final class SimpleCompareFileExtensions
 	 */
 	public static boolean compareFilesByContent(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, true, true,
-			true, false).getContentEquality();
+		return CompareFileExtensions
+			.compareFiles(sourceFile, fileToCompare, true, true, true, true, true, false)
+			.getContentEquality();
 	}
 
 	/**
@@ -133,8 +137,9 @@ public final class SimpleCompareFileExtensions
 	 */
 	public static boolean compareFilesByExtension(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, false, true, true,
-			true, true).getFileExtensionEquality();
+		return CompareFileExtensions
+			.compareFiles(sourceFile, fileToCompare, true, false, true, true, true, true)
+			.getFileExtensionEquality();
 	}
 
 	/**
@@ -146,10 +151,12 @@ public final class SimpleCompareFileExtensions
 	 *            the file to compare
 	 * @return true if the last modified are equal, otherwise false.
 	 */
-	public static boolean compareFilesByLastModified(final File sourceFile, final File fileToCompare)
+	public static boolean compareFilesByLastModified(final File sourceFile,
+		final File fileToCompare)
 	{
-		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, true, false,
-			true, true).getLastModifiedEquality();
+		return CompareFileExtensions
+			.compareFiles(sourceFile, fileToCompare, true, true, true, false, true, true)
+			.getLastModifiedEquality();
 	}
 
 	/**
@@ -163,8 +170,9 @@ public final class SimpleCompareFileExtensions
 	 */
 	public static boolean compareFilesByLength(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, false, true,
-			true, true).getLengthEquality();
+		return CompareFileExtensions
+			.compareFiles(sourceFile, fileToCompare, true, true, false, true, true, true)
+			.getLengthEquality();
 	}
 
 	/**
@@ -178,8 +186,9 @@ public final class SimpleCompareFileExtensions
 	 */
 	public static boolean compareFilesByName(final File sourceFile, final File fileToCompare)
 	{
-		return CompareFileExtensions.compareFiles(sourceFile, fileToCompare, true, true, true, true,
-			false, true).getNameEquality();
+		return CompareFileExtensions
+			.compareFiles(sourceFile, fileToCompare, true, true, true, true, false, true)
+			.getNameEquality();
 	}
 
 	/**

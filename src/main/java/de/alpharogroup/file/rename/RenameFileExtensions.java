@@ -342,9 +342,9 @@ public final class RenameFileExtensions
 					final boolean copied = CopyFileExtensions.copyFile(fileToRename, newFileName);
 					if (copied)
 					{
-						System.err.println("Sucessfully copied the old file "
-							+ fileToRename.getName() + " to the new file " + newFileName.getName()
-							+ ".");
+						System.err
+							.println("Sucessfully copied the old file " + fileToRename.getName()
+								+ " to the new file " + newFileName.getName() + ".");
 					}
 					else
 					{
@@ -369,8 +369,8 @@ public final class RenameFileExtensions
 				}
 				catch (final IOException e)
 				{
-					System.err.println("Try to delete the old file " + fileToRename.getName()
-						+ " failed.");
+					System.err.println(
+						"Try to delete the old file " + fileToRename.getName() + " failed.");
 				}
 			}
 		}
@@ -396,8 +396,8 @@ public final class RenameFileExtensions
 		{
 			try
 			{
-				throw new FileDoesNotExistException("File" + fileToRename.getName()
-					+ " does not exists!");
+				throw new FileDoesNotExistException(
+					"File" + fileToRename.getName() + " does not exists!");
 			}
 			catch (final FileDoesNotExistException e)
 			{

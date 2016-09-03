@@ -73,7 +73,8 @@ public final class Zip4jExtensions
 	 */
 	public static void zipFiles(final ZipFile zipFile4j, final File... toAdd) throws ZipException
 	{
-		zipFiles(zipFile4j, Zip4jConstants.COMP_DEFLATE, Zip4jConstants.DEFLATE_LEVEL_NORMAL, toAdd);
+		zipFiles(zipFile4j, Zip4jConstants.COMP_DEFLATE, Zip4jConstants.DEFLATE_LEVEL_NORMAL,
+			toAdd);
 	}
 
 	/**

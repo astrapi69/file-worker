@@ -29,7 +29,7 @@ import java.io.InputStream;
 
 // from 'http://blog.alutam.com/2009/10/31/reading-password-protected-zip-files-in-java/'
 /**
- * The Class ZipDecryptInputStream is from the blog from Martin's Weekend Coding from
+ * The class ZipDecryptInputStream is from the blog from Martin's Weekend Coding from
  * 'http://blog.alutam.com/2009/10/31/reading-password-protected-zip-files-in-java/'.
  */
 public class ZipDecryptInputStream extends InputStream

@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The Class CsvBean.
+ * The class CsvBean.
  */
 public class CsvBean implements Serializable, Cloneable
 {

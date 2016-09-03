@@ -125,8 +125,8 @@ public final class CsvToSqlExtensions
 	 *            the lines
 	 * @return the csv file as sql insert script
 	 */
-	public static String getCsvFileAsSqlInsertScript(final String tableName,
-		final String[] headers, final String[] columnTypes, final List<String[]> lines)
+	public static String getCsvFileAsSqlInsertScript(final String tableName, final String[] headers,
+		final String[] columnTypes, final List<String[]> lines)
 	{
 		return getCsvFileAsSqlInsertScript(tableName, new CsvBean(headers, columnTypes, lines));
 	}
@@ -146,12 +146,11 @@ public final class CsvToSqlExtensions
 	 *            the lines
 	 * @return the csv file as sql insert script
 	 */
-	public static String getCsvFileAsSqlInsertScript(final String tableName,
-		final String[] headers, final String[] columnTypes, final String[] columnTypesEdit,
-		final List<String[]> lines)
+	public static String getCsvFileAsSqlInsertScript(final String tableName, final String[] headers,
+		final String[] columnTypes, final String[] columnTypesEdit, final List<String[]> lines)
 	{
-		return getCsvFileAsSqlInsertScript(tableName, new CsvBean(headers, columnTypes,
-			columnTypesEdit, lines));
+		return getCsvFileAsSqlInsertScript(tableName,
+			new CsvBean(headers, columnTypes, columnTypesEdit, lines));
 	}
 
 	/**
