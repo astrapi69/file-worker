@@ -39,7 +39,7 @@ import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The Class Zipper.
+ * The class Zipper.
  * 
  * @version 1.0
  * @author Asterios Raptis
@@ -441,8 +441,8 @@ public class Zipper implements ZipModel
 			}
 			if (!this.zipFile.exists())
 			{
-				throw new FileDoesNotExistException("Zipfile with the name "
-					+ this.zipFile.getName() + " does not exist.");
+				throw new FileDoesNotExistException(
+					"Zipfile with the name " + this.zipFile.getName() + " does not exist.");
 			}
 			fos = new FileOutputStream(this.zipFile);
 			this.zos = new ZipOutputStream(fos);

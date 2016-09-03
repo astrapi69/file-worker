@@ -25,7 +25,7 @@
 package de.alpharogroup.file.search;
 
 /**
- * The Class SearchFileAttributesBean provides file attribute flags to ignore or not.
+ * The class SearchFileAttributesBean provides file attribute flags to ignore or not.
  *
  * @version 1.0
  * @author Asterios Raptis

@@ -42,7 +42,8 @@ import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The class {@link ChecksumExtensions} is a utility class for computing checksum from files and byte arrays.
+ * The class {@link ChecksumExtensions} is a utility class for computing checksum from files and
+ * byte arrays.
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -439,8 +440,8 @@ public final class ChecksumExtensions
 	 * @throws NoSuchAlgorithmException
 	 *             Is thrown if the algorithm is not supported or does not exists.
 	 */
-	public static void main(final String[] args) throws FileNotFoundException, IOException,
-		NoSuchAlgorithmException
+	public static void main(final String[] args)
+		throws FileNotFoundException, IOException, NoSuchAlgorithmException
 	{
 
 		if (args.length != 1)

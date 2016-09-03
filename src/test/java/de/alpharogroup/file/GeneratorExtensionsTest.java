@@ -81,7 +81,8 @@ public class GeneratorExtensionsTest extends FileTestCase
 	public void testCreateConstantsFromStringList() throws IOException
 	{
 		final List<String> cl = CsvFileExtensions.readFileToList(constantlist);
-		final List<String> gcl = GeneratorExtensions.newConstantsFromStringList(cl, null, "_key", true);
+		final List<String> gcl = GeneratorExtensions.newConstantsFromStringList(cl, null, "_key",
+			true);
 		for (final String string : gcl)
 		{
 			System.out.println(string);

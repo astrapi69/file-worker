@@ -173,10 +173,13 @@ public final class ReadFileExtensions
 	/**
 	 * Read from file.
 	 *
-	 * @param file the file
-	 * @param encoding the encoding
+	 * @param file
+	 *            the file
+	 * @param encoding
+	 *            the encoding
 	 * @return the string
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String readFromFile(final File file, final Charset encoding) throws IOException
 	{
@@ -226,10 +229,29 @@ public final class ReadFileExtensions
 	 * @throws IOException
 	 *             When a io-problem occurs.
 	 */
-	public static List<String> readLinesInList(final File input) throws FileNotFoundException,
-		IOException
+	public static List<String> readLinesInList(final File input)
+		throws FileNotFoundException, IOException
 	{
 		return readLinesInList(input, false);
+	}
+
+	/**
+	 * Reads every line from the File and puts them to the List.
+	 *
+	 * @param input
+	 *            The File from where the input comes.
+	 * @param encoding
+	 *            the encoding
+	 * @return The List with all lines from the file.
+	 * @throws FileNotFoundException
+	 *             is thrown if the given file is not found.
+	 * @throws IOException
+	 *             When a io-problem occurs.
+	 */
+	public static List<String> readLinesInList(final File input, final Charset encoding)
+		throws FileNotFoundException, IOException
+	{
+		return readLinesInList(input, encoding, false);
 	}
 
 	/**
@@ -252,11 +274,32 @@ public final class ReadFileExtensions
 	}
 
 	/**
+	 * Reads every line from the File and puts them to the List.
+	 *
+	 * @param input
+	 *            The File from where the input comes.
+	 * @param trim
+	 *            the flag trim if the lines shell be trimed.
+	 * @return The List with all lines from the file.
+	 * @throws FileNotFoundException
+	 *             is thrown if the given file is not found.
+	 * @throws IOException
+	 *             When a io-problem occurs.
+	 */
+	public static List<String> readLinesInList(final File input, final Charset encoding,
+		final boolean trim) throws FileNotFoundException, IOException
+	{
+		return readLinesInList(new FileInputStream(input), encoding, trim);
+	}
+
+	/**
 	 * Reads every line from the given InputStream and puts them to the List.
 	 *
-	 * @param input            The InputStream from where the input comes.
+	 * @param input
+	 *            The InputStream from where the input comes.
 	 * @return The List with all lines from the file.
-	 * @throws IOException             When a io-problem occurs.
+	 * @throws IOException
+	 *             When a io-problem occurs.
 	 */
 	public static List<String> readLinesInList(final InputStream input) throws IOException
 	{
@@ -277,6 +320,24 @@ public final class ReadFileExtensions
 	public static List<String> readLinesInList(final InputStream input, final boolean trim)
 		throws IOException
 	{
+		// return the list with all lines from the file.
+		return readLinesInList(input, null, trim);
+	}
+
+	/**
+	 * Reads every line from the given InputStream and puts them to the List.
+	 *
+	 * @param input
+	 *            The InputStream from where the input comes.
+	 * @param trim
+	 *            the flag trim if the lines shell be trimed.
+	 * @return The List with all lines from the file.
+	 * @throws IOException
+	 *             When a io-problem occurs.
+	 */
+	public static List<String> readLinesInList(final InputStream input, final Charset encoding,
+		final boolean trim) throws IOException
+	{
 		// The List where the lines from the File to save.
 		final List<String> output = new ArrayList<>();
 		InputStreamReader isr = null;
@@ -284,7 +345,15 @@ public final class ReadFileExtensions
 		try
 		{
 			// create the inputstreamreader
-			isr = new InputStreamReader(input);
+			if (encoding == null)
+			{
+				isr = new InputStreamReader(input);
+			}
+			else
+			{
+
+				isr = new InputStreamReader(input, encoding);
+			}
 			// create the bufferedreader
 			reader = new BufferedReader(isr);
 			// the line.
@@ -382,16 +451,18 @@ public final class ReadFileExtensions
 	/**
 	 * Get a byte array from the given {@code InputStream}.
 	 *
-	 * @param input            The {@code InputStream}.
+	 * @param input
+	 *            The {@code InputStream}.
 	 * @return the a byte array.
-	 * @throws IOException             Signals that an I/O exception has occurred.
-	 * @throws NullPointerException             if the input is null
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws NullPointerException
+	 *             if the input is null
 	 */
 	public static byte[] toByteArray(final InputStream input) throws IOException
 	{
 		return IOUtils.toByteArray(input);
 	}
-
 
 	/**
 	 * To byte array.

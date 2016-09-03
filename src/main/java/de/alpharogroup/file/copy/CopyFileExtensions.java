@@ -141,9 +141,9 @@ public final class CopyFileExtensions
 	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
-		final FileFilter fileFilter, final boolean lastModified) throws IOException,
-		FileIsNotADirectoryException, FileIsADirectoryException, FileIsSecurityRestrictedException,
-		DirectoryAllreadyExistsException
+		final FileFilter fileFilter, final boolean lastModified)
+		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
+		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
 	{
 		return copyDirectoryWithFileFilter(source, destination, fileFilter, null, lastModified);
 	}
@@ -180,9 +180,9 @@ public final class CopyFileExtensions
 	 */
 	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
 		final FileFilter includeFileFilter, final FileFilter excludeFileFilter,
-		final boolean lastModified) throws IOException, FileIsNotADirectoryException,
-		FileIsADirectoryException, FileIsSecurityRestrictedException,
-		DirectoryAllreadyExistsException
+		final boolean lastModified)
+		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
+		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
 	{
 		return copyDirectoryWithFileFilter(source, destination, includeFileFilter,
 			excludeFileFilter, null, lastModified);
@@ -223,14 +223,14 @@ public final class CopyFileExtensions
 	 */
 	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
 		final FileFilter includeFileFilter, final FileFilter excludeFileFilter,
-		final Collection<File> excludeFiles, final boolean lastModified) throws IOException,
-		FileIsNotADirectoryException, FileIsADirectoryException, FileIsSecurityRestrictedException,
-		DirectoryAllreadyExistsException
+		final Collection<File> excludeFiles, final boolean lastModified)
+		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
+		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
 	{
 		if (!source.isDirectory())
 		{
-			throw new FileIsNotADirectoryException("Source file '" + source.getAbsolutePath()
-				+ "' is not a directory.");
+			throw new FileIsNotADirectoryException(
+				"Source file '" + source.getAbsolutePath() + "' is not a directory.");
 		}
 		if (!destination.exists())
 		{
@@ -313,8 +313,8 @@ public final class CopyFileExtensions
 		}
 		else
 		{
-			throw new FileIsSecurityRestrictedException("File '" + source.getAbsolutePath()
-				+ "' is security restricted.");
+			throw new FileIsSecurityRestrictedException(
+				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
 		return copied;
 	}
@@ -345,8 +345,8 @@ public final class CopyFileExtensions
 	 * @throws DirectoryAllreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
-	public static boolean copyDirectoryWithFilenameFilter(final File source,
-		final File destination, final FilenameFilter filenameFilter, final boolean lastModified)
+	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
+		final FilenameFilter filenameFilter, final boolean lastModified)
 		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
 		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
 	{
@@ -385,16 +385,16 @@ public final class CopyFileExtensions
 	 * @throws DirectoryAllreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
-	public static boolean copyDirectoryWithFilenameFilter(final File source,
-		final File destination, final FilenameFilter includeFilenameFilter,
-		final FilenameFilter excludeFilenameFilter, final boolean lastModified) throws IOException,
-		FileIsNotADirectoryException, FileIsADirectoryException, FileIsSecurityRestrictedException,
-		DirectoryAllreadyExistsException
+	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
+		final FilenameFilter includeFilenameFilter, final FilenameFilter excludeFilenameFilter,
+		final boolean lastModified)
+		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
+		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
 	{
 		if (!source.isDirectory())
 		{
-			throw new FileIsNotADirectoryException("Source file '" + source.getAbsolutePath()
-				+ "' is not a directory.");
+			throw new FileIsNotADirectoryException(
+				"Source file '" + source.getAbsolutePath() + "' is not a directory.");
 		}
 		if (!destination.exists())
 		{
@@ -462,8 +462,8 @@ public final class CopyFileExtensions
 		}
 		else
 		{
-			throw new FileIsSecurityRestrictedException("File '" + source.getAbsolutePath()
-				+ "' is security restricted.");
+			throw new FileIsSecurityRestrictedException(
+				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
 		return copied;
 	}
@@ -483,8 +483,8 @@ public final class CopyFileExtensions
 	 * @throws FileIsADirectoryException
 	 *             Is thrown if the destination file is a directory.
 	 */
-	public static boolean copyFile(final File source, final File destination) throws IOException,
-		FileIsADirectoryException
+	public static boolean copyFile(final File source, final File destination)
+		throws IOException, FileIsADirectoryException
 	{
 		return copyFile(source, destination, true);
 	}
@@ -641,8 +641,8 @@ public final class CopyFileExtensions
 	 *             Is thrown if the destination file is a directory.
 	 */
 	public static boolean copyFileToDirectory(final File source, final File destinationDir,
-		final boolean lastModified) throws FileIsNotADirectoryException, IOException,
-		FileIsADirectoryException
+		final boolean lastModified)
+		throws FileIsNotADirectoryException, IOException, FileIsADirectoryException
 	{
 		if (null == destinationDir)
 		{

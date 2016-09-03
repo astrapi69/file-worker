@@ -77,8 +77,8 @@ public class ExcelPoiFactory
 	public static CellStyle newDateCellStyle(final Workbook workbook, final String dateFormat)
 	{
 		final CellStyle dateCellStyle = workbook.createCellStyle();
-		dateCellStyle.setDataFormat(workbook.getCreationHelper().createDataFormat()
-			.getFormat(dateFormat));
+		dateCellStyle
+			.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat(dateFormat));
 		return dateCellStyle;
 	}
 

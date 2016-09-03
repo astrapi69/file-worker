@@ -124,8 +124,8 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testChangeAllFilenameSuffixFileStringString() throws IOException,
-		FileDoesNotExistException
+	public void testChangeAllFilenameSuffixFileStringString()
+		throws IOException, FileDoesNotExistException
 	{
 
 		final String oldFileSuffix = ".txt";
@@ -177,8 +177,8 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testChangeAllFilenameSuffixFileStringStringBoolean() throws IOException,
-		FileDoesNotExistException
+	public void testChangeAllFilenameSuffixFileStringStringBoolean()
+		throws IOException, FileDoesNotExistException
 	{
 
 		final String oldFileSuffix = ".txt";
@@ -228,8 +228,8 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testChangeFilenameSuffixFileString() throws FileNotRenamedException, IOException,
-		FileDoesNotExistException
+	public void testChangeFilenameSuffixFileString()
+		throws FileNotRenamedException, IOException, FileDoesNotExistException
 	{
 
 		final String filePrefix = "testChangeFilenameSuffixFileString";
@@ -257,8 +257,8 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testChangeFilenameSuffixFileStringBoolean() throws IOException,
-		FileNotRenamedException, FileDoesNotExistException
+	public void testChangeFilenameSuffixFileStringBoolean()
+		throws IOException, FileNotRenamedException, FileDoesNotExistException
 	{
 
 		final String filePrefix = "testChangeFilenameSuffixFileStringBoolean";
@@ -752,7 +752,7 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.FileUtils#download(java.net.URI)}.
+	 * Test method for {@link de.alpharogroup.file.FileExtensions#download(java.net.URI)}.
 	 */
 	@Test
 	public void testDownload()
@@ -882,7 +882,7 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.FileUtils#getFilenamePrefix(File)}.
+	 * Test method for {@link de.alpharogroup.file.FileExtensions#getFilenamePrefix(File)}.
 	 */
 	@Test
 	public void testGetFilenamePrefix()
@@ -901,7 +901,7 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.FileUtils#getFilenameSuffix(File)}.
+	 * Test method for {@link de.alpharogroup.file.FileExtensions#getFilenameSuffix(File)}.
 	 */
 	@Test
 	public void testGetFilenameSuffix()
@@ -945,7 +945,8 @@ public class FileExtensionsTest extends FileTestCase
 
 		final File source = new File(this.testDir.getAbsoluteFile(), "testGetOutputStream.txt");
 
-		final File destination = new File(this.testDir.getAbsoluteFile(), "testGetOutputStream.tft");
+		final File destination = new File(this.testDir.getAbsoluteFile(),
+			"testGetOutputStream.tft");
 
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
@@ -961,8 +962,8 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testInputStream2String() throws DirectoryAllreadyExistsException, IOException,
-		FileDoesNotExistException
+	public void testInputStream2String()
+		throws DirectoryAllreadyExistsException, IOException, FileDoesNotExistException
 	{
 
 		final File inputFile = new File(this.testDir, "testInputStream2String.inp");
@@ -985,15 +986,15 @@ public class FileExtensionsTest extends FileTestCase
 		final int length = FileConst.ZIP_EXTENSIONS.length;
 		for (int i = 0; i < length; i++)
 		{
-			final File testIsZip = new File(this.testResources, "testIsZip"
-				+ FileConst.ZIP_EXTENSIONS[i]);
+			final File testIsZip = new File(this.testResources,
+				"testIsZip" + FileConst.ZIP_EXTENSIONS[i]);
 			this.result = ZipExtensions.isZip(testIsZip.getName());
 			AssertJUnit.assertTrue("The file " + testIsZip.getName() + " should be a zipfile.",
 				this.result);
 		}
 		this.result = ZipExtensions.isZip(this.testResources.getName());
-		AssertJUnit.assertFalse("The file " + this.testResources.getName()
-			+ " should not be a zipfile.", this.result);
+		AssertJUnit.assertFalse(
+			"The file " + this.testResources.getName() + " should not be a zipfile.", this.result);
 	}
 
 	@Test
@@ -1029,8 +1030,8 @@ public class FileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue("The directory " + srcDir.getAbsolutePath()
-				+ " should be created.", created);
+			AssertJUnit.assertTrue(
+				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
 			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
 		System.err.println("-------------------------------------------------");
@@ -1373,8 +1374,8 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testWrite2FileReaderWriterBoolean() throws DirectoryAllreadyExistsException,
-		IOException
+	public void testWrite2FileReaderWriterBoolean()
+		throws DirectoryAllreadyExistsException, IOException
 	{
 
 		final File inputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.inp");
@@ -1395,8 +1396,8 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testWrite2FileStringPrintWriterBoolean() throws DirectoryAllreadyExistsException,
-		IOException
+	public void testWrite2FileStringPrintWriterBoolean()
+		throws DirectoryAllreadyExistsException, IOException
 	{
 
 		final File inputFile = new File(this.testDir, "testWrite2FileStringPrintWriterBoolean.inp");

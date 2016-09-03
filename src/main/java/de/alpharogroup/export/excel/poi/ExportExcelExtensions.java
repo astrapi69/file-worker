@@ -43,7 +43,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import de.alpharogroup.lang.ClassExtensions;
 
 /**
- * The Class ExportExcelExtensions.
+ * The class ExportExcelExtensions.
  */
 public final class ExportExcelExtensions
 {
@@ -61,8 +61,8 @@ public final class ExportExcelExtensions
 	 * @throws FileNotFoundException
 	 *             Fals die excel-Datei nicht gefunden wurde.
 	 */
-	public static List<String[][]> exportWorkbook(final File excelSheet) throws IOException,
-		FileNotFoundException
+	public static List<String[][]> exportWorkbook(final File excelSheet)
+		throws IOException, FileNotFoundException
 	{
 		final POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(excelSheet));
 		final HSSFWorkbook wb = new HSSFWorkbook(fs);
@@ -99,8 +99,8 @@ public final class ExportExcelExtensions
 							}
 							else if (cellType == Cell.CELL_TYPE_BOOLEAN)
 							{
-								excelSheetInTDArray[i][j] = Boolean.toString(cell
-									.getBooleanCellValue());
+								excelSheetInTDArray[i][j] = Boolean
+									.toString(cell.getBooleanCellValue());
 							}
 							else if (cellType == Cell.CELL_TYPE_ERROR)
 							{
@@ -112,8 +112,8 @@ public final class ExportExcelExtensions
 							}
 							else if (cellType == Cell.CELL_TYPE_NUMERIC)
 							{
-								excelSheetInTDArray[i][j] = Double.toString(cell
-									.getNumericCellValue());
+								excelSheetInTDArray[i][j] = Double
+									.toString(cell.getNumericCellValue());
 							}
 							else if (cellType == Cell.CELL_TYPE_STRING)
 							{
@@ -223,8 +223,8 @@ public final class ExportExcelExtensions
 	 * @throws URISyntaxException
 	 *             is thrown if a string could not be parsed as a URI reference.
 	 */
-	public static void main(final String[] args) throws FileNotFoundException, IOException,
-		URISyntaxException
+	public static void main(final String[] args)
+		throws FileNotFoundException, IOException, URISyntaxException
 	{
 		final String filename = "test.xls";
 		final URL url = ClassExtensions.getResource(filename);

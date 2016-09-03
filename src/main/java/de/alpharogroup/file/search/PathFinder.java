@@ -30,32 +30,32 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The Class PathFinder is a helper class for getting source folders from maven projects.
+ * The class PathFinder is a helper class for getting source folders from maven projects.
  */
 public final class PathFinder
 {
 	/**
 	 * The Constant SOURCE_FOLDER_SRC_MAIN_RESOURCES keeps the relative path for the source folder
 	 * 'src/main/resources' in maven projects.
-	 * */
+	 */
 	public static final String SOURCE_FOLDER_SRC_MAIN_RESOURCES = "src/main/resources";
 
 	/**
 	 * The Constant SOURCE_FOLDER_SRC_MAIN_JAVA keeps the relative path for the source folder
 	 * 'src/main/java' in maven projects.
-	 * */
+	 */
 	public static final String SOURCE_FOLDER_SRC_MAIN_JAVA = "src/main/java";
 
 	/**
 	 * The Constant SOURCE_FOLDER_SRC_TEST_RESOURCES keeps the relative path for the source folder
 	 * 'src/test/resources' in maven projects.
-	 * */
+	 */
 	public static final String SOURCE_FOLDER_SRC_TEST_RESOURCES = "src/test/resources";
 
 	/**
 	 * The Constant SOURCE_FOLDER_SRC_TEST_JAVA keeps the relative path for the source folder
 	 * 'src/test/java' in maven projects.
-	 * */
+	 */
 	public static final String SOURCE_FOLDER_SRC_TEST_JAVA = "src/test/java";
 
 	/**

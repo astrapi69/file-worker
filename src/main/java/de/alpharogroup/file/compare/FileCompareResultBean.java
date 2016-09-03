@@ -29,7 +29,7 @@ import java.io.File;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 
 /**
- * The Class FileCompareResultBean is pojo for comparing two files.
+ * The class FileCompareResultBean is pojo for comparing two files.
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -107,13 +107,15 @@ public class FileCompareResultBean implements IFileCompareResultBean
 			&& (this.fileExtensionEquality == null
 				? other.fileExtensionEquality == null
 				: this.fileExtensionEquality.equals(other.fileExtensionEquality))
-			&& (this.lengthEquality == null ? other.lengthEquality == null : this.lengthEquality
-				.equals(other.lengthEquality))
+			&& (this.lengthEquality == null
+				? other.lengthEquality == null
+				: this.lengthEquality.equals(other.lengthEquality))
 			&& (this.lastModifiedEquality == null
 				? other.lastModifiedEquality == null
 				: this.lastModifiedEquality.equals(other.lastModifiedEquality))
-			&& (this.nameEquality == null ? other.nameEquality == null : this.nameEquality
-				.equals(other.nameEquality))
+			&& (this.nameEquality == null
+				? other.nameEquality == null
+				: this.nameEquality.equals(other.nameEquality))
 			&& (this.absolutePathEquality == null
 				? other.absolutePathEquality == null
 				: this.absolutePathEquality.equals(other.absolutePathEquality));

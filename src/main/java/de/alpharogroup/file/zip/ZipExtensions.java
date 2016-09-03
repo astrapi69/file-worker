@@ -229,8 +229,8 @@ public final class ZipExtensions
 		{
 			if (!dirToZip.exists())
 			{
-				throw new IOException("Directory with the name " + dirToZip.getName()
-					+ " does not exist.");
+				throw new IOException(
+					"Directory with the name " + dirToZip.getName() + " does not exist.");
 			}
 
 			if (!zipFile.exists())
@@ -241,8 +241,8 @@ public final class ZipExtensions
 				}
 				else
 				{
-					throw new FileDoesNotExistException("Zipfile with the name "
-						+ zipFile.getName() + " does not exist.");
+					throw new FileDoesNotExistException(
+						"Zipfile with the name " + zipFile.getName() + " does not exist.");
 				}
 			}
 			fos = new FileOutputStream(zipFile);

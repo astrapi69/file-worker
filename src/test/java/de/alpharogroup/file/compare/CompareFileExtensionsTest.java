@@ -102,7 +102,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
 		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
 
-		final List<IFileCompareResultBean> found = CompareFileExtensions.findEqualFiles(this.testDir);
+		final List<IFileCompareResultBean> found = CompareFileExtensions
+			.findEqualFiles(this.testDir);
 
 		AssertJUnit.assertTrue("found.size() is not equal 1.", found.size() == 1);
 
@@ -147,8 +148,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
 
-		final List<IFileCompareResultBean> found = CompareFileExtensions.findEqualFiles(this.testDir,
-			this.secondTestDir);
+		final List<IFileCompareResultBean> found = CompareFileExtensions
+			.findEqualFiles(this.testDir, this.secondTestDir);
 
 		AssertJUnit.assertTrue("found.size() is not equal 3.", found.size() == 2);
 
