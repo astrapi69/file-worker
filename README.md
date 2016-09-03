@@ -1,5 +1,7 @@
 # file-worker
 
+Project that holds utility class for file operations.
+
 ## License
 
 The source code comes under the liberal MIT License, making file-worker great for all types of applications.
@@ -20,7 +22,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 Than you can add the dependency to your dependencies:
 
 		<!-- file-worker version -->
-		<file-worker.version>4.10.0</file-worker.version>
+		<file-worker.version>4.11.0</file-worker.version>
 
 		<dependencies>
 			...
@@ -51,6 +53,7 @@ Do not hesitate to contact the file-worker developers with your questions, conce
 
 # Donate
 
+If you like this library, please consider a donation through 
 <a href="https://flattr.com/submit/auto?fid=r7vp62&url=https%3A%2F%2Fgithub.com%2Flightblueseas%2Ffile-worker" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
 </a>
