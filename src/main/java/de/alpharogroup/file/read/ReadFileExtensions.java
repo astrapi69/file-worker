@@ -278,6 +278,7 @@ public final class ReadFileExtensions
 	 *
 	 * @param input
 	 *            The File from where the input comes.
+	 * @param encoding         the charset for read
 	 * @param trim
 	 *            the flag trim if the lines shell be trimed.
 	 * @return The List with all lines from the file.
@@ -327,13 +328,11 @@ public final class ReadFileExtensions
 	/**
 	 * Reads every line from the given InputStream and puts them to the List.
 	 *
-	 * @param input
-	 *            The InputStream from where the input comes.
-	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 * @param input            The InputStream from where the input comes.
+	 * @param encoding         the charset for read
+	 * @param trim            the flag trim if the lines shell be trimed.
 	 * @return The List with all lines from the file.
-	 * @throws IOException
-	 *             When a io-problem occurs.
+	 * @throws IOException             When a io-problem occurs.
 	 */
 	public static List<String> readLinesInList(final InputStream input, final Charset encoding,
 		final boolean trim) throws IOException
