@@ -17,7 +17,15 @@
 	<description>
 		Project that holds utility class for file operations.
 	</description>
-
+	
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
 	<url>https://github.com/lightblueseas/file-worker</url>
 
 	<scm>
