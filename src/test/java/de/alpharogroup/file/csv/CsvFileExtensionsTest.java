@@ -97,6 +97,34 @@ public class CsvFileExtensionsTest
 	{
 	}
 
+	@Test(enabled = true)
+	public void testCreateSqlInsertFromCsv() throws IOException
+	{
+		final File testFile = new File(testResources, "languages_iso639_1.csv");
+		final File output = new File(testResources, "insert_languages.sql");
+		final List<String> list = ReadFileExtensions.readLinesInList(testFile,
+			Charset.forName("Windows-1252"));
+		int id = 1;
+		final int version = 1;
+		final StringBuilder sb = new StringBuilder();
+		for (final String string2 : list)
+		{
+			final String string = string2;
+			final String[] data = CsvFileExtensions.getDataFromLine(string, ";");
+			byte[] destinationBytes = data[0].getBytes("UTF-8");
+			final String languageName = new String(destinationBytes);
+			destinationBytes = data[1].getBytes("UTF-8");
+			final String languageCode = new String(destinationBytes);
+			final String insert = "INSERT INTO languages (id, version, name, iso639_1) VALUES ("
+				+ id + ", " + version + ", '" + languageName + "', '" + languageCode + "');";
+			sb.append(insert);
+			sb.append(System.lineSeparator());
+			id++;
+			System.out.println(insert);
+		}
+		WriteFileExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
+	}
+
 	/**
 	 * Test method for.
 	 *
@@ -204,34 +232,6 @@ public class CsvFileExtensionsTest
 			System.out.println(data);
 
 		}
-	}
-
-	@Test(enabled = true)
-	public void testCreateSqlInsertFromCsv() throws IOException
-	{
-		final File testFile = new File(testResources, "languages_iso639_1.csv");
-		final File output = new File(testResources, "insert_languages.sql");
-		final List<String> list = ReadFileExtensions.readLinesInList(testFile,
-			Charset.forName("Windows-1252"));
-		int id = 1;
-		final int version = 1;
-		final StringBuilder sb = new StringBuilder();
-		for (final String string2 : list)
-		{
-			final String string = string2;
-			final String[] data = CsvFileExtensions.getDataFromLine(string, ";");
-			byte[] destinationBytes = data[0].getBytes("UTF-8");
-			final String languageName = new String(destinationBytes);
-			destinationBytes = data[1].getBytes("UTF-8");
-			final String languageCode = new String(destinationBytes);
-			final String insert = "INSERT INTO languages (id, version, name, iso639_1) VALUES ("
-				+ id + ", " + version + ", '" + languageName + "', '" + languageCode + "');";
-			sb.append(insert);
-			sb.append(System.lineSeparator());
-			id++;
-			System.out.println(insert);
-		}
-		WriteFileExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
 	}
 
 	/**

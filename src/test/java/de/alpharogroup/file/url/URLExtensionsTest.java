@@ -27,12 +27,11 @@ package de.alpharogroup.file.url;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import lombok.experimental.ExtensionMethod;
-
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.zip.ZipTestCase;
+import lombok.experimental.ExtensionMethod;
 
 
 @ExtensionMethod({ URLExtensions.class })

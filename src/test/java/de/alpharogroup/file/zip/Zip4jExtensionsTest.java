@@ -89,8 +89,8 @@ public class Zip4jExtensionsTest extends FileTestCase
 		// Test to extract...
 		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, null);
 
-		AssertJUnit.assertTrue("File" + unzippedFile1.getName()
-			+ " should be extracted.", unzippedFile1.exists());
+		AssertJUnit.assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
+			unzippedFile1.exists());
 
 	}
 
@@ -121,10 +121,10 @@ public class Zip4jExtensionsTest extends FileTestCase
 
 		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, null);
 
-		AssertJUnit.assertTrue("File" + unzippedFile1.getName()
-			+ " should be extracted.", unzippedFile1.exists());
-		AssertJUnit.assertTrue("File" + unzippedFile2.getName()
-			+ " should be extracted.", unzippedFile2.exists());
+		AssertJUnit.assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
+			unzippedFile1.exists());
+		AssertJUnit.assertTrue("File" + unzippedFile2.getName() + " should be extracted.",
+			unzippedFile2.exists());
 	}
 
 	/**
@@ -133,16 +133,17 @@ public class Zip4jExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testZipFilesZipFileIntIntFileArray()
 	{
-//		Zip4jExtensions.zipFiles(zipFile4j, compressionMethod, compressionLevel, toAdd);
+		// Zip4jExtensions.zipFiles(zipFile4j, compressionMethod, compressionLevel, toAdd);
 	}
 
 	/**
-	 * Test for {@link Zip4jExtensions#zipFiles(ZipFile, net.lingala.zip4j.model.ZipParameters, File...)}
+	 * Test for
+	 * {@link Zip4jExtensions#zipFiles(ZipFile, net.lingala.zip4j.model.ZipParameters, File...)}
 	 */
 	@Test(enabled = false)
 	public void testZipFilesZipFileZipParametersFileArray()
 	{
-//		Zip4jExtensions.zipFiles(zipFile4j, parameters, toAdd);
+		// Zip4jExtensions.zipFiles(zipFile4j, parameters, toAdd);
 	}
 
 }

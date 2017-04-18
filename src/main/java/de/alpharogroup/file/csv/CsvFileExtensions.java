@@ -40,10 +40,10 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import lombok.experimental.ExtensionMethod;
 import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
+import lombok.experimental.ExtensionMethod;
 
 /**
  * Utility class for the use of cvs-files.

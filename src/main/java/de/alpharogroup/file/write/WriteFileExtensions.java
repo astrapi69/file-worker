@@ -207,6 +207,37 @@ public final class WriteFileExtensions
 	}
 
 	/**
+	 * Writes the given input stream to the output stream.
+	 *
+	 * @param inputStream
+	 *            the input stream
+	 * @param outputStream
+	 *            the output stream
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void write(final InputStream inputStream, final OutputStream outputStream)
+		throws FileNotFoundException, IOException
+	{
+		try
+		{
+			int counter;
+			final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
+			while ((counter = inputStream.read(byteArray)) != -1)
+			{
+				outputStream.write(byteArray, 0, counter);
+			}
+		}
+		finally
+		{
+			StreamExtensions.closeInputStream(inputStream);
+			StreamExtensions.closeOutputStream(outputStream);
+		}
+	}
+
+	/**
 	 * The Method write2File() reads from an opened Reader and writes it to the opened Writer.
 	 *
 	 * @param reader
@@ -315,37 +346,6 @@ public final class WriteFileExtensions
 				StreamExtensions.closeReader(bufferedReader);
 				StreamExtensions.closeWriter(writer);
 			}
-		}
-	}
-
-	/**
-	 * Writes the given input stream to the output stream.
-	 *
-	 * @param inputStream
-	 *            the input stream
-	 * @param outputStream
-	 *            the output stream
-	 * @throws FileNotFoundException
-	 *             the file not found exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void write(final InputStream inputStream, final OutputStream outputStream)
-		throws FileNotFoundException, IOException
-	{
-		try
-		{
-			int counter;
-			final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
-			while ((counter = inputStream.read(byteArray)) != -1)
-			{
-				outputStream.write(byteArray, 0, counter);
-			}
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(inputStream);
-			StreamExtensions.closeOutputStream(outputStream);
 		}
 	}
 

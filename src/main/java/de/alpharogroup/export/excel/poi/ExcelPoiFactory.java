@@ -56,14 +56,12 @@ public class ExcelPoiFactory
 	 * @param height
 	 *            the height
 	 * @return the cell style
-	 * @deprecated Scheduled for removal for apache.poi in 3.17. use instead {@link ExcelPoiFactory#newCellStyle(Workbook, String, boolean, short)}
 	 */
-	@Deprecated
 	public static CellStyle newCellStyle(final Workbook workbook, final String fontName,
-		final short boldweight, final short height)
+		final boolean bold, final short height)
 	{
 		final CellStyle boldFontCellStyle = workbook.createCellStyle();
-		boldFontCellStyle.setFont(newFont(workbook, fontName, boldweight, height));
+		boldFontCellStyle.setFont(newFont(workbook, fontName, bold, height));
 		return boldFontCellStyle;
 	}
 
@@ -79,12 +77,15 @@ public class ExcelPoiFactory
 	 * @param height
 	 *            the height
 	 * @return the cell style
+	 * @deprecated Scheduled for removal for apache.poi in 3.17. use instead
+	 *             {@link ExcelPoiFactory#newCellStyle(Workbook, String, boolean, short)}
 	 */
+	@Deprecated
 	public static CellStyle newCellStyle(final Workbook workbook, final String fontName,
-		final boolean bold, final short height)
+		final short boldweight, final short height)
 	{
 		final CellStyle boldFontCellStyle = workbook.createCellStyle();
-		boldFontCellStyle.setFont(newFont(workbook, fontName, bold, height));
+		boldFontCellStyle.setFont(newFont(workbook, fontName, boldweight, height));
 		return boldFontCellStyle;
 	}
 
@@ -117,15 +118,13 @@ public class ExcelPoiFactory
 	 * @param height
 	 *            the height
 	 * @return the font
-	 * @deprecated Scheduled for removal for apache.poi in 3.17. use instead {@link ExcelPoiFactory#newFont(Workbook, String, boolean, short)}
 	 */
-	@Deprecated
-	public static Font newFont(final Workbook workbook, final String fontName,
-		final short boldweight, final short height)
+	public static Font newFont(final Workbook workbook, final String fontName, final boolean bold,
+		final short height)
 	{
 		final Font font = workbook.createFont();
 		font.setFontName(fontName);
-		font.setBoldweight(boldweight);
+		font.setBold(bold);
 		font.setFontHeightInPoints(height);
 		return font;
 	}
@@ -142,13 +141,16 @@ public class ExcelPoiFactory
 	 * @param height
 	 *            the height
 	 * @return the font
+	 * @deprecated Scheduled for removal for apache.poi in 3.17. use instead
+	 *             {@link ExcelPoiFactory#newFont(Workbook, String, boolean, short)}
 	 */
+	@Deprecated
 	public static Font newFont(final Workbook workbook, final String fontName,
-		final boolean bold, final short height)
+		final short boldweight, final short height)
 	{
 		final Font font = workbook.createFont();
 		font.setFontName(fontName);
-		font.setBold(bold);
+		font.setBoldweight(boldweight);
 		font.setFontHeightInPoints(height);
 		return font;
 	}
