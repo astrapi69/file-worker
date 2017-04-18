@@ -51,8 +51,8 @@ public class ExcelPoiFactory
 	 *            the workbook
 	 * @param fontName
 	 *            the font name
-	 * @param boldweight
-	 *            the boldweight
+	 * @param bold
+	 *            the bold flag
 	 * @param height
 	 *            the height
 	 * @return the cell style
@@ -113,8 +113,8 @@ public class ExcelPoiFactory
 	 *            the workbook
 	 * @param fontName
 	 *            the font name
-	 * @param boldweight
-	 *            the boldweight
+	 * @param bold
+	 *            the bold flag
 	 * @param height
 	 *            the height
 	 * @return the font
