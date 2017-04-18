@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- * Copyright (C) 2007 Asterios Raptis
+ * Copyright (C) 2015 Asterios Raptis
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -43,7 +43,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import de.alpharogroup.lang.ClassExtensions;
 
 /**
- * The class ExportExcelExtensions.
+ * The class {@link ExportExcelExtensions}.
  */
 public final class ExportExcelExtensions
 {
@@ -61,6 +61,7 @@ public final class ExportExcelExtensions
 	 * @throws FileNotFoundException
 	 *             Fals die excel-Datei nicht gefunden wurde.
 	 */
+	@SuppressWarnings("deprecation")
 	public static List<String[][]> exportWorkbook(final File excelSheet)
 		throws IOException, FileNotFoundException
 	{
@@ -145,6 +146,7 @@ public final class ExportExcelExtensions
 	 * @throws FileNotFoundException
 	 *             Fals die excel-Datei nicht gefunden wurde.
 	 */
+	@SuppressWarnings("deprecation")
 	public static List<List<List<String>>> exportWorkbookAsStringList(final File excelSheet)
 		throws IOException, FileNotFoundException
 	{
@@ -248,6 +250,7 @@ public final class ExportExcelExtensions
 	 * @throws FileNotFoundException
 	 *             the file not found exception
 	 */
+	@SuppressWarnings("deprecation")
 	public static HSSFWorkbook replaceNullCellsIntoEmptyCells(final File excelSheet)
 		throws IOException, FileNotFoundException
 	{

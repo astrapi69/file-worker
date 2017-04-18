@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- * Copyright (C) 2007 Asterios Raptis
+ * Copyright (C) 2015 Asterios Raptis
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -240,25 +240,6 @@ public final class ReadFileExtensions
 	 *
 	 * @param input
 	 *            The File from where the input comes.
-	 * @param encoding
-	 *            the encoding
-	 * @return The List with all lines from the file.
-	 * @throws FileNotFoundException
-	 *             is thrown if the given file is not found.
-	 * @throws IOException
-	 *             When a io-problem occurs.
-	 */
-	public static List<String> readLinesInList(final File input, final Charset encoding)
-		throws FileNotFoundException, IOException
-	{
-		return readLinesInList(input, encoding, false);
-	}
-
-	/**
-	 * Reads every line from the File and puts them to the List.
-	 *
-	 * @param input
-	 *            The File from where the input comes.
 	 * @param trim
 	 *            the flag trim if the lines shell be trimed.
 	 * @return The List with all lines from the file.
@@ -278,7 +259,27 @@ public final class ReadFileExtensions
 	 *
 	 * @param input
 	 *            The File from where the input comes.
-	 * @param encoding         the charset for read
+	 * @param encoding
+	 *            the encoding
+	 * @return The List with all lines from the file.
+	 * @throws FileNotFoundException
+	 *             is thrown if the given file is not found.
+	 * @throws IOException
+	 *             When a io-problem occurs.
+	 */
+	public static List<String> readLinesInList(final File input, final Charset encoding)
+		throws FileNotFoundException, IOException
+	{
+		return readLinesInList(input, encoding, false);
+	}
+
+	/**
+	 * Reads every line from the File and puts them to the List.
+	 *
+	 * @param input
+	 *            The File from where the input comes.
+	 * @param encoding
+	 *            the charset for read
 	 * @param trim
 	 *            the flag trim if the lines shell be trimed.
 	 * @return The List with all lines from the file.
@@ -328,11 +329,15 @@ public final class ReadFileExtensions
 	/**
 	 * Reads every line from the given InputStream and puts them to the List.
 	 *
-	 * @param input            The InputStream from where the input comes.
-	 * @param encoding         the charset for read
-	 * @param trim            the flag trim if the lines shell be trimed.
+	 * @param input
+	 *            The InputStream from where the input comes.
+	 * @param encoding
+	 *            the charset for read
+	 * @param trim
+	 *            the flag trim if the lines shell be trimed.
 	 * @return The List with all lines from the file.
-	 * @throws IOException             When a io-problem occurs.
+	 * @throws IOException
+	 *             When a io-problem occurs.
 	 */
 	public static List<String> readLinesInList(final InputStream input, final Charset encoding,
 		final boolean trim) throws IOException

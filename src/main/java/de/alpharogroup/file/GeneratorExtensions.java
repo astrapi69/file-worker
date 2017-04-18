@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- * Copyright (C) 2007 Asterios Raptis
+ * Copyright (C) 2015 Asterios Raptis
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -35,8 +35,8 @@ public final class GeneratorExtensions
 	/**
 	 * Creates a String list with the String constants from the given String list. For instance:
 	 * List data = new ArrayList(); data.add("foo"); data.add("bar");
-	 * newConstantsFromStringList(data, false); Result from list:[
-	 * "public static final String FOO = "foo";", "public static final String BAR = "bar";"]
+	 * newConstantsFromStringList(data, false); Result from list:[ "public static final String FOO =
+	 * "foo";", "public static final String BAR = "bar";"]
 	 *
 	 * @param data
 	 *            The data from what to create the contant strings.
@@ -98,8 +98,8 @@ public final class GeneratorExtensions
 	/**
 	 * Creates a String for a constant Stringarray to be inserted in java-file. For instance: List
 	 * data = new ArrayList(); data.add("foo"); data.add("bar");
-	 * newcreateStaticArrayVariable("test", data); Resultstring:
-	 * "public static final String [] TEST = { "foo", "bar"};"
+	 * newcreateStaticArrayVariable("test", data); Resultstring: "public static final String [] TEST
+	 * = { "foo", "bar"};"
 	 *
 	 * @param arrayName
 	 *            The name from the array.

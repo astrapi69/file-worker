@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- * Copyright (C) 2007 Asterios Raptis
+ * Copyright (C) 2015 Asterios Raptis
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -27,12 +27,11 @@ package de.alpharogroup.file.url;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import lombok.experimental.ExtensionMethod;
-
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.zip.ZipTestCase;
+import lombok.experimental.ExtensionMethod;
 
 
 @ExtensionMethod({ URLExtensions.class })
