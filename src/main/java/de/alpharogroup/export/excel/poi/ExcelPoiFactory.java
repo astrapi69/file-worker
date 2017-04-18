@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- * Copyright (C) 2007 Asterios Raptis
+ * Copyright (C) 2015 Asterios Raptis
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -51,12 +51,36 @@ public class ExcelPoiFactory
 	 *            the workbook
 	 * @param fontName
 	 *            the font name
+	 * @param bold
+	 *            the bold flag
+	 * @param height
+	 *            the height
+	 * @return the cell style
+	 */
+	public static CellStyle newCellStyle(final Workbook workbook, final String fontName,
+		final boolean bold, final short height)
+	{
+		final CellStyle boldFontCellStyle = workbook.createCellStyle();
+		boldFontCellStyle.setFont(newFont(workbook, fontName, bold, height));
+		return boldFontCellStyle;
+	}
+
+	/**
+	 * Creates a new CellStyle from the given parameters.
+	 *
+	 * @param workbook
+	 *            the workbook
+	 * @param fontName
+	 *            the font name
 	 * @param boldweight
 	 *            the boldweight
 	 * @param height
 	 *            the height
 	 * @return the cell style
+	 * @deprecated Scheduled for removal for apache.poi in 3.17. use instead
+	 *             {@link ExcelPoiFactory#newCellStyle(Workbook, String, boolean, short)}
 	 */
+	@Deprecated
 	public static CellStyle newCellStyle(final Workbook workbook, final String fontName,
 		final short boldweight, final short height)
 	{
@@ -89,12 +113,38 @@ public class ExcelPoiFactory
 	 *            the workbook
 	 * @param fontName
 	 *            the font name
+	 * @param bold
+	 *            the bold flag
+	 * @param height
+	 *            the height
+	 * @return the font
+	 */
+	public static Font newFont(final Workbook workbook, final String fontName, final boolean bold,
+		final short height)
+	{
+		final Font font = workbook.createFont();
+		font.setFontName(fontName);
+		font.setBold(bold);
+		font.setFontHeightInPoints(height);
+		return font;
+	}
+
+	/**
+	 * Creates a new font from the given parameters.
+	 *
+	 * @param workbook
+	 *            the workbook
+	 * @param fontName
+	 *            the font name
 	 * @param boldweight
 	 *            the boldweight
 	 * @param height
 	 *            the height
 	 * @return the font
+	 * @deprecated Scheduled for removal for apache.poi in 3.17. use instead
+	 *             {@link ExcelPoiFactory#newFont(Workbook, String, boolean, short)}
 	 */
+	@Deprecated
 	public static Font newFont(final Workbook workbook, final String fontName,
 		final short boldweight, final short height)
 	{
@@ -150,7 +200,7 @@ public class ExcelPoiFactory
 	 * <li>opening square bracket ([)</li>
 	 * <li>closing square bracket (])</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param workbook
 	 *            the workbook
 	 * @param name
