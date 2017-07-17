@@ -6,11 +6,17 @@ Project that holds utility class for file operations.
 
 The source code comes under the liberal MIT License, making file-worker great for all types of applications.
 
-# Build status and latest maven version
+## Build status
+
 [![Build Status](https://travis-ci.org/lightblueseas/file-worker.svg?branch=master)](https://travis-ci.org/lightblueseas/file-worker)
 
+## Maven Central
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker)
+
+## javadoc
+
+file-worker [![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/file-worker.svg)](http://www.javadoc.io/doc/de.alpharogroup/file-worker)
 
 ## Maven dependency
 
