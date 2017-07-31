@@ -47,7 +47,7 @@ The source code for file-worker are on GitHub. Please feel free to fork and send
 
 Create your own fork of [lightblueseas/file-worker/fork](https://github.com/lightblueseas/file-worker/fork)
 
-To share your changes, [submit a pull request](https://github.com/lightblueseas/file-worker/pull/new/master).
+To share your changes, [submit a pull request](https://github.com/lightblueseas/file-worker/pull/new/develop).
 
 Don't forget to add new units tests on your changes.
 
