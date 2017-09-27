@@ -35,7 +35,7 @@ import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
@@ -72,7 +72,7 @@ public final class ChecksumExtensions
 	 *            the value
 	 * @return true, the given value matches a SHA1 value otherwise false
 	 */
-	public static boolean matchesSHA512(String value) {
+	public static boolean matchesSHA512(final String value) {
 		return value.matches(REGEX_VALIDATION_SHA512);
 	}
 
@@ -82,7 +82,7 @@ public final class ChecksumExtensions
 	 * @param value the value
 	 * @return true, the given value matches a SHA1 value otherwise false
 	 */
-	public static boolean matchesSHA1(String value) {
+	public static boolean matchesSHA1(final String value) {
 	    return value.matches(REGEX_VALIDATION_SHA1);
 	}
 
@@ -92,7 +92,7 @@ public final class ChecksumExtensions
 	 * @param value the value
 	 * @return true, the given value matches a MD5 value otherwise false
 	 */
-	public static boolean matchesMD5(String value) {
+	public static boolean matchesMD5(final String value) {
 	    return value.matches(REGEX_VALIDATION_MD5);
 	}
 
