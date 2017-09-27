@@ -6,11 +6,17 @@ Project that holds utility class for file operations.
 
 The source code comes under the liberal MIT License, making file-worker great for all types of applications.
 
-# Build status and latest maven version
+## Build status
+
 [![Build Status](https://travis-ci.org/lightblueseas/file-worker.svg?branch=master)](https://travis-ci.org/lightblueseas/file-worker)
 
+## Maven Central
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker)
+
+## javadoc
+
+file-worker [![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/file-worker.svg)](http://www.javadoc.io/doc/de.alpharogroup/file-worker)
 
 ## Maven dependency
 
@@ -22,7 +28,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 Than you can add the dependency to your dependencies:
 
 		<!-- file-worker version -->
-		<file-worker.version>4.15.0</file-worker.version>
+		<file-worker.version>4.16.0</file-worker.version>
 
 		<dependencies>
 			...
@@ -41,7 +47,7 @@ The source code for file-worker are on GitHub. Please feel free to fork and send
 
 Create your own fork of [lightblueseas/file-worker/fork](https://github.com/lightblueseas/file-worker/fork)
 
-To share your changes, [submit a pull request](https://github.com/lightblueseas/file-worker/pull/new/master).
+To share your changes, [submit a pull request](https://github.com/lightblueseas/file-worker/pull/new/develop).
 
 Don't forget to add new units tests on your changes.
 
