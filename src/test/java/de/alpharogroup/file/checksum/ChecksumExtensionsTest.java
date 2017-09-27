@@ -27,7 +27,7 @@ package de.alpharogroup.file.checksum;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class ChecksumExtensionsTest
 
 	/**
 	 * Test for {@link ChecksumExtensions#getChecksum(byte[], Algorithm)}
-	 * 
+	 *
 	 * @throws UnsupportedEncodingException
 	 *             If the named charset is not supported
 	 * @throws NoSuchAlgorithmException
@@ -76,7 +76,7 @@ public class ChecksumExtensionsTest
 
 	/**
 	 * Test for {@link ChecksumExtensions#getChecksum(byte[], String)}
-	 * 
+	 *
 	 * @throws UnsupportedEncodingException
 	 *             If the named charset is not supported
 	 * @throws NoSuchAlgorithmException
@@ -120,7 +120,7 @@ public class ChecksumExtensionsTest
 
 	/**
 	 * Test for {@link ChecksumExtensions#getChecksum(Byte[], Algorithm)}
-	 * 
+	 *
 	 * @throws UnsupportedEncodingException
 	 *             If the named charset is not supported
 	 * @throws NoSuchAlgorithmException
@@ -162,7 +162,7 @@ public class ChecksumExtensionsTest
 
 	/**
 	 * Test for {@link ChecksumExtensions#getChecksum(Byte[], String)}
-	 * 
+	 *
 	 * @throws UnsupportedEncodingException
 	 *             If the named charset is not supported
 	 * @throws NoSuchAlgorithmException
