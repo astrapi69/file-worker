@@ -58,43 +58,12 @@ public final class ChecksumExtensions
 	private static final String HEXADECIMAL_CHARACTER_CLASS = "[a-fA-F0-9]";
 
 	/** The constant REGEX_VALIDATION_SHA1. */
-	public static final String REGEX_VALIDATION_SHA1 = HEXADECIMAL_CHARACTER_CLASS+"{40}";
+	public static final String REGEX_VALIDATION_SHA1 = HEXADECIMAL_CHARACTER_CLASS + "{40}";
 
 	/** The constant REGEX_VALIDATION_MD5. */
-	public static final String REGEX_VALIDATION_MD5 = HEXADECIMAL_CHARACTER_CLASS+"{32}";
+	public static final String REGEX_VALIDATION_MD5 = HEXADECIMAL_CHARACTER_CLASS + "{32}";
 	/** The constant REGEX_VALIDATION_SHA512. */
 	public static final String REGEX_VALIDATION_SHA512 = HEXADECIMAL_CHARACTER_CLASS + "{128}";
-
-	/**
-	 * Checks if the given value matches a SHA512 value pattern.
-	 *
-	 * @param value
-	 *            the value
-	 * @return true, the given value matches a SHA1 value otherwise false
-	 */
-	public static boolean matchesSHA512(final String value) {
-		return value.matches(REGEX_VALIDATION_SHA512);
-	}
-
-	/**
-	 * Checks if the given value matches a SHA1 value pattern.
-	 *
-	 * @param value the value
-	 * @return true, the given value matches a SHA1 value otherwise false
-	 */
-	public static boolean matchesSHA1(final String value) {
-	    return value.matches(REGEX_VALIDATION_SHA1);
-	}
-
-	/**
-	 * Checks if the given value matches a MD5 value pattern.
-	 *
-	 * @param value the value
-	 * @return true, the given value matches a MD5 value otherwise false
-	 */
-	public static boolean matchesMD5(final String value) {
-	    return value.matches(REGEX_VALIDATION_MD5);
-	}
 
 	/**
 	 * Utility method for tests.
@@ -506,6 +475,42 @@ public final class ChecksumExtensions
 
 		}
 
+	}
+
+	/**
+	 * Checks if the given value matches a MD5 value pattern.
+	 *
+	 * @param value
+	 *            the value
+	 * @return true, the given value matches a MD5 value otherwise false
+	 */
+	public static boolean matchesMD5(final String value)
+	{
+		return value.matches(REGEX_VALIDATION_MD5);
+	}
+
+	/**
+	 * Checks if the given value matches a SHA1 value pattern.
+	 *
+	 * @param value
+	 *            the value
+	 * @return true, the given value matches a SHA1 value otherwise false
+	 */
+	public static boolean matchesSHA1(final String value)
+	{
+		return value.matches(REGEX_VALIDATION_SHA1);
+	}
+
+	/**
+	 * Checks if the given value matches a SHA512 value pattern.
+	 *
+	 * @param value
+	 *            the value
+	 * @return true, the given value matches a SHA1 value otherwise false
+	 */
+	public static boolean matchesSHA512(final String value)
+	{
+		return value.matches(REGEX_VALIDATION_SHA512);
 	}
 
 	/**
