@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>file-worker</artifactId>
-	<version>4.17.0-SNAPSHOT</version>
+	<version>4.16.1</version>
 
 	<name>${project.artifactId}</name>
 

@@ -28,7 +28,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 Than you can add the dependency to your dependencies:
 
 		<!-- file-worker version -->
-		<file-worker.version>4.16.0</file-worker.version>
+		<file-worker.version>4.16.1</file-worker.version>
 
 		<dependencies>
 			...
