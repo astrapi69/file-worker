@@ -45,7 +45,7 @@
 	</issueManagement>
 
 	<properties>
-		<jcommons-lang.version>4.22.0</jcommons-lang.version>
+		<jcommons-lang.version>4.23.0</jcommons-lang.version>
 		<test-objects.version>4.16.0</test-objects.version>
 		<!-- EXTERNAL LIBRARIES versions -->
 		<poi.version>3.15</poi.version>
