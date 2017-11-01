@@ -32,6 +32,7 @@ Than you can add the dependency to your dependencies:
 
 		<dependencies>
 			...
+			<!-- FILE-WORKER DEPENDENCY -->
 			<dependency>
 				<groupId>de.alpharogroup</groupId>
 				<artifactId>file-worker</artifactId>
