@@ -29,11 +29,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * The class PathFinder is a helper class for getting source folders from maven projects.
  */
+@UtilityClass
 public final class PathFinder
 {
+	/**
+	 * The Constant SOURCE_FOLDER_SRC_MAIN_WEBAPP keeps the relative path for the source folder
+	 * 'src/main/webapp' in maven projects.
+	 */
+	public static final String SOURCE_FOLDER_SRC_MAIN_WEBAPP = "src/main/webapp";
+
 	/**
 	 * The Constant SOURCE_FOLDER_SRC_MAIN_RESOURCES keeps the relative path for the source folder
 	 * 'src/main/resources' in maven projects.
@@ -249,14 +258,6 @@ public final class PathFinder
 	public static File getSrcTestResourcesDir(final File projectDirectory)
 	{
 		return new File(projectDirectory, PathFinder.SOURCE_FOLDER_SRC_TEST_RESOURCES);
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private PathFinder()
-	{
-		super();
 	}
 
 }
