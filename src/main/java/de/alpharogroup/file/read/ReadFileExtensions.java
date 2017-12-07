@@ -43,7 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.io.StreamExtensions;
@@ -227,7 +227,7 @@ public final class ReadFileExtensions
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
-	 *             When a io-problem occurs.
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static List<String> readLinesInList(final File input)
 		throws FileNotFoundException, IOException
@@ -246,7 +246,7 @@ public final class ReadFileExtensions
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
-	 *             When a io-problem occurs.
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static List<String> readLinesInList(final File input, final boolean trim)
 		throws FileNotFoundException, IOException
@@ -323,7 +323,7 @@ public final class ReadFileExtensions
 		throws IOException
 	{
 		// return the list with all lines from the file.
-		return readLinesInList(input, null, trim);
+		return readLinesInList(input, Charset.forName("UTF-8"), trim);
 	}
 
 	/**

@@ -1,0 +1,20 @@
+#Fri Dec 04 15:34:07 CET 2015
+/instance/org.eclipse.jdt.ui/sp_cleanup.add_missing_annotations=true
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.comment.indent_parameter_description=true
+@org.eclipse.ui.editors=3.9.0.v20150213-1939
+@org.eclipse.debug.ui=3.11.100.v20150731-1137
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_at_in_annotation_type_declaration=do not insert
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.brace_position_for_enum_constant=end_of_line
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.classpathVariable.M2_REPO=/home/astrapi69/.m2/repository
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_binary_operator=insert
+@org.eclipse.wst.jsdt.ui=1.1.601.v201507290118
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_comma_in_method_invocation_arguments=insert
+/instance/org.eclipse.jdt.ui/sp_cleanup.remove_unnecessary_casts=true
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_prefix_operator=do not insert
+/instance/org.eclipse.jdt.ui/Refactoring.savealleditors=true
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_before_closing_paren_in_if=do not insert
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_after_comma_in_type_arguments=insert
+/instance/org.eclipse.jdt.debug.ui/org.eclipse.debug.ui.VariableView.org.eclipse.jdt.debug.ui.show_null_entries=true
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.brace_position_for_lambda_body=end_of_line
+@org.eclipse.egit.core=4.0.3.201509231615-r
+/instance/org.eclipse.jdt.core/org.eclipse.jdt.core.formatter.insert_space_before_comma_in_method_declaration_throws=do not insert
