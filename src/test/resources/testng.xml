@@ -17,6 +17,7 @@
       <class name="de.alpharogroup.file.compare.CompareFileExtensionsTest"/>
       <class name="de.alpharogroup.file.zip.UnzipperTest"/>
       <class name="de.alpharogroup.file.search.FileSearchExtensionsTest"/>
+      <class name="de.alpharogroup.file.sort.SortFileExtensionsTest"/>
       <class name="de.alpharogroup.file.copy.CopyFileExtensionsTest"/>
     </classes>
   </test> <!-- Test -->
