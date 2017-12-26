@@ -92,7 +92,7 @@ public class SortFileExtensionsTest
 	public void testSort() throws FileNotFoundException, IOException
 	{
 		final File testFile = new File(testResources, "resources");
-		final File epfFile = new File(testFile, "testEpf.epf");
+		final File epfFile = new File(testFile, "allPreferences.epf");
 
 		List<String> originalLines = ReadFileExtensions.readLinesInList(epfFile, false);
 
