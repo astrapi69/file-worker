@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -5,19 +6,31 @@
 	<parent>
 		<groupId>de.alpharogroup</groupId>
 		<artifactId>mvn-java-parent</artifactId>
-		<version>2.30.0</version>
+		<version>3.5.0</version>
 		<relativePath></relativePath>
 	</parent>
 
 	<artifactId>file-worker</artifactId>
-	<version>4.17.0</version>
+	<version>4.19.0</version>
 
 	<name>${project.artifactId}</name>
 
-	<description>
-		Project that holds utility class for file operations.
-	</description>
-	
+	<description>Project that holds utility class for file operations.</description>
+
+	<url>https://github.com/lightblueseas/file-worker</url>
+
+	<properties>
+		<!-- JCOMMONS-LANG version -->
+		<jcommons-lang.version>4.29.0</jcommons-lang.version>
+		<!-- TEST-OBJECTS version -->
+		<test-objects.version>4.21.0</test-objects.version>
+		<!-- EXTERNAL LIBRARIES versions -->
+		<poi.version>3.17</poi.version>
+		<zip4j.version>1.3.2</zip4j.version>
+		<!-- MEANBEAN version -->
+		<meanbean.version>2.0.3</meanbean.version>
+	</properties>
+
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -25,8 +38,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
-	<url>https://github.com/lightblueseas/file-worker</url>
 
 	<scm>
 		<connection>scm:git:git:@github.com:lightblueseas/file-worker.git</connection>
@@ -34,23 +45,15 @@
 		<url>git:@github.com:lightblueseas/file-worker.git</url>
 	</scm>
 
-	<ciManagement>
-		<system>travis-ci</system>
-		<url>https://travis-ci.org/lightblueseas/file-worker</url>
-	</ciManagement>
-
 	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/lightblueseas/file-worker/issues</url>
 	</issueManagement>
 
-	<properties>
-		<jcommons-lang.version>4.26.0</jcommons-lang.version>
-		<test-objects.version>4.17.0</test-objects.version>
-		<!-- EXTERNAL LIBRARIES versions -->
-		<poi.version>3.15</poi.version>
-		<zip4j.version>1.3.2</zip4j.version>
-	</properties>
+	<ciManagement>
+		<system>travis-ci</system>
+		<url>https://travis-ci.org/lightblueseas/file-worker</url>
+	</ciManagement>
 
 	<dependencyManagement>
 
@@ -85,6 +88,12 @@
 				<artifactId>test-objects</artifactId>
 				<version>${test-objects.version}</version>
 			</dependency>
+			<!-- MEANBEAN DEPENDENCY -->
+			<dependency>
+				<groupId>org.meanbean</groupId>
+				<artifactId>meanbean</artifactId>
+				<version>${meanbean.version}</version>
+			</dependency>
 
 		</dependencies>
 
@@ -117,6 +126,13 @@
 			<artifactId>test-objects</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- MEANBEAN DEPENDENCY -->
+		<dependency>
+			<groupId>org.meanbean</groupId>
+			<artifactId>meanbean</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
+
 </project>
