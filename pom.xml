@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.alpharogroup</groupId>
 		<artifactId>mvn-java-parent</artifactId>
-		<version>3.4.0</version>
+		<version>3.5.0</version>
 		<relativePath></relativePath>
 	</parent>
 
@@ -21,7 +21,7 @@
 
 	<properties>
 		<!-- JCOMMONS-LANG version -->
-		<jcommons-lang.version>4.28.1</jcommons-lang.version>
+		<jcommons-lang.version>4.29.0</jcommons-lang.version>
 		<!-- TEST-OBJECTS version -->
 		<test-objects.version>4.21.0</test-objects.version>
 		<!-- EXTERNAL LIBRARIES versions -->
