@@ -34,7 +34,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.file.csv.CsvFileExtensions;
 
 /**
- * Test class for the class {@link GeneratorExtensions}.
+ * The unit test class for the class {@link GeneratorExtensions}.
  * 
  * @version 1.0
  * @author Asterios Raptis

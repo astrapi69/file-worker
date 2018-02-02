@@ -39,7 +39,7 @@ import net.lingala.zip4j.exception.ZipException;
 
 
 /**
- * Test class for the class {@link Zip4jExtensions}.
+ * The unit test class for the class {@link Zip4jExtensions}.
  *
  * @version 1.0
  * @author Asterios Raptis

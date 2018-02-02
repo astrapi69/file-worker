@@ -46,7 +46,7 @@ import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
- * Test class for the class {@link CsvFileExtensions}.
+ * The unit test class for the class {@link CsvFileExtensions}.
  *
  * @version 1.0
  * @author Asterios Raptis

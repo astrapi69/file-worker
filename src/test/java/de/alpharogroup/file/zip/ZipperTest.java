@@ -37,7 +37,7 @@ import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * Test class for the class Zipper.
+ * The unit test class for the class Zipper.
  *
  * @version 1.0
  * @author Asterios Raptis
