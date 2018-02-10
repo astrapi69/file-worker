@@ -38,53 +38,98 @@ import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * The class {@link CompareFileExtensionsTest}.
+ * The unit test class for the class {@link CompareFileExtensions}.
  */
 public class CompareFileExtensionsTest extends FileTestCase
 {
 
-	// @Test
-	// public void testCompareFileContentByBytes() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// public void testCompareFileContentByLines() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// public void testCompareFiles() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// public void testCompleteCompare() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// public void testSimpleCompareFiles() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// public void testValidateEqualityIFileCompareResultBean() {
-	// fail("Not yet implemented");
-	// }
-	//
-	// @Test
-	// public void testValidateEqualityIFileContentResultBean() {
-	// fail("Not yet implemented");
-	// }
-	//
 	/**
-	 * Test find equal files file.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * Test method for {@link CompareFileExtensions#compare(IFileCompareResultBean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test
+	@Test(enabled = false)
+	public void testCompareIFileCompareResultBeanBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compare(IFileContentResultBean, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareIFileContentResultBeanBooleanBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareFileContentByBytes()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFileContentByLines(File, File)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareFileContentByLines()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFiles(File, File)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareFilesFileFile()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareFilesFileFileBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#completeCompare(IFileCompareResultBean)}.
+	 */
+	@Test(enabled = false)
+	public void testCompleteCompare()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File)}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@Test(enabled = true)
 	public void testFindEqualFilesFile() throws IOException
 	{
 		final List<File> expectedFiles = new ArrayList<>();
@@ -115,12 +160,20 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test find equal files file file.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test
+	@Test(enabled = false)
+	public void testFindEqualFilesFileBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, File)}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@Test(enabled = true)
 	public void testFindEqualFilesFileFile() throws IOException
 	{
 		final List<File> expectedFiles = new ArrayList<>();
@@ -159,4 +212,77 @@ public class CompareFileExtensionsTest extends FileTestCase
 		AssertJUnit.assertTrue("contentfound() is not equal 3.", contentfound.size() == 2);
 
 	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File)}.
+	 */
+	@Test(enabled = false)
+	public void testFindEqualFilesWithSameContentFile()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testFindEqualFilesWithSameContentFileBooleanBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)}.
+	 */
+	@Test(enabled = false)
+	public void testFindEqualFilesWithSameContentFileFile()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#simpleCompareFiles(File, File)}.
+	 */
+	@Test(enabled = false)
+	public void testSimpleCompareFiles()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#validateEquality(IFileCompareResultBean)}.
+	 */
+	@Test(enabled = false)
+	public void testValidateEqualityIFileCompareResultBean()
+	{
+
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#validateEquality(IFileContentResultBean)}.
+	 */
+	@Test(enabled = false)
+	public void testValidateEqualityIFileContentResultBean()
+	{
+
+	}
+
 }

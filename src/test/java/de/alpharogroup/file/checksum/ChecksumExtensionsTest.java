@@ -38,7 +38,6 @@ import org.testng.annotations.Test;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.search.PathFinder;
 
-// TODO: Auto-generated Javadoc
 /**
  * The unit test class for the class {@link ChecksumExtensions}.
  */
