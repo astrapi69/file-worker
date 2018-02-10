@@ -62,61 +62,9 @@ public final class ChecksumExtensions
 
 	/** The constant REGEX_VALIDATION_MD5. */
 	public static final String REGEX_VALIDATION_MD5 = HEXADECIMAL_CHARACTER_CLASS + "{32}";
+
 	/** The constant REGEX_VALIDATION_SHA512. */
 	public static final String REGEX_VALIDATION_SHA512 = HEXADECIMAL_CHARACTER_CLASS + "{128}";
-
-	/**
-	 * Utility method for tests.
-	 *
-	 * @param data
-	 *            the byte array
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             the no such algorithm exception
-	 */
-	private static void checkWithByteArray(final byte[] data) throws NoSuchAlgorithmException
-	{
-
-		final Algorithm[] algorithms = Algorithm.values();
-		for (final Algorithm algorithm : algorithms)
-		{
-			try
-			{
-				final String result = getChecksum(data, algorithm.getAlgorithm());
-				LOGGER.info("getChecksum from " + algorithm + " algorithm:\t\t" + result);
-			}
-			catch (final NoSuchAlgorithmException e)
-			{
-				// do nothing
-			}
-		}
-	}
-
-	/**
-	 * Utility method for tests.
-	 *
-	 * @param pom
-	 *            the pom
-	 *
-	 * @throws NoSuchAlgorithmException
-	 *             Is thrown if the algorithm is not supported or does not exists.
-	 */
-	private static void checkWithFile(final File pom) throws NoSuchAlgorithmException
-	{
-		final Algorithm[] algorithms = Algorithm.values();
-		for (final Algorithm algorithm : algorithms)
-		{
-			try
-			{
-				final String result = getChecksum(pom, algorithm.getAlgorithm());
-				LOGGER.info("getChecksum from " + algorithm + " algorithm:\t\t" + result);
-			}
-			catch (final NoSuchAlgorithmException e)
-			{
-				// do nothing
-			}
-		}
-	}
 
 	/**
 	 * Gets the checksum from the given byte array with an instance of.
@@ -436,45 +384,6 @@ public final class ChecksumExtensions
 			LOGGER.error("getChecksumQuietly failed...\n" + e.getMessage(), e);
 		}
 		return null;
-	}
-
-	/**
-	 * The main method.
-	 *
-	 * @param args
-	 *            The args
-	 * @throws FileNotFoundException
-	 *             Is thrown if the file is not found.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws NoSuchAlgorithmException
-	 *             Is thrown if the algorithm is not supported or does not exists.
-	 */
-	public static void main(final String[] args)
-		throws FileNotFoundException, IOException, NoSuchAlgorithmException
-	{
-
-		if (args.length != 1)
-		{
-			System.err.println("Usage: java ChecksumCRC32 filename");
-		}
-		else
-		{
-			final File pom = new File(args[0]);
-
-			checkWithFile(pom);
-
-			long checksum = getChecksum(new File(args[0]), true);
-			System.out.println("CRC32 checksum:" + checksum);
-			checksum = getChecksum(new File(args[0]), false);
-			System.out.println("Adler32 checksum:" + checksum);
-
-			final byte[] ba = ReadFileExtensions.readFileToBytearray(pom);
-
-			checkWithByteArray(ba);
-
-		}
-
 	}
 
 	/**
