@@ -44,24 +44,6 @@ public class CompareFileExtensionsTest extends FileTestCase
 {
 
 	/**
-	 * Test method for {@link CompareFileExtensions#compare(IFileCompareResultBean, boolean, boolean, boolean, boolean, boolean)}.
-	 */
-	@Test(enabled = false)
-	public void testCompareIFileCompareResultBeanBooleanBooleanBooleanBooleanBoolean()
-	{
-
-	}
-
-	/**
-	 * Test method for {@link CompareFileExtensions#compare(IFileContentResultBean, boolean, boolean, boolean, boolean, boolean, boolean)}.
-	 */
-	@Test(enabled = false)
-	public void testCompareIFileContentResultBeanBooleanBooleanBooleanBooleanBooleanBoolean()
-	{
-
-	}
-
-	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)}.
 	 */
 	@Test(enabled = false)
@@ -98,7 +80,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
+	 * Test method for
+	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
@@ -107,10 +90,31 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 * Test method for
+	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link CompareFileExtensions#compare(IFileCompareResultBean, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareIFileCompareResultBeanBooleanBooleanBooleanBooleanBoolean()
+	{
+
+	}
+
+	/**
+	 * Test method for
+	 * {@link CompareFileExtensions#compare(IFileContentResultBean, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 */
+	@Test(enabled = false)
+	public void testCompareIFileContentResultBeanBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
 
 	}
@@ -127,7 +131,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#findEqualFiles(File)}.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test(enabled = true)
 	public void testFindEqualFilesFile() throws IOException
@@ -160,7 +165,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)}.
+	 * Test method for
+	 * {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
 	public void testFindEqualFilesFileBooleanBooleanBooleanBooleanBoolean()
@@ -171,7 +177,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, File)}.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test(enabled = true)
 	public void testFindEqualFilesFileFile() throws IOException
@@ -214,7 +221,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
+	 * Test method for
+	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
 	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
@@ -232,7 +240,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 * Test method for
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
 	public void testFindEqualFilesWithSameContentFileBooleanBooleanBooleanBooleanBooleanBoolean()
@@ -250,7 +259,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
+	 * Test method for
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
 	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
