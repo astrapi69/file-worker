@@ -45,6 +45,40 @@ public class ChecksumExtensionsTest extends FileTestCase
 {
 
 	/**
+	 * Test method for {@link ChecksumExtensions#getCheckSumAdler32(byte[])}.
+	 *
+	 * @throws UnsupportedEncodingException
+	 *             is thrown if the named charset is not supported.
+	 */
+	@Test
+	public void testGetCheckSumAdler32ByteArray() throws UnsupportedEncodingException
+	{
+		long expected;
+		long actual;
+		final String secretMessage = "secret Message";
+		final byte[] secretMessageBytes = secretMessage.getBytes("UTF-8");
+		actual = ChecksumExtensions.getCheckSumAdler32(secretMessageBytes);
+		expected = 685966700l;
+		assertEquals(expected, actual);
+
+	}
+
+	/**
+	 * Test method for {@link ChecksumExtensions#getCheckSumAdler32(File)}.
+	 */
+	@Test
+	public void testGetCheckSumAdler32File()
+	{
+		long expected;
+		long actual;
+		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
+			"testReadFileInput.txt");
+		actual = ChecksumExtensions.getCheckSumAdler32(testFile);
+		expected = 3296728756l;
+		assertEquals(expected, actual);
+	}
+
+	/**
 	 * Test method for {@link ChecksumExtensions#getChecksum(byte[], Algorithm)}.
 	 *
 	 * @throws UnsupportedEncodingException
@@ -223,6 +257,38 @@ public class ChecksumExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link ChecksumExtensions#getCheckSumCRC32(byte[])}.
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
+	@Test
+	public void testGetCheckSumCRC32ByteArray() throws UnsupportedEncodingException
+	{
+		long expected;
+		long actual;
+		final String secretMessage = "secret Message";
+		final byte[] secretMessageBytes = secretMessage.getBytes("UTF-8");
+		actual = ChecksumExtensions.getCheckSumCRC32(secretMessageBytes);
+		expected = 711998200l;
+		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test method for {@link ChecksumExtensions#getCheckSumCRC32(File)}.
+	 */
+	@Test
+	public void testGetCheckSumCRC32File()
+	{
+		long expected;
+		long actual;
+		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
+			"testReadFileInput.txt");
+		actual = ChecksumExtensions.getCheckSumCRC32(testFile);
+		expected = 197057321l;
+		assertEquals(expected, actual);
+	}
+
+	/**
 	 * Test method for {@link ChecksumExtensions#getChecksum(File, Algorithm)}.
 	 *
 	 * @throws NoSuchAlgorithmException
@@ -331,71 +397,6 @@ public class ChecksumExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link ChecksumExtensions#getCheckSumAdler32(byte[])}.
-	 *
-	 * @throws UnsupportedEncodingException
-	 *             is thrown if the named charset is not supported.
-	 */
-	@Test
-	public void testGetCheckSumAdler32ByteArray() throws UnsupportedEncodingException
-	{
-		long expected;
-		long actual;
-		final String secretMessage = "secret Message";
-		final byte[] secretMessageBytes = secretMessage.getBytes("UTF-8");
-		actual = ChecksumExtensions.getCheckSumAdler32(secretMessageBytes);
-		expected = 685966700l;
-		assertEquals(expected, actual);
-
-	}
-
-	/**
-	 * Test method for {@link ChecksumExtensions#getCheckSumAdler32(File)}.
-	 */
-	@Test
-	public void testGetCheckSumAdler32File()
-	{
-		long expected;
-		long actual;
-		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
-			"testReadFileInput.txt");
-		actual = ChecksumExtensions.getCheckSumAdler32(testFile);
-		expected = 3296728756l;
-		assertEquals(expected, actual);
-	}
-
-	/**
-	 * Test method for {@link ChecksumExtensions#getCheckSumCRC32(byte[])}.
-	 * @throws UnsupportedEncodingException
-	 */
-	@Test
-	public void testGetCheckSumCRC32ByteArray() throws UnsupportedEncodingException
-	{
-		long expected;
-		long actual;
-		final String secretMessage = "secret Message";
-		final byte[] secretMessageBytes = secretMessage.getBytes("UTF-8");
-		actual = ChecksumExtensions.getCheckSumCRC32(secretMessageBytes);
-		expected = 711998200l;
-		assertEquals(expected, actual);
-	}
-
-	/**
-	 * Test method for {@link ChecksumExtensions#getCheckSumCRC32(File)}.
-	 */
-	@Test
-	public void testGetCheckSumCRC32File()
-	{
-		long expected;
-		long actual;
-		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
-			"testReadFileInput.txt");
-		actual = ChecksumExtensions.getCheckSumCRC32(testFile);
-		expected = 197057321l;
-		assertEquals(expected, actual);
-	}
-
-	/**
 	 * Test method for {@link ChecksumExtensions#getChecksumQuietly(byte[], Algorithm)}.
 	 */
 	@Test
@@ -434,6 +435,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link ChecksumExtensions#getChecksumQuietly(byte[], String)}.
+	 * 
 	 * @throws UnsupportedEncodingException
 	 */
 	@Test
@@ -444,15 +446,18 @@ public class ChecksumExtensionsTest extends FileTestCase
 		final String secretMessage = "secret Message";
 		final byte[] secretMessageBytes = secretMessage.getBytes("UTF-8");
 		expected = "5cc16e663491726545c13ec2012f4601";
-		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes, Algorithm.MD2.getAlgorithm());
+		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes,
+			Algorithm.MD2.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "25659bd9db98ecc3c2077d44e69607b8";
-		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes, Algorithm.MD5.getAlgorithm());
+		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes,
+			Algorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "874026e54b67d4f9aaf87cb14a683fb51de6f9cb";
-		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes, Algorithm.SHA_1.getAlgorithm());
+		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes,
+			Algorithm.SHA_1.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "8a3b3c92a8b0eb00da917c23201a9407ef7963373464076aec4c54c066e8b7aa";
@@ -473,6 +478,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link ChecksumExtensions#getChecksumQuietly(Byte[], String)}.
+	 * 
 	 * @throws UnsupportedEncodingException
 	 */
 	@Test
@@ -485,15 +491,18 @@ public class ChecksumExtensionsTest extends FileTestCase
 		final Byte[] secretMessageBytes = ArrayUtils.toObject(sbytes);
 
 		expected = "5cc16e663491726545c13ec2012f4601";
-		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes, Algorithm.MD2.getAlgorithm());
+		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes,
+			Algorithm.MD2.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "25659bd9db98ecc3c2077d44e69607b8";
-		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes, Algorithm.MD5.getAlgorithm());
+		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes,
+			Algorithm.MD5.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "874026e54b67d4f9aaf87cb14a683fb51de6f9cb";
-		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes, Algorithm.SHA_1.getAlgorithm());
+		actual = ChecksumExtensions.getChecksumQuietly(secretMessageBytes,
+			Algorithm.SHA_1.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "8a3b3c92a8b0eb00da917c23201a9407ef7963373464076aec4c54c066e8b7aa";
@@ -591,7 +600,8 @@ public class ChecksumExtensionsTest extends FileTestCase
 	{
 		boolean expected;
 		boolean actual;
-		actual = ChecksumExtensions.matchesSHA512("4d0c14f299254e58dcea1f524ca08af5f0776b1f5070919a859b92c2ab350635375862ab0727fd5e34ff35da837bd836a17047544db8df63adc4912211ea7f02");
+		actual = ChecksumExtensions.matchesSHA512(
+			"4d0c14f299254e58dcea1f524ca08af5f0776b1f5070919a859b92c2ab350635375862ab0727fd5e34ff35da837bd836a17047544db8df63adc4912211ea7f02");
 		expected = true;
 		assertEquals(expected, actual);
 
