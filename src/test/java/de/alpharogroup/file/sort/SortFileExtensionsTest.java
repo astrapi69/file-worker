@@ -38,10 +38,12 @@ import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The unit test class for the class {@link SortFileExtensions}.
  */
+@Slf4j
 public class SortFileExtensionsTest
 {
 	/** The directory /src/test/resources for test resources. */
@@ -65,6 +67,7 @@ public class SortFileExtensionsTest
 		AssertJUnit.assertTrue(
 			"The directory " + projectPath.getAbsolutePath() + " should be created.",
 			projectPath.exists());
+		log.debug("The directory " + projectPath.getAbsolutePath() + " exists or is created.");
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{

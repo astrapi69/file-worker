@@ -61,7 +61,7 @@ import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
 
 /**
- * Test class for the class {@link FileExtensions}.
+ * The unit test class for the class {@link FileExtensions}.
  *
  * @version 1.0
  * @author Asterios Raptis

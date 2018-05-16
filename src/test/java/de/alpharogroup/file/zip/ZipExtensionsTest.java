@@ -38,7 +38,7 @@ import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * Test class for the class {@link ZipExtensions}.
+ * The unit test class for the class {@link ZipExtensions}.
  *
  * @version 1.0
  * @author Asterios Raptis

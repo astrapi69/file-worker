@@ -50,7 +50,6 @@ import de.alpharogroup.io.StreamExtensions;
 public final class CompareFileExtensions
 {
 
-
 	/**
 	 * Sets the flags in the FileCompareResultBean object according to the given boolean flag what
 	 * to ignore.

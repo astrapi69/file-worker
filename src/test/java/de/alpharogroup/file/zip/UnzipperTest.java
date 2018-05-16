@@ -40,7 +40,7 @@ import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * Test class for the class Unzipper.
+ * The unit test class for the class Unzipper.
  *
  * @version 1.0
  * @author Asterios Raptis

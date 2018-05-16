@@ -39,7 +39,7 @@ import de.alpharogroup.file.checksum.Algorithm;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
-public class SimpleCompareFileUtilsTest extends FileTestCase
+public class SimpleCompareFileExtensionsTest extends FileTestCase
 {
 
 	@Override

@@ -37,7 +37,7 @@ import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * Test class for the class SimpleFilenameFilter.
+ * The unit test class for the class SimpleFilenameFilter.
  *
  * @version 1.0
  * @author Asterios Raptis
