@@ -67,10 +67,10 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile1);
-		AssertJUnit.assertTrue(this.result);
-		this.result = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile2);
-		AssertJUnit.assertFalse(this.result);
+		this.actual = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile1);
+		AssertJUnit.assertTrue(this.actual);
+		this.actual = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile2);
+		AssertJUnit.assertFalse(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 
@@ -84,9 +84,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByChecksum(testFile1, testFile2,
+		this.actual = SimpleCompareFileExtensions.compareFilesByChecksum(testFile1, testFile2,
 			Algorithm.MD5);
-		AssertJUnit.assertTrue(this.result);
+		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}
@@ -99,9 +99,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByChecksumAdler32(testFile1,
+		this.actual = SimpleCompareFileExtensions.compareFilesByChecksumAdler32(testFile1,
 			testFile2);
-		AssertJUnit.assertTrue(this.result);
+		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}
@@ -114,8 +114,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByChecksumCRC32(testFile1, testFile2);
-		AssertJUnit.assertTrue(this.result);
+		this.actual = SimpleCompareFileExtensions.compareFilesByChecksumCRC32(testFile1, testFile2);
+		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}
@@ -131,8 +131,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByContent(testFile1, testFile2);
-		AssertJUnit.assertTrue(this.result);
+		this.actual = SimpleCompareFileExtensions.compareFilesByContent(testFile1, testFile2);
+		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}
@@ -148,8 +148,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByExtension(testFile1, testFile2);
-		AssertJUnit.assertTrue(this.result);
+		this.actual = SimpleCompareFileExtensions.compareFilesByExtension(testFile1, testFile2);
+		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}
@@ -170,8 +170,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		// simulate that first file is created 10 seconds before the second file...
 		testFile1.setLastModified(now.getTime() - tenSeconds);
 		testFile2.setLastModified(now.getTime());
-		this.result = SimpleCompareFileExtensions.compareFilesByLastModified(testFile1, testFile2);
-		AssertJUnit.assertFalse(this.result);
+		this.actual = SimpleCompareFileExtensions.compareFilesByLastModified(testFile1, testFile2);
+		AssertJUnit.assertFalse(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}
@@ -187,8 +187,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByLength(testFile1, testFile2);
-		AssertJUnit.assertTrue(this.result);
+		this.actual = SimpleCompareFileExtensions.compareFilesByLength(testFile1, testFile2);
+		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}
@@ -201,8 +201,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
-		this.result = SimpleCompareFileExtensions.compareFilesByName(testFile1, testFile2);
-		AssertJUnit.assertTrue(this.result);
+		this.actual = SimpleCompareFileExtensions.compareFilesByName(testFile1, testFile2);
+		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
 	}

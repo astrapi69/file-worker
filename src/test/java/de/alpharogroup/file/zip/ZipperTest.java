@@ -81,8 +81,8 @@ public class ZipperTest extends ZipTestCase
 			zipFile.createNewFile();
 		}
 		final long length = zipFile.length();
-		this.result = length == 0;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = length == 0;
+		AssertJUnit.assertTrue("", this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -113,17 +113,17 @@ public class ZipperTest extends ZipTestCase
 		zipper.zip();
 
 		final long currentLength = zipFile.length();
-		this.result = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = 0 < currentLength;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getFileCounter() == 9;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getFileCounter() == 9;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getZipFile().equals(zipFile);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
+		AssertJUnit.assertTrue("", this.actual);
 
 	}
 
@@ -143,8 +143,8 @@ public class ZipperTest extends ZipTestCase
 			zipFile.createNewFile();
 		}
 		final long length = zipFile.length();
-		this.result = length == 0;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = length == 0;
+		AssertJUnit.assertTrue("", this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -177,18 +177,18 @@ public class ZipperTest extends ZipTestCase
 		zipper.zip();
 
 		final long currentLength = zipFile.length();
-		this.result = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = 0 < currentLength;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getFileCounter() == 4;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getFileCounter() == 4;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getZipFile().equals(zipFile);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
 
-		AssertJUnit.assertTrue("", this.result);
+		AssertJUnit.assertTrue("", this.actual);
 
 	}
 

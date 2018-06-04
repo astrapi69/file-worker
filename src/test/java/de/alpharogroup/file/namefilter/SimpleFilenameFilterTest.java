@@ -89,12 +89,12 @@ public class SimpleFilenameFilterTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 		final SimpleFilenameFilter txtFilenameFilter = new SimpleFilenameFilter(".txt", false);
 		final File[] txtFiles = this.testDir.listFiles(txtFilenameFilter);
-		this.result = txtFiles.length == 2;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = txtFiles.length == 2;
+		AssertJUnit.assertTrue("", this.actual);
 		for (final File txtFile : txtFiles)
 		{
-			this.result = expectedfiles.contains(txtFile);
-			AssertJUnit.assertTrue("", this.result);
+			this.actual = expectedfiles.contains(txtFile);
+			AssertJUnit.assertTrue("", this.actual);
 		}
 
 	}

@@ -141,10 +141,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 		}
 
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectory(srcDeepDir, destDir);
+		this.actual = CopyFileExtensions.copyDirectory(srcDeepDir, destDir);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+			this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
 		AssertJUnit.assertTrue(
@@ -229,10 +229,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 		}
 
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectory(srcDir, destDir, false);
+		this.actual = CopyFileExtensions.copyDirectory(srcDir, destDir, false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+			this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
 		AssertJUnit.assertTrue(
@@ -322,11 +322,11 @@ public class CopyFileExtensionsTest extends FileTestCase
 		// define a filefilter object...
 		final FileFilter fileFilter = new TxtFileFilter();
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir, fileFilter,
+		this.actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir, fileFilter,
 			false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+			this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
 		AssertJUnit.assertTrue(
@@ -434,12 +434,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
 			includeFileFilter, excludeFileFilter, false);
 
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+			this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
 		AssertJUnit.assertTrue(
@@ -567,11 +567,11 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
 			includeFileFilter, excludeFileFilter, excludeFiles, false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+			this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
 		AssertJUnit.assertTrue(
@@ -693,11 +693,11 @@ public class CopyFileExtensionsTest extends FileTestCase
 		// define a filefilter object...
 		final FilenameFilter fileFilter = new SimpleFilenameFilter(".txt", true);
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
 			fileFilter, false);
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+			this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
 		AssertJUnit.assertTrue(
@@ -804,12 +804,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final FilenameFilter excludeFilenameFilter = new MultiplyExtensionsFilenameFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
 			includeFilenameFilter, excludeFilenameFilter, false);
 
 		// Check if the destination directory was copied.
 		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+			this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
 		AssertJUnit.assertTrue(
@@ -873,28 +873,28 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testCopyFileOutput.tft");
 		try
 		{
-			this.result = CopyFileExtensions.copyFile(source, destination);
-			AssertJUnit.assertFalse("", this.result);
+			this.actual = CopyFileExtensions.copyFile(source, destination);
+			AssertJUnit.assertFalse("", this.actual);
 		}
 		catch (final Exception fnfe)
 		{
-			this.result = fnfe instanceof FileNotFoundException;
-			AssertJUnit.assertTrue("", this.result);
+			this.actual = fnfe instanceof FileNotFoundException;
+			AssertJUnit.assertTrue("", this.actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
 		WriteFileExtensions.string2File(source, inputString);
 
-		this.result = CopyFileExtensions.copyFile(source, destination);
+		this.actual = CopyFileExtensions.copyFile(source, destination);
 		AssertJUnit.assertTrue("Source file " + source.getName()
 			+ " was not copied in the destination file " + destination.getName() + ".",
-			this.result);
+			this.actual);
 		final String actual = ReadFileExtensions.readFromFile(destination);
-		this.result = expected.equals(actual);
+		this.actual = expected.equals(actual);
 		AssertJUnit.assertTrue(
 			"The content from the source file " + source.getName()
 				+ " is not the same as the destination file " + destination.getName() + ".",
-			this.result);
+			this.actual);
 
 	}
 
@@ -915,28 +915,28 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testCopyFileOutput.tft");
 		try
 		{
-			this.result = CopyFileExtensions.copyFile(source, destination, false);
-			AssertJUnit.assertFalse("", this.result);
+			this.actual = CopyFileExtensions.copyFile(source, destination, false);
+			AssertJUnit.assertFalse("", this.actual);
 		}
 		catch (final Exception fnfe)
 		{
-			this.result = fnfe instanceof FileNotFoundException;
-			AssertJUnit.assertTrue("", this.result);
+			this.actual = fnfe instanceof FileNotFoundException;
+			AssertJUnit.assertTrue("", this.actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
 		WriteFileExtensions.string2File(source, inputString);
 
-		this.result = CopyFileExtensions.copyFile(source, destination, false);
+		this.actual = CopyFileExtensions.copyFile(source, destination, false);
 		AssertJUnit.assertTrue("Source file " + source.getName()
 			+ " was not copied in the destination file " + destination.getName() + ".",
-			this.result);
+			this.actual);
 		final String compare = ReadFileExtensions.readFromFile(destination);
-		this.result = expected.equals(compare);
+		this.actual = expected.equals(compare);
 		AssertJUnit.assertTrue(
 			"The content from the source file " + source.getName()
 				+ " is not the same as the destination file " + destination.getName() + ".",
-			this.result);
+			this.actual);
 
 	}
 
@@ -979,7 +979,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		}
 
 		// Try to copy the file srcFile into the destination directory.
-		this.result = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir);
+		this.actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir);
 		final File expectedCopiedFile = new File(srcDir, filePrefix + txtSuffix);
 		AssertJUnit.assertTrue(
 			"File " + expectedCopiedFile.getAbsolutePath() + " should be copied.",
@@ -1028,7 +1028,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 
 		}
 		// Try to copy the file srcFile into the destination directory.
-		this.result = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir, false);
+		this.actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir, false);
 		final File expectedCopiedFile = new File(srcDir, filePrefix + txtSuffix);
 		AssertJUnit.assertTrue(
 			"File " + expectedCopiedFile.getAbsolutePath() + " should be copied.",

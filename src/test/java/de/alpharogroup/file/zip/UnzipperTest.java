@@ -88,8 +88,8 @@ public class UnzipperTest extends ZipTestCase
 		}
 
 		final long length = zipFile.length();
-		this.result = length == 0;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = length == 0;
+		AssertJUnit.assertTrue("", this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -120,8 +120,8 @@ public class UnzipperTest extends ZipTestCase
 		ZipExtensions.zip(this.testDir, zipFile);
 
 		final long currentLength = zipFile.length();
-		this.result = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = 0 < currentLength;
+		AssertJUnit.assertTrue("", this.actual);
 
 		final ZipEntry zipEntry = new ZipEntry("testDir" + File.separator + "deepDir"
 			+ File.separator + "deeperDir" + File.separator + "testZip8.txt");
@@ -134,16 +134,16 @@ public class UnzipperTest extends ZipTestCase
 		final Unzipper unzipper = new Unzipper(zf, this.unzipDir);
 		unzipper.extractZipEntry(zf, zipEntry, this.unzipDir);
 		zf.close();
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
+		AssertJUnit.assertTrue("", this.actual);
 
 		final ZipEntry zipEntry2 = new ZipEntry("testDir" + File.separator + "deepDir"
 			+ File.separator + "deeperDir" + File.separator + "testZip9.cvs");
 		zf = new ZipFile(zipFile);
 		unzipper.extractZipEntry(zf, zipEntry2, this.unzipDir);
 		zf.close();
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
+		AssertJUnit.assertTrue("", this.actual);
 
 	}
 
@@ -166,8 +166,8 @@ public class UnzipperTest extends ZipTestCase
 		}
 
 		final long length = zipFile.length();
-		this.result = length == 0;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = length == 0;
+		AssertJUnit.assertTrue("", this.actual);
 		final String file1 = "testZip1.txt";
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), file1);
 		final File unzippedFile1 = new File(this.unzipDirTestDir, file1);
@@ -210,47 +210,47 @@ public class UnzipperTest extends ZipTestCase
 		zipper.zip();
 
 		final long currentLength = zipFile.length();
-		this.result = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = 0 < currentLength;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getFileCounter() == 9;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getFileCounter() == 9;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getZipFile().equals(zipFile);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
+		AssertJUnit.assertTrue("", this.actual);
 		final ZipFile zf = new ZipFile(zipFile);
 		final Unzipper unzipper = new Unzipper(zf, this.unzipDir);
 		unzipper.unzip();
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile1);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile1);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile2);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile2);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile3);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile3);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile4);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile4);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile5);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile5);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile6);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile6);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile7);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile7);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
+		AssertJUnit.assertTrue("", this.actual);
 
 	}
 
@@ -270,8 +270,8 @@ public class UnzipperTest extends ZipTestCase
 		unzipper.unzip(zipFileWithPassword, this.unzipDir, password, Charset.forName("UTF-8"));
 		final String encryptedFilename = "autotext";
 		final File encryptedFile = new File(this.unzipDir, encryptedFilename);
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, encryptedFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, encryptedFile);
+		AssertJUnit.assertTrue("", this.actual);
 	}
 
 	/**
@@ -295,8 +295,8 @@ public class UnzipperTest extends ZipTestCase
 		}
 
 		final long length = zipFile.length();
-		this.result = length == 0;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = length == 0;
+		AssertJUnit.assertTrue("", this.actual);
 		final String file1 = "testZip1.txt";
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), file1);
 		final File unzippedFile1 = new File(this.unzipDirTestDir, file1);
@@ -339,48 +339,48 @@ public class UnzipperTest extends ZipTestCase
 		zipper.zip();
 
 		final long currentLength = zipFile.length();
-		this.result = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = 0 < currentLength;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getFileCounter() == 9;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getFileCounter() == 9;
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getZipFile().equals(zipFile);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
+		AssertJUnit.assertTrue("", this.actual);
 
 		final Unzipper unzipper = new Unzipper();
 		final ZipFile zf = new ZipFile(zipFile);
 		unzipper.unzip(zf, this.unzipDir);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile1);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile1);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile2);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile2);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile3);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile3);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile4);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile4);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile5);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile5);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile6);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile6);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile7);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile7);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile8);
+		AssertJUnit.assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, unzippedFile9);
+		AssertJUnit.assertTrue("", this.actual);
 
 	}
 
