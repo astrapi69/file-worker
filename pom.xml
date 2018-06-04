@@ -21,9 +21,9 @@
 
 	<properties>
 		<!-- JCOMMONS-LANG version -->
-		<jcommons-lang.version>4.31.0</jcommons-lang.version>
+		<jcommons-lang.version>4.33</jcommons-lang.version>
 		<!-- TEST-OBJECTS version -->
-		<test-objects.version>4.24.0</test-objects.version>
+		<test-objects.version>4.26</test-objects.version>
 		<!-- EXTERNAL LIBRARIES versions -->
 		<poi.version>3.17</poi.version>
 		<zip4j.version>1.3.2</zip4j.version>
