@@ -24,9 +24,16 @@
  */
 package de.alpharogroup.file.url;
 
+import lombok.Getter;
+
 /**
- * The Enum Protocol represents protocols from an url.
+ * The enum {@link Protocol} represents protocols from an url.
+ * 
+ * @deprecated use instead the same name class in the net-extensions project <br>
+ *             <br>
+ *             Note: This method will be removed in next minor release.
  */
+@Deprecated
 public enum Protocol
 {
 
@@ -54,10 +61,17 @@ public enum Protocol
 	WAR("war");
 
 	/** The protocol. */
+
+	/**
+	 * Gets the protocol.
+	 *
+	 * @return the protocol
+	 */
+	@Getter
 	private final String protocol;
 
 	/**
-	 * Instantiates a new protocol.
+	 * Instantiates a new {@link Protocol}.
 	 * 
 	 * @param protocol
 	 *            the protocol
@@ -67,13 +81,4 @@ public enum Protocol
 		this.protocol = protocol;
 	}
 
-	/**
-	 * Gets the protocol.
-	 * 
-	 * @return the protocol
-	 */
-	public String getProtocol()
-	{
-		return protocol;
-	}
 }

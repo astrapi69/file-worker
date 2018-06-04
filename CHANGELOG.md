@@ -15,6 +15,7 @@ CHANGED:
 - update of test-objects dependency version from 4.22.0 to 4.24.0 
 - update of jcommons-lang dependency version from 4.29.0 to 4.31.0 
 - javadoc improved 
+- tagged URLExtensions and Protocol classes as deprecated. Moved to net-extensions project 
 
 Version 4.19.0
 -------------

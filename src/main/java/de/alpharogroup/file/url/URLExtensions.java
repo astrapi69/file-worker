@@ -29,8 +29,13 @@ import java.net.URL;
 import java.net.URLDecoder;
 
 /**
- * The class URLUtils.
+ * The class URLExtensions.
+ * 
+ * @deprecated use instead the same name class in the net-extensions project <br>
+ *             <br>
+ *             Note: This method will be removed in next minor release.
  */
+@Deprecated
 public class URLExtensions
 {
 
