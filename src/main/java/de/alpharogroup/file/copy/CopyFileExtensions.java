@@ -547,32 +547,19 @@ public final class CopyFileExtensions
 				+ " should be a File but is a Directory.");
 		}
 		boolean copied = false;
-		final InputStream inputStream = StreamExtensions.getInputStream(source);
-		InputStreamReader reader;
-		if (sourceEncoding != null)
+		try (InputStream inputStream = StreamExtensions.getInputStream(source);
+			InputStreamReader reader = sourceEncoding != null
+				? new InputStreamReader(inputStream, sourceEncoding)
+				: new InputStreamReader(inputStream);
+			OutputStream outputStream = StreamExtensions.getOutputStream(destination,
+				!destination.exists());
+			BufferedOutputStream bos = new BufferedOutputStream(outputStream);
+			OutputStreamWriter writer = destinationEncoding != null
+				? new OutputStreamWriter(bos, destinationEncoding)
+				: new OutputStreamWriter(bos))
 		{
-			reader = new InputStreamReader(inputStream, sourceEncoding);
-		}
-		else
-		{
-			reader = new InputStreamReader(inputStream);
-		}
-		final OutputStream outputStream = StreamExtensions.getOutputStream(destination,
-			!destination.exists());
-		final char[] charArray = new char[FileConst.BLOCKSIZE];
-		final BufferedOutputStream bos = new BufferedOutputStream(outputStream);
-		OutputStreamWriter writer;
-		if (destinationEncoding != null)
-		{
-			writer = new OutputStreamWriter(bos, destinationEncoding);
-		}
-		else
-		{
-			writer = new OutputStreamWriter(bos);
-		}
-		int tmp;
-		try
-		{
+			int tmp;
+			final char[] charArray = new char[FileConst.BLOCKSIZE];
 			while ((tmp = reader.read(charArray)) > 0)
 			{
 				writer.write(charArray, 0, tmp);
@@ -582,11 +569,6 @@ public final class CopyFileExtensions
 		catch (final IOException e)
 		{
 			throw e;
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-			StreamExtensions.closeWriter(writer);
 		}
 		if (lastModified)
 		{

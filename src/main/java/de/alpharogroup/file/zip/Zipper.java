@@ -36,7 +36,6 @@ import java.util.zip.ZipOutputStream;
 
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The class Zipper.
@@ -431,9 +430,9 @@ public class Zipper implements ZipModel
 	 */
 	public void zip()
 	{
-		FileOutputStream fos = null;
-		try
-		{
+		try(FileOutputStream fos = new FileOutputStream(this.zipFile);
+			ZipOutputStream zos = new ZipOutputStream(fos);) {
+
 			if (!this.directoryToZip.exists())
 			{
 				throw new IOException("Directory with the name " + this.directoryToZip.getName()
@@ -444,8 +443,7 @@ public class Zipper implements ZipModel
 				throw new FileDoesNotExistException(
 					"Zipfile with the name " + this.zipFile.getName() + " does not exist.");
 			}
-			fos = new FileOutputStream(this.zipFile);
-			this.zos = new ZipOutputStream(fos);
+			this.zos = zos;
 			if (0 < this.zipLevel)
 			{
 				this.zos.setLevel(this.zipLevel);
@@ -465,21 +463,17 @@ public class Zipper implements ZipModel
 			this.zipFiles(this.directoryToZip);
 			this.zos.flush();
 			this.zos.finish();
-			this.zos.close();
 			fos.flush();
-			fos.close();
-			fos = null;
-			this.zos = null;
 		}
-		catch (final Exception e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		finally
+		catch (FileDoesNotExistException e)
 		{
-			StreamExtensions.closeOutputStream(fos);
-			StreamExtensions.closeOutputStream(this.zos);
+			e.printStackTrace();
 		}
+		this.zos = null;
 	}
 
 	/**

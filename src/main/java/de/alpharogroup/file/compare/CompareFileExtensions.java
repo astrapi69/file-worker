@@ -33,8 +33,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.file.FileExtensions;
-import de.alpharogroup.file.checksum.Algorithm;
 import de.alpharogroup.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
@@ -171,9 +171,9 @@ public final class CompareFileExtensions
 			try
 			{
 				final String sourceChecksum = ChecksumExtensions.getChecksum(source,
-					Algorithm.SHA_512.getAlgorithm());
+					HashAlgorithm.SHA_512.getAlgorithm());
 				final String compareChecksum = ChecksumExtensions.getChecksum(compare,
-					Algorithm.SHA_512.getAlgorithm());
+					HashAlgorithm.SHA_512.getAlgorithm());
 				contentEquality = sourceChecksum.equals(compareChecksum);
 				fileContentResultBean.setContentEquality(contentEquality);
 			}
@@ -211,13 +211,11 @@ public final class CompareFileExtensions
 		boolean contentEquality = true;
 		// Compare the content...
 		if (simpleEquality)
-		{
-			InputStream sourceReader = null;
-			InputStream compareReader = null;
-			try
+		{			
+			try (
+				InputStream sourceReader = StreamExtensions.getInputStream(sourceFile);
+				InputStream compareReader = StreamExtensions.getInputStream(fileToCompare);)
 			{
-				sourceReader = StreamExtensions.getInputStream(sourceFile);
-				compareReader = StreamExtensions.getInputStream(fileToCompare);
 
 				final byte[] source = StreamExtensions.getByteArray(sourceReader);
 				final byte[] compare = StreamExtensions.getByteArray(compareReader);
@@ -238,11 +236,6 @@ public final class CompareFileExtensions
 			catch (final IOException e)
 			{
 				contentEquality = false;
-			}
-			finally
-			{
-				StreamExtensions.closeInputStream(sourceReader);
-				StreamExtensions.closeInputStream(compareReader);
 			}
 		}
 		fileContentResultBean.setContentEquality(contentEquality);
@@ -270,12 +263,11 @@ public final class CompareFileExtensions
 		// Compare the content...
 		if (simpleEquality)
 		{
-			BufferedReader sourceReader = null;
-			BufferedReader compareReader = null;
-			try
-			{
-				sourceReader = (BufferedReader)StreamExtensions.getReader(sourceFile);
-				compareReader = (BufferedReader)StreamExtensions.getReader(fileToCompare);
+			try (
+
+				BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(sourceFile);
+				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(fileToCompare);
+				) {
 				String sourceLine;
 				String compareLine;
 
@@ -296,11 +288,6 @@ public final class CompareFileExtensions
 			catch (final IOException e)
 			{
 				contentEquality = false;
-			}
-			finally
-			{
-				StreamExtensions.closeReader(sourceReader);
-				StreamExtensions.closeReader(compareReader);
 			}
 		}
 		fileContentResultBean.setContentEquality(contentEquality);
@@ -382,12 +369,10 @@ public final class CompareFileExtensions
 		// Compare the content?
 		if (content)
 		{
-			BufferedReader sourceReader = null;
-			BufferedReader compareReader = null;
-			try
-			{
-				sourceReader = (BufferedReader)StreamExtensions.getReader(source);
-				compareReader = (BufferedReader)StreamExtensions.getReader(compare);
+			try (
+				BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(source);
+				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(compare);
+				) {
 				String sourceLine;
 				String compareLine;
 
@@ -408,12 +393,7 @@ public final class CompareFileExtensions
 			catch (final IOException e)
 			{
 				equal = false;
-			}
-			finally
-			{
-				StreamExtensions.closeReader(sourceReader);
-				StreamExtensions.closeReader(compareReader);
-			}
+			}			
 		}
 		return equal;
 	}

@@ -115,7 +115,9 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * The Method reader2String() reads the data from the Reader into a String.
+	 * The Method reader2String() reads the data from the Reader into a String.<br>
+	 * <br>
+	 * Note: Reader will not be closed.
 	 *
 	 * @param reader
 	 *            The Reader from where we read.
@@ -136,10 +138,6 @@ public final class ReadFileExtensions
 		catch (final IOException e)
 		{
 			LOGGER.log(Level.SEVERE, "reader2String failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
 		}
 		return stringBuffer.toString();
 	}
@@ -195,13 +193,10 @@ public final class ReadFileExtensions
 	 */
 	public static String readHeadLine(final String inputFile)
 	{
-		BufferedReader reader = null;
 		String headLine = null;
-		try
+		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)))
 		{
-			reader = new BufferedReader(new FileReader(inputFile));
 			headLine = reader.readLine();
-			reader.close();
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -210,10 +205,6 @@ public final class ReadFileExtensions
 		catch (final IOException e)
 		{
 			LOGGER.log(Level.SEVERE, "readHeadLine failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
 		}
 		return headLine;
 	}
@@ -344,22 +335,12 @@ public final class ReadFileExtensions
 	{
 		// The List where the lines from the File to save.
 		final List<String> output = new ArrayList<>();
-		InputStreamReader isr = null;
-		BufferedReader reader = null;
-		try
+		try (
+			InputStreamReader isr = encoding == null
+				? new InputStreamReader(input)
+				: new InputStreamReader(input, encoding);
+			BufferedReader reader = new BufferedReader(isr);)
 		{
-			// create the inputstreamreader
-			if (encoding == null)
-			{
-				isr = new InputStreamReader(input);
-			}
-			else
-			{
-
-				isr = new InputStreamReader(input, encoding);
-			}
-			// create the bufferedreader
-			reader = new BufferedReader(isr);
 			// the line.
 			String line = null;
 			// read all lines from the file
@@ -380,11 +361,6 @@ public final class ReadFileExtensions
 			}
 			while (true);
 		}
-		finally
-		{
-			StreamExtensions.closeReader(isr);
-			StreamExtensions.closeReader(reader);
-		}
 		// return the list with all lines from the file.
 		return output;
 	}
@@ -400,19 +376,13 @@ public final class ReadFileExtensions
 	public static Properties readPropertiesFromFile(final String filename)
 	{
 		final Properties properties = new Properties();
-		FileInputStream fis = null;
-		try
+		try (FileInputStream fis = new FileInputStream(filename))
 		{
-			fis = new FileInputStream(filename);
 			properties.load(fis);
 		}
 		catch (final IOException e)
 		{
 			LOGGER.log(Level.SEVERE, "readPropertiesFromFile failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(fis);
 		}
 		return properties;
 	}
@@ -427,26 +397,19 @@ public final class ReadFileExtensions
 	public static byte[] toByteArray(final File tmpFile)
 	{
 		byte[] data = null;
-		BufferedInputStream bis = null;
-		ByteArrayOutputStream bos = null;
 		if (tmpFile.exists() && !tmpFile.isDirectory())
 		{
-			try
+			try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(tmpFile));
+				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileConst.KILOBYTE);)
 			{
-				bos = new ByteArrayOutputStream(FileConst.KILOBYTE);
-				bis = new BufferedInputStream(new FileInputStream(tmpFile));
-				StreamExtensions.writeInputStreamToOutputStream(bis, bos, false);
+
+				StreamExtensions.writeInputStreamToOutputStream(bis, bos);
 				data = bos.toByteArray();
 			}
 			catch (final IOException e)
 			{
 				LOGGER.log(Level.SEVERE,
 					"transformFilecontentToByteArray failed...\n" + e.getMessage(), e);
-			}
-			finally
-			{
-				StreamExtensions.closeInputStream(bis);
-				StreamExtensions.closeOutputStream(bos);
 			}
 		}
 		return data;

@@ -56,9 +56,7 @@ import de.alpharogroup.file.rename.RenameFileExtensions;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.file.zip.ZipExtensions;
-import de.alpharogroup.io.SerializedObjectExtensions;
 import de.alpharogroup.io.StreamExtensions;
-import de.alpharogroup.string.StringExtensions;
 
 /**
  * The unit test class for the class {@link FileExtensions}.
@@ -393,32 +391,6 @@ public class FileExtensionsTest extends FileTestCase
 		AssertJUnit.assertTrue("File should not exist in this directory.", contains);
 		this.actual = FileSearchExtensions.containsFileRecursive(this.testDir, testFile3);
 		AssertJUnit.assertTrue("", this.actual);
-	}
-
-	@Test
-	public void testConvert2ByteArray() throws IOException
-	{
-		final byte[] expected = { -84, -19, 0, 5, 116, 0, 7, 70, 111, 111, 32, 98, 97, 114 };
-		final String testString = "Foo bar";
-		byte[] compare = null;
-		compare = SerializedObjectExtensions.toByteArray(testString);
-		for (int i = 0; i < compare.length; i++)
-		{
-			this.actual = expected[i] == compare[i];
-			AssertJUnit.assertTrue("", this.actual);
-		}
-	}
-
-	@Test
-	public void testConvert2Object() throws ClassNotFoundException, IOException
-	{
-		final byte[] testBytearray = { -84, -19, 0, 5, 116, 0, 7, 70, 111, 111, 32, 98, 97, 114 };
-		final String expected = "Foo bar";
-		final Object obj = SerializedObjectExtensions.toObject(testBytearray);
-		final String compare = (String)obj;
-		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
-
 	}
 
 	@Test
@@ -925,18 +897,18 @@ public class FileExtensionsTest extends FileTestCase
 		final String expected = inputString;
 		WriteFileExtensions.writeStringToFile(source, inputString, null);
 
-		final InputStream is = StreamExtensions.getInputStream(source);
-		final StringBuffer sb = new StringBuffer();
-		int byt;
-		while ((byt = is.read()) != -1)
+		try (final InputStream is = StreamExtensions.getInputStream(source))
 		{
-			sb.append((char)byt);
+			final StringBuffer sb = new StringBuffer();
+			int byt;
+			while ((byt = is.read()) != -1)
+			{
+				sb.append((char)byt);
+			}
+			final String compare = sb.toString();
+			this.actual = expected.equals(compare);
+			AssertJUnit.assertTrue("", this.actual);
 		}
-		StreamExtensions.closeInputStream(is);
-		final String compare = sb.toString();
-		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
-
 	}
 
 	@Test
@@ -952,10 +924,11 @@ public class FileExtensionsTest extends FileTestCase
 		final String expected = inputString;
 		WriteFileExtensions.writeStringToFile(source, inputString, null);
 
-		final OutputStream os = StreamExtensions.getOutputStream(destination, true);
-		os.write(inputString.getBytes());
+		try (final OutputStream os = StreamExtensions.getOutputStream(destination, true))
+		{
+			os.write(inputString.getBytes());
+		}
 
-		StreamExtensions.closeOutputStream(os);
 		final String compare = ReadFileExtensions.readFromFile(destination);
 		this.actual = expected.equals(compare);
 		AssertJUnit.assertTrue("", this.actual);
@@ -1362,10 +1335,12 @@ public class FileExtensionsTest extends FileTestCase
 		outputFile.createNewFile();
 		final String inputString = "Its a beautifull day!!!";
 		WriteFileExtensions.string2File(inputFile, inputString);
-		// --------------------------------
-		final InputStream is = StreamExtensions.getInputStream(inputFile);
-		final OutputStream os = StreamExtensions.getOutputStream(outputFile);
-		StreamExtensions.writeInputStreamToOutputStream(is, os, true);
+
+		try (final InputStream is = StreamExtensions.getInputStream(inputFile);
+			final OutputStream os = StreamExtensions.getOutputStream(outputFile);)
+		{
+			StreamExtensions.writeInputStreamToOutputStream(is, os);
+		}
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
@@ -1385,9 +1360,10 @@ public class FileExtensionsTest extends FileTestCase
 		final String inputString = "Its a beautifull day!!!";
 		WriteFileExtensions.string2File(inputFile, inputString);
 		// --------------------------------
-		final Reader reader = StreamExtensions.getReader(inputFile);
-		final Writer writer = StreamExtensions.getWriter(outputFile);
-		WriteFileExtensions.write2File(reader, writer, true);
+		try (final Reader reader = StreamExtensions.getReader(inputFile);
+			final Writer writer = StreamExtensions.getWriter(outputFile);) {
+			WriteFileExtensions.write2File(reader, writer);
+		}		
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
@@ -1408,9 +1384,10 @@ public class FileExtensionsTest extends FileTestCase
 		final String inputString = "Its a beautifull day!!!";
 		WriteFileExtensions.string2File(inputFile, inputString);
 		// --------------------------------
-		final PrintWriter writer = (PrintWriter)StreamExtensions.getWriter(outputFile);
-		final String path = inputFile.getAbsolutePath();
-		WriteFileExtensions.write2File(path, writer, true);
+		try(final PrintWriter writer = (PrintWriter)StreamExtensions.getWriter(outputFile);) {
+			final String path = inputFile.getAbsolutePath();
+			WriteFileExtensions.write2File(path, writer);
+		}
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
@@ -1471,8 +1448,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.writeByteArrayToFile(destination, expected);
 
-		final String compareString = ReadFileExtensions.readFromFile(destination);
-		final byte[] compare = StringExtensions.convertToBytearray(compareString.toCharArray());
+		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
 
 		for (int i = 0; i < compare.length; i++)
 		{
@@ -1491,8 +1467,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.writeByteArrayToFile(destination.getAbsolutePath(), expected);
 
-		final String compareString = ReadFileExtensions.readFromFile(destination);
-		final byte[] compare = StringExtensions.convertToBytearray(compareString.toCharArray());
+		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
 
 		for (int i = 0; i < compare.length; i++)
 		{

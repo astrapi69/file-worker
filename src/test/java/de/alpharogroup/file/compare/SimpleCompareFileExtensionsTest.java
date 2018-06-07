@@ -34,8 +34,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.crypto.algorithm.MdAlgorithm;
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.checksum.Algorithm;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
@@ -85,7 +85,7 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByChecksum(testFile1, testFile2,
-			Algorithm.MD5);
+			MdAlgorithm.MD5);
 		AssertJUnit.assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);

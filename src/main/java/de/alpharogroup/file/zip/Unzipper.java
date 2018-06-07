@@ -37,8 +37,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import de.alpharogroup.io.StreamExtensions;
-
 /**
  * The class Unzipper.
  *
@@ -94,36 +92,21 @@ public class Unzipper
 		final File toDirectory) throws IOException
 	{
 		final File fileToExtract = new File(toDirectory, target.getName());
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		InputStream is = null;
-		try
+		new File(fileToExtract.getParent()).mkdirs();
+		try (InputStream is = zipFile.getInputStream(target);
+			BufferedInputStream bis = new BufferedInputStream(is);
+			FileOutputStream fos = new FileOutputStream(fileToExtract);
+			BufferedOutputStream bos = new BufferedOutputStream(fos))
 		{
-			is = zipFile.getInputStream(target);
-			if (is != null)
+			for (int c; (c = bis.read()) != -1;)
 			{
-				bis = new BufferedInputStream(is);
-
-				new File(fileToExtract.getParent()).mkdirs();
-
-				bos = new BufferedOutputStream(new FileOutputStream(fileToExtract));
-				for (int c; (c = bis.read()) != -1;)
-				{
-					bos.write((byte)c);
-				}
-
-				bos.close();
+				bos.write((byte)c);
 			}
+			bos.flush();
 		}
 		catch (final IOException e)
 		{
 			throw e;
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(is);
-			StreamExtensions.closeInputStream(bis);
-			StreamExtensions.closeOutputStream(bos);
 		}
 	}
 

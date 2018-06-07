@@ -27,7 +27,7 @@ package de.alpharogroup.file.compare;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
-import de.alpharogroup.file.checksum.Algorithm;
+import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.file.checksum.ChecksumExtensions;
 
 /**

@@ -38,8 +38,8 @@ import java.util.zip.Checksum;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
+import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The class {@link ChecksumExtensions} is a utility class for computing checksum from files and
@@ -197,25 +197,20 @@ public final class ChecksumExtensions
 	public static long getChecksum(final File file, final boolean crc)
 		throws FileNotFoundException, IOException
 	{
-		CheckedInputStream cis = null;
-		if (crc)
+		try (CheckedInputStream cis = crc
+			? new CheckedInputStream(new FileInputStream(file), new CRC32())
+			: new CheckedInputStream(new FileInputStream(file), new Adler32());)
 		{
-			cis = new CheckedInputStream(new FileInputStream(file), new CRC32());
-		}
-		else
-		{
-			cis = new CheckedInputStream(new FileInputStream(file), new Adler32());
-		}
-		final int length = (int)file.length();
-		final byte[] buffer = new byte[length];
-		long checksum = 0;
-		while (cis.read(buffer) >= 0)
-		{
+			final int length = (int)file.length();
+			final byte[] buffer = new byte[length];
+			long checksum = 0;
+			while (cis.read(buffer) >= 0)
+			{
+				checksum = cis.getChecksum().getValue();
+			}
 			checksum = cis.getChecksum().getValue();
+			return checksum;
 		}
-		checksum = cis.getChecksum().getValue();
-		StreamExtensions.closeInputStream(cis);
-		return checksum;
 	}
 
 	/**

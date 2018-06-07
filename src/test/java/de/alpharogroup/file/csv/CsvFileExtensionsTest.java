@@ -425,7 +425,7 @@ public class CsvFileExtensionsTest
 	 *             {@link de.alpharogroup.file.csv.CsvFileExtensions#writeLinesToFile(java.util.Collection, java.io.File, java.lang.String)}
 	 *             .
 	 */
-	@Test
+	@Test(enabled = true)
 	public void testWriteLinesToFile() throws IOException
 	{
 		final List<String> expected = new ArrayList<>();

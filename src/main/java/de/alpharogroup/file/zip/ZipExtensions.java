@@ -41,7 +41,6 @@ import java.util.zip.ZipOutputStream;
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The class {@link ZipExtensions} provides functionality for ziping and unzipping files.
@@ -93,39 +92,23 @@ public final class ZipExtensions
 		final File toDirectory) throws IOException
 	{
 		final File fileToExtract = new File(toDirectory, target.getName());
-		InputStream is = null;
-		BufferedInputStream bis = null;
-		FileOutputStream fos = null;
-		BufferedOutputStream bos = null;
+		new File(fileToExtract.getParent()).mkdirs();
 
-		try
+		try (InputStream is = zipFile.getInputStream(target);
+			BufferedInputStream bis = new BufferedInputStream(is);
+			FileOutputStream fos = new FileOutputStream(fileToExtract);
+			BufferedOutputStream bos = new BufferedOutputStream(fos))
 		{
-			final ZipEntry ze = zipFile.getEntry(target.getName());
-			is = zipFile.getInputStream(ze);
-			bis = new BufferedInputStream(is);
-
-			new File(fileToExtract.getParent()).mkdirs();
-			fos = new FileOutputStream(fileToExtract);
-			bos = new BufferedOutputStream(fos);
 			for (int c; (c = bis.read()) != -1;)
 			{
 				bos.write((byte)c);
 			}
 			bos.flush();
-			bos.close();
 		}
 		catch (final IOException e)
 		{
 			throw e;
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(bis);
-			StreamExtensions.closeInputStream(is);
-
-			StreamExtensions.closeOutputStream(fos);
-			StreamExtensions.closeOutputStream(bos);
-		}
+		}		
 	}
 
 	/**
@@ -223,10 +206,9 @@ public final class ZipExtensions
 	public static void zip(final File dirToZip, final File zipFile, final FilenameFilter filter,
 		final boolean createFile)
 	{
-		ZipOutputStream zos = null;
-		FileOutputStream fos = null;
-		try
-		{
+		try(
+			FileOutputStream fos = new FileOutputStream(zipFile);
+			ZipOutputStream zos = new ZipOutputStream(fos);) {
 			if (!dirToZip.exists())
 			{
 				throw new IOException(
@@ -245,26 +227,19 @@ public final class ZipExtensions
 						"Zipfile with the name " + zipFile.getName() + " does not exist.");
 				}
 			}
-			fos = new FileOutputStream(zipFile);
-			zos = new ZipOutputStream(fos);
 			zos.setLevel(9);
 			zipFiles(dirToZip, dirToZip, zos, filter);
 			zos.flush();
 			zos.finish();
-			zos.close();
 			fos.flush();
-			fos.close();
-			fos = null;
-			zos = null;
 		}
-		catch (final Exception e)
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		finally
+		catch (FileDoesNotExistException e)
 		{
-			StreamExtensions.closeOutputStream(fos);
-			StreamExtensions.closeOutputStream(zos);
+			e.printStackTrace();
 		}
 	}
 
