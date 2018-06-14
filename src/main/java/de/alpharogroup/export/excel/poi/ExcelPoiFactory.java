@@ -37,11 +37,13 @@ import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import de.alpharogroup.check.Check;
+import lombok.experimental.UtilityClass;
 
 /**
  * Factory class for create poi objects.
  */
-public class ExcelPoiFactory
+@UtilityClass
+public final class ExcelPoiFactory
 {
 
 	/**

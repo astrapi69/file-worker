@@ -41,10 +41,12 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 
 import de.alpharogroup.lang.ClassExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ExportExcelExtensions}.
  */
+@UtilityClass
 public final class ExportExcelExtensions
 {
 
@@ -281,12 +283,5 @@ public final class ExportExcelExtensions
 		}
 		return wb;
 	}
-
-
-	/**
-	 * Privater Konstruktor damit keine Instanzen erzeugt werden können.
-	 */
-	private ExportExcelExtensions()
-	{
-	}
+	
 }
