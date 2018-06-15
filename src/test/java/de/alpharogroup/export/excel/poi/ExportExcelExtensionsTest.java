@@ -28,16 +28,24 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.delete.DeleteFileExtensions;
@@ -50,10 +58,46 @@ import de.alpharogroup.lang.ClassExtensions;
  */
 public class ExportExcelExtensionsTest
 {
-
 	final String twoDimArray[][] = { { "1", "a", "!" }, { "2", "b", "?" }, { "3", "c", "%" } };
-	final String twoDimArrayDouble[][] = { { "1.0", "a", "!" }, { "2.0", "b", "?" }, { "3.0", "c", "%" } };
+	final String twoDimArrayDouble[][] = { { "1.0", "a", "!" }, { "2.0", "b", "?" },
+			{ "3.0", "c", "%" } };
+	File emptyWorkbook;
 
+	Workbook workbook;
+
+
+	/**
+	 * Sets up method will be invoked before every unit test method
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		emptyWorkbook = new File(PathFinder.getSrcTestResourcesDir(), "emptyWorkbook.xls");
+		workbook = ExcelPoiFactory.newHSSFWorkbook(emptyWorkbook);
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		emptyWorkbook.deleteOnExit();
+	}
+
+	/**
+	 * Creates the workbook with content.
+	 *
+	 * @return the file
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	private File createWorkbookWithContent() throws IOException
 	{
 		final File emptyWorkbook = new File(PathFinder.getSrcTestResourcesDir(),
@@ -98,6 +142,9 @@ public class ExportExcelExtensionsTest
 		return emptyWorkbook;
 	}
 
+	/**
+	 * Test method for {@link ExportExcelExtensions#exportWorkbook(File)}
+	 */
 	@Test
 	public void testExportWorkbook() throws URISyntaxException, IOException
 	{
@@ -140,6 +187,9 @@ public class ExportExcelExtensionsTest
 		}
 	}
 
+	/**
+	 * Test method for {@link ExportExcelExtensions#exportWorkbookAsStringList(File)}
+	 */
 	@Test
 	public void testExportWorkbookAsStringList() throws IOException, URISyntaxException
 	{
@@ -159,13 +209,13 @@ public class ExportExcelExtensionsTest
 				}
 			}
 		}
-		DeleteFileExtensions.delete(emptyWorkbook);		
+		DeleteFileExtensions.delete(emptyWorkbook);
 
 		final String filename = "test.xls";
 		final URL url = ClassExtensions.getResource(filename);
 		final File excelSheet = new File(url.toURI());
-		final List<List<List<String>>> excelSheetList = ExportExcelExtensions.exportWorkbookAsStringList(excelSheet);
-		System.out.println(excelSheetList);
+		final List<List<List<String>>> excelSheetList = ExportExcelExtensions
+			.exportWorkbookAsStringList(excelSheet);
 		for (int i = 0; i < excelSheetList.size(); i++)
 		{
 			final List<List<String>> sheetEntry = excelSheetList.get(i);
@@ -183,9 +233,78 @@ public class ExportExcelExtensionsTest
 		}
 	}
 
+	/**
+	 * Test method for {@link ExportExcelExtensions#replaceNullCellsIntoEmptyCells(File)}
+	 * 
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 */
 	@Test
-	public void testReplaceNullCellsIntoEmptyCells()
+	public void testReplaceNullCellsIntoEmptyCells() throws FileNotFoundException, IOException
 	{
+		Sheet sheet = workbook.createSheet("Foo");
+
+		// create a header font styling
+		Font headerFont = workbook.createFont();
+		headerFont.setBold(true);
+		headerFont.setFontHeightInPoints((short)12);
+		headerFont.setColor(IndexedColors.BLUE.getIndex());
+
+		// create a CellStyle with the created font
+		CellStyle headerCellStyle = workbook.createCellStyle();
+		headerCellStyle.setFont(headerFont);
+
+		// create the header row
+		Row headerRow = sheet.createRow(0);
+
+		// create some header cells
+		for (int i = 0; i < twoDimArray.length; i++)
+		{
+			Cell cell = headerRow.createCell(i);
+			String header = twoDimArray[i][0];
+			cell.setCellValue(header);
+			cell.setCellStyle(headerCellStyle);
+		}
+
+		// create some cells with null values
+		for (int i = 0; i < twoDimArray.length; i++)
+		{
+			Row row = sheet.createRow(i + 1);
+			Cell cell = row.createCell(0);
+			cell.setCellValue((String)null);
+			cell = row.createCell(1);
+			cell.setCellValue((String)null);
+			cell = row.createCell(2);
+			cell.setCellValue((String)null);
+		}
+
+		// now write it to the output file
+		try (FileOutputStream fileOut = new FileOutputStream(emptyWorkbook))
+		{
+			workbook.write(fileOut);
+			workbook.close();
+		}
+		// FileOutputStream fileOut = new FileOutputStream(emptyWorkbook);
+		// workbook.write(fileOut);
+		// fileOut.close();
+		workbook.close();
+
+		HSSFWorkbook hssfWorkbook = ExportExcelExtensions
+			.replaceNullCellsIntoEmptyCells(emptyWorkbook);
+
+		sheet = hssfWorkbook.getSheet("Foo");
+
+		// Create cells with null values
+		for (int i = 0; i < twoDimArray.length; i++)
+		{
+			Row row = sheet.getRow(i + 1);
+			Cell cell = row.getCell(0);
+			assertEquals(cell.getStringCellValue(), "");
+			cell = row.getCell(1);
+			assertEquals(cell.getStringCellValue(), "");
+			cell = row.getCell(2);
+			assertEquals(cell.getStringCellValue(), "");
+		}
 	}
 
 }
