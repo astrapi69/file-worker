@@ -24,32 +24,35 @@
  */
 package de.alpharogroup.export.excel.poi;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
 import de.alpharogroup.io.StreamExtensions;
-
+import de.alpharogroup.lang.ClassExtensions;
 
 /**
- * The test class {@link ExportExcelExtensionsTest} is for the class {@link ExportExcelExtensions}.
+ * The unit test class for the class {@link ExportExcelExtensions}.
  */
 public class ExportExcelExtensionsTest
 {
 
 	final String twoDimArray[][] = { { "1", "a", "!" }, { "2", "b", "?" }, { "3", "c", "%" } };
+	final String twoDimArrayDouble[][] = { { "1.0", "a", "!" }, { "2.0", "b", "?" }, { "3.0", "c", "%" } };
 
 	private File createWorkbookWithContent() throws IOException
 	{
@@ -99,7 +102,7 @@ public class ExportExcelExtensionsTest
 	public void testExportWorkbook() throws URISyntaxException, IOException
 	{
 		final File emptyWorkbook = createWorkbookWithContent();
-		final List<String[][]> sheetList = ExportExcelExtensions.exportWorkbook(emptyWorkbook);
+		List<String[][]> sheetList = ExportExcelExtensions.exportWorkbook(emptyWorkbook);
 		for (int i = 0; i < sheetList.size(); i++)
 		{
 			final String[][] sheetEntry = sheetList.get(i);
@@ -108,15 +111,37 @@ public class ExportExcelExtensionsTest
 			{
 				for (int y = 0; y < sheetEntry[j].length; y++)
 				{
-					AssertJUnit.assertEquals(twoDimArray[j][y], sheetEntry[j][y]);
+					String expected = twoDimArray[j][y];
+					String actual = sheetEntry[j][y];
+					assertEquals(expected, actual);
 				}
 			}
 		}
 		DeleteFileExtensions.delete(emptyWorkbook);
+
+		final String filename = "test.xls";
+		final URL url = ClassExtensions.getResource(filename);
+		final File excelSheet = new File(url.toURI());
+		assertTrue(excelSheet.exists());
+		sheetList = ExportExcelExtensions.exportWorkbook(excelSheet);
+		for (int i = 0; i < sheetList.size(); i++)
+		{
+			final String[][] sheetEntry = sheetList.get(i);
+
+			for (int j = 0; j < sheetEntry.length; j++)
+			{
+				for (int y = 0; y < sheetEntry[j].length; y++)
+				{
+					String expected = twoDimArrayDouble[j][y];
+					String actual = sheetEntry[j][y];
+					assertEquals(expected, actual);
+				}
+			}
+		}
 	}
 
 	@Test
-	public void testExportWorkbookAsStringList() throws IOException
+	public void testExportWorkbookAsStringList() throws IOException, URISyntaxException
 	{
 		final File emptyWorkbook = createWorkbookWithContent();
 		final List<List<List<String>>> sheetList = ExportExcelExtensions
@@ -130,11 +155,32 @@ public class ExportExcelExtensionsTest
 				final List<String> list = sheetEntry.get(j);
 				for (int y = 0; y < list.size(); y++)
 				{
-					AssertJUnit.assertEquals(twoDimArray[j][y], list.get(y));
+					assertEquals(twoDimArray[j][y], list.get(y));
 				}
 			}
 		}
-		DeleteFileExtensions.delete(emptyWorkbook);
+		DeleteFileExtensions.delete(emptyWorkbook);		
+
+		final String filename = "test.xls";
+		final URL url = ClassExtensions.getResource(filename);
+		final File excelSheet = new File(url.toURI());
+		final List<List<List<String>>> excelSheetList = ExportExcelExtensions.exportWorkbookAsStringList(excelSheet);
+		System.out.println(excelSheetList);
+		for (int i = 0; i < excelSheetList.size(); i++)
+		{
+			final List<List<String>> sheetEntry = excelSheetList.get(i);
+
+			for (int j = 0; j < sheetEntry.size(); j++)
+			{
+				final List<String> list = sheetEntry.get(j);
+				for (int y = 0; y < list.size(); y++)
+				{
+					String expected = twoDimArrayDouble[j][y];
+					String actual = list.get(y);
+					assertEquals(expected, actual);
+				}
+			}
+		}
 	}
 
 	@Test

@@ -33,11 +33,17 @@ import java.io.IOException;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
 
 /**
@@ -46,7 +52,11 @@ import de.alpharogroup.file.search.PathFinder;
 public class ExcelPoiFactoryTest
 {
 	File emptyWorkbook;
+	File emptyWorkbookXlsx;
+	File testWorkbookXlsx;
 	Workbook workbook;
+	Workbook workbookXlsx;
+	Workbook xssfWorkbook;
 
 	/**
 	 * Sets up method will be invoked before every unit test method
@@ -57,9 +67,18 @@ public class ExcelPoiFactoryTest
 	@BeforeMethod
 	protected void setUp() throws Exception
 	{
-		emptyWorkbook = new File(PathFinder.getSrcTestResourcesDir(),
-			"emptyWorkbook.xls");
+		emptyWorkbook = new File(PathFinder.getSrcTestResourcesDir(), "emptyWorkbook.xls");
 		workbook = ExcelPoiFactory.newHSSFWorkbook(emptyWorkbook);
+
+		emptyWorkbookXlsx = new File(PathFinder.getSrcTestResourcesDir(),
+			"emptyWorkbook-xlsx.xlsx");
+		emptyWorkbookXlsx.createNewFile();
+		workbookXlsx = ExcelPoiFactory.newXSSFWorkbook(emptyWorkbookXlsx);
+
+		testWorkbookXlsx = new File(PathFinder.getSrcTestResourcesDir(),
+			"TestWorkbook-xlsx.xlsx");
+		testWorkbookXlsx.createNewFile();
+		xssfWorkbook = new XSSFWorkbook();
 	}
 
 	/**
@@ -71,13 +90,16 @@ public class ExcelPoiFactoryTest
 	@AfterMethod
 	protected void tearDown() throws Exception
 	{
+		DeleteFileExtensions.delete(emptyWorkbook);
+		DeleteFileExtensions.delete(emptyWorkbookXlsx);
+		DeleteFileExtensions.delete(testWorkbookXlsx);
 	}
-	
+
 	/**
 	 * Test method for {@link ExcelPoiFactory#newCellStyle(Workbook, String, boolean, short)}
 	 */
 	@Test
-	public final void testNewCellStyle() 
+	public final void testNewCellStyle()
 	{
 		String fontName = "Arial";
 		boolean bold = true;
@@ -90,7 +112,7 @@ public class ExcelPoiFactoryTest
 	 * Test method for {@link ExcelPoiFactory#newDateCellStyle(Workbook, String)}
 	 */
 	@Test
-	public final void testNewDateCellStyle() 
+	public final void testNewDateCellStyle()
 	{
 		String dateFormat = BuiltinFormats.getBuiltinFormat(14);
 		CellStyle cellStyle = ExcelPoiFactory.newDateCellStyle(workbook, dateFormat);
@@ -102,14 +124,14 @@ public class ExcelPoiFactoryTest
 	 * Test method for {@link ExcelPoiFactory#newFont(Workbook, String, boolean, short)}
 	 */
 	@Test
-	public final void testNewFont() 
+	public final void testNewFont()
 	{
 		String fontName = "Arial";
 		boolean bold = true;
 		short height = 1;
 		Font font = ExcelPoiFactory.newFont(workbook, fontName, bold, height);
 		assertNotNull(font);
-		
+
 	}
 
 	/**
@@ -118,19 +140,25 @@ public class ExcelPoiFactoryTest
 	@Test
 	public final void testNewHSSFWorkbookFile()
 	{
-		assertNotNull(emptyWorkbook);
+		assertNotNull(workbook);
 	}
 
 	/**
 	 * Test method for {@link ExcelPoiFactory#newHSSFWorkbook(String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public final void testNewHSSFWorkbookString()
+	public final void testNewHSSFWorkbookString() throws IOException
 	{
-
-		// TODO implement unit test cases...
 		File emptyWorkbookTmp = new File(PathFinder.getSrcTestResourcesDir(),
 			"emptyWorkbook-tmp.xls");
+		emptyWorkbookTmp.createNewFile();
+		String absolutePath = emptyWorkbookTmp.getAbsolutePath();
+		Workbook workbookTmp = ExcelPoiFactory.newHSSFWorkbook(absolutePath);
+		assertNotNull(workbookTmp);
+		DeleteFileExtensions.delete(emptyWorkbookTmp);
 	}
 
 	/**
@@ -139,8 +167,9 @@ public class ExcelPoiFactoryTest
 	@Test
 	public final void testNewSheet()
 	{
-
-		// TODO implement unit test cases...
+		String sheetName = "foo";
+		Sheet sheet = ExcelPoiFactory.newSheet(workbook, sheetName);
+		assertNotNull(sheet);
 	}
 
 	/**
@@ -149,18 +178,29 @@ public class ExcelPoiFactoryTest
 	@Test
 	public final void testNewXSSFWorkbook()
 	{
-
-		// TODO implement unit test cases...
+		assertNotNull(workbookXlsx);
 	}
 
 	/**
 	 * Test method for {@link ExcelPoiFactory#writeWorkbook(Workbook, File)}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public final void testWriteWorkbook()
+	public final void testWriteWorkbook() throws IOException
 	{
-
-		// TODO implement unit test cases...
+		Workbook newWorkbook = ExcelPoiFactory.writeWorkbook(xssfWorkbook, testWorkbookXlsx);
+		assertNotNull(newWorkbook);
 	}
 
+	/**
+	 * Test method for {@link ExcelPoiFactory}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(ExcelPoiFactory.class);
+	}
+	
 }

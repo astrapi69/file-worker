@@ -37,6 +37,7 @@ import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
+import lombok.NonNull;
 
 /**
  * The class {@link DeleteFileExtensions} helps you delete files.
@@ -109,7 +110,7 @@ public final class DeleteFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void delete(final File file) throws IOException
+	public static void delete(final @NonNull File file) throws IOException
 	{
 		if (file.isDirectory())
 		{
