@@ -27,6 +27,9 @@ package de.alpharogroup.file.compare;
 import java.io.File;
 
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Bean that tells if the content from the given files are equal.
@@ -34,11 +37,14 @@ import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
  * @version 1.0
  * @author Asterios Raptis
  */
+@Setter
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class FileContentResultBean extends FileCompareResultBean implements IFileContentResultBean
 {
 
 	/** The same content. */
-	private Boolean contentEquality;
+	private boolean contentEquality;
 
 	/**
 	 * Default constructor.
@@ -51,45 +57,6 @@ public class FileContentResultBean extends FileCompareResultBean implements IFil
 	public FileContentResultBean(final File source, final File compare)
 	{
 		super(source, compare);
-	}
-
-	/**
-	 * Returns <code>true</code> if this <code>FileContentResultBean</code> is the same as the o
-	 * argument.
-	 *
-	 * @param o
-	 *            the o
-	 * @return <code>true</code> if this <code>FileContentResultBean</code> is the same as the o
-	 *         argument.
-	 */
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
-		}
-		if (o == null)
-		{
-			return false;
-		}
-		if (o.getClass() != getClass())
-		{
-			return false;
-		}
-		final FileContentResultBean castedObj = (FileContentResultBean)o;
-		final FileContentResultBean other = (FileContentResultBean)o;
-		if (this.compare.equals(other.source) && this.source.equals(other.compare))
-		{
-			return true;
-		}
-		if (!super.equals(o))
-		{
-			return false;
-		}
-		return this.contentEquality == null
-			? castedObj.contentEquality == null
-			: this.contentEquality.equals(castedObj.contentEquality);
 	}
 
 	/**

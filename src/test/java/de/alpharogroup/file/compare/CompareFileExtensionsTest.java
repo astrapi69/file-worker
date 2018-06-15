@@ -155,12 +155,12 @@ public class CompareFileExtensionsTest extends FileTestCase
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir);
 
-		AssertJUnit.assertTrue("found.size() is not equal 1.", found.size() == 1);
+		AssertJUnit.assertTrue("found.size() is not equal 2.", found.size() == 2);
 
 		final List<IFileContentResultBean> contentfound = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir);
 
-		AssertJUnit.assertTrue("contentfound() is not equal 1.", contentfound.size() == 1);
+		AssertJUnit.assertTrue("contentfound() is not equal 1.", contentfound.size() == 2);
 
 	}
 

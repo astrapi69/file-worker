@@ -27,6 +27,9 @@ package de.alpharogroup.file.compare;
 import java.io.File;
 
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * The class FileCompareResultBean is pojo for comparing two files.
@@ -34,6 +37,9 @@ import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
  * @version 1.0
  * @author Asterios Raptis
  */
+@Setter
+@EqualsAndHashCode
+@ToString
 public class FileCompareResultBean implements IFileCompareResultBean
 {
 
@@ -68,57 +74,8 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 */
 	public FileCompareResultBean(final File source, final File compare)
 	{
-		super();
 		this.source = source;
 		this.compare = compare;
-	}
-
-	/**
-	 * Returns <code>true</code> if this <code>FileCompareResultBean</code> is the same as the o
-	 * argument.
-	 *
-	 * @param o
-	 *            the o
-	 * @return <code>true</code> if this <code>FileCompareResultBean</code> is the same as the o
-	 *         argument.
-	 */
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
-		}
-		if (o == null)
-		{
-			return false;
-		}
-		if (o.getClass() != getClass())
-		{
-			return false;
-		}
-		final FileCompareResultBean other = (FileCompareResultBean)o;
-		if (this.compare.equals(other.source) && this.source.equals(other.compare))
-		{
-			return true;
-		}
-		return (this.source == null ? other.source == null : this.source.equals(other.source))
-			&& (this.compare == null ? other.compare == null : this.compare.equals(other.compare))
-			&& (this.fileExtensionEquality == null
-				? other.fileExtensionEquality == null
-				: this.fileExtensionEquality.equals(other.fileExtensionEquality))
-			&& (this.lengthEquality == null
-				? other.lengthEquality == null
-				: this.lengthEquality.equals(other.lengthEquality))
-			&& (this.lastModifiedEquality == null
-				? other.lastModifiedEquality == null
-				: this.lastModifiedEquality.equals(other.lastModifiedEquality))
-			&& (this.nameEquality == null
-				? other.nameEquality == null
-				: this.nameEquality.equals(other.nameEquality))
-			&& (this.absolutePathEquality == null
-				? other.absolutePathEquality == null
-				: this.absolutePathEquality.equals(other.absolutePathEquality));
 	}
 
 	/**

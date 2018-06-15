@@ -32,6 +32,9 @@
 		<!-- MYSTIC-CRYPT versions -->
 		<mystic-crypt.version>5.1.0</mystic-crypt.version>
 		<crypt-api.version>${mystic-crypt.version}</crypt-api.version>
+		<!-- JOBJECT-EXTENSIONS version -->
+		<jobject-extensions.version>1.11</jobject-extensions.version>
+		<jobject-evaluate.version>${jobject-extensions.version}</jobject-evaluate.version>
 	</properties>
 
 	<licenses>
@@ -103,6 +106,12 @@
 				<artifactId>crypt-api</artifactId>
 				<version>${crypt-api.version}</version>
 			</dependency>
+			<!-- JOBJECT-EVALUATE DEPENDENCY -->
+			<dependency>
+				<groupId>de.alpharogroup</groupId>
+				<artifactId>jobject-evaluate</artifactId>
+				<version>${jobject-evaluate.version}</version>
+			</dependency>
 
 		</dependencies>
 
@@ -144,6 +153,12 @@
 		<dependency>
 			<groupId>org.meanbean</groupId>
 			<artifactId>meanbean</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- JOBJECT-EVALUATE DEPENDENCY -->
+		<dependency>
+			<groupId>de.alpharogroup</groupId>
+			<artifactId>jobject-evaluate</artifactId>
 			<scope>test</scope>
 		</dependency>
 
@@ -206,7 +221,7 @@
 					<artifactId>cobertura-maven-plugin</artifactId>
 					<configuration>
 						<instrumentation>
-							<excludes>		
+							<excludes>
 								<!-- abstract classes -->
 								<!-- annotations -->
 								<!-- enums -->
