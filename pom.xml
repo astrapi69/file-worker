@@ -236,6 +236,7 @@
 								<exclude>de/alpharogroup/file/FileConst.class</exclude>
 								<!-- explicit annotations -->
 								<!-- explicit bean classes -->
+								<exclude>de/alpharogroup/file/checksum/ChecksumQuietlyExtensions.class</exclude>
 								<!-- explicit deprecated classes -->
 								<!-- explicit enums -->
 								<exclude>de/alpharogroup/file/zip/ZipState.class</exclude>
