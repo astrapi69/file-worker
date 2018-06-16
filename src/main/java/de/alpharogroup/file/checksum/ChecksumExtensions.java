@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.file.read.ReadFileExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ChecksumExtensions} is a utility class for computing checksum from files and
@@ -48,6 +49,7 @@ import de.alpharogroup.file.read.ReadFileExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class ChecksumExtensions
 {
 
@@ -295,6 +297,10 @@ public final class ChecksumExtensions
 	 *            the algorithm to get the checksum. This could be for instance "MD4", "MD5",
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 * 			<br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final byte[] bytes, final Algorithm algorithm)
 	{
@@ -318,6 +324,10 @@ public final class ChecksumExtensions
 	 *            the algorithm to get the checksum. This could be for instance "MD4", "MD5",
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 * 			<br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final byte[] bytes, final String algorithm)
 	{
@@ -342,6 +352,10 @@ public final class ChecksumExtensions
 	 *            the algorithm to get the checksum. This could be for instance "MD4", "MD5",
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 * 			<br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final Byte[] bytes, final String algorithm)
 	{
@@ -367,6 +381,10 @@ public final class ChecksumExtensions
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object or null if a NoSuchAlgorithmException
 	 *         will be thrown. exists. {@link java.security.MessageDigest} object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 * 			<br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final File file, final Algorithm algorithm)
 	{
@@ -415,13 +433,6 @@ public final class ChecksumExtensions
 	public static boolean matchesSHA512(final String value)
 	{
 		return value.matches(REGEX_VALIDATION_SHA512);
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private ChecksumExtensions()
-	{
 	}
 
 }
