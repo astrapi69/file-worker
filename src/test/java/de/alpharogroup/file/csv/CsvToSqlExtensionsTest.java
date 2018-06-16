@@ -71,7 +71,7 @@ public class CsvToSqlExtensionsTest
 		String[] lineTwo;
 		String[] lineThree;
 		List<String[]> lines;
-		headers = ArrayFactory.newArray("foo", "bar", "bla");
+		headers = ArrayFactory.newArray("name", "age", "gender");
 		columnTypes = ArrayFactory.newArray("text", "integer", "enum");
 		lineOne = ArrayFactory.newArray("John", "23", "male");
 		lineTwo = ArrayFactory.newArray("Jim", "25", "male");
@@ -81,7 +81,7 @@ public class CsvToSqlExtensionsTest
 		tableName = "employees";
 		csvBean = CsvBean.builder().headers(headers).columnTypes(columnTypes).lines(lines).build();
 		actual = CsvToSqlExtensions.getCsvFileAsSqlInsertScript(tableName, csvBean);
-		expected = "INSERT INTO employees ( foo, bar, bla) VALUES \n"
+		expected = "INSERT INTO employees ( name, age, gender) VALUES \n"
 			+ "(\"John\", 23, male),\n"
 			+ "(\"Jim\", 25, male),\n"
 			+ "(\"Mary\", 21, female);\n";

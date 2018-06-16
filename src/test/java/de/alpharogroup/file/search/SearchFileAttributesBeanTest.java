@@ -24,19 +24,59 @@
  */
 package de.alpharogroup.file.search;
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.AssertJUnit.assertEquals;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 import org.testng.annotations.Test;
 
+import de.alpharogroup.evaluate.object.EqualsHashCodeAndToStringEvaluator;
+
+/**
+ * The unit test class for the class {@link SearchFileAttributesBean}
+ */
 public class SearchFileAttributesBeanTest
 {
 
 	/**
-	 * Test method for {@link SearchFileAttributesBean#SearchFileAttributesBean(boolean, boolean, boolean, boolean, boolean)}.
+	 * Test method for {@link SearchFileAttributesBean} constructors and builders
 	 */
 	@Test
-	public void testSearchFileAttributesBean()
+	public final void testConstructors()
 	{
-		// TODO implement unit test cases...
+		SearchFileAttributesBean model = new SearchFileAttributesBean(false,false,false,false,false);
+		assertNotNull(model);
+		model = SearchFileAttributesBean.builder().build();
+		assertNotNull(model);
 	}
 
+	/**
+	 * Test method for {@link SearchFileAttributesBean#equals(Object)} , {@link SearchFileAttributesBean#hashCode()}
+	 * and {@link SearchFileAttributesBean#toString()}
+	 *
+	 * @throws NoSuchMethodException
+	 *             if an accessor method for this property cannot be found
+	 * @throws IllegalAccessException
+	 *             if the caller does not have access to the property accessor method
+	 * @throws InvocationTargetException
+	 *             if the property accessor method throws an exception
+	 * @throws InstantiationException
+	 *             if a new instance of the bean's class cannot be instantiated
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testEqualsHashcodeAndToStringWithClass() throws NoSuchMethodException,
+		IllegalAccessException, InvocationTargetException, InstantiationException, IOException
+	{
+		boolean expected;
+		boolean actual;
+		actual = EqualsHashCodeAndToStringEvaluator
+			.evaluateEqualsHashcodeAndToString(SearchFileAttributesBean.class);
+		expected = true;
+		assertEquals(expected, actual);
+	}
 
 }
