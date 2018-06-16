@@ -1,65 +1,120 @@
 /**
- * 
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package de.alpharogroup.file.csv;
 
-import org.junit.Test;
+import static org.testng.AssertJUnit.assertEquals;
+
+import java.util.List;
+import java.util.Map;
+
+import org.testng.annotations.Test;
+
+import de.alpharogroup.collections.array.ArrayFactory;
+import de.alpharogroup.collections.list.ListFactory;
 
 /**
- * @author astrapi69
- *
+ * The unit test class for the class {@link CsvToSqlExtensions}.
  */
 public class CsvToSqlExtensionsTest
 {
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.csv.CsvToSqlExtensions#extractSqlColumns(java.lang.String[])}.
+	 * Test method for {@link CsvToSqlExtensions#extractSqlColumns(String[])}.
 	 */
 	@Test
-	public final void testExtractSqlColumns() throws Exception
+	public final void testExtractSqlColumns()
 	{
-		// TODO
-		throw new RuntimeException("not yet implemented");
+		String expected;
+		String actual;
+		String[] headers;
+		headers = ArrayFactory.newArray("foo", "bar", "bla");
+		actual = CsvToSqlExtensions.extractSqlColumns(headers);
+		expected = "foo, bar, bla";
+		assertEquals(expected, actual);
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.csv.CsvToSqlExtensions#getCsvFileAsSqlInsertScript(java.lang.String, de.alpharogroup.file.csv.CsvBean)}.
+	 * Test method for {@link CsvToSqlExtensions#getCsvFileAsSqlInsertScript(String, CsvBean)}.
 	 */
 	@Test
-	public final void testGetCsvFileAsSqlInsertScriptStringCsvBean() throws Exception
+	public final void testGetCsvFileAsSqlInsertScriptStringCsvBean()
 	{
-		// TODO
-		throw new RuntimeException("not yet implemented");
+		String expected;
+		String actual;
+		String tableName;
+		CsvBean csvBean;
+		String[] headers;
+		String[] columnTypes;
+		String[] lineOne;
+		String[] lineTwo;
+		String[] lineThree;
+		List<String[]> lines;
+		headers = ArrayFactory.newArray("foo", "bar", "bla");
+		columnTypes = ArrayFactory.newArray("text", "integer", "enum");
+		lineOne = ArrayFactory.newArray("John", "23", "male");
+		lineTwo = ArrayFactory.newArray("Jim", "25", "male");
+		lineThree = ArrayFactory.newArray("Mary", "21", "female");
+		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);
+
+		tableName = "employees";
+		csvBean = CsvBean.builder().headers(headers).columnTypes(columnTypes).lines(lines).build();
+		actual = CsvToSqlExtensions.getCsvFileAsSqlInsertScript(tableName, csvBean);
+		expected = "INSERT INTO employees ( foo, bar, bla) VALUES \n"
+			+ "(\"John\", 23, male),\n"
+			+ "(\"Jim\", 25, male),\n"
+			+ "(\"Mary\", 21, female);\n";
+		assertEquals(expected, actual);
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.csv.CsvToSqlExtensions#getCsvFileAsSqlInsertScript(java.lang.String, de.alpharogroup.file.csv.CsvBean, boolean, boolean)}.
+	 * Test method for
+	 * {@link CsvToSqlExtensions#getCsvFileAsSqlInsertScript(String, CsvBean, boolean, boolean)}.
 	 */
 	@Test
-	public final void testGetCsvFileAsSqlInsertScriptStringCsvBeanBooleanBoolean() throws Exception
+	public final void testGetCsvFileAsSqlInsertScriptStringCsvBeanBooleanBoolean()
 	{
-		// TODO
-		throw new RuntimeException("not yet implemented");
+		// TODO implement unit test cases...
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.csv.CsvToSqlExtensions#getDataFromLine(java.lang.String, java.lang.String)}.
+	 * Test method for {@link CsvToSqlExtensions#getDataFromLine(String, String)}.
 	 */
 	@Test
-	public final void testGetDataFromLine() throws Exception
+	public final void testGetDataFromLine()
 	{
-		// TODO
-		throw new RuntimeException("not yet implemented");
+		// TODO implement unit test cases...
 	}
 
 	/**
-	 * Test method for {@link de.alpharogroup.file.csv.CsvToSqlExtensions#getSqlData(java.lang.String[], java.lang.String[], java.lang.String[], java.util.Map, java.util.List, boolean)}.
+	 * Test method for
+	 * {@link CsvToSqlExtensions#getSqlData(String[], String[], String[], Map, List, boolean)}.
 	 */
 	@Test
-	public final void testGetSqlData() throws Exception
+	public final void testGetSqlData()
 	{
-		// TODO
-		throw new RuntimeException("not yet implemented");
+		// TODO implement unit test cases...
 	}
 
 }
