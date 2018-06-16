@@ -401,6 +401,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link ChecksumExtensions#getChecksumQuietly(byte[], Algorithm)}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetChecksumQuietlyByteArrayAlgorithm()
 	{
@@ -440,6 +441,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetChecksumQuietlyByteArrayString() throws UnsupportedEncodingException
 	{
@@ -483,6 +485,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 	 * 
 	 * @throws UnsupportedEncodingException
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetChecksumQuietlyByteObjectArrayString() throws UnsupportedEncodingException
 	{
@@ -526,6 +529,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link ChecksumExtensions#getChecksumQuietly(File, Algorithm)}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetChecksumQuietlyFileAlgorithm()
 	{
