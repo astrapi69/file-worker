@@ -238,6 +238,7 @@
 								<!-- explicit bean classes -->
 								<!-- explicit deprecated classes -->
 								<!-- explicit enums -->
+								<exclude>de/alpharogroup/file/zip/ZipState.class</exclude>
 								<!-- explicit exceptions -->
 								<!-- explicit interfaces -->
 								<exclude>de/alpharogroup/file/zip/ZipModel.class</exclude>
