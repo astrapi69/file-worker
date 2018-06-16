@@ -233,12 +233,14 @@
 								<!-- deprecated classes -->
 								<!-- constant classes with only constants -->
 								<!-- explicit abstract classes -->
+								<exclude>de/alpharogroup/file/FileConst.class</exclude>
 								<!-- explicit annotations -->
 								<!-- explicit bean classes -->
 								<!-- explicit deprecated classes -->
 								<!-- explicit enums -->
 								<!-- explicit exceptions -->
 								<!-- explicit interfaces -->
+								<exclude>de/alpharogroup/file/zip/ZipModel.class</exclude>
 								<!-- explicit abstract classes -->
 								<!-- explicit constant classes with only constants -->
 								<!-- explicit delegation classes -->
