@@ -29,6 +29,8 @@
 		<zip4j.version>1.3.2</zip4j.version>
 		<!-- MEANBEAN version -->
 		<meanbean.version>2.0.3</meanbean.version>
+		<!-- MEANBEAN-FACTORIES version -->
+		<meanbean-factories.version>1.1-SNAPSHOT</meanbean-factories.version>
 		<!-- MYSTIC-CRYPT versions -->
 		<mystic-crypt.version>5.1.0</mystic-crypt.version>
 		<crypt-api.version>${mystic-crypt.version}</crypt-api.version>
@@ -153,6 +155,12 @@
 		<dependency>
 			<groupId>org.meanbean</groupId>
 			<artifactId>meanbean</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- MEANBEAN-FACTORIES DEPENDENCY -->
+		<dependency>
+			<groupId>de.alpharogroup</groupId>
+			<artifactId>meanbean-factories</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<!-- JOBJECT-EVALUATE DEPENDENCY -->

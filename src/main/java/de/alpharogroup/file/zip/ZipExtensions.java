@@ -108,7 +108,7 @@ public final class ZipExtensions
 		catch (final IOException e)
 		{
 			throw e;
-		}		
+		}
 	}
 
 	/**
@@ -206,9 +206,9 @@ public final class ZipExtensions
 	public static void zip(final File dirToZip, final File zipFile, final FilenameFilter filter,
 		final boolean createFile)
 	{
-		try(
-			FileOutputStream fos = new FileOutputStream(zipFile);
-			ZipOutputStream zos = new ZipOutputStream(fos);) {
+		try (FileOutputStream fos = new FileOutputStream(zipFile);
+			ZipOutputStream zos = new ZipOutputStream(fos);)
+		{
 			if (!dirToZip.exists())
 			{
 				throw new IOException(

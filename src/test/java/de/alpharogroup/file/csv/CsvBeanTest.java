@@ -29,11 +29,16 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.util.List;
 
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.Configuration;
+import org.meanbean.test.ConfigurationBuilder;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.array.ArrayFactory;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.evaluate.object.EqualsHashCodeAndToStringEvaluator;
+import de.alpharogroup.meanbean.factories.ListStringArrayFactory;
+import de.alpharogroup.meanbean.factories.StringArrayFactory;
 
 /**
  * The unit test class for the class {@link CsvBean}
@@ -42,57 +47,40 @@ public class CsvBeanTest
 {
 
 	/**
-	 * Test method for {@link CsvBean} constructors and builders
+	 * Factory method for create {@link CsvBean} with builder for unit tests.
+	 *
+	 * @return the csv bean
 	 */
-	@Test
-	public final void testConstructors()
+	public static CsvBean newCsvBeanWithBuilder()
 	{
 		CsvBean model;
-		model = newCsvBean();
-		assertNotNull(model);
-		model = new CsvBean();
-		assertNotNull(model);
-	}
-
-	/**
-	 * Test method for {@link CsvBean#equals(Object)} , {@link CsvBean#hashCode()} and
-	 * {@link CsvBean#toString()}
-	 */
-	@Test(enabled = false)
-	public void testEqualsHashcodeAndToString()
-	{
-		final boolean expected;
-		final boolean actual;
 		String[] headers;
 		String[] columnTypes;
+		String[] columnTypesEdit;
 		String[] lineOne;
 		String[] lineTwo;
 		String[] lineThree;
 		List<String[]> lines;
-		headers = ArrayFactory.newArray("foo", "bar", "bla");
-		columnTypes = ArrayFactory.newArray("integer", "integer", "integer");
-		lineOne = ArrayFactory.newArray("1", "23", "3");
-		lineTwo = ArrayFactory.newArray("4", "25", "9");
-		lineThree = ArrayFactory.newArray("6", "21", "8");
+		columnTypesEdit = ArrayFactory.newArray("edit", "'", "\"", "true");
+		headers = ArrayFactory.newArray("name", "age", "gender");
+		columnTypes = ArrayFactory.newArray("text", "integer", "enum");
+		lineOne = ArrayFactory.newArray("John", "23", "male");
+		lineTwo = ArrayFactory.newArray("Jim", "25", "male");
+		lineThree = ArrayFactory.newArray("Mary", "21", "female");
 		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);
 
-		CsvBean first = newCsvBean();
-		CsvBean second = CsvBean.builder().headers(headers).columnTypes(columnTypes).lines(lines).build();
-		CsvBean third = newCsvBean();
-		CsvBean fourth = newCsvBean();
-
-		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(first, second,
-			third, fourth);
-		expected = true;
-		assertEquals(expected, actual);
+		model = CsvBean.builder().headers(headers).columnTypes(columnTypes)
+			.columnTypesEdit(columnTypesEdit).lines(lines).build();
+		return model;
 	}
-	
+
 	/**
-	 * Factory method for create {@link CsvBean} for unit tests.
+	 * Factory method for create {@link CsvBean} with constructor for unit tests.
 	 *
 	 * @return the csv bean
 	 */
-	public static CsvBean newCsvBean() {
+	public static CsvBean newCsvBeanWithConstructor()
+	{
 		CsvBean model;
 		String[] headers;
 		String[] columnTypes;
@@ -107,8 +95,72 @@ public class CsvBeanTest
 		lineThree = ArrayFactory.newArray("Mary", "21", "female");
 		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);
 
-		model = CsvBean.builder().headers(headers).columnTypes(columnTypes).lines(lines).build();
+		model = new CsvBean(headers, columnTypes, lines);
 		return model;
+	}
+
+	/**
+	 * Test method for {@link CsvBean} constructors and builders
+	 */
+	@Test
+	public final void testConstructors()
+	{
+		CsvBean model;
+		model = newCsvBeanWithBuilder();
+		assertNotNull(model);
+		model = new CsvBean();
+		assertNotNull(model);
+	}
+
+	/**
+	 * Test method for {@link CsvBean#equals(Object)} , {@link CsvBean#hashCode()} and
+	 * {@link CsvBean#toString()}
+	 */
+	@Test(enabled = true)
+	public void testEqualsHashcodeAndToString()
+	{
+		final boolean expected;
+		final boolean actual;
+		String[] headers;
+		String[] columnTypes;
+		String[] columnTypesEdit;
+		String[] lineOne;
+		String[] lineTwo;
+		String[] lineThree;
+		List<String[]> lines;
+		headers = ArrayFactory.newArray("foo", "bar", "bla");
+		columnTypes = ArrayFactory.newArray("integer", "integer", "integer");
+		columnTypesEdit = ArrayFactory.newArray("autoincrement", "1");
+		lineOne = ArrayFactory.newArray("1", "23", "3");
+		lineTwo = ArrayFactory.newArray("4", "25", "9");
+		lineThree = ArrayFactory.newArray("6", "21", "8");
+		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);
+
+		CsvBean first = newCsvBeanWithBuilder();
+		CsvBean second = new CsvBean(headers, columnTypes, columnTypesEdit, lines);
+		CsvBean third = newCsvBeanWithBuilder();
+		CsvBean fourth = newCsvBeanWithBuilder();
+
+		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(first, second,
+			third, fourth);
+		expected = true;
+		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test method for {@link CsvBean}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		Configuration configuration = new ConfigurationBuilder()
+			.overrideFactory("headers", new StringArrayFactory())
+			.overrideFactory("columnTypes", new StringArrayFactory())
+			.overrideFactory("columnTypesEdit", new StringArrayFactory())
+			.overrideFactory("lines", new ListStringArrayFactory()).build();
+		final BeanTester beanTester = new BeanTester();
+		beanTester.addCustomConfiguration(CsvBean.class, configuration);
+		beanTester.testBean(CsvBean.class);
 	}
 
 }

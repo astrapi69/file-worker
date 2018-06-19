@@ -67,31 +67,6 @@ public class ExportExcelExtensionsTest
 
 
 	/**
-	 * Sets up method will be invoked before every unit test method
-	 *
-	 * @throws Exception
-	 *             is thrown if an exception occurs
-	 */
-	@BeforeMethod
-	protected void setUp() throws Exception
-	{
-		emptyWorkbook = new File(PathFinder.getSrcTestResourcesDir(), "emptyWorkbook.xls");
-		workbook = ExcelPoiFactory.newHSSFWorkbook(emptyWorkbook);
-	}
-
-	/**
-	 * Tear down method will be invoked after every unit test method
-	 *
-	 * @throws Exception
-	 *             is thrown if an exception occurs
-	 */
-	@AfterMethod
-	protected void tearDown() throws Exception
-	{
-		emptyWorkbook.deleteOnExit();
-	}
-
-	/**
 	 * Creates the workbook with content.
 	 *
 	 * @return the file
@@ -140,6 +115,31 @@ public class ExportExcelExtensionsTest
 			throw e;
 		}
 		return emptyWorkbook;
+	}
+
+	/**
+	 * Sets up method will be invoked before every unit test method
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		emptyWorkbook = new File(PathFinder.getSrcTestResourcesDir(), "emptyWorkbook.xls");
+		workbook = ExcelPoiFactory.newHSSFWorkbook(emptyWorkbook);
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		emptyWorkbook.deleteOnExit();
 	}
 
 	/**

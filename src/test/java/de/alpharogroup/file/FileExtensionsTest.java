@@ -1361,9 +1361,10 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(inputFile, inputString);
 		// --------------------------------
 		try (final Reader reader = StreamExtensions.getReader(inputFile);
-			final Writer writer = StreamExtensions.getWriter(outputFile);) {
+			final Writer writer = StreamExtensions.getWriter(outputFile);)
+		{
 			WriteFileExtensions.write2File(reader, writer);
-		}		
+		}
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
@@ -1384,7 +1385,8 @@ public class FileExtensionsTest extends FileTestCase
 		final String inputString = "Its a beautifull day!!!";
 		WriteFileExtensions.string2File(inputFile, inputString);
 		// --------------------------------
-		try(final PrintWriter writer = (PrintWriter)StreamExtensions.getWriter(outputFile);) {
+		try (final PrintWriter writer = (PrintWriter)StreamExtensions.getWriter(outputFile);)
+		{
 			final String path = inputFile.getAbsolutePath();
 			WriteFileExtensions.write2File(path, writer);
 		}

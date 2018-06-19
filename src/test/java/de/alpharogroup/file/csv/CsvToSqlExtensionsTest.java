@@ -82,9 +82,7 @@ public class CsvToSqlExtensionsTest
 		csvBean = CsvBean.builder().headers(headers).columnTypes(columnTypes).lines(lines).build();
 		actual = CsvToSqlExtensions.getCsvFileAsSqlInsertScript(tableName, csvBean);
 		expected = "INSERT INTO employees ( name, age, gender) VALUES \n"
-			+ "(\"John\", 23, male),\n"
-			+ "(\"Jim\", 25, male),\n"
-			+ "(\"Mary\", 21, female);\n";
+			+ "(\"John\", 23, male),\n" + "(\"Jim\", 25, male),\n" + "(\"Mary\", 21, female);\n";
 		assertEquals(expected, actual);
 	}
 

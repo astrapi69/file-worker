@@ -35,7 +35,7 @@ import java.io.InputStream;
  * @deprecated use instead
  *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
  *             <br>
- * 			<br>
+ *             <br>
  *             Note: will be removed in the next minor version.
  */
 @Deprecated
@@ -168,12 +168,6 @@ public class ZipDecryptInputStream extends InputStream
 		}
 	}
 
-	@Override
-	public int read(byte[] b, int off, int len) throws IOException
-	{
-		int result = delegate.read(b, off, len);
-		return readlocal(result);
-	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -183,6 +177,13 @@ public class ZipDecryptInputStream extends InputStream
 	public int read() throws IOException
 	{
 		int result = delegate.read();
+		return readlocal(result);
+	}
+
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException
+	{
+		int result = delegate.read(b, off, len);
 		return readlocal(result);
 	}
 

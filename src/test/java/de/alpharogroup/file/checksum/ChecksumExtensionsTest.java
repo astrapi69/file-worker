@@ -35,6 +35,7 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.crypto.algorithm.MdAlgorithm;
 import de.alpharogroup.file.FileTestCase;
@@ -148,7 +149,8 @@ public class ChecksumExtensionsTest extends FileTestCase
 		assertEquals(expected, actual);
 
 		expected = "874026e54b67d4f9aaf87cb14a683fb51de6f9cb";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, HashAlgorithm.SHA_1.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			HashAlgorithm.SHA_1.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "8a3b3c92a8b0eb00da917c23201a9407ef7963373464076aec4c54c066e8b7aa";
@@ -239,7 +241,8 @@ public class ChecksumExtensionsTest extends FileTestCase
 		assertEquals(expected, actual);
 
 		expected = "874026e54b67d4f9aaf87cb14a683fb51de6f9cb";
-		actual = ChecksumExtensions.getChecksum(secretMessageBytes, HashAlgorithm.SHA_1.getAlgorithm());
+		actual = ChecksumExtensions.getChecksum(secretMessageBytes,
+			HashAlgorithm.SHA_1.getAlgorithm());
 		assertEquals(expected, actual);
 
 		expected = "8a3b3c92a8b0eb00da917c23201a9407ef7963373464076aec4c54c066e8b7aa";

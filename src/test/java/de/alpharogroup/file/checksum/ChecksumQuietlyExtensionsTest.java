@@ -24,7 +24,11 @@
  */
 package de.alpharogroup.file.checksum;
 
+import java.io.File;
+
 import org.testng.annotations.Test;
+
+import de.alpharogroup.crypto.algorithm.Algorithm;
 
 /**
  * The unit test class for the class {@link ChecksumQuietlyExtensions}

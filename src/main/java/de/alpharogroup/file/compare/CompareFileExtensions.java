@@ -211,9 +211,8 @@ public final class CompareFileExtensions
 		boolean contentEquality = true;
 		// Compare the content...
 		if (simpleEquality)
-		{			
-			try (
-				InputStream sourceReader = StreamExtensions.getInputStream(sourceFile);
+		{
+			try (InputStream sourceReader = StreamExtensions.getInputStream(sourceFile);
 				InputStream compareReader = StreamExtensions.getInputStream(fileToCompare);)
 			{
 
@@ -265,9 +264,11 @@ public final class CompareFileExtensions
 		{
 			try (
 
-				BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(sourceFile);
-				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(fileToCompare);
-				) {
+				BufferedReader sourceReader = (BufferedReader)StreamExtensions
+					.getReader(sourceFile);
+				BufferedReader compareReader = (BufferedReader)StreamExtensions
+					.getReader(fileToCompare);)
+			{
 				String sourceLine;
 				String compareLine;
 
@@ -369,10 +370,9 @@ public final class CompareFileExtensions
 		// Compare the content?
 		if (content)
 		{
-			try (
-				BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(source);
-				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(compare);
-				) {
+			try (BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(source);
+				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(compare);)
+			{
 				String sourceLine;
 				String compareLine;
 
@@ -393,7 +393,7 @@ public final class CompareFileExtensions
 			catch (final IOException e)
 			{
 				equal = false;
-			}			
+			}
 		}
 		return equal;
 	}

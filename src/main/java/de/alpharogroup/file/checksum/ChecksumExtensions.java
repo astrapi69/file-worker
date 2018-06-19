@@ -299,7 +299,7 @@ public final class ChecksumExtensions
 	 * @return The checksum from the file as a String object.
 	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
 	 *             <br>
-	 * 			<br>
+	 *             <br>
 	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final byte[] bytes, final Algorithm algorithm)
@@ -326,7 +326,7 @@ public final class ChecksumExtensions
 	 * @return The checksum from the file as a String object.
 	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
 	 *             <br>
-	 * 			<br>
+	 *             <br>
 	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final byte[] bytes, final String algorithm)
@@ -354,7 +354,7 @@ public final class ChecksumExtensions
 	 * @return The checksum from the file as a String object.
 	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
 	 *             <br>
-	 * 			<br>
+	 *             <br>
 	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final Byte[] bytes, final String algorithm)
@@ -383,7 +383,7 @@ public final class ChecksumExtensions
 	 *         will be thrown. exists. {@link java.security.MessageDigest} object.
 	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
 	 *             <br>
-	 * 			<br>
+	 *             <br>
 	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final File file, final Algorithm algorithm)

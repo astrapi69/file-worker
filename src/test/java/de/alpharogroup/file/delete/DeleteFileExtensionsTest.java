@@ -47,24 +47,6 @@ public class DeleteFileExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link DeleteFileExtensions#delete(Collection)}.
-	 */
-	@Test
-	public void testDeleteCollectionOfFile()
-	{
-		// TODO implement unit test cases...
-	}
-
-	/**
-	 * Test method for {@link DeleteFileExtensions#delete(File)}.
-	 */
-	@Test
-	public void testDeleteFile()
-	{
-		// TODO implement unit test cases...
-	}
-
-	/**
 	 * Test method for {@link DeleteFileExtensions#deleteAllFiles(File)}.
 	 */
 	@Test
@@ -78,6 +60,24 @@ public class DeleteFileExtensionsTest
 	 */
 	@Test
 	public void testDeleteAllFilesWithSuffix()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link DeleteFileExtensions#delete(Collection)}.
+	 */
+	@Test
+	public void testDeleteCollectionOfFile()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link DeleteFileExtensions#delete(File)}.
+	 */
+	@Test
+	public void testDeleteFile()
 	{
 		// TODO implement unit test cases...
 	}
@@ -110,7 +110,8 @@ public class DeleteFileExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link DeleteFileExtensions#deleteFilesWithFileFilter(File, FileFilter, FileFilter)}.
+	 * Test method for
+	 * {@link DeleteFileExtensions#deleteFilesWithFileFilter(File, FileFilter, FileFilter)}.
 	 */
 	@Test
 	public void testDeleteFilesWithFileFilterFileFileFilterFileFilter()
@@ -119,7 +120,8 @@ public class DeleteFileExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link DeleteFileExtensions#deleteFilesWithFilenameFilter(File, FilenameFilter)}.
+	 * Test method for
+	 * {@link DeleteFileExtensions#deleteFilesWithFilenameFilter(File, FilenameFilter)}.
 	 */
 	@Test
 	public void testDeleteFilesWithFilenameFilterFileFilenameFilter()
@@ -128,7 +130,8 @@ public class DeleteFileExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link DeleteFileExtensions#deleteFilesWithFilenameFilter(File, FilenameFilter, FilenameFilter)}.
+	 * Test method for
+	 * {@link DeleteFileExtensions#deleteFilesWithFilenameFilter(File, FilenameFilter, FilenameFilter)}.
 	 */
 	@Test
 	public void testDeleteFilesWithFilenameFilterFileFilenameFilterFilenameFilter()

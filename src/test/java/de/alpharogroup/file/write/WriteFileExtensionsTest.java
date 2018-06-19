@@ -96,19 +96,19 @@ public class WriteFileExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer, boolean)}.
+	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer)}.
 	 */
 	@Test
-	public void testWrite2FileReaderWriterBoolean()
+	public void testWrite2FileReaderWriter()
 	{
 		// TODO implement unit test cases...
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer)}.
+	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer, boolean)}.
 	 */
 	@Test
-	public void testWrite2FileReaderWriter()
+	public void testWrite2FileReaderWriterBoolean()
 	{
 		// TODO implement unit test cases...
 	}
@@ -123,19 +123,19 @@ public class WriteFileExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write2File(String, Writer, boolean)}.
+	 * Test method for {@link WriteFileExtensions#write2File(String, Writer)}.
 	 */
 	@Test
-	public void testWrite2FileStringWriterBoolean()
+	public void testWrite2FileStringWriter()
 	{
 		// TODO implement unit test cases...
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write2File(String, Writer)}.
+	 * Test method for {@link WriteFileExtensions#write2File(String, Writer, boolean)}.
 	 */
 	@Test
-	public void testWrite2FileStringWriter()
+	public void testWrite2FileStringWriterBoolean()
 	{
 		// TODO implement unit test cases...
 	}

@@ -294,8 +294,6 @@ public final class WriteFileExtensions
 	 *            The Name from the File to read and copy.
 	 * @param writer
 	 *            The PrintWriter to write into.
-	 * @param closeWriter
-	 *            If true then close the outputStream otherwise keep open.
 	 */
 	public static void write2File(final String inputFile, final Writer writer)
 	{

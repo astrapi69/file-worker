@@ -63,7 +63,8 @@ public class RenameFileExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}.
+	 * Test method for
+	 * {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}.
 	 */
 	@Test
 	public void testChangeAllFilenameSuffixFileStringStringBoolean()

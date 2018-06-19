@@ -95,6 +95,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 			unzippedFile1.exists());
 
 	}
+
 	/**
 	 * Test for {@link Zip4jExtensions#extract(ZipFile, File, String)}
 	 */
@@ -105,17 +106,17 @@ public class Zip4jExtensionsTest extends FileTestCase
 		final File unzippedFile = new File(this.unzipDir, "autotext");
 		// unzipped file should not exists in file system...
 		expected = false;
-		actual = unzippedFile.exists();		
+		actual = unzippedFile.exists();
 		assertEquals(expected, actual);
 		final String password = "Hallo";
 
 		final ZipFile zip4jZipFile = new ZipFile(zipFile);
-		
+
 		// Test to extract...
 		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, password);
 		// unzipped file should be extracted and should exists in file system...
 		expected = true;
-		actual = unzippedFile.exists();		
+		actual = unzippedFile.exists();
 		assertEquals(expected, actual);
 	}
 

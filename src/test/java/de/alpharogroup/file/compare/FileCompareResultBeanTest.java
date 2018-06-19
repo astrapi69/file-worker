@@ -44,7 +44,8 @@ public class FileCompareResultBeanTest
 	@Test
 	public final void testConstructors()
 	{
-		FileCompareResultBean model = new FileCompareResultBean(PathFinder.getProjectDirectory(), PathFinder.getProjectDirectory());
+		FileCompareResultBean model = new FileCompareResultBean(PathFinder.getProjectDirectory(),
+			PathFinder.getProjectDirectory());
 		assertNotNull(model);
 		model.setAbsolutePathEquality(true);
 		model.setCompare(PathFinder.getSrcMainJavaDir());
@@ -56,8 +57,8 @@ public class FileCompareResultBeanTest
 	}
 
 	/**
-	 * Test method for {@link FileCompareResultBean#equals(Object)} , {@link FileCompareResultBean#hashCode()} and
-	 * {@link FileCompareResultBean#toString()}
+	 * Test method for {@link FileCompareResultBean#equals(Object)} ,
+	 * {@link FileCompareResultBean#hashCode()} and {@link FileCompareResultBean#toString()}
 	 */
 	@Test
 	public void testEqualsHashcodeAndToString()
@@ -65,10 +66,14 @@ public class FileCompareResultBeanTest
 		final boolean expected;
 		final boolean actual;
 
-		FileCompareResultBean first = new FileCompareResultBean(PathFinder.getProjectDirectory(), PathFinder.getProjectDirectory());
-		FileCompareResultBean second = new FileCompareResultBean(PathFinder.getSrcMainJavaDir(), PathFinder.getSrcTestJavaDir());
-		FileCompareResultBean third = new FileCompareResultBean(PathFinder.getProjectDirectory(), PathFinder.getProjectDirectory());
-		FileCompareResultBean fourth = new FileCompareResultBean(PathFinder.getProjectDirectory(), PathFinder.getProjectDirectory());
+		FileCompareResultBean first = new FileCompareResultBean(PathFinder.getProjectDirectory(),
+			PathFinder.getProjectDirectory());
+		FileCompareResultBean second = new FileCompareResultBean(PathFinder.getSrcMainJavaDir(),
+			PathFinder.getSrcTestJavaDir());
+		FileCompareResultBean third = new FileCompareResultBean(PathFinder.getProjectDirectory(),
+			PathFinder.getProjectDirectory());
+		FileCompareResultBean fourth = new FileCompareResultBean(PathFinder.getProjectDirectory(),
+			PathFinder.getProjectDirectory());
 
 		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(first, second,
 			third, fourth);

@@ -36,7 +36,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class CsvToSqlExtensions
 {
-	
+
 	/**
 	 * Extract sql columns.
 	 *
@@ -216,7 +216,8 @@ public final class CsvToSqlExtensions
 			for (int i = 0; i < line.length; i++)
 			{
 				String lineItem = line[i];
-				if(columnTypesEdit != null) {
+				if (columnTypesEdit != null)
+				{
 					final String columTypeEdit = columnTypesEdit[i];
 					final String[] editTypeData = columTypeEdit.split(",");
 					final String editType = editTypeData[0];
@@ -264,55 +265,6 @@ public final class CsvToSqlExtensions
 						}
 					}
 				}
-//				final String columTypeEdit = columnTypesEdit[i];
-//				if (columTypeEdit != null)
-//				{
-////					final String[] editTypeData = columTypeEdit.split(",");
-////					final String editType = editTypeData[0];
-////					if (editType.equals("edit"))
-////					{
-////						lineItem = lineItem.replace(editTypeData[1], editTypeData[2]);
-////						if (2 < editTypeData.length)
-////						{
-////							final Boolean lc = new Boolean(editTypeData[3]);
-////							if (lc)
-////							{
-////								final String tlc = lineItem.toLowerCase();
-////								sb.append("\"" + tlc + "\"");
-////							}
-////							else
-////							{
-////								sb.append("\"" + lineItem + "\"");
-////							}
-////						}
-////						else
-////						{
-////							sb.append("\"" + lineItem + "\"");
-////						}
-////					}
-////					else if (editType.equals("autoincrement"))
-////					{
-////						final int startCount = Integer.parseInt(editTypeData[1]);
-////						if (i == 0 && autoincrement == 0)
-////						{
-////							autoincrement = startCount;
-////						}
-////						sb.append(autoincrement);
-////						autoincrement++;
-////					}
-////					else if (editType.equals("constant"))
-////					{
-////						final String type = editTypeData[1];
-////						if (type.equals("text"))
-////						{
-////							sb.append("\"" + editTypeData[2] + "\"");
-////						}
-////						else
-////						{
-////							sb.append(editTypeData[2]);
-////						}
-////					}
-//				}
 				else
 				{
 					if (lineItem != null)

@@ -430,8 +430,9 @@ public class Zipper implements ZipModel
 	 */
 	public void zip()
 	{
-		try(FileOutputStream fos = new FileOutputStream(this.zipFile);
-			ZipOutputStream zos = new ZipOutputStream(fos);) {
+		try (FileOutputStream fos = new FileOutputStream(this.zipFile);
+			ZipOutputStream zos = new ZipOutputStream(fos);)
+		{
 
 			if (!this.directoryToZip.exists())
 			{

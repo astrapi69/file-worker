@@ -75,8 +75,7 @@ public class ExcelPoiFactoryTest
 		emptyWorkbookXlsx.createNewFile();
 		workbookXlsx = ExcelPoiFactory.newXSSFWorkbook(emptyWorkbookXlsx);
 
-		testWorkbookXlsx = new File(PathFinder.getSrcTestResourcesDir(),
-			"TestWorkbook-xlsx.xlsx");
+		testWorkbookXlsx = new File(PathFinder.getSrcTestResourcesDir(), "TestWorkbook-xlsx.xlsx");
 		testWorkbookXlsx.createNewFile();
 		xssfWorkbook = new XSSFWorkbook();
 	}
@@ -182,18 +181,6 @@ public class ExcelPoiFactoryTest
 	}
 
 	/**
-	 * Test method for {@link ExcelPoiFactory#writeWorkbook(Workbook, File)}.
-	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	@Test
-	public final void testWriteWorkbook() throws IOException
-	{
-		Workbook newWorkbook = ExcelPoiFactory.writeWorkbook(xssfWorkbook, testWorkbookXlsx);
-		assertNotNull(newWorkbook);
-	}
-
-	/**
 	 * Test method for {@link ExcelPoiFactory}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
@@ -202,5 +189,18 @@ public class ExcelPoiFactoryTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(ExcelPoiFactory.class);
 	}
-	
+
+	/**
+	 * Test method for {@link ExcelPoiFactory#writeWorkbook(Workbook, File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public final void testWriteWorkbook() throws IOException
+	{
+		Workbook newWorkbook = ExcelPoiFactory.writeWorkbook(xssfWorkbook, testWorkbookXlsx);
+		assertNotNull(newWorkbook);
+	}
+
 }

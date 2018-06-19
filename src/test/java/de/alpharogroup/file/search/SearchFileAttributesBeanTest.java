@@ -46,15 +46,16 @@ public class SearchFileAttributesBeanTest
 	@Test
 	public final void testConstructors()
 	{
-		SearchFileAttributesBean model = new SearchFileAttributesBean(false,false,false,false,false);
+		SearchFileAttributesBean model = new SearchFileAttributesBean(false, false, false, false,
+			false);
 		assertNotNull(model);
 		model = SearchFileAttributesBean.builder().build();
 		assertNotNull(model);
 	}
 
 	/**
-	 * Test method for {@link SearchFileAttributesBean#equals(Object)} , {@link SearchFileAttributesBean#hashCode()}
-	 * and {@link SearchFileAttributesBean#toString()}
+	 * Test method for {@link SearchFileAttributesBean#equals(Object)} ,
+	 * {@link SearchFileAttributesBean#hashCode()} and {@link SearchFileAttributesBean#toString()}
 	 *
 	 * @throws NoSuchMethodException
 	 *             if an accessor method for this property cannot be found

@@ -38,19 +38,19 @@ public class ZipDecryptInputStreamTest extends FileTestCase
 {
 
 	/**
-	 * Test method for {@link ZipDecryptInputStream#read()}.
+	 * Test method for {@link ZipDecryptInputStream#close()}.
 	 */
 	@Test
-	public void testRead()
+	public void testClose()
 	{
 		// TODO implement unit test cases...
 	}
 
 	/**
-	 * Test method for {@link ZipDecryptInputStream#close()}.
+	 * Test method for {@link ZipDecryptInputStream#read()}.
 	 */
 	@Test
-	public void testClose()
+	public void testRead()
 	{
 		// TODO implement unit test cases...
 	}

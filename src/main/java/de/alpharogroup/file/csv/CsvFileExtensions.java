@@ -619,8 +619,9 @@ public final class CsvFileExtensions
 		final String comments) throws IOException
 	{
 		final Properties prop = readFilelistToProperties(input);
-		try (final OutputStream out = StreamExtensions.getOutputStream(output, true)) {
-			prop.store(out, comments);			
+		try (final OutputStream out = StreamExtensions.getOutputStream(output, true))
+		{
+			prop.store(out, comments);
 		}
 		final OutputStream out = StreamExtensions.getOutputStream(output, true);
 		prop.store(out, comments);
