@@ -25,13 +25,17 @@
 package de.alpharogroup.file.csv;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,7 +47,6 @@ import lombok.experimental.FieldDefaults;
  */
 @Getter
 @Setter
-@EqualsAndHashCode
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,10 +54,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CsvBean implements Serializable, Cloneable
 {
-
+	
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 5428554488510583277L;
-
+	private static final long serialVersionUID = 1648936246997896598L;
 
 	/** The headers. */
 	private String[] headers;
@@ -146,4 +148,78 @@ public class CsvBean implements Serializable, Cloneable
 		return inst;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean equals(final Object o)
+	{
+		if (this == o)
+		{
+			return true;
+		}
+		if (o == null)
+		{
+			return false;
+		}
+		if (o.getClass() != getClass())
+		{
+			return false;
+		}
+		final CsvBean castedObj = (CsvBean)o;
+		boolean headersEquality = java.util.Arrays.equals(headers, castedObj.headers);
+		boolean columnTypesEquality = java.util.Arrays.equals(columnTypes, castedObj.columnTypes);
+		boolean linesEquality = false;
+		if (lines == null)
+		{
+			if (castedObj.lines != null)
+				return false;
+		}
+		Collection<String[]> retainAll = CollectionUtils.retainAll(lines, castedObj.lines);
+		linesEquality = retainAll.isEmpty();
+		return headersEquality && columnTypesEquality && linesEquality;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode()
+	{
+		int hashCode = 1;
+		final int prime = 31;
+		hashCode = prime * hashCode + Arrays.hashCode(columnTypes);
+		hashCode = prime * hashCode + Arrays.hashCode(headers);
+
+		hashCode = prime * hashCode * hashCode(lines);
+		return hashCode;
+	}
+	
+	/**
+	 * Returns a hash code based on the contents of the collection that contains array objects.
+	 *
+	 * @param <T>
+	 *            the generic type of the array objects
+	 * @param arrayObjects
+	 *            the collection that contains array objects whose content-based hash code to
+	 *            compute
+	 * @return the content-based hash code for the given collection that contains array objects
+	 * @deprecated will be removed when silly-collection new release comes out.
+	 */
+	private static<T> int hashCode(Collection<T[]> arrayObjects)
+	{
+		int hashCode = 1;
+		for(T[] arrayObject : arrayObjects) {
+			hashCode = 31 * hashCode * Arrays.hashCode(arrayObject);
+		}
+		Iterator<T[]> iterator = arrayObjects.iterator();
+		while (iterator.hasNext())
+		{
+			T[] arrayItem = iterator.next();
+			hashCode = 31 * hashCode * Arrays.hashCode(arrayItem);
+		}
+		return hashCode;
+	}
+	
 }

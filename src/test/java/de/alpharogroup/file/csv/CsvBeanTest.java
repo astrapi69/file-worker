@@ -116,7 +116,7 @@ public class CsvBeanTest
 	 * Test method for {@link CsvBean#equals(Object)} , {@link CsvBean#hashCode()} and
 	 * {@link CsvBean#toString()}
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testEqualsHashcodeAndToString()
 	{
 		final boolean expected;
