@@ -260,11 +260,12 @@ public class UnzipperTest extends ZipTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test(enabled = false)
 	public void testUnzipWithPassword() throws IOException
 	{
 		// password-protected zip file I need to read
-		final File zipFileWithPassword = new File(this.testResources, "autotextWithPassword.zip");
+		final File zipFileWithPassword = new File(this.testResources, "autotextWithPassword.testzip");
 		final String password = "Hallo";
 		final Unzipper unzipper = new Unzipper();
 		unzipper.unzip(zipFileWithPassword, this.unzipDir, password, Charset.forName("UTF-8"));

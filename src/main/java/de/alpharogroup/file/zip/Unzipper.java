@@ -215,7 +215,14 @@ public class Unzipper
 	 *            the charset name
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * 
+	 * @deprecated use instead
+	 *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor version.
 	 */
+	@Deprecated
 	public void unzip(final File zipFile, final File toDir, final String password,
 		final Charset charsetName) throws IOException
 	{

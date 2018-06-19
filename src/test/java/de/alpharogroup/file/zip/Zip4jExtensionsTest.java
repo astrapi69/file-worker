@@ -24,10 +24,12 @@
  */
 package de.alpharogroup.file.zip;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -89,9 +91,32 @@ public class Zip4jExtensionsTest extends FileTestCase
 		// Test to extract...
 		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, null);
 
-		AssertJUnit.assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
+		assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
 			unzippedFile1.exists());
 
+	}
+	/**
+	 * Test for {@link Zip4jExtensions#extract(ZipFile, File, String)}
+	 */
+	@Test(enabled = true)
+	public void testExtractWithPassword() throws ZipException
+	{
+		final File zipFile = new File(this.testResources, "autotextWithPassword.testzip");
+		final File unzippedFile = new File(this.unzipDir, "autotext");
+		// unzipped file should not exists in file system...
+		expected = false;
+		actual = unzippedFile.exists();		
+		assertEquals(expected, actual);
+		final String password = "Hallo";
+
+		final ZipFile zip4jZipFile = new ZipFile(zipFile);
+		
+		// Test to extract...
+		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, password);
+		// unzipped file should be extracted and should exists in file system...
+		expected = true;
+		actual = unzippedFile.exists();		
+		assertEquals(expected, actual);
 	}
 
 	/**
@@ -121,9 +146,9 @@ public class Zip4jExtensionsTest extends FileTestCase
 
 		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, null);
 
-		AssertJUnit.assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
+		assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
 			unzippedFile1.exists());
-		AssertJUnit.assertTrue("File" + unzippedFile2.getName() + " should be extracted.",
+		assertTrue("File" + unzippedFile2.getName() + " should be extracted.",
 			unzippedFile2.exists());
 	}
 

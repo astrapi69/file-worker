@@ -31,7 +31,14 @@ import java.io.InputStream;
 /**
  * The class ZipDecryptInputStream is from the blog from Martin's Weekend Coding from
  * 'http://blog.alutam.com/2009/10/31/reading-password-protected-zip-files-in-java/'.
+ * 
+ * @deprecated use instead
+ *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
+ *             <br>
+ * 			<br>
+ *             Note: will be removed in the next minor version.
  */
+@Deprecated
 public class ZipDecryptInputStream extends InputStream
 {
 
@@ -161,6 +168,12 @@ public class ZipDecryptInputStream extends InputStream
 		}
 	}
 
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException
+	{
+		int result = delegate.read(b, off, len);
+		return readlocal(result);
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -170,6 +183,11 @@ public class ZipDecryptInputStream extends InputStream
 	public int read() throws IOException
 	{
 		int result = delegate.read();
+		return readlocal(result);
+	}
+
+	private int readlocal(int result) throws IOException
+	{
 		if (skipBytes == 0)
 		{
 			switch (state)

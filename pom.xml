@@ -237,15 +237,14 @@
 								<!-- explicit annotations -->
 								<!-- explicit bean classes -->
 								<exclude>de/alpharogroup/file/checksum/ChecksumQuietlyExtensions.class</exclude>
-								<!-- explicit deprecated classes -->
+								<!-- explicit constant classes with only constants -->
+								<!-- explicit delegation classes -->
+								<exclude>de/alpharogroup/file/zip/ZipDecryptInputStream.class</exclude>
 								<!-- explicit enums -->
 								<exclude>de/alpharogroup/file/zip/ZipState.class</exclude>
 								<!-- explicit exceptions -->
 								<!-- explicit interfaces -->
 								<exclude>de/alpharogroup/file/zip/ZipModel.class</exclude>
-								<!-- explicit abstract classes -->
-								<!-- explicit constant classes with only constants -->
-								<!-- explicit delegation classes -->
 							</excludes>
 						</instrumentation>
 					</configuration>

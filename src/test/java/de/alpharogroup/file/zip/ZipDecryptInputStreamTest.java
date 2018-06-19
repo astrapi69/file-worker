@@ -24,14 +24,17 @@
  */
 package de.alpharogroup.file.zip;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.FileTestCase;
+
 /**
  * The unit test class for the class {@link ZipDecryptInputStream}
  */
-public class ZipDecryptInputStreamTest
+public class ZipDecryptInputStreamTest extends FileTestCase
 {
 
 	/**
@@ -53,11 +56,13 @@ public class ZipDecryptInputStreamTest
 	}
 
 	/**
-	 * Test method for
-	 * {@link ZipDecryptInputStream#ZipDecryptInputStream(InputStream, String)}.
+	 * Test method for {@link ZipDecryptInputStream#ZipDecryptInputStream(InputStream, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testZipDecryptInputStream()
+	public void testZipDecryptInputStream() throws IOException
 	{
 		// TODO implement unit test cases...
 	}
