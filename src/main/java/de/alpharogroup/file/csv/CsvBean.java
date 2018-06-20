@@ -26,13 +26,13 @@ package de.alpharogroup.file.csv;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
-
+import de.alpharogroup.collections.CollectionExtensions;
+import de.alpharogroup.collections.array.ArrayExtensions;
+import de.alpharogroup.collections.list.ListFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,7 +54,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CsvBean implements Serializable, Cloneable
 {
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1648936246997896598L;
 
@@ -118,40 +118,21 @@ public class CsvBean implements Serializable, Cloneable
 	@Override
 	public Object clone()
 	{
-		final CsvBean inst = new CsvBean();
-		if (headers != null)
-		{
-			inst.headers = new String[headers.length];
-			for (int i0 = 0; i0 < headers.length; i0++)
-			{
-				inst.headers[i0] = headers[i0] == null ? null : new String(headers[i0]);
-			}
-		}
-		else
-		{
-			inst.headers = null;
-		}
-		if (columnTypes != null)
-		{
-			inst.columnTypes = new String[columnTypes.length];
-			for (int i0 = 0; i0 < columnTypes.length; i0++)
-			{
-				inst.columnTypes[i0] = columnTypes[i0] == null ? null : new String(columnTypes[i0]);
-			}
-		}
-		else
-		{
-			inst.columnTypes = null;
-		}
-
-		inst.lines = lines;
+		final CsvBean inst = CsvBean.builder()
+			.columnTypes(ArrayExtensions.arraycopyWithSystem(columnTypes,
+				columnTypes == null ? null : new String[columnTypes.length]))
+			.columnTypesEdit(ArrayExtensions.arraycopyWithSystem(columnTypesEdit,
+				columnTypesEdit == null ? null : new String[columnTypesEdit.length]))
+			.headers(ArrayExtensions.arraycopyWithSystem(headers,
+				headers == null ? null : new String[headers.length]))
+			.lineOrder(lineOrder == null ? null : new LinkedHashMap<>(lineOrder))
+			.lines(lines == null ? null : ListFactory.newArrayList(lines)).build();
 		return inst;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -167,17 +148,16 @@ public class CsvBean implements Serializable, Cloneable
 		{
 			return false;
 		}
-		final CsvBean castedObj = (CsvBean)o;
-		boolean headersEquality = java.util.Arrays.equals(headers, castedObj.headers);
-		boolean columnTypesEquality = java.util.Arrays.equals(columnTypes, castedObj.columnTypes);
+		final CsvBean other = (CsvBean)o;
+		boolean headersEquality = java.util.Arrays.equals(headers, other.headers);
+		boolean columnTypesEquality = java.util.Arrays.equals(columnTypes, other.columnTypes);
 		boolean linesEquality = false;
 		if (lines == null)
 		{
-			if (castedObj.lines != null)
+			if (other.lines != null)
 				return false;
 		}
-		Collection<String[]> retainAll = CollectionUtils.retainAll(lines, castedObj.lines);
-		linesEquality = retainAll.isEmpty();
+		linesEquality = CollectionExtensions.isEqualCollection(lines, other.lines);
 		return headersEquality && columnTypesEquality && linesEquality;
 	}
 
@@ -192,34 +172,8 @@ public class CsvBean implements Serializable, Cloneable
 		hashCode = prime * hashCode + Arrays.hashCode(columnTypes);
 		hashCode = prime * hashCode + Arrays.hashCode(headers);
 
-		hashCode = prime * hashCode * hashCode(lines);
+		hashCode = prime * hashCode * CollectionExtensions.hashCode(lines);
 		return hashCode;
 	}
-	
-	/**
-	 * Returns a hash code based on the contents of the collection that contains array objects.
-	 *
-	 * @param <T>
-	 *            the generic type of the array objects
-	 * @param arrayObjects
-	 *            the collection that contains array objects whose content-based hash code to
-	 *            compute
-	 * @return the content-based hash code for the given collection that contains array objects
-	 * @deprecated will be removed when silly-collection new release comes out.
-	 */
-	private static<T> int hashCode(Collection<T[]> arrayObjects)
-	{
-		int hashCode = 1;
-		for(T[] arrayObject : arrayObjects) {
-			hashCode = 31 * hashCode * Arrays.hashCode(arrayObject);
-		}
-		Iterator<T[]> iterator = arrayObjects.iterator();
-		while (iterator.hasNext())
-		{
-			T[] arrayItem = iterator.next();
-			hashCode = 31 * hashCode * Arrays.hashCode(arrayItem);
-		}
-		return hashCode;
-	}
-	
+
 }

@@ -25,8 +25,10 @@
 package de.alpharogroup.file.csv;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.meanbean.test.BeanTester;
@@ -100,6 +102,22 @@ public class CsvBeanTest
 	}
 
 	/**
+	 * Test method for {@link CsvBean#clone()}.
+	 */
+	@Test(enabled = true)
+	public void testClone()
+	{
+		CsvBean actual;
+		CsvBean expected;
+		actual = newCsvBeanWithBuilder();
+		expected = (CsvBean)actual.clone();
+		assertTrue(Arrays.deepEquals(expected.getColumnTypes(), actual.getColumnTypes()));
+		assertTrue(Arrays.deepEquals(expected.getColumnTypesEdit(), actual.getColumnTypesEdit()));
+		assertTrue(Arrays.deepEquals(expected.getHeaders(), actual.getHeaders()));
+		assertEquals(expected.getLineOrder(), actual.getLineOrder());
+	}
+
+	/**
 	 * Test method for {@link CsvBean} constructors and builders
 	 */
 	@Test
@@ -110,6 +128,8 @@ public class CsvBeanTest
 		assertNotNull(model);
 		model = new CsvBean();
 		assertNotNull(model);
+		model = newCsvBeanWithConstructor();
+		assertNotNull(model);
 	}
 
 	/**
@@ -119,8 +139,8 @@ public class CsvBeanTest
 	@Test(enabled = true)
 	public void testEqualsHashcodeAndToString()
 	{
-		final boolean expected;
-		final boolean actual;
+		boolean expected;
+		boolean actual;
 		String[] headers;
 		String[] columnTypes;
 		String[] columnTypesEdit;
@@ -144,6 +164,15 @@ public class CsvBeanTest
 		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(first, second,
 			third, fourth);
 		expected = true;
+		assertEquals(expected, actual);
+
+		actual = first.equals("foo");
+		expected = false;
+		assertEquals(expected, actual);
+
+		first.setLines(null);
+		actual = first.equals(third);
+		expected = false;
 		assertEquals(expected, actual);
 	}
 

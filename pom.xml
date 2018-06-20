@@ -22,6 +22,8 @@
 	<properties>
 		<!-- JCOMMONS-LANG version -->
 		<jcommons-lang.version>4.34</jcommons-lang.version>
+		<!-- SILLY-COLLECTIONS version -->
+		<silly-collections.version>4.30</silly-collections.version>
 		<!-- TEST-OBJECTS version -->
 		<test-objects.version>4.28</test-objects.version>
 		<!-- EXTERNAL LIBRARIES versions -->
@@ -114,6 +116,12 @@
 				<artifactId>jobject-evaluate</artifactId>
 				<version>${jobject-evaluate.version}</version>
 			</dependency>
+			<!-- SILLY-COLLECTIONS DEPENDENCY -->
+			<dependency>
+				<groupId>de.alpharogroup</groupId>
+				<artifactId>silly-collections</artifactId>
+				<version>${silly-collections.version}</version>
+			</dependency>
 
 		</dependencies>
 
@@ -139,11 +147,22 @@
 		<dependency>
 			<groupId>de.alpharogroup</groupId>
 			<artifactId>jcommons-lang</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>de.alpharogroup</groupId>
+					<artifactId>silly-collections</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- CRYPT-API DEPENDENCY -->
 		<dependency>
 			<groupId>de.alpharogroup</groupId>
 			<artifactId>crypt-api</artifactId>
+		</dependency>
+		<!-- SILLY-COLLECTIONS DEPENDENCY -->
+		<dependency>
+			<groupId>de.alpharogroup</groupId>
+			<artifactId>silly-collections</artifactId>
 		</dependency>
 
 		<dependency>
