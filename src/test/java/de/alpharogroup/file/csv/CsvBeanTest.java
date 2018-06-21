@@ -37,6 +37,7 @@ import org.meanbean.test.ConfigurationBuilder;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.array.ArrayFactory;
+import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.evaluate.object.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.meanbean.factories.ListStringArrayFactory;
@@ -115,6 +116,8 @@ public class CsvBeanTest
 		assertTrue(Arrays.deepEquals(expected.getColumnTypesEdit(), actual.getColumnTypesEdit()));
 		assertTrue(Arrays.deepEquals(expected.getHeaders(), actual.getHeaders()));
 		assertEquals(expected.getLineOrder(), actual.getLineOrder());
+		assertTrue(ListExtensions.isEqualListOfArrays(expected.getLines(), actual.getLines()));
+		assertEquals(expected, actual);
 	}
 
 	/**

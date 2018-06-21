@@ -4,6 +4,13 @@
 Version 4.21-SNAPSHOT
 -------------
 
+ADDED:
+ 
+- new dependency silly-collections in version 4.30.1
+
+CHANGED:
+
+- update of jcommons-lang dependency version from 4.33 to 4.34 
 
 Version 4.20
 -------------

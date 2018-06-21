@@ -32,6 +32,7 @@ import java.util.Map;
 
 import de.alpharogroup.collections.CollectionExtensions;
 import de.alpharogroup.collections.array.ArrayExtensions;
+import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -157,7 +158,7 @@ public class CsvBean implements Serializable, Cloneable
 			if (other.lines != null)
 				return false;
 		}
-		linesEquality = CollectionExtensions.isEqualCollection(lines, other.lines);
+		linesEquality = ListExtensions.isEqualListOfArrays(lines, other.lines);
 		return headersEquality && columnTypesEquality && linesEquality;
 	}
 
@@ -171,7 +172,6 @@ public class CsvBean implements Serializable, Cloneable
 		final int prime = 31;
 		hashCode = prime * hashCode + Arrays.hashCode(columnTypes);
 		hashCode = prime * hashCode + Arrays.hashCode(headers);
-
 		hashCode = prime * hashCode * CollectionExtensions.hashCode(lines);
 		return hashCode;
 	}
