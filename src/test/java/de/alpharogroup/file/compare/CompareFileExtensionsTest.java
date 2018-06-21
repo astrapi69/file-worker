@@ -24,6 +24,7 @@
  */
 package de.alpharogroup.file.compare;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
@@ -47,10 +48,41 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareFileContentByBytes()
 	{
-		// TODO implement unit test cases...
+		IFileContentResultBean actual;
+		IFileContentResultBean expected;
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+		
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull day!!!");
+		
+		actual = CompareFileExtensions.compareFileContentByBytes(testFile1, testFile2);
+		expected = new FileContentResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);		
+		
+		actual = CompareFileExtensions.compareFileContentByBytes(testFile1, testFile3);
+		expected = new FileContentResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
