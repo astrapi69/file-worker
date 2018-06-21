@@ -24,6 +24,9 @@
  */
 package de.alpharogroup.file;
 
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,7 +40,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.testng.Assert;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -154,7 +156,7 @@ public class FileExtensionsTest extends FileTestCase
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix);
 		this.actual = null == notDeletedFiles;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -164,13 +166,13 @@ public class FileExtensionsTest extends FileTestCase
 		notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir, oldFileSuffix,
 			newFileSuffix);
 		this.actual = null == notDeletedFiles;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		for (final File file : filesWithNewSuffixes)
 		{
 			final File currentFile = file;
 			this.actual = FileSearchExtensions.containsFileRecursive(this.deepDir, currentFile);
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 	}
 
@@ -207,7 +209,7 @@ public class FileExtensionsTest extends FileTestCase
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix, true);
 		this.actual = null == notDeletedFiles;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -221,7 +223,7 @@ public class FileExtensionsTest extends FileTestCase
 		{
 			final File currentFile = file;
 			this.actual = FileSearchExtensions.containsFileRecursive(this.deepDir, currentFile);
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 	}
 
@@ -242,15 +244,15 @@ public class FileExtensionsTest extends FileTestCase
 		catch (final Exception e)
 		{
 			this.actual = e instanceof FileDoesNotExistException;
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 
 		testFile1.createNewFile();
 		this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, fileWithNewSuffix);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -271,15 +273,15 @@ public class FileExtensionsTest extends FileTestCase
 		catch (final Exception e)
 		{
 			this.actual = e instanceof FileDoesNotExistException;
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 
 		testFile1.createNewFile();
 		this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix, true);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, fileWithNewSuffix);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	@Test
@@ -292,30 +294,30 @@ public class FileExtensionsTest extends FileTestCase
 		this.testDir = new File(this.testResources, "testDir");
 		Exception ex = DeleteFileExtensions.checkFile(this.testDir);
 		this.actual = ex != null;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		this.actual = ex instanceof FileDoesNotExistException;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		if (!this.testDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.testDir);
-			AssertJUnit.assertTrue("The directory should be created.", created);
+			assertTrue("The directory should be created.", created);
 		}
 		ex = DeleteFileExtensions.checkFile(this.testDir);
 		this.actual = ex == null;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		final File testFile1 = new File(this.testDir, "testCheckFile.txt");
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		ex = DeleteFileExtensions.checkFile(testFile1);
 		this.actual = ex != null;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		this.actual = ex instanceof FileIsNotADirectoryException;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		final File testFile2 = new File("a");
 		ex = DeleteFileExtensions.checkFile(testFile2);
 		this.actual = ex != null;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -330,22 +332,22 @@ public class FileExtensionsTest extends FileTestCase
 		File compare = new File(this.deepDir, filePrefix1 + oldFileSuffix);
 
 		this.actual = CompareFileExtensions.compareFiles(source, compare, false);
-		AssertJUnit.assertTrue("File should be equal cause they dont exist.", this.actual);
+		assertTrue("File should be equal cause they dont exist.", this.actual);
 		compare = new File(this.deepDir, filePrefix2 + newFileSuffix);
 		this.actual = CompareFileExtensions.compareFiles(source, compare, false);
-		AssertJUnit.assertFalse("File should not be equal.", this.actual);
+		assertFalse("File should not be equal.", this.actual);
 		WriteFileExtensions.string2File(source, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(compare, "Its a beautifull day!!!");
 		this.actual = CompareFileExtensions.compareFiles(source, compare, false);
-		AssertJUnit.assertTrue("File should be equal.", this.actual);
+		assertTrue("File should be equal.", this.actual);
 		this.actual = CompareFileExtensions.compareFiles(source, compare, true);
-		AssertJUnit.assertTrue("File should be equal.", this.actual);
+		assertTrue("File should be equal.", this.actual);
 		WriteFileExtensions.string2File(compare, "Its a beautifull evening!!!");
 		this.actual = CompareFileExtensions.compareFiles(source, compare, true);
-		AssertJUnit.assertFalse("File should not be equal.", this.actual);
+		assertFalse("File should not be equal.", this.actual);
 		WriteFileExtensions.string2File(compare, "Its a beautifull boy!!!");
 		this.actual = CompareFileExtensions.compareFiles(source, compare, true);
-		AssertJUnit.assertFalse("File should not be equal.", this.actual);
+		assertFalse("File should not be equal.", this.actual);
 
 	}
 
@@ -355,9 +357,9 @@ public class FileExtensionsTest extends FileTestCase
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
-		AssertJUnit.assertFalse("File should not exist in this directory.", contains);
+		assertFalse("File should not exist in this directory.", contains);
 		contains = FileSearchExtensions.containsFile(this.testDir, testFile);
-		AssertJUnit.assertTrue("File should not exist in this directory.", contains);
+		assertTrue("File should not exist in this directory.", contains);
 	}
 
 	@Test
@@ -366,10 +368,10 @@ public class FileExtensionsTest extends FileTestCase
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
-		AssertJUnit.assertFalse("File should not exist in this directory.", contains);
+		assertFalse("File should not exist in this directory.", contains);
 		final String filename = testFile.getName();
 		contains = FileSearchExtensions.containsFile(this.testDir, filename);
-		AssertJUnit.assertTrue("File should not exist in this directory.", contains);
+		assertTrue("File should not exist in this directory.", contains);
 	}
 
 	@Test
@@ -386,11 +388,11 @@ public class FileExtensionsTest extends FileTestCase
 		final File currentDir = new File(".").getAbsoluteFile();
 		boolean contains = FileSearchExtensions.containsFileRecursive(currentDir.getAbsoluteFile(),
 			testFile);
-		AssertJUnit.assertFalse("File should not exist in this directory.", contains);
+		assertFalse("File should not exist in this directory.", contains);
 		contains = FileSearchExtensions.containsFileRecursive(this.testDir, testFile);
-		AssertJUnit.assertTrue("File should not exist in this directory.", contains);
+		assertTrue("File should not exist in this directory.", contains);
 		this.actual = FileSearchExtensions.containsFileRecursive(this.testDir, testFile3);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	@Test
@@ -401,22 +403,22 @@ public class FileExtensionsTest extends FileTestCase
 		try
 		{
 			this.actual = CopyFileExtensions.copyFile(source, destination);
-			AssertJUnit.assertFalse("", this.actual);
+			assertFalse("", this.actual);
 		}
 		catch (final Exception fnfe)
 		{
 			this.actual = fnfe instanceof FileNotFoundException;
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
 		WriteFileExtensions.string2File(source, inputString);
 
 		this.actual = CopyFileExtensions.copyFile(source, destination);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		final String compare = ReadFileExtensions.readFromFile(destination);
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -429,9 +431,9 @@ public class FileExtensionsTest extends FileTestCase
 			DeleteFileExtensions.delete(testing);
 		}
 		final boolean created = CreateFileExtensions.newDirectory(testing);
-		AssertJUnit.assertTrue("The directory should be created.", created);
+		assertTrue("The directory should be created.", created);
 		this.actual = testing.isDirectory();
-		AssertJUnit.assertTrue("Created File should be a directory.", this.actual);
+		assertTrue("Created File should be a directory.", this.actual);
 		if (testing.exists())
 		{
 			DeleteFileExtensions.delete(testing);
@@ -445,7 +447,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		CreateFileExtensions.newFile(source);
 		this.actual = source.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -465,45 +467,45 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile1.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile2.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile3.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = this.testDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.deleteFiles(this.testDir);
 
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile1.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile2.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile3.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 	}
 
@@ -523,50 +525,50 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.delete(testFile1);
 
 		this.actual = testFile1.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 		this.actual = testFile3.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.delete(testFile3);
 
 		this.actual = testFile3.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.delete(this.deepDir);
 
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = this.testDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.delete(this.testDir);
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = this.testDir.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 
 	}
@@ -587,45 +589,45 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile3.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = this.testDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.deleteAllFiles(this.testDir);
 
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = this.testDir.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile1.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile2.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile3.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 	}
 
@@ -647,15 +649,15 @@ public class FileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.deleteAllFilesWithSuffix(this.testDir, ".txt");
 
 		this.actual = testFile1.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		this.actual = testFile2.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		this.actual = testFile3.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		this.actual = testFile4.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		this.actual = testFile5.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -675,50 +677,50 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.deleteFile(testFile1);
 
 		this.actual = testFile1.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 		this.actual = testFile3.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.deleteFile(testFile3);
 
 		this.actual = testFile3.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.deleteFile(this.deepDir);
 
 		this.actual = this.deepDir.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = testFile5.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = this.testDir.exists();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		DeleteFileExtensions.deleteFile(this.testDir);
 
 		this.actual = testFile4.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 
 		this.actual = this.testDir.exists();
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 		// --------------------------------
 
 	}
@@ -741,7 +743,7 @@ public class FileExtensionsTest extends FileTestCase
 		for (int i = 0; i < compare.length; i++)
 		{
 			this.actual = compare[i] == expected[i];
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 
 	}
@@ -759,9 +761,9 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 		final List<File> foundedFiles = FileSearchExtensions.findFiles(this.testDir, test);
 		this.actual = foundedFiles != null;
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 		this.actual = foundedFiles.size() == 2;
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 	}
 
 	@Test
@@ -781,13 +783,13 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 		List<File> foundedFiles = FileSearchExtensions.findFilesRecursive(this.testDir, test);
 		this.actual = foundedFiles != null;
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 		this.actual = foundedFiles.size() == 2;
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 		for (final File expectedFile : expectedFiles)
 		{
 			this.actual = foundedFiles.contains(expectedFile);
-			AssertJUnit.assertTrue(this.actual);
+			assertTrue(this.actual);
 		}
 		final String pattern = "*";
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive2.cvs");
@@ -796,9 +798,9 @@ public class FileExtensionsTest extends FileTestCase
 		foundedFiles = FileSearchExtensions.findFilesRecursive(this.testDir, pattern);
 
 		this.actual = foundedFiles != null;
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 		this.actual = foundedFiles.size() == 4;
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 	}
 
 	@Test
@@ -844,12 +846,12 @@ public class FileExtensionsTest extends FileTestCase
 		final List<File> compare = FileSearchExtensions.findFiles(this.testDir.getAbsolutePath(),
 			txtExtension);
 		this.actual = expected.size() == compare.size();
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		for (final File file : compare)
 		{
 			final File currentFile = file;
 			this.actual = expected.contains(currentFile);
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 	}
 
@@ -869,7 +871,7 @@ public class FileExtensionsTest extends FileTestCase
 		final String expected = fileNamePrefix;
 		final String compare = FileExtensions.getFilenamePrefix(testFile1);
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	/**
@@ -884,7 +886,7 @@ public class FileExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, filePrefix + fileSuffix);
 		final String compare = FileExtensions.getFilenameSuffix(testFile1);
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	@Test
@@ -907,7 +909,7 @@ public class FileExtensionsTest extends FileTestCase
 			}
 			final String compare = sb.toString();
 			this.actual = expected.equals(compare);
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 	}
 
@@ -931,7 +933,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String compare = ReadFileExtensions.readFromFile(destination);
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	@Test
@@ -949,7 +951,7 @@ public class FileExtensionsTest extends FileTestCase
 		final String compare = ReadFileExtensions.inputStream2String(is);
 
 		this.actual = inputString.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -962,11 +964,11 @@ public class FileExtensionsTest extends FileTestCase
 			final File testIsZip = new File(this.testResources,
 				"testIsZip" + FileConst.ZIP_EXTENSIONS[i]);
 			this.actual = ZipExtensions.isZip(testIsZip.getName());
-			AssertJUnit.assertTrue("The file " + testIsZip.getName() + " should be a zipfile.",
+			assertTrue("The file " + testIsZip.getName() + " should be a zipfile.",
 				this.actual);
 		}
 		this.actual = ZipExtensions.isZip(this.testResources.getName());
-		AssertJUnit.assertFalse(
+		assertFalse(
 			"The file " + this.testResources.getName() + " should not be a zipfile.", this.actual);
 	}
 
@@ -980,11 +982,11 @@ public class FileExtensionsTest extends FileTestCase
 		final String[] extensions = { txtExtension };
 
 		this.actual = FileSearchExtensions.match(filename, extensions);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		final String[] otherExtensions = { rtfExtension, cvsExtension };
 		this.actual = FileSearchExtensions.match(filename, otherExtensions);
-		AssertJUnit.assertFalse("", this.actual);
+		assertFalse("", this.actual);
 	}
 
 	@Test
@@ -1003,7 +1005,7 @@ public class FileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
 			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
@@ -1012,7 +1014,7 @@ public class FileExtensionsTest extends FileTestCase
 		System.err.println("-------------------------------------------------");
 		// Test to move the dir.
 		this.actual = RenameFileExtensions.moveFile(srcDir, destDir);
-		AssertJUnit.assertTrue("Directory should be renamed.", this.actual);
+		assertTrue("Directory should be renamed.", this.actual);
 		System.err.println("-------------------------------------------------");
 		System.err.println("srcFile.getAbsolutePath():" + srcFile.getAbsolutePath());
 		System.err.println("-------------------------------------------------");
@@ -1029,12 +1031,12 @@ public class FileExtensionsTest extends FileTestCase
 		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
 		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
-		AssertJUnit.assertFalse("File should not exist in this directory.", this.actual);
+		assertFalse("File should not exist in this directory.", this.actual);
 		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
-		AssertJUnit.assertTrue("File should be renamed.", this.actual);
+		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destDir);
-		AssertJUnit.assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue("The renamed file should exist in this directory.", this.actual);
 
 
 	}
@@ -1051,7 +1053,7 @@ public class FileExtensionsTest extends FileTestCase
 		final Reader reader = ReadFileExtensions.openFileReader(ap);
 		final String compare = ReadFileExtensions.reader2String(reader);
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	@Test
@@ -1068,7 +1070,7 @@ public class FileExtensionsTest extends FileTestCase
 		final String compare = ReadFileExtensions.reader2String(reader);
 
 		this.actual = inputString.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1083,7 +1085,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(testFile1);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1101,7 +1103,7 @@ public class FileExtensionsTest extends FileTestCase
 		final String compare = ReadFileExtensions.readHeadLine(inputFile.getAbsolutePath());
 
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1128,7 +1130,7 @@ public class FileExtensionsTest extends FileTestCase
 		final File testFile = new File(this.testResources, "testReadLinesInList.lst");
 		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
 		this.actual = expected.equals(testList);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	@Test
@@ -1144,7 +1146,7 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.writeProperties2File(ap, properties);
 		compare = ReadFileExtensions.readPropertiesFromFile(ap);
 		this.actual = properties.equals(compare);
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 		// clean up
 		DeleteFileExtensions.delete(tp);
 	}
@@ -1168,7 +1170,7 @@ public class FileExtensionsTest extends FileTestCase
 		catch (final Exception e)
 		{
 			this.actual = e instanceof FileNotFoundException;
-			AssertJUnit.assertTrue("Exception should be of type FileNotFoundException.",
+			assertTrue("Exception should be of type FileNotFoundException.",
 				this.actual);
 		}
 
@@ -1181,7 +1183,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String compare = ReadFileExtensions.readFromFile(destination);
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1196,12 +1198,12 @@ public class FileExtensionsTest extends FileTestCase
 		final File renamedFile1 = new File(this.deepDir, filePrefix2 + newFileSuffix);
 
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1, false);
-		AssertJUnit.assertFalse("File should not exist in this directory.", this.actual);
+		assertFalse("File should not exist in this directory.", this.actual);
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1, false);
-		AssertJUnit.assertTrue("File should be renamed.", this.actual);
+		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
-		AssertJUnit.assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue("The renamed file should exist in this directory.", this.actual);
 	}
 
 	@Test
@@ -1216,12 +1218,12 @@ public class FileExtensionsTest extends FileTestCase
 		final File renamedFile1 = new File(this.deepDir, filePrefix2 + newFileSuffix);
 
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1);
-		AssertJUnit.assertFalse("File should not exist in this directory.", this.actual);
+		assertFalse("File should not exist in this directory.", this.actual);
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1);
-		AssertJUnit.assertTrue("File should be renamed.", this.actual);
+		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
-		AssertJUnit.assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue("The renamed file should exist in this directory.", this.actual);
 
 	}
 
@@ -1238,9 +1240,9 @@ public class FileExtensionsTest extends FileTestCase
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1.getName());
-		AssertJUnit.assertTrue("File should be renamed.", this.actual);
+		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
-		AssertJUnit.assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue("The renamed file should exist in this directory.", this.actual);
 
 	}
 
@@ -1303,7 +1305,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(testFile1);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1318,7 +1320,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(testFile1);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1344,7 +1346,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1368,7 +1370,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1393,7 +1395,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1416,7 +1418,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1436,7 +1438,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -1455,7 +1457,7 @@ public class FileExtensionsTest extends FileTestCase
 		for (int i = 0; i < compare.length; i++)
 		{
 			this.actual = compare[i] == expected[i];
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 	}
 
@@ -1474,7 +1476,7 @@ public class FileExtensionsTest extends FileTestCase
 		for (int i = 0; i < compare.length; i++)
 		{
 			this.actual = compare[i] == expected[i];
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 	}
 
@@ -1503,7 +1505,7 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.writeLinesToFile(expected, testFile);
 		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
 		this.actual = expected.equals(testList);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 	@Test
@@ -1530,7 +1532,7 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.writeLinesToFile(testFile, expected, null);
 		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
 		final boolean result = expected.equals(testList);
-		AssertJUnit.assertTrue("", result);
+		assertTrue("", result);
 	}
 
 	@Test
@@ -1546,7 +1548,7 @@ public class FileExtensionsTest extends FileTestCase
 		WriteFileExtensions.writeProperties2File(ap, properties);
 		final Properties compare = ReadFileExtensions.readPropertiesFromFile(ap);
 		this.actual = properties.equals(compare);
-		AssertJUnit.assertTrue(this.actual);
+		assertTrue(this.actual);
 		DeleteFileExtensions.delete(tp);
 	}
 
@@ -1562,7 +1564,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final String compare = ReadFileExtensions.readFromFile(source);
 		this.actual = expected.equals(compare);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 	}
 
 }

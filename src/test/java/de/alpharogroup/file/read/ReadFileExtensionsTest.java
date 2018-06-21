@@ -24,10 +24,11 @@
  */
 package de.alpharogroup.file.read;
 
+import static org.testng.AssertJUnit.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
@@ -44,7 +45,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		final File output = new File(this.test.getAbsoluteFile(), "testReadFileOutput.txt");
 		WriteFileExtensions.string2File(output, sourceContent);
 		final String outputContent = ReadFileExtensions.readFromFile(output);
-		AssertJUnit.assertEquals(sourceContent, outputContent);
+		assertEquals(sourceContent, outputContent);
 
 	}
 

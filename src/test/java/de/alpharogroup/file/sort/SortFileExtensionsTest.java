@@ -24,12 +24,14 @@
  */
 package de.alpharogroup.file.sort;
 
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -64,7 +66,7 @@ public class SortFileExtensionsTest
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		final File projectPath = new File(absolutePath);
-		AssertJUnit.assertTrue(
+		assertTrue(
 			"The directory " + projectPath.getAbsolutePath() + " should be created.",
 			projectPath.exists());
 		log.debug("The directory " + projectPath.getAbsolutePath() + " exists or is created.");
@@ -72,7 +74,7 @@ public class SortFileExtensionsTest
 		if (!testResources.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(testResources);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + testResources.getAbsolutePath() + " should be created.",
 				created);
 		}
@@ -104,7 +106,7 @@ public class SortFileExtensionsTest
 
 		List<String> expectedSortedLines = ReadFileExtensions.readLinesInList(sortedEpfFile, false);
 
-		AssertJUnit.assertEquals(expectedSortedLines.size(), actualSortedLines.size());
+		assertEquals(expectedSortedLines.size(), actualSortedLines.size());
 
 		Object expected;
 		Object actual;
@@ -112,7 +114,7 @@ public class SortFileExtensionsTest
 		{
 			expected = expectedSortedLines.get(i);
 			actual = actualSortedLines.get(i);
-			AssertJUnit.assertEquals(expected, actual);
+			assertEquals(expected, actual);
 		}
 		// create initial state...
 		WriteFileExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");

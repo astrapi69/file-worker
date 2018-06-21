@@ -24,11 +24,12 @@
  */
 package de.alpharogroup.file.namefilter;
 
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -90,11 +91,11 @@ public class SimpleFilenameFilterTest extends FileTestCase
 		final SimpleFilenameFilter txtFilenameFilter = new SimpleFilenameFilter(".txt", false);
 		final File[] txtFiles = this.testDir.listFiles(txtFilenameFilter);
 		this.actual = txtFiles.length == 2;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		for (final File txtFile : txtFiles)
 		{
 			this.actual = expectedfiles.contains(txtFile);
-			AssertJUnit.assertTrue("", this.actual);
+			assertTrue("", this.actual);
 		}
 
 	}

@@ -24,10 +24,11 @@
  */
 package de.alpharogroup.file.zip;
 
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -82,7 +83,7 @@ public class ZipperTest extends ZipTestCase
 		}
 		final long length = zipFile.length();
 		this.actual = length == 0;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -114,16 +115,16 @@ public class ZipperTest extends ZipTestCase
 
 		final long currentLength = zipFile.length();
 		this.actual = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = zipper.getFileCounter() == 9;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 
@@ -144,7 +145,7 @@ public class ZipperTest extends ZipTestCase
 		}
 		final long length = zipFile.length();
 		this.actual = length == 0;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -178,17 +179,17 @@ public class ZipperTest extends ZipTestCase
 
 		final long currentLength = zipFile.length();
 		this.actual = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = zipper.getFileCounter() == 4;
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
 
-		AssertJUnit.assertTrue("", this.actual);
+		assertTrue("", this.actual);
 
 	}
 

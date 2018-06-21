@@ -24,12 +24,13 @@
  */
 package de.alpharogroup.file.search;
 
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
@@ -74,10 +75,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final long executionTime = end - start;
 		System.out.println("execution:" + executionTime);
 		// 3. assert that expected with actual match
-		AssertJUnit.assertTrue("", expected.size() == actual.size());
+		assertTrue("", expected.size() == actual.size());
 		for (final File file : expected)
 		{
-			AssertJUnit.assertTrue("", actual.contains(file));
+			assertTrue("", actual.contains(file));
 		}
 		// 4. cleanup all files from this test
 		DeleteFileExtensions.delete(fileList);
@@ -111,19 +112,19 @@ public class FileSearchExtensionsTest extends FileTestCase
 		// 2. run the actual method to test
 		List<File> actual = FileSearchExtensions.findFilesWithFilter(this.testDir, ".txt");
 		// 3. assert that expected with actual match
-		AssertJUnit.assertTrue("", expected.size() == actual.size());
+		assertTrue("", expected.size() == actual.size());
 		for (final File file : expected)
 		{
-			AssertJUnit.assertTrue("", actual.contains(file));
+			assertTrue("", actual.contains(file));
 		}
 		actual = FileSearchExtensions.findFilesWithFilter(this.testDir, "tft", "cvs");
 		expected.clear();
 		expected.add(testFile2);
 		expected.add(testFile3);
-		AssertJUnit.assertTrue("", expected.size() == actual.size());
+		assertTrue("", expected.size() == actual.size());
 		for (final File file : expected)
 		{
-			AssertJUnit.assertTrue("", actual.contains(file));
+			assertTrue("", actual.contains(file));
 		}
 		// 4. cleanup all files from this test
 		DeleteFileExtensions.delete(fileList);

@@ -24,9 +24,10 @@
  */
 package de.alpharogroup.file;
 
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -109,28 +110,28 @@ public abstract class FileTestCase extends BaseTestCase
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		projectPath = new File(absolutePath);
-		AssertJUnit.assertTrue(
+		assertTrue(
 			"The directory " + this.projectPath.getAbsolutePath() + " should be created.",
 			projectPath.exists());
 		this.test = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!this.test.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.test);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.test.getAbsolutePath() + " should be created.", created);
 		}
 		this.zipDir = new File(this.test.getAbsoluteFile(), "zipDir");
 		if (!this.zipDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.zipDir);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.zipDir.getAbsolutePath() + " should be created.", created);
 		}
 		this.unzipDir = new File(this.test.getAbsoluteFile(), "unzipDir");
 		if (!this.unzipDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.unzipDir);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.unzipDir.getAbsolutePath() + " should be created.",
 				created);
 		}
@@ -138,7 +139,7 @@ public abstract class FileTestCase extends BaseTestCase
 		if (!this.resources.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.resources);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.resources.getAbsolutePath() + " should be created.",
 				created);
 		}
@@ -146,7 +147,7 @@ public abstract class FileTestCase extends BaseTestCase
 		if (!this.testResources.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.testResources);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.testResources.getAbsolutePath() + " should be created.",
 				created);
 		}
@@ -154,14 +155,14 @@ public abstract class FileTestCase extends BaseTestCase
 		if (!this.testDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.testDir);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.testDir.getAbsolutePath() + " should be created.", created);
 		}
 		this.secondTestDir = new File(this.testResources.getAbsoluteFile(), "secondTestDir");
 		if (!secondTestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.secondTestDir);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.secondTestDir.getAbsolutePath() + " should be created.",
 				created);
 		}
@@ -169,7 +170,7 @@ public abstract class FileTestCase extends BaseTestCase
 		if (!this.deepDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.deepDir);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.deepDir.getAbsolutePath() + " should be created.", created);
 
 		}
@@ -177,7 +178,7 @@ public abstract class FileTestCase extends BaseTestCase
 		if (!this.deepDir2.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.deepDir2);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.deepDir2.getAbsolutePath() + " should be created.",
 				created);
 
@@ -186,7 +187,7 @@ public abstract class FileTestCase extends BaseTestCase
 		if (!this.deeperDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(this.deeperDir);
-			AssertJUnit.assertTrue(
+			assertTrue(
 				"The directory " + this.deeperDir.getAbsolutePath() + " should be created.",
 				created);
 		}

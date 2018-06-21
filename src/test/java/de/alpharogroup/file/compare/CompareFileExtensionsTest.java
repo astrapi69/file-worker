@@ -24,12 +24,13 @@
  */
 package de.alpharogroup.file.compare;
 
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
@@ -49,7 +50,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareFileContentByBytes()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareFileContentByLines()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -67,7 +68,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareFilesFileFile()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareFilesFileFileBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -86,7 +87,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -106,7 +107,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareIFileCompareResultBeanBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -116,7 +117,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompareIFileContentResultBeanBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -125,7 +126,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testCompleteCompare()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -155,12 +156,12 @@ public class CompareFileExtensionsTest extends FileTestCase
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir);
 
-		AssertJUnit.assertTrue("found.size() is not equal 2.", found.size() == 2);
+		assertTrue("found.size() is not equal 2.", found.size() == 2);
 
 		final List<IFileContentResultBean> contentfound = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir);
 
-		AssertJUnit.assertTrue("contentfound() is not equal 1.", contentfound.size() == 2);
+		assertTrue("contentfound() is not equal 1.", contentfound.size() == 2);
 
 	}
 
@@ -171,7 +172,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testFindEqualFilesFileBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -211,12 +212,12 @@ public class CompareFileExtensionsTest extends FileTestCase
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir, this.secondTestDir);
 
-		AssertJUnit.assertTrue("found.size() is not equal 3.", found.size() == 2);
+		assertTrue("found.size() is not equal 3.", found.size() == 2);
 
 		final List<IFileContentResultBean> contentfound = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir, this.secondTestDir);
 
-		AssertJUnit.assertTrue("contentfound() is not equal 3.", contentfound.size() == 2);
+		assertTrue("contentfound() is not equal 3.", contentfound.size() == 2);
 
 	}
 
@@ -227,7 +228,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -236,7 +237,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testFindEqualFilesWithSameContentFile()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -246,7 +247,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testFindEqualFilesWithSameContentFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -255,7 +256,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testFindEqualFilesWithSameContentFileFile()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -265,7 +266,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -274,7 +275,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testSimpleCompareFiles()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -283,7 +284,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testValidateEqualityIFileCompareResultBean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -292,7 +293,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = false)
 	public void testValidateEqualityIFileContentResultBean()
 	{
-
+		// TODO implement unit test cases...
 	}
 
 }

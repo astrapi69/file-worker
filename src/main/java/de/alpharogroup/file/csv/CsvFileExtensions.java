@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,6 +53,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class CsvFileExtensions
 {
+
 	/**
 	 * Reads every line from the File splits the data through a comma and puts them to the List.
 	 *
@@ -62,9 +62,11 @@ public final class CsvFileExtensions
 	 * @param encoding
 	 *            The encoding from the file.
 	 * @return The List with all lines from the file.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static List<String> formatKommaSeperatedFileToList(final File input,
-		final String encoding)
+		final String encoding) throws IOException
 	{
 		// The List where the data from every line from the File to put.
 		final List<String> output = new ArrayList<>();
@@ -92,18 +94,6 @@ public final class CsvFileExtensions
 				}
 			}
 			while (true);
-		}
-		catch (final UnsupportedEncodingException e)
-		{
-			e.printStackTrace();
-		}
-		catch (final FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
 		}
 		// return the list with all lines from the file.
 		return output;
