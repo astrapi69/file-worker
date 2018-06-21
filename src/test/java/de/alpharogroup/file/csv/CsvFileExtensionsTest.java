@@ -43,6 +43,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.collections.CollectionExtensions;
 import de.alpharogroup.collections.array.ArrayFactory;
 import de.alpharogroup.collections.list.ListFactory;
+import de.alpharogroup.collections.set.SetFactory;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
@@ -380,7 +381,7 @@ public class CsvFileExtensionsTest
 	 * @throws FileDoesNotExistException
 	 *             the file does not exist exception
 	 */
-	@Test(enabled = false) // TODO set to true
+	@Test(enabled = true)
 	public void testStoreFilelistToProperties() throws IOException, FileDoesNotExistException
 	{
 		final String[] expected = { "test1", "test2", "test3", "bla", "fasel", "and", "so", "on",
@@ -409,12 +410,34 @@ public class CsvFileExtensionsTest
 
 	/**
 	 * Test method for {@link CsvFileExtensions#writeLines(File, Set, String)}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = false)
-	public void testWriteLines()
+	@Test(enabled = true)
+	public void testWriteLines() throws IOException
 	{
-		// See test from
-		// CsvFileUtils.writeLinesToFile(Collection, File, String )
+		final Set<String> expected = SetFactory.newHashSet();
+		expected.add("test1");
+		expected.add("test2");
+		expected.add("test3");
+		expected.add("bla");
+		expected.add("fasel");
+		expected.add("and");
+		expected.add("so");
+		expected.add("on");
+		expected.add("test4");
+		expected.add("test5");
+		expected.add("test6");
+		expected.add("foo");
+		expected.add("bar");
+		expected.add("sim");
+		expected.add("sala");
+		expected.add("bim");
+		final File testFile = new File(testResources, "testWriteLinesToFile.lst");
+		CsvFileExtensions.writeLines(testFile, expected, "UTF-8");
+		final Set<String> actual = SetFactory.newHashSet(CsvFileExtensions.readLinesInList(testFile, null));
+		final boolean result = CollectionExtensions.isEqualCollection(expected, actual);
+		assertTrue("", result);
 
 	}
 
