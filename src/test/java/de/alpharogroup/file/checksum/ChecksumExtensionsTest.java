@@ -443,6 +443,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 	 * Test method for {@link ChecksumExtensions#getChecksumQuietly(byte[], String)}.
 	 * 
 	 * @throws UnsupportedEncodingException
+	 *             if the named charset is not supported
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
@@ -487,6 +488,7 @@ public class ChecksumExtensionsTest extends FileTestCase
 	 * Test method for {@link ChecksumExtensions#getChecksumQuietly(Byte[], String)}.
 	 * 
 	 * @throws UnsupportedEncodingException
+	 *             if the named charset is not supported
 	 */
 	@SuppressWarnings("deprecation")
 	@Test
