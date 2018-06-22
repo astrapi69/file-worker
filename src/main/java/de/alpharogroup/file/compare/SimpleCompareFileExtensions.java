@@ -29,10 +29,12 @@ import java.security.NoSuchAlgorithmException;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.file.checksum.ChecksumExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link SimpleCompareFileExtensions}.
  */
+@UtilityClass
 public final class SimpleCompareFileExtensions
 {
 
@@ -189,14 +191,6 @@ public final class SimpleCompareFileExtensions
 		return CompareFileExtensions
 			.compareFiles(sourceFile, fileToCompare, true, true, true, true, false, true)
 			.getNameEquality();
-	}
-
-	/**
-	 * The Constructor.
-	 */
-	private SimpleCompareFileExtensions()
-	{
-		super();
 	}
 
 }

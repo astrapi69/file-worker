@@ -30,6 +30,9 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
@@ -205,6 +208,16 @@ public class ChecksumQuietlyExtensionsTest
 		expected = "4d0c14f299254e58dcea1f524ca08af5f0776b1f5070919a859b92c2ab350635375862ab0727fd5e34ff35da837bd836a17047544db8df63adc4912211ea7f02";
 		actual = ChecksumQuietlyExtensions.getChecksumQuietly(testFile, HashAlgorithm.SHA_512);
 		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test method for {@link ChecksumQuietlyExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(ChecksumQuietlyExtensions.class);
 	}
 
 }

@@ -33,6 +33,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
@@ -621,5 +624,14 @@ public class ChecksumExtensionsTest extends FileTestCase
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * Test method for {@link ChecksumExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(ChecksumExtensions.class);
+	}
 
 }

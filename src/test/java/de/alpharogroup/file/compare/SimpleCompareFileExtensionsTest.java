@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -78,6 +81,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByChecksum(File, File)}
+	 */
 	@Test
 	public void testCompareFilesByChecksum() throws NoSuchAlgorithmException, IOException
 	{
@@ -93,6 +99,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(testFile1);
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByChecksumAdler32(File, File)}
+	 */
 	@Test
 	public void testCompareFilesByChecksumAdler32() throws IOException
 	{
@@ -108,6 +117,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(testFile1);
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByChecksumCRC32(File, File)}
+	 */
 	@Test
 	public void testCompareFilesByChecksumCRC32() throws IOException
 	{
@@ -122,6 +134,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(testFile1);
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByContent(File, File)}
+	 */
 	@Test
 	public void testCompareFilesByContent() throws IOException
 	{
@@ -139,6 +154,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(testFile1);
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByExtension(File, File)}
+	 */
 	@Test
 	public void testCompareFilesByExtension() throws IOException
 	{
@@ -156,6 +174,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(testFile1);
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByLastModified(File, File)}
+	 */
 	@Test(enabled = true)
 	public void testCompareFilesByLastModified() throws IOException
 	{
@@ -178,6 +199,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(testFile1);
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByLength(File, File)}
+	 */
 	@Test
 	public void testCompareFilesByLength() throws IOException
 	{
@@ -195,6 +219,9 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(testFile1);
 	}
 
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByName(File, File)}
+	 */
 	@Test
 	public void testCompareFilesByName() throws IOException
 	{
@@ -207,6 +234,16 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
+	}	
+
+	/**
+	 * Test method for {@link SimpleCompareFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(SimpleCompareFileExtensions.class);
 	}
 
 }
