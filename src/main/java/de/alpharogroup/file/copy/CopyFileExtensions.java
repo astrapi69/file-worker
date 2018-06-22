@@ -47,10 +47,12 @@ import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link CopyFileExtensions} helps you to copy files or directories.
  */
+@UtilityClass
 public final class CopyFileExtensions
 {
 
@@ -354,7 +356,6 @@ public final class CopyFileExtensions
 			lastModified);
 	}
 
-
 	/**
 	 * Copies all files that match to the given includeFilenameFilter and does not copy all the
 	 * files that match the excludeFilenameFilter from the given source directory to the given
@@ -577,7 +578,6 @@ public final class CopyFileExtensions
 		return copied;
 	}
 
-
 	/**
 	 * Copies the given source file to the given destination directory.
 	 *
@@ -641,7 +641,6 @@ public final class CopyFileExtensions
 		return copyFile(source, destinationFile, lastModified);
 	}
 
-
 	/**
 	 * Creates a backup file in the same directory with the same name of the given file and with the
 	 * extension of '*.bak'.
@@ -663,13 +662,5 @@ public final class CopyFileExtensions
 		CopyFileExtensions.copyFile(file, backup, sourceEncoding, destinationEncoding, true);
 		return backup;
 	}
-
-	/**
-	 * Private constructor.
-	 */
-	private CopyFileExtensions()
-	{
-	}
-
 
 }

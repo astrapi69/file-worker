@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -974,6 +977,16 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final File expectedCopiedFile = new File(srcDir, filePrefix + txtSuffix);
 		assertTrue("File " + expectedCopiedFile.getAbsolutePath() + " should be copied.",
 			expectedCopiedFile.exists());
+	}
+
+	/**
+	 * Test method for {@link CopyFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(CopyFileExtensions.class);
 	}
 
 }
