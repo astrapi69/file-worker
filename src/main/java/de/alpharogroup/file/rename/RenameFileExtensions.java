@@ -41,6 +41,7 @@ import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
@@ -48,6 +49,7 @@ import de.alpharogroup.file.search.FileSearchExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class RenameFileExtensions
 {
 	/** The Constant LOGGER. */
@@ -433,14 +435,6 @@ public final class RenameFileExtensions
 		renameFile(fileToRename, fileWithNewName, true);
 
 		return fileWithNewName;
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private RenameFileExtensions()
-	{
-		super();
 	}
 
 }

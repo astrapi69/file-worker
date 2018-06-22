@@ -29,14 +29,23 @@ import static org.testng.AssertJUnit.assertEquals;
 import java.io.File;
 import java.io.IOException;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
+/**
+ * The unit test class for the class {@link ReadFileExtensions}.
+ */
 public class ReadFileExtensionsTest extends FileTestCase
 {
 
+	/**
+	 * Test method for {@link ReadFileExtensions#readFromFile(File)}
+	 */
 	@Test
 	public void testReadFromFileFile() throws IOException
 	{
@@ -46,7 +55,16 @@ public class ReadFileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(output, sourceContent);
 		final String outputContent = ReadFileExtensions.readFromFile(output);
 		assertEquals(sourceContent, outputContent);
+	}
 
+	/**
+	 * Test method for {@link ReadFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(ReadFileExtensions.class);
 	}
 
 }

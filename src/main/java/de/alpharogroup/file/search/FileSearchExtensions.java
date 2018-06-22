@@ -32,6 +32,7 @@ import java.util.Stack;
 
 import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
 import de.alpharogroup.regex.RegExExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link FileSearchExtensions} provides methods for searching in directories.
@@ -39,6 +40,7 @@ import de.alpharogroup.regex.RegExExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class FileSearchExtensions
 {
 	/**
@@ -495,14 +497,6 @@ public final class FileSearchExtensions
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private FileSearchExtensions()
-	{
-		super();
 	}
 
 }

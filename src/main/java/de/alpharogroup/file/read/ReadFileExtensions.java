@@ -47,6 +47,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ReadFileExtensions} helps you reading files.
@@ -54,6 +55,7 @@ import de.alpharogroup.io.StreamExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class ReadFileExtensions
 {
 	/** The LOGGER. */
@@ -441,14 +443,6 @@ public final class ReadFileExtensions
 	private static Byte[] toObject(final byte[] byteArray)
 	{
 		return ArrayUtils.toObject(byteArray);
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private ReadFileExtensions()
-	{
-		super();
 	}
 
 }

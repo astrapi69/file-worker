@@ -38,6 +38,7 @@ import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link DeleteFileExtensions} helps you delete files.
@@ -45,6 +46,7 @@ import lombok.NonNull;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class DeleteFileExtensions
 {
 	/**
@@ -459,14 +461,6 @@ public final class DeleteFileExtensions
 			throw new FileIsSecurityRestrictedException(
 				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private DeleteFileExtensions()
-	{
-		super();
 	}
 
 }

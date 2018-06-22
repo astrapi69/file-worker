@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.rename.RenameFileExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for the use of File object.
@@ -42,6 +43,7 @@ import de.alpharogroup.file.rename.RenameFileExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class FileExtensions
 {
 

@@ -27,6 +27,9 @@ package de.alpharogroup.file.rename;
 import java.io.File;
 import java.util.Date;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
 /**
@@ -151,6 +154,16 @@ public class RenameFileExtensionsTest
 	public void testRenameFileWithSystemtime()
 	{
 		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(RenameFileExtensions.class);
 	}
 
 }

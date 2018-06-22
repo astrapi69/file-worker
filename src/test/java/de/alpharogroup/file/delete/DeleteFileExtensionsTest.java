@@ -29,6 +29,9 @@ import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.Collection;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
 /**
@@ -137,6 +140,16 @@ public class DeleteFileExtensionsTest
 	public void testDeleteFilesWithFilenameFilterFileFilenameFilterFilenameFilter()
 	{
 		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link DeleteFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(DeleteFileExtensions.class);
 	}
 
 }

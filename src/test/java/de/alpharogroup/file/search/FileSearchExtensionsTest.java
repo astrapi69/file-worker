@@ -31,6 +31,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
@@ -128,6 +131,16 @@ public class FileSearchExtensionsTest extends FileTestCase
 		}
 		// 4. cleanup all files from this test
 		DeleteFileExtensions.delete(fileList);
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(FileSearchExtensions.class);
 	}
 
 }
