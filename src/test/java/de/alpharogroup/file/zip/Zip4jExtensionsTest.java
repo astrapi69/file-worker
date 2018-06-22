@@ -30,6 +30,9 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -170,6 +173,16 @@ public class Zip4jExtensionsTest extends FileTestCase
 	public void testZipFilesZipFileZipParametersFileArray()
 	{
 		// Zip4jExtensions.zipFiles(zipFile4j, parameters, toAdd);
+	}
+
+	/**
+	 * Test method for {@link Zip4jExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(Zip4jExtensions.class);
 	}
 
 }

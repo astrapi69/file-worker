@@ -33,7 +33,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import org.junit.Test;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.Test;
 
 /**
  * The unit test class for the class {@link WriteFileExtensions}
@@ -211,5 +214,15 @@ public class WriteFileExtensionsTest
 	{
 		// TODO implement unit test cases...
 	}
+
+	/**
+	 * Test method for {@link WriteFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(WriteFileExtensions.class);
+	}	
 
 }

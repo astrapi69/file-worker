@@ -30,6 +30,9 @@ import java.io.File;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -345,6 +348,16 @@ public class ZipExtensionsTest extends ZipTestCase
 
 		assertTrue("", this.actual);
 
+	}
+
+	/**
+	 * Test method for {@link ZipExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(ZipExtensions.class);
 	}
 
 }

@@ -26,6 +26,9 @@ package de.alpharogroup.file.search;
 
 import java.io.File;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -96,6 +99,16 @@ public class PathFinderTest
 	public void testGetSrcMainResourcesDir()
 	{
 		// fail("Not yet implemented");
+	}
+
+	/**
+	 * Test method for {@link PathFinder}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(PathFinder.class);
 	}
 
 }

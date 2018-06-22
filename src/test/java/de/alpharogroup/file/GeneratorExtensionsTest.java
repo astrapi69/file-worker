@@ -28,6 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -87,6 +90,16 @@ public class GeneratorExtensionsTest extends FileTestCase
 		{
 			System.out.println(string);
 		}
+	}
+
+	/**
+	 * Test method for {@link GeneratorExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(GeneratorExtensions.class);
 	}
 
 }

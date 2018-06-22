@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -1563,6 +1566,16 @@ public class FileExtensionsTest extends FileTestCase
 		final String compare = ReadFileExtensions.readFromFile(source);
 		this.actual = expected.equals(compare);
 		assertTrue("", this.actual);
+	}
+
+	/**
+	 * Test method for {@link FileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(FileExtensions.class);
 	}
 
 }
