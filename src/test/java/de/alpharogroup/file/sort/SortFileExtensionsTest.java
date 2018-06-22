@@ -129,6 +129,6 @@ public class SortFileExtensionsTest
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(SortFileExtensions.class);
-	}	
+	}
 
 }

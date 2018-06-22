@@ -90,6 +90,16 @@ public class WriteFileExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link WriteFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(WriteFileExtensions.class);
+	}
+
+	/**
 	 * Test method for {@link WriteFileExtensions#write(InputStream, OutputStream)}.
 	 */
 	@Test
@@ -214,15 +224,5 @@ public class WriteFileExtensionsTest
 	{
 		// TODO implement unit test cases...
 	}
-
-	/**
-	 * Test method for {@link WriteFileExtensions}
-	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(WriteFileExtensions.class);
-	}	
 
 }

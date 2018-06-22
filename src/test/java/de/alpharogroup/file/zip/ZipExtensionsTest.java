@@ -243,6 +243,16 @@ public class ZipExtensionsTest extends ZipTestCase
 	}
 
 	/**
+	 * Test method for {@link ZipExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(ZipExtensions.class);
+	}
+
+	/**
 	 * Test method for.
 	 *
 	 * @throws Exception
@@ -348,16 +358,6 @@ public class ZipExtensionsTest extends ZipTestCase
 
 		assertTrue("", this.actual);
 
-	}
-
-	/**
-	 * Test method for {@link ZipExtensions}
-	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(ZipExtensions.class);
 	}
 
 }

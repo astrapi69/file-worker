@@ -234,7 +234,7 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
-	}	
+	}
 
 	/**
 	 * Test method for {@link SimpleCompareFileExtensions}

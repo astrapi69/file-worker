@@ -124,6 +124,16 @@ public class Zip4jExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link Zip4jExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(Zip4jExtensions.class);
+	}
+
+	/**
 	 * Test for {@link Zip4jExtensions#zipFiles(ZipFile, File...)}
 	 */
 	@Test(enabled = true)
@@ -173,16 +183,6 @@ public class Zip4jExtensionsTest extends FileTestCase
 	public void testZipFilesZipFileZipParametersFileArray()
 	{
 		// Zip4jExtensions.zipFiles(zipFile4j, parameters, toAdd);
-	}
-
-	/**
-	 * Test method for {@link Zip4jExtensions}
-	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(Zip4jExtensions.class);
 	}
 
 }

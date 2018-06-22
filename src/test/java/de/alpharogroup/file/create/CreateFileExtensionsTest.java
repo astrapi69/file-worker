@@ -181,7 +181,7 @@ public class CreateFileExtensionsTest
 			}
 		}
 	}
-	
+
 	/**
 	 * Test method for {@link CreateFileExtensions}
 	 */

@@ -41,6 +41,7 @@ import java.util.zip.ZipOutputStream;
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.search.FileSearchExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ZipExtensions} provides functionality for ziping and unzipping files.
@@ -48,6 +49,7 @@ import de.alpharogroup.file.search.FileSearchExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class ZipExtensions
 {
 
@@ -295,14 +297,6 @@ public final class ZipExtensions
 		{
 			addFile(file, dirToZip, zos);
 		}
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private ZipExtensions()
-	{
-		super();
 	}
 
 }

@@ -1325,6 +1325,16 @@ public class FileExtensionsTest extends FileTestCase
 
 	}
 
+	/**
+	 * Test method for {@link FileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(FileExtensions.class);
+	}
+
 	@Test
 	public void testWrite2FileInputStreamOutputStreamBoolean()
 		throws DirectoryAllreadyExistsException, IOException, FileDoesNotExistException
@@ -1566,16 +1576,6 @@ public class FileExtensionsTest extends FileTestCase
 		final String compare = ReadFileExtensions.readFromFile(source);
 		this.actual = expected.equals(compare);
 		assertTrue("", this.actual);
-	}
-
-	/**
-	 * Test method for {@link FileExtensions}
-	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(FileExtensions.class);
 	}
 
 }

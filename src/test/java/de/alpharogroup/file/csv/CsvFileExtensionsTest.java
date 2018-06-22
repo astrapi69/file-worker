@@ -459,6 +459,16 @@ public class CsvFileExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link CsvFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(CsvFileExtensions.class);
+	}
+
+	/**
 	 * Test method for {@link CsvFileExtensions#writeLines(File, Set, String)}.
 	 *
 	 * @throws IOException
@@ -524,16 +534,6 @@ public class CsvFileExtensionsTest
 		final List<String> testList = CsvFileExtensions.readLinesInList(testFile, null);
 		final boolean result = expected.equals(testList);
 		assertTrue("", result);
-	}
-
-	/**
-	 * Test method for {@link CsvFileExtensions}
-	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(CsvFileExtensions.class);
 	}
 
 }
