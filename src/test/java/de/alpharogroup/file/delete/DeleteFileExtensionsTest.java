@@ -34,10 +34,12 @@ import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.FileTestCase;
+
 /**
  * The unit test class for the class {@link DeleteFileExtensions}
  */
-public class DeleteFileExtensionsTest
+public class DeleteFileExtensionsTest extends FileTestCase
 {
 
 	/**
@@ -47,6 +49,7 @@ public class DeleteFileExtensionsTest
 	public void testCheckFile()
 	{
 		// TODO implement unit test cases...
+		// DeleteFileExtensions.checkFile(file)
 	}
 
 	/**

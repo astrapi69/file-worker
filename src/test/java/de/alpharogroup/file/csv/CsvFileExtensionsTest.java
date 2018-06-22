@@ -24,6 +24,7 @@
  */
 package de.alpharogroup.file.csv;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
@@ -33,6 +34,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
@@ -46,6 +49,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.collections.CollectionExtensions;
 import de.alpharogroup.collections.array.ArrayFactory;
 import de.alpharogroup.collections.list.ListFactory;
+import de.alpharogroup.collections.map.MapFactory;
 import de.alpharogroup.collections.set.SetFactory;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
@@ -219,11 +223,77 @@ public class CsvFileExtensionsTest
 
 	/**
 	 * Test method for {@link CsvFileExtensions#getCvsAsListMap(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetCvsAsListMap()
+	public void testGetCvsAsListMap() throws IOException
+	{
+		List<Map<String, String>> expected;
+		String key;
+		String value;
+		Map<String, String> map;
+		
+		expected = ListFactory.newArrayList();
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Jaroslav\",\"Mengele\",\"jaro.meng@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+		
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Dimitri\",\"Vladim\",\"dim.vlad@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+		
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Jim\",\"Phelps\",\"jim.phelps@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+		
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Jürgen\",\"Dößler\",\"juerg.doesl@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+		
+		final File res = new File(testResources, "resources");
+		final File input = new File(res, "test-csv-data.csv");
+		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input);
+		for (int i = 0; i < cvsAsListMap.size(); i++)
+		{
+			Map<String, String> map2 = cvsAsListMap.get(i);
+			Map<String, String> map3 = expected.get(i);
+			assertEquals(map2.get(key), map3.get(key));
+		}
+	}
+
+	/**
+	 * Test method for {@link CsvFileExtensions#getCvsAsListMap(File, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testGetCvsAsListMapFileString() throws IOException
 	{
 		// TODO implement unit test cases...
+		final File res = new File(testResources, "resources");
+		final File input = new File(res, "testReadDataFromCVSFileToList.csv");
+		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input,
+			"ISO-8859-1");
+		for (Map<String, String> map : cvsAsListMap)
+		{
+			for (Entry<String, String> entry : map.entrySet())
+			{
+
+				System.out.println("Key:" + entry.getKey());
+				System.out.println("Value:" + entry.getValue());
+			}
+		}
 	}
 
 	/**

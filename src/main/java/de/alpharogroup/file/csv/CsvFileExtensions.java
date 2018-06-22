@@ -160,7 +160,25 @@ public final class CsvFileExtensions
 	 */
 	public static List<Map<String, String>> getCvsAsListMap(final File input) throws IOException
 	{
-		final List<String[]> lines = CsvFileExtensions.readFileToList(input, ";", "UTF-8");
+		return getCvsAsListMap(input, "ISO-8859-1");
+	}
+
+	/**
+	 * Gets the given cvs file as list of maps. Every map has as key the header from the column and
+	 * the corresponding value for this line.
+	 *
+	 * @param input
+	 *            the input
+	 * @param encoding
+	 *            the encoding to read
+	 * @return the cvs as list map
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static List<Map<String, String>> getCvsAsListMap(final File input, final String encoding)
+		throws IOException
+	{
+		final List<String[]> lines = CsvFileExtensions.readFileToList(input, ";", encoding);
 		final List<Map<String, String>> data = new ArrayList<>();
 		final String[] headline = lines.remove(0);
 		for (final String[] line : lines)
@@ -175,7 +193,6 @@ public final class CsvFileExtensions
 		}
 		return data;
 	}
-
 
 	/**
 	 * Gets the data from line.
