@@ -215,6 +215,15 @@ public class CsvFileExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link CsvFileExtensions#getCvsAsListMap(File)}.
+	 */
+	@Test
+	public void testGetCvsAsListMap()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
 	 * Test get data from line.
 	 *
 	 * @throws IOException
@@ -248,6 +257,15 @@ public class CsvFileExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link CsvFileExtensions#getLineCountFromCsvFile(File)}.
+	 */
+	@Test
+	public void testGetLineCountFromCsvFile()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
 	 * Test method for
 	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String)}
 	 *
@@ -265,6 +283,26 @@ public class CsvFileExtensionsTest
 			"UTF-8");
 		final boolean result = output.size() == 5;
 		assertTrue("", result);
+	}
+
+	/**
+	 * Test method for
+	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String)}.
+	 */
+	@Test
+	public void testReadDataFromCVSFileToListFileIntBooleanString()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for
+	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String, String)}.
+	 */
+	@Test
+	public void testReadDataFromCVSFileToListFileIntBooleanStringString()
+	{
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -315,6 +353,15 @@ public class CsvFileExtensionsTest
 		assertTrue(result);
 		result = expected.equals(fileList);
 		assertTrue(result);
+	}
+
+	/**
+	 * Test method for {@link CsvFileExtensions#readFileToList(File, String, String)}.
+	 */
+	@Test
+	public void testReadFileToListFileStringString()
+	{
+		// TODO implement unit test cases...
 	}
 
 	/**
@@ -474,53 +521,6 @@ public class CsvFileExtensionsTest
 		final List<String> testList = CsvFileExtensions.readLinesInList(testFile, null);
 		final boolean result = expected.equals(testList);
 		assertTrue("", result);
-	}
-
-	/**
-	 * Test method for {@link CsvFileExtensions#getCvsAsListMap(File)}.
-	 */
-	@Test
-	public void testGetCvsAsListMap()
-	{
-		// TODO implement unit test cases...
-	}
-
-	/**
-	 * Test method for {@link CsvFileExtensions#getLineCountFromCsvFile(File)}.
-	 */
-	@Test
-	public void testGetLineCountFromCsvFile()
-	{
-		// TODO implement unit test cases...
-	}
-
-	/**
-	 * Test method for
-	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String)}.
-	 */
-	@Test
-	public void testReadDataFromCVSFileToListFileIntBooleanString()
-	{
-		// TODO implement unit test cases...
-	}
-
-	/**
-	 * Test method for
-	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String, String)}.
-	 */
-	@Test
-	public void testReadDataFromCVSFileToListFileIntBooleanStringString()
-	{
-		// TODO implement unit test cases...
-	}
-
-	/**
-	 * Test method for {@link CsvFileExtensions#readFileToList(File, String, String)}.
-	 */
-	@Test
-	public void testReadFileToListFileStringString()
-	{
-		// TODO implement unit test cases...
 	}
 
 }
