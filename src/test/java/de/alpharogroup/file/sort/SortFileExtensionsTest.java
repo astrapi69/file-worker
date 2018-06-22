@@ -66,16 +66,14 @@ public class SortFileExtensionsTest
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		final File projectPath = new File(absolutePath);
-		assertTrue(
-			"The directory " + projectPath.getAbsolutePath() + " should be created.",
+		assertTrue("The directory " + projectPath.getAbsolutePath() + " should be created.",
 			projectPath.exists());
 		log.debug("The directory " + projectPath.getAbsolutePath() + " exists or is created.");
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(testResources);
-			assertTrue(
-				"The directory " + testResources.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
 				created);
 		}
 		resources = new File(testResources, "resources");

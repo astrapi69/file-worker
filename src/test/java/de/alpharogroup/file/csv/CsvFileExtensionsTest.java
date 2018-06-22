@@ -411,7 +411,8 @@ public class CsvFileExtensionsTest
 	/**
 	 * Test method for {@link CsvFileExtensions#writeLines(File, Set, String)}.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test(enabled = true)
 	public void testWriteLines() throws IOException
@@ -435,7 +436,8 @@ public class CsvFileExtensionsTest
 		expected.add("bim");
 		final File testFile = new File(testResources, "testWriteLinesToFile.lst");
 		CsvFileExtensions.writeLines(testFile, expected, "UTF-8");
-		final Set<String> actual = SetFactory.newHashSet(CsvFileExtensions.readLinesInList(testFile, null));
+		final Set<String> actual = SetFactory
+			.newHashSet(CsvFileExtensions.readLinesInList(testFile, null));
 		final boolean result = CollectionExtensions.isEqualCollection(expected, actual);
 		assertTrue("", result);
 

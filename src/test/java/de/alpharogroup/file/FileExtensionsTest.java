@@ -964,12 +964,11 @@ public class FileExtensionsTest extends FileTestCase
 			final File testIsZip = new File(this.testResources,
 				"testIsZip" + FileConst.ZIP_EXTENSIONS[i]);
 			this.actual = ZipExtensions.isZip(testIsZip.getName());
-			assertTrue("The file " + testIsZip.getName() + " should be a zipfile.",
-				this.actual);
+			assertTrue("The file " + testIsZip.getName() + " should be a zipfile.", this.actual);
 		}
 		this.actual = ZipExtensions.isZip(this.testResources.getName());
-		assertFalse(
-			"The file " + this.testResources.getName() + " should not be a zipfile.", this.actual);
+		assertFalse("The file " + this.testResources.getName() + " should not be a zipfile.",
+			this.actual);
 	}
 
 	@Test
@@ -1005,8 +1004,8 @@ public class FileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
 			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
 		System.err.println("-------------------------------------------------");
@@ -1170,8 +1169,7 @@ public class FileExtensionsTest extends FileTestCase
 		catch (final Exception e)
 		{
 			this.actual = e instanceof FileNotFoundException;
-			assertTrue("Exception should be of type FileNotFoundException.",
-				this.actual);
+			assertTrue("Exception should be of type FileNotFoundException.", this.actual);
 		}
 
 		final String inputString = "Its a beautifull day!!!";
