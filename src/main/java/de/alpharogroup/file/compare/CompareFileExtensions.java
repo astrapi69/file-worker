@@ -40,6 +40,7 @@ import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link CompareFileExtensions} helps you to compare files.
@@ -47,6 +48,7 @@ import de.alpharogroup.io.StreamExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class CompareFileExtensions
 {
 
@@ -895,11 +897,6 @@ public final class CompareFileExtensions
 			&& fileContentResultBean.getLastModifiedEquality()
 			&& fileContentResultBean.getNameEquality()
 			&& fileContentResultBean.getContentEquality();
-	}
-
-	private CompareFileExtensions()
-	{
-		super();
 	}
 
 }

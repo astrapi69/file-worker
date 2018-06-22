@@ -29,11 +29,14 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.collections.CollectionExtensions;
+import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
@@ -45,25 +48,49 @@ import de.alpharogroup.file.write.WriteFileExtensions;
 public class CompareFileExtensionsTest extends FileTestCase
 {
 
+	IFileContentResultBean actual;
+	IFileContentResultBean expected;
+	File testFile1;
+	File testFile2;
+	File testFile3;
+	File testFile4;
+
+	@Override
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+		testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.txt");
+		testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.tft");
+
+		testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+
+		testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
+
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+	}
+
+	@Override
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+		testFile1.delete();
+		testFile2.delete();
+		testFile3.delete();
+		testFile4.delete();
+	}
+
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)}.
 	 */
 	@Test(enabled = true)
 	public void testCompareFileContentByBytes()
 	{
-		IFileContentResultBean actual;
-		IFileContentResultBean expected;
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
 
-		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
-		
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull day!!!");
-		
 		actual = CompareFileExtensions.compareFileContentByBytes(testFile1, testFile2);
 		expected = new FileContentResultBean(testFile1, testFile2);
 		expected.setAbsolutePathEquality(false);
@@ -72,8 +99,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 		expected.setLastModifiedEquality(true);
 		expected.setLengthEquality(false);
 		expected.setNameEquality(true);
-		assertEquals(expected, actual);		
-		
+		assertEquals(expected, actual);
+
 		actual = CompareFileExtensions.compareFileContentByBytes(testFile1, testFile3);
 		expected = new FileContentResultBean(testFile1, testFile3);
 		expected.setAbsolutePathEquality(false);
@@ -88,77 +115,222 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByLines(File, File)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareFileContentByLines()
 	{
-		// TODO implement unit test cases...
+		actual = CompareFileExtensions.compareFileContentByLines(testFile1, testFile2);
+		expected = new FileContentResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = CompareFileExtensions.compareFileContentByLines(testFile1, testFile3);
+		expected = new FileContentResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFiles(File, File)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareFilesFileFile()
 	{
-		// TODO implement unit test cases...
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile2);
+		expected = new FileContentResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(true);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile3);
+		expected = new FileContentResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(true);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareFilesFileFileBoolean()
 	{
-		// TODO implement unit test cases...
+		boolean actual;
+		boolean expected;
+
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile2, false);
+		expected = false;
+		assertEquals(expected, actual);
+
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile3, true);
+		expected = true;
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		IFileCompareResultBean actual;
+		IFileCompareResultBean expected;
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile2, false, false, false,
+			false, false);
+		expected = new FileCompareResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile3, false, false, false,
+			false, false);
+		expected = new FileCompareResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile2, false, false, false,
+			false, false, false);
+		expected = new FileContentResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = CompareFileExtensions.compareFiles(testFile1, testFile3, false, false, false,
+			false, false, false);
+		expected = new FileContentResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#compare(IFileCompareResultBean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareIFileCompareResultBeanBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		IFileCompareResultBean actual;
+		IFileCompareResultBean expected;
+		actual = new FileCompareResultBean(testFile1, testFile2);
+		CompareFileExtensions.compare(actual, false, false, false, false, false);
+		expected = new FileCompareResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = new FileCompareResultBean(testFile1, testFile3);
+		CompareFileExtensions.compare(actual, false, false, false, false, false);
+		expected = new FileCompareResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#compare(IFileContentResultBean, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompareIFileContentResultBeanBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		actual = new FileContentResultBean(testFile1, testFile2);
+		CompareFileExtensions.compare(actual, false, false, false, false, false, false);
+		expected = new FileContentResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = new FileContentResultBean(testFile1, testFile3);
+		CompareFileExtensions.compare(actual, false, false, false, false, false, false);
+		expected = new FileContentResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(false);
+		expected.setContentEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#completeCompare(IFileCompareResultBean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCompleteCompare()
 	{
-		// TODO implement unit test cases...
+		IFileCompareResultBean actual;
+		IFileCompareResultBean expected;
+		actual = new FileCompareResultBean(testFile1, testFile2);
+		CompareFileExtensions.completeCompare(actual);
+		expected = new FileCompareResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = new FileCompareResultBean(testFile1, testFile3);
+		CompareFileExtensions.completeCompare(actual);
+		expected = new FileCompareResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(false);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
@@ -170,41 +342,37 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = true)
 	public void testFindEqualFilesFile() throws IOException
 	{
-		final List<File> expectedFiles = new ArrayList<>();
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		expectedFiles.add(testFile1);
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
-
-		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-
-		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
-
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir);
 
 		assertTrue("found.size() is not equal 2.", found.size() == 2);
-
-		final List<IFileContentResultBean> contentfound = CompareFileExtensions
-			.findEqualFilesWithSameContent(this.testDir);
-
-		assertTrue("contentfound() is not equal 1.", contentfound.size() == 2);
-
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testFindEqualFilesFileBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		List<IFileCompareResultBean> actual;
+		List<IFileCompareResultBean> expected;
+		actual = CompareFileExtensions.findEqualFiles(this.testDir, false, false, false, false,
+			false);
+		FileCompareResultBean one = new FileCompareResultBean(testFile4, testFile1);
+		one.setAbsolutePathEquality(false);
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		FileCompareResultBean two = new FileCompareResultBean(testFile1, testFile4);
+		two.setAbsolutePathEquality(false);
+		two.setFileExtensionEquality(true);
+		two.setLastModifiedEquality(true);
+		two.setLengthEquality(true);
+		two.setNameEquality(true);
+		expected = ListFactory.newArrayList(one, two);
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
 
 	/**
@@ -216,16 +384,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	@Test(enabled = true)
 	public void testFindEqualFilesFileFile() throws IOException
 	{
-		final List<File> expectedFiles = new ArrayList<>();
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		expectedFiles.add(testFile1);
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
-
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+
 		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 
 		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
@@ -240,92 +400,326 @@ public class CompareFileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
 		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
-
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir, this.secondTestDir);
 
-		assertTrue("found.size() is not equal 3.", found.size() == 2);
-
-		final List<IFileContentResultBean> contentfound = CompareFileExtensions
-			.findEqualFilesWithSameContent(this.testDir, this.secondTestDir);
-
-		assertTrue("contentfound() is not equal 3.", contentfound.size() == 2);
-
+		assertTrue("found.size() is not equal 3.", found.size() == 3);
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		List<IFileCompareResultBean> actual;
+		List<IFileCompareResultBean> expected;
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+
+		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+
+		final File testFile5 = new File(this.secondTestDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+
+		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
+
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
+
+		actual = CompareFileExtensions.findEqualFiles(this.secondTestDir, this.testDir, false,
+			false, false, false, false);
+		FileCompareResultBean one = new FileCompareResultBean(testFile4, this.testFile4);
+		one.setAbsolutePathEquality(false);
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		FileCompareResultBean two = new FileCompareResultBean(testFile4, testFile1);
+		two.setAbsolutePathEquality(false);
+		two.setFileExtensionEquality(true);
+		two.setLastModifiedEquality(true);
+		two.setLengthEquality(true);
+		two.setNameEquality(true);
+		FileCompareResultBean three = new FileCompareResultBean(testFile6, testFile3);
+		three.setAbsolutePathEquality(false);
+		three.setFileExtensionEquality(true);
+		three.setLastModifiedEquality(true);
+		three.setLengthEquality(true);
+		three.setNameEquality(true);
+		expected = ListFactory.newArrayList(one, two, three);
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testFindEqualFilesWithSameContentFile()
 	{
-		// TODO implement unit test cases...
+		final List<IFileContentResultBean> found = CompareFileExtensions
+			.findEqualFilesWithSameContent(this.testDir);
+
+		assertTrue("found.size() is not equal 2.", found.size() == 2);
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testFindEqualFilesWithSameContentFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		List<IFileContentResultBean> actual;
+		List<IFileContentResultBean> expected;
+		actual = CompareFileExtensions.findEqualFilesWithSameContent(this.testDir, false, false,
+			false, false, false, false);
+		FileContentResultBean one = new FileContentResultBean(testFile4, testFile1);
+		one.setAbsolutePathEquality(false);
+		one.setContentEquality(false);
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		FileContentResultBean two = new FileContentResultBean(testFile1, testFile4);
+		two.setAbsolutePathEquality(false);
+		two.setContentEquality(false);
+		two.setFileExtensionEquality(true);
+		two.setLastModifiedEquality(true);
+		two.setLengthEquality(true);
+		two.setNameEquality(true);
+		expected = ListFactory.newArrayList(one, two);
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testFindEqualFilesWithSameContentFileFile()
 	{
-		// TODO implement unit test cases...
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+
+		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+
+		final File testFile5 = new File(this.secondTestDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+
+		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
+
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
+
+		final List<IFileContentResultBean> contentfound = CompareFileExtensions
+			.findEqualFilesWithSameContent(this.testDir, this.secondTestDir);
+
+		assertTrue("contentfound() is not equal 3.", contentfound.size() == 3);
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		List<IFileContentResultBean> actual;
+		List<IFileContentResultBean> expected;
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+
+		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+
+		final File testFile5 = new File(this.secondTestDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+
+		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
+
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
+
+		actual = CompareFileExtensions.findEqualFilesWithSameContent(this.secondTestDir,
+			this.testDir, false, false, false, false, false, false);
+		FileContentResultBean one = new FileContentResultBean(testFile4, this.testFile4);
+		one.setAbsolutePathEquality(false);
+		one.setContentEquality(false);
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		FileContentResultBean two = new FileContentResultBean(testFile4, testFile1);
+		two.setAbsolutePathEquality(false);
+		two.setContentEquality(false);
+		two.setFileExtensionEquality(true);
+		two.setLastModifiedEquality(true);
+		two.setLengthEquality(true);
+		two.setNameEquality(true);
+		FileContentResultBean three = new FileContentResultBean(testFile6, testFile3);
+		three.setAbsolutePathEquality(false);
+		three.setContentEquality(false);
+		three.setFileExtensionEquality(true);
+		three.setLastModifiedEquality(true);
+		three.setLengthEquality(true);
+		three.setNameEquality(true);
+		expected = ListFactory.newArrayList(one, two, three);
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#simpleCompareFiles(File, File)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testSimpleCompareFiles()
 	{
-		// TODO implement unit test cases...
+		IFileCompareResultBean actual;
+		IFileCompareResultBean expected;
+		actual = CompareFileExtensions.simpleCompareFiles(testFile1, testFile2);
+		expected = new FileCompareResultBean(testFile1, testFile2);
+		expected.setAbsolutePathEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(false);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
+
+		actual = CompareFileExtensions.simpleCompareFiles(testFile1, testFile3);
+		expected = new FileCompareResultBean(testFile1, testFile3);
+		expected.setAbsolutePathEquality(true);
+		expected.setFileExtensionEquality(false);
+		expected.setLastModifiedEquality(true);
+		expected.setLengthEquality(true);
+		expected.setNameEquality(true);
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#validateEquality(IFileCompareResultBean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testValidateEqualityIFileCompareResultBean()
 	{
-		// TODO implement unit test cases...
+		boolean actual;
+		boolean expected;
+
+		FileCompareResultBean one = new FileCompareResultBean(testFile4, this.testFile4);
+		one.setAbsolutePathEquality(false);
+
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = true;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(false);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(false);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(false);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(false);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
 	}
 
 	/**
 	 * Test method for {@link CompareFileExtensions#validateEquality(IFileContentResultBean)}.
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testValidateEqualityIFileContentResultBean()
 	{
-		// TODO implement unit test cases...
+		boolean actual;
+		boolean expected;
+
+		FileContentResultBean one = new FileContentResultBean(testFile4, this.testFile4);
+		one.setAbsolutePathEquality(false);
+		one.setContentEquality(true);
+		one.setFileExtensionEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = true;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(false);
+		one.setContentEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(true);
+		one.setContentEquality(true);
+		one.setLastModifiedEquality(false);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(true);
+		one.setContentEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(false);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(true);
+		one.setContentEquality(true);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(false);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
+
+		one.setFileExtensionEquality(true);
+		one.setContentEquality(false);
+		one.setLastModifiedEquality(true);
+		one.setLengthEquality(true);
+		one.setNameEquality(true);
+		actual = CompareFileExtensions.validateEquality(one);
+		expected = false;
+		assertEquals(expected, actual);
 	}
 
 }
