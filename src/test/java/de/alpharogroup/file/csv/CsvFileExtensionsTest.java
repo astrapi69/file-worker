@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
@@ -48,6 +47,7 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.CollectionExtensions;
 import de.alpharogroup.collections.array.ArrayFactory;
+import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.collections.map.MapFactory;
 import de.alpharogroup.collections.set.SetFactory;
@@ -109,7 +109,13 @@ public class CsvFileExtensionsTest
 	{
 	}
 
-	@Test(enabled = true)
+	/**
+	 * Test create sql insert from csv.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test(enabled = false)
 	public void testCreateSqlInsertFromCsv() throws IOException
 	{
 		final File testFile = new File(testResources, "languages_iso639_1.csv");
@@ -132,7 +138,6 @@ public class CsvFileExtensionsTest
 			sb.append(insert);
 			sb.append(System.lineSeparator());
 			id++;
-			System.out.println(insert);
 		}
 		WriteFileExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
 	}
@@ -234,32 +239,32 @@ public class CsvFileExtensionsTest
 		String key;
 		String value;
 		Map<String, String> map;
-		
+
 		expected = ListFactory.newArrayList();
 		map = MapFactory.newLinkedHashMap();
 		key = "\"Vorname\",\"Nachname\",\"Email\"";
 		value = "\"Jaroslav\",\"Mengele\",\"jaro.meng@gmail.com\"";
 		map.put(key, value);
 		expected.add(map);
-		
+
 		map = MapFactory.newLinkedHashMap();
 		key = "\"Vorname\",\"Nachname\",\"Email\"";
 		value = "\"Dimitri\",\"Vladim\",\"dim.vlad@gmail.com\"";
 		map.put(key, value);
 		expected.add(map);
-		
+
 		map = MapFactory.newLinkedHashMap();
 		key = "\"Vorname\",\"Nachname\",\"Email\"";
 		value = "\"Jim\",\"Phelps\",\"jim.phelps@gmail.com\"";
 		map.put(key, value);
 		expected.add(map);
-		
+
 		map = MapFactory.newLinkedHashMap();
 		key = "\"Vorname\",\"Nachname\",\"Email\"";
 		value = "\"Jürgen\",\"Dößler\",\"juerg.doesl@gmail.com\"";
 		map.put(key, value);
 		expected.add(map);
-		
+
 		final File res = new File(testResources, "resources");
 		final File input = new File(res, "test-csv-data.csv");
 		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input);
@@ -280,24 +285,52 @@ public class CsvFileExtensionsTest
 	@Test
 	public void testGetCvsAsListMapFileString() throws IOException
 	{
-		// TODO implement unit test cases...
-		final File res = new File(testResources, "resources");
-		final File input = new File(res, "testReadDataFromCVSFileToList.csv");
-		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input,
-			"ISO-8859-1");
-		for (Map<String, String> map : cvsAsListMap)
-		{
-			for (Entry<String, String> entry : map.entrySet())
-			{
+		List<Map<String, String>> expected;
+		String key;
+		String value;
+		String encoding;
+		Map<String, String> map;
 
-				System.out.println("Key:" + entry.getKey());
-				System.out.println("Value:" + entry.getValue());
-			}
+		expected = ListFactory.newArrayList();
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Jaroslav\",\"Mengele\",\"jaro.meng@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Dimitri\",\"Vladim\",\"dim.vlad@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Jim\",\"Phelps\",\"jim.phelps@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+
+		map = MapFactory.newLinkedHashMap();
+		key = "\"Vorname\",\"Nachname\",\"Email\"";
+		value = "\"Jürgen\",\"Dößler\",\"juerg.doesl@gmail.com\"";
+		map.put(key, value);
+		expected.add(map);
+
+		final File res = new File(testResources, "resources");
+		final File input = new File(res, "test-csv-data.csv");
+
+		encoding = "ISO-8859-1";
+		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input, encoding);
+		for (int i = 0; i < cvsAsListMap.size(); i++)
+		{
+			Map<String, String> map2 = cvsAsListMap.get(i);
+			Map<String, String> map3 = expected.get(i);
+			assertEquals(map2.get(key), map3.get(key));
 		}
 	}
 
 	/**
-	 * Test get data from line.
+	 * Test method for {@link CsvFileExtensions#getDataFromLine(String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -305,10 +338,10 @@ public class CsvFileExtensionsTest
 	@Test(enabled = true)
 	public void testGetDataFromLine() throws IOException
 	{
-		String[] lineOne;
-		String[] lineTwo;
 		List<String[]> actual;
 		List<String[]> expected;
+		String[] lineOne;
+		String[] lineTwo;
 
 		lineOne = ArrayFactory.newArray("test1", "test2", "test3", "bla", "fasel", "and", "so",
 			"on");
@@ -331,11 +364,24 @@ public class CsvFileExtensionsTest
 
 	/**
 	 * Test method for {@link CsvFileExtensions#getLineCountFromCsvFile(File)}.
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testGetLineCountFromCsvFile()
+	public void testGetLineCountFromCsvFile() throws IOException
 	{
-		// TODO implement unit test cases...
+		int actual;
+		int expected;
+		final File res = new File(testResources, "resources");
+		File input = new File(res, "test-csv-data.csv");
+		actual = CsvFileExtensions.getLineCountFromCsvFile(input);
+		expected = 5;
+		assertEquals(actual, expected);
+
+		input = new File(res, "testReadDataFromCVSFileToList.csv");
+		actual = CsvFileExtensions.getLineCountFromCsvFile(input);
+		expected = 6;
+		assertEquals(actual, expected);
 	}
 
 	/**
@@ -352,7 +398,7 @@ public class CsvFileExtensionsTest
 		final File res = new File(testResources, "resources");
 		final File input = new File(res, "testReadDataFromCVSFileToList.csv");
 		System.out.println(input.getAbsolutePath());
-		final List<String> output = CsvFileExtensions.readDataFromCVSFileToList(input, 1, true,
+		final List<String> output = CsvFileExtensions.readDataFromCVSFileToList(input, 1, false,
 			"UTF-8");
 		final boolean result = output.size() == 5;
 		assertTrue("", result);
@@ -361,21 +407,67 @@ public class CsvFileExtensionsTest
 	/**
 	 * Test method for
 	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String)}.
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testReadDataFromCVSFileToListFileIntBooleanString()
+	public void testReadDataFromCVSFileToListFileIntBooleanString() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File res = new File(testResources, "resources");
+		File input = new File(res, "test-csv-data.csv");
+
+		List<String> actual;
+		List<String> expected;
+		int position;
+		boolean putFirstLine;
+		String encoding;
+		position = 0;
+		putFirstLine = false;
+		encoding = "ISO-8859-1";
+		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
+			encoding);
+		expected = ListFactory.newArrayList("Jaroslav", "Dimitri", "Jim", "Jürgen");
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
+		//
+		putFirstLine = true;
+		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
+			encoding);
+		expected = ListFactory.newArrayList("Vorname", "Jaroslav", "Dimitri", "Jim", "Jürgen");
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
 
 	/**
 	 * Test method for
 	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String, String)}.
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testReadDataFromCVSFileToListFileIntBooleanStringString()
+	public void testReadDataFromCVSFileToListFileIntBooleanStringString() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File res = new File(testResources, "resources");
+		File input = new File(res, "test-csv-data.csv");
+
+		List<String> actual;
+		List<String> expected;
+		int position;
+		boolean putFirstLine;
+		String splitChar;
+		String encoding;
+		position = 0;
+		putFirstLine = false;
+		encoding = "ISO-8859-1";
+		splitChar = ",";
+		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
+			splitChar, encoding);
+		expected = ListFactory.newArrayList("Jaroslav", "Dimitri", "Jim", "Jürgen");
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
+		//
+		putFirstLine = true;
+		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
+			splitChar, encoding);
+		expected = ListFactory.newArrayList("Vorname", "Jaroslav", "Dimitri", "Jim", "Jürgen");
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
 
 	/**
@@ -430,19 +522,39 @@ public class CsvFileExtensionsTest
 
 	/**
 	 * Test method for {@link CsvFileExtensions#readFileToList(File, String, String)}.
+	 * 
+	 * @throws IOException
 	 */
 	@Test
-	public void testReadFileToListFileStringString()
+	public void testReadFileToListFileStringString() throws IOException
 	{
-		// TODO implement unit test cases...
+		List<String[]> actual;
+		List<String[]> expected;
+		String[] lineOne;
+		String[] lineTwo;
+		String[] lineThree;
+		String[] lineFour;
+		String[] lineFive;
+
+		lineOne = ArrayFactory.newArray("\"Vorname\"", "\"Nachname\"", "\"Email\"");
+		lineTwo = ArrayFactory.newArray("\"Jaroslav\"", "\"Mengele\"", "\"jaro.meng@gmail.com\"");
+		lineThree = ArrayFactory.newArray("\"Dimitri\"", "\"Vladim\"", "\"dim.vlad@gmail.com\"");
+		lineFour = ArrayFactory.newArray("\"Jim\"", "\"Phelps\"", "\"jim.phelps@gmail.com\"");
+		lineFive = ArrayFactory.newArray("\"Jürgen\"", "\"Dößler\"", "\"juerg.doesl@gmail.com\"");
+
+		expected = ListFactory.newArrayList(lineOne, lineTwo, lineThree, lineFour, lineFive);
+
+		final File res = new File(testResources, "resources");
+		File input = new File(res, "test-csv-data.csv");
+		actual = CsvFileExtensions.readFileToList(input, ",", "ISO-8859-1");
+		assertTrue(ListExtensions.isEqualListOfArrays(actual, expected));
 	}
 
 	/**
-	 * Test method for.
-	 *
+	 * Test method for {@link CsvFileExtensions#readLinesInList(File, String)}
+	 * 
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 *             {@link CsvFileExtensions#readLinesInList(File, String)} .
 	 */
 	@Test(enabled = true)
 	public void testReadLinesInList() throws IOException

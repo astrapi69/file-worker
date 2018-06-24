@@ -273,48 +273,7 @@ public final class CsvFileExtensions
 	public static List<String> readDataFromCVSFileToList(final File input, final int position,
 		final boolean putFirstLine, final String encoding) throws IOException
 	{
-		final List<String> output = new ArrayList<>();
-		try (BufferedReader reader = (BufferedReader)StreamExtensions.getReader(input, encoding,
-			false))
-		{
-			// the line.
-			String line = null;
-			// read all lines from the file
-			do
-			{
-				line = reader.readLine();
-
-				// if null break the loop
-				if (line == null)
-				{
-					break;
-				}
-				// Split the line
-				final String[] splittedData = line.split(",");
-				// get the data with the index
-				if (position < splittedData.length - 1)
-				{
-					final String s = StringExtensions.removeQuotationMarks(splittedData[position]);
-					output.add(s);
-				}
-				else
-				{
-					break;
-				}
-
-			}
-			while (true);
-		}
-		catch (final IOException e)
-		{
-			throw e;
-		}
-		// return the list with all lines from the file.
-		if (putFirstLine)
-		{
-			output.remove(0);
-		}
-		return output;
+		return readDataFromCVSFileToList(input, position, putFirstLine, ",", encoding);
 	}
 
 	/**
@@ -372,7 +331,7 @@ public final class CsvFileExtensions
 			throw e;
 		}
 		// return the list with all lines from the file.
-		if (putFirstLine)
+		if (!putFirstLine)
 		{
 			output.remove(0);
 		}
