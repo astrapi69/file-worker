@@ -109,7 +109,7 @@ public final class CsvToSqlExtensions
 		else
 		{
 			final StringBuffer sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
-				null, null, csvBean.getLines(), true);
+				null, null, csvBean.getLines(), withEndSemicolon);
 			sb.append(sqlData.toString());
 		}
 		return sb.toString();
@@ -223,9 +223,9 @@ public final class CsvToSqlExtensions
 					final String editType = editTypeData[0];
 					if (editType.equals("edit"))
 					{
-						lineItem = lineItem.replace(editTypeData[1], editTypeData[2]);
-						if (2 < editTypeData.length)
+						if (3 < editTypeData.length)
 						{
+							lineItem = lineItem.replace(editTypeData[1], editTypeData[2]);
 							final Boolean lc = new Boolean(editTypeData[3]);
 							if (lc)
 							{

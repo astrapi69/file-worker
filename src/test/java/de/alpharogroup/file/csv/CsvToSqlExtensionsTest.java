@@ -24,8 +24,10 @@
  */
 package de.alpharogroup.file.csv;
 
+import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -96,7 +98,59 @@ public class CsvToSqlExtensionsTest
 	@Test
 	public final void testGetCsvFileAsSqlInsertScriptStringCsvBeanBooleanBoolean()
 	{
-		// TODO implement unit test cases...
+		String expected;
+		String actual;
+		String tableName;
+		CsvBean csvBean;
+		boolean withHeader;
+		boolean withEndSemicolon;
+		String[] headers;
+		String[] columnTypes;
+		String[] lineOne;
+		String[] lineTwo;
+		String[] lineThree;
+		List<String[]> lines;
+		headers = ArrayFactory.newArray("name", "age", "gender");
+		columnTypes = ArrayFactory.newArray("text", "integer", "enum");
+		lineOne = ArrayFactory.newArray("John", "23", "male");
+		lineTwo = ArrayFactory.newArray("Jim", "25", "male");
+		lineThree = ArrayFactory.newArray("Mary", "21", "female");
+		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);
+
+		tableName = "employees";
+
+		csvBean = CsvBean.builder().headers(headers).columnTypes(columnTypes).lines(lines).build();
+		withHeader = true;
+		withEndSemicolon = true;
+		actual = CsvToSqlExtensions.getCsvFileAsSqlInsertScript(tableName, csvBean, withHeader,
+			withEndSemicolon);
+		expected = "INSERT INTO employees ( name, age, gender) VALUES \n"
+			+ "(\"John\", 23, male),\n" + "(\"Jim\", 25, male),\n" + "(\"Mary\", 21, female);\n";
+		assertEquals(expected, actual);
+		//
+		withHeader = true;
+		withEndSemicolon = false;
+		actual = CsvToSqlExtensions.getCsvFileAsSqlInsertScript(tableName, csvBean, withHeader,
+			withEndSemicolon);
+		expected = "INSERT INTO employees ( name, age, gender) VALUES \n"
+			+ "(\"John\", 23, male),\n" + "(\"Jim\", 25, male),\n" + "(\"Mary\", 21, female),\n";
+		assertEquals(expected, actual);
+		//
+		withHeader = false;
+		withEndSemicolon = false;
+		actual = CsvToSqlExtensions.getCsvFileAsSqlInsertScript(tableName, csvBean, withHeader,
+			withEndSemicolon);
+		expected = "(\"John\", 23, male),\n" + "(\"Jim\", 25, male),\n"
+			+ "(\"Mary\", 21, female),\n";
+		assertEquals(expected, actual);
+		//
+		withHeader = false;
+		withEndSemicolon = true;
+		actual = CsvToSqlExtensions.getCsvFileAsSqlInsertScript(tableName, csvBean, withHeader,
+			withEndSemicolon);
+		expected = "(\"John\", 23, male),\n" + "(\"Jim\", 25, male),\n"
+			+ "(\"Mary\", 21, female);\n";
+		assertEquals(expected, actual);
 	}
 
 	/**
@@ -105,7 +159,13 @@ public class CsvToSqlExtensionsTest
 	@Test
 	public final void testGetDataFromLine()
 	{
-		// TODO implement unit test cases...
+		String[] actual;
+		String[] expected;
+		String line = "test1, test2, test3, bla, fasel, and, so, on";
+		String seperator = ",";
+		actual = CsvToSqlExtensions.getDataFromLine(line, seperator);
+		expected = ArrayFactory.newArray("test1", " test2", " test3", " bla", " fasel", " and", " so", " on");
+		assertTrue(Arrays.deepEquals(actual, expected));
 	}
 
 	/**
@@ -115,7 +175,34 @@ public class CsvToSqlExtensionsTest
 	@Test
 	public final void testGetSqlData()
 	{
-		// TODO implement unit test cases...
+		String actual;
+		String expected;
+		String[] columns; 
+		String[] columnTypes;
+		String[] columnTypesEdit; 
+		Map<Integer, Integer> lineOrder;
+		List<String[]> lines; 
+		boolean withEndSemicolon;
+		
+		String[] lineOne;
+		String[] lineTwo;
+		String[] lineThree;
+	
+		lineOrder = null;
+		columns = ArrayFactory.newArray("name", "age", "gender");
+		columnTypes = ArrayFactory.newArray("text", "integer", "enum");
+		columnTypesEdit = ArrayFactory.newArray("edit,',\",true", "edit,',\",true", "edit,',\",true");
+		lineOne = ArrayFactory.newArray("John", "23", "male");
+		lineTwo = ArrayFactory.newArray("Jim", "25", "male");
+		lineThree = ArrayFactory.newArray("Mary", "21", "female");
+		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);		
+
+		withEndSemicolon = false;
+		
+		StringBuffer sqlData = CsvToSqlExtensions.getSqlData(columns, columnTypes, columnTypesEdit, lineOrder, lines, withEndSemicolon);
+		actual = sqlData.toString();
+		expected = "(\"john\", \"23\", \"male\"),\n(\"jim\", \"25\", \"male\"),\n(\"mary\", \"21\", \"female\"),\n";
+		assertEquals(actual, expected);		
 	}
 
 	/**
