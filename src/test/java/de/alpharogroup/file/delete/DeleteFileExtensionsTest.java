@@ -24,6 +24,7 @@
  */
 package de.alpharogroup.file.delete;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -42,11 +43,16 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
+import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
+import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.file.filter.TxtFileFilter;
+import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
@@ -256,7 +262,8 @@ public class DeleteFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link DeleteFileExtensions#delete(File)}.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	public void testDeleteFile() throws IOException
@@ -322,7 +329,8 @@ public class DeleteFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link DeleteFileExtensions#deleteFile(File)}.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	public void testDeleteFile1() throws IOException
@@ -388,7 +396,8 @@ public class DeleteFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#deleteFiles(File)}.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	@Test
 	public void testDeleteFiles() throws IOException
@@ -448,41 +457,243 @@ public class DeleteFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#deleteFilesWithFileFilter(File, FileFilter)}.
+	 * 
+	 * @throws FileIsSecurityRestrictedException
+	 * @throws IOException
+	 * @throws FileIsNotADirectoryException
 	 */
 	@Test
 	public void testDeleteFilesWithFileFilterFileFileFilter()
+		throws FileIsNotADirectoryException, IOException, FileIsSecurityRestrictedException
 	{
-		// TODO implement unit test cases...
+		final File source;
+		final FileFilter includeFileFilter;
+
+		final File testFile1 = new File(this.testDir, "testDeleleFiles1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleleFiles2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		source = this.deepDir;
+		includeFileFilter = new TxtFileFilter();
+		DeleteFileExtensions.deleteFilesWithFileFilter(source, includeFileFilter);
+
+		actual = testFile1.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		actual = testFile3.exists();
+		expected = false;
+		assertEquals(actual, expected);
+
+		actual = testFile5.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		// this list for clean up...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile1);
+		fileList.add(testFile2);
+		fileList.add(testFile4);
+		fileList.add(testFile5);
+
+		DeleteFileExtensions.delete(fileList);
+
 	}
 
 	/**
 	 * Test method for
 	 * {@link DeleteFileExtensions#deleteFilesWithFileFilter(File, FileFilter, FileFilter)}.
+	 *
+	 * @throws FileIsNotADirectoryException
+	 *             the file is not A directory exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsSecurityRestrictedException
+	 *             the file is security restricted exception
 	 */
 	@Test
 	public void testDeleteFilesWithFileFilterFileFileFilterFileFilter()
+		throws FileIsNotADirectoryException, IOException, FileIsSecurityRestrictedException
 	{
-		// TODO implement unit test cases...
+		final File source;
+		final FileFilter includeFileFilter;
+		FileFilter excludeFileFilter;
+		final File testFile1 = new File(this.testDir, "testDeleleFiles1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleleFiles2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		source = this.testDir;
+		includeFileFilter = new MultiplyExtensionsFileFilter(".txt", ".tft");
+		excludeFileFilter = new MultiplyExtensionsFileFilter(".cvs", ".tft");
+		DeleteFileExtensions.deleteFilesWithFileFilter(source, includeFileFilter,
+			excludeFileFilter);
+
+		actual = testFile1.exists();
+		expected = false;
+		assertEquals(actual, expected);
+
+		actual = testFile2.exists();
+		expected = false;
+		assertEquals(actual, expected);
+
+		actual = testFile3.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		actual = testFile4.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		actual = testFile5.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		// this list for clean up...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile3);
+		fileList.add(testFile4);
+		fileList.add(testFile5);
+
+		DeleteFileExtensions.delete(fileList);
 	}
 
 	/**
 	 * Test method for
 	 * {@link DeleteFileExtensions#deleteFilesWithFilenameFilter(File, FilenameFilter)}.
+	 * 
+	 * @throws FileIsSecurityRestrictedException
+	 * @throws IOException
+	 * @throws FileIsNotADirectoryException
 	 */
 	@Test
 	public void testDeleteFilesWithFilenameFilterFileFilenameFilter()
+		throws FileIsNotADirectoryException, IOException, FileIsSecurityRestrictedException
 	{
-		// TODO implement unit test cases...
+		final File source;
+		final FilenameFilter includeFileFilter;
+		boolean acceptDir;
+		Collection<String> fileExtensions;
+
+
+		final File testFile1 = new File(this.testDir, "testDeleleFiles1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleleFiles2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		source = this.deepDir;
+
+		acceptDir = false;
+		fileExtensions = ListFactory.newArrayList(".txt");
+		includeFileFilter = new MultiplyExtensionsFilenameFilter(fileExtensions, acceptDir);
+
+		DeleteFileExtensions.deleteFilesWithFilenameFilter(source, includeFileFilter);
+
+		actual = testFile1.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		actual = testFile3.exists();
+		expected = false;
+		assertEquals(actual, expected);
+
+		actual = testFile5.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		// this list for clean up...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile1);
+		fileList.add(testFile2);
+		fileList.add(testFile4);
+		fileList.add(testFile5);
+
+		DeleteFileExtensions.delete(fileList);
 	}
 
 	/**
 	 * Test method for
 	 * {@link DeleteFileExtensions#deleteFilesWithFilenameFilter(File, FilenameFilter, FilenameFilter)}.
+	 *
+	 * @throws FileIsNotADirectoryException
+	 *             the file is not A directory exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsSecurityRestrictedException
+	 *             the file is security restricted exception
 	 */
 	@Test
 	public void testDeleteFilesWithFilenameFilterFileFilenameFilterFilenameFilter()
+		throws FileIsNotADirectoryException, IOException, FileIsSecurityRestrictedException
 	{
-		// TODO implement unit test cases...
+		final File source;
+		final FilenameFilter includeFileFilter;
+		FilenameFilter excludeFileFilter;
+		boolean acceptDir;
+
+		final File testFile1 = new File(this.testDir, "testDeleleFiles1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleleFiles2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		source = this.testDir;
+		acceptDir = true;
+		includeFileFilter = new MultiplyExtensionsFilenameFilter(ListFactory.newArrayList(".txt"),
+			acceptDir);
+
+		excludeFileFilter = new MultiplyExtensionsFilenameFilter(
+			ListFactory.newArrayList(".cvs", ".tft"), acceptDir);
+		DeleteFileExtensions.deleteFilesWithFilenameFilter(source, includeFileFilter,
+			excludeFileFilter);
+
+		actual = testFile1.exists();
+		expected = false;
+		assertEquals(actual, expected);
+
+		actual = testFile2.exists();
+		expected = false;
+		assertEquals(actual, expected);
+
+		actual = testFile3.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		actual = testFile4.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		actual = testFile5.exists();
+		expected = true;
+		assertEquals(actual, expected);
+
+		// this list for clean up...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile3);
+		fileList.add(testFile4);
+		fileList.add(testFile5);
+
+		DeleteFileExtensions.delete(fileList);
 	}
 
 	/**
