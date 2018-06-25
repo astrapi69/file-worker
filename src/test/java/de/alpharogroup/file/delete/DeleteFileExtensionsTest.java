@@ -24,17 +24,30 @@
  */
 package de.alpharogroup.file.delete;
 
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
+import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link DeleteFileExtensions}
@@ -43,67 +56,394 @@ public class DeleteFileExtensionsTest extends FileTestCase
 {
 
 	/**
+	 * Sets up method will be invoked before every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+	}
+
+	/**
 	 * Test method for {@link DeleteFileExtensions#checkFile(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws DirectoryAllreadyExistsException
+	 *             is thrown if the directory all ready exists
 	 */
 	@Test
-	public void testCheckFile()
+	public void testCheckFile() throws IOException, DirectoryAllreadyExistsException
 	{
-		// TODO implement unit test cases...
-		// DeleteFileExtensions.checkFile(file)
+		if (this.testDir.exists())
+		{
+			DeleteFileExtensions.delete(this.testDir);
+		}
+		this.testDir = new File(this.testResources, "testDir");
+		Exception ex = DeleteFileExtensions.checkFile(this.testDir);
+		this.actual = ex != null;
+		assertTrue("", this.actual);
+		this.actual = ex instanceof FileDoesNotExistException;
+		assertTrue("", this.actual);
+		if (!this.testDir.exists())
+		{
+			final boolean created = CreateFileExtensions.newDirectory(this.testDir);
+			assertTrue("The directory should be created.", created);
+		}
+		ex = DeleteFileExtensions.checkFile(this.testDir);
+		this.actual = ex == null;
+		assertTrue("", this.actual);
+
+		final File testFile1 = new File(this.testDir, "testCheckFile.txt");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		ex = DeleteFileExtensions.checkFile(testFile1);
+		this.actual = ex != null;
+		assertTrue("", this.actual);
+		this.actual = ex instanceof FileIsNotADirectoryException;
+		assertTrue("", this.actual);
+
+		final File testFile2 = new File("a");
+		ex = DeleteFileExtensions.checkFile(testFile2);
+		this.actual = ex != null;
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#deleteAllFiles(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testDeleteAllFiles()
+	public void testDeleteAllFiles() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testDeleteAllFiles1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleteAllFiles2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleteAllFiles3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleteAllFiles4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleteAllFiles5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		// --------------------------------
+		this.actual = testFile1.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile3.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile5.exists();
+		assertTrue("", this.actual);
+
+		this.actual = this.deepDir.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile4.exists();
+		assertTrue("", this.actual);
+
+		this.actual = this.testDir.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.deleteAllFiles(this.testDir);
+
+		this.actual = this.deepDir.exists();
+		assertFalse("", this.actual);
+
+		this.actual = this.testDir.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile1.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile2.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile3.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile4.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile5.exists();
+		assertFalse("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#deleteAllFilesWithSuffix(File, String)}.
 	 */
 	@Test
-	public void testDeleteAllFilesWithSuffix()
+	public void testDeleteAllFilesWithSuffix() throws DirectoryAllreadyExistsException, IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testDeleteAllFilesWithSuffix1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleteAllFilesWithSuffix2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleteAllFilesWithSuffix3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleteAllFilesWithSuffix4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleteAllFilesWithSuffix5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+
+		DeleteFileExtensions.deleteAllFilesWithSuffix(this.testDir, ".txt");
+
+		this.actual = testFile1.exists();
+		assertFalse("", this.actual);
+		this.actual = testFile2.exists();
+		assertFalse("", this.actual);
+		this.actual = testFile3.exists();
+		assertFalse("", this.actual);
+		this.actual = testFile4.exists();
+		assertTrue("", this.actual);
+		this.actual = testFile5.exists();
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#delete(Collection)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testDeleteCollectionOfFile()
+	public void testDeleteCollectionOfFile() throws IOException
 	{
-		// TODO implement unit test cases...
+		// 1. initialize expected files for deletion
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		// this list is for deletion...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile1);
+		fileList.add(testFile2);
+		fileList.add(testFile3);
+		fileList.add(testFile4);
+
+		DeleteFileExtensions.delete(fileList);
+
+		assertFalse(testFile1.exists());
+		assertFalse(testFile2.exists());
+		assertFalse(testFile3.exists());
+		assertFalse(testFile4.exists());
 	}
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#delete(File)}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testDeleteFile()
+	public void testDeleteFile() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testDelete1.txt");
+		final File testFile2 = new File(this.testDir, "testDelete2.txt");
+		final File testFile3 = new File(this.deepDir, "testDelete3.txt");
+		final File testFile4 = new File(this.testDir, "testDelete4.tft");
+		final File testFile5 = new File(this.deepDir, "testDelete5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		// --------------------------------
+		this.actual = testFile1.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.delete(testFile1);
+
+		this.actual = testFile1.exists();
+		assertFalse("", this.actual);
+		// --------------------------------
+		this.actual = testFile3.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.delete(testFile3);
+
+		this.actual = testFile3.exists();
+		assertFalse("", this.actual);
+		// --------------------------------
+
+		this.actual = testFile5.exists();
+		assertTrue("", this.actual);
+
+		this.actual = this.deepDir.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.delete(this.deepDir);
+
+		this.actual = this.deepDir.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile5.exists();
+		assertFalse("", this.actual);
+		// --------------------------------
+
+		this.actual = testFile4.exists();
+		assertTrue("", this.actual);
+
+		this.actual = this.testDir.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.delete(this.testDir);
+
+		this.actual = testFile4.exists();
+		assertFalse("", this.actual);
+
+		this.actual = this.testDir.exists();
+		assertFalse("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#deleteFile(File)}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testDeleteFile1()
+	public void testDeleteFile1() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testDeleteFile1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleteFile2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleteFile3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleteFile4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleteFile5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		// --------------------------------
+		this.actual = testFile1.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.deleteFile(testFile1);
+
+		this.actual = testFile1.exists();
+		assertFalse("", this.actual);
+		// --------------------------------
+		this.actual = testFile3.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.deleteFile(testFile3);
+
+		this.actual = testFile3.exists();
+		assertFalse("", this.actual);
+		// --------------------------------
+
+		this.actual = testFile5.exists();
+		assertTrue("", this.actual);
+
+		this.actual = this.deepDir.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.deleteFile(this.deepDir);
+
+		this.actual = this.deepDir.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile5.exists();
+		assertFalse("", this.actual);
+		// --------------------------------
+
+		this.actual = testFile4.exists();
+		assertTrue("", this.actual);
+
+		this.actual = this.testDir.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.deleteFile(this.testDir);
+
+		this.actual = testFile4.exists();
+		assertFalse("", this.actual);
+
+		this.actual = this.testDir.exists();
+		assertFalse("", this.actual);
+		// --------------------------------
 	}
 
 	/**
 	 * Test method for {@link DeleteFileExtensions#deleteFiles(File)}.
+	 * @throws IOException 
 	 */
 	@Test
-	public void testDeleteFiles()
+	public void testDeleteFiles() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testDeleleFiles1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleleFiles2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
+		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		// --------------------------------
+		this.actual = this.deepDir.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile1.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile2.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile3.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile4.exists();
+		assertTrue("", this.actual);
+
+		this.actual = testFile5.exists();
+		assertTrue("", this.actual);
+
+		this.actual = this.testDir.exists();
+		assertTrue("", this.actual);
+
+		DeleteFileExtensions.deleteFiles(this.testDir);
+
+		this.actual = this.deepDir.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile1.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile2.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile3.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile4.exists();
+		assertFalse("", this.actual);
+
+		this.actual = testFile5.exists();
+		assertFalse("", this.actual);
 	}
 
 	/**

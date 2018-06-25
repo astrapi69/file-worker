@@ -541,8 +541,8 @@ public class ChecksumExtensionsTest extends FileTestCase
 	@Test
 	public void testGetChecksumQuietlyFileAlgorithm()
 	{
-		String expected;
 		String actual;
+		String expected;
 
 		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
 			"testReadFileInput.txt");

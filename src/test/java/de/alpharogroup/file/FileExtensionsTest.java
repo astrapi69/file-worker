@@ -76,7 +76,7 @@ public class FileExtensionsTest extends FileTestCase
 	 * Sets up method will be invoked before every unit test method in this class.
 	 *
 	 * @throws Exception
-	 *             the exception
+	 *             is thrown if an exception occurs
 	 */
 	@Override
 	@BeforeMethod
@@ -89,7 +89,7 @@ public class FileExtensionsTest extends FileTestCase
 	 * Tear down method will be invoked after every unit test method in this class.
 	 *
 	 * @throws Exception
-	 *             the exception
+	 *             is thrown if an exception occurs
 	 */
 	@Override
 	@AfterMethod
