@@ -51,11 +51,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SortFileExtensionsTest
 {
-	/** The directory /src/test/resources for test resources. */
-	File testResources;
-
 	/** The resources. */
 	File resources;
+
+	/** The directory /src/test/resources for test resources. */
+	File testResources;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.

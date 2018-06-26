@@ -45,48 +45,6 @@ import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 public abstract class FileTestCase extends BaseTestCase
 {
 
-	/** The File object for the current project path. */
-	protected File projectPath;
-
-	/** The File object for the test resources. */
-	protected File testResources;
-
-	/**
-	 * The File object for the source folder for test. Current
-	 * value:"projectpath"+"/src/test/resources".
-	 */
-	protected File test;
-
-	/** The zip directory. Current value:"projectpath"+"/src/test/resources"+"/zipDir". */
-	protected File zipDir;
-
-	/**
-	 * The directory for unzipping zip files. Current
-	 * value:"projectpath"+"/src/test/resources"+"/unzipDir".
-	 */
-	protected File unzipDir;
-
-	/** The unzip dir test dir. */
-	protected File unzipDirTestDir;
-
-	/**
-	 * The directory for test resources. Current
-	 * value:"projectpath"+"/src/test/resources"+"/resources".
-	 */
-	protected File resources;
-
-	/**
-	 * The directory for resources that after the test are deleted. Current
-	 * value:"projectpath"+"/src/test/resources"+"/resources"+"/testDir".
-	 */
-	protected File testDir;
-
-	/**
-	 * The directory for resources that after the test are deleted. A second directory for testing.
-	 * Current value:"projectpath"+"/src/test/resources"+"/resources"+"/secondTestDir".
-	 */
-	protected File secondTestDir;
-
 	/**
 	 * The directory that is under the testDir. Current
 	 * value:"projectpath"+"/src/test/resources"+"/resources"+"/testDir"+"/deepDir".
@@ -104,6 +62,48 @@ public abstract class FileTestCase extends BaseTestCase
 	 * +"/resources"+"/testDir"+"/deepDir"+"/deeperDir".
 	 */
 	protected File deeperDir;
+
+	/** The File object for the current project path. */
+	protected File projectPath;
+
+	/**
+	 * The directory for test resources. Current
+	 * value:"projectpath"+"/src/test/resources"+"/resources".
+	 */
+	protected File resources;
+
+	/**
+	 * The directory for resources that after the test are deleted. A second directory for testing.
+	 * Current value:"projectpath"+"/src/test/resources"+"/resources"+"/secondTestDir".
+	 */
+	protected File secondTestDir;
+
+	/**
+	 * The File object for the source folder for test. Current
+	 * value:"projectpath"+"/src/test/resources".
+	 */
+	protected File test;
+
+	/**
+	 * The directory for resources that after the test are deleted. Current
+	 * value:"projectpath"+"/src/test/resources"+"/resources"+"/testDir".
+	 */
+	protected File testDir;
+
+	/** The File object for the test resources. */
+	protected File testResources;
+
+	/**
+	 * The directory for unzipping zip files. Current
+	 * value:"projectpath"+"/src/test/resources"+"/unzipDir".
+	 */
+	protected File unzipDir;
+
+	/** The unzip dir test dir. */
+	protected File unzipDirTestDir;
+
+	/** The zip directory. Current value:"projectpath"+"/src/test/resources"+"/zipDir". */
+	protected File zipDir;
 
 	private void initDirs() throws DirectoryAllreadyExistsException
 	{

@@ -46,20 +46,26 @@ import de.alpharogroup.file.search.FileSearchExtensions;
 public class Zipper implements ZipModel
 {
 
-	/** The zos. */
-	private ZipOutputStream zos = null;
+	/** The compression method. */
+	private int compressionMethod = -1;
 
-	/** The file length. */
-	private long fileLength;
+	/** The directory to zip. */
+	private File directoryToZip;
+
+	/** The dir to start. */
+	private String dirToStart;
 
 	/** The file counter. */
 	private int fileCounter;
 
-	/** The zip level. */
-	private int zipLevel = -1;
+	/** The file filter. */
+	private FilenameFilter fileFilter;
 
-	/** The compression method. */
-	private int compressionMethod = -1;
+	/** The file length. */
+	private long fileLength;
+
+	/** The zip file. */
+	private File zipFile;
 
 	/** The zip file comment. */
 	private String zipFileComment;
@@ -67,20 +73,14 @@ public class Zipper implements ZipModel
 	/** The zip file name. */
 	private String zipFileName;
 
-	/** The directory to zip. */
-	private File directoryToZip;
-
-	/** The file filter. */
-	private FilenameFilter fileFilter;
-
-	/** The zip file. */
-	private File zipFile;
-
 	/** The zip file obj. */
 	private ZipFile zipFileObj = null;
 
-	/** The dir to start. */
-	private String dirToStart;
+	/** The zip level. */
+	private int zipLevel = -1;
+
+	/** The zos. */
+	private ZipOutputStream zos = null;
 
 	/**
 	 * Instantiates a new zipper.

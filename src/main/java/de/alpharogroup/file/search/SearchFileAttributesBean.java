@@ -47,19 +47,19 @@ import lombok.experimental.FieldDefaults;
 public class SearchFileAttributesBean
 {
 
+	/** The ignore content equality. */
+	boolean ignoreContentEquality;
+
 	/** The ignore extension equality. */
 	boolean ignoreExtensionEquality;
-
-	/** The ignore length equality. */
-	boolean ignoreLengthEquality;
 
 	/** The ignore last modified. */
 	boolean ignoreLastModified;
 
+	/** The ignore length equality. */
+	boolean ignoreLengthEquality;
+
 	/** The ignore name equality. */
 	boolean ignoreNameEquality;
-
-	/** The ignore content equality. */
-	boolean ignoreContentEquality;
 
 }

@@ -45,6 +45,12 @@ public class ZipDecryptInputStream extends InputStream
 	/** The Constant CRC_TABLE. */
 	private static final int[] CRC_TABLE = new int[256];
 
+	/** The Constant DECRYPT_HEADER_SIZE. */
+	private static final int DECRYPT_HEADER_SIZE = 12;
+
+	/** The Constant LFH_SIGNATURE. */
+	private static final int[] LFH_SIGNATURE = { 0x50, 0x4b, 0x03, 0x04 };
+
 	// compute the table
 	// (could also have it pre-computed - see http://snippets.dzone.com/tag/crc32)
 	static
@@ -67,38 +73,32 @@ public class ZipDecryptInputStream extends InputStream
 		}
 	}
 
-	/** The Constant DECRYPT_HEADER_SIZE. */
-	private static final int DECRYPT_HEADER_SIZE = 12;
-
-	/** The Constant LFH_SIGNATURE. */
-	private static final int[] LFH_SIGNATURE = { 0x50, 0x4b, 0x03, 0x04 };
+	/** The compressed size. */
+	private int compressedSize;
 
 	/** The delegate. */
 	private final InputStream delegate;
 
-	/** The password. */
-	private final String password;
-
 	/** The keys. */
 	private final int keys[] = new int[3];
 
-	/** The state. */
-	private ZipState state = ZipState.SIGNATURE;
+	/** The password. */
+	private final String password;
 
 	/** The skip bytes. */
 	private int skipBytes;
 
-	/** The compressed size. */
-	private int compressedSize;
+	/** The state. */
+	private ZipState state = ZipState.SIGNATURE;
 
 	/** The value. */
 	private int value;
 
-	/** The value pos. */
-	private int valuePos;
-
 	/** The value inc. */
 	private int valueInc;
+
+	/** The value pos. */
+	private int valuePos;
 
 	/**
 	 * Instantiates a new zip decrypt input stream.

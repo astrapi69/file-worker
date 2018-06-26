@@ -61,10 +61,10 @@ import de.alpharogroup.lang.ClassExtensions;
  */
 public class ExportExcelExtensionsTest
 {
+	File emptyWorkbook;
 	final String twoDimArray[][] = { { "1", "a", "!" }, { "2", "b", "?" }, { "3", "c", "%" } };
 	final String twoDimArrayDouble[][] = { { "1.0", "a", "!" }, { "2.0", "b", "?" },
 			{ "3.0", "c", "%" } };
-	File emptyWorkbook;
 
 	Workbook workbook;
 

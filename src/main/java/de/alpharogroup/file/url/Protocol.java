@@ -37,26 +37,26 @@ import lombok.Getter;
 public enum Protocol
 {
 
-	/** The urn protocol. */
-	URN("urn"),
-	/** The jar protocol. */
-	MAILTO("mailto"),
-	/** The jar protocol. */
-	NEWS("mailto"),
+	/** The ear protocol. */
+	EAR("ear"),
 	/** The jar protocol. */
 	FILE("file"),
-	/** The jar protocol. */
-	JAR("jar"),
+	/** The ftp protocol. */
+	FTP("ftp"),
 	/** The http protocol. */
 	HTTP("http"),
 	/** The https protocol. */
 	HTTPS("https"),
+	/** The jar protocol. */
+	JAR("jar"),
+	/** The jar protocol. */
+	MAILTO("mailto"),
+	/** The jar protocol. */
+	NEWS("mailto"),
 	/** The nntp protocol. */
 	NNTP("nntp"),
-	/** The ftp protocol. */
-	FTP("ftp"),
-	/** The ear protocol. */
-	EAR("ear"),
+	/** The urn protocol. */
+	URN("urn"),
 	/** The war protocol. */
 	WAR("war");
 

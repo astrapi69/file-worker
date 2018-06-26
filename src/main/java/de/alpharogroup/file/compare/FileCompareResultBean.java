@@ -43,8 +43,8 @@ import lombok.ToString;
 public class FileCompareResultBean implements IFileCompareResultBean
 {
 
-	/** The source file. */
-	protected File source;
+	/** The absolute path equality. */
+	private Boolean absolutePathEquality = Boolean.FALSE;
 
 	/** The compare file. */
 	protected File compare;
@@ -52,17 +52,17 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	/** The file extension equality. */
 	private Boolean fileExtensionEquality = Boolean.FALSE;
 
-	/** The same length. */
-	private Boolean lengthEquality = Boolean.FALSE;
-
 	/** The same last modified. */
 	private Boolean lastModifiedEquality = Boolean.FALSE;
+
+	/** The same length. */
+	private Boolean lengthEquality = Boolean.FALSE;
 
 	/** The same name. */
 	private Boolean nameEquality = Boolean.FALSE;
 
-	/** The absolute path equality. */
-	private Boolean absolutePathEquality = Boolean.FALSE;
+	/** The source file. */
+	protected File source;
 
 	/**
 	 * Instantiates a new file compare result bean.

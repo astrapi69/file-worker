@@ -68,10 +68,10 @@ import de.alpharogroup.io.StreamExtensions;
 public class CsvFileExtensionsTest
 {
 
+	File resources;
+
 	/** The test resources. */
 	File testResources;
-
-	File resources;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.

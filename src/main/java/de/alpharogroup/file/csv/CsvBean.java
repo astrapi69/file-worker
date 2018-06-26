@@ -59,21 +59,21 @@ public class CsvBean implements Serializable, Cloneable
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1648936246997896598L;
 
-	/** The headers. */
-	private String[] headers;
-
 	/** The column types. */
 	private String[] columnTypes;
-
-	/** The lines. */
-	private List<String[]> lines;
 
 	/** The column types edit. */
 	private String[] columnTypesEdit;
 
+	/** The headers. */
+	private String[] headers;
 
 	/** The line order. */
 	private Map<Integer, Integer> lineOrder;
+
+
+	/** The lines. */
+	private List<String[]> lines;
 
 	/**
 	 * Instantiates a new {@link CsvBean} object.

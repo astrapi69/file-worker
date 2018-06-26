@@ -46,14 +46,14 @@ import java.util.zip.ZipInputStream;
 public class Unzipper
 {
 
-	/** The zip file. */
-	private ZipFile zipFile;
+	/** The password. */
+	private String password;
 
 	/** The to dir. */
 	private File toDir;
 
-	/** The password. */
-	private String password;
+	/** The zip file. */
+	private ZipFile zipFile;
 
 	/**
 	 * Instantiates a new unzipper.
