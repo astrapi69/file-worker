@@ -25,6 +25,7 @@
 package de.alpharogroup.file.checksum;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
@@ -128,6 +129,10 @@ public final class ChecksumQuietlyExtensions
 			return ChecksumExtensions.getChecksum(file, algorithm.getAlgorithm());
 		}
 		catch (final NoSuchAlgorithmException e)
+		{
+			log.error("getChecksumQuietly failed...\n" + e.getMessage(), e);
+		}
+		catch (IOException e)
 		{
 			log.error("getChecksumQuietly failed...\n" + e.getMessage(), e);
 		}

@@ -39,8 +39,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -58,8 +56,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class ReadFileExtensions
 {
-	/** The LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(ReadFileExtensions.class.getName());
 
 	/**
 	 * Get a Byte array from the given file.
@@ -67,8 +63,10 @@ public final class ReadFileExtensions
 	 * @param tmpFile
 	 *            the tmp file
 	 * @return the filecontent as Byte array object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static Byte[] getFilecontentAsByteObjectArray(final File tmpFile)
+	public static Byte[] getFilecontentAsByteObjectArray(final File tmpFile) throws IOException
 	{
 		return toObject(toByteArray(tmpFile));
 	}
@@ -79,8 +77,10 @@ public final class ReadFileExtensions
 	 * @param inputStream
 	 *            The InputStream from where we read.
 	 * @return The String that we read from the InputStream.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static String inputStream2String(final InputStream inputStream)
+	public static String inputStream2String(final InputStream inputStream) throws IOException
 	{
 		return inputStream2String(inputStream, Charset.forName("UTF-8"));
 	}
@@ -93,8 +93,11 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the encoding
 	 * @return The String that we read from the InputStream.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String inputStream2String(final InputStream inputStream, final Charset encoding)
+		throws IOException
 	{
 		return ReadFileExtensions.reader2String(new InputStreamReader(inputStream, encoding));
 	}
@@ -124,22 +127,17 @@ public final class ReadFileExtensions
 	 * @param reader
 	 *            The Reader from where we read.
 	 * @return The String that we read from the Reader.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static String reader2String(final Reader reader)
+	public static String reader2String(final Reader reader) throws IOException
 	{
 		final StringBuffer stringBuffer = new StringBuffer();
 		final char[] charArray = new char[FileConst.BLOCKSIZE];
 		int tmp;
-		try
+		while ((tmp = reader.read(charArray)) > 0)
 		{
-			while ((tmp = reader.read(charArray)) > 0)
-			{
-				stringBuffer.append(charArray, 0, tmp);
-			}
-		}
-		catch (final IOException e)
-		{
-			LOGGER.log(Level.SEVERE, "reader2String failed...\n" + e.getMessage(), e);
+			stringBuffer.append(charArray, 0, tmp);
 		}
 		return stringBuffer.toString();
 	}
@@ -150,8 +148,10 @@ public final class ReadFileExtensions
 	 * @param file
 	 *            The file.
 	 * @return Returns a byte array or null.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static byte[] readFileToBytearray(final File file)
+	public static byte[] readFileToBytearray(final File file) throws IOException
 	{
 		return toByteArray(file);
 	}
@@ -192,21 +192,18 @@ public final class ReadFileExtensions
 	 * @param inputFile
 	 *            The Path to the File and name from the file from where we read.
 	 * @return The first line from the file.
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String readHeadLine(final String inputFile)
+		throws FileNotFoundException, IOException
 	{
 		String headLine = null;
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)))
 		{
 			headLine = reader.readLine();
-		}
-		catch (final FileNotFoundException e)
-		{
-			LOGGER.log(Level.SEVERE, "readHeadLine failed...\n" + e.getMessage(), e);
-		}
-		catch (final IOException e)
-		{
-			LOGGER.log(Level.SEVERE, "readHeadLine failed...\n" + e.getMessage(), e);
 		}
 		return headLine;
 	}
@@ -374,17 +371,15 @@ public final class ReadFileExtensions
 	 * @param filename
 	 *            The Filename from the Properties-file.
 	 * @return The Properties or null if an error occurs.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static Properties readPropertiesFromFile(final String filename)
+	public static Properties readPropertiesFromFile(final String filename) throws IOException
 	{
 		final Properties properties = new Properties();
 		try (FileInputStream fis = new FileInputStream(filename))
 		{
 			properties.load(fis);
-		}
-		catch (final IOException e)
-		{
-			LOGGER.log(Level.SEVERE, "readPropertiesFromFile failed...\n" + e.getMessage(), e);
 		}
 		return properties;
 	}
@@ -395,8 +390,10 @@ public final class ReadFileExtensions
 	 * @param tmpFile
 	 *            The file.
 	 * @return Returns a byte array or null.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static byte[] toByteArray(final File tmpFile)
+	public static byte[] toByteArray(final File tmpFile) throws IOException
 	{
 		byte[] data = null;
 		if (tmpFile.exists() && !tmpFile.isDirectory())
@@ -404,14 +401,8 @@ public final class ReadFileExtensions
 			try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(tmpFile));
 				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileConst.KILOBYTE);)
 			{
-
 				StreamExtensions.writeInputStreamToOutputStream(bis, bos);
 				data = bos.toByteArray();
-			}
-			catch (final IOException e)
-			{
-				LOGGER.log(Level.SEVERE,
-					"transformFilecontentToByteArray failed...\n" + e.getMessage(), e);
 			}
 		}
 		return data;

@@ -170,9 +170,11 @@ public final class ChecksumExtensions
 	 * @throws NoSuchAlgorithmException
 	 *             Is thrown if the algorithm is not supported or does not exists.
 	 *             {@link java.security.MessageDigest} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String getChecksum(final File file, final Algorithm algorithm)
-		throws NoSuchAlgorithmException
+		throws NoSuchAlgorithmException, IOException
 	{
 		return getChecksum(file, algorithm.getAlgorithm());
 	}
@@ -227,9 +229,11 @@ public final class ChecksumExtensions
 	 * @throws NoSuchAlgorithmException
 	 *             Is thrown if the algorithm is not supported or does not exists.
 	 *             {@link java.security.MessageDigest} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String getChecksum(final File file, final String algorithm)
-		throws NoSuchAlgorithmException
+		throws NoSuchAlgorithmException, IOException
 	{
 		return getChecksum(ReadFileExtensions.toByteArray(file), algorithm);
 	}
@@ -255,8 +259,10 @@ public final class ChecksumExtensions
 	 * @param file
 	 *            The file.
 	 * @return The checksum from the file as long. {@link java.util.zip.Adler32} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static long getCheckSumAdler32(final File file)
+	public static long getCheckSumAdler32(final File file) throws IOException
 	{
 		return getCheckSumAdler32(ReadFileExtensions.toByteArray(file));
 	}
@@ -282,8 +288,10 @@ public final class ChecksumExtensions
 	 * @param file
 	 *            The file.
 	 * @return The checksum from the file as long. {@link java.util.zip.CRC32} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static long getCheckSumCRC32(final File file)
+	public static long getCheckSumCRC32(final File file) throws IOException
 	{
 		return getCheckSumCRC32(ReadFileExtensions.toByteArray(file));
 	}
@@ -393,6 +401,10 @@ public final class ChecksumExtensions
 			return getChecksum(file, algorithm.getAlgorithm());
 		}
 		catch (final NoSuchAlgorithmException e)
+		{
+			LOGGER.error("getChecksumQuietly failed...\n" + e.getMessage(), e);
+		}
+		catch (IOException e)
 		{
 			LOGGER.error("getChecksumQuietly failed...\n" + e.getMessage(), e);
 		}

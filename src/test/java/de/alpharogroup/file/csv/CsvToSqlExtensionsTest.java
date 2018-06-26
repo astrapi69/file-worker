@@ -164,7 +164,8 @@ public class CsvToSqlExtensionsTest
 		String line = "test1, test2, test3, bla, fasel, and, so, on";
 		String seperator = ",";
 		actual = CsvToSqlExtensions.getDataFromLine(line, seperator);
-		expected = ArrayFactory.newArray("test1", " test2", " test3", " bla", " fasel", " and", " so", " on");
+		expected = ArrayFactory.newArray("test1", " test2", " test3", " bla", " fasel", " and",
+			" so", " on");
 		assertTrue(Arrays.deepEquals(actual, expected));
 	}
 
@@ -177,32 +178,34 @@ public class CsvToSqlExtensionsTest
 	{
 		String actual;
 		String expected;
-		String[] columns; 
+		String[] columns;
 		String[] columnTypes;
-		String[] columnTypesEdit; 
+		String[] columnTypesEdit;
 		Map<Integer, Integer> lineOrder;
-		List<String[]> lines; 
+		List<String[]> lines;
 		boolean withEndSemicolon;
-		
+
 		String[] lineOne;
 		String[] lineTwo;
 		String[] lineThree;
-	
+
 		lineOrder = null;
 		columns = ArrayFactory.newArray("name", "age", "gender");
 		columnTypes = ArrayFactory.newArray("text", "integer", "enum");
-		columnTypesEdit = ArrayFactory.newArray("edit,',\",true", "edit,',\",true", "edit,',\",true");
+		columnTypesEdit = ArrayFactory.newArray("edit,',\",true", "edit,',\",true",
+			"edit,',\",true");
 		lineOne = ArrayFactory.newArray("John", "23", "male");
 		lineTwo = ArrayFactory.newArray("Jim", "25", "male");
 		lineThree = ArrayFactory.newArray("Mary", "21", "female");
-		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);		
+		lines = ListFactory.newArrayList(lineOne, lineTwo, lineThree);
 
 		withEndSemicolon = false;
-		
-		StringBuffer sqlData = CsvToSqlExtensions.getSqlData(columns, columnTypes, columnTypesEdit, lineOrder, lines, withEndSemicolon);
+
+		StringBuffer sqlData = CsvToSqlExtensions.getSqlData(columns, columnTypes, columnTypesEdit,
+			lineOrder, lines, withEndSemicolon);
 		actual = sqlData.toString();
 		expected = "(\"john\", \"23\", \"male\"),\n(\"jim\", \"25\", \"male\"),\n(\"mary\", \"21\", \"female\"),\n";
-		assertEquals(actual, expected);		
+		assertEquals(actual, expected);
 	}
 
 	/**

@@ -55,12 +55,14 @@ public final class FileExtensions
 
 	/**
 	 * Downloads Data from the given URI.
-	 * 
+	 *
 	 * @param uri
 	 *            The URI from where to download.
 	 * @return Returns a byte array or null.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static byte[] download(final URI uri)
+	public static byte[] download(final URI uri) throws IOException
 	{
 		final File tmpFile = new File(uri);
 		return ReadFileExtensions.toByteArray(tmpFile);

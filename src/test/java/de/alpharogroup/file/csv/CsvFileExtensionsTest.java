@@ -114,6 +114,7 @@ public class CsvFileExtensionsTest
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated
 	 */
 	@Test(enabled = false)
 	public void testCreateSqlInsertFromCsv() throws IOException

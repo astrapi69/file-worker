@@ -182,9 +182,20 @@ public final class CompareFileExtensions
 			catch (final NoSuchAlgorithmException e)
 			{
 				// if the algorithm is not supported check it with CRC32.
-				contentEquality = ChecksumExtensions.getCheckSumCRC32(source) == ChecksumExtensions
-					.getCheckSumCRC32(compare);
-				fileContentResultBean.setContentEquality(contentEquality);
+				try
+				{
+					contentEquality = ChecksumExtensions
+						.getCheckSumCRC32(source) == ChecksumExtensions.getCheckSumCRC32(compare);
+					fileContentResultBean.setContentEquality(contentEquality);
+				}
+				catch (IOException e1)
+				{
+					fileContentResultBean.setContentEquality(false);
+				}
+			}
+			catch (IOException e)
+			{
+				fileContentResultBean.setContentEquality(false);
 			}
 		}
 		else

@@ -71,9 +71,12 @@ public class ChecksumExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link ChecksumExtensions#getCheckSumAdler32(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetCheckSumAdler32File()
+	public void testGetCheckSumAdler32File() throws IOException
 	{
 		long expected;
 		long actual;
@@ -283,9 +286,12 @@ public class ChecksumExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link ChecksumExtensions#getCheckSumCRC32(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetCheckSumCRC32File()
+	public void testGetCheckSumCRC32File() throws IOException
 	{
 		long expected;
 		long actual;
@@ -301,9 +307,11 @@ public class ChecksumExtensionsTest extends FileTestCase
 	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetChecksumFileAlgorithm() throws NoSuchAlgorithmException
+	public void testGetChecksumFileAlgorithm() throws NoSuchAlgorithmException, IOException
 	{
 		String expected;
 		String actual;
@@ -369,9 +377,11 @@ public class ChecksumExtensionsTest extends FileTestCase
 	 *
 	 * @throws NoSuchAlgorithmException
 	 *             is thrown if instantiation of the SecretKeyFactory object fails.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetChecksumFileString() throws NoSuchAlgorithmException
+	public void testGetChecksumFileString() throws NoSuchAlgorithmException, IOException
 	{
 		String expected;
 		String actual;

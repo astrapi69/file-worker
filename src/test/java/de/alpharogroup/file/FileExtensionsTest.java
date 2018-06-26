@@ -456,9 +456,12 @@ public class FileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link de.alpharogroup.file.FileExtensions#download(java.net.URI)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testDownload()
+	public void testDownload() throws IOException
 	{
 
 		final byte[] expected = { -84, -19, 0, 5, 116, 0, 7, 70, 111, 111, 32, 98, 97, 114 };
