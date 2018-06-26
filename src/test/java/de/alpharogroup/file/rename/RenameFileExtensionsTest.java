@@ -24,19 +24,61 @@
  */
 package de.alpharogroup.file.rename;
 
-import java.io.File;
-import java.util.Date;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.joda.time.LocalDateTime;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import de.alpharogroup.file.FileTestCase;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileNotRenamedException;
+import de.alpharogroup.file.search.FileSearchExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link RenameFileExtensions}
  */
-public class RenameFileExtensionsTest
+public class RenameFileExtensionsTest extends FileTestCase
 {
+
+	/**
+	 * Sets up method will be invoked before every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+	}
 
 	/**
 	 * Test method for {@link RenameFileExtensions#appendSystemtimeToFilename(File)}.
@@ -44,7 +86,12 @@ public class RenameFileExtensionsTest
 	@Test
 	public void testAppendSystemtimeToFilenameFile()
 	{
-		// TODO implement unit test cases...
+		String actual;
+		final File testFile1 = new File(this.testDir, "testRename.txt");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		actual = RenameFileExtensions.appendSystemtimeToFilename(testFile1);
+		assertNotNull(actual);
+		assertTrue(actual.length() == 24);
 	}
 
 	/**
@@ -53,44 +100,205 @@ public class RenameFileExtensionsTest
 	@Test
 	public void testAppendSystemtimeToFilenameFileDate()
 	{
-		// TODO implement unit test cases...
+		String actual;
+		String expected;
+		final File testFile1 = new File(this.testDir, "testRename.txt");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		Date date = LocalDateTime.parse("2007-11-07T06:34:59").toDate();
+		actual = RenameFileExtensions.appendSystemtimeToFilename(testFile1, date);
+		assertNotNull(actual);
+		assertTrue(actual.length() == 24);
+		expected = "testRename_063459000.txt";
+		assertEquals(actual, expected);
 	}
 
 	/**
 	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}.
+	 * 
+	 * @throws FileDoesNotExistException
+	 * @throws IOException
 	 */
 	@Test
 	public void testChangeAllFilenameSuffixFileStringString()
+		throws IOException, FileDoesNotExistException
 	{
-		// TODO implement unit test cases...
+		final String oldFileSuffix = ".txt";
+		final String newFileSuffix = ".rtf";
+		final List<File> filesWithNewSuffixes = new ArrayList<>();
+		final List<File> filesWithOldSuffixes = new ArrayList<>();
+		final String filePrefix1 = "testChangeAllFilenameSuffixFileStringString1";
+		final File testFile1 = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile1);
+		final File fileWithNewSuffix1 = new File(this.deepDir, filePrefix1 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix1);
+		final String filePrefix2 = "testChangeAllFilenameSuffixFileStringString2";
+		final File testFile2 = new File(this.deepDir, filePrefix2 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile2);
+		final File fileWithNewSuffix2 = new File(this.deepDir, filePrefix2 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix2);
+		final String filePrefix3 = "testChangeAllFilenameSuffixFileStringString3";
+		final File testFile3 = new File(this.deeperDir, filePrefix3 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile3);
+		final File fileWithNewSuffix3 = new File(this.deeperDir, filePrefix3 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix3);
+		final String filePrefix4 = "testChangeAllFilenameSuffixFileStringString4";
+		final File testFile4 = new File(this.deeperDir, filePrefix4 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile4);
+		final File fileWithNewSuffix4 = new File(this.deeperDir, filePrefix4 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix4);
+
+		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
+			oldFileSuffix, newFileSuffix);
+		this.actual = null == notDeletedFiles;
+		assertTrue("", this.actual);
+		// ----------------------------------------------------------------
+		for (final File file : filesWithOldSuffixes)
+		{
+			final File currentFile = file;
+			currentFile.createNewFile();
+		}
+		notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir, oldFileSuffix,
+			newFileSuffix);
+		this.actual = null == notDeletedFiles;
+		assertTrue("", this.actual);
+
+		for (final File file : filesWithNewSuffixes)
+		{
+			final File currentFile = file;
+			this.actual = FileSearchExtensions.containsFileRecursive(this.deepDir, currentFile);
+			assertTrue("", this.actual);
+		}
 	}
 
 	/**
 	 * Test method for
 	 * {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
 	@Test
 	public void testChangeAllFilenameSuffixFileStringStringBoolean()
+		throws IOException, FileDoesNotExistException
 	{
-		// TODO implement unit test cases...
+		final String oldFileSuffix = ".txt";
+		final String newFileSuffix = ".rtf";
+		final List<File> filesWithNewSuffixes = new ArrayList<>();
+		final List<File> filesWithOldSuffixes = new ArrayList<>();
+		final String filePrefix1 = "testChangeAllFilenameSuffixFileStringStringBoolean1";
+		final File testFile1 = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile1);
+		final File fileWithNewSuffix1 = new File(this.deepDir, filePrefix1 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix1);
+		final String filePrefix2 = "testChangeAllFilenameSuffixFileStringStringBoolean2";
+		final File testFile2 = new File(this.deepDir, filePrefix2 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile2);
+		final File fileWithNewSuffix2 = new File(this.deepDir, filePrefix2 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix2);
+		final String filePrefix3 = "testChangeAllFilenameSuffixFileStringStringBoolean3";
+		final File testFile3 = new File(this.deeperDir, filePrefix3 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile3);
+		final File fileWithNewSuffix3 = new File(this.deeperDir, filePrefix3 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix3);
+		final String filePrefix4 = "testChangeAllFilenameSuffixFileStringStringBoolean4";
+		final File testFile4 = new File(this.deeperDir, filePrefix4 + oldFileSuffix);
+		filesWithOldSuffixes.add(testFile4);
+		final File fileWithNewSuffix4 = new File(this.deeperDir, filePrefix4 + newFileSuffix);
+		filesWithNewSuffixes.add(fileWithNewSuffix4);
+
+		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
+			oldFileSuffix, newFileSuffix, true);
+		this.actual = null == notDeletedFiles;
+		assertTrue("", this.actual);
+		// ----------------------------------------------------------------
+		for (final File file : filesWithOldSuffixes)
+		{
+			final File currentFile = file;
+			currentFile.createNewFile();
+		}
+		notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir, oldFileSuffix,
+			newFileSuffix, true);
+
+		for (final File file : filesWithNewSuffixes)
+		{
+			final File currentFile = file;
+			this.actual = FileSearchExtensions.containsFileRecursive(this.deepDir, currentFile);
+			assertTrue("", this.actual);
+		}
 	}
 
 	/**
 	 * Test method for {@link RenameFileExtensions#changeFilenameSuffix(File, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileNotRenamedException
+	 *             the file not renamed exception
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
 	@Test
 	public void testChangeFilenameSuffixFileString()
+		throws IOException, FileNotRenamedException, FileDoesNotExistException
 	{
-		// TODO implement unit test cases...
+		final String filePrefix = "testChangeFilenameSuffixFileString";
+		final String oldFileSuffix = ".txt";
+		final String newFileSuffix = ".rtf";
+		final File testFile1 = new File(this.deepDir, filePrefix + oldFileSuffix);
+		final File fileWithNewSuffix = new File(this.deepDir, filePrefix + newFileSuffix);
+		try
+		{
+			this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix);
+		}
+		catch (final Exception e)
+		{
+			this.actual = e instanceof FileDoesNotExistException;
+			assertTrue("", this.actual);
+		}
+
+		testFile1.createNewFile();
+		this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix);
+		assertTrue("", this.actual);
+
+		this.actual = FileSearchExtensions.containsFile(this.deepDir, fileWithNewSuffix);
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link RenameFileExtensions#changeFilenameSuffix(File, String, boolean)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
 	@Test
 	public void testChangeFilenameSuffixFileStringBoolean()
+		throws IOException, FileDoesNotExistException
 	{
-		// TODO implement unit test cases...
+		final String filePrefix = "testChangeFilenameSuffixFileStringBoolean";
+		final String oldFileSuffix = ".txt";
+		final String newFileSuffix = ".rtf";
+		final File testFile1 = new File(this.deepDir, filePrefix + oldFileSuffix);
+		final File fileWithNewSuffix = new File(this.deepDir, filePrefix + newFileSuffix);
+		try
+		{
+			this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix, true);
+		}
+		catch (final Exception e)
+		{
+			this.actual = e instanceof FileDoesNotExistException;
+			assertTrue("", this.actual);
+		}
+
+		testFile1.createNewFile();
+		this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix, true);
+		assertTrue("", this.actual);
+
+		this.actual = FileSearchExtensions.containsFile(this.deepDir, fileWithNewSuffix);
+		assertTrue("", this.actual);
 	}
 
 	/**
@@ -165,5 +373,6 @@ public class RenameFileExtensionsTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(RenameFileExtensions.class);
 	}
+
 
 }

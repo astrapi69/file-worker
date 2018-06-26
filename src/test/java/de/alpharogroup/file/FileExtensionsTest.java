@@ -127,63 +127,9 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testChangeAllFilenameSuffixFileStringString()
-		throws IOException, FileDoesNotExistException
-	{
-
-		final String oldFileSuffix = ".txt";
-		final String newFileSuffix = ".rtf";
-		final List<File> filesWithNewSuffixes = new ArrayList<>();
-		final List<File> filesWithOldSuffixes = new ArrayList<>();
-		final String filePrefix1 = "testChangeAllFilenameSuffixFileStringString1";
-		final File testFile1 = new File(this.deepDir, filePrefix1 + oldFileSuffix);
-		filesWithOldSuffixes.add(testFile1);
-		final File fileWithNewSuffix1 = new File(this.deepDir, filePrefix1 + newFileSuffix);
-		filesWithNewSuffixes.add(fileWithNewSuffix1);
-		final String filePrefix2 = "testChangeAllFilenameSuffixFileStringString2";
-		final File testFile2 = new File(this.deepDir, filePrefix2 + oldFileSuffix);
-		filesWithOldSuffixes.add(testFile2);
-		final File fileWithNewSuffix2 = new File(this.deepDir, filePrefix2 + newFileSuffix);
-		filesWithNewSuffixes.add(fileWithNewSuffix2);
-		final String filePrefix3 = "testChangeAllFilenameSuffixFileStringString3";
-		final File testFile3 = new File(this.deeperDir, filePrefix3 + oldFileSuffix);
-		filesWithOldSuffixes.add(testFile3);
-		final File fileWithNewSuffix3 = new File(this.deeperDir, filePrefix3 + newFileSuffix);
-		filesWithNewSuffixes.add(fileWithNewSuffix3);
-		final String filePrefix4 = "testChangeAllFilenameSuffixFileStringString4";
-		final File testFile4 = new File(this.deeperDir, filePrefix4 + oldFileSuffix);
-		filesWithOldSuffixes.add(testFile4);
-		final File fileWithNewSuffix4 = new File(this.deeperDir, filePrefix4 + newFileSuffix);
-		filesWithNewSuffixes.add(fileWithNewSuffix4);
-
-		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
-			oldFileSuffix, newFileSuffix);
-		this.actual = null == notDeletedFiles;
-		assertTrue("", this.actual);
-		// ----------------------------------------------------------------
-		for (final File file : filesWithOldSuffixes)
-		{
-			final File currentFile = file;
-			currentFile.createNewFile();
-		}
-		notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir, oldFileSuffix,
-			newFileSuffix);
-		this.actual = null == notDeletedFiles;
-		assertTrue("", this.actual);
-
-		for (final File file : filesWithNewSuffixes)
-		{
-			final File currentFile = file;
-			this.actual = FileSearchExtensions.containsFileRecursive(this.deepDir, currentFile);
-			assertTrue("", this.actual);
-		}
-	}
-
-	@Test
 	public void testChangeAllFilenameSuffixFileStringStringBoolean()
 		throws IOException, FileDoesNotExistException
 	{
-
 		final String oldFileSuffix = ".txt";
 		final String newFileSuffix = ".rtf";
 		final List<File> filesWithNewSuffixes = new ArrayList<>();
