@@ -43,6 +43,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.math.MathExtensions;
 
 /**
  * The unit test class for the class {@link FileSearchExtensions}.
@@ -312,6 +313,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		long expected;
 		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);
 		expected = 197129516;
+		assertTrue(MathExtensions.isBetween(190000000, 200000000, actual));
 		assertEquals(actual, expected);
 	}
 
@@ -325,6 +327,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		long expected;
 		actual = FileSearchExtensions.getFileLengthInMegabytes(testDir);
 		expected = 192509;
+		assertTrue(MathExtensions.isBetween(190000, 200000, actual));
 		assertEquals(actual, expected);
 	}
 
