@@ -24,6 +24,8 @@
  */
 package de.alpharogroup.file.search;
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
@@ -34,6 +36,8 @@ import java.util.List;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
@@ -41,11 +45,83 @@ import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
- * The class {@link FileSearchExtensionsTest}.
+ * The unit test class for the class {@link FileSearchExtensions}.
  */
 public class FileSearchExtensionsTest extends FileTestCase
 {
 
+	/**
+	 * Sets up method will be invoked before every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#countAllFilesInDirectory(File, long, boolean)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testCountAllFilesInDirectory() throws IOException
+	{
+		long actual;
+		long expected;
+		// initialize files to count...
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		// this list is kept for clean up...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile1);
+		fileList.add(testFile2);
+		fileList.add(testFile3);
+		fileList.add(testFile4);
+		// count only files ...
+		actual = FileSearchExtensions.countAllFilesInDirectory(this.testDir, 0, false);
+		expected = 4;
+		assertEquals(actual, expected);
+		// count files and directories...
+		actual = FileSearchExtensions.countAllFilesInDirectory(this.testDir, 0, true);
+		expected = 7;
+		assertEquals(actual, expected);
+		// clean up...
+		DeleteFileExtensions.delete(fileList);
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#findAllFiles(File, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test(enabled = true)
 	public void testFindAllFilesFileString() throws IOException
 	{
@@ -87,6 +163,12 @@ public class FileSearchExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(fileList);
 	}
 
+	/**
+	 * Test method for {@link FileSearchExtensions#findFilesWithFilter(File, String...)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test(enabled = true)
 	public void testFindFileWithFileFilter() throws IOException
 	{
@@ -131,6 +213,137 @@ public class FileSearchExtensionsTest extends FileTestCase
 		}
 		// 4. cleanup all files from this test
 		DeleteFileExtensions.delete(fileList);
+	}
+
+
+	/**
+	 * Test method for {@link FileSearchExtensions#getAllFilesFromDir(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testGetAllFilesFromDir() throws IOException
+	{
+		// initialize files to count...
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		// this list is kept for clean up...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile1);
+		fileList.add(testFile2);
+		fileList.add(testFile3);
+		fileList.add(testFile4);
+		List<File> allFilesFromDir = FileSearchExtensions.getAllFilesFromDir(testDir);
+		assertNotNull(allFilesFromDir);
+		// this list is expected as result...
+		final List<File> expected = new ArrayList<>();
+		expected.add(testFile1);
+		expected.add(testFile2);
+		expected.add(testFile3);
+		expected.add(testFile4);
+		assertTrue("", expected.size() == fileList.size());
+		for (final File file : expected)
+		{
+			assertTrue("", fileList.contains(file));
+		}
+		// clean up...
+		DeleteFileExtensions.delete(fileList);
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#getAllFilesFromDirRecursive(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testGetAllFilesFromDirRecursive() throws IOException
+	{
+		// initialize files to count...
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
+			"testFindFilesRecursive.tft");
+		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
+		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		// this list is kept for clean up...
+		final List<File> fileList = new ArrayList<>();
+		fileList.add(testFile1);
+		fileList.add(testFile2);
+		fileList.add(testFile3);
+		fileList.add(testFile4);
+		List<File> allFilesFromDir = FileSearchExtensions.getAllFilesFromDirRecursive(testDir);
+		assertNotNull(allFilesFromDir);
+		// this list is expected as result...
+		final List<File> expected = new ArrayList<>();
+		expected.add(testFile1);
+		expected.add(testFile2);
+		expected.add(testFile3);
+		expected.add(testFile4);
+		assertTrue("", expected.size() == fileList.size());
+		for (final File file : expected)
+		{
+			assertTrue("", fileList.contains(file));
+		}
+		// clean up...
+		DeleteFileExtensions.delete(fileList);
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#getFileLengthInKilobytes(File)}.
+	 */
+	@Test
+	public void testGetFileLengthInKilobytes()
+	{
+		long actual;
+		long expected;
+		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);
+		expected = 197129516;
+		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#getFileLengthInMegabytes(File)}.
+	 */
+	@Test
+	public void testGetFileLengthInMegabytes()
+	{
+		long actual;
+		long expected;
+		actual = FileSearchExtensions.getFileLengthInMegabytes(testDir);
+		expected = 192509;
+		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#getSearchFilePattern(String[])}.
+	 */
+	@Test
+	public void testGetSearchFilePattern()
+	{
+		String actual;
+		String expected;
+
+		actual = FileSearchExtensions.getSearchFilePattern("txt");
+		expected = "([^\\s]+(\\.(?i)(txt))$)";
+		assertEquals(actual, expected);
+
+		actual = FileSearchExtensions.getSearchFilePattern("img", "png");
+		expected = "([^\\s]+(\\.(?i)(img|png))$)";
+		assertEquals(actual, expected);
 	}
 
 	/**
