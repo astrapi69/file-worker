@@ -310,7 +310,6 @@ public class FileSearchExtensionsTest extends FileTestCase
 	{
 		long actual;
 		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);	
-		System.err.println("FileSearchExtensions#getFileLengthInKilobytes(File) length:"+ actual);
 		assertTrue(0 < actual);
 	}
 
