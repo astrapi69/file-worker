@@ -42,7 +42,6 @@ import java.util.Properties;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -1078,29 +1077,6 @@ public class FileExtensionsTest extends FileTestCase
 			final String path = inputFile.getAbsolutePath();
 			WriteFileExtensions.write2File(path, writer);
 		}
-
-		final String content = ReadFileExtensions.readFromFile(outputFile);
-		this.actual = inputString.equals(content);
-		assertTrue("", this.actual);
-
-	}
-
-	@Test
-	public void testWrite2FileStringString() throws DirectoryAllreadyExistsException, IOException
-	{
-		boolean created;
-		final File inputFile = new File(this.testDir, "testWrite2FileStringString.inp");
-		created = inputFile.createNewFile();
-		if (!created)
-		{
-			Assert.fail("Fail to create inputFile.");
-		}
-		final File outputFile = new File(this.testDir, "testWrite2FileStringString.outp");
-		outputFile.createNewFile();
-		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
-		// --------------------------------
-		WriteFileExtensions.write2File(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);

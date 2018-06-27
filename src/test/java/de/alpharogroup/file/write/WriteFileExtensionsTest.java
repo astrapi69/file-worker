@@ -41,6 +41,7 @@ import java.util.Properties;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -244,29 +245,85 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testWrite2FileReaderWriter()
+	public void testWrite2FileReaderWriter() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File inputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.inp");
+		inputFile.createNewFile();
+		final File outputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.outp");
+		outputFile.createNewFile();
+		final String inputString = "Its a beautifull day!!!";
+		WriteFileExtensions.string2File(inputFile, inputString);
+		// --------------------------------
+		try (final Reader reader = StreamExtensions.getReader(inputFile);
+			final Writer writer = StreamExtensions.getWriter(outputFile);)
+		{
+			WriteFileExtensions.write2File(reader, writer);
+		}
+
+		final String content = ReadFileExtensions.readFromFile(outputFile);
+		this.actual = inputString.equals(content);
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer, boolean)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
-	public void testWrite2FileReaderWriterBoolean()
+	public void testWrite2FileReaderWriterBoolean() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File inputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.inp");
+		inputFile.createNewFile();
+		final File outputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.outp");
+		outputFile.createNewFile();
+		final String inputString = "Its a beautifull day!!!";
+		WriteFileExtensions.string2File(inputFile, inputString);
+		// --------------------------------
+		try (final Reader reader = StreamExtensions.getReader(inputFile);
+			final Writer writer = StreamExtensions.getWriter(outputFile);)
+		{
+			WriteFileExtensions.write2File(reader, writer, false);
+		}
+
+		final String content = ReadFileExtensions.readFromFile(outputFile);
+		this.actual = inputString.equals(content);
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link WriteFileExtensions#write2File(String, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testWrite2FileStringString()
+	public void testWrite2FileStringString() throws IOException
 	{
-		// TODO implement unit test cases...
+		boolean created;
+		final File inputFile = new File(this.testDir, "testWrite2FileStringString.inp");
+		created = inputFile.createNewFile();
+		if (!created)
+		{
+			Assert.fail("Fail to create inputFile.");
+		}
+		final File outputFile = new File(this.testDir, "testWrite2FileStringString.outp");
+		outputFile.createNewFile();
+		final String inputString = "Its a beautifull day!!!";
+		WriteFileExtensions.string2File(inputFile, inputString);
+		// --------------------------------
+		WriteFileExtensions.write2File(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
+
+		final String content = ReadFileExtensions.readFromFile(outputFile);
+		this.actual = inputString.equals(content);
+		assertTrue("", this.actual);
 	}
 
 	/**
