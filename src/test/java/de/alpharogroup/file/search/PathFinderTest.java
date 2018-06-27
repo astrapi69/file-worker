@@ -37,6 +37,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.file.FileTestCase;
 
 /**
@@ -124,10 +125,19 @@ public class PathFinderTest extends FileTestCase
 	@Test
 	public void testGetRelativePath()
 	{
-		// TODO implement unit test cases...
 		File actual;
 		File expected;
+		
 		actual = PathFinder.getRelativePath(testDir, "foo", "bar");
+		expected = new File(testDir, "foo");
+		expected = new File(expected, "bar");
+		assertEquals(actual, expected);
+		
+		actual = PathFinder.getRelativePath(testDir, "foo", "bar", "bla");
+		expected = new File(testDir, "foo");
+		expected = new File(expected, "bar");
+		expected = new File(expected, "bla");
+		assertEquals(actual, expected);
 	}
 
 	/**
@@ -136,7 +146,29 @@ public class PathFinderTest extends FileTestCase
 	@Test
 	public void testGetRelativePathToFileListOfString()
 	{
-		// TODO implement unit test cases...
+		File actual;
+		File expected;
+		List<String> folders;
+		folders = ListFactory.newArrayList("foo", "bar");
+		actual = PathFinder.getRelativePathTo(testDir, folders);
+		expected = new File(testDir, "foo");
+		expected = new File(expected, "bar");
+		assertEquals(actual, expected);
+
+		folders = ListFactory.newArrayList("foo", "bar", "bla");
+		actual = PathFinder.getRelativePathTo(testDir, folders);
+		expected = new File(testDir, "foo");
+		expected = new File(expected, "bar");
+		expected = new File(expected, "bla");
+		assertEquals(actual, expected);
+
+		folders = ListFactory.newArrayList("foo", "bar", "bla", "test.txt");
+		actual = PathFinder.getRelativePathTo(testDir, folders);
+		expected = new File(testDir, "foo");
+		expected = new File(expected, "bar");
+		expected = new File(expected, "bla");
+		expected = new File(expected, "test.txt");
+		assertEquals(actual, expected);
 	}
 
 	/**
@@ -145,7 +177,21 @@ public class PathFinderTest extends FileTestCase
 	@Test
 	public void testGetRelativePathToFileStringStringString()
 	{
-		// TODO implement unit test cases...
+		File actual;
+		File expected;
+
+		actual = PathFinder.getRelativePathTo(testDir, ",", "foo,bar", "test.txt");
+		expected = new File(testDir, "foo");
+		expected = new File(expected, "bar");
+		expected = new File(expected, "test.txt");
+		assertEquals(actual, expected);
+
+		actual = PathFinder.getRelativePathTo(testDir, ",", "foo,bar,bla", "test.txt");
+		expected = new File(testDir, "foo");
+		expected = new File(expected, "bar");
+		expected = new File(expected, "bla");
+		expected = new File(expected, "test.txt");
+		assertEquals(actual, expected);
 	}
 
 	/**
@@ -154,7 +200,11 @@ public class PathFinderTest extends FileTestCase
 	@Test
 	public void testGetSrcMainJavaDir()
 	{
-		// TODO implement unit test cases...
+		File actual;
+		File expected;
+		actual = PathFinder.getSrcMainJavaDir();
+		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_MAIN_JAVA);
+		assertEquals(actual, expected);
 	}
 
 	/**
