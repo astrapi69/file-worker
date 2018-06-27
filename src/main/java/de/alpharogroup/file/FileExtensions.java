@@ -74,6 +74,9 @@ public final class FileExtensions
 	 * @param file
 	 *            the file.
 	 * @return 's the absolut path without filename.
+	 * @deprecated use instead the same name method from {@code RenameFileExtensions}. <br>
+	 * 			<br>
+	 *             Note: will be removed in next minor release
 	 */
 	public static String getAbsolutPathWithoutFilename(final File file)
 	{

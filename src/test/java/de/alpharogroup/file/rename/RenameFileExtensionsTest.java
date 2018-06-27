@@ -25,6 +25,7 @@
 package de.alpharogroup.file.rename;
 
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -43,6 +44,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
+import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
@@ -307,7 +310,15 @@ public class RenameFileExtensionsTest extends FileTestCase
 	@Test
 	public void testForceToMoveFile()
 	{
-		// TODO implement unit test cases...
+		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
+		final File expectedMovedFile = new File(this.deepDir, "testMovedFile.moved");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		actual = RenameFileExtensions.forceToMoveFile(srcFile, expectedMovedFile);
+		expected = true;
+		assertEquals(actual, expected);
+		assertTrue(expectedMovedFile.exists());
+		assertFalse(srcFile.exists());
+		expectedMovedFile.deleteOnExit();
 	}
 
 	/**
@@ -316,16 +327,69 @@ public class RenameFileExtensionsTest extends FileTestCase
 	@Test
 	public void testGetAbsolutPathWithoutFilename()
 	{
-		// TODO implement unit test cases...
+		String actual;
+		String expected;
+		String absolutePath = this.testDir.getAbsolutePath();
+		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
+		actual = RenameFileExtensions.getAbsolutPathWithoutFilename(srcFile);
+		expected = absolutePath + "/";
+		assertEquals(actual, expected);
 	}
 
 	/**
-	 * Test method for {@link RenameFileExtensions#moveFile(File, File)}.
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for directory
+	 */
+	@Test
+	public void testMoveDir() throws DirectoryAllreadyExistsException
+	{
+		// Test to move a directory...
+		// Create a test directory to move.
+		final File srcDir = new File(this.deepDir, "dirToMove");
+		// Create a destination directory.
+		final File destDir = new File(this.deeperDir, "dirToMove");
+		// Create a test file in the directory to move to check if the file is moved too.
+		final String filePrefix = "testMoveFile";
+		final String fileSuffix = ".txt";
+		final File srcFile = new File(srcDir, filePrefix + fileSuffix);
+		// if the testfile does not exist create it.
+		if (!srcDir.exists())
+		{
+			final boolean created = CreateFileExtensions.newDirectory(srcDir);
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		}
+		System.err.println("-------------------------------------------------");
+		System.err.println("srcFile.getAbsolutePath():" + srcFile.getAbsolutePath());
+		System.err.println("-------------------------------------------------");
+		// Test to move the dir.
+		this.actual = RenameFileExtensions.moveFile(srcDir, destDir);
+		assertTrue("Directory should be renamed.", this.actual);
+		System.err.println("-------------------------------------------------");
+		System.err.println("srcFile.getAbsolutePath():" + srcFile.getAbsolutePath());
+		System.err.println("-------------------------------------------------");
+
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for file
 	 */
 	@Test
 	public void testMoveFile()
 	{
-		// TODO implement unit test cases...
+		// Test to move a file....
+		final String filePrefix1 = "testMoveFile";
+		final String oldFileSuffix = ".txt";
+		final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+
+		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
+		assertFalse("File should not exist in this directory.", this.actual);
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
+		assertTrue("File should be renamed.", this.actual);
+		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destDir);
+		assertTrue("The renamed file should exist in this directory.", this.actual);
 	}
 
 	/**
@@ -334,7 +398,15 @@ public class RenameFileExtensionsTest extends FileTestCase
 	@Test
 	public void testRenameFileFileFile()
 	{
-		// TODO implement unit test cases...
+		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testRenameFile.txt");
+		final File expectedRenamedFile = new File(this.deepDir, "testRenamedFile.renamed");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		actual = RenameFileExtensions.renameFile(srcFile, expectedRenamedFile);
+		expected = true;
+		assertEquals(actual, expected);
+		assertTrue(expectedRenamedFile.exists());
+		assertFalse(srcFile.exists());
+		expectedRenamedFile.deleteOnExit();
 	}
 
 	/**
@@ -343,7 +415,16 @@ public class RenameFileExtensionsTest extends FileTestCase
 	@Test
 	public void testRenameFileFileFileBoolean()
 	{
-		// TODO implement unit test cases...
+		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testRenameFile.txt");
+		final File expectedRenamedFile = new File(this.deepDir, "testRenamedFile.renamed");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		actual = RenameFileExtensions.renameFile(srcFile, expectedRenamedFile, true);
+		expected = true;
+		assertEquals(actual, expected);
+		assertTrue(expectedRenamedFile.exists());
+		assertFalse(srcFile.exists());
+		expectedRenamedFile.deleteOnExit();
+		srcFile.deleteOnExit();
 	}
 
 	/**
@@ -352,7 +433,18 @@ public class RenameFileExtensionsTest extends FileTestCase
 	@Test
 	public void testRenameFileFileString()
 	{
-		// TODO implement unit test cases...
+		final String filePrefix1 = "testRenameFileFileString1";
+		final String filePrefix2 = "testRenameFileFileString2";
+		final String oldFileSuffix = ".txt";
+		final String newFileSuffix = ".rtf";
+		final File testFile1 = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+		final File renamedFile1 = new File(this.deepDir, filePrefix2 + newFileSuffix);
+
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1.getName());
+		assertTrue("File should be renamed.", this.actual);
+		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
+		assertTrue("The renamed file should exist in this directory.", this.actual);
 	}
 
 	/**
@@ -361,7 +453,13 @@ public class RenameFileExtensionsTest extends FileTestCase
 	@Test
 	public void testRenameFileWithSystemtime()
 	{
-		// TODO implement unit test cases...
+		final File srcFile = new File(this.testDir.getAbsoluteFile(),
+			"testRenameFileWithSystemtime.txt");// 32 length
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		File renameFileWithSystemtime = RenameFileExtensions.renameFileWithSystemtime(srcFile);
+		assertNotNull(renameFileWithSystemtime);
+		String name = renameFileWithSystemtime.getName();
+		assertTrue(name.length() == 42);
 	}
 
 	/**

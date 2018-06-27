@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.copy.CopyFileExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
@@ -42,6 +40,7 @@ import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
@@ -50,10 +49,9 @@ import lombok.experimental.UtilityClass;
  * @author Asterios Raptis
  */
 @UtilityClass
+@Slf4j
 public final class RenameFileExtensions
 {
-	/** The Constant LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(RenameFileExtensions.class.getName());
 
 	/**
 	 * Returns the filename from the given file with the systemtime.
@@ -163,7 +161,7 @@ public final class RenameFileExtensions
 			}
 			catch (final FileDoesNotExistException e)
 			{
-				LOGGER.error("changeAllFilenameSuffix failed...\n" + e.getMessage(), e);
+				log.error("changeAllFilenameSuffix failed...\n" + e.getMessage(), e);
 				success = false;
 			}
 			if (!success)
@@ -239,25 +237,25 @@ public final class RenameFileExtensions
 	}
 
 	/**
-	 * Moves the given source file to the destination Directory.
+	 * Moves the given source file to the given destination file.
 	 *
 	 * @param srcFile
 	 *            The source file.
-	 * @param destDir
-	 *            The destination directory.
+	 * @param destinationFile
+	 *            The destination file.
 	 *
 	 * @return true if the file was moved otherwise false.
 	 */
-	public static boolean forceToMoveFile(final File srcFile, final File destDir)
+	public static boolean forceToMoveFile(final File srcFile, final File destinationFile)
 	{
 		boolean moved = false;
 		try
 		{
-			moved = RenameFileExtensions.renameFile(srcFile, destDir, true);
+			moved = RenameFileExtensions.renameFile(srcFile, destinationFile, true);
 		}
 		catch (final Exception e)
 		{
-			LOGGER.error("forceToMoveFile method failed...\n" + e.getMessage(), e);
+			log.error("forceToMoveFile method failed...\n" + e.getMessage(), e);
 		}
 		return moved;
 	}
@@ -334,36 +332,35 @@ public final class RenameFileExtensions
 		boolean success = fileToRename.renameTo(newFileName);
 		if (!success)
 		{
-			System.err.println("The file " + fileToRename.getName() + " was not renamed.");
+			log.info("The file " + fileToRename.getName() + " was not renamed.");
 
 			if (delete)
 			{
-				System.err.println("Try to copy the content into the new file with the new name.");
+				log.info("Try to copy the content into the new file with the new name.");
 				try
 				{
 					final boolean copied = CopyFileExtensions.copyFile(fileToRename, newFileName);
 					if (copied)
 					{
-						System.err
-							.println("Sucessfully copied the old file " + fileToRename.getName()
-								+ " to the new file " + newFileName.getName() + ".");
+						log.info("Sucessfully copied the old file " + fileToRename.getName()
+							+ " to the new file " + newFileName.getName() + ".");
 					}
 					else
 					{
-						System.err.println("Try to copy file " + fileToRename.getName()
+						log.info("Try to copy file " + fileToRename.getName()
 							+ " into the new file " + newFileName.getName() + " failed.");
 					}
 				}
 				catch (final IOException e)
 				{
-					System.err.println("Try to copy file " + fileToRename.getName()
-						+ " into the new file " + newFileName.getName() + " failed.");
+					log.error("Try to copy file " + fileToRename.getName() + " into the new file "
+						+ newFileName.getName() + " failed.");
 				}
 				catch (final FileIsADirectoryException e)
 				{
-					e.printStackTrace();
+					log.error("Given file " + newFileName.getName() + " is a directory.", e);
 				}
-				System.err.println("Try to delete the old file " + fileToRename.getName() + ".");
+				log.info("Try to delete the old file " + fileToRename.getName() + ".");
 				try
 				{
 					DeleteFileExtensions.delete(fileToRename);
@@ -371,8 +368,8 @@ public final class RenameFileExtensions
 				}
 				catch (final IOException e)
 				{
-					System.err.println(
-						"Try to delete the old file " + fileToRename.getName() + " failed.");
+					log.error("Try to delete the old file " + fileToRename.getName() + " failed.",
+						e);
 				}
 			}
 		}
