@@ -310,12 +310,13 @@ public class FileSearchExtensionsTest extends FileTestCase
 	public void testGetFileLengthInKilobytes()
 	{
 		long actual;
-		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);		
-		assertTrue(MathExtensions.isBetween(180000000, 210000000, actual));
+		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);	
+		System.err.println("FileSearchExtensions#getFileLengthInKilobytes(File) length:"+ actual);
+//		assertTrue(MathExtensions.isBetween(180000000L, 210000000L, actual));
 
-//		long expected;
-//		expected = 197129516L;
-//		assertEquals(actual, expected);
+		long expected;
+		expected = 197129516L;
+		assertEquals(actual, expected);
 	}
 
 	/**
@@ -326,11 +327,12 @@ public class FileSearchExtensionsTest extends FileTestCase
 	{
 		long actual;
 		actual = FileSearchExtensions.getFileLengthInMegabytes(testDir);
-		assertTrue(MathExtensions.isBetween(180000, 210000, actual));
+		System.err.println("FileSearchExtensions#getFileLengthInMegabytes(File) length:"+ actual);
+//		assertTrue(MathExtensions.isBetween(180000L, 210000L, actual));
 
-//		long expected;
-//		expected = 192509L;
-//		assertEquals(actual, expected);
+		long expected;
+		expected = 192509L;
+		assertEquals(actual, expected);
 	}
 
 	/**
