@@ -314,7 +314,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 //		assertTrue(MathExtensions.isBetween(180000000, 210000000, actual));
 
 		long expected;
-		expected = 197129516;
+		expected = 197129516L;
 		assertEquals(actual, expected);
 	}
 
@@ -329,7 +329,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 //		assertTrue(MathExtensions.isBetween(180000, 210000, actual));
 
 		long expected;
-		expected = 192509;
+		expected = 192509L;
 		assertEquals(actual, expected);
 	}
 

@@ -125,6 +125,9 @@ public class PathFinderTest extends FileTestCase
 	public void testGetRelativePath()
 	{
 		// TODO implement unit test cases...
+		File actual;
+		File expected;
+		actual = PathFinder.getRelativePath(testDir, "foo", "bar");
 	}
 
 	/**
