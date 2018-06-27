@@ -24,7 +24,7 @@
  */
 package de.alpharogroup.file.search;
 
-import static org.testng.Assert.assertNotNull;
+import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -310,10 +310,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 	public void testGetFileLengthInKilobytes()
 	{
 		long actual;
-		long expected;
-		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);
-		expected = 197129516;
+		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);		
 		assertTrue(MathExtensions.isBetween(190000000, 200000000, actual));
+
+		long expected;
+		expected = 197129516;
 		assertEquals(actual, expected);
 	}
 
@@ -324,10 +325,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 	public void testGetFileLengthInMegabytes()
 	{
 		long actual;
-		long expected;
 		actual = FileSearchExtensions.getFileLengthInMegabytes(testDir);
-		expected = 192509;
 		assertTrue(MathExtensions.isBetween(190000, 200000, actual));
+
+		long expected;
+		expected = 192509;
 		assertEquals(actual, expected);
 	}
 

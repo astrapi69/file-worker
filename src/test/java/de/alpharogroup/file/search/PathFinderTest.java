@@ -24,7 +24,11 @@
  */
 package de.alpharogroup.file.search;
 
+import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertEquals;
+
 import java.io.File;
+import java.util.List;
 
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
@@ -33,72 +37,184 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.FileTestCase;
+
 /**
- * The class PathFinderTest.
+ * The unit test class for the class {@link PathFinder}.
  */
-public class PathFinderTest
+public class PathFinderTest extends FileTestCase
 {
 
 	/**
-	 * Sets the up.
+	 * Sets up method will be invoked before every unit test method in this class.
 	 *
 	 * @throws Exception
-	 *             the exception
+	 *             is thrown if an exception occurs
 	 */
+	@Override
 	@BeforeMethod
-	public void setUp() throws Exception
+	protected void setUp() throws Exception
 	{
+		super.setUp();
 	}
 
 	/**
-	 * Tear down.
+	 * Tear down method will be invoked after every unit test method in this class.
 	 *
 	 * @throws Exception
-	 *             the exception
+	 *             is thrown if an exception occurs
 	 */
+	@Override
 	@AfterMethod
-	public void tearDown() throws Exception
+	protected void tearDown() throws Exception
 	{
+		super.tearDown();
 	}
 
 	/**
-	 * Test get absolute path.
+	 * Test method for {@link PathFinder#getAbsolutePath(File, boolean)}.
 	 */
 	@Test
 	public void testGetAbsolutePath()
 	{
-		final File pp = new File(".");
-		final File projectDir = PathFinder.getProjectDirectory(pp);
-		final File srcMainResourcesDir = PathFinder.getSrcMainResourcesDir(projectDir);
-		System.out.println(projectDir.getAbsolutePath());
-		System.out.println(srcMainResourcesDir.getAbsolutePath());
+		String actual;
+		String expected;
+		actual = PathFinder.getAbsolutePath(testDir, false);
+		expected = "file-worker/src/test/resources/resources/testDir";
+		assertTrue(actual.endsWith(expected));
 	}
 
 	/**
-	 * Test get project directory.
+	 * Test method for {@link PathFinder#getProjectDirectory()}.
 	 */
 	@Test
 	public void testGetProjectDirectory()
 	{
-		// fail("Not yet implemented");
+		File actual;
+		File expected;
+		final File pp = new File(".");
+		actual = PathFinder.getProjectDirectory();
+		expected = pp.getAbsoluteFile();
+		String expectedPath = expected.getPath();
+		expectedPath = expectedPath.substring(0, expectedPath.length()-2);
+		String actualPath = actual.getPath();
+		assertEquals(actualPath, expectedPath);		
 	}
 
 	/**
-	 * Test get src main java dir.
+	 * Test method for {@link PathFinder#getProjectDirectory(File)}.
+	 */
+	@Test
+	public void testGetProjectDirectoryFile()
+	{
+		File actual;
+		File expected;
+		final File pp = new File(".");
+		actual = PathFinder.getProjectDirectory(pp);
+		expected = pp.getAbsoluteFile();
+		String expectedPath = expected.getPath();
+		expectedPath = expectedPath.substring(0, expectedPath.length()-2);
+		String actualPath = actual.getPath();
+		assertEquals(actualPath, expectedPath);
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getRelativePath(File, String[])}.
+	 */
+	@Test
+	public void testGetRelativePath()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getRelativePathTo(File, List)}.
+	 */
+	@Test
+	public void testGetRelativePathToFileListOfString()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getRelativePathTo(File, String, String, String)}.
+	 */
+	@Test
+	public void testGetRelativePathToFileStringStringString()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getSrcMainJavaDir()}.
 	 */
 	@Test
 	public void testGetSrcMainJavaDir()
 	{
-		// fail("Not yet implemented");
+		// TODO implement unit test cases...
 	}
 
 	/**
-	 * Test get src main resources dir.
+	 * Test method for {@link PathFinder#getSrcMainJavaDir(File)}.
+	 */
+	@Test
+	public void testGetSrcMainJavaDirFile()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getSrcMainResourcesDir()}.
 	 */
 	@Test
 	public void testGetSrcMainResourcesDir()
 	{
-		// fail("Not yet implemented");
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getSrcMainResourcesDir(File)}.
+	 */
+	@Test
+	public void testGetSrcMainResourcesDirFile()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getSrcTestJavaDir()}.
+	 */
+	@Test
+	public void testGetSrcTestJavaDir()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getSrcTestJavaDir(File)}.
+	 */
+	@Test
+	public void testGetSrcTestJavaDirFile()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getSrcTestResourcesDir()}.
+	 */
+	@Test
+	public void testGetSrcTestResourcesDir()
+	{
+		// TODO implement unit test cases...
+	}
+
+	/**
+	 * Test method for {@link PathFinder#getSrcTestResourcesDir(File)}.
+	 */
+	@Test
+	public void testGetSrcTestResourcesDirFile()
+	{
+		// TODO implement unit test cases...
 	}
 
 	/**
