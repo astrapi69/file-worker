@@ -24,7 +24,12 @@
  */
 package de.alpharogroup.file.write;
 
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
@@ -36,57 +41,167 @@ import java.util.Properties;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import de.alpharogroup.file.FileExtensions;
+import de.alpharogroup.file.FileTestCase;
+import de.alpharogroup.file.checksum.ChecksumExtensions;
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.file.search.PathFinder;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link WriteFileExtensions}
  */
-public class WriteFileExtensionsTest
+public class WriteFileExtensionsTest extends FileTestCase
 {
 
 	/**
+	 * Sets up method will be invoked before every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+	}
+
+	/**
 	 * Test method for {@link WriteFileExtensions#readSourceFileAndWriteDestFile(String, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testReadSourceFileAndWriteDestFile()
+	public void testReadSourceFileAndWriteDestFile() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File source = new File(this.testDir.getAbsoluteFile(),
+			"testReadSourceFileAndWriteDestFileInput.txt");
+		final File destination = new File(this.testDir.getAbsoluteFile(),
+			"testReadSourceFileAndWriteDestFileOutput.tft");
+
+		WriteFileExtensions.string2File(source, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(destination, "");
+		try
+		{
+			WriteFileExtensions.readSourceFileAndWriteDestFile(source.getAbsolutePath(),
+				destination.getAbsolutePath());
+		}
+		catch (final Exception e)
+		{
+			this.actual = e instanceof FileNotFoundException;
+			assertTrue("Exception should be of type FileNotFoundException.", this.actual);
+		}
+
+		final String inputString = "Its a beautifull day!!!";
+		final String expected = inputString;
+		WriteFileExtensions.string2File(source, inputString);
+
+		WriteFileExtensions.readSourceFileAndWriteDestFile(source.getAbsolutePath(),
+			destination.getAbsolutePath());
+
+		final String compare = ReadFileExtensions.readFromFile(destination);
+		this.actual = expected.equals(compare);
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link WriteFileExtensions#storeByteArrayToFile(byte[], File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testStoreByteArrayToFile()
+	public void testStoreByteArrayToFile() throws IOException
 	{
-		// TODO implement unit test cases...
+		final byte[] expected = { -84, -19, 0, 5, 116, 0, 7, 70, 111, 111, 32, 98, 97, 114 };
+
+		final File destination = new File(this.testDir.getAbsoluteFile(), "testDownload.txt");
+
+		WriteFileExtensions.storeByteArrayToFile(expected, destination);
+
+		final byte[] compare = FileExtensions.download(destination.toURI());
+
+		for (int i = 0; i < compare.length; i++)
+		{
+			this.actual = compare[i] == expected[i];
+			assertTrue("", this.actual);
+		}
 	}
 
 	/**
 	 * Test method for {@link WriteFileExtensions#string2File(File, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testString2FileFileString()
+	public void testString2FileFileString() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testString2FileFileString.txt");
+		final String inputString = "Its a beautifull day!!!";
+		WriteFileExtensions.string2File(testFile1, inputString);
+		// --------------------------------
+
+		final String content = ReadFileExtensions.readFromFile(testFile1);
+		this.actual = inputString.equals(content);
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link WriteFileExtensions#string2File(File, String, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testString2FileFileStringString()
+	public void testString2FileFileStringString() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testString2FileFileStringString.txt");
+		final String inputString = "Its a beautifull day!!!";
+		WriteFileExtensions.string2File(testFile1, inputString, "UTF-8");
+		// --------------------------------
+
+		final String content = ReadFileExtensions.readFromFile(testFile1);
+		this.actual = inputString.equals(content);
+		assertTrue("", this.actual);
 	}
 
 	/**
 	 * Test method for {@link WriteFileExtensions#string2File(String, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testString2FileStringString()
+	public void testString2FileStringString() throws IOException
 	{
-		// TODO implement unit test cases...
+		final File testFile1 = new File(this.testDir, "testString2FileFileString.txt");
+		final String inputString = "Its a beautifull day!!!";
+		WriteFileExtensions.string2File(inputString, testFile1.getAbsolutePath());
+		// --------------------------------
+
+		final String content = ReadFileExtensions.readFromFile(testFile1);
+		this.actual = inputString.equals(content);
+		assertTrue("", this.actual);
 	}
 
 	/**
@@ -101,11 +216,30 @@ public class WriteFileExtensionsTest
 
 	/**
 	 * Test method for {@link WriteFileExtensions#write(InputStream, OutputStream)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testWrite()
+	public void testWrite() throws IOException
 	{
-		// TODO implement unit test cases...
+		long actual;
+		long expected;
+
+		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
+			"testReadFileInput.txt");
+		File fileout = new File(PathFinder.getSrcTestResourcesDir(),
+			"testWriteFileExtensionsWrite.out");
+		try (InputStream inputStream = StreamExtensions.getInputStream(testFile, true);
+			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true);)
+		{
+			WriteFileExtensions.write(inputStream, outputStream);
+		}
+
+		actual = ChecksumExtensions.getCheckSumAdler32(testFile);
+		expected = ChecksumExtensions.getCheckSumAdler32(fileout);
+		assertEquals(expected, actual);
+		fileout.deleteOnExit();
 	}
 
 	/**
