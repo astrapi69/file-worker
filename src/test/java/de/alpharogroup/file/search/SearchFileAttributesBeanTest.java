@@ -27,9 +27,6 @@ package de.alpharogroup.file.search;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.AssertJUnit.assertEquals;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 import org.testng.annotations.Test;
 
 import de.alpharogroup.evaluate.object.EqualsHashCodeAndToStringEvaluator;
@@ -56,26 +53,23 @@ public class SearchFileAttributesBeanTest
 	/**
 	 * Test method for {@link SearchFileAttributesBean#equals(Object)} ,
 	 * {@link SearchFileAttributesBean#hashCode()} and {@link SearchFileAttributesBean#toString()}
-	 *
-	 * @throws NoSuchMethodException
-	 *             if an accessor method for this property cannot be found
-	 * @throws IllegalAccessException
-	 *             if the caller does not have access to the property accessor method
-	 * @throws InvocationTargetException
-	 *             if the property accessor method throws an exception
-	 * @throws InstantiationException
-	 *             if a new instance of the bean's class cannot be instantiated
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = false) // TODO set to true...
-	public void testEqualsHashcodeAndToStringWithClass() throws NoSuchMethodException,
-		IllegalAccessException, InvocationTargetException, InstantiationException, IOException
+	@Test
+	public void testEqualsHashcodeAndToString()
 	{
-		boolean expected;
-		boolean actual;
-		actual = EqualsHashCodeAndToStringEvaluator
-			.evaluateEqualsHashcodeAndToString(SearchFileAttributesBean.class);
+		final boolean expected;
+		final boolean actual;
+
+		SearchFileAttributesBean first = new SearchFileAttributesBean(false, false, false, false,
+			false);
+		SearchFileAttributesBean second = new SearchFileAttributesBean(true, true, true, true,
+			true);
+		SearchFileAttributesBean third = SearchFileAttributesBean.builder().build();
+		SearchFileAttributesBean fourth = new SearchFileAttributesBean(false, false, false, false,
+			false);
+
+		actual = EqualsHashCodeAndToStringEvaluator.evaluateEqualsHashcodeAndToString(first, second,
+			third, fourth);
 		expected = true;
 		assertEquals(expected, actual);
 	}
