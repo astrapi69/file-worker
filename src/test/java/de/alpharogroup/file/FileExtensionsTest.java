@@ -100,6 +100,21 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link FileExtensions#getAbsolutPathWithoutFilename(File)}.
+	 */
+	@Test
+	public void testGetAbsolutPathWithoutFilename()
+	{
+		String actual;
+		String expected;
+		String absolutePath = this.testDir.getAbsolutePath();
+		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
+		actual = FileExtensions.getAbsolutPathWithoutFilename(srcFile);
+		expected = absolutePath + "/";
+		assertEquals(actual, expected);
+	}
+
+	/**
 	 * Test method for {@link FileExtensions#getFilenamePrefix(File)}.
 	 */
 	@Test
@@ -134,31 +149,6 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link FileExtensions}
-	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(FileExtensions.class);
-	}
-
-	/**
-	 * Test method for {@link FileExtensions#getAbsolutPathWithoutFilename(File)}.
-	 */
-	@Test
-	public void testGetAbsolutPathWithoutFilename()
-	{
-		String actual;
-		String expected;
-		String absolutePath = this.testDir.getAbsolutePath();
-		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
-		actual = FileExtensions.getAbsolutPathWithoutFilename(srcFile);
-		expected = absolutePath + "/";
-		assertEquals(actual, expected);
-	}
-
-	/**
 	 * Test method for {@link FileExtensions#getTempDir()}.
 	 */
 	@Test
@@ -183,6 +173,16 @@ public class FileExtensionsTest extends FileTestCase
 		actual = FileExtensions.isOpen(srcFile);
 		expected = false;
 		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link FileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(FileExtensions.class);
 	}
 
 }

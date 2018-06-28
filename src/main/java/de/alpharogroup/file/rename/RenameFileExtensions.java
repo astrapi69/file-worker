@@ -273,8 +273,7 @@ public final class RenameFileExtensions
 	 */
 	public static String getAbsolutPathWithoutFilename(final File file)
 	{
-		return FileExtensions
-			.getAbsolutPathWithoutFilename(file);
+		return FileExtensions.getAbsolutPathWithoutFilename(file);
 	}
 
 	/**
