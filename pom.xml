@@ -258,15 +258,17 @@
 								<!-- interfaces -->
 								<exclude>de/alpharogroup/file/compare/interfaces/**/*.class</exclude>
 								<!-- deprecated classes -->
+								<exclude>de/alpharogroup/file/url/**/*.class</exclude>
 								<!-- constant classes with only constants -->
 								<!-- explicit abstract classes -->
 								<exclude>de/alpharogroup/file/FileConst.class</exclude>
 								<!-- explicit annotations -->
 								<!-- explicit bean classes -->
-								<exclude>de/alpharogroup/file/checksum/ChecksumQuietlyExtensions.class</exclude>
 								<!-- explicit constant classes with only constants -->
 								<!-- explicit delegation classes -->
 								<exclude>de/alpharogroup/file/zip/ZipDecryptInputStream.class</exclude>
+								<exclude>de/alpharogroup/file/checksum/ChecksumQuietlyExtensions.class</exclude>
+								<exclude>de/alpharogroup/file/write/WriteFileQuietlyExtensions.class</exclude>
 								<!-- explicit enums -->
 								<exclude>de/alpharogroup/file/zip/ZipState.class</exclude>
 								<!-- explicit exceptions -->

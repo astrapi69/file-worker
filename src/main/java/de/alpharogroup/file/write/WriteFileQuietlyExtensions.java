@@ -48,22 +48,23 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import de.alpharogroup.file.FileConst;
 import de.alpharogroup.io.StreamExtensions;
 import lombok.experimental.UtilityClass;
 
 /**
- * The class {@link WriteFileExtensions} provides methods for writing in files.
+ * The class {@link WriteFileQuietlyExtensions} provides methods for writing in files in a quietly
+ * manner as the name let presume.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
 @UtilityClass
-public final class WriteFileExtensions
+public final class WriteFileQuietlyExtensions
 {
 
 	/** The LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(WriteFileExtensions.class.getName());
+	private static final Logger LOGGER = Logger
+		.getLogger(WriteFileQuietlyExtensions.class.getName());
 
 
 	/**
@@ -73,10 +74,6 @@ public final class WriteFileExtensions
 	 *            The source file.
 	 * @param destFile
 	 *            The destination file.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void readSourceFileAndWriteDestFile(final String srcfile, final String destFile)
 	{
@@ -107,10 +104,6 @@ public final class WriteFileExtensions
 	 *            The byte array to be saved.
 	 * @param file
 	 *            The file to save the byte array.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void storeByteArrayToFile(final byte[] data, final File file)
 	{
@@ -139,10 +132,6 @@ public final class WriteFileExtensions
 	 *            The String to write into the File.
 	 * @return The Method return true if the String was write successfull to the file otherwise
 	 *         false.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static boolean string2File(final File file, final String string2write)
 	{
@@ -160,10 +149,6 @@ public final class WriteFileExtensions
 	 *            the encoding
 	 * @return The Method return true if the String was write successfull to the file otherwise
 	 *         false.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static boolean string2File(final File file, final String string2write,
 		final String encoding)
@@ -179,10 +164,6 @@ public final class WriteFileExtensions
 	 * @param nameOfFile
 	 *            The path to the file and name from the file from where we want to write the
 	 *            String.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void string2File(final String string2write, final String nameOfFile)
 	{
@@ -198,58 +179,12 @@ public final class WriteFileExtensions
 	}
 
 	/**
-	 * Writes the given input stream to the output stream.
-	 *
-	 * @param inputStream
-	 *            the input stream
-	 * @param outputStream
-	 *            the output stream
-	 * @throws FileNotFoundException
-	 *             the file not found exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void write(final InputStream inputStream, final OutputStream outputStream)
-		throws FileNotFoundException, IOException
-	{
-		int counter;
-		final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
-		while ((counter = inputStream.read(byteArray)) != -1)
-		{
-			outputStream.write(byteArray, 0, counter);
-		}
-	}
-
-	/**
-	 * The Method write2File() reads from an opened Reader and writes it to the opened Writer. <br>
-	 * <br>
-	 * Note: Stream will not be closed even if the flag is set to true!!!
-	 *
-	 * @param reader
-	 *            The opened Reader.
-	 * @param writer
-	 *            The opened Writer.
-	 * @param closeStream
-	 *            not in use.
-	 * @deprecated use instead the same name method without the closeStream flag.
-	 */
-	public static void write2File(final Reader reader, final Writer writer,
-		final boolean closeStream)
-	{
-		write2File(reader, writer);
-	}
-
-	/**
 	 * The Method write2File() reads from an opened Reader and writes it to the opened Writer.
 	 *
 	 * @param reader
 	 *            The opened Reader.
 	 * @param writer
 	 *            The opened Writer.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void write2File(final Reader reader, final Writer writer)
 	{
@@ -274,10 +209,6 @@ public final class WriteFileExtensions
 	 *            The Name from the File to read and copy.
 	 * @param outputFile
 	 *            The Name from the File to write into.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void write2File(final String inputFile, final String outputFile)
 	{
@@ -305,30 +236,6 @@ public final class WriteFileExtensions
 	 *            The Name from the File to read and copy.
 	 * @param writer
 	 *            The PrintWriter to write into.
-	 * @param closeWriter
-	 *            If true then close the outputStream otherwise keep open.
-	 * @deprecated use instead the same name method without the closeWriter flag.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
-	 */
-	public static void write2File(final String inputFile, final Writer writer,
-		final boolean closeWriter)
-	{
-		write2File(inputFile, writer);
-	}
-
-	/**
-	 * The Method write2File() writes the File into the PrintWriter.
-	 *
-	 * @param inputFile
-	 *            The Name from the File to read and copy.
-	 * @param writer
-	 *            The PrintWriter to write into.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void write2File(final String inputFile, final Writer writer)
 	{
@@ -354,17 +261,13 @@ public final class WriteFileExtensions
 	 *            The Path to the File and name from the file from where we read.
 	 * @param outputFile
 	 *            The Path to the File and name from the file from where we want to write.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void write2FileWithBuffer(final String inputFile, final String outputFile)
 	{
 		try (InputStream inputStream = StreamExtensions.getInputStream(new File(inputFile));
 			OutputStream outputStream = StreamExtensions.getOutputStream(new File(outputFile));)
 		{
-			write(inputStream, outputStream);
+			WriteFileExtensions.write(inputStream, outputStream);
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -377,61 +280,12 @@ public final class WriteFileExtensions
 	}
 
 	/**
-	 * Writes the given byte array to the given file.
-	 *
-	 * @param file
-	 *            The file.
-	 * @param byteArray
-	 *            The byte array.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void writeByteArrayToFile(final File file, final byte[] byteArray)
-		throws IOException
-	{
-		try (FileOutputStream fos = new FileOutputStream(file);
-			BufferedOutputStream bos = new BufferedOutputStream(fos))
-		{
-			bos.write(byteArray);
-		}
-		catch (final FileNotFoundException ex)
-		{
-			throw ex;
-		}
-		catch (final IOException ex)
-		{
-			throw ex;
-		}
-	}
-
-	/**
-	 * Writes the given byte array to a file.
-	 *
-	 * @param filename
-	 *            The filename from the file.
-	 * @param byteArray
-	 *            The byte array.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void writeByteArrayToFile(final String filename, final byte[] byteArray)
-		throws IOException
-	{
-		final File file = new File(filename);
-		writeByteArrayToFile(file, byteArray);
-	}
-
-	/**
 	 * Writes the input from the collection into the file.
 	 *
 	 * @param collection
 	 *            The collection to write to file.
 	 * @param output
 	 *            The output-file.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeLinesToFile(final Collection<String> collection, final File output)
 	{
@@ -453,10 +307,6 @@ public final class WriteFileExtensions
 	 *            The output-file.
 	 * @param encoding
 	 *            the encoding
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeLinesToFile(final Collection<String> collection, final File output,
 		final String encoding)
@@ -479,10 +329,6 @@ public final class WriteFileExtensions
 	 *            The list with the input data.
 	 * @param encoding
 	 *            The encoding.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeLinesToFile(final File output, final List<String> input,
 		final String encoding)
@@ -524,10 +370,6 @@ public final class WriteFileExtensions
 	 *            The filename from the file to write the properties.
 	 * @param properties
 	 *            The properties.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeProperties2File(final String filename, final Properties properties)
 	{
@@ -553,10 +395,6 @@ public final class WriteFileExtensions
 	 *            The encoding from the file.
 	 * @return The Method return true if the String was write successfull to the file otherwise
 	 *         false.
-	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
 	 */
 	public static boolean writeStringToFile(final File file, final String string2write,
 		final String encoding)

@@ -24,14 +24,11 @@
  */
 package de.alpharogroup.file.write;
 
-import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
@@ -50,16 +47,14 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.search.PathFinder;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
- * The unit test class for the class {@link WriteFileExtensions}
+ * The unit test class for the class {@link WriteFileQuietlyExtensions}
  */
-public class WriteFileExtensionsTest extends FileTestCase
+public class WriteFileQuietlyExtensionsTest extends FileTestCase
 {
 
 	/**
@@ -89,12 +84,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#readSourceFileAndWriteDestFile(String, String)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#readSourceFileAndWriteDestFile(String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testReadSourceFileAndWriteDestFile() throws IOException
 	{
@@ -103,11 +97,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 		final File destination = new File(this.testDir.getAbsoluteFile(),
 			"testReadSourceFileAndWriteDestFileOutput.tft");
 
-		WriteFileExtensions.string2File(source, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(destination, "");
+		WriteFileQuietlyExtensions.string2File(source, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(destination, "");
 		try
 		{
-			WriteFileExtensions.readSourceFileAndWriteDestFile(source.getAbsolutePath(),
+			WriteFileQuietlyExtensions.readSourceFileAndWriteDestFile(source.getAbsolutePath(),
 				destination.getAbsolutePath());
 		}
 		catch (final Exception e)
@@ -118,9 +112,9 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileExtensions.string2File(source, inputString);
+		WriteFileQuietlyExtensions.string2File(source, inputString);
 
-		WriteFileExtensions.readSourceFileAndWriteDestFile(source.getAbsolutePath(),
+		WriteFileQuietlyExtensions.readSourceFileAndWriteDestFile(source.getAbsolutePath(),
 			destination.getAbsolutePath());
 
 		final String compare = ReadFileExtensions.readFromFile(destination);
@@ -131,12 +125,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#storeByteArrayToFile(byte[], File)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#storeByteArrayToFile(byte[], File)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testStoreByteArrayToFile() throws IOException
 	{
@@ -144,7 +137,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testDownload.txt");
 
-		WriteFileExtensions.storeByteArrayToFile(expected, destination);
+		WriteFileQuietlyExtensions.storeByteArrayToFile(expected, destination);
 
 		final byte[] compare = FileExtensions.download(destination.toURI());
 
@@ -157,18 +150,17 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#string2File(File, String)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#string2File(File, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testString2FileFileString() throws IOException
 	{
 		final File testFile1 = new File(this.testDir, "testString2FileFileString.txt");
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(testFile1, inputString);
+		WriteFileQuietlyExtensions.string2File(testFile1, inputString);
 		// --------------------------------
 
 		final String content = ReadFileExtensions.readFromFile(testFile1);
@@ -178,18 +170,17 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#string2File(File, String, String)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#string2File(File, String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testString2FileFileStringString() throws IOException
 	{
 		final File testFile1 = new File(this.testDir, "testString2FileFileStringString.txt");
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(testFile1, inputString, "UTF-8");
+		WriteFileQuietlyExtensions.string2File(testFile1, inputString, "UTF-8");
 		// --------------------------------
 
 		final String content = ReadFileExtensions.readFromFile(testFile1);
@@ -199,18 +190,17 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#string2File(String, String)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#string2File(String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testString2FileStringString() throws IOException
 	{
 		final File testFile1 = new File(this.testDir, "testString2FileFileString.txt");
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputString, testFile1.getAbsolutePath());
+		WriteFileQuietlyExtensions.string2File(inputString, testFile1.getAbsolutePath());
 		// --------------------------------
 
 		final String content = ReadFileExtensions.readFromFile(testFile1);
@@ -220,50 +210,21 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions}
+	 * Test method for {@link WriteFileQuietlyExtensions}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(WriteFileExtensions.class);
+		beanTester.testBean(WriteFileQuietlyExtensions.class);
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write(InputStream, OutputStream)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#write2File(Reader, Writer)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public void testWrite() throws IOException
-	{
-		long actual;
-		long expected;
-
-		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
-			"testReadFileInput.txt");
-		File fileout = new File(PathFinder.getSrcTestResourcesDir(),
-			"testWriteFileExtensionsWrite.out");
-		try (InputStream inputStream = StreamExtensions.getInputStream(testFile, true);
-			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true);)
-		{
-			WriteFileExtensions.write(inputStream, outputStream);
-		}
-
-		actual = ChecksumExtensions.getCheckSumAdler32(testFile);
-		expected = ChecksumExtensions.getCheckSumAdler32(fileout);
-		assertEquals(expected, actual);
-		fileout.deleteOnExit();
-	}
-
-	/**
-	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWrite2FileReaderWriter() throws IOException
 	{
@@ -272,12 +233,12 @@ public class WriteFileExtensionsTest extends FileTestCase
 		final File outputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.outp");
 		outputFile.createNewFile();
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
+		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
 		// --------------------------------
 		try (final Reader reader = StreamExtensions.getReader(inputFile);
 			final Writer writer = StreamExtensions.getWriter(outputFile);)
 		{
-			WriteFileExtensions.write2File(reader, writer);
+			WriteFileQuietlyExtensions.write2File(reader, writer);
 		}
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
@@ -288,42 +249,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write2File(Reader, Writer, boolean)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#write2File(String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testWrite2FileReaderWriterBoolean() throws IOException
-	{
-		final File inputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.inp");
-		inputFile.createNewFile();
-		final File outputFile = new File(this.testDir, "testWrite2FileReaderWriterBoolean.outp");
-		outputFile.createNewFile();
-		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
-		// --------------------------------
-		try (final Reader reader = StreamExtensions.getReader(inputFile);
-			final Writer writer = StreamExtensions.getWriter(outputFile);)
-		{
-			WriteFileExtensions.write2File(reader, writer, false);
-		}
-
-		final String content = ReadFileExtensions.readFromFile(outputFile);
-		this.actual = inputString.equals(content);
-		assertTrue("", this.actual);
-		inputFile.deleteOnExit();
-		outputFile.deleteOnExit();
-	}
-
-	/**
-	 * Test method for {@link WriteFileExtensions#write2File(String, String)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWrite2FileStringString() throws IOException
 	{
@@ -337,9 +267,9 @@ public class WriteFileExtensionsTest extends FileTestCase
 		final File outputFile = new File(this.testDir, "testWrite2FileStringString.outp");
 		outputFile.createNewFile();
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
+		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
 		// --------------------------------
-		WriteFileExtensions.write2File(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
+		WriteFileQuietlyExtensions.write2File(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
@@ -349,12 +279,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write2File(String, Writer)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#write2File(String, Writer)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWrite2FileStringWriter() throws IOException
 	{
@@ -364,12 +293,12 @@ public class WriteFileExtensionsTest extends FileTestCase
 			"testWrite2FileStringPrintWriterBoolean.outp");
 		outputFile.createNewFile();
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
+		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
 		// --------------------------------
 		try (final PrintWriter writer = (PrintWriter)StreamExtensions.getWriter(outputFile);)
 		{
 			final String path = inputFile.getAbsolutePath();
-			WriteFileExtensions.write2File(path, writer);
+			WriteFileQuietlyExtensions.write2File(path, writer);
 		}
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
@@ -380,43 +309,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#write2File(String, Writer, boolean)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#write2FileWithBuffer(String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testWrite2FileStringWriterBoolean() throws IOException
-	{
-		final File inputFile = new File(this.testDir, "testWrite2FileStringPrintWriterBoolean.inp");
-		inputFile.createNewFile();
-		final File outputFile = new File(this.testDir,
-			"testWrite2FileStringPrintWriterBoolean.outp");
-		outputFile.createNewFile();
-		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
-		// --------------------------------
-		try (final PrintWriter writer = (PrintWriter)StreamExtensions.getWriter(outputFile);)
-		{
-			final String path = inputFile.getAbsolutePath();
-			WriteFileExtensions.write2File(path, writer, false);
-		}
-
-		final String content = ReadFileExtensions.readFromFile(outputFile);
-		this.actual = inputString.equals(content);
-		assertTrue("", this.actual);
-		inputFile.deleteOnExit();
-		outputFile.deleteOnExit();
-	}
-
-	/**
-	 * Test method for {@link WriteFileExtensions#write2FileWithBuffer(String, String)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWrite2FileWithBuffer() throws IOException
 	{
@@ -425,9 +322,9 @@ public class WriteFileExtensionsTest extends FileTestCase
 		final File outputFile = new File(this.testDir, "testWrite2FileWithBuffer.outp");
 		outputFile.createNewFile();
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
+		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
 		// --------------------------------
-		WriteFileExtensions.write2FileWithBuffer(inputFile.getAbsolutePath(),
+		WriteFileQuietlyExtensions.write2FileWithBuffer(inputFile.getAbsolutePath(),
 			outputFile.getAbsolutePath());
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
@@ -438,66 +335,13 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeByteArrayToFile(File, byte[])}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@Test
-	public void testWriteByteArrayToFileFileByteArray() throws IOException
-	{
-		final byte[] expected = { -84, -19, 0, 5, 116, 0, 7, 70, 111, 111, 32, 98, 97, 114 };
-
-		final File destination = new File(this.testDir.getAbsoluteFile(),
-			"testStoreByteArrayToFile.txt");
-
-		WriteFileExtensions.writeByteArrayToFile(destination, expected);
-
-		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
-
-		for (int i = 0; i < compare.length; i++)
-		{
-			this.actual = compare[i] == expected[i];
-			assertTrue("", this.actual);
-		}
-		destination.deleteOnExit();
-	}
-
-	/**
-	 * Test method for {@link WriteFileExtensions#writeByteArrayToFile(String, byte[])}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@Test
-	public void testWriteByteArrayToFileStringByteArray() throws IOException
-	{
-		final byte[] expected = { -84, -19, 0, 5, 116, 0, 7, 70, 111, 111, 32, 98, 97, 114 };
-
-		final File destination = new File(this.testDir.getAbsoluteFile(),
-			"testStoreByteArrayToFile.txt");
-
-		WriteFileExtensions.writeByteArrayToFile(destination.getAbsolutePath(), expected);
-
-		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
-
-		for (int i = 0; i < compare.length; i++)
-		{
-			this.actual = compare[i] == expected[i];
-			assertTrue("", this.actual);
-		}
-		destination.deleteOnExit();
-	}
-
-	/**
-	 * Test method for {@link WriteFileExtensions#writeLinesToFile(Collection, File)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#writeLinesToFile(Collection, File)}.
 	 *
 	 * @throws FileNotFoundException
 	 *             the file not found exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWriteLinesToFileCollectionOfStringFile()
 		throws FileNotFoundException, IOException
@@ -520,7 +364,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 		expected.add("sala");
 		expected.add("bim");
 		final File testFile = new File(this.testResources, "testWriteLinesToFile.lst");
-		WriteFileExtensions.writeLinesToFile(expected, testFile);
+		WriteFileQuietlyExtensions.writeLinesToFile(expected, testFile);
 		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
 		this.actual = expected.equals(testList);
 		assertTrue("", this.actual);
@@ -528,14 +372,13 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeLinesToFile(Collection, File, String)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#writeLinesToFile(Collection, File, String)}.
 	 *
 	 * @throws FileNotFoundException
 	 *             the file not found exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWriteLinesToFileCollectionOfStringFileString()
 		throws FileNotFoundException, IOException
@@ -553,7 +396,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 		expected.add("test5");
 		expected.add("test6");
 		final File testFile = new File(this.testResources, "testWriteLines.clctn");
-		WriteFileExtensions.writeLinesToFile(expected, testFile, "UTF-8");
+		WriteFileQuietlyExtensions.writeLinesToFile(expected, testFile, "UTF-8");
 		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
 		this.actual = expected.equals(testList);
 		assertTrue("", this.actual);
@@ -561,14 +404,13 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeLinesToFile(File, List, String)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#writeLinesToFile(File, List, String)}.
 	 *
 	 * @throws FileNotFoundException
 	 *             the file not found exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWriteLinesToFileFileListOfStringString()
 		throws FileNotFoundException, IOException
@@ -591,7 +433,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 		expected.add("sala");
 		expected.add("bim");
 		final File testFile = new File(this.testResources, "testWriteLinesToFile.lst");
-		WriteFileExtensions.writeLinesToFile(testFile, expected, null);
+		WriteFileQuietlyExtensions.writeLinesToFile(testFile, expected, null);
 		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
 		final boolean result = expected.equals(testList);
 		assertTrue("", result);
@@ -599,12 +441,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeProperties2File(String, Properties)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#writeProperties2File(String, Properties)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWriteProperties2File() throws IOException
 	{
@@ -615,7 +456,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 		properties.setProperty("testkey1", "testvalue1");
 		properties.setProperty("testkey2", "testvalue2");
 		properties.setProperty("testkey3", "testvalue3");
-		WriteFileExtensions.writeProperties2File(ap, properties);
+		WriteFileQuietlyExtensions.writeProperties2File(ap, properties);
 		final Properties compare = ReadFileExtensions.readPropertiesFromFile(ap);
 		this.actual = properties.equals(compare);
 		assertTrue(this.actual);
@@ -623,12 +464,11 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeStringToFile(File, String, String)}.
+	 * Test method for {@link WriteFileQuietlyExtensions#writeStringToFile(File, String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testWriteStringToFile() throws IOException
 	{
@@ -636,7 +476,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileExtensions.writeStringToFile(source, inputString, null);
+		WriteFileQuietlyExtensions.writeStringToFile(source, inputString, null);
 
 		final String compare = ReadFileExtensions.readFromFile(source);
 		this.actual = expected.equals(compare);
