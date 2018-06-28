@@ -322,22 +322,6 @@ public class RenameFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link RenameFileExtensions#getAbsolutPathWithoutFilename(File)}.
-	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testGetAbsolutPathWithoutFilename()
-	{
-		String actual;
-		String expected;
-		String absolutePath = this.testDir.getAbsolutePath();
-		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
-		actual = RenameFileExtensions.getAbsolutPathWithoutFilename(srcFile);
-		expected = absolutePath + "/";
-		assertEquals(actual, expected);
-	}
-
-	/**
 	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for directory
 	 */
 	@Test

@@ -4,6 +4,11 @@
 Version 4.22-SNAPSHOT
 -------------
 
+CHANGED:
+
+- unit tests extended for improve code coverage
+- removed deprecated methods, enums and classes 
+
 Version 4.21
 -------------
 

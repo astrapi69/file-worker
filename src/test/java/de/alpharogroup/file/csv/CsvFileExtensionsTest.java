@@ -56,7 +56,7 @@ import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
@@ -140,7 +140,7 @@ public class CsvFileExtensionsTest
 			sb.append(System.lineSeparator());
 			id++;
 		}
-		WriteFileExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
+		WriteFileQuietlyExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
 	}
 
 	/**

@@ -261,22 +261,6 @@ public final class RenameFileExtensions
 	}
 
 	/**
-	 * Gets the absolut path without the filename.
-	 *
-	 * @param file
-	 *            the file.
-	 *
-	 * @return the absolut path without filename.
-	 * @deprecated use instead the same name method from {@code RenameFileExtensions}. <br>
-	 *             <br>
-	 *             Note: will be removed in next minor release
-	 */
-	public static String getAbsolutPathWithoutFilename(final File file)
-	{
-		return FileExtensions.getAbsolutPathWithoutFilename(file);
-	}
-
-	/**
 	 * Moves the given source file to the destination Directory.
 	 *
 	 * @param srcFile
