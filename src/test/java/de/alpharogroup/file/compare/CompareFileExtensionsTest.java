@@ -25,6 +25,7 @@
 package de.alpharogroup.file.compare;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
@@ -43,7 +44,7 @@ import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 
 /**
  * The unit test class for the class {@link CompareFileExtensions}.
@@ -70,10 +71,10 @@ public class CompareFileExtensionsTest extends FileTestCase
 
 		testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull day!!!");
 	}
 
 	@Override
@@ -185,6 +186,31 @@ public class CompareFileExtensionsTest extends FileTestCase
 		actual = CompareFileExtensions.compareFiles(testFile1, testFile3, true);
 		expected = true;
 		assertEquals(expected, actual);
+
+		final String filePrefix1 = "testCompareFiles1";
+		final String filePrefix2 = "testCompareFiles2";
+		final String oldFileSuffix = ".txt";
+		final String newFileSuffix = ".rtf";
+		final File source = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+		File compare = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+
+		actual = CompareFileExtensions.compareFiles(source, compare, false);
+		assertTrue("File should be equal cause they dont exist.", actual);
+		compare = new File(this.deepDir, filePrefix2 + newFileSuffix);
+		actual = CompareFileExtensions.compareFiles(source, compare, false);
+		assertFalse("File should not be equal.", actual);
+		WriteFileQuietlyExtensions.string2File(source, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(compare, "Its a beautifull day!!!");
+		actual = CompareFileExtensions.compareFiles(source, compare, false);
+		assertTrue("File should be equal.", actual);
+		actual = CompareFileExtensions.compareFiles(source, compare, true);
+		assertTrue("File should be equal.", actual);
+		WriteFileQuietlyExtensions.string2File(compare, "Its a beautifull evening!!!");
+		actual = CompareFileExtensions.compareFiles(source, compare, true);
+		assertFalse("File should not be equal.", actual);
+		WriteFileQuietlyExtensions.string2File(compare, "Its a beautifull boy!!!");
+		actual = CompareFileExtensions.compareFiles(source, compare, true);
+		assertFalse("File should not be equal.", actual);
 	}
 
 	/**
@@ -389,7 +415,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	{
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
 
 		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
 			"testFindFilesRecursive.txt");
@@ -399,9 +425,9 @@ public class CompareFileExtensionsTest extends FileTestCase
 
 		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir, this.secondTestDir);
@@ -420,7 +446,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		List<IFileCompareResultBean> expected;
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
 
 		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
 			"testFindFilesRecursive.txt");
@@ -430,9 +456,9 @@ public class CompareFileExtensionsTest extends FileTestCase
 
 		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
 		actual = CompareFileExtensions.findEqualFiles(this.secondTestDir, this.testDir, false,
 			false, false, false, false);
@@ -507,7 +533,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	{
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
 
 		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
 			"testFindFilesRecursive.txt");
@@ -517,9 +543,9 @@ public class CompareFileExtensionsTest extends FileTestCase
 
 		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
 		final List<IFileContentResultBean> contentfound = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir, this.secondTestDir);
@@ -538,7 +564,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		List<IFileContentResultBean> expected;
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
 
 		final File testFile4 = new File(this.secondTestDir.getAbsoluteFile(),
 			"testFindFilesRecursive.txt");
@@ -548,9 +574,9 @@ public class CompareFileExtensionsTest extends FileTestCase
 
 		final File testFile6 = new File(this.secondTestDir, "testFindFilesRecursive.cvs");
 
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "Its a beautifull evening!!!????");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
 		actual = CompareFileExtensions.findEqualFilesWithSameContent(this.secondTestDir,
 			this.testDir, false, false, false, false, false, false);

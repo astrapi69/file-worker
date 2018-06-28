@@ -38,7 +38,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -88,7 +88,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 		final File unzippedFile1 = new File(this.unzipDir, file1);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), file1);
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
 
 		Zip4jExtensions.zipFiles(zip4jZipFile, testFile1);
 		// Test to extract...
@@ -152,8 +152,8 @@ public class Zip4jExtensionsTest extends FileTestCase
 		final File unzippedFile2 = new File(this.unzipDir, file2);
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), file2);
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
 
 		Zip4jExtensions.zipFiles(zip4jZipFile, testFile1, testFile2);
 

@@ -53,7 +53,7 @@ import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
 import de.alpharogroup.file.filter.TxtFileFilter;
 import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 
 /**
  * The unit test class for the class {@link DeleteFileExtensions}
@@ -118,7 +118,7 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		assertTrue("", this.actual);
 
 		final File testFile1 = new File(this.testDir, "testCheckFile.txt");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		ex = DeleteFileExtensions.checkFile(testFile1);
 		this.actual = ex != null;
 		assertTrue("", this.actual);
@@ -145,11 +145,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleteAllFiles3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleteAllFiles4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleteAllFiles5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
 		assertTrue("", this.actual);
@@ -204,11 +204,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleteAllFilesWithSuffix3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleteAllFilesWithSuffix4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleteAllFilesWithSuffix5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 
 		DeleteFileExtensions.deleteAllFilesWithSuffix(this.testDir, ".txt");
 
@@ -240,10 +240,10 @@ public class DeleteFileExtensionsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull day!!!");
 		// this list is for deletion...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);
@@ -273,11 +273,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDelete3.txt");
 		final File testFile4 = new File(this.testDir, "testDelete4.tft");
 		final File testFile5 = new File(this.deepDir, "testDelete5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
 		assertTrue("", this.actual);
@@ -340,11 +340,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleteFile3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleteFile4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleteFile5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
 		assertTrue("", this.actual);
@@ -407,11 +407,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = this.deepDir.exists();
 		assertTrue("", this.actual);
@@ -474,11 +474,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		source = this.deepDir;
 		includeFileFilter = new TxtFileFilter();
 		DeleteFileExtensions.deleteFilesWithFileFilter(source, includeFileFilter);
@@ -529,11 +529,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		source = this.testDir;
 		includeFileFilter = new MultiplyExtensionsFileFilter(".txt", ".tft");
 		excludeFileFilter = new MultiplyExtensionsFileFilter(".cvs", ".tft");
@@ -592,11 +592,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		source = this.deepDir;
 
 		acceptDir = false;
@@ -652,11 +652,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		final File testFile3 = new File(this.deepDir, "testDeleleFiles3.txt");
 		final File testFile4 = new File(this.testDir, "testDeleleFiles4.tft");
 		final File testFile5 = new File(this.deepDir, "testDeleleFiles5.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
 		source = this.testDir;
 		acceptDir = true;
 		includeFileFilter = new MultiplyExtensionsFilenameFilter(ListFactory.newArrayList(".txt"),

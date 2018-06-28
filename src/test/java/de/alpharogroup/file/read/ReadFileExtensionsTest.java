@@ -33,9 +33,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
@@ -46,7 +49,11 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.array.ArrayFactory;
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
+import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link ReadFileExtensions}.
@@ -102,6 +109,55 @@ public class ReadFileExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link ReadFileExtensions#inputStream2String(InputStream)}
+	 *
+	 * @throws DirectoryAllreadyExistsException
+	 *             the directory allready exists exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
+	 */
+	@Test
+	public void testInputStream2String()
+		throws DirectoryAllreadyExistsException, IOException, FileDoesNotExistException
+	{
+
+		final File inputFile = new File(this.testDir, "testInputStream2String.inp");
+		inputFile.createNewFile();
+		final String inputString = "Its a beautifull day!!!\n" + "This is the second line.\n"
+			+ "This is the third line. ";
+		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
+		// --------------------------------
+		final InputStream is = StreamExtensions.getInputStream(inputFile);
+		final String compare = ReadFileExtensions.inputStream2String(is);
+
+		this.actual = inputString.equals(compare);
+		assertTrue("", this.actual);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#openFileReader(String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testOpenFileReader() throws IOException
+	{
+		final File testFile1 = new File(this.testDir, "testOpenFileReader.txt");
+		final String inputString = "Its a beautifull day!!!";
+		final String expected = inputString;
+		final String ap = testFile1.getAbsolutePath();
+		WriteFileQuietlyExtensions.string2File(inputString, ap);
+
+		final Reader reader = ReadFileExtensions.openFileReader(ap);
+		final String compare = ReadFileExtensions.reader2String(reader);
+		this.actual = expected.equals(compare);
+		assertTrue("", this.actual);
+	}
+
+	/**
 	 * Test method for {@link ReadFileExtensions#readFromFile(File)}
 	 */
 	@Test
@@ -110,9 +166,18 @@ public class ReadFileExtensionsTest extends FileTestCase
 		final File source = new File(this.test.getAbsoluteFile(), "testReadFileInput.txt");
 		final String sourceContent = ReadFileExtensions.readFromFile(source);
 		final File output = new File(this.test.getAbsoluteFile(), "testReadFileOutput.txt");
-		WriteFileExtensions.string2File(output, sourceContent);
+		WriteFileQuietlyExtensions.string2File(output, sourceContent);
 		final String outputContent = ReadFileExtensions.readFromFile(output);
 		assertEquals(sourceContent, outputContent);
+
+		final File testFile1 = new File(this.testDir, "testReadFromFile.txt");
+		final String inputString = "Its a beautifull day!!!";
+		WriteFileQuietlyExtensions.string2File(testFile1, inputString);
+		// --------------------------------
+
+		final String content = ReadFileExtensions.readFromFile(testFile1);
+		this.actual = inputString.equals(content);
+		assertTrue("", this.actual);
 	}
 
 	/**
@@ -130,6 +195,62 @@ public class ReadFileExtensionsTest extends FileTestCase
 		actual = ReadFileExtensions.readFromFile(file, Charset.forName("UTF-8"));
 		expected = "foo bar\n";
 		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readHeadLine(String)}.
+	 *
+	 * @throws DirectoryAllreadyExistsException
+	 *             the directory allready exists exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testReadHeadLine() throws DirectoryAllreadyExistsException, IOException
+	{
+		final File inputFile = new File(this.testDir, "testReadHeadLine.inp");
+		inputFile.createNewFile();
+
+		final String inputString = "Its a beautifull day!!!\n This is the second line.\nThis is the third line. ";
+		final String expected = "Its a beautifull day!!!";
+		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
+		// --------------------------------
+		final String compare = ReadFileExtensions.readHeadLine(inputFile.getAbsolutePath());
+
+		this.actual = expected.equals(compare);
+		assertTrue("", this.actual);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readLinesInList(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testReadLinesInList() throws IOException
+	{
+		final List<String> expected = new ArrayList<>();
+		expected.add("test1");
+		expected.add("test2");
+		expected.add("test3");
+		expected.add("bla");
+		expected.add("fasel");
+		expected.add("and");
+		expected.add("so");
+		expected.add("on");
+		expected.add("test4");
+		expected.add("test5");
+		expected.add("test6");
+		expected.add("foo");
+		expected.add("bar");
+		expected.add("sim");
+		expected.add("sala");
+		expected.add("bim");
+		final File testFile = new File(this.testResources, "testReadLinesInList.lst");
+		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
+		this.actual = expected.equals(testList);
+		assertTrue("", this.actual);
 	}
 
 	/**
@@ -189,6 +310,30 @@ public class ReadFileExtensionsTest extends FileTestCase
 		actual = list.size() == 185;
 		expected = true;
 		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readPropertiesFromFile(String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testReadPropertiesFromFile() throws IOException
+	{
+		final File tp = new File(this.testResources, "testReadPropertiesFromFile.properties");
+		final String ap = tp.getAbsolutePath();
+		Properties compare = new Properties();
+		final Properties properties = new Properties();
+		properties.setProperty("testkey1", "testvalue1");
+		properties.setProperty("testkey2", "testvalue2");
+		properties.setProperty("testkey3", "testvalue3");
+		WriteFileQuietlyExtensions.writeProperties2File(ap, properties);
+		compare = ReadFileExtensions.readPropertiesFromFile(ap);
+		this.actual = properties.equals(compare);
+		assertTrue(this.actual);
+		// clean up
+		DeleteFileExtensions.delete(tp);
 	}
 
 	/**

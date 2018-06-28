@@ -54,7 +54,7 @@ import de.alpharogroup.file.filter.TxtFileFilter;
 import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
 import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 
 /**
  * The unit test class for the class {@link CopyFileExtensions}.
@@ -130,7 +130,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepDir);
 			assertTrue("The directory " + srcDeepDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDeepDir, deepestDirName);
@@ -141,7 +141,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 		}
 
 		// Test to copy the source directory to the destination directory.
@@ -212,7 +212,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -223,7 +223,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 		}
 
 		// Test to copy the source directory to the destination directory.
@@ -292,8 +292,8 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
 
 		}
 		final String deepestDirName = "deepest";
@@ -307,8 +307,8 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
 		}
 
 		// define a filefilter object...
@@ -389,9 +389,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -406,9 +406,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile3,
+				"Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -511,10 +512,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
-			WriteFileExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -529,9 +530,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile3,
+				"Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -636,8 +638,8 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -650,8 +652,8 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
 		}
 
 		// define a filefilter object...
@@ -731,9 +733,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -748,9 +750,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile3,
+				"Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -831,7 +834,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileExtensions.string2File(source, inputString);
+		WriteFileQuietlyExtensions.string2File(source, inputString);
 
 		this.actual = CopyFileExtensions.copyFile(source, destination);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
@@ -872,7 +875,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileExtensions.string2File(source, inputString);
+		WriteFileQuietlyExtensions.string2File(source, inputString);
 
 		this.actual = CopyFileExtensions.copyFile(source, destination, false);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
@@ -914,7 +917,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final String filePrefix = "testCopyFile";
 		final String txtSuffix = ".txt";
 		final File srcFile = new File(this.testDir, filePrefix + txtSuffix);
-		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
@@ -963,7 +966,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final String filePrefix = "testCopyFile";
 		final String txtSuffix = ".txt";
 		final File srcFile = new File(this.testDir, filePrefix + txtSuffix);
-		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{

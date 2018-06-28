@@ -42,7 +42,7 @@ import de.alpharogroup.comparators.StringComparator;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -118,7 +118,7 @@ public class SortFileExtensionsTest
 			assertEquals(expected, actual);
 		}
 		// create initial state...
-		WriteFileExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");
+		WriteFileQuietlyExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");
 	}
 
 	/**

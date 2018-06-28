@@ -24,9 +24,11 @@
  */
 package de.alpharogroup.file.zip;
 
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -37,9 +39,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.FileConst;
 import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 
 /**
  * The unit test class for the class {@link ZipExtensions}.
@@ -76,12 +79,10 @@ public class ZipExtensionsTest extends ZipTestCase
 	}
 
 	/**
-	 * Test method for.
+	 * Test method for {@link ZipExtensions#extractZipEntry(ZipFile, ZipEntry, File)}
 	 *
 	 * @throws Exception
-	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipExtensions#extractZipEntry(java.util.zip.ZipFile, java.util.zip.ZipEntry, java.io.File)}
-	 *             .
+	 *             catch all exception and throw
 	 */
 	@Test(enabled = true)
 	public void testExtractZipEntry() throws Exception
@@ -109,15 +110,15 @@ public class ZipExtensionsTest extends ZipTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), file9);
 		final File unzippedFile9 = new File(this.unzipDirDeeperDir, file9);
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		ZipExtensions.zip(this.testDir, zipFile);
 
@@ -148,12 +149,29 @@ public class ZipExtensionsTest extends ZipTestCase
 	}
 
 	/**
+	 * Test method for {@link ZipExtensions#isZip(String)}
+	 */
+	@Test
+	public void testIsZip()
+	{
+		final int length = FileConst.ZIP_EXTENSIONS.length;
+		for (int i = 0; i < length; i++)
+		{
+			final File testIsZip = new File(this.testResources,
+				"testIsZip" + FileConst.ZIP_EXTENSIONS[i]);
+			this.actual = ZipExtensions.isZip(testIsZip.getName());
+			assertTrue("The file " + testIsZip.getName() + " should be a zipfile.", this.actual);
+		}
+		this.actual = ZipExtensions.isZip(this.testResources.getName());
+		assertFalse("The file " + this.testResources.getName() + " should not be a zipfile.",
+			this.actual);
+	}
+
+	/**
 	 * Test method for.
 	 *
 	 * @throws Exception
-	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipExtensions#unzip(java.util.zip.ZipFile, java.io.File)}
-	 *             .
+	 *             the exception {@link ZipExtensions#unzip(ZipFile, File)} .
 	 */
 	@Test
 	public void testUnzip() throws Exception
@@ -192,15 +210,15 @@ public class ZipExtensionsTest extends ZipTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), file9);
 		final File unzippedFile9 = new File(this.unzipDirDeeperDir, file9);
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		ZipExtensions.zip(this.testDir, zipFile);
 
@@ -256,8 +274,7 @@ public class ZipExtensionsTest extends ZipTestCase
 	 * Test method for.
 	 *
 	 * @throws Exception
-	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipExtensions#zip(java.io.File, java.io.File)}.
+	 *             the exception {@link ZipExtensions#zip(File, File)}.
 	 */
 	@Test
 	public void testZipFileFile() throws Exception
@@ -281,15 +298,15 @@ public class ZipExtensionsTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		ZipExtensions.zip(this.testDir, zipFile);
 
@@ -307,9 +324,7 @@ public class ZipExtensionsTest extends ZipTestCase
 	 * Test method for.
 	 *
 	 * @throws Exception
-	 *             the exception
-	 *             {@link de.alpharogroup.file.zip.ZipExtensions#zip(java.io.File, java.io.File, java.io.FilenameFilter)}
-	 *             .
+	 *             the exception {@link ZipExtensions#zip(File, File, FilenameFilter)} .
 	 */
 	@Test
 	public void testZipFileFileFilenameFilter() throws Exception
@@ -336,15 +351,15 @@ public class ZipExtensionsTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		final SimpleFilenameFilter txtFilenameFilter = new SimpleFilenameFilter(".txt", false);
 

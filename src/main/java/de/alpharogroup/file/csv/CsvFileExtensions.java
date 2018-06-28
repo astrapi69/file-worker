@@ -39,7 +39,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
 import lombok.experimental.UtilityClass;
@@ -145,7 +145,7 @@ public final class CsvFileExtensions
 	{
 		final List<String> list = readLinesInList(input, "UTF-8");
 		final String sb = formatListToString(list);
-		WriteFileExtensions.writeStringToFile(output, sb, encoding);
+		WriteFileQuietlyExtensions.writeStringToFile(output, sb, encoding);
 	}
 
 	/**
@@ -631,7 +631,7 @@ public final class CsvFileExtensions
 			sb.append(element);
 			sb.append("\n");
 		}
-		WriteFileExtensions.writeStringToFile(output, sb.toString(), encoding);
+		WriteFileQuietlyExtensions.writeStringToFile(output, sb.toString(), encoding);
 	}
 
 }

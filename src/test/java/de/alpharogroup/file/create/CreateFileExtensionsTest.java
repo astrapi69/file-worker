@@ -34,8 +34,11 @@ import java.util.List;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 
@@ -43,8 +46,34 @@ import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
  * The class {@link CreateFileExtensionsTest} has unit test for the class
  * {@link CreateFileExtensions}.
  */
-public class CreateFileExtensionsTest
+public class CreateFileExtensionsTest extends FileTestCase
 {
+
+	/**
+	 * Sets up method will be invoked before every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+	}
 
 	/**
 	 * Test create directories.
@@ -100,7 +129,7 @@ public class CreateFileExtensionsTest
 	@Test(enabled = true)
 	public void testNewDirectory() throws DirectoryAllreadyExistsException, IOException
 	{
-		final File dir = new File("test.dir");
+		final File dir = new File(this.testResources, "testCreateDirectory");
 		// if the directory exist delete it to prevent a DirectoryAllreadyExistsException.
 		if (dir.exists())
 		{
