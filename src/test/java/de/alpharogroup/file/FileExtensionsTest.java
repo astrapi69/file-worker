@@ -24,6 +24,7 @@
  */
 package de.alpharogroup.file;
 
+import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
@@ -140,6 +141,48 @@ public class FileExtensionsTest extends FileTestCase
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(FileExtensions.class);
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#getAbsolutPathWithoutFilename(File)}.
+	 */
+	@Test
+	public void testGetAbsolutPathWithoutFilename()
+	{
+		String actual;
+		String expected;
+		String absolutePath = this.testDir.getAbsolutePath();
+		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
+		actual = FileExtensions.getAbsolutPathWithoutFilename(srcFile);
+		expected = absolutePath + "/";
+		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#getTempDir()}.
+	 */
+	@Test
+	public void testGetTempDir()
+	{
+		File actual;
+		File expected;
+		actual = FileExtensions.getTempDir();
+		expected = new File(System.getProperty("java.io.tmpdir"));
+		assertEquals(actual, expected);
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#isOpen(File)}.
+	 */
+	@Test
+	public void testIsOpen()
+	{
+		boolean actual;
+		boolean expected;
+		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
+		actual = FileExtensions.isOpen(srcFile);
+		expected = false;
+		assertEquals(actual, expected);
 	}
 
 }

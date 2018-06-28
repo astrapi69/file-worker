@@ -324,6 +324,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link RenameFileExtensions#getAbsolutPathWithoutFilename(File)}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetAbsolutPathWithoutFilename()
 	{

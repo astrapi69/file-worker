@@ -34,7 +34,6 @@ import java.nio.channels.FileLock;
 import org.apache.log4j.Logger;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.rename.RenameFileExtensions;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -74,13 +73,16 @@ public final class FileExtensions
 	 * @param file
 	 *            the file.
 	 * @return 's the absolut path without filename.
-	 * @deprecated use instead the same name method from {@code RenameFileExtensions}. <br>
-	 *             <br>
-	 *             Note: will be removed in next minor release
 	 */
 	public static String getAbsolutPathWithoutFilename(final File file)
 	{
-		return RenameFileExtensions.getAbsolutPathWithoutFilename(file);
+		final String absolutePath = file.getAbsolutePath();
+		int lastSlash_index = absolutePath.lastIndexOf("/");
+		if (lastSlash_index < 0)
+		{
+			lastSlash_index = absolutePath.lastIndexOf("\\");
+		}
+		return absolutePath.substring(0, lastSlash_index + 1);
 	}
 
 	/**

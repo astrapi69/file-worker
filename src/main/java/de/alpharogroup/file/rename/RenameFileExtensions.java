@@ -267,16 +267,14 @@ public final class RenameFileExtensions
 	 *            the file.
 	 *
 	 * @return the absolut path without filename.
+	 * @deprecated use instead the same name method from {@code RenameFileExtensions}. <br>
+	 *             <br>
+	 *             Note: will be removed in next minor release
 	 */
 	public static String getAbsolutPathWithoutFilename(final File file)
 	{
-		final String absolutePath = file.getAbsolutePath();
-		int lastSlash_index = absolutePath.lastIndexOf("/");
-		if (lastSlash_index < 0)
-		{
-			lastSlash_index = absolutePath.lastIndexOf("\\");
-		}
-		return absolutePath.substring(0, lastSlash_index + 1);
+		return FileExtensions
+			.getAbsolutPathWithoutFilename(file);
 	}
 
 	/**
@@ -404,7 +402,7 @@ public final class RenameFileExtensions
 			}
 			return false;
 		}
-		final String fileNameAbsolutPathPrefix = RenameFileExtensions
+		final String fileNameAbsolutPathPrefix = FileExtensions
 			.getAbsolutPathWithoutFilename(fileToRename);
 		final StringBuffer sb = new StringBuffer();
 		sb.append(fileNameAbsolutPathPrefix);
