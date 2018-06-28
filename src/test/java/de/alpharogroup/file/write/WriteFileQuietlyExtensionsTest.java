@@ -84,7 +84,8 @@ public class WriteFileQuietlyExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileQuietlyExtensions#readSourceFileAndWriteDestFile(String, String)}.
+	 * Test method for
+	 * {@link WriteFileQuietlyExtensions#readSourceFileAndWriteDestFile(String, String)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -269,7 +270,8 @@ public class WriteFileQuietlyExtensionsTest extends FileTestCase
 		final String inputString = "Its a beautifull day!!!";
 		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
 		// --------------------------------
-		WriteFileQuietlyExtensions.write2File(inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
+		WriteFileQuietlyExtensions.write2File(inputFile.getAbsolutePath(),
+			outputFile.getAbsolutePath());
 
 		final String content = ReadFileExtensions.readFromFile(outputFile);
 		this.actual = inputString.equals(content);
@@ -372,7 +374,8 @@ public class WriteFileQuietlyExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileQuietlyExtensions#writeLinesToFile(Collection, File, String)}.
+	 * Test method for
+	 * {@link WriteFileQuietlyExtensions#writeLinesToFile(Collection, File, String)}.
 	 *
 	 * @throws FileNotFoundException
 	 *             the file not found exception

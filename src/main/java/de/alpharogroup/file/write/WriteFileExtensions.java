@@ -307,8 +307,7 @@ public final class WriteFileExtensions
 	 *            The PrintWriter to write into.
 	 * @param closeWriter
 	 *            If true then close the outputStream otherwise keep open.
-	 * @deprecated use instead the same name method without the closeWriter flag.
-	 *             <br>
+	 * @deprecated use instead the same name method without the closeWriter flag. <br>
 	 *             <br>
 	 *             Note: will be removed in the next minor release.
 	 */

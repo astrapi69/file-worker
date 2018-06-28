@@ -97,9 +97,9 @@ public class PathFinderTest extends FileTestCase
 		actual = PathFinder.getProjectDirectory();
 		expected = pp.getAbsoluteFile();
 		String expectedPath = expected.getPath();
-		expectedPath = expectedPath.substring(0, expectedPath.length()-2);
+		expectedPath = expectedPath.substring(0, expectedPath.length() - 2);
 		String actualPath = actual.getPath();
-		assertEquals(actualPath, expectedPath);		
+		assertEquals(actualPath, expectedPath);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class PathFinderTest extends FileTestCase
 		actual = PathFinder.getProjectDirectory(pp);
 		expected = pp.getAbsoluteFile();
 		String expectedPath = expected.getPath();
-		expectedPath = expectedPath.substring(0, expectedPath.length()-2);
+		expectedPath = expectedPath.substring(0, expectedPath.length() - 2);
 		String actualPath = actual.getPath();
 		assertEquals(actualPath, expectedPath);
 	}
@@ -127,12 +127,12 @@ public class PathFinderTest extends FileTestCase
 	{
 		File actual;
 		File expected;
-		
+
 		actual = PathFinder.getRelativePath(testDir, "foo", "bar");
 		expected = new File(testDir, "foo");
 		expected = new File(expected, "bar");
 		assertEquals(actual, expected);
-		
+
 		actual = PathFinder.getRelativePath(testDir, "foo", "bar", "bla");
 		expected = new File(testDir, "foo");
 		expected = new File(expected, "bar");
@@ -203,7 +203,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcMainJavaDir();
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_MAIN_JAVA);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_MAIN_JAVA);
 		assertEquals(actual, expected);
 	}
 
@@ -216,7 +217,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcMainJavaDir(PathFinder.getProjectDirectory());
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_MAIN_JAVA);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_MAIN_JAVA);
 		assertEquals(actual, expected);
 	}
 
@@ -229,7 +231,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcMainResourcesDir();
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_MAIN_RESOURCES);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_MAIN_RESOURCES);
 		assertEquals(actual, expected);
 	}
 
@@ -242,7 +245,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcMainResourcesDir(PathFinder.getProjectDirectory());
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_MAIN_RESOURCES);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_MAIN_RESOURCES);
 		assertEquals(actual, expected);
 	}
 
@@ -255,7 +259,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcTestJavaDir();
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_TEST_JAVA);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_TEST_JAVA);
 		assertEquals(actual, expected);
 	}
 
@@ -268,7 +273,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcTestJavaDir(PathFinder.getProjectDirectory());
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_TEST_JAVA);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_TEST_JAVA);
 		assertEquals(actual, expected);
 	}
 
@@ -281,7 +287,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcTestResourcesDir();
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_TEST_RESOURCES);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_TEST_RESOURCES);
 		assertEquals(actual, expected);
 	}
 
@@ -294,7 +301,8 @@ public class PathFinderTest extends FileTestCase
 		File actual;
 		File expected;
 		actual = PathFinder.getSrcTestResourcesDir(PathFinder.getProjectDirectory());
-		expected = new File(PathFinder.getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_TEST_RESOURCES);
+		expected = new File(PathFinder.getProjectDirectory(),
+			PathFinder.SOURCE_FOLDER_SRC_TEST_RESOURCES);
 		assertEquals(actual, expected);
 	}
 
