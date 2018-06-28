@@ -39,14 +39,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ReadFileExtensions} helps you reading files.
@@ -54,10 +53,9 @@ import de.alpharogroup.io.StreamExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class ReadFileExtensions
 {
-	/** The LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(ReadFileExtensions.class.getName());
 
 	/**
 	 * Get a Byte array from the given file.
@@ -65,8 +63,10 @@ public final class ReadFileExtensions
 	 * @param tmpFile
 	 *            the tmp file
 	 * @return the filecontent as Byte array object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static Byte[] getFilecontentAsByteObjectArray(final File tmpFile)
+	public static Byte[] getFilecontentAsByteObjectArray(final File tmpFile) throws IOException
 	{
 		return toObject(toByteArray(tmpFile));
 	}
@@ -77,8 +77,10 @@ public final class ReadFileExtensions
 	 * @param inputStream
 	 *            The InputStream from where we read.
 	 * @return The String that we read from the InputStream.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static String inputStream2String(final InputStream inputStream)
+	public static String inputStream2String(final InputStream inputStream) throws IOException
 	{
 		return inputStream2String(inputStream, Charset.forName("UTF-8"));
 	}
@@ -91,8 +93,11 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the encoding
 	 * @return The String that we read from the InputStream.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String inputStream2String(final InputStream inputStream, final Charset encoding)
+		throws IOException
 	{
 		return ReadFileExtensions.reader2String(new InputStreamReader(inputStream, encoding));
 	}
@@ -115,31 +120,24 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * The Method reader2String() reads the data from the Reader into a String.
+	 * The Method reader2String() reads the data from the Reader into a String.<br>
+	 * <br>
+	 * Note: Reader will not be closed.
 	 *
 	 * @param reader
 	 *            The Reader from where we read.
 	 * @return The String that we read from the Reader.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static String reader2String(final Reader reader)
+	public static String reader2String(final Reader reader) throws IOException
 	{
 		final StringBuffer stringBuffer = new StringBuffer();
 		final char[] charArray = new char[FileConst.BLOCKSIZE];
 		int tmp;
-		try
+		while ((tmp = reader.read(charArray)) > 0)
 		{
-			while ((tmp = reader.read(charArray)) > 0)
-			{
-				stringBuffer.append(charArray, 0, tmp);
-			}
-		}
-		catch (final IOException e)
-		{
-			LOGGER.log(Level.SEVERE, "reader2String failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
+			stringBuffer.append(charArray, 0, tmp);
 		}
 		return stringBuffer.toString();
 	}
@@ -150,8 +148,10 @@ public final class ReadFileExtensions
 	 * @param file
 	 *            The file.
 	 * @return Returns a byte array or null.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static byte[] readFileToBytearray(final File file)
+	public static byte[] readFileToBytearray(final File file) throws IOException
 	{
 		return toByteArray(file);
 	}
@@ -192,28 +192,18 @@ public final class ReadFileExtensions
 	 * @param inputFile
 	 *            The Path to the File and name from the file from where we read.
 	 * @return The first line from the file.
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String readHeadLine(final String inputFile)
+		throws FileNotFoundException, IOException
 	{
-		BufferedReader reader = null;
 		String headLine = null;
-		try
+		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)))
 		{
-			reader = new BufferedReader(new FileReader(inputFile));
 			headLine = reader.readLine();
-			reader.close();
-		}
-		catch (final FileNotFoundException e)
-		{
-			LOGGER.log(Level.SEVERE, "readHeadLine failed...\n" + e.getMessage(), e);
-		}
-		catch (final IOException e)
-		{
-			LOGGER.log(Level.SEVERE, "readHeadLine failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
 		}
 		return headLine;
 	}
@@ -344,22 +334,12 @@ public final class ReadFileExtensions
 	{
 		// The List where the lines from the File to save.
 		final List<String> output = new ArrayList<>();
-		InputStreamReader isr = null;
-		BufferedReader reader = null;
-		try
+		try (
+			InputStreamReader isr = encoding == null
+				? new InputStreamReader(input)
+				: new InputStreamReader(input, encoding);
+			BufferedReader reader = new BufferedReader(isr);)
 		{
-			// create the inputstreamreader
-			if (encoding == null)
-			{
-				isr = new InputStreamReader(input);
-			}
-			else
-			{
-
-				isr = new InputStreamReader(input, encoding);
-			}
-			// create the bufferedreader
-			reader = new BufferedReader(isr);
 			// the line.
 			String line = null;
 			// read all lines from the file
@@ -380,11 +360,6 @@ public final class ReadFileExtensions
 			}
 			while (true);
 		}
-		finally
-		{
-			StreamExtensions.closeReader(isr);
-			StreamExtensions.closeReader(reader);
-		}
 		// return the list with all lines from the file.
 		return output;
 	}
@@ -396,23 +371,15 @@ public final class ReadFileExtensions
 	 * @param filename
 	 *            The Filename from the Properties-file.
 	 * @return The Properties or null if an error occurs.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static Properties readPropertiesFromFile(final String filename)
+	public static Properties readPropertiesFromFile(final String filename) throws IOException
 	{
 		final Properties properties = new Properties();
-		FileInputStream fis = null;
-		try
+		try (FileInputStream fis = new FileInputStream(filename))
 		{
-			fis = new FileInputStream(filename);
 			properties.load(fis);
-		}
-		catch (final IOException e)
-		{
-			LOGGER.log(Level.SEVERE, "readPropertiesFromFile failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(fis);
 		}
 		return properties;
 	}
@@ -423,30 +390,19 @@ public final class ReadFileExtensions
 	 * @param tmpFile
 	 *            The file.
 	 * @return Returns a byte array or null.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static byte[] toByteArray(final File tmpFile)
+	public static byte[] toByteArray(final File tmpFile) throws IOException
 	{
 		byte[] data = null;
-		BufferedInputStream bis = null;
-		ByteArrayOutputStream bos = null;
 		if (tmpFile.exists() && !tmpFile.isDirectory())
 		{
-			try
+			try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(tmpFile));
+				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileConst.KILOBYTE);)
 			{
-				bos = new ByteArrayOutputStream(FileConst.KILOBYTE);
-				bis = new BufferedInputStream(new FileInputStream(tmpFile));
-				StreamExtensions.writeInputStreamToOutputStream(bis, bos, false);
+				StreamExtensions.writeInputStreamToOutputStream(bis, bos);
 				data = bos.toByteArray();
-			}
-			catch (final IOException e)
-			{
-				LOGGER.log(Level.SEVERE,
-					"transformFilecontentToByteArray failed...\n" + e.getMessage(), e);
-			}
-			finally
-			{
-				StreamExtensions.closeInputStream(bis);
-				StreamExtensions.closeOutputStream(bos);
 			}
 		}
 		return data;
@@ -478,14 +434,6 @@ public final class ReadFileExtensions
 	private static Byte[] toObject(final byte[] byteArray)
 	{
 		return ArrayUtils.toObject(byteArray);
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private ReadFileExtensions()
-	{
-		super();
 	}
 
 }

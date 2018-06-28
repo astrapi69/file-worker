@@ -25,14 +25,17 @@
 package de.alpharogroup.file.compare;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-import de.alpharogroup.file.checksum.Algorithm;
+import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.file.checksum.ChecksumExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link SimpleCompareFileExtensions}.
  */
+@UtilityClass
 public final class SimpleCompareFileExtensions
 {
 
@@ -65,9 +68,11 @@ public final class SimpleCompareFileExtensions
 	 * @return true if the checksum with the algorithm Adler32 are equal, otherwise false.
 	 * @throws NoSuchAlgorithmException
 	 *             Is thrown if the algorithm is not supported or does not exists.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static boolean compareFilesByChecksum(final File sourceFile, final File fileToCompare,
-		final Algorithm algorithm) throws NoSuchAlgorithmException
+		final Algorithm algorithm) throws NoSuchAlgorithmException, IOException
 	{
 		final String checksumSourceFile = ChecksumExtensions.getChecksum(sourceFile, algorithm);
 		final String checksumFileToCompare = ChecksumExtensions.getChecksum(fileToCompare,
@@ -83,9 +88,11 @@ public final class SimpleCompareFileExtensions
 	 * @param fileToCompare
 	 *            the file to compare
 	 * @return true if the checksum with the algorithm Adler32 are equal, otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static boolean compareFilesByChecksumAdler32(final File sourceFile,
-		final File fileToCompare)
+		final File fileToCompare) throws IOException
 	{
 		final long checksumSourceFile = ChecksumExtensions.getCheckSumAdler32(sourceFile);
 		final long checksumFileToCompare = ChecksumExtensions.getCheckSumAdler32(fileToCompare);
@@ -100,9 +107,11 @@ public final class SimpleCompareFileExtensions
 	 * @param fileToCompare
 	 *            the file to compare
 	 * @return true if the checksum with the algorithm CRC32 are equal, otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static boolean compareFilesByChecksumCRC32(final File sourceFile,
-		final File fileToCompare)
+		final File fileToCompare) throws IOException
 	{
 		final long checksumSourceFile = ChecksumExtensions.getCheckSumCRC32(sourceFile);
 		final long checksumFileToCompare = ChecksumExtensions.getCheckSumCRC32(fileToCompare);
@@ -189,14 +198,6 @@ public final class SimpleCompareFileExtensions
 		return CompareFileExtensions
 			.compareFiles(sourceFile, fileToCompare, true, true, true, true, false, true)
 			.getNameEquality();
-	}
-
-	/**
-	 * The Constructor.
-	 */
-	private SimpleCompareFileExtensions()
-	{
-		super();
 	}
 
 }

@@ -24,12 +24,17 @@
  */
 package de.alpharogroup.file.sort;
 
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import org.testng.AssertJUnit;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -37,7 +42,7 @@ import de.alpharogroup.comparators.StringComparator;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,11 +51,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SortFileExtensionsTest
 {
-	/** The directory /src/test/resources for test resources. */
-	File testResources;
-
 	/** The resources. */
 	File resources;
+
+	/** The directory /src/test/resources for test resources. */
+	File testResources;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
@@ -64,16 +69,14 @@ public class SortFileExtensionsTest
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		final File projectPath = new File(absolutePath);
-		AssertJUnit.assertTrue(
-			"The directory " + projectPath.getAbsolutePath() + " should be created.",
+		assertTrue("The directory " + projectPath.getAbsolutePath() + " should be created.",
 			projectPath.exists());
 		log.debug("The directory " + projectPath.getAbsolutePath() + " exists or is created.");
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(testResources);
-			AssertJUnit.assertTrue(
-				"The directory " + testResources.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
 				created);
 		}
 		resources = new File(testResources, "resources");
@@ -104,7 +107,7 @@ public class SortFileExtensionsTest
 
 		List<String> expectedSortedLines = ReadFileExtensions.readLinesInList(sortedEpfFile, false);
 
-		AssertJUnit.assertEquals(expectedSortedLines.size(), actualSortedLines.size());
+		assertEquals(expectedSortedLines.size(), actualSortedLines.size());
 
 		Object expected;
 		Object actual;
@@ -112,10 +115,20 @@ public class SortFileExtensionsTest
 		{
 			expected = expectedSortedLines.get(i);
 			actual = actualSortedLines.get(i);
-			AssertJUnit.assertEquals(expected, actual);
+			assertEquals(expected, actual);
 		}
 		// create initial state...
-		WriteFileExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");
+		WriteFileQuietlyExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");
+	}
+
+	/**
+	 * Test method for {@link SortFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(SortFileExtensions.class);
 	}
 
 }

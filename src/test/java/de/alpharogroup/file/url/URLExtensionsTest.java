@@ -24,30 +24,39 @@
  */
 package de.alpharogroup.file.url;
 
+
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.zip.ZipTestCase;
-import lombok.experimental.ExtensionMethod;
 
-
-@ExtensionMethod({ URLExtensions.class })
+/**
+ * The unit test class for the class {@link URLExtensions}.
+ */
 public class URLExtensionsTest extends ZipTestCase
 {
 
-
+	/**
+	 * Test method for {@link URLExtensions#isJar(URL)}
+	 *
+	 * @throws MalformedURLException
+	 *             is thrown if no protocol is specified, or an unknown protocol is found, or
+	 *             {@code spec} is {@code null}.
+	 * @see java.net.URL#URL(java.net.URL, java.lang.String)
+	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testIsJar() throws MalformedURLException
 	{
 		final URL myURL = new URL("http://example.com/");
-		AssertJUnit.assertFalse(myURL.isJar());
+		assertFalse(URLExtensions.isJar(myURL));
 		final URL jarUrl = new URL("jar:file:/home/root/jdk/rt.jar!/test.xml");
-		AssertJUnit.assertTrue(jarUrl.isJar());
-
+		assertTrue(URLExtensions.isJar(jarUrl));
 	}
-
 
 }

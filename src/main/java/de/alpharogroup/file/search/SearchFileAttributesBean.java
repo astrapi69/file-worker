@@ -24,105 +24,42 @@
  */
 package de.alpharogroup.file.search;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
+
 /**
- * The class SearchFileAttributesBean provides file attribute flags to ignore or not.
+ * The class {@link SearchFileAttributesBean} provides file attribute flags to ignore or not.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
+@Getter
+@EqualsAndHashCode
+@ToString
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SearchFileAttributesBean
 {
 
-	/** The ignore extension equality. */
-	private final boolean ignoreExtensionEquality;
+	/** The ignore content equality. */
+	boolean ignoreContentEquality;
 
-	/** The ignore length equality. */
-	private final boolean ignoreLengthEquality;
+	/** The ignore extension equality. */
+	boolean ignoreExtensionEquality;
 
 	/** The ignore last modified. */
-	private final boolean ignoreLastModified;
+	boolean ignoreLastModified;
+
+	/** The ignore length equality. */
+	boolean ignoreLengthEquality;
 
 	/** The ignore name equality. */
-	private final boolean ignoreNameEquality;
-
-	/** The ignore content equality. */
-	private final boolean ignoreContentEquality;
-
-	/**
-	 * Instantiates a new search file attributes bean.
-	 *
-	 * @param ignoreExtensionEquality
-	 *            the ignore extension equality
-	 * @param ignoreLengthEquality
-	 *            the ignore length equality
-	 * @param ignoreLastModified
-	 *            the ignore last modified
-	 * @param ignoreNameEquality
-	 *            the ignore name equality
-	 * @param ignoreContentEquality
-	 *            the ignore content equality
-	 */
-	public SearchFileAttributesBean(final boolean ignoreExtensionEquality,
-		final boolean ignoreLengthEquality, final boolean ignoreLastModified,
-		final boolean ignoreNameEquality, final boolean ignoreContentEquality)
-	{
-		super();
-		this.ignoreExtensionEquality = ignoreExtensionEquality;
-		this.ignoreLengthEquality = ignoreLengthEquality;
-		this.ignoreLastModified = ignoreLastModified;
-		this.ignoreNameEquality = ignoreNameEquality;
-		this.ignoreContentEquality = ignoreContentEquality;
-	}
-
-
-	/**
-	 * Checks if is ignore content equality.
-	 *
-	 * @return true, if is ignore content equality
-	 */
-	public boolean isIgnoreContentEquality()
-	{
-		return ignoreContentEquality;
-	}
-
-	/**
-	 * Checks if is ignore extension equality.
-	 *
-	 * @return true, if is ignore extension equality
-	 */
-	public boolean isIgnoreExtensionEquality()
-	{
-		return ignoreExtensionEquality;
-	}
-
-	/**
-	 * Checks if is ignore last modified.
-	 *
-	 * @return true, if is ignore last modified
-	 */
-	public boolean isIgnoreLastModified()
-	{
-		return ignoreLastModified;
-	}
-
-	/**
-	 * Checks if is ignore length equality.
-	 *
-	 * @return true, if is ignore length equality
-	 */
-	public boolean isIgnoreLengthEquality()
-	{
-		return ignoreLengthEquality;
-	}
-
-	/**
-	 * Checks if is ignore name equality.
-	 *
-	 * @return true, if is ignore name equality
-	 */
-	public boolean isIgnoreNameEquality()
-	{
-		return ignoreNameEquality;
-	}
+	boolean ignoreNameEquality;
 
 }

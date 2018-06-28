@@ -31,6 +31,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link CreateFileExtensions} helps you to create files or directories.
@@ -38,6 +39,7 @@ import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
  * @author Asterios Raptis
  * @version 1.0
  */
+@UtilityClass
 public final class CreateFileExtensions
 {
 
@@ -222,14 +224,6 @@ public final class CreateFileExtensions
 				parent.mkdirs();
 			}
 		}
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private CreateFileExtensions()
-	{
-		super();
 	}
 
 }

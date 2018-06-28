@@ -24,6 +24,9 @@
  */
 package de.alpharogroup.file.copy;
 
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileNotFoundException;
@@ -33,7 +36,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.testng.AssertJUnit;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -49,10 +54,10 @@ import de.alpharogroup.file.filter.TxtFileFilter;
 import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
 import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 
 /**
- * The class {@link CopyFileExtensionsTest}.
+ * The unit test class for the class {@link CopyFileExtensions}.
  *
  * @version 1.0
  *
@@ -123,9 +128,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepDir.getAbsolutePath() + " should be created.", created);
-			WriteFileExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
+			assertTrue("The directory " + srcDeepDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileQuietlyExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDeepDir, deepestDirName);
@@ -134,43 +139,37 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 		}
 
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectory(srcDeepDir, destDir);
+		this.actual = CopyFileExtensions.copyDirectory(srcDeepDir, destDir);
 		// Check if the destination directory was copied.
-		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+		assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.", this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
 			expectedDeeperDir.exists());
 		// Check if the file in the directory inside the destination directory was copied.
 		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile.exists());
 		// Check the long lastModified from the file that they are equal.
-		AssertJUnit.assertTrue("long lastModified was not set.",
+		assertTrue("long lastModified was not set.",
 			srcDeepFile.lastModified() == expectedDeeperFile.lastModified());
 		// Check if the directory in the directory inside the destination directory was copied.
 		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
 			expectedDeepestDir.exists());
 		// Check if the file in the deeper directory inside the directory from the destination
 		// directory was copied.
 		final File expectedDeepestFile = new File(expectedDeepestDir, deepestFilename);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile.exists());
 		// Check the long lastModified from the file that they are equal.
-		AssertJUnit.assertTrue("long lastModified was not set.",
+		assertTrue("long lastModified was not set.",
 			srcDeepestFile.lastModified() == expectedDeepestFile.lastModified());
 	}
 
@@ -211,9 +210,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
-			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -222,37 +221,31 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 		}
 
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectory(srcDir, destDir, false);
+		this.actual = CopyFileExtensions.copyDirectory(srcDir, destDir, false);
 		// Check if the destination directory was copied.
-		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+		assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.", this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
 			expectedDeeperDir.exists());
 		// Check if the file in the directory inside the destination directory was copied.
 		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile.exists());
 		// Check if the directory in the directory inside the destination directory was copied.
 		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
 			expectedDeepestDir.exists());
 		// Check if the file in the deeper directory inside the directory from the destination
 		// directory was copied.
 		final File expectedDeepestFile = new File(expectedDeepestDir, deepestFilename);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile.exists());
 
 	}
@@ -297,10 +290,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
 
 		}
 		final String deepestDirName = "deepest";
@@ -312,50 +305,43 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
 		}
 
 		// define a filefilter object...
 		final FileFilter fileFilter = new TxtFileFilter();
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir, fileFilter,
+		this.actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir, fileFilter,
 			false);
 		// Check if the destination directory was copied.
-		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+		assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.", this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
 			expectedDeeperDir.exists());
 		// Check if the file in the directory inside the destination directory was copied.
 		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile.exists());
 		// Check if the file that is not included in the FileFilter was not copied in the
 		// destination directory.
 		final File notCopied1 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		AssertJUnit.assertFalse("File " + notCopied1.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notCopied1.getAbsolutePath() + " should not be copied.",
 			notCopied1.exists());
 		// Check if the directory in the directory inside the destination directory was copied.
 		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
 			expectedDeepestDir.exists());
 		// Check if the file in the deeper directory inside the directory from the destination
 		// directory was copied.
 		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile1.exists());
 		final File notExpectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeepestFile2.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeepestFile2.getAbsolutePath() + " should not be copied.",
 			notExpectedDeepestFile2.exists());
 
 	}
@@ -401,11 +387,11 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -418,12 +404,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile3,
+				"Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -434,56 +420,47 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
 			includeFileFilter, excludeFileFilter, false);
 
 		// Check if the destination directory was copied.
-		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+		assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.", this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
 			expectedDeeperDir.exists());
 		// Check if the file in the first directory inside the destination directory was copied.
 		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile.exists());
 
 		// Check if the file in the second directory inside the destination directory was copied.
 		final File expectedDeeperFile2 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile2.exists());
 		// Check if the excluded file inside the deeper destination directory was not copied
 		final File notExpectedDeeperFile1 = new File(expectedDeeperDir, filePrefix + exeSuffix);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.",
 			notExpectedDeeperFile1.exists());
 		// Check if the directory in the directory inside the destination directory was copied.
 		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
 			expectedDeepestDir.exists());
 		// Check if the first file in the deeper directory inside the directory from the destination
 		// directory was copied.
 		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile1.exists());
 
 		// Check if the second file in the deeper directory inside the directory from the
 		// destination directory was copied.
 		final File expectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile2.exists());
 
 		// Check if the excluded file inside the deepest destination directory was not copied
 		final File notExpectedDeepestFile3 = new File(expectedDeepestDir, srcDeepestFileName3);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.",
 			notExpectedDeepestFile3.exists());
 
 	}
@@ -533,12 +510,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
-			WriteFileExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -551,12 +528,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile3,
+				"Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -567,31 +544,26 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDir, destDir,
 			includeFileFilter, excludeFileFilter, excludeFiles, false);
 		// Check if the destination directory was copied.
-		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+		assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.", this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
 			expectedDeeperDir.exists());
 		// Check if the file in the first directory inside the destination directory was copied.
 		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile.exists());
 
 		// Check if the file in the second directory inside the destination directory was copied.
 		final File expectedDeeperFile2 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile2.exists());
 		// Check if the excluded file inside the deeper destination directory was not copied
 		final File notExpectedDeeperFile1 = new File(expectedDeeperDir, filePrefix + exeSuffix);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.",
 			notExpectedDeeperFile1.exists());
 
 
@@ -599,33 +571,28 @@ public class CopyFileExtensionsTest extends FileTestCase
 		// copied
 		final File notExpectedDeeperFile2 = new File(expectedDeeperDir,
 			excludeFilePrefix + exeSuffix);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeeperFile2.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeeperFile2.getAbsolutePath() + " should not be copied.",
 			notExpectedDeeperFile2.exists());
 
 		// Check if the directory in the directory inside the destination directory was copied.
 		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
 			expectedDeepestDir.exists());
 		// Check if the first file in the deeper directory inside the directory from the destination
 		// directory was copied.
 		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile1.exists());
 
 		// Check if the second file in the deeper directory inside the directory from the
 		// destination directory was copied.
 		final File expectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile2.exists());
 
 		// Check if the excluded file inside the deepest destination directory was not copied
 		final File notExpectedDeepestFile3 = new File(expectedDeepestDir, srcDeepestFileName3);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.",
 			notExpectedDeepestFile3.exists());
 
 	}
@@ -669,10 +636,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -683,48 +650,41 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
 		}
 
 		// define a filefilter object...
 		final FilenameFilter fileFilter = new SimpleFilenameFilter(".txt", true);
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
 			fileFilter, false);
 		// Check if the destination directory was copied.
-		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+		assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.", this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
 			expectedDeeperDir.exists());
 		// Check if the file in the directory inside the destination directory was copied.
 		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile.exists());
 		final File notCopied1 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		AssertJUnit.assertFalse("File " + notCopied1.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notCopied1.getAbsolutePath() + " should not be copied.",
 			notCopied1.exists());
 		// Check if the directory in the directory inside the destination directory was copied.
 		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
 			expectedDeepestDir.exists());
 		// Check if the file in the deeper directory inside the directory from the destination
 		// directory was copied.
 		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile1.exists());
 		final File notExpectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeepestFile2.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeepestFile2.getAbsolutePath() + " should not be copied.",
 			notExpectedDeepestFile2.exists());
 
 
@@ -771,11 +731,11 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
-			WriteFileExtensions.string2File(srcFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
+			WriteFileQuietlyExtensions.string2File(srcFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
 		}
 		final String deepestDirName = "deepest";
 		final File srcDeepestDir = new File(srcDir, deepestDirName);
@@ -788,12 +748,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 		if (!srcDeepestDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
+			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileQuietlyExtensions.string2File(srcDeepestFile3,
+				"Its a beautifull exe morning!!!");
 		}
 
 		// define the include filefilter object...
@@ -804,56 +764,47 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final FilenameFilter excludeFilenameFilter = new MultiplyExtensionsFilenameFilter(
 			Arrays.asList(new String[] { ".exe" }));
 		// Test to copy the source directory to the destination directory.
-		this.result = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
+		this.actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDir, destDir,
 			includeFilenameFilter, excludeFilenameFilter, false);
 
 		// Check if the destination directory was copied.
-		AssertJUnit.assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.",
-			this.result);
+		assertTrue("Directory " + destDir.getAbsolutePath() + " should be copied.", this.actual);
 		// Check if the directory inside the destination directory was copied.
 		final File expectedDeeperDir = new File(this.deeperDir, dirToCopyName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.",
 			expectedDeeperDir.exists());
 		// Check if the file in the first directory inside the destination directory was copied.
 		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile.exists());
 
 		// Check if the file in the second directory inside the destination directory was copied.
 		final File expectedDeeperFile2 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.",
 			expectedDeeperFile2.exists());
 		// Check if the excluded file inside the deeper destination directory was not copied
 		final File notExpectedDeeperFile1 = new File(expectedDeeperDir, filePrefix + exeSuffix);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.",
 			notExpectedDeeperFile1.exists());
 		// Check if the directory in the directory inside the destination directory was copied.
 		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		AssertJUnit.assertTrue(
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
+		assertTrue("Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.",
 			expectedDeepestDir.exists());
 		// Check if the first file in the deeper directory inside the directory from the destination
 		// directory was copied.
 		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile1.exists());
 
 		// Check if the second file in the deeper directory inside the directory from the
 		// destination directory was copied.
 		final File expectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		AssertJUnit.assertTrue(
-			"File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.",
 			expectedDeepestFile2.exists());
 
 		// Check if the excluded file inside the deepest destination directory was not copied
 		final File notExpectedDeepestFile3 = new File(expectedDeepestDir, srcDeepestFileName3);
-		AssertJUnit.assertFalse(
-			"File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.",
+		assertFalse("File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.",
 			notExpectedDeepestFile3.exists());
 	}
 
@@ -873,28 +824,27 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testCopyFileOutput.tft");
 		try
 		{
-			this.result = CopyFileExtensions.copyFile(source, destination);
-			AssertJUnit.assertFalse("", this.result);
+			this.actual = CopyFileExtensions.copyFile(source, destination);
+			assertFalse("", this.actual);
 		}
 		catch (final Exception fnfe)
 		{
-			this.result = fnfe instanceof FileNotFoundException;
-			AssertJUnit.assertTrue("", this.result);
+			this.actual = fnfe instanceof FileNotFoundException;
+			assertTrue("", this.actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileExtensions.string2File(source, inputString);
+		WriteFileQuietlyExtensions.string2File(source, inputString);
 
-		this.result = CopyFileExtensions.copyFile(source, destination);
-		AssertJUnit.assertTrue("Source file " + source.getName()
-			+ " was not copied in the destination file " + destination.getName() + ".",
-			this.result);
+		this.actual = CopyFileExtensions.copyFile(source, destination);
+		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
+			+ destination.getName() + ".", this.actual);
 		final String actual = ReadFileExtensions.readFromFile(destination);
-		this.result = expected.equals(actual);
-		AssertJUnit.assertTrue(
+		this.actual = expected.equals(actual);
+		assertTrue(
 			"The content from the source file " + source.getName()
 				+ " is not the same as the destination file " + destination.getName() + ".",
-			this.result);
+			this.actual);
 
 	}
 
@@ -915,28 +865,27 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testCopyFileOutput.tft");
 		try
 		{
-			this.result = CopyFileExtensions.copyFile(source, destination, false);
-			AssertJUnit.assertFalse("", this.result);
+			this.actual = CopyFileExtensions.copyFile(source, destination, false);
+			assertFalse("", this.actual);
 		}
 		catch (final Exception fnfe)
 		{
-			this.result = fnfe instanceof FileNotFoundException;
-			AssertJUnit.assertTrue("", this.result);
+			this.actual = fnfe instanceof FileNotFoundException;
+			assertTrue("", this.actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
-		WriteFileExtensions.string2File(source, inputString);
+		WriteFileQuietlyExtensions.string2File(source, inputString);
 
-		this.result = CopyFileExtensions.copyFile(source, destination, false);
-		AssertJUnit.assertTrue("Source file " + source.getName()
-			+ " was not copied in the destination file " + destination.getName() + ".",
-			this.result);
+		this.actual = CopyFileExtensions.copyFile(source, destination, false);
+		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
+			+ destination.getName() + ".", this.actual);
 		final String compare = ReadFileExtensions.readFromFile(destination);
-		this.result = expected.equals(compare);
-		AssertJUnit.assertTrue(
+		this.actual = expected.equals(compare);
+		assertTrue(
 			"The content from the source file " + source.getName()
 				+ " is not the same as the destination file " + destination.getName() + ".",
-			this.result);
+			this.actual);
 
 	}
 
@@ -968,25 +917,24 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final String filePrefix = "testCopyFile";
 		final String txtSuffix = ".txt";
 		final File srcFile = new File(this.testDir, filePrefix + txtSuffix);
-		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
 
 		}
 
 		// Try to copy the file srcFile into the destination directory.
-		this.result = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir);
+		this.actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir);
 		final File expectedCopiedFile = new File(srcDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedCopiedFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedCopiedFile.getAbsolutePath() + " should be copied.",
 			expectedCopiedFile.exists());
 
 		// Check the long lastModified from the file that they are equal.
-		AssertJUnit.assertTrue("long lastModified is not the same.",
+		assertTrue("long lastModified is not the same.",
 			srcFile.lastModified() == expectedCopiedFile.lastModified());
 
 	}
@@ -1018,21 +966,30 @@ public class CopyFileExtensionsTest extends FileTestCase
 		final String filePrefix = "testCopyFile";
 		final String txtSuffix = ".txt";
 		final File srcFile = new File(this.testDir, filePrefix + txtSuffix);
-		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
-			AssertJUnit.assertTrue(
-				"The directory " + srcDir.getAbsolutePath() + " should be created.", created);
+			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
+				created);
 
 		}
 		// Try to copy the file srcFile into the destination directory.
-		this.result = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir, false);
+		this.actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDir, false);
 		final File expectedCopiedFile = new File(srcDir, filePrefix + txtSuffix);
-		AssertJUnit.assertTrue(
-			"File " + expectedCopiedFile.getAbsolutePath() + " should be copied.",
+		assertTrue("File " + expectedCopiedFile.getAbsolutePath() + " should be copied.",
 			expectedCopiedFile.exists());
+	}
+
+	/**
+	 * Test method for {@link CopyFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(CopyFileExtensions.class);
 	}
 
 }

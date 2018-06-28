@@ -34,7 +34,7 @@ import java.nio.channels.FileLock;
 import org.apache.log4j.Logger;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.rename.RenameFileExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for the use of File object.
@@ -42,6 +42,7 @@ import de.alpharogroup.file.rename.RenameFileExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class FileExtensions
 {
 
@@ -53,12 +54,14 @@ public final class FileExtensions
 
 	/**
 	 * Downloads Data from the given URI.
-	 * 
+	 *
 	 * @param uri
 	 *            The URI from where to download.
 	 * @return Returns a byte array or null.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static byte[] download(final URI uri)
+	public static byte[] download(final URI uri) throws IOException
 	{
 		final File tmpFile = new File(uri);
 		return ReadFileExtensions.toByteArray(tmpFile);
@@ -73,7 +76,13 @@ public final class FileExtensions
 	 */
 	public static String getAbsolutPathWithoutFilename(final File file)
 	{
-		return RenameFileExtensions.getAbsolutPathWithoutFilename(file);
+		final String absolutePath = file.getAbsolutePath();
+		int lastSlash_index = absolutePath.lastIndexOf("/");
+		if (lastSlash_index < 0)
+		{
+			lastSlash_index = absolutePath.lastIndexOf("\\");
+		}
+		return absolutePath.substring(0, lastSlash_index + 1);
 	}
 
 	/**

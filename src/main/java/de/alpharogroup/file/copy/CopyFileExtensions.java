@@ -47,10 +47,12 @@ import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link CopyFileExtensions} helps you to copy files or directories.
  */
+@UtilityClass
 public final class CopyFileExtensions
 {
 
@@ -354,7 +356,6 @@ public final class CopyFileExtensions
 			lastModified);
 	}
 
-
 	/**
 	 * Copies all files that match to the given includeFilenameFilter and does not copy all the
 	 * files that match the excludeFilenameFilter from the given source directory to the given
@@ -547,32 +548,19 @@ public final class CopyFileExtensions
 				+ " should be a File but is a Directory.");
 		}
 		boolean copied = false;
-		final InputStream inputStream = StreamExtensions.getInputStream(source);
-		InputStreamReader reader;
-		if (sourceEncoding != null)
+		try (InputStream inputStream = StreamExtensions.getInputStream(source);
+			InputStreamReader reader = sourceEncoding != null
+				? new InputStreamReader(inputStream, sourceEncoding)
+				: new InputStreamReader(inputStream);
+			OutputStream outputStream = StreamExtensions.getOutputStream(destination,
+				!destination.exists());
+			BufferedOutputStream bos = new BufferedOutputStream(outputStream);
+			OutputStreamWriter writer = destinationEncoding != null
+				? new OutputStreamWriter(bos, destinationEncoding)
+				: new OutputStreamWriter(bos))
 		{
-			reader = new InputStreamReader(inputStream, sourceEncoding);
-		}
-		else
-		{
-			reader = new InputStreamReader(inputStream);
-		}
-		final OutputStream outputStream = StreamExtensions.getOutputStream(destination,
-			!destination.exists());
-		final char[] charArray = new char[FileConst.BLOCKSIZE];
-		final BufferedOutputStream bos = new BufferedOutputStream(outputStream);
-		OutputStreamWriter writer;
-		if (destinationEncoding != null)
-		{
-			writer = new OutputStreamWriter(bos, destinationEncoding);
-		}
-		else
-		{
-			writer = new OutputStreamWriter(bos);
-		}
-		int tmp;
-		try
-		{
+			int tmp;
+			final char[] charArray = new char[FileConst.BLOCKSIZE];
 			while ((tmp = reader.read(charArray)) > 0)
 			{
 				writer.write(charArray, 0, tmp);
@@ -583,18 +571,12 @@ public final class CopyFileExtensions
 		{
 			throw e;
 		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-			StreamExtensions.closeWriter(writer);
-		}
 		if (lastModified)
 		{
 			destination.setLastModified(source.lastModified());
 		}
 		return copied;
 	}
-
 
 	/**
 	 * Copies the given source file to the given destination directory.
@@ -659,7 +641,6 @@ public final class CopyFileExtensions
 		return copyFile(source, destinationFile, lastModified);
 	}
 
-
 	/**
 	 * Creates a backup file in the same directory with the same name of the given file and with the
 	 * extension of '*.bak'.
@@ -681,13 +662,5 @@ public final class CopyFileExtensions
 		CopyFileExtensions.copyFile(file, backup, sourceEncoding, destinationEncoding, true);
 		return backup;
 	}
-
-	/**
-	 * Private constructor.
-	 */
-	private CopyFileExtensions()
-	{
-	}
-
 
 }

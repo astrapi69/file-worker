@@ -24,17 +24,27 @@
  */
 package de.alpharogroup.file.zip;
 
-import java.io.File;
-import java.io.IOException;
+import static org.testng.AssertJUnit.assertTrue;
 
-import org.testng.AssertJUnit;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.zip.ZipFile;
+
+import org.meanbean.lang.Factory;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.Configuration;
+import org.meanbean.test.ConfigurationBuilder;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.collections.list.ListFactory;
+import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
 import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.meanbean.factories.FileFactory;
 
 /**
  * The unit test class for the class Zipper.
@@ -66,6 +76,46 @@ public class ZipperTest extends ZipTestCase
 	}
 
 	/**
+	 * Test method for {@link Zipper}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		Configuration configuration = new ConfigurationBuilder()
+			.overrideFactory("fileFilter", new Factory<FilenameFilter>()
+			{
+
+				@Override
+				public FilenameFilter create()
+				{
+					return new MultiplyExtensionsFilenameFilter(ListFactory.newArrayList("txt"));
+				}
+			}).overrideFactory("zipFileObj", new Factory<ZipFile>()
+			{
+
+				@Override
+				public ZipFile create()
+				{
+					ZipFile zipFile = null;
+					try
+					{
+						zipFile = new ZipFile(
+							new File(ZipperTest.this.resources.getAbsoluteFile(), "test.testzip"));
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+					return zipFile;
+				}
+			}).overrideFactory("zipFile", new FileFactory())
+			.overrideFactory("directoryToZip", new FileFactory()).build();
+		final BeanTester beanTester = new BeanTester();
+		beanTester.addCustomConfiguration(Zipper.class, configuration);
+		beanTester.testBean(Zipper.class);
+	}
+
+	/**
 	 * Test method for {@link de.alpharogroup.file.zip.Zipper#zip()}.
 	 *
 	 * @throws IOException
@@ -81,8 +131,8 @@ public class ZipperTest extends ZipTestCase
 			zipFile.createNewFile();
 		}
 		final long length = zipFile.length();
-		this.result = length == 0;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = length == 0;
+		assertTrue("", this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -96,15 +146,15 @@ public class ZipperTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		// ZipUtils.zip( testDir, zipFile );
 
@@ -113,17 +163,17 @@ public class ZipperTest extends ZipTestCase
 		zipper.zip();
 
 		final long currentLength = zipFile.length();
-		this.result = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = 0 < currentLength;
+		assertTrue("", this.actual);
 
-		this.result = zipper.getFileCounter() == 9;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getFileCounter() == 9;
+		assertTrue("", this.actual);
 
-		this.result = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getZipFile().equals(zipFile);
+		assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
+		assertTrue("", this.actual);
 
 	}
 
@@ -143,8 +193,8 @@ public class ZipperTest extends ZipTestCase
 			zipFile.createNewFile();
 		}
 		final long length = zipFile.length();
-		this.result = length == 0;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = length == 0;
+		assertTrue("", this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -158,15 +208,15 @@ public class ZipperTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		// ZipUtils.zip( testDir, zipFile );
 
@@ -177,18 +227,18 @@ public class ZipperTest extends ZipTestCase
 		zipper.zip();
 
 		final long currentLength = zipFile.length();
-		this.result = 0 < currentLength;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = 0 < currentLength;
+		assertTrue("", this.actual);
 
-		this.result = zipper.getFileCounter() == 4;
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getFileCounter() == 4;
+		assertTrue("", this.actual);
 
-		this.result = zipper.getZipFile().equals(zipFile);
-		AssertJUnit.assertTrue("", this.result);
+		this.actual = zipper.getZipFile().equals(zipFile);
+		assertTrue("", this.actual);
 
-		this.result = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
+		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
 
-		AssertJUnit.assertTrue("", this.result);
+		assertTrue("", this.actual);
 
 	}
 

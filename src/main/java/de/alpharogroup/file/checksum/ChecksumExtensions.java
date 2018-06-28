@@ -38,8 +38,9 @@ import java.util.zip.Checksum;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
 
+import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ChecksumExtensions} is a utility class for computing checksum from files and
@@ -48,6 +49,7 @@ import de.alpharogroup.io.StreamExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class ChecksumExtensions
 {
 
@@ -168,9 +170,11 @@ public final class ChecksumExtensions
 	 * @throws NoSuchAlgorithmException
 	 *             Is thrown if the algorithm is not supported or does not exists.
 	 *             {@link java.security.MessageDigest} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String getChecksum(final File file, final Algorithm algorithm)
-		throws NoSuchAlgorithmException
+		throws NoSuchAlgorithmException, IOException
 	{
 		return getChecksum(file, algorithm.getAlgorithm());
 	}
@@ -197,25 +201,20 @@ public final class ChecksumExtensions
 	public static long getChecksum(final File file, final boolean crc)
 		throws FileNotFoundException, IOException
 	{
-		CheckedInputStream cis = null;
-		if (crc)
+		try (CheckedInputStream cis = crc
+			? new CheckedInputStream(new FileInputStream(file), new CRC32())
+			: new CheckedInputStream(new FileInputStream(file), new Adler32());)
 		{
-			cis = new CheckedInputStream(new FileInputStream(file), new CRC32());
-		}
-		else
-		{
-			cis = new CheckedInputStream(new FileInputStream(file), new Adler32());
-		}
-		final int length = (int)file.length();
-		final byte[] buffer = new byte[length];
-		long checksum = 0;
-		while (cis.read(buffer) >= 0)
-		{
+			final int length = (int)file.length();
+			final byte[] buffer = new byte[length];
+			long checksum = 0;
+			while (cis.read(buffer) >= 0)
+			{
+				checksum = cis.getChecksum().getValue();
+			}
 			checksum = cis.getChecksum().getValue();
+			return checksum;
 		}
-		checksum = cis.getChecksum().getValue();
-		StreamExtensions.closeInputStream(cis);
-		return checksum;
 	}
 
 	/**
@@ -230,9 +229,11 @@ public final class ChecksumExtensions
 	 * @throws NoSuchAlgorithmException
 	 *             Is thrown if the algorithm is not supported or does not exists.
 	 *             {@link java.security.MessageDigest} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String getChecksum(final File file, final String algorithm)
-		throws NoSuchAlgorithmException
+		throws NoSuchAlgorithmException, IOException
 	{
 		return getChecksum(ReadFileExtensions.toByteArray(file), algorithm);
 	}
@@ -258,8 +259,10 @@ public final class ChecksumExtensions
 	 * @param file
 	 *            The file.
 	 * @return The checksum from the file as long. {@link java.util.zip.Adler32} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static long getCheckSumAdler32(final File file)
+	public static long getCheckSumAdler32(final File file) throws IOException
 	{
 		return getCheckSumAdler32(ReadFileExtensions.toByteArray(file));
 	}
@@ -285,8 +288,10 @@ public final class ChecksumExtensions
 	 * @param file
 	 *            The file.
 	 * @return The checksum from the file as long. {@link java.util.zip.CRC32} object.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static long getCheckSumCRC32(final File file)
+	public static long getCheckSumCRC32(final File file) throws IOException
 	{
 		return getCheckSumCRC32(ReadFileExtensions.toByteArray(file));
 	}
@@ -300,6 +305,10 @@ public final class ChecksumExtensions
 	 *            the algorithm to get the checksum. This could be for instance "MD4", "MD5",
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final byte[] bytes, final Algorithm algorithm)
 	{
@@ -323,6 +332,10 @@ public final class ChecksumExtensions
 	 *            the algorithm to get the checksum. This could be for instance "MD4", "MD5",
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final byte[] bytes, final String algorithm)
 	{
@@ -347,6 +360,10 @@ public final class ChecksumExtensions
 	 *            the algorithm to get the checksum. This could be for instance "MD4", "MD5",
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final Byte[] bytes, final String algorithm)
 	{
@@ -372,6 +389,10 @@ public final class ChecksumExtensions
 	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
 	 * @return The checksum from the file as a String object or null if a NoSuchAlgorithmException
 	 *         will be thrown. exists. {@link java.security.MessageDigest} object.
+	 * @deprecated use instead the same name method in the class {@code ChecksumQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static String getChecksumQuietly(final File file, final Algorithm algorithm)
 	{
@@ -380,6 +401,10 @@ public final class ChecksumExtensions
 			return getChecksum(file, algorithm.getAlgorithm());
 		}
 		catch (final NoSuchAlgorithmException e)
+		{
+			LOGGER.error("getChecksumQuietly failed...\n" + e.getMessage(), e);
+		}
+		catch (IOException e)
 		{
 			LOGGER.error("getChecksumQuietly failed...\n" + e.getMessage(), e);
 		}
@@ -420,13 +445,6 @@ public final class ChecksumExtensions
 	public static boolean matchesSHA512(final String value)
 	{
 		return value.matches(REGEX_VALIDATION_SHA512);
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private ChecksumExtensions()
-	{
 	}
 
 }

@@ -24,14 +24,21 @@
  */
 package de.alpharogroup.file.create;
 
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.testng.AssertJUnit;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 
@@ -39,8 +46,34 @@ import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
  * The class {@link CreateFileExtensionsTest} has unit test for the class
  * {@link CreateFileExtensions}.
  */
-public class CreateFileExtensionsTest
+public class CreateFileExtensionsTest extends FileTestCase
 {
+
+	/**
+	 * Sets up method will be invoked before every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@BeforeMethod
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@AfterMethod
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+	}
 
 	/**
 	 * Test create directories.
@@ -69,11 +102,11 @@ public class CreateFileExtensionsTest
 			}
 		}
 		final boolean created = CreateFileExtensions.newDirectories(dirs);
-		AssertJUnit.assertTrue("directory should be created.", created);
+		assertTrue("directory should be created.", created);
 		for (final File dir : dirs)
 		{
-			AssertJUnit.assertTrue("directory should exist.", dir.exists());
-			AssertJUnit.assertTrue("File object should be a directory.", dir.isDirectory());
+			assertTrue("directory should exist.", dir.exists());
+			assertTrue("File object should be a directory.", dir.isDirectory());
 		}
 		// Finally delete the test directories...
 		for (final File dir : dirs)
@@ -96,16 +129,16 @@ public class CreateFileExtensionsTest
 	@Test(enabled = true)
 	public void testNewDirectory() throws DirectoryAllreadyExistsException, IOException
 	{
-		final File dir = new File("test.dir");
+		final File dir = new File(this.testResources, "testCreateDirectory");
 		// if the directory exist delete it to prevent a DirectoryAllreadyExistsException.
 		if (dir.exists())
 		{
 			DeleteFileExtensions.delete(dir);
 		}
 		final boolean created = CreateFileExtensions.newDirectory(dir);
-		AssertJUnit.assertTrue("directory should be created.", created);
-		AssertJUnit.assertTrue("directory should exist.", dir.exists());
-		AssertJUnit.assertTrue("File object should be a directory.", dir.isDirectory());
+		assertTrue("directory should be created.", created);
+		assertTrue("directory should exist.", dir.exists());
+		assertTrue("File object should be a directory.", dir.isDirectory());
 		// Finally delete the test directory...
 		DeleteFileExtensions.delete(dir);
 	}
@@ -128,9 +161,9 @@ public class CreateFileExtensionsTest
 			DeleteFileExtensions.delete(file);
 		}
 		final boolean created = CreateFileExtensions.newFile(file);
-		AssertJUnit.assertTrue("File should be created.", created);
-		AssertJUnit.assertTrue("File should exist.", file.exists());
-		AssertJUnit.assertTrue("File object should be a file.", file.isFile());
+		assertTrue("File should be created.", created);
+		assertTrue("File should exist.", file.exists());
+		assertTrue("File object should be a file.", file.isFile());
 		// Finally delete the test file...
 		DeleteFileExtensions.delete(file);
 	}
@@ -162,11 +195,11 @@ public class CreateFileExtensionsTest
 			}
 		}
 		final boolean created = CreateFileExtensions.newFiles(files);
-		AssertJUnit.assertTrue("files should be created.", created);
+		assertTrue("files should be created.", created);
 		for (final File file : files)
 		{
-			AssertJUnit.assertTrue("file should exist.", file.exists());
-			AssertJUnit.assertTrue("File object should be a file.", file.isFile());
+			assertTrue("file should exist.", file.exists());
+			assertTrue("File object should be a file.", file.isFile());
 		}
 		// Finally delete the test files...
 		for (final File file : files)
@@ -176,6 +209,16 @@ public class CreateFileExtensionsTest
 				DeleteFileExtensions.delete(file);
 			}
 		}
+	}
+
+	/**
+	 * Test method for {@link CreateFileExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(CreateFileExtensions.class);
 	}
 
 }

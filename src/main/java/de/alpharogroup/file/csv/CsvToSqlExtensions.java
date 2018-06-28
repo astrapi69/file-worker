@@ -28,11 +28,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * The class {@link CsvToSqlExtensions}.
  */
+@UtilityClass
 public final class CsvToSqlExtensions
 {
+
 	/**
 	 * Extract sql columns.
 	 *
@@ -105,7 +109,7 @@ public final class CsvToSqlExtensions
 		else
 		{
 			final StringBuffer sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
-				null, null, csvBean.getLines(), true);
+				null, null, csvBean.getLines(), withEndSemicolon);
 			sb.append(sqlData.toString());
 		}
 		return sb.toString();
@@ -212,16 +216,16 @@ public final class CsvToSqlExtensions
 			for (int i = 0; i < line.length; i++)
 			{
 				String lineItem = line[i];
-				final String columTypeEdit = columnTypesEdit[i];
-				if (columTypeEdit != null)
+				if (columnTypesEdit != null)
 				{
+					final String columTypeEdit = columnTypesEdit[i];
 					final String[] editTypeData = columTypeEdit.split(",");
 					final String editType = editTypeData[0];
 					if (editType.equals("edit"))
 					{
-						lineItem = lineItem.replace(editTypeData[1], editTypeData[2]);
-						if (2 < editTypeData.length)
+						if (3 < editTypeData.length)
 						{
+							lineItem = lineItem.replace(editTypeData[1], editTypeData[2]);
 							final Boolean lc = new Boolean(editTypeData[3]);
 							if (lc)
 							{
@@ -303,14 +307,6 @@ public final class CsvToSqlExtensions
 			}
 		}
 		return sb;
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private CsvToSqlExtensions()
-	{
-		super();
 	}
 
 }

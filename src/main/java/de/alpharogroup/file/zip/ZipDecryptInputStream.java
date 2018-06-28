@@ -31,36 +31,25 @@ import java.io.InputStream;
 /**
  * The class ZipDecryptInputStream is from the blog from Martin's Weekend Coding from
  * 'http://blog.alutam.com/2009/10/31/reading-password-protected-zip-files-in-java/'.
+ * 
+ * @deprecated use instead
+ *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
+ *             <br>
+ *             <br>
+ *             Note: will be removed in the next minor version.
  */
+@Deprecated
 public class ZipDecryptInputStream extends InputStream
 {
 
-	/**
-	 * The Enum State.
-	 */
-	private static enum State
-	{
-
-		/** The SIGNATURE. */
-		SIGNATURE,
-		/** The FLAGS. */
-		FLAGS,
-		/** The COMPRESSE d_ size. */
-		COMPRESSED_SIZE,
-		/** The F n_ length. */
-		FN_LENGTH,
-		/** The E f_ length. */
-		EF_LENGTH,
-		/** The HEADER. */
-		HEADER,
-		/** The DATA. */
-		DATA,
-		/** The TAIL. */
-		TAIL
-	}
-
 	/** The Constant CRC_TABLE. */
 	private static final int[] CRC_TABLE = new int[256];
+
+	/** The Constant DECRYPT_HEADER_SIZE. */
+	private static final int DECRYPT_HEADER_SIZE = 12;
+
+	/** The Constant LFH_SIGNATURE. */
+	private static final int[] LFH_SIGNATURE = { 0x50, 0x4b, 0x03, 0x04 };
 
 	// compute the table
 	// (could also have it pre-computed - see http://snippets.dzone.com/tag/crc32)
@@ -84,38 +73,32 @@ public class ZipDecryptInputStream extends InputStream
 		}
 	}
 
-	/** The Constant DECRYPT_HEADER_SIZE. */
-	private static final int DECRYPT_HEADER_SIZE = 12;
-
-	/** The Constant LFH_SIGNATURE. */
-	private static final int[] LFH_SIGNATURE = { 0x50, 0x4b, 0x03, 0x04 };
+	/** The compressed size. */
+	private int compressedSize;
 
 	/** The delegate. */
 	private final InputStream delegate;
 
-	/** The password. */
-	private final String password;
-
 	/** The keys. */
 	private final int keys[] = new int[3];
 
-	/** The state. */
-	private State state = State.SIGNATURE;
+	/** The password. */
+	private final String password;
 
 	/** The skip bytes. */
 	private int skipBytes;
 
-	/** The compressed size. */
-	private int compressedSize;
+	/** The state. */
+	private ZipState state = ZipState.SIGNATURE;
 
 	/** The value. */
 	private int value;
 
-	/** The value pos. */
-	private int valuePos;
-
 	/** The value inc. */
 	private int valueInc;
+
+	/** The value pos. */
+	private int valuePos;
 
 	/**
 	 * Instantiates a new zip decrypt input stream.
@@ -194,6 +177,18 @@ public class ZipDecryptInputStream extends InputStream
 	public int read() throws IOException
 	{
 		int result = delegate.read();
+		return readlocal(result);
+	}
+
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException
+	{
+		int result = delegate.read(b, off, len);
+		return readlocal(result);
+	}
+
+	private int readlocal(int result) throws IOException
+	{
 		if (skipBytes == 0)
 		{
 			switch (state)
@@ -201,7 +196,7 @@ public class ZipDecryptInputStream extends InputStream
 				case SIGNATURE :
 					if (result != LFH_SIGNATURE[valuePos])
 					{
-						state = State.TAIL;
+						state = ZipState.TAIL;
 					}
 					else
 					{
@@ -209,7 +204,7 @@ public class ZipDecryptInputStream extends InputStream
 						if (valuePos >= LFH_SIGNATURE.length)
 						{
 							skipBytes = 2;
-							state = State.FLAGS;
+							state = ZipState.FLAGS;
 						}
 					}
 					break;
@@ -230,7 +225,7 @@ public class ZipDecryptInputStream extends InputStream
 					compressedSize = 0;
 					valuePos = 0;
 					valueInc = DECRYPT_HEADER_SIZE;
-					state = State.COMPRESSED_SIZE;
+					state = ZipState.COMPRESSED_SIZE;
 					skipBytes = 11;
 					break;
 				case COMPRESSED_SIZE :
@@ -250,7 +245,7 @@ public class ZipDecryptInputStream extends InputStream
 					{
 						valuePos = 0;
 						value = 0;
-						state = State.FN_LENGTH;
+						state = ZipState.FN_LENGTH;
 						skipBytes = 4;
 					}
 					break;
@@ -260,13 +255,13 @@ public class ZipDecryptInputStream extends InputStream
 					if (valuePos == 1)
 					{
 						valuePos = 0;
-						if (state == State.FN_LENGTH)
+						if (state == ZipState.FN_LENGTH)
 						{
-							state = State.EF_LENGTH;
+							state = ZipState.EF_LENGTH;
 						}
 						else
 						{
-							state = State.HEADER;
+							state = ZipState.HEADER;
 							skipBytes = value;
 						}
 					}
@@ -283,7 +278,7 @@ public class ZipDecryptInputStream extends InputStream
 						result = delegate.read();
 					}
 					compressedSize -= DECRYPT_HEADER_SIZE;
-					state = State.DATA;
+					state = ZipState.DATA;
 					// intentionally no break
 				case DATA :
 					result = (result ^ decryptByte()) & 0xff;
@@ -292,7 +287,7 @@ public class ZipDecryptInputStream extends InputStream
 					if (compressedSize == 0)
 					{
 						valuePos = 0;
-						state = State.SIGNATURE;
+						state = ZipState.SIGNATURE;
 					}
 					break;
 				case TAIL :

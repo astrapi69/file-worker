@@ -50,6 +50,7 @@ import org.apache.log4j.Logger;
 
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link WriteFileExtensions} provides methods for writing in files.
@@ -57,6 +58,7 @@ import de.alpharogroup.io.StreamExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class WriteFileExtensions
 {
 
@@ -71,26 +73,22 @@ public final class WriteFileExtensions
 	 *            The source file.
 	 * @param destFile
 	 *            The destination file.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void readSourceFileAndWriteDestFile(final String srcfile, final String destFile)
 	{
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		FileInputStream fis = null;
-		FileOutputStream fos = null;
-		try
+		try (FileInputStream fis = new FileInputStream(srcfile);
+			FileOutputStream fos = new FileOutputStream(destFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);)
 		{
-			fis = new FileInputStream(srcfile);
-			fos = new FileOutputStream(destFile);
-			bis = new BufferedInputStream(fis);
-			bos = new BufferedOutputStream(fos);
 			final int availableLength = bis.available();
 			final byte[] totalBytes = new byte[availableLength];
 			bis.read(totalBytes, 0, availableLength);
 			bos.write(totalBytes, 0, availableLength);
-			bos.flush();
-			bis.close();
-			bos.close();
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -99,13 +97,6 @@ public final class WriteFileExtensions
 		catch (final IOException e)
 		{
 			LOGGER.error("readSourceFileAndWriteDestFile failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(bis);
-			StreamExtensions.closeOutputStream(bos);
-			StreamExtensions.closeInputStream(fis);
-			StreamExtensions.closeOutputStream(fos);
 		}
 	}
 
@@ -116,18 +107,18 @@ public final class WriteFileExtensions
 	 *            The byte array to be saved.
 	 * @param file
 	 *            The file to save the byte array.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void storeByteArrayToFile(final byte[] data, final File file)
 	{
-		FileOutputStream fos = null;
-		BufferedOutputStream bos = null;
-		try
+		try (FileOutputStream fos = new FileOutputStream(file);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);)
 		{
-			fos = new FileOutputStream(file);
-			bos = new BufferedOutputStream(fos);
 			bos.write(data);
 			bos.flush();
-			bos.close();
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -136,11 +127,6 @@ public final class WriteFileExtensions
 		catch (final IOException e)
 		{
 			LOGGER.error("storeByteArrayToFile failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeOutputStream(bos);
-			StreamExtensions.closeOutputStream(fos);
 		}
 	}
 
@@ -153,6 +139,10 @@ public final class WriteFileExtensions
 	 *            The String to write into the File.
 	 * @return The Method return true if the String was write successfull to the file otherwise
 	 *         false.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static boolean string2File(final File file, final String string2write)
 	{
@@ -170,6 +160,10 @@ public final class WriteFileExtensions
 	 *            the encoding
 	 * @return The Method return true if the String was write successfull to the file otherwise
 	 *         false.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static boolean string2File(final File file, final String string2write,
 		final String encoding)
@@ -185,24 +179,21 @@ public final class WriteFileExtensions
 	 * @param nameOfFile
 	 *            The path to the file and name from the file from where we want to write the
 	 *            String.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void string2File(final String string2write, final String nameOfFile)
 	{
-		BufferedWriter bufferedWriter = null;
-		try
+		try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(nameOfFile)))
 		{
-			bufferedWriter = new BufferedWriter(new FileWriter(nameOfFile));
 			bufferedWriter.write(string2write);
 			bufferedWriter.flush();
-			bufferedWriter.close();
 		}
 		catch (final IOException e)
 		{
 			LOGGER.error("string2File failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeWriter(bufferedWriter);
 		}
 	}
 
@@ -221,20 +212,31 @@ public final class WriteFileExtensions
 	public static void write(final InputStream inputStream, final OutputStream outputStream)
 		throws FileNotFoundException, IOException
 	{
-		try
+		int counter;
+		final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
+		while ((counter = inputStream.read(byteArray)) != -1)
 		{
-			int counter;
-			final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
-			while ((counter = inputStream.read(byteArray)) != -1)
-			{
-				outputStream.write(byteArray, 0, counter);
-			}
+			outputStream.write(byteArray, 0, counter);
 		}
-		finally
-		{
-			StreamExtensions.closeInputStream(inputStream);
-			StreamExtensions.closeOutputStream(outputStream);
-		}
+	}
+
+	/**
+	 * The Method write2File() reads from an opened Reader and writes it to the opened Writer. <br>
+	 * <br>
+	 * Note: Stream will not be closed even if the flag is set to true!!!
+	 *
+	 * @param reader
+	 *            The opened Reader.
+	 * @param writer
+	 *            The opened Writer.
+	 * @param closeStream
+	 *            not in use.
+	 * @deprecated use instead the same name method without the closeStream flag.
+	 */
+	public static void write2File(final Reader reader, final Writer writer,
+		final boolean closeStream)
+	{
+		write2File(reader, writer);
 	}
 
 	/**
@@ -244,11 +246,12 @@ public final class WriteFileExtensions
 	 *            The opened Reader.
 	 * @param writer
 	 *            The opened Writer.
-	 * @param closeStream
-	 *            If true then close the outputStream otherwise keep open.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
-	public static void write2File(final Reader reader, final Writer writer,
-		final boolean closeStream)
+	public static void write2File(final Reader reader, final Writer writer)
 	{
 		int byt;
 		try
@@ -257,23 +260,10 @@ public final class WriteFileExtensions
 			{
 				writer.write(byt);
 			}
-			if (closeStream)
-			{
-				reader.close();
-				writer.close();
-			}
 		}
 		catch (final IOException e)
 		{
 			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			if (closeStream)
-			{
-				StreamExtensions.closeReader(reader);
-				StreamExtensions.closeWriter(writer);
-			}
 		}
 	}
 
@@ -284,20 +274,19 @@ public final class WriteFileExtensions
 	 *            The Name from the File to read and copy.
 	 * @param outputFile
 	 *            The Name from the File to write into.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void write2File(final String inputFile, final String outputFile)
 	{
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		FileInputStream fis = null;
-		FileOutputStream fos = null;
-		try
+		try (FileInputStream fis = new FileInputStream(inputFile);
+			FileOutputStream fos = new FileOutputStream(outputFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);)
 		{
-			fis = new FileInputStream(inputFile);
-			fos = new FileOutputStream(outputFile);
-			bis = new BufferedInputStream(fis);
-			bos = new BufferedOutputStream(fos);
-			StreamExtensions.writeInputStreamToOutputStream(bis, bos, true);
+			StreamExtensions.writeInputStreamToOutputStream(bis, bos);
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -306,13 +295,6 @@ public final class WriteFileExtensions
 		catch (final IOException e)
 		{
 			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(fis);
-			StreamExtensions.closeOutputStream(fos);
-			StreamExtensions.closeInputStream(bis);
-			StreamExtensions.closeOutputStream(bos);
 		}
 	}
 
@@ -325,27 +307,41 @@ public final class WriteFileExtensions
 	 *            The PrintWriter to write into.
 	 * @param closeWriter
 	 *            If true then close the outputStream otherwise keep open.
+	 * @deprecated use instead the same name method without the closeWriter flag. <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void write2File(final String inputFile, final Writer writer,
 		final boolean closeWriter)
 	{
-		BufferedReader bufferedReader = null;
-		try
+		write2File(inputFile, writer);
+	}
+
+	/**
+	 * The Method write2File() writes the File into the PrintWriter.
+	 *
+	 * @param inputFile
+	 *            The Name from the File to read and copy.
+	 * @param writer
+	 *            The PrintWriter to write into.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
+	 */
+	public static void write2File(final String inputFile, final Writer writer)
+	{
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile));)
 		{
-			bufferedReader = new BufferedReader(new FileReader(inputFile));
-			write2File(bufferedReader, writer, closeWriter);
+			write2File(bufferedReader, writer);
 		}
 		catch (final FileNotFoundException e)
 		{
 			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
 		}
-		finally
+		catch (IOException e)
 		{
-			if (closeWriter)
-			{
-				StreamExtensions.closeReader(bufferedReader);
-				StreamExtensions.closeWriter(writer);
-			}
+			LOGGER.error("write2File failed...\n" + e.getMessage(), e);
 		}
 	}
 
@@ -357,15 +353,16 @@ public final class WriteFileExtensions
 	 *            The Path to the File and name from the file from where we read.
 	 * @param outputFile
 	 *            The Path to the File and name from the file from where we want to write.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void write2FileWithBuffer(final String inputFile, final String outputFile)
 	{
-		InputStream inputStream = null;
-		OutputStream outputStream = null;
-		try
+		try (InputStream inputStream = StreamExtensions.getInputStream(new File(inputFile));
+			OutputStream outputStream = StreamExtensions.getOutputStream(new File(outputFile));)
 		{
-			inputStream = StreamExtensions.getInputStream(new File(inputFile));
-			outputStream = StreamExtensions.getOutputStream(new File(outputFile));
 			write(inputStream, outputStream);
 		}
 		catch (final FileNotFoundException e)
@@ -375,11 +372,6 @@ public final class WriteFileExtensions
 		catch (final IOException e)
 		{
 			LOGGER.error("write2FileWithBuffer failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(inputStream);
-			StreamExtensions.closeOutputStream(outputStream);
 		}
 	}
 
@@ -396,16 +388,10 @@ public final class WriteFileExtensions
 	public static void writeByteArrayToFile(final File file, final byte[] byteArray)
 		throws IOException
 	{
-		BufferedOutputStream bos = null;
-		FileOutputStream fos = null;
-		try
+		try (FileOutputStream fos = new FileOutputStream(file);
+			BufferedOutputStream bos = new BufferedOutputStream(fos))
 		{
-			fos = new FileOutputStream(file);
-			bos = new BufferedOutputStream(fos);
 			bos.write(byteArray);
-			fos.close();
-			fos = null;
-			bos = null;
 		}
 		catch (final FileNotFoundException ex)
 		{
@@ -414,11 +400,6 @@ public final class WriteFileExtensions
 		catch (final IOException ex)
 		{
 			throw ex;
-		}
-		finally
-		{
-			StreamExtensions.closeOutputStream(fos);
-			StreamExtensions.closeOutputStream(bos);
 		}
 	}
 
@@ -446,6 +427,10 @@ public final class WriteFileExtensions
 	 *            The collection to write to file.
 	 * @param output
 	 *            The output-file.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeLinesToFile(final Collection<String> collection, final File output)
 	{
@@ -467,6 +452,10 @@ public final class WriteFileExtensions
 	 *            The output-file.
 	 * @param encoding
 	 *            the encoding
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeLinesToFile(final Collection<String> collection, final File output,
 		final String encoding)
@@ -489,26 +478,21 @@ public final class WriteFileExtensions
 	 *            The list with the input data.
 	 * @param encoding
 	 *            The encoding.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeLinesToFile(final File output, final List<String> input,
 		final String encoding)
 	{
-		PrintWriter out = null;
-		FileOutputStream fos = null;
-		OutputStreamWriter osw = null;
 		final String lineSeparator = System.getProperty("line.separator");
-		try
+		try (FileOutputStream fos = new FileOutputStream(output);
+			OutputStreamWriter osw = (null == encoding)
+				? new OutputStreamWriter(fos)
+				: new OutputStreamWriter(fos, encoding);
+			PrintWriter out = new PrintWriter(osw);)
 		{
-			fos = new FileOutputStream(output);
-			if (null == encoding)
-			{
-				osw = new OutputStreamWriter(fos);
-			}
-			else
-			{
-				osw = new OutputStreamWriter(fos, encoding);
-			}
-			out = new PrintWriter(osw);
 			final int size = input.size();
 			final StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < size; i++)
@@ -517,12 +501,6 @@ public final class WriteFileExtensions
 				sb.append(entry).append(lineSeparator);
 			}
 			out.write(sb.toString());
-			out.close();
-			osw.close();
-			fos.close();
-			out = null;
-			osw = null;
-			fos = null;
 		}
 		catch (final UnsupportedEncodingException e)
 		{
@@ -536,12 +514,6 @@ public final class WriteFileExtensions
 		{
 			LOGGER.error("writeLinesToFile failed...\n" + e.getMessage(), e);
 		}
-		finally
-		{
-			StreamExtensions.closeOutputStream(fos);
-			StreamExtensions.closeWriter(osw);
-			StreamExtensions.closeWriter(out);
-		}
 	}
 
 	/**
@@ -551,23 +523,21 @@ public final class WriteFileExtensions
 	 *            The filename from the file to write the properties.
 	 * @param properties
 	 *            The properties.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static void writeProperties2File(final String filename, final Properties properties)
 	{
 		// Write properties to the file.
-		FileOutputStream fos = null;
-		try
+		try (FileOutputStream fos = new FileOutputStream(filename))
 		{
-			fos = new FileOutputStream(filename);
 			properties.store(fos, null);
 		}
 		catch (final IOException e)
 		{
 			LOGGER.error("writeProperties2File failed...\n" + e.getMessage(), e);
-		}
-		finally
-		{
-			StreamExtensions.closeOutputStream(fos);
 		}
 	}
 
@@ -582,38 +552,23 @@ public final class WriteFileExtensions
 	 *            The encoding from the file.
 	 * @return The Method return true if the String was write successfull to the file otherwise
 	 *         false.
+	 * @deprecated use instead the same name method in the class {@code WriteFileQuietlyExtensions}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
 	public static boolean writeStringToFile(final File file, final String string2write,
 		final String encoding)
 	{
 		boolean iswritten = true;
-		PrintWriter printWriter = null;
-		BufferedOutputStream bos = null;
-		FileOutputStream fos = null;
-		OutputStreamWriter osw = null;
-
-		try
+		try (FileOutputStream fos = new FileOutputStream(file);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			OutputStreamWriter osw = (null == encoding)
+				? new OutputStreamWriter(bos)
+				: new OutputStreamWriter(bos, encoding);
+			PrintWriter printWriter = new PrintWriter(osw);)
 		{
-			fos = new FileOutputStream(file);
-			bos = new BufferedOutputStream(fos);
-			if (null == encoding)
-			{
-				osw = new OutputStreamWriter(bos);
-			}
-			else
-			{
-				osw = new OutputStreamWriter(bos, encoding);
-			}
-			printWriter = new PrintWriter(osw);
 			printWriter.write(string2write);
-			printWriter.close();
-			osw.close();
-			bos.close();
-			fos.close();
-			printWriter = null;
-			osw = null;
-			bos = null;
-			fos = null;
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -624,22 +579,7 @@ public final class WriteFileExtensions
 		{
 			LOGGER.error("writeStringToFile failed...\n" + e.getMessage(), e);
 		}
-		finally
-		{
-
-			StreamExtensions.closeWriter(printWriter);
-			StreamExtensions.closeWriter(osw);
-			StreamExtensions.closeOutputStream(bos);
-			StreamExtensions.closeOutputStream(fos);
-		}
 		return iswritten;
 	}
 
-	/**
-	 * Private constructor.
-	 */
-	private WriteFileExtensions()
-	{
-		super();
-	}
 }

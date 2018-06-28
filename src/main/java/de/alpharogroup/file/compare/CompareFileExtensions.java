@@ -33,13 +33,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.alpharogroup.crypto.algorithm.HashAlgorithm;
 import de.alpharogroup.file.FileExtensions;
-import de.alpharogroup.file.checksum.Algorithm;
 import de.alpharogroup.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
 import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.io.StreamExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link CompareFileExtensions} helps you to compare files.
@@ -47,6 +48,7 @@ import de.alpharogroup.io.StreamExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
+@UtilityClass
 public final class CompareFileExtensions
 {
 
@@ -171,18 +173,29 @@ public final class CompareFileExtensions
 			try
 			{
 				final String sourceChecksum = ChecksumExtensions.getChecksum(source,
-					Algorithm.SHA_512.getAlgorithm());
+					HashAlgorithm.SHA_512.getAlgorithm());
 				final String compareChecksum = ChecksumExtensions.getChecksum(compare,
-					Algorithm.SHA_512.getAlgorithm());
+					HashAlgorithm.SHA_512.getAlgorithm());
 				contentEquality = sourceChecksum.equals(compareChecksum);
 				fileContentResultBean.setContentEquality(contentEquality);
 			}
 			catch (final NoSuchAlgorithmException e)
 			{
 				// if the algorithm is not supported check it with CRC32.
-				contentEquality = ChecksumExtensions.getCheckSumCRC32(source) == ChecksumExtensions
-					.getCheckSumCRC32(compare);
-				fileContentResultBean.setContentEquality(contentEquality);
+				try
+				{
+					contentEquality = ChecksumExtensions
+						.getCheckSumCRC32(source) == ChecksumExtensions.getCheckSumCRC32(compare);
+					fileContentResultBean.setContentEquality(contentEquality);
+				}
+				catch (IOException e1)
+				{
+					fileContentResultBean.setContentEquality(false);
+				}
+			}
+			catch (IOException e)
+			{
+				fileContentResultBean.setContentEquality(false);
 			}
 		}
 		else
@@ -212,12 +225,9 @@ public final class CompareFileExtensions
 		// Compare the content...
 		if (simpleEquality)
 		{
-			InputStream sourceReader = null;
-			InputStream compareReader = null;
-			try
+			try (InputStream sourceReader = StreamExtensions.getInputStream(sourceFile);
+				InputStream compareReader = StreamExtensions.getInputStream(fileToCompare);)
 			{
-				sourceReader = StreamExtensions.getInputStream(sourceFile);
-				compareReader = StreamExtensions.getInputStream(fileToCompare);
 
 				final byte[] source = StreamExtensions.getByteArray(sourceReader);
 				final byte[] compare = StreamExtensions.getByteArray(compareReader);
@@ -238,11 +248,6 @@ public final class CompareFileExtensions
 			catch (final IOException e)
 			{
 				contentEquality = false;
-			}
-			finally
-			{
-				StreamExtensions.closeInputStream(sourceReader);
-				StreamExtensions.closeInputStream(compareReader);
 			}
 		}
 		fileContentResultBean.setContentEquality(contentEquality);
@@ -270,12 +275,13 @@ public final class CompareFileExtensions
 		// Compare the content...
 		if (simpleEquality)
 		{
-			BufferedReader sourceReader = null;
-			BufferedReader compareReader = null;
-			try
+			try (
+
+				BufferedReader sourceReader = (BufferedReader)StreamExtensions
+					.getReader(sourceFile);
+				BufferedReader compareReader = (BufferedReader)StreamExtensions
+					.getReader(fileToCompare);)
 			{
-				sourceReader = (BufferedReader)StreamExtensions.getReader(sourceFile);
-				compareReader = (BufferedReader)StreamExtensions.getReader(fileToCompare);
 				String sourceLine;
 				String compareLine;
 
@@ -296,11 +302,6 @@ public final class CompareFileExtensions
 			catch (final IOException e)
 			{
 				contentEquality = false;
-			}
-			finally
-			{
-				StreamExtensions.closeReader(sourceReader);
-				StreamExtensions.closeReader(compareReader);
 			}
 		}
 		fileContentResultBean.setContentEquality(contentEquality);
@@ -382,12 +383,9 @@ public final class CompareFileExtensions
 		// Compare the content?
 		if (content)
 		{
-			BufferedReader sourceReader = null;
-			BufferedReader compareReader = null;
-			try
+			try (BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(source);
+				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(compare);)
 			{
-				sourceReader = (BufferedReader)StreamExtensions.getReader(source);
-				compareReader = (BufferedReader)StreamExtensions.getReader(compare);
 				String sourceLine;
 				String compareLine;
 
@@ -408,11 +406,6 @@ public final class CompareFileExtensions
 			catch (final IOException e)
 			{
 				equal = false;
-			}
-			finally
-			{
-				StreamExtensions.closeReader(sourceReader);
-				StreamExtensions.closeReader(compareReader);
 			}
 		}
 		return equal;
@@ -915,11 +908,6 @@ public final class CompareFileExtensions
 			&& fileContentResultBean.getLastModifiedEquality()
 			&& fileContentResultBean.getNameEquality()
 			&& fileContentResultBean.getContentEquality();
-	}
-
-	private CompareFileExtensions()
-	{
-		super();
 	}
 
 }

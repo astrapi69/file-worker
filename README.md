@@ -21,7 +21,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 Than you can add the dependency to your dependencies:
 
 		<!-- FILE-WORKER version -->
-		<file-worker.version>4.20</file-worker.version>
+		<file-worker.version>4.21</file-worker.version>
 
 		<dependencies>
 			...
@@ -33,6 +33,16 @@ Than you can add the dependency to your dependencies:
 			</dependency>
 			...
 		</dependencies>
+
+## Semantic Versioning
+
+The versions of file-worker are maintained with the Semantic Versioning guidelines.
+
+Release version numbers will be incremented in the following format:
+
+`<major>.<minor>.<patch>`
+
+For detailed information on versioning you can visit the [wiki page](https://github.com/lightblueseas/mvn-parent-projects/wiki/Semantic-Versioning).
 
 
 ## Want to Help and improve it? ###
@@ -73,6 +83,14 @@ or over flattr:
 <a href="https://flattr.com/submit/auto?fid=r7vp62&url=https%3A%2F%2Fgithub.com%2Flightblueseas%2Ffile-worker" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
 </a>
+
+## Similar projects
+
+Here is a list of awesome similar projects:
+
+Open Source:
+
+ * [ziputils](https://bitbucket.org/matulic/ziputils) Simple library for reading and writing password-protected zip files in Java
 
 ## Credits
 

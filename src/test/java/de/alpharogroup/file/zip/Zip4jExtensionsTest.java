@@ -24,16 +24,21 @@
  */
 package de.alpharogroup.file.zip;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.testng.AssertJUnit;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -83,15 +88,49 @@ public class Zip4jExtensionsTest extends FileTestCase
 		final File unzippedFile1 = new File(this.unzipDir, file1);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), file1);
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
 
 		Zip4jExtensions.zipFiles(zip4jZipFile, testFile1);
 		// Test to extract...
 		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, null);
 
-		AssertJUnit.assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
+		assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
 			unzippedFile1.exists());
 
+	}
+
+	/**
+	 * Test for {@link Zip4jExtensions#extract(ZipFile, File, String)}
+	 */
+	@Test(enabled = true)
+	public void testExtractWithPassword() throws ZipException
+	{
+		final File zipFile = new File(this.testResources, "autotextWithPassword.testzip");
+		final File unzippedFile = new File(this.unzipDir, "autotext");
+		// unzipped file should not exists in file system...
+		expected = false;
+		actual = unzippedFile.exists();
+		assertEquals(expected, actual);
+		final String password = "Hallo";
+
+		final ZipFile zip4jZipFile = new ZipFile(zipFile);
+
+		// Test to extract...
+		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, password);
+		// unzipped file should be extracted and should exists in file system...
+		expected = true;
+		actual = unzippedFile.exists();
+		assertEquals(expected, actual);
+	}
+
+	/**
+	 * Test method for {@link Zip4jExtensions}
+	 */
+	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(Zip4jExtensions.class);
 	}
 
 	/**
@@ -113,17 +152,17 @@ public class Zip4jExtensionsTest extends FileTestCase
 		final File unzippedFile2 = new File(this.unzipDir, file2);
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), file2);
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
 
 		Zip4jExtensions.zipFiles(zip4jZipFile, testFile1, testFile2);
 
 
 		Zip4jExtensions.extract(zip4jZipFile, this.unzipDir, null);
 
-		AssertJUnit.assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
+		assertTrue("File" + unzippedFile1.getName() + " should be extracted.",
 			unzippedFile1.exists());
-		AssertJUnit.assertTrue("File" + unzippedFile2.getName() + " should be extracted.",
+		assertTrue("File" + unzippedFile2.getName() + " should be extracted.",
 			unzippedFile2.exists());
 	}
 

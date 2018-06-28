@@ -25,45 +25,58 @@
 package de.alpharogroup.file.csv;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.alpharogroup.collections.CollectionExtensions;
+import de.alpharogroup.collections.array.ArrayExtensions;
+import de.alpharogroup.collections.list.ListExtensions;
+import de.alpharogroup.collections.list.ListFactory;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
+
 /**
- * The class CsvBean.
+ * The class {@link CsvBean}.
  */
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CsvBean implements Serializable, Cloneable
 {
 
 	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 5428554488510583277L;
-
-
-	/** The headers. */
-	private String[] headers;
+	private static final long serialVersionUID = 1648936246997896598L;
 
 	/** The column types. */
 	private String[] columnTypes;
 
-	/** The lines. */
-	private List<String[]> lines;
-
 	/** The column types edit. */
 	private String[] columnTypesEdit;
 
+	/** The headers. */
+	private String[] headers;
 
 	/** The line order. */
 	private Map<Integer, Integer> lineOrder;
 
-	/**
-	 * Instantiates a new csv bean.
-	 */
-	public CsvBean()
-	{
-		super();
-	}
+
+	/** The lines. */
+	private List<String[]> lines;
 
 	/**
-	 * Instantiates a new csv bean.
+	 * Instantiates a new {@link CsvBean} object.
 	 *
 	 * @param headers
 	 *            the headers
@@ -74,39 +87,13 @@ public class CsvBean implements Serializable, Cloneable
 	 */
 	public CsvBean(final String[] headers, final String[] columnTypes, final List<String[]> lines)
 	{
-		this();
 		this.headers = headers;
 		this.columnTypes = columnTypes;
 		this.lines = lines;
 	}
 
 	/**
-	 * Instantiates a new csv bean.
-	 *
-	 * @param headers
-	 *            the headers
-	 * @param columnTypes
-	 *            the column types
-	 * @param lines
-	 *            the lines
-	 * @param columnTypesEdit
-	 *            the column types edit
-	 * @param lineOrder
-	 *            the line order
-	 */
-	public CsvBean(final String[] headers, final String[] columnTypes, final List<String[]> lines,
-		final String[] columnTypesEdit, final Map<Integer, Integer> lineOrder)
-	{
-		super();
-		this.headers = headers;
-		this.columnTypes = columnTypes;
-		this.lines = lines;
-		this.columnTypesEdit = columnTypesEdit;
-		this.lineOrder = lineOrder;
-	}
-
-	/**
-	 * Instantiates a new csv bean.
+	 * Instantiates a new {@link CsvBean} object.
 	 *
 	 * @param headers
 	 *            the headers
@@ -120,7 +107,6 @@ public class CsvBean implements Serializable, Cloneable
 	public CsvBean(final String[] headers, final String[] columnTypes,
 		final String[] columnTypesEdit, final List<String[]> lines)
 	{
-		this();
 		this.headers = headers;
 		this.columnTypes = columnTypes;
 		this.columnTypesEdit = columnTypesEdit;
@@ -128,50 +114,25 @@ public class CsvBean implements Serializable, Cloneable
 	}
 
 	/**
-	 * (non-Javadoc).
-	 *
-	 * @return the object
-	 * @see java.lang.Object#clone()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Object clone()
 	{
-		final CsvBean inst = new CsvBean();
-		if (headers != null)
-		{
-			inst.headers = new String[headers.length];
-			for (int i0 = 0; i0 < headers.length; i0++)
-			{
-				inst.headers[i0] = headers[i0] == null ? null : new String(headers[i0]);
-			}
-		}
-		else
-		{
-			inst.headers = null;
-		}
-		if (columnTypes != null)
-		{
-			inst.columnTypes = new String[columnTypes.length];
-			for (int i0 = 0; i0 < columnTypes.length; i0++)
-			{
-				inst.columnTypes[i0] = columnTypes[i0] == null ? null : new String(columnTypes[i0]);
-			}
-		}
-		else
-		{
-			inst.columnTypes = null;
-		}
-
-		inst.lines = lines;
+		final CsvBean inst = CsvBean.builder()
+			.columnTypes(ArrayExtensions.arraycopyWithSystem(columnTypes,
+				columnTypes == null ? null : new String[columnTypes.length]))
+			.columnTypesEdit(ArrayExtensions.arraycopyWithSystem(columnTypesEdit,
+				columnTypesEdit == null ? null : new String[columnTypesEdit.length]))
+			.headers(ArrayExtensions.arraycopyWithSystem(headers,
+				headers == null ? null : new String[headers.length]))
+			.lineOrder(lineOrder == null ? null : new LinkedHashMap<>(lineOrder))
+			.lines(lines == null ? null : ListFactory.newArrayList(lines)).build();
 		return inst;
 	}
 
 	/**
-	 * Returns <code>true</code> if this <code>CsvBean</code> is the same as the o argument.
-	 *
-	 * @param o
-	 *            the o
-	 * @return is the same as the o argument.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean equals(final Object o)
@@ -188,169 +149,31 @@ public class CsvBean implements Serializable, Cloneable
 		{
 			return false;
 		}
-		final CsvBean castedObj = (CsvBean)o;
-		return java.util.Arrays.equals(headers, castedObj.headers)
-			&& java.util.Arrays.equals(columnTypes, castedObj.columnTypes)
-			&& (lines == null ? castedObj.lines == null : lines.equals(castedObj.lines));
+		final CsvBean other = (CsvBean)o;
+		boolean headersEquality = java.util.Arrays.equals(headers, other.headers);
+		boolean columnTypesEquality = java.util.Arrays.equals(columnTypes, other.columnTypes);
+		boolean linesEquality = false;
+		if (lines == null)
+		{
+			if (other.lines != null)
+				return false;
+		}
+		linesEquality = ListExtensions.isEqualListOfArrays(lines, other.lines);
+		return headersEquality && columnTypesEquality && linesEquality;
 	}
 
 	/**
-	 * Gets the column types.
-	 *
-	 * @return the column types
-	 */
-	public String[] getColumnTypes()
-	{
-		return columnTypes;
-	}
-
-	/**
-	 * Gets the column types edit.
-	 *
-	 * @return the column types edit
-	 */
-	public String[] getColumnTypesEdit()
-	{
-		return columnTypesEdit;
-	}
-
-
-	/**
-	 * Gets the headers.
-	 *
-	 * @return the headers
-	 */
-	public String[] getHeaders()
-	{
-		return headers;
-	}
-
-	/**
-	 * Gets the line order.
-	 *
-	 * @return the line order
-	 */
-	public Map<Integer, Integer> getLineOrder()
-	{
-		return lineOrder;
-	}
-
-	/**
-	 * Gets the lines.
-	 *
-	 * @return the lines
-	 */
-	public List<String[]> getLines()
-	{
-		return lines;
-	}
-
-	/**
-	 * Override hashCode.
-	 *
-	 * @return the Objects hashcode.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int hashCode()
 	{
 		int hashCode = 1;
-		hashCode = 31 * hashCode + (int)(+serialVersionUID ^ serialVersionUID >>> 32);
-		for (int i0 = 0; headers != null && i0 < headers.length; i0++)
-		{
-			hashCode = 31 * hashCode + (headers == null ? 0 : headers[i0].hashCode());
-		}
-		for (int i0 = 0; columnTypes != null && i0 < columnTypes.length; i0++)
-		{
-			hashCode = 31 * hashCode + (columnTypes == null ? 0 : columnTypes[i0].hashCode());
-		}
-		hashCode = 31 * hashCode + (lines == null ? 0 : lines.hashCode());
+		final int prime = 31;
+		hashCode = prime * hashCode + Arrays.hashCode(columnTypes);
+		hashCode = prime * hashCode + Arrays.hashCode(headers);
+		hashCode = prime * hashCode * CollectionExtensions.hashCode(lines);
 		return hashCode;
-	}
-
-	/**
-	 * Sets the column types.
-	 *
-	 * @param columnTypes
-	 *            the new column types
-	 */
-	public void setColumnTypes(final String[] columnTypes)
-	{
-		this.columnTypes = columnTypes;
-	}
-
-	/**
-	 * Sets the column types edit.
-	 *
-	 * @param columnTypesEdit
-	 *            the new column types edit
-	 */
-	public void setColumnTypesEdit(final String[] columnTypesEdit)
-	{
-		this.columnTypesEdit = columnTypesEdit;
-	}
-
-	/**
-	 * Sets the headers.
-	 *
-	 * @param headers
-	 *            the new headers
-	 */
-	public void setHeaders(final String[] headers)
-	{
-		this.headers = headers;
-	}
-
-	/**
-	 * Sets the line order.
-	 *
-	 * @param lineOrder
-	 *            the line order
-	 */
-	public void setLineOrder(final Map<Integer, Integer> lineOrder)
-	{
-		this.lineOrder = lineOrder;
-	}
-
-	/**
-	 * Sets the lines.
-	 *
-	 * @param lines
-	 *            the new lines
-	 */
-	public void setLines(final List<String[]> lines)
-	{
-		this.lines = lines;
-	}
-
-	/**
-	 * (non-Javadoc).
-	 *
-	 * @return the string
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString()
-	{
-		final StringBuilder buffer = new StringBuilder();
-		buffer.append("[CsvBean:");
-		buffer.append(" { ");
-		for (int i0 = 0; headers != null && i0 < headers.length; i0++)
-		{
-			buffer.append(" headers[" + i0 + "]: ");
-			buffer.append(headers[i0]);
-		}
-		buffer.append(" } ");
-		buffer.append(" { ");
-		for (int i0 = 0; columnTypes != null && i0 < columnTypes.length; i0++)
-		{
-			buffer.append(" columnTypes[" + i0 + "]: ");
-			buffer.append(columnTypes[i0]);
-		}
-		buffer.append(" } ");
-		buffer.append(" lines: ");
-		buffer.append(lines);
-		buffer.append("]");
-		return buffer.toString();
 	}
 
 }

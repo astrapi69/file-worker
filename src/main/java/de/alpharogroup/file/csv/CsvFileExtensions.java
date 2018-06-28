@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,10 +39,10 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
-import lombok.experimental.ExtensionMethod;
+import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for the use of cvs-files.
@@ -51,9 +50,10 @@ import lombok.experimental.ExtensionMethod;
  * @version 1.0
  * @author Asterios Raptis
  */
-@ExtensionMethod(StringExtensions.class)
+@UtilityClass
 public final class CsvFileExtensions
 {
+
 	/**
 	 * Reads every line from the File splits the data through a comma and puts them to the List.
 	 *
@@ -62,17 +62,17 @@ public final class CsvFileExtensions
 	 * @param encoding
 	 *            The encoding from the file.
 	 * @return The List with all lines from the file.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static List<String> formatKommaSeperatedFileToList(final File input,
-		final String encoding)
+		final String encoding) throws IOException
 	{
 		// The List where the data from every line from the File to put.
 		final List<String> output = new ArrayList<>();
-		BufferedReader reader = null;
-		try
+		try (BufferedReader reader = (BufferedReader)StreamExtensions.getReader(input, encoding,
+			false))
 		{
-			// create the bufferedreader
-			reader = (BufferedReader)StreamExtensions.getReader(input, encoding, false);
 			// the line.
 			String line = null;
 			// read all lines from the file
@@ -95,23 +95,6 @@ public final class CsvFileExtensions
 			}
 			while (true);
 		}
-		catch (final UnsupportedEncodingException e)
-		{
-			e.printStackTrace();
-		}
-		catch (final FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (final IOException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-		}
-
 		// return the list with all lines from the file.
 		return output;
 
@@ -162,7 +145,7 @@ public final class CsvFileExtensions
 	{
 		final List<String> list = readLinesInList(input, "UTF-8");
 		final String sb = formatListToString(list);
-		WriteFileExtensions.writeStringToFile(output, sb, encoding);
+		WriteFileQuietlyExtensions.writeStringToFile(output, sb, encoding);
 	}
 
 	/**
@@ -177,7 +160,25 @@ public final class CsvFileExtensions
 	 */
 	public static List<Map<String, String>> getCvsAsListMap(final File input) throws IOException
 	{
-		final List<String[]> lines = CsvFileExtensions.readFileToList(input, ";", "UTF-8");
+		return getCvsAsListMap(input, "ISO-8859-1");
+	}
+
+	/**
+	 * Gets the given cvs file as list of maps. Every map has as key the header from the column and
+	 * the corresponding value for this line.
+	 *
+	 * @param input
+	 *            the input
+	 * @param encoding
+	 *            the encoding to read
+	 * @return the cvs as list map
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static List<Map<String, String>> getCvsAsListMap(final File input, final String encoding)
+		throws IOException
+	{
+		final List<String[]> lines = CsvFileExtensions.readFileToList(input, ";", encoding);
 		final List<Map<String, String>> data = new ArrayList<>();
 		final String[] headline = lines.remove(0);
 		for (final String[] line : lines)
@@ -192,7 +193,6 @@ public final class CsvFileExtensions
 		}
 		return data;
 	}
-
 
 	/**
 	 * Gets the data from line.
@@ -273,55 +273,7 @@ public final class CsvFileExtensions
 	public static List<String> readDataFromCVSFileToList(final File input, final int position,
 		final boolean putFirstLine, final String encoding) throws IOException
 	{
-		final List<String> output = new ArrayList<>();
-		BufferedReader reader = null;
-		try
-		{
-			// create the bufferedreader
-			reader = (BufferedReader)StreamExtensions.getReader(input, encoding, false);
-			// the line.
-			String line = null;
-			// read all lines from the file
-			do
-			{
-
-				line = reader.readLine();
-
-				// if null break the loop
-				if (line == null)
-				{
-					break;
-				}
-				// Split the line
-				final String[] splittedData = line.split(",");
-				// get the data with the index
-				if (position < splittedData.length - 1)
-				{
-					final String s = splittedData[position].removeQuotationMarks();
-					output.add(s);
-				}
-				else
-				{
-					break;
-				}
-
-			}
-			while (true);
-		}
-		catch (final IOException e)
-		{
-			throw e;
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-		}
-		// return the list with all lines from the file.
-		if (putFirstLine)
-		{
-			output.remove(0);
-		}
-		return output;
+		return readDataFromCVSFileToList(input, position, putFirstLine, ",", encoding);
 	}
 
 	/**
@@ -346,11 +298,9 @@ public final class CsvFileExtensions
 		throws IOException
 	{
 		final List<String> output = new ArrayList<>();
-		BufferedReader reader = null;
-		try
+		try (BufferedReader reader = (BufferedReader)StreamExtensions.getReader(input, encoding,
+			false))
 		{
-			// create the bufferedreader
-			reader = (BufferedReader)StreamExtensions.getReader(input, encoding, false);
 			// the line.
 			String line = null;
 			// read all lines from the file
@@ -369,7 +319,8 @@ public final class CsvFileExtensions
 				// get the data with the index
 				if (position <= splittedData.length - 1)
 				{
-					final String s = splittedData[position].removeQuotationMarks();
+
+					final String s = StringExtensions.removeQuotationMarks(splittedData[position]);
 					output.add(s);
 				}
 			}
@@ -379,12 +330,8 @@ public final class CsvFileExtensions
 		{
 			throw e;
 		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-		}
 		// return the list with all lines from the file.
-		if (putFirstLine)
+		if (!putFirstLine)
 		{
 			output.remove(0);
 		}
@@ -442,11 +389,9 @@ public final class CsvFileExtensions
 		throws IOException
 	{
 		final List<String> fn = new ArrayList<>();
-		BufferedReader reader = null;
-		try
+		try (BufferedReader reader = (BufferedReader)StreamExtensions.getReader(file, encoding,
+			false))
 		{
-			// create a reader
-			reader = (BufferedReader)StreamExtensions.getReader(file, encoding, false);
 			// the line.
 			String line = null;
 			// read all lines from the file
@@ -469,13 +414,7 @@ public final class CsvFileExtensions
 		{
 			throw e;
 		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-		}
-
 		return fn;
-
 	}
 
 
@@ -496,11 +435,9 @@ public final class CsvFileExtensions
 		final String encoding) throws IOException
 	{
 		final List<String[]> fn = new ArrayList<>();
-		BufferedReader reader = null;
-		try
+		try (BufferedReader reader = (BufferedReader)StreamExtensions.getReader(file, encoding,
+			false))
 		{
-			// create a reader
-			reader = (BufferedReader)StreamExtensions.getReader(file, encoding, false);
 			// the line.
 			String line = null;
 			// read all lines from the file
@@ -524,10 +461,6 @@ public final class CsvFileExtensions
 		{
 			throw e;
 		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-		}
 		return fn;
 	}
 
@@ -547,11 +480,9 @@ public final class CsvFileExtensions
 	{
 		// The List where the lines from the File to put.
 		final List<String> output = new ArrayList<>();
-		BufferedReader reader = null;
-		try
+		try (BufferedReader reader = (BufferedReader)StreamExtensions.getReader(input, encoding,
+			false))
 		{
-			// create the bufferedreader
-			reader = (BufferedReader)StreamExtensions.getReader(input, encoding, false);
 			// the line.
 			String line = null;
 			// read all lines from the file
@@ -571,10 +502,6 @@ public final class CsvFileExtensions
 		catch (final IOException e)
 		{
 			throw e;
-		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
 		}
 		// return the list with all lines from the file.
 		return output;
@@ -597,11 +524,9 @@ public final class CsvFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		final List<String> fn = new ArrayList<>();
-		BufferedReader reader = null;
-		try
+		try (BufferedReader reader = (BufferedReader)StreamExtensions.getReader(csvData, encoding,
+			false))
 		{
-			// create a reader
-			reader = (BufferedReader)StreamExtensions.getReader(csvData, encoding, false);
 			// the line.
 			String line = null;
 			int index, last;
@@ -637,10 +562,6 @@ public final class CsvFileExtensions
 		{
 			throw e;
 		}
-		finally
-		{
-			StreamExtensions.closeReader(reader);
-		}
 		// convert the list to a String array.
 		final String data[] = fn.toArray(new String[fn.size()]);
 		// and sort the array.
@@ -664,9 +585,12 @@ public final class CsvFileExtensions
 		final String comments) throws IOException
 	{
 		final Properties prop = readFilelistToProperties(input);
+		try (final OutputStream out = StreamExtensions.getOutputStream(output, true))
+		{
+			prop.store(out, comments);
+		}
 		final OutputStream out = StreamExtensions.getOutputStream(output, true);
 		prop.store(out, comments);
-		StreamExtensions.closeOutputStream(out);
 	}
 
 	/**
@@ -707,15 +631,7 @@ public final class CsvFileExtensions
 			sb.append(element);
 			sb.append("\n");
 		}
-		WriteFileExtensions.writeStringToFile(output, sb.toString(), encoding);
-	}
-
-	/**
-	 * Private constructor.
-	 */
-	private CsvFileExtensions()
-	{
-		super();
+		WriteFileQuietlyExtensions.writeStringToFile(output, sb.toString(), encoding);
 	}
 
 }

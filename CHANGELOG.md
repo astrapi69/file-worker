@@ -1,6 +1,17 @@
 ## Change log
 ----------------------
 
+Version 4.21
+-------------
+
+ADDED:
+ 
+- new dependency silly-collections in version 4.30.1
+
+CHANGED:
+
+- update of jcommons-lang dependency version from 4.33 to 4.34 
+
 Version 4.20
 -------------
 
@@ -8,9 +19,10 @@ CHANGED:
 
 - update of parent version to 3.11
 - removed unneeded .0 at the end of version
-- update of test-objects dependency version from 4.22.0 to 4.24.0 
-- update of jcommons-lang dependency version from 4.29.0 to 4.31.0 
+- update of test-objects dependency version from 4.22.0 to 4.26 
+- update of jcommons-lang dependency version from 4.29.0 to 4.33 
 - javadoc improved 
+- tagged URLExtensions and Protocol classes as deprecated. Moved to net-extensions project 
 
 Version 4.19.0
 -------------

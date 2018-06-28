@@ -42,12 +42,6 @@ public abstract class ZipTestCase extends FileTestCase
 
 	/**
 	 * The directory for unzipping zip files. Current
-	 * value:"projectpath"+"/src/test/resources"+"/unzipDir"+"/testDir".
-	 */
-	protected File unzipDirTestDir;
-
-	/**
-	 * The directory for unzipping zip files. Current
 	 * value:"projectpath"+"/src/test/resources"+"/unzipDir"+"/testDir"+"/deepDir".
 	 */
 	protected File unzipDirDeepDir;
@@ -63,6 +57,12 @@ public abstract class ZipTestCase extends FileTestCase
 	 * +"/unzipDir"+"/testDir"+"/deepDir"+"/deeperDir".
 	 */
 	protected File unzipDirDeeperDir;
+
+	/**
+	 * The directory for unzipping zip files. Current
+	 * value:"projectpath"+"/src/test/resources"+"/unzipDir"+"/testDir".
+	 */
+	protected File unzipDirTestDir;
 
 	/**
 	 * Sets the up.

@@ -28,8 +28,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +38,12 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 
-import de.alpharogroup.lang.ClassExtensions;
+import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ExportExcelExtensions}.
  */
+@UtilityClass
 public final class ExportExcelExtensions
 {
 
@@ -212,33 +211,6 @@ public final class ExportExcelExtensions
 		return sl;
 	}
 
-
-	/**
-	 * The main method.
-	 *
-	 * @param args
-	 *            the arguments
-	 * @throws FileNotFoundException
-	 *             the file not found exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws URISyntaxException
-	 *             is thrown if a string could not be parsed as a URI reference.
-	 */
-	public static void main(final String[] args)
-		throws FileNotFoundException, IOException, URISyntaxException
-	{
-		final String filename = "test.xls";
-		final URL url = ClassExtensions.getResource(filename);
-		final File excelSheet = new File(url.toURI());
-		System.out.println(excelSheet.exists());
-		final List<String[][]> sheetList = exportWorkbook(excelSheet);
-		System.out.println(sheetList);
-		final List<List<List<String>>> excelSheetList = exportWorkbookAsStringList(excelSheet);
-		System.out.println(excelSheetList);
-	}
-
-
 	/**
 	 * Replace null cells into empty cells.
 	 *
@@ -282,11 +254,4 @@ public final class ExportExcelExtensions
 		return wb;
 	}
 
-
-	/**
-	 * Privater Konstruktor damit keine Instanzen erzeugt werden können.
-	 */
-	private ExportExcelExtensions()
-	{
-	}
 }

@@ -24,45 +24,54 @@
  */
 package de.alpharogroup.file.zip;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import de.alpharogroup.io.StreamExtensions;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
 /**
- * The class Unzipper.
+ * The class {@link Unzipper}
  *
  * @author Asterios Raptis
  * @version 1.0
  */
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Unzipper
 {
 
-	/** The zip file. */
-	private ZipFile zipFile;
+	/**
+	 * The password.
+	 * 
+	 * @deprecated <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor version.
+	 */
+	String password;
 
 	/** The to dir. */
-	private File toDir;
+	File toDir;
 
-	/** The password. */
-	private String password;
-
-	/**
-	 * Instantiates a new unzipper.
-	 */
-	public Unzipper()
-	{
-	}
+	/** The zip file. */
+	ZipFile zipFile;
 
 	/**
 	 * Instantiates a new unzipper.
@@ -93,101 +102,7 @@ public class Unzipper
 	public void extractZipEntry(final ZipFile zipFile, final ZipEntry target,
 		final File toDirectory) throws IOException
 	{
-		final File fileToExtract = new File(toDirectory, target.getName());
-		BufferedInputStream bis = null;
-		BufferedOutputStream bos = null;
-		InputStream is = null;
-		try
-		{
-			is = zipFile.getInputStream(target);
-			if (is != null)
-			{
-				bis = new BufferedInputStream(is);
-
-				new File(fileToExtract.getParent()).mkdirs();
-
-				bos = new BufferedOutputStream(new FileOutputStream(fileToExtract));
-				for (int c; (c = bis.read()) != -1;)
-				{
-					bos.write((byte)c);
-				}
-
-				bos.close();
-			}
-		}
-		catch (final IOException e)
-		{
-			throw e;
-		}
-		finally
-		{
-			StreamExtensions.closeInputStream(is);
-			StreamExtensions.closeInputStream(bis);
-			StreamExtensions.closeOutputStream(bos);
-		}
-	}
-
-	/**
-	 * Gets the password.
-	 *
-	 * @return the password
-	 */
-	public String getPassword()
-	{
-		return password;
-	}
-
-	/**
-	 * Returns the field <code>toDir</code>.
-	 * 
-	 * @return The field <code>toDir</code>.
-	 */
-	public File getToDir()
-	{
-		return this.toDir;
-	}
-
-	/**
-	 * Returns the field <code>zipFile</code>.
-	 * 
-	 * @return The field <code>zipFile</code>.
-	 */
-	public ZipFile getZipFile()
-	{
-		return this.zipFile;
-	}
-
-	/**
-	 * Sets the password.
-	 *
-	 * @param password
-	 *            the new password
-	 */
-	public void setPassword(final String password)
-	{
-		this.password = password;
-	}
-
-	/**
-	 * Sets the field <code>toDir</code>.
-	 * 
-	 * @param toDir
-	 *            The <code>toDir</code> to set
-	 */
-	public void setToDir(final File toDir)
-	{
-		this.toDir = toDir;
-	}
-
-	/**
-	 * Sets the field <code>zipFile</code>.
-	 * 
-	 * @param zipFile
-	 *            The <code>zipFile</code> to set
-	 */
-	public void setZipFile(final ZipFile zipFile)
-	{
-		this.zipFile = zipFile;
+		ZipExtensions.extractZipEntry(zipFile, target, toDirectory);
 	}
 
 	/**
@@ -212,6 +127,12 @@ public class Unzipper
 	 *            the password
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * 
+	 * @deprecated use instead
+	 *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor version.
 	 */
 	public void unzip(final File zipFile, final File toDir, final String password)
 		throws IOException
@@ -232,7 +153,14 @@ public class Unzipper
 	 *            the charset name
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * 
+	 * @deprecated use instead
+	 *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
+	 *             <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor version.
 	 */
+	@Deprecated
 	public void unzip(final File zipFile, final File toDir, final String password,
 		final Charset charsetName) throws IOException
 	{
@@ -278,12 +206,7 @@ public class Unzipper
 	 */
 	public void unzip(final ZipFile zipFile, final File toDir) throws IOException
 	{
-		for (final Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements();)
-		{
-			final ZipEntry entry = e.nextElement();
-			this.extractZipEntry(zipFile, entry, toDir);
-		}
-		zipFile.close();
+		ZipExtensions.unzip(zipFile, toDir);
 	}
 
 }
