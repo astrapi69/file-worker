@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>de.alpharogroup</groupId>
 		<artifactId>mvn-java-parent</artifactId>
-		<version>3.11</version>
+		<version>3.12</version>
 		<relativePath></relativePath>
 	</parent>
 
 	<artifactId>file-worker</artifactId>
-	<version>4.21</version>
+	<version>4.22</version>
 
 	<name>${project.artifactId}</name>
 
@@ -39,6 +39,8 @@
 		<!-- JOBJECT-EXTENSIONS version -->
 		<jobject-extensions.version>1.11</jobject-extensions.version>
 		<jobject-evaluate.version>${jobject-extensions.version}</jobject-evaluate.version>
+		
+		<mockito-core.version>2.18.3</mockito-core.version>
 	</properties>
 
 	<licenses>
@@ -267,6 +269,8 @@
 								<!-- explicit constant classes with only constants -->
 								<!-- explicit delegation classes -->
 								<exclude>de/alpharogroup/file/checksum/ChecksumQuietlyExtensions.class</exclude>
+								<exclude>de/alpharogroup/file/create/CreateFileQuietlyExtensions.class</exclude>
+								<exclude>de/alpharogroup/file/rename/RenameFileQuietlyExtensions.class</exclude>
 								<exclude>de/alpharogroup/file/write/WriteFileQuietlyExtensions.class</exclude>
 								<exclude>de/alpharogroup/file/zip/Zip4jExtensions.class</exclude>
 								<!-- explicit deprecated classes -->

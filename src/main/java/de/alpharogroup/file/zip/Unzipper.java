@@ -25,13 +25,9 @@
 package de.alpharogroup.file.zip;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -114,84 +110,6 @@ public class Unzipper
 	public void unzip() throws IOException
 	{
 		this.unzip(this.zipFile, this.toDir);
-	}
-
-	/**
-	 * Unzip.
-	 *
-	 * @param zipFile
-	 *            the zip file
-	 * @param toDir
-	 *            the to dir
-	 * @param password
-	 *            the password
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * 
-	 * @deprecated use instead
-	 *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor version.
-	 */
-	public void unzip(final File zipFile, final File toDir, final String password)
-		throws IOException
-	{
-		unzip(zipFile, toDir, password, null);
-	}
-
-	/**
-	 * Unzip.
-	 *
-	 * @param zipFile
-	 *            the zip file
-	 * @param toDir
-	 *            the to dir
-	 * @param password
-	 *            the password
-	 * @param charsetName
-	 *            the charset name
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * 
-	 * @deprecated use instead
-	 *             {@code Zip4jExtensions#extract(net.lingala.zip4j.core.ZipFile, java.io.File, String)}.
-	 *             <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor version.
-	 */
-	@Deprecated
-	public void unzip(final File zipFile, final File toDir, final String password,
-		final Charset charsetName) throws IOException
-	{
-		final FileInputStream fis = new FileInputStream(zipFile);
-		// wrap it in the decrypt stream
-		final ZipDecryptInputStream zdis = new ZipDecryptInputStream(fis, password);
-		// wrap the decrypt stream by the ZIP input stream
-		ZipInputStream zis = null;
-		if (charsetName != null)
-		{
-			zis = new ZipInputStream(zdis, charsetName);
-		}
-		else
-		{
-			zis = new ZipInputStream(zdis);
-		}
-		// read all the zip entries and save them as files
-		ZipEntry ze;
-		while ((ze = zis.getNextEntry()) != null)
-		{
-			final String pathToExtract = toDir.getAbsolutePath() + File.separator + ze.getName();
-			final FileOutputStream fos = new FileOutputStream(pathToExtract);
-			int b;
-			while ((b = zis.read()) != -1)
-			{
-				fos.write(b);
-			}
-			fos.close();
-			zis.closeEntry();
-		}
-		zis.close();
 	}
 
 	/**

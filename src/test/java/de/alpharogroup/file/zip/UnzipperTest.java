@@ -29,7 +29,6 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -267,40 +266,16 @@ public class UnzipperTest extends ZipTestCase
 	}
 
 	/**
-	 * Test unzip with password.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@SuppressWarnings("deprecation")
-	@Test(enabled = false)
-	public void testUnzipWithPassword() throws IOException
-	{
-		// password-protected zip file I need to read
-		final File zipFileWithPassword = new File(this.testResources,
-			"autotextWithPassword.testzip");
-		final String password = "Hallo";
-		final Unzipper unzipper = new Unzipper();
-		unzipper.unzip(zipFileWithPassword, this.unzipDir, password, Charset.forName("UTF-8"));
-		final String encryptedFilename = "autotext";
-		final File encryptedFile = new File(this.unzipDir, encryptedFilename);
-		this.actual = FileSearchExtensions.containsFileRecursive(this.unzipDir, encryptedFile);
-		assertTrue("", this.actual);
-	}
-
-	/**
-	 * Test method for.
+	 * Test method for {@link Unzipper#unzip(ZipFile, File)}
 	 *
 	 * @throws ZipException
 	 *             the zip exception
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred. {@link Unzipper#unzip(ZipFile, File)}
-	 *             .
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	public void testUnzipZipFileFile() throws ZipException, IOException
 	{
-
 		final File zipFile = new File(this.zipDir.getAbsoluteFile(), "testZip.zip");
 		if (!zipFile.exists())
 		{

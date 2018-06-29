@@ -1,6 +1,20 @@
 ## Change log
 ----------------------
 
+Version 4.22
+-------------
+
+ADDED:
+ 
+- new classes created and moved to them all methods that catches exceptions and handle them in a quietly manner
+
+CHANGED:
+
+- update of parent version to 3.12
+- unit tests extended for improve code coverage
+- removed deprecated methods, enums and classes 
+- update of silly-collections dependency version to 4.31 
+
 Version 4.21
 -------------
 

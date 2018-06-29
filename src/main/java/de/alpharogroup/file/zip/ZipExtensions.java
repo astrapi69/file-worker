@@ -27,6 +27,7 @@ package de.alpharogroup.file.zip;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -170,10 +171,15 @@ public final class ZipExtensions
 	 *            the file to zip.
 	 * @param zipFile
 	 *            the zip file
-	 * @throws Exception
-	 *             the exception
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
-	public static void zip(final File fileToZip, final File zipFile) throws Exception
+	public static void zip(final File fileToZip, final File zipFile)
+		throws FileNotFoundException, IOException, FileDoesNotExistException
 	{
 		zip(fileToZip, zipFile, null);
 	}
@@ -187,8 +193,15 @@ public final class ZipExtensions
 	 *            the zip file
 	 * @param filter
 	 *            the filter
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
 	public static void zip(final File dirToZip, final File zipFile, final FilenameFilter filter)
+		throws FileNotFoundException, IOException, FileDoesNotExistException
 	{
 		zip(dirToZip, zipFile, filter, true);
 	}
@@ -204,9 +217,16 @@ public final class ZipExtensions
 	 *            the filter
 	 * @param createFile
 	 *            the create file
+	 * @throws FileNotFoundException
+	 *             the file not found exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
 	public static void zip(final File dirToZip, final File zipFile, final FilenameFilter filter,
 		final boolean createFile)
+		throws FileNotFoundException, IOException, FileDoesNotExistException
 	{
 		try (FileOutputStream fos = new FileOutputStream(zipFile);
 			ZipOutputStream zos = new ZipOutputStream(fos);)
@@ -234,14 +254,6 @@ public final class ZipExtensions
 			zos.flush();
 			zos.finish();
 			fos.flush();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (FileDoesNotExistException e)
-		{
-			e.printStackTrace();
 		}
 	}
 

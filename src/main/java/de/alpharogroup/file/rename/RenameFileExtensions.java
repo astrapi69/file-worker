@@ -45,8 +45,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
  *
- * @version 1.0
  * @author Asterios Raptis
+ * @version 1.0
  */
 @UtilityClass
 @Slf4j
@@ -57,7 +57,7 @@ public final class RenameFileExtensions
 	 * Returns the filename from the given file with the systemtime.
 	 *
 	 * @param fileToRename
-	 *            The file.
+	 *            The file to rename.
 	 *
 	 * @return Returns the filename from the given file with the systemtime.
 	 */
@@ -108,16 +108,17 @@ public final class RenameFileExtensions
 	 *            All files that have the old suffix will be renamed with the new Suffix.
 	 * @param newSuffix
 	 *            The new suffix.
-	 *
 	 * @return the list of files
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
 	 *             If the file does not exist.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static List<File> changeAllFilenameSuffix(final File file, final String oldSuffix,
-		final String newSuffix) throws IOException, FileDoesNotExistException
+		final String newSuffix)
+		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
 		return changeAllFilenameSuffix(file, oldSuffix, newSuffix, false);
 	}
@@ -135,16 +136,17 @@ public final class RenameFileExtensions
 	 * @param delete
 	 *            If its true than its deletes the existing file with the same name. But before it
 	 *            copys the contents into the new File.
-	 *
 	 * @return the list of files
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
 	 *             If the file does not exist.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static List<File> changeAllFilenameSuffix(final File file, final String oldSuffix,
-		final String newSuffix, final boolean delete) throws IOException, FileDoesNotExistException
+		final String newSuffix, final boolean delete)
+		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
 		boolean success;
 		List<File> notDeletedFiles = null;
@@ -155,15 +157,7 @@ public final class RenameFileExtensions
 		for (int i = 0; i < fileCount; i++)
 		{
 			final File currentFile = files.get(i);
-			try
-			{
-				success = RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete);
-			}
-			catch (final FileDoesNotExistException e)
-			{
-				log.error("changeAllFilenameSuffix failed...\n" + e.getMessage(), e);
-				success = false;
-			}
+			success = RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete);
 			if (!success)
 			{
 				if (null != notDeletedFiles)
@@ -187,18 +181,19 @@ public final class RenameFileExtensions
 	 *            The file to change.
 	 * @param newSuffix
 	 *            The new suffix. You must start with a dot. For instance: .xxx
-	 *
 	 * @return true if the file was renamed.
-	 *
 	 * @throws FileNotRenamedException
 	 *             If the file could not renamed.
 	 * @throws FileDoesNotExistException
 	 *             If the file does not exist.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static boolean changeFilenameSuffix(final File file, final String newSuffix)
-		throws FileNotRenamedException, FileDoesNotExistException, IOException
+		throws FileNotRenamedException, FileDoesNotExistException, IOException,
+		FileIsADirectoryException
 	{
 		return changeFilenameSuffix(file, newSuffix, false);
 	}
@@ -213,16 +208,17 @@ public final class RenameFileExtensions
 	 * @param delete
 	 *            If its true than its deletes the existing file with the same name. But before it
 	 *            copys the contents into the new File.
-	 *
 	 * @return true, if change filename suffix
-	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
 	 *             If the file does not exist.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static boolean changeFilenameSuffix(final File file, final String newSuffix,
-		final boolean delete) throws IOException, FileDoesNotExistException
+		final boolean delete)
+		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
 		if (!file.exists())
 		{
@@ -243,37 +239,17 @@ public final class RenameFileExtensions
 	 *            The source file.
 	 * @param destinationFile
 	 *            The destination file.
-	 *
 	 * @return true if the file was moved otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static boolean forceToMoveFile(final File srcFile, final File destinationFile)
+		throws IOException, FileIsADirectoryException
 	{
-		boolean moved = false;
-		try
-		{
-			moved = RenameFileExtensions.renameFile(srcFile, destinationFile, true);
-		}
-		catch (final Exception e)
-		{
-			log.error("forceToMoveFile method failed...\n" + e.getMessage(), e);
-		}
+		boolean moved = RenameFileExtensions.renameFile(srcFile, destinationFile, true);
 		return moved;
-	}
-
-	/**
-	 * Gets the absolut path without the filename.
-	 *
-	 * @param file
-	 *            the file.
-	 *
-	 * @return the absolut path without filename.
-	 * @deprecated use instead the same name method from {@code RenameFileExtensions}. <br>
-	 *             <br>
-	 *             Note: will be removed in next minor release
-	 */
-	public static String getAbsolutPathWithoutFilename(final File file)
-	{
-		return FileExtensions.getAbsolutPathWithoutFilename(file);
 	}
 
 	/**
@@ -283,10 +259,14 @@ public final class RenameFileExtensions
 	 *            The source file.
 	 * @param destDir
 	 *            The destination directory.
-	 *
 	 * @return true if the file was moved otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static boolean moveFile(final File srcFile, final File destDir)
+		throws IOException, FileIsADirectoryException
 	{
 		return RenameFileExtensions.renameFile(srcFile, destDir, true);
 	}
@@ -300,10 +280,14 @@ public final class RenameFileExtensions
 	 *            The file to rename.
 	 * @param newFileName
 	 *            The new name from the file.
-	 *
 	 * @return 's true if the file was renamed otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static boolean renameFile(final File fileToRename, final File newFileName)
+		throws IOException, FileIsADirectoryException
 	{
 		return renameFile(fileToRename, newFileName, false);
 	}
@@ -320,11 +304,14 @@ public final class RenameFileExtensions
 	 * @param delete
 	 *            If true an attempt to copy the content from the file to rename to the new file and
 	 *            then delete the file to rename otherwise not.
-	 *
 	 * @return 's true if the file was renamed otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static boolean renameFile(final File fileToRename, final File newFileName,
-		final boolean delete)
+		final boolean delete) throws IOException, FileIsADirectoryException
 	{
 		boolean success = fileToRename.renameTo(newFileName);
 		if (!success)
@@ -334,40 +321,23 @@ public final class RenameFileExtensions
 			if (delete)
 			{
 				log.info("Try to copy the content into the new file with the new name.");
-				try
+
+				final boolean copied = CopyFileExtensions.copyFile(fileToRename, newFileName);
+				if (copied)
 				{
-					final boolean copied = CopyFileExtensions.copyFile(fileToRename, newFileName);
-					if (copied)
-					{
-						log.info("Sucessfully copied the old file " + fileToRename.getName()
-							+ " to the new file " + newFileName.getName() + ".");
-					}
-					else
-					{
-						log.info("Try to copy file " + fileToRename.getName()
-							+ " into the new file " + newFileName.getName() + " failed.");
-					}
+					log.info("Sucessfully copied the old file " + fileToRename.getName()
+						+ " to the new file " + newFileName.getName() + ".");
 				}
-				catch (final IOException e)
+				else
 				{
-					log.error("Try to copy file " + fileToRename.getName() + " into the new file "
+					log.info("Try to copy file " + fileToRename.getName() + " into the new file "
 						+ newFileName.getName() + " failed.");
 				}
-				catch (final FileIsADirectoryException e)
-				{
-					log.error("Given file " + newFileName.getName() + " is a directory.", e);
-				}
+
 				log.info("Try to delete the old file " + fileToRename.getName() + ".");
-				try
-				{
-					DeleteFileExtensions.delete(fileToRename);
-					success = true;
-				}
-				catch (final IOException e)
-				{
-					log.error("Try to delete the old file " + fileToRename.getName() + " failed.",
-						e);
-				}
+
+				DeleteFileExtensions.delete(fileToRename);
+				success = true;
 			}
 		}
 		return success;
@@ -382,24 +352,22 @@ public final class RenameFileExtensions
 	 *            The file to rename.
 	 * @param newFileNameWithoutAbsolutPath
 	 *            The new name from the file.
-	 *
 	 * @return 's true if the file was renamed otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
 	public static boolean renameFile(final File fileToRename,
 		final String newFileNameWithoutAbsolutPath)
+		throws IOException, FileIsADirectoryException, FileDoesNotExistException
 	{
 		if (!fileToRename.exists())
 		{
-			try
-			{
-				throw new FileDoesNotExistException(
-					"File" + fileToRename.getName() + " does not exists!");
-			}
-			catch (final FileDoesNotExistException e)
-			{
-				e.printStackTrace();
-			}
-			return false;
+			throw new FileDoesNotExistException(
+				"File" + fileToRename.getName() + " does not exists!");
 		}
 		final String fileNameAbsolutPathPrefix = FileExtensions
 			.getAbsolutPathWithoutFilename(fileToRename);
@@ -416,18 +384,18 @@ public final class RenameFileExtensions
 	 *
 	 * @param fileToRename
 	 *            The file to rename.
-	 *
 	 * @return Returns the renamed file from the given file with the systemtime.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	public static File renameFileWithSystemtime(final File fileToRename)
+		throws IOException, FileIsADirectoryException
 	{
-
 		final String newFilenameWithSystemtime = appendSystemtimeToFilename(fileToRename);
-
 		final File fileWithNewName = new File(fileToRename.getParent(), newFilenameWithSystemtime);
-
 		renameFile(fileToRename, fileWithNewName, true);
-
 		return fileWithNewName;
 	}
 

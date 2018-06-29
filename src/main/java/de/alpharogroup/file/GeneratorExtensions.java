@@ -110,8 +110,7 @@ public final class GeneratorExtensions
 	 *            The data what to insert in the generated array.
 	 * @return The result.
 	 */
-	public static String newcreateStaticArrayVariable(final String arrayName,
-		final List<String> data)
+	public static String newStaticArrayVariable(final String arrayName, final List<String> data)
 	{
 		final StringBuffer sb = new StringBuffer();
 		sb.append("public static final String []");
