@@ -30,6 +30,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,12 +48,13 @@ import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
 
 /**
- * The unit test class for the class {@link RenameFileExtensions}
+ * The unit test class for the class {@link RenameFileExtensions}.
  */
 public class RenameFileExtensionsTest extends FileTestCase
 {
@@ -117,13 +119,17 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}.
-	 * 
-	 * @throws FileDoesNotExistException
+	 *
 	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
 	public void testChangeAllFilenameSuffixFileStringString()
-		throws IOException, FileDoesNotExistException
+		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
 		final String oldFileSuffix = ".txt";
 		final String newFileSuffix = ".rtf";
@@ -181,10 +187,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
 	 *             the file does not exist exception
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
 	public void testChangeAllFilenameSuffixFileStringStringBoolean()
-		throws IOException, FileDoesNotExistException
+		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
 		final String oldFileSuffix = ".txt";
 		final String newFileSuffix = ".rtf";
@@ -241,10 +249,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 *             the file not renamed exception
 	 * @throws FileDoesNotExistException
 	 *             the file does not exist exception
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
-	public void testChangeFilenameSuffixFileString()
-		throws IOException, FileNotRenamedException, FileDoesNotExistException
+	public void testChangeFilenameSuffixFileString() throws IOException, FileNotRenamedException,
+		FileDoesNotExistException, FileIsADirectoryException
 	{
 		final String filePrefix = "testChangeFilenameSuffixFileString";
 		final String oldFileSuffix = ".txt";
@@ -276,10 +286,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
 	 *             the file does not exist exception
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
 	public void testChangeFilenameSuffixFileStringBoolean()
-		throws IOException, FileDoesNotExistException
+		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
 		final String filePrefix = "testChangeFilenameSuffixFileStringBoolean";
 		final String oldFileSuffix = ".txt";
@@ -306,9 +318,14 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link RenameFileExtensions#forceToMoveFile(File, File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
-	public void testForceToMoveFile()
+	public void testForceToMoveFile() throws IOException, FileIsADirectoryException
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
 		final File expectedMovedFile = new File(this.deepDir, "testMovedFile.moved");
@@ -322,10 +339,18 @@ public class RenameFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for directory
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for directory.
+	 *
+	 * @throws DirectoryAllreadyExistsException
+	 *             the directory allready exists exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
-	public void testMoveDir() throws DirectoryAllreadyExistsException
+	public void testMoveDir()
+		throws DirectoryAllreadyExistsException, IOException, FileIsADirectoryException
 	{
 		// Test to move a directory...
 		// Create a test directory to move.
@@ -351,10 +376,15 @@ public class RenameFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for file
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for file.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
-	public void testMoveFile()
+	public void testMoveFile() throws IOException, FileIsADirectoryException
 	{
 		// Test to move a file....
 		final String filePrefix1 = "testMoveFile";
@@ -362,8 +392,6 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
 		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
-		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
-		assertFalse("File should not exist in this directory.", this.actual);
 		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
 		assertTrue("File should be renamed.", this.actual);
@@ -372,10 +400,36 @@ public class RenameFileExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} that throws a
+	 * {@code FileNotFoundException}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
+	 */
+	@Test(expectedExceptions = { FileNotFoundException.class })
+	public void testMoveFileFileNotFoundException() throws IOException, FileIsADirectoryException
+	{
+		// Test to move a file....
+		final String filePrefix1 = "testMoveFile";
+		final String oldFileSuffix = ".txt";
+		final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+
+		RenameFileExtensions.moveFile(srcFile, destDir);
+	}
+
+	/**
 	 * Test method for {@link RenameFileExtensions#renameFile(File, File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
-	public void testRenameFileFileFile()
+	public void testRenameFileFileFile() throws IOException, FileIsADirectoryException
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testRenameFile.txt");
 		final File expectedRenamedFile = new File(this.deepDir, "testRenamedFile.renamed");
@@ -408,9 +462,14 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link RenameFileExtensions#renameFile(File, File, boolean)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
-	public void testRenameFileFileFileBoolean()
+	public void testRenameFileFileFileBoolean() throws IOException, FileIsADirectoryException
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testRenameFile.txt");
 		final File expectedRenamedFile = new File(this.deepDir, "testRenamedFile.renamed");
@@ -443,9 +502,17 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link RenameFileExtensions#renameFile(File, String)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
+	 * @throws FileDoesNotExistException
+	 *             the file does not exist exception
 	 */
 	@Test
 	public void testRenameFileFileString()
+		throws IOException, FileIsADirectoryException, FileDoesNotExistException
 	{
 		final String filePrefix1 = "testRenameFileFileString1";
 		final String filePrefix2 = "testRenameFileFileString2";
@@ -463,9 +530,14 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link RenameFileExtensions#renameFileWithSystemtime(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is A directory exception
 	 */
 	@Test
-	public void testRenameFileWithSystemtime()
+	public void testRenameFileWithSystemtime() throws IOException, FileIsADirectoryException
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(),
 			"testRenameFileWithSystemtime.txt");// 32 length
@@ -477,7 +549,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link RenameFileExtensions}
+	 * Test method for {@link RenameFileExtensions}.
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
 	public void testWithBeanTester()

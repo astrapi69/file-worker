@@ -28,10 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
-
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The class {@link CreateFileExtensions} helps you to create files or directories.
@@ -40,11 +39,9 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  */
 @UtilityClass
+@Slf4j
 public final class CreateFileExtensions
 {
-
-	/** The Constant logger. */
-	private static final Logger logger = Logger.getLogger(CreateFileExtensions.class.getName());
 
 	/**
 	 * Creates the directories.
@@ -76,13 +73,19 @@ public final class CreateFileExtensions
 	 *            the directories
 	 *
 	 * @return true, if successful
+	 * 
+	 * @deprecated use instead the same name method in the class
+	 *             {@code CreateFileQuietlyExtensions}. <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
+	@Deprecated
 	public static boolean newDirectoriesQuietly(final Collection<File> directories)
 	{
 		boolean created = false;
 		for (final File dir : directories)
 		{
-			created = CreateFileExtensions.newDirectoryQuietly(dir);
+			created = CreateFileQuietlyExtensions.newDirectoryQuietly(dir);
 		}
 		return created;
 	}
@@ -123,7 +126,13 @@ public final class CreateFileExtensions
 	 *            The directory to create.
 	 *
 	 * @return Returns true if the directory was created otherwise false.
+	 * 
+	 * @deprecated use instead the same name method in the class
+	 *             {@code CreateFileQuietlyExtensions}. <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
+	@Deprecated
 	public static boolean newDirectoryQuietly(final File dir)
 	{
 		try
@@ -132,7 +141,7 @@ public final class CreateFileExtensions
 		}
 		catch (final DirectoryAllreadyExistsException e)
 		{
-			logger.error("Directory '" + dir.getAbsolutePath() + "' allready exists.", e);
+			log.error("Directory '" + dir.getAbsolutePath() + "' allready exists.", e);
 		}
 		return false;
 	}
@@ -171,7 +180,13 @@ public final class CreateFileExtensions
 	 *            the file.
 	 *
 	 * @return true, if the file is successful created otherwise false.
+	 * 
+	 * @deprecated use instead the same name method in the class
+	 *             {@code CreateFileQuietlyExtensions}. <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release.
 	 */
+	@Deprecated
 	public static boolean newFileQuietly(final File file)
 	{
 		try
@@ -180,7 +195,7 @@ public final class CreateFileExtensions
 		}
 		catch (final IOException e)
 		{
-			logger.error("File '" + file.getAbsolutePath()
+			log.error("File '" + file.getAbsolutePath()
 				+ "' could not created. For more information see the exception:", e);
 		}
 		return false;
