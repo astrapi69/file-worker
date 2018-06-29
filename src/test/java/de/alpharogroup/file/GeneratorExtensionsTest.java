@@ -24,17 +24,18 @@
  */
 package de.alpharogroup.file;
 
-import java.io.File;
-import java.io.IOException;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import java.util.List;
 
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.csv.CsvFileExtensions;
+import de.alpharogroup.collections.CollectionExtensions;
+import de.alpharogroup.collections.list.ListFactory;
 
 /**
  * The unit test class for the class {@link GeneratorExtensions}.
@@ -42,54 +43,57 @@ import de.alpharogroup.file.csv.CsvFileExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
-public class GeneratorExtensionsTest extends FileTestCase
+public class GeneratorExtensionsTest
 {
 
-	/** The constantlist. */
-	File constantlist;
-
 	/**
-	 * {@inheritDoc}
+	 * Test method for
+	 * {@link GeneratorExtensions#newConstantsFromStringList(List, String, String, boolean)}.
 	 */
-	@Override
-	@BeforeMethod
-	protected void setUp() throws Exception
+	@Test
+	public void testNewConstantsFromStringList()
 	{
-		super.setUp();
-		constantlist = new File(this.testResources, "constantlist");
+		List<String> actual;
+		List<String> expected;
+		List<String> data;
+		String prefix;
+		String suffix;
+		boolean withQuotation;
 
+		data = ListFactory.newArrayList("fooDoo", "bar");
+		prefix = "pre";
+		suffix = "fix";
+		withQuotation = false;
+		actual = GeneratorExtensions.newConstantsFromStringList(data, prefix, suffix,
+			withQuotation);
+		expected = ListFactory.newArrayList("public static final String PREFOODOOFIX = \"fooDoo\";",
+			"public static final String PREBARFIX = \"bar\";");
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
+
+		data = ListFactory.newArrayList("fooDoo", "bar");
+		withQuotation = true;
+		actual = GeneratorExtensions.newConstantsFromStringList(data, prefix, suffix,
+			withQuotation);
+		expected = ListFactory.newArrayList("public static final String PREFOODOOFIX = fooDoo;",
+			"public static final String PREBARFIX = bar;");
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
 
 	/**
-	 * Test method for
-	 * {@link de.alpharogroup.file.GeneratorUtils#createStaticArrayVariable(String, List)} .
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	// @Test
-	// public void testCreateStaticArrayVariable() {
-	// fail("Not yet implemented");
-	// }
-
-	/**
-	 * Test method for
-	 * {@link de.alpharogroup.file.GeneratorExtensions#newConstantsFromStringList(List, String, String, boolean)}
-	 * .
-	 * 
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * Test method for {@link GeneratorExtensions#newStaticArrayVariable(String, List)}
 	 */
 	@Test
-	public void testCreateConstantsFromStringList() throws IOException
+	public void testNewStaticArrayVariable()
 	{
-		final List<String> cl = CsvFileExtensions.readFileToList(constantlist);
-		final List<String> gcl = GeneratorExtensions.newConstantsFromStringList(cl, null, "_key",
-			true);
-		for (final String string : gcl)
-		{
-			System.out.println(string);
-		}
+		String actual;
+		String expected;
+		List<String> data;
+		String arrayName;
+		arrayName = "fooArray";
+		data = ListFactory.newArrayList("foo", "bar");
+		actual = GeneratorExtensions.newStaticArrayVariable(arrayName, data);
+		expected = "public static final String []FOOARRAY = {\"foo\", \"bar\"};";
+		assertEquals(actual, expected);
 	}
 
 	/**
