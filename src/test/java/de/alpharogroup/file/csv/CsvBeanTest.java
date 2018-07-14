@@ -139,6 +139,7 @@ public class CsvBeanTest
 	 * Test method for {@link CsvBean#equals(Object)} , {@link CsvBean#hashCode()} and
 	 * {@link CsvBean#toString()}
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	@Test(enabled = true)
 	public void testEqualsHashcodeAndToString()
 	{
