@@ -23,11 +23,13 @@ Check out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search
 
 Add the following maven dependency to your project `pom.xml` if you want to import the core functionality of file-worker:
 
-Than you can add the dependency to your dependencies:
-
+	<properties>
+			...
 		<!-- FILE-WORKER version -->
 		<file-worker.version>4.22</file-worker.version>
-
+			...
+	</properties>
+			...
 		<dependencies>
 			...
 			<!-- FILE-WORKER DEPENDENCY -->
