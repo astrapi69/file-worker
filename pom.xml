@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.alpharogroup</groupId>
 		<artifactId>mvn-java-parent</artifactId>
-		<version>3.12</version>
+		<version>4.1</version>
 		<relativePath></relativePath>
 	</parent>
 
@@ -21,9 +21,9 @@
 
 	<properties>
 		<!-- JCOMMONS-LANG version -->
-		<jcommons-lang.version>4.34</jcommons-lang.version>
+		<jcommons-lang.version>4.35</jcommons-lang.version>
 		<!-- SILLY-COLLECTIONS version -->
-		<silly-collections.version>4.31</silly-collections.version>
+		<silly-collections.version>4.33</silly-collections.version>
 		<!-- TEST-OBJECTS version -->
 		<test-objects.version>4.28</test-objects.version>
 		<!-- EXTERNAL LIBRARIES versions -->
@@ -32,13 +32,11 @@
 		<!-- MEANBEAN-FACTORIES version -->
 		<meanbean-factories.version>1.1</meanbean-factories.version>
 		<!-- MYSTIC-CRYPT versions -->
-		<mystic-crypt.version>5.1.0</mystic-crypt.version>
+		<mystic-crypt.version>5.4</mystic-crypt.version>
 		<crypt-api.version>${mystic-crypt.version}</crypt-api.version>
 		<!-- JOBJECT-EXTENSIONS version -->
-		<jobject-extensions.version>1.11</jobject-extensions.version>
+		<jobject-extensions.version>1.12</jobject-extensions.version>
 		<jobject-evaluate.version>${jobject-extensions.version}</jobject-evaluate.version>
-		
-		<mockito-core.version>2.18.3</mockito-core.version>
 	</properties>
 
 	<licenses>
