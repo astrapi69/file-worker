@@ -4,6 +4,13 @@
 Version 4.23-SNAPSHOT
 -------------
 
+CHANGED:
+
+- update of parent version to 4.1
+- update of jcommons-lang dependency version to 4.35
+- update of silly-collections dependency version to 4.33
+- update of mystic-crypt dependency version to 5.4
+- update of jobject-extensions version to 1.12
 
 Version 4.22
 -------------
