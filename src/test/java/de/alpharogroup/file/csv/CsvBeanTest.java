@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.collections.array.ArrayFactory;
 import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
-import de.alpharogroup.evaluate.object.EqualsHashCodeAndToStringEvaluator;
+import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
 import de.alpharogroup.meanbean.factories.ListStringArrayFactory;
 import de.alpharogroup.meanbean.factories.StringArrayFactory;
 
@@ -139,6 +139,7 @@ public class CsvBeanTest
 	 * Test method for {@link CsvBean#equals(Object)} , {@link CsvBean#hashCode()} and
 	 * {@link CsvBean#toString()}
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	@Test(enabled = true)
 	public void testEqualsHashcodeAndToString()
 	{
