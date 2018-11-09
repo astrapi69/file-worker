@@ -69,6 +69,30 @@ public final class ChecksumExtensions
 	public static final String REGEX_VALIDATION_SHA512 = HEXADECIMAL_CHARACTER_CLASS + "{128}";
 
 	/**
+	 * Gets the checksum from the given byte arrays with the given algorithm
+	 *
+	 * @param algorithm
+	 *            the algorithm to get the checksum. This could be for instance "MD4", "MD5",
+	 *            "SHA-1", "SHA-256", "SHA-384" or "SHA-512".
+	 * @param byteArrays
+	 *            the array of byte arrays
+	 * @return The checksum from the given byte arrays as a String object.
+	 * @throws NoSuchAlgorithmException
+	 *             Is thrown if the algorithm is not supported or does not exists.
+	 *             {@link java.security.MessageDigest} object.
+	 */
+	public static String getChecksum(final Algorithm algorithm, final byte[]... byteArrays)
+		throws NoSuchAlgorithmException
+	{
+		StringBuilder sb = new StringBuilder();
+		for (byte[] byteArray : byteArrays)
+		{
+			sb.append(getChecksum(byteArray, algorithm.getAlgorithm()));
+		}
+		return sb.toString();
+	}
+
+	/**
 	 * Gets the checksum from the given byte array with an instance of.
 	 *
 	 * @param bytes
