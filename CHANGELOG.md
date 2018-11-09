@@ -1,13 +1,19 @@
 ## Change log
 ----------------------
 
-Version 5-SNAPSHOT
+Version 5
 -------------
+
+ADDED:
+ 
+- new method for get the checksum from a given byte arrays with a given algorithm
 
 CHANGED:
 
 - update of parent version to 4.2
 - removed poi dependencies and corresponding classes
+- update of silly-collections dependency version to 4.34.1
+- update of mystic-crypt dependency version to 5.6
 
 Version 4.23
 -------------
