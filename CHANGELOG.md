@@ -4,6 +4,11 @@
 Version 5-SNAPSHOT
 -------------
 
+CHANGED:
+
+- update of parent version to 4.2
+- removed poi dependencies and corresponding classes
+
 Version 4.23
 -------------
 

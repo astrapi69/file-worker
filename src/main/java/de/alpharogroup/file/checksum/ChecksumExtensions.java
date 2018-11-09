@@ -82,10 +82,11 @@ public final class ChecksumExtensions
 	 *             {@link java.security.MessageDigest} object.
 	 */
 	public static String getChecksum(final Algorithm algorithm, final byte[]... byteArrays)
-			throws NoSuchAlgorithmException
+		throws NoSuchAlgorithmException
 	{
 		StringBuilder sb = new StringBuilder();
-		for (byte[] byteArray: byteArrays) {
+		for (byte[] byteArray : byteArrays)
+		{
 			sb.append(getChecksum(byteArray, algorithm.getAlgorithm()));
 		}
 		return sb.toString();
