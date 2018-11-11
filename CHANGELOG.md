@@ -7,6 +7,7 @@ Version 5.1-SNAPSHOT
 CHANGED:
 
 - update of silly-collections dependency version to 4.35
+- update of jobject-extensions version to 2
 
 Version 5
 -------------
