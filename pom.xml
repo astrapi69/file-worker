@@ -23,7 +23,7 @@
 		<!-- JCOMMONS-LANG version -->
 		<jcommons-lang.version>4.35</jcommons-lang.version>
 		<!-- SILLY-COLLECTIONS version -->
-		<silly-collections.version>4.34.1</silly-collections.version>
+		<silly-collections.version>4.35</silly-collections.version>
 		<!-- TEST-OBJECTS version -->
 		<test-objects.version>4.28</test-objects.version>
 		<!-- ZIP4J version -->
