@@ -21,11 +21,11 @@
 
 	<properties>
 		<!-- JCOMMONS-LANG version -->
-		<jcommons-lang.version>4.35</jcommons-lang.version>
+		<jcommons-lang.version>5</jcommons-lang.version>
 		<!-- SILLY-COLLECTIONS version -->
 		<silly-collections.version>4.35</silly-collections.version>
 		<!-- TEST-OBJECTS version -->
-		<test-objects.version>4.28</test-objects.version>
+		<test-objects.version>4.29</test-objects.version>
 		<!-- ZIP4J version -->
 		<zip4j.version>1.3.2</zip4j.version>
 		<!-- MYSTIC-CRYPT versions -->

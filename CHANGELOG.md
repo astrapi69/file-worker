@@ -8,6 +8,8 @@ CHANGED:
 
 - update of silly-collections dependency version to 4.35
 - update of jobject-extensions version to 2
+- update of jcommons-lang dependency version to 5
+- update of test-objects dependency version to 4.29
 
 Version 5
 -------------
