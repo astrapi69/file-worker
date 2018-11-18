@@ -61,6 +61,7 @@ public class Unzipper
 	 *             <br>
 	 *             Note: will be removed in the next minor version.
 	 */
+	@Deprecated
 	String password;
 
 	/** The to dir. */

@@ -32,11 +32,12 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.joda.time.LocalDateTime;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
@@ -109,7 +110,8 @@ public class RenameFileExtensionsTest extends FileTestCase
 		String expected;
 		final File testFile1 = new File(this.testDir, "testRename.txt");
 		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		Date date = LocalDateTime.parse("2007-11-07T06:34:59").toDate();
+		LocalDateTime localDateTime = LocalDateTime.parse("2007-11-07T06:34:59");
+		Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 		actual = RenameFileExtensions.appendSystemtimeToFilename(testFile1, date);
 		assertNotNull(actual);
 		assertTrue(actual.length() == 24);
