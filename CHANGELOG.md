@@ -6,10 +6,12 @@ Version 5.1-SNAPSHOT
 
 CHANGED:
 
+- update of parent version to 4.4
 - update of silly-collections dependency version to 4.35
 - update of jobject-extensions version to 2
 - update of jcommons-lang dependency version to 5
-- update of test-objects dependency version to 4.29
+- update of test-objects dependency version to 4.29.1
+- update of jobject-evaluate dependency version to 2.3.2
 
 Version 5
 -------------
