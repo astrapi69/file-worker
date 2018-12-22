@@ -34,6 +34,8 @@
 		<!-- JOBJECT-EXTENSIONS version -->
 		<jobject-extensions.version>2.5</jobject-extensions.version>
 		<jobject-evaluate.version>${jobject-extensions.version}</jobject-evaluate.version>
+		<!-- MEANBEAN-FACTORIES version -->
+		<meanbean-factories.version>1.1.1</meanbean-factories.version>
 	</properties>
 
 	<licenses>
