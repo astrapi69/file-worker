@@ -52,7 +52,7 @@ import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link RenameFileExtensions}.
@@ -90,11 +90,11 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 * Test method for {@link RenameFileExtensions#appendSystemtimeToFilename(File)}.
 	 */
 	@Test
-	public void testAppendSystemtimeToFilenameFile()
+	public void testAppendSystemtimeToFilenameFile() throws FileNotFoundException, IOException
 	{
 		String actual;
 		final File testFile1 = new File(this.testDir, "testRename.txt");
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		actual = RenameFileExtensions.appendSystemtimeToFilename(testFile1);
 		assertNotNull(actual);
 		assertTrue(actual.length() == 24);
@@ -104,12 +104,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 * Test method for {@link RenameFileExtensions#appendSystemtimeToFilename(File, Date)}.
 	 */
 	@Test
-	public void testAppendSystemtimeToFilenameFileDate()
+	public void testAppendSystemtimeToFilenameFileDate() throws FileNotFoundException, IOException
 	{
 		String actual;
 		String expected;
 		final File testFile1 = new File(this.testDir, "testRename.txt");
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		LocalDateTime localDateTime = LocalDateTime.parse("2007-11-07T06:34:59");
 		Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 		actual = RenameFileExtensions.appendSystemtimeToFilename(testFile1, date);
@@ -331,7 +331,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
 		final File expectedMovedFile = new File(this.deepDir, "testMovedFile.moved");
-		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		actual = RenameFileExtensions.forceToMoveFile(srcFile, expectedMovedFile);
 		expected = true;
 		assertEquals(actual, expected);
@@ -369,7 +369,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
 		// Test to move the dir.
 		this.actual = RenameFileExtensions.moveFile(srcDir, destDir);
@@ -394,7 +394,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
 		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
-		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
 		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destDir);
@@ -435,7 +435,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testRenameFile.txt");
 		final File expectedRenamedFile = new File(this.deepDir, "testRenamedFile.renamed");
-		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		actual = RenameFileExtensions.renameFile(srcFile, expectedRenamedFile);
 		expected = true;
 		assertEquals(actual, expected);
@@ -452,7 +452,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1);
 		assertFalse("File should not exist in this directory.", this.actual);
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1);
 		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
@@ -475,7 +475,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testRenameFile.txt");
 		final File expectedRenamedFile = new File(this.deepDir, "testRenamedFile.renamed");
-		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		actual = RenameFileExtensions.renameFile(srcFile, expectedRenamedFile, true);
 		expected = true;
 		assertEquals(actual, expected);
@@ -493,7 +493,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1, false);
 		assertFalse("File should not exist in this directory.", this.actual);
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1, false);
 		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
@@ -523,7 +523,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.deepDir, filePrefix1 + oldFileSuffix);
 		final File renamedFile1 = new File(this.deepDir, filePrefix2 + newFileSuffix);
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1.getName());
 		assertTrue("File should be renamed.", this.actual);
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
@@ -543,7 +543,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	{
 		final File srcFile = new File(this.testDir.getAbsoluteFile(),
 			"testRenameFileWithSystemtime.txt");// 32 length
-		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		File renameFileWithSystemtime = RenameFileExtensions.renameFileWithSystemtime(srcFile);
 		assertNotNull(renameFileWithSystemtime);
 		String name = renameFileWithSystemtime.getName();
