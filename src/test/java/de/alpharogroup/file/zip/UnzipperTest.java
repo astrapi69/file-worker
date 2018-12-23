@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.file.csv.CsvBean;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link Unzipper}
@@ -119,15 +119,15 @@ public class UnzipperTest extends ZipTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), file9);
 		final File unzippedFile9 = new File(this.unzipDirDeeperDir, file9);
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		ZipExtensions.zip(this.testDir, zipFile);
 
@@ -207,15 +207,15 @@ public class UnzipperTest extends ZipTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), file9);
 		final File unzippedFile9 = new File(this.unzipDirDeeperDir, file9);
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		final Zipper zipper = new Zipper(this.testDir, zipFile);
 		zipper.zip();
@@ -313,15 +313,15 @@ public class UnzipperTest extends ZipTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), file9);
 		final File unzippedFile9 = new File(this.unzipDirDeeperDir, file9);
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileQuietlyExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileQuietlyExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileQuietlyExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileQuietlyExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileQuietlyExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileQuietlyExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileQuietlyExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
 		final Zipper zipper = new Zipper(this.testDir, zipFile);
 		zipper.zip();

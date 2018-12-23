@@ -56,7 +56,7 @@ import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
@@ -116,6 +116,7 @@ public class CsvFileExtensionsTest
 	 *             Signals that an I/O exception has occurred.
 	 * @deprecated
 	 */
+	@Deprecated
 	@Test(enabled = false)
 	public void testCreateSqlInsertFromCsv() throws IOException
 	{
@@ -140,7 +141,7 @@ public class CsvFileExtensionsTest
 			sb.append(System.lineSeparator());
 			id++;
 		}
-		WriteFileQuietlyExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
+		WriteFileExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
 	}
 
 	/**
@@ -365,7 +366,7 @@ public class CsvFileExtensionsTest
 
 	/**
 	 * Test method for {@link CsvFileExtensions#getLineCountFromCsvFile(File)}.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -408,7 +409,7 @@ public class CsvFileExtensionsTest
 	/**
 	 * Test method for
 	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String)}.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -440,7 +441,7 @@ public class CsvFileExtensionsTest
 	/**
 	 * Test method for
 	 * {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String, String)}.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -523,7 +524,7 @@ public class CsvFileExtensionsTest
 
 	/**
 	 * Test method for {@link CsvFileExtensions#readFileToList(File, String, String)}.
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -553,7 +554,7 @@ public class CsvFileExtensionsTest
 
 	/**
 	 * Test method for {@link CsvFileExtensions#readLinesInList(File, String)}
-	 * 
+	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */

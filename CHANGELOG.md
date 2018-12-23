@@ -1,6 +1,19 @@
 ## Change log
 ----------------------
 
+Version 5.0.1
+-------------
+
+CHANGED:
+
+- update of parent version to 4.4
+- update of silly-collections dependency version to 5
+- update of jobject-extensions version to 2.5
+- update of jcommons-lang dependency version to 5.1
+- update of test-objects dependency version to 5
+- update of jobject-evaluate dependency version to 2.5
+- excluded logging dependencies
+
 Version 5
 -------------
 

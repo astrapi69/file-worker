@@ -52,7 +52,7 @@ import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
@@ -127,7 +127,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		inputFile.createNewFile();
 		final String inputString = "Its a beautifull day!!!\n" + "This is the second line.\n"
 			+ "This is the third line. ";
-		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
+		WriteFileExtensions.string2File(inputFile, inputString);
 		// --------------------------------
 		final InputStream is = StreamExtensions.getInputStream(inputFile);
 		final String compare = ReadFileExtensions.inputStream2String(is);
@@ -149,7 +149,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		final String inputString = "Its a beautifull day!!!";
 		final String expected = inputString;
 		final String ap = testFile1.getAbsolutePath();
-		WriteFileQuietlyExtensions.string2File(inputString, ap);
+		WriteFileExtensions.string2File(inputString, ap);
 
 		final Reader reader = ReadFileExtensions.openFileReader(ap);
 		final String compare = ReadFileExtensions.reader2String(reader);
@@ -166,13 +166,13 @@ public class ReadFileExtensionsTest extends FileTestCase
 		final File source = new File(this.test.getAbsoluteFile(), "testReadFileInput.txt");
 		final String sourceContent = ReadFileExtensions.readFromFile(source);
 		final File output = new File(this.test.getAbsoluteFile(), "testReadFileOutput.txt");
-		WriteFileQuietlyExtensions.string2File(output, sourceContent);
+		WriteFileExtensions.string2File(output, sourceContent);
 		final String outputContent = ReadFileExtensions.readFromFile(output);
 		assertEquals(sourceContent, outputContent);
 
 		final File testFile1 = new File(this.testDir, "testReadFromFile.txt");
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileQuietlyExtensions.string2File(testFile1, inputString);
+		WriteFileExtensions.string2File(testFile1, inputString);
 		// --------------------------------
 
 		final String content = ReadFileExtensions.readFromFile(testFile1);
@@ -213,7 +213,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 
 		final String inputString = "Its a beautifull day!!!\n This is the second line.\nThis is the third line. ";
 		final String expected = "Its a beautifull day!!!";
-		WriteFileQuietlyExtensions.string2File(inputFile, inputString);
+		WriteFileExtensions.string2File(inputFile, inputString);
 		// --------------------------------
 		final String compare = ReadFileExtensions.readHeadLine(inputFile.getAbsolutePath());
 
@@ -328,7 +328,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		properties.setProperty("testkey1", "testvalue1");
 		properties.setProperty("testkey2", "testvalue2");
 		properties.setProperty("testkey3", "testvalue3");
-		WriteFileQuietlyExtensions.writeProperties2File(ap, properties);
+		WriteFileExtensions.writeProperties2File(ap, properties);
 		compare = ReadFileExtensions.readPropertiesFromFile(ap);
 		this.actual = properties.equals(compare);
 		assertTrue(this.actual);

@@ -29,7 +29,6 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.meanbean.factories.ObjectCreationException;
@@ -120,48 +119,6 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CreateFileExtensions#newDirectoriesQuietly(Collection)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testNewDirectoriesQuietly() throws IOException
-	{
-		final List<File> dirs = new ArrayList<>();
-		final File dir1 = new File("test1.dir");
-		final File dir2 = new File("test2.dir");
-		final File dir3 = new File("test3.dir");
-		dirs.add(dir1);
-		dirs.add(dir2);
-		dirs.add(dir3);
-		// if the directories exist delete them to prevent a DirectoryAllreadyExistsException.
-		for (final File dir : dirs)
-		{
-			if (dir.exists())
-			{
-				DeleteFileExtensions.delete(dir);
-			}
-		}
-		final boolean created = CreateFileExtensions.newDirectoriesQuietly(dirs);
-		assertTrue("directory should be created.", created);
-		for (final File dir : dirs)
-		{
-			assertTrue("directory should exist.", dir.exists());
-			assertTrue("File object should be a directory.", dir.isDirectory());
-		}
-		// Finally delete the test directories...
-		for (final File dir : dirs)
-		{
-			if (dir.exists())
-			{
-				DeleteFileExtensions.delete(dir);
-			}
-		}
-	}
-
-	/**
 	 * Test create directory.
 	 *
 	 * @throws DirectoryAllreadyExistsException
@@ -187,30 +144,6 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CreateFileExtensions#newDirectoryQuietly(File)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testNewDirectoryQuietly() throws IOException
-	{
-		final File dir = new File(this.testResources, "testCreateDirectory");
-		// if the directory exist delete it to prevent a DirectoryAllreadyExistsException.
-		if (dir.exists())
-		{
-			DeleteFileExtensions.delete(dir);
-		}
-		final boolean created = CreateFileExtensions.newDirectoryQuietly(dir);
-		assertTrue("directory should be created.", created);
-		assertTrue("directory should exist.", dir.exists());
-		assertTrue("File object should be a directory.", dir.isDirectory());
-		// Finally delete the test directory...
-		DeleteFileExtensions.delete(dir);
-	}
-
-	/**
 	 * Test create file.
 	 *
 	 * @throws IOException
@@ -228,30 +161,6 @@ public class CreateFileExtensionsTest extends FileTestCase
 			DeleteFileExtensions.delete(file);
 		}
 		final boolean created = CreateFileExtensions.newFile(file);
-		assertTrue("File should be created.", created);
-		assertTrue("File should exist.", file.exists());
-		assertTrue("File object should be a file.", file.isFile());
-		// Finally delete the test file...
-		DeleteFileExtensions.delete(file);
-	}
-
-	/**
-	 * Test method for {@link CreateFileExtensions#newFileQuietly(File)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testNewFileQuietly() throws IOException
-	{
-		final File file = new File("/tmp/foo/bar/test.file");
-		// if the file exist delete it to prevent a DirectoryAllreadyExistsException.
-		if (file.exists())
-		{
-			DeleteFileExtensions.delete(file);
-		}
-		final boolean created = CreateFileExtensions.newFileQuietly(file);
 		assertTrue("File should be created.", created);
 		assertTrue("File should exist.", file.exists());
 		assertTrue("File object should be a file.", file.isFile());

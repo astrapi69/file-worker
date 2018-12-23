@@ -36,7 +36,6 @@ import java.util.zip.CheckedInputStream;
 import java.util.zip.Checksum;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.log4j.Logger;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.file.read.ReadFileExtensions;
@@ -52,9 +51,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class ChecksumExtensions
 {
-
-	/** The LOGGER. */
-	protected static final Logger LOGGER = Logger.getLogger(ChecksumExtensions.class.getName());
 
 	/** The constant HEXADECIMAL_CHARACTER_CLASS. */
 	private static final String HEXADECIMAL_CHARACTER_CLASS = "[a-fA-F0-9]";

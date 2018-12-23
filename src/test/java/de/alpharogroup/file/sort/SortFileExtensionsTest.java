@@ -42,13 +42,12 @@ import de.alpharogroup.comparators.StringComparator;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * The unit test class for the class {@link SortFileExtensions}.
  */
-@Slf4j
 public class SortFileExtensionsTest
 {
 	/** The resources. */
@@ -71,7 +70,6 @@ public class SortFileExtensionsTest
 		final File projectPath = new File(absolutePath);
 		assertTrue("The directory " + projectPath.getAbsolutePath() + " should be created.",
 			projectPath.exists());
-		log.debug("The directory " + projectPath.getAbsolutePath() + " exists or is created.");
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
@@ -118,7 +116,7 @@ public class SortFileExtensionsTest
 			assertEquals(expected, actual);
 		}
 		// create initial state...
-		WriteFileQuietlyExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");
+		WriteFileExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");
 	}
 
 	/**

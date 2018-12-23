@@ -31,14 +31,12 @@ import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.channels.FileLock;
 
-import org.apache.log4j.Logger;
-
 import de.alpharogroup.file.read.ReadFileExtensions;
 import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for the use of File object.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -48,9 +46,6 @@ public final class FileExtensions
 
 	/** The Constant VELOCITY_TEMPLATE_FILE_EXTENSION. */
 	public static final String VELOCITY_TEMPLATE_FILE_EXTENSION = ".vm";
-
-	/** The LOGGER. */
-	private static final Logger LOGGER = Logger.getLogger(FileExtensions.class.getName());
 
 	/**
 	 * Downloads Data from the given URI.
@@ -69,7 +64,7 @@ public final class FileExtensions
 
 	/**
 	 * Gets the absolut path without the filename.
-	 * 
+	 *
 	 * @param file
 	 *            the file.
 	 * @return 's the absolut path without filename.
@@ -87,7 +82,7 @@ public final class FileExtensions
 
 	/**
 	 * Gets the current absolut path without the dot and slash.
-	 * 
+	 *
 	 * @return 's the current absolut path without the dot and slash.
 	 */
 	public static String getCurrentAbsolutPathWithoutDotAndSlash()
@@ -99,7 +94,7 @@ public final class FileExtensions
 
 	/**
 	 * Gets the filename with the absolute path prefix.
-	 * 
+	 *
 	 * @param file
 	 *            the file.
 	 * @return the filename prefix.
@@ -111,7 +106,7 @@ public final class FileExtensions
 
 	/**
 	 * Gets the filename suffix or null if no suffix exists or the given file object is a directory.
-	 * 
+	 *
 	 * @param file
 	 *            the file.
 	 * @return 's the filename suffix or null if no suffix exists or the given file object is a
@@ -124,7 +119,7 @@ public final class FileExtensions
 
 	/**
 	 * Gets the filename without the extension or null if the given file object is a directory.
-	 * 
+	 *
 	 * @param file
 	 *            the file.
 	 * @return the filename without the extension or null if the given file object is a directory.
@@ -146,19 +141,17 @@ public final class FileExtensions
 
 	/**
 	 * Not yet implemented. Checks if the given file is open.
-	 * 
+	 *
 	 * @param file
 	 *            The file to check.
 	 * @return Return true if the file is open otherwise false.
+	 * @throws IOException
 	 */
-	public static boolean isOpen(final File file)
+	public static boolean isOpen(final File file) throws IOException
 	{
 		boolean open = false;
-		RandomAccessFile fileAccess = null;
 		FileLock lock = null;
-		try
-		{
-			fileAccess = new RandomAccessFile(file.getAbsolutePath(), "rw");
+		try(RandomAccessFile fileAccess = new RandomAccessFile(file.getAbsolutePath(), "rw")) {
 			lock = fileAccess.getChannel().tryLock();
 			if (lock == null)
 			{
@@ -167,29 +160,6 @@ public final class FileExtensions
 			else
 			{
 				lock.release();
-			}
-		}
-		catch (final FileNotFoundException fnfe)
-		{
-			open = true;
-		}
-		catch (final IOException ioe)
-		{
-			open = true;
-		}
-		finally
-		{
-			if (fileAccess != null)
-			{
-				try
-				{
-					fileAccess.close();
-					fileAccess = null;
-				}
-				catch (final IOException ioex)
-				{
-					LOGGER.error(ioex);
-				}
 			}
 		}
 		return open;

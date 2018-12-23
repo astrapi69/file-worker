@@ -57,7 +57,7 @@ import de.alpharogroup.file.filter.TxtFileFilter;
 import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
 import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link CopyFileExtensions}.
@@ -138,10 +138,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepDir);
 			assertTrue("The directory " + srcDeepDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileQuietlyExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
-			WriteFileQuietlyExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileQuietlyExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
-			WriteFileQuietlyExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
+			WriteFileExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
 		}
 		deepestDirName = "deepest";
 		srcDeepestDir = new File(srcDeepDir, deepestDirName);
@@ -165,10 +165,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				created);
-			WriteFileQuietlyExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
-			WriteFileQuietlyExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileQuietlyExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileQuietlyExtensions.string2File(srcDeepestFile3,
+			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
+			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
+			WriteFileExtensions.string2File(srcDeepestFile3,
 				"Its a beautifull exe morning!!!");
 		}
 
@@ -181,7 +181,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			assertTrue("The directory " + testDir.getAbsolutePath() + " should be created.",
 				created);
 		}
-		WriteFileQuietlyExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// define a filefilter object...
 		fileFilter = new TxtFileFilter();
 		// define the include filefilter object...
@@ -299,7 +299,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link CopyFileExtensions#copyDirectory(File, File, boolean)}
-	 * 
+	 *
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
 	 * @throws IOException
@@ -338,7 +338,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for
 	 * {@link CopyFileExtensions#copyDirectoryWithFileFilter(File, File, FileFilter, boolean)}
-	 * 
+	 *
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
 	 * @throws IOException
@@ -387,7 +387,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for
 	 * {@link CopyFileExtensions#copyDirectoryWithFileFilter(File, File, FileFilter, FileFilter, boolean)}
-	 * 
+	 *
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
 	 * @throws IOException
@@ -453,7 +453,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CopyFileExtensions#copyDirectoryWithFileFilter(File, File, FileFilter, FileFilter, boolean)}
 	 * .
-	 * 
+	 *
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
 	 * @throws IOException
@@ -669,7 +669,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			assertTrue("", actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileQuietlyExtensions.string2File(source, inputString);
+		WriteFileExtensions.string2File(source, inputString);
 
 		actual = CopyFileExtensions.copyFile(source, destination);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
@@ -681,7 +681,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link CopyFileExtensions#copyFile(File, File, boolean)}
-	 * 
+	 *
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsADirectoryException
@@ -701,7 +701,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			assertTrue("", actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileQuietlyExtensions.string2File(source, inputString);
+		WriteFileExtensions.string2File(source, inputString);
 
 		actual = CopyFileExtensions.copyFile(source, destination, false);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
