@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -61,7 +61,7 @@ public class SortFileExtensions
 	{
 		List<String> lines = ReadFileExtensions.readLinesInList(file);
 		Collections.sort(lines, comparator);
-		WriteFileQuietlyExtensions.writeLinesToFile(file, lines, encoding);
+		WriteFileExtensions.writeLinesToFile(file, lines, encoding);
 	}
 
 }

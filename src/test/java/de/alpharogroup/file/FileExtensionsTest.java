@@ -37,7 +37,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link FileExtensions}.
@@ -88,7 +88,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testDownload.txt");
 
-		WriteFileQuietlyExtensions.storeByteArrayToFile(expected, destination);
+		WriteFileExtensions.storeByteArrayToFile(expected, destination);
 
 		final byte[] compare = FileExtensions.download(destination.toURI());
 
@@ -163,9 +163,11 @@ public class FileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link FileExtensions#isOpen(File)}.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testIsOpen()
+	public void testIsOpen() throws IOException
 	{
 		boolean actual;
 		boolean expected;
