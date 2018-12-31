@@ -1,12 +1,15 @@
 ## Change log
 ----------------------
 
+Version 5.1-SNAPSHOT
+-------------
+
 Version 5.0.1
 -------------
 
 CHANGED:
 
-- update of parent version to 4.4
+- update of parent version to 4.5
 - update of silly-collections dependency version to 5
 - update of jobject-extensions version to 2.5
 - update of jcommons-lang dependency version to 5.1
