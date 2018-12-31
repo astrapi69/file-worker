@@ -168,8 +168,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
 			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3,
-				"Its a beautifull exe morning!!!");
+			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
 		}
 
 		source = new File(this.testDir, "testCopyFileInput.txt");

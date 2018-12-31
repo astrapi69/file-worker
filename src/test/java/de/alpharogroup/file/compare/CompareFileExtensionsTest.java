@@ -219,7 +219,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = true)
-	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean() throws FileNotFoundException, IOException
+	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
+		throws FileNotFoundException, IOException
 	{
 		IFileCompareResultBean actual;
 		IFileCompareResultBean expected;
@@ -249,7 +250,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = true)
-	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean() throws FileNotFoundException, IOException
+	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
+		throws FileNotFoundException, IOException
 	{
 		actual = CompareFileExtensions.compareFiles(testFile1, testFile2, false, false, false,
 			false, false, false);
@@ -441,7 +443,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = true)
-	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean() throws FileNotFoundException, IOException
+	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
+		throws FileNotFoundException, IOException
 	{
 		List<IFileCompareResultBean> actual;
 		List<IFileCompareResultBean> expected;
@@ -530,7 +533,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)}.
 	 */
 	@Test(enabled = true)
-	public void testFindEqualFilesWithSameContentFileFile() throws FileNotFoundException, IOException
+	public void testFindEqualFilesWithSameContentFileFile()
+		throws FileNotFoundException, IOException
 	{
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 
@@ -559,7 +563,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = true)
-	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean() throws FileNotFoundException, IOException
+	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
+		throws FileNotFoundException, IOException
 	{
 		List<IFileContentResultBean> actual;
 		List<IFileContentResultBean> expected;

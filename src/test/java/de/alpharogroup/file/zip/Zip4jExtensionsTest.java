@@ -77,6 +77,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 
 	/**
 	 * Test for {@link Zip4jExtensions#extract(ZipFile, File, String)}
+	 * 
 	 * @throws IOException
 	 * @throws FileNotFoundException
 	 */

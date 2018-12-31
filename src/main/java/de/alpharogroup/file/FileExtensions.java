@@ -25,7 +25,6 @@
 package de.alpharogroup.file;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URI;
@@ -151,7 +150,8 @@ public final class FileExtensions
 	{
 		boolean open = false;
 		FileLock lock = null;
-		try(RandomAccessFile fileAccess = new RandomAccessFile(file.getAbsolutePath(), "rw")) {
+		try (RandomAccessFile fileAccess = new RandomAccessFile(file.getAbsolutePath(), "rw"))
+		{
 			lock = fileAccess.getChannel().tryLock();
 			if (lock == null)
 			{

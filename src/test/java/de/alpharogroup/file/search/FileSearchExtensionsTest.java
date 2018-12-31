@@ -139,7 +139,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testCountAllFilesInDirectory()  throws FileNotFoundException, IOException
+	public void testCountAllFilesInDirectory() throws FileNotFoundException, IOException
 	{
 		long actual;
 		long expected;

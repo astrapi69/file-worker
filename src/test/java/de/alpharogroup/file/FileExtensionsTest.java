@@ -164,7 +164,8 @@ public class FileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileExtensions#isOpen(File)}.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	public void testIsOpen() throws IOException

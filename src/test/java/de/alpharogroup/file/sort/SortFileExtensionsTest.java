@@ -43,16 +43,21 @@ import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * The unit test class for the class {@link SortFileExtensions}.
  */
 public class SortFileExtensionsTest
 {
+
+	String absolutePath;
+	String actual;
+	boolean created;
+
+	String expected;
+	File projectPath;
 	/** The resources. */
 	File resources;
-
 	/** The directory /src/test/resources for test resources. */
 	File testResources;
 
@@ -66,14 +71,14 @@ public class SortFileExtensionsTest
 	protected void setUp() throws Exception
 	{
 		// Get the absolut path from the current project.
-		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
-		final File projectPath = new File(absolutePath);
+		absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
+		projectPath = new File(absolutePath);
 		assertTrue("The directory " + projectPath.getAbsolutePath() + " should be created.",
 			projectPath.exists());
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(testResources);
+			created = CreateFileExtensions.newDirectory(testResources);
 			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
 				created);
 		}
@@ -92,23 +97,28 @@ public class SortFileExtensionsTest
 	@Test
 	public void testSort() throws FileNotFoundException, IOException
 	{
-		final File testFile = new File(testResources, "resources");
-		final File epfFile = new File(testFile, "testEpf.epf");
+		File testFile;
+		File epfFile;
+		File sortedEpfFile;
+		List<String> originalLines;
+		List<String> actualSortedLines;
+		List<String> expectedSortedLines;
 
-		List<String> originalLines = ReadFileExtensions.readLinesInList(epfFile, false);
+		testFile = new File(testResources, "resources");
+		epfFile = new File(testFile, "testEpf.epf");
+
+		originalLines = ReadFileExtensions.readLinesInList(epfFile, false);
 
 		SortFileExtensions.sort(epfFile, StringComparator.of(), "UTF-8");
 
-		List<String> actualSortedLines = ReadFileExtensions.readLinesInList(epfFile, false);
+		actualSortedLines = ReadFileExtensions.readLinesInList(epfFile, false);
 
-		final File sortedEpfFile = new File(testFile, "testSortedEpf.epf");
+		sortedEpfFile = new File(testFile, "testSortedEpf.epf");
 
-		List<String> expectedSortedLines = ReadFileExtensions.readLinesInList(sortedEpfFile, false);
+		expectedSortedLines = ReadFileExtensions.readLinesInList(sortedEpfFile, false);
 
 		assertEquals(expectedSortedLines.size(), actualSortedLines.size());
 
-		Object expected;
-		Object actual;
 		for (int i = 0; i < expectedSortedLines.size(); i++)
 		{
 			expected = expectedSortedLines.get(i);

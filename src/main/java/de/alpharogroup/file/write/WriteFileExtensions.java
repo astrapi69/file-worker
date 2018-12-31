@@ -63,11 +63,15 @@ public final class WriteFileExtensions
 	/**
 	 * The Method writeProperties2File(String, Properties) writes the Properties to the file.
 	 *
-	 * @param filename            The filename from the file to write the properties.
-	 * @param properties            The properties.
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @param filename
+	 *            The filename from the file to write the properties.
+	 * @param properties
+	 *            The properties.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void writeProperties2File(final String filename, final Properties properties) throws IOException
+	public static void writeProperties2File(final String filename, final Properties properties)
+		throws IOException
 	{
 		// Write properties to the file.
 		try (FileOutputStream fos = new FileOutputStream(filename))
@@ -176,7 +180,8 @@ public final class WriteFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void writeLinesToFile(final Collection<String> collection, final File output) throws FileNotFoundException, IOException
+	public static void writeLinesToFile(final Collection<String> collection, final File output)
+		throws FileNotFoundException, IOException
 	{
 		final StringBuffer sb = new StringBuffer();
 		for (final String element : collection)
