@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>file-worker</artifactId>
-	<version>5.1-SNAPSHOT</version>
+	<version>5.0.2</version>
 
 	<name>${project.artifactId}</name>
 
@@ -21,7 +21,7 @@
 
 	<properties>
 		<!-- JCOMMONS-LANG version -->
-		<jcommons-lang.version>5.1</jcommons-lang.version>
+		<jcommons-lang.version>5.1.1</jcommons-lang.version>
 		<!-- SILLY-COLLECTIONS version -->
 		<silly-collections.version>5</silly-collections.version>
 		<!-- TEST-OBJECTS version -->
