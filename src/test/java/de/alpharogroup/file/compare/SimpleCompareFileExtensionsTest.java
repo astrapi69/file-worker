@@ -42,7 +42,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.crypto.algorithm.MdAlgorithm;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 
 public class SimpleCompareFileExtensionsTest extends FileTestCase
 {
@@ -70,8 +70,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.tft");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile1);
 		assertTrue(this.actual);
 		this.actual = SimpleCompareFileExtensions.compareFilesByAbsolutePath(testFile1, testFile2);
@@ -90,8 +90,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByChecksum(testFile1, testFile2,
 			MdAlgorithm.MD5);
 		assertTrue(this.actual);
@@ -108,8 +108,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByChecksumAdler32(testFile1,
 			testFile2);
 		assertTrue(this.actual);
@@ -126,8 +126,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByChecksumCRC32(testFile1, testFile2);
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
@@ -146,8 +146,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.tft");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByContent(testFile1, testFile2);
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
@@ -166,8 +166,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.txt");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByExtension(testFile1, testFile2);
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
@@ -186,8 +186,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.txt");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		final Date now = new Date(System.currentTimeMillis());
 		final long tenSeconds = 1000 * 10;
 		// simulate that first file is created 10 seconds before the second file...
@@ -211,8 +211,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
 			"testFindFilesRecursive2.txt");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByLength(testFile1, testFile2);
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
@@ -228,8 +228,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesRecursive.txt");
 		final File testFile2 = new File(this.deepDir, "testFindFilesRecursive.txt");
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull day!!!");
 		this.actual = SimpleCompareFileExtensions.compareFilesByName(testFile1, testFile2);
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);

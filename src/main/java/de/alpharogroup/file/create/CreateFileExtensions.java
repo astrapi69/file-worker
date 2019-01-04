@@ -30,7 +30,6 @@ import java.util.Collection;
 
 import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * The class {@link CreateFileExtensions} helps you to create files or directories.
@@ -39,7 +38,6 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  */
 @UtilityClass
-@Slf4j
 public final class CreateFileExtensions
 {
 
@@ -64,30 +62,6 @@ public final class CreateFileExtensions
 		}
 		return created;
 
-	}
-
-	/**
-	 * Creates the directories.
-	 *
-	 * @param directories
-	 *            the directories
-	 *
-	 * @return true, if successful
-	 * 
-	 * @deprecated use instead the same name method in the class
-	 *             {@code CreateFileQuietlyExtensions}. <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
-	 */
-	@Deprecated
-	public static boolean newDirectoriesQuietly(final Collection<File> directories)
-	{
-		boolean created = false;
-		for (final File dir : directories)
-		{
-			created = CreateFileQuietlyExtensions.newDirectoryQuietly(dir);
-		}
-		return created;
 	}
 
 	/**
@@ -120,33 +94,6 @@ public final class CreateFileExtensions
 	}
 
 	/**
-	 * Creates a new directory quietly.
-	 *
-	 * @param dir
-	 *            The directory to create.
-	 *
-	 * @return Returns true if the directory was created otherwise false.
-	 * 
-	 * @deprecated use instead the same name method in the class
-	 *             {@code CreateFileQuietlyExtensions}. <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
-	 */
-	@Deprecated
-	public static boolean newDirectoryQuietly(final File dir)
-	{
-		try
-		{
-			return newDirectory(dir);
-		}
-		catch (final DirectoryAllreadyExistsException e)
-		{
-			log.error("Directory '" + dir.getAbsolutePath() + "' allready exists.", e);
-		}
-		return false;
-	}
-
-	/**
 	 * Creates an empty file if the File does not exists otherwise it lets the file as it is.
 	 *
 	 * @param file
@@ -170,35 +117,6 @@ public final class CreateFileExtensions
 			created = true;
 		}
 		return created;
-	}
-
-	/**
-	 * Creates an empty file quietly if the File does not exists otherwise it lets the file as it
-	 * is.
-	 *
-	 * @param file
-	 *            the file.
-	 *
-	 * @return true, if the file is successful created otherwise false.
-	 * 
-	 * @deprecated use instead the same name method in the class
-	 *             {@code CreateFileQuietlyExtensions}. <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release.
-	 */
-	@Deprecated
-	public static boolean newFileQuietly(final File file)
-	{
-		try
-		{
-			return newFile(file);
-		}
-		catch (final IOException e)
-		{
-			log.error("File '" + file.getAbsolutePath()
-				+ "' could not created. For more information see the exception:", e);
-		}
-		return false;
 	}
 
 	/**

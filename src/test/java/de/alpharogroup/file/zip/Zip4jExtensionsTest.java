@@ -28,6 +28,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.meanbean.factories.ObjectCreationException;
@@ -38,7 +39,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.write.WriteFileQuietlyExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -76,9 +77,12 @@ public class Zip4jExtensionsTest extends FileTestCase
 
 	/**
 	 * Test for {@link Zip4jExtensions#extract(ZipFile, File, String)}
+	 * 
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
 	@Test(enabled = true)
-	public void testExtract() throws ZipException
+	public void testExtract() throws ZipException, FileNotFoundException, IOException
 	{
 		final File zipFile = new File(this.zipDir.getAbsoluteFile(), "Zip4j.zip");
 
@@ -88,7 +92,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 		final File unzippedFile1 = new File(this.unzipDir, file1);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), file1);
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 
 		Zip4jExtensions.zipFiles(zip4jZipFile, testFile1);
 		// Test to extract...
@@ -152,8 +156,8 @@ public class Zip4jExtensionsTest extends FileTestCase
 		final File unzippedFile2 = new File(this.unzipDir, file2);
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), file2);
 
-		WriteFileQuietlyExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileQuietlyExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
 
 		Zip4jExtensions.zipFiles(zip4jZipFile, testFile1, testFile2);
 

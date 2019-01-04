@@ -40,7 +40,6 @@ import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
@@ -49,7 +48,6 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  */
 @UtilityClass
-@Slf4j
 public final class RenameFileExtensions
 {
 
@@ -316,26 +314,9 @@ public final class RenameFileExtensions
 		boolean success = fileToRename.renameTo(newFileName);
 		if (!success)
 		{
-			log.info("The file " + fileToRename.getName() + " was not renamed.");
-
 			if (delete)
 			{
-				log.info("Try to copy the content into the new file with the new name.");
-
-				final boolean copied = CopyFileExtensions.copyFile(fileToRename, newFileName);
-				if (copied)
-				{
-					log.info("Sucessfully copied the old file " + fileToRename.getName()
-						+ " to the new file " + newFileName.getName() + ".");
-				}
-				else
-				{
-					log.info("Try to copy file " + fileToRename.getName() + " into the new file "
-						+ newFileName.getName() + " failed.");
-				}
-
-				log.info("Try to delete the old file " + fileToRename.getName() + ".");
-
+				CopyFileExtensions.copyFile(fileToRename, newFileName);
 				DeleteFileExtensions.delete(fileToRename);
 				success = true;
 			}
@@ -398,5 +379,6 @@ public final class RenameFileExtensions
 		renameFile(fileToRename, fileWithNewName, true);
 		return fileWithNewName;
 	}
+
 
 }

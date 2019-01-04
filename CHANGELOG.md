@@ -1,6 +1,40 @@
 ## Change log
 ----------------------
 
+Version 5.0.2
+-------------
+
+CHANGED:
+
+- update of jcommons-lang dependency version to 5.1.1
+
+Version 5.0.1
+-------------
+
+CHANGED:
+
+- update of parent version to 4.5
+- update of silly-collections dependency version to 5
+- update of jobject-extensions version to 2.5
+- update of jcommons-lang dependency version to 5.1
+- update of test-objects dependency version to 5
+- update of jobject-evaluate dependency version to 2.5
+- excluded logging dependencies
+
+Version 5
+-------------
+
+ADDED:
+ 
+- new method for get the checksum from a given byte arrays with a given algorithm
+
+CHANGED:
+
+- update of parent version to 4.2
+- removed poi dependencies and corresponding classes
+- update of silly-collections dependency version to 4.34.1
+- update of mystic-crypt dependency version to 5.6
+
 Version 4.23
 -------------
 
