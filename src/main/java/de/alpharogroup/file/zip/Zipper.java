@@ -30,11 +30,12 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -44,10 +45,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.java.Log;
 
 /**
- * The class {@link Zipper}.
- * 
+ * The class {@link Zipper}
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -58,6 +60,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Log
 public class Zipper implements ZipModel
 {
 
@@ -102,8 +105,8 @@ public class Zipper implements ZipModel
 	}
 
 	/**
-	 * Instantiates a new zipper.
-	 * 
+	 * Instantiates a new {@link Zipper} object
+	 *
 	 * @param dirToZip
 	 *            the dir to zip
 	 * @param zipFile
@@ -115,7 +118,7 @@ public class Zipper implements ZipModel
 	}
 
 	/**
-	 * Instantiates a new zipper.
+	 * Instantiates a new {@link Zipper} object
 	 *
 	 * @param dirToZip
 	 *            the dir to zip
@@ -134,7 +137,7 @@ public class Zipper implements ZipModel
 	/**
 	 * Zip.
 	 */
-	public void zip()
+	public Optional<ZipErrorCodes> zip()
 	{
 		try (FileOutputStream fos = new FileOutputStream(this.zipFile);
 			ZipOutputStream zos = new ZipOutputStream(fos);)
@@ -142,13 +145,11 @@ public class Zipper implements ZipModel
 
 			if (!this.directoryToZip.exists())
 			{
-				throw new IOException("Directory with the name " + this.directoryToZip.getName()
-					+ " does not exist.");
+				return Optional.of(ZipErrorCodes.DIRECTORY_TO_ZIP_DOES_NOT_EXIST);
 			}
 			if (!this.zipFile.exists())
 			{
-				throw new FileDoesNotExistException(
-					"Zipfile with the name " + this.zipFile.getName() + " does not exist.");
+				return Optional.of(ZipErrorCodes.ZIP_FILE_DOES_NOT_EXIST);
 			}
 			if (0 < this.zipLevel)
 			{
@@ -173,17 +174,15 @@ public class Zipper implements ZipModel
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			log.log(Level.SEVERE, e.getLocalizedMessage(), e);
+			return Optional.of(ZipErrorCodes.IO_ERROR);
 		}
-		catch (FileDoesNotExistException e)
-		{
-			e.printStackTrace();
-		}
+		return Optional.empty();
 	}
 
 	/**
 	 * Zip files.
-	 * 
+	 *
 	 * @param file
 	 *            the file
 	 * @throws IOException
