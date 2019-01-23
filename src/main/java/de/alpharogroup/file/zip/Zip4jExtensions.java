@@ -25,6 +25,8 @@
 package de.alpharogroup.file.zip;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import lombok.experimental.UtilityClass;
 import net.lingala.zip4j.core.ZipFile;
@@ -124,12 +126,30 @@ public final class Zip4jExtensions
 	 * @param parameters
 	 *            the parameters
 	 * @param toAdd
-	 *            the to add
+	 *            the list with the files to add in the zip file
 	 * @throws ZipException
 	 *             the zip exception
 	 */
 	public static void zipFiles(final ZipFile zipFile4j, final ZipParameters parameters,
 		final File... toAdd) throws ZipException
+	{
+		zipFiles(zipFile4j, parameters, Arrays.asList(toAdd));
+	}
+
+	/**
+	 * Adds a file or several files to the given zip file.
+	 *
+	 * @param zipFile4j
+	 *            the zip file4j
+	 * @param parameters
+	 *            the parameters
+	 * @param toAdd
+	 *            the list with the files to add in the zip file
+	 * @throws ZipException
+	 *             the zip exception
+	 */
+	public static void zipFiles(final ZipFile zipFile4j, final ZipParameters parameters,
+		final List<File> toAdd) throws ZipException
 	{
 		for (final File element : toAdd)
 		{
