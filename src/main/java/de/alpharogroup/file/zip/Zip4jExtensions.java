@@ -119,7 +119,7 @@ public final class Zip4jExtensions
 	}
 
 	/**
-	 * Adds a file or several files to the given zip file.
+	 * Adds the given file(s) to the given zip file.
 	 *
 	 * @param zipFile4j
 	 *            the zip file4j
@@ -137,7 +137,7 @@ public final class Zip4jExtensions
 	}
 
 	/**
-	 * Adds a file or several files to the given zip file.
+	 * Adds the given file(s) to the given zip file.
 	 *
 	 * @param zipFile4j
 	 *            the zip file4j
