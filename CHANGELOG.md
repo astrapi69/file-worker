@@ -1,6 +1,19 @@
 ## Change log
 ----------------------
 
+Version 5.1
+-------------
+
+ADDED:
+ 
+- new extension class for modify file content
+- new BiFunction interface created for generic modify file content
+- new unit tests for the new extension class for modify file content
+
+CHANGED:
+
+- moved interfaces for comparison from files or directories to appropriate api package
+
 Version 5.0.2
 -------------
 

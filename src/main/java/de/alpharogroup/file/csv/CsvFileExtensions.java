@@ -621,6 +621,8 @@ public final class CsvFileExtensions
 	 *            The file where the String-object will be writing.
 	 * @param encoding
 	 *            The encoding from the file.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static void writeLinesToFile(final Collection<String> collection, final File output,
 		final String encoding) throws IOException

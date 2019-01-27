@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>file-worker</artifactId>
-	<version>5.0.2</version>
+	<version>5.1</version>
 
 	<name>${project.artifactId}</name>
 
@@ -217,7 +217,8 @@
 								<!-- exceptions -->
 								<exclude>de/alpharogroup/file/exceptions/**/*.class</exclude>
 								<!-- interfaces -->
-								<exclude>de/alpharogroup/file/compare/interfaces/**/*.class</exclude>
+								<exclude>de/alpharogroup/file/compare/api/**/*.class</exclude>
+								<exclude>de/alpharogroup/file/modify/api/**/*.class</exclude>
 								<!-- deprecated classes -->
 								<!-- constant classes with only constants -->
 								<!-- explicit abstract classes -->

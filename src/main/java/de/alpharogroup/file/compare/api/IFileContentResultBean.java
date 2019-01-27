@@ -22,66 +22,30 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package de.alpharogroup.file.compare;
-
-import java.io.File;
-
-import de.alpharogroup.file.compare.api.IFileContentResultBean;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.ToString;
+package de.alpharogroup.file.compare.api;
 
 /**
- * Bean that tells if the content from the given files are equal.
- *
+ * The Interface IFileContentResultBean.
+ * 
  * @version 1.0
  * @author Asterios Raptis
  */
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class FileContentResultBean extends FileCompareResultBean implements IFileContentResultBean
+public interface IFileContentResultBean extends IFileCompareResultBean
 {
-
-	/** The same content. */
-	private boolean contentEquality;
-
-	/**
-	 * Default constructor.
-	 *
-	 * @param source
-	 *            the source
-	 * @param compare
-	 *            the compare
-	 */
-	public FileContentResultBean(final File source, final File compare)
-	{
-		super(source, compare);
-	}
 
 	/**
 	 * Gets the content equality.
-	 *
-	 * @return the content equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.api.IFileContentResultBean#getContentEquality()
+	 * 
+	 * @return the content equality
 	 */
-	@Override
-	public boolean getContentEquality()
-	{
-		return this.contentEquality;
-	}
+	boolean getContentEquality();
 
 	/**
 	 * Sets the content equality.
-	 *
+	 * 
 	 * @param contentEquality
-	 *            the new content equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.api.IFileContentResultBean#setContentEquality(boolean)
+	 *            the new content equality
 	 */
-	@Override
-	public void setContentEquality(final boolean contentEquality)
-	{
-		this.contentEquality = contentEquality;
-	}
+	void setContentEquality(final boolean contentEquality);
 
 }
