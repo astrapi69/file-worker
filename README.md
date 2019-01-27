@@ -110,7 +110,7 @@ Open Source:
 
 |**Nexus Sonatype repositories**|
 |     :---:      |
-|![sonatype repository](https://avatars1.githubusercontent.com/u/33330803?s=200&v=4)|
+|![sonatype repository](https://img.shields.io/nexus/r/https/oss.sonatype.org/de.alpharogroup/file-worker.svg?style=for-the-badge)|
 |Special thanks to [sonatype repository](https://www.sonatype.com) for providing a free maven repository service for open source projects|
 |     <img width=1000/>     |
 
