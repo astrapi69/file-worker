@@ -26,7 +26,7 @@ package de.alpharogroup.file.compare;
 
 import java.io.File;
 
-import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
+import de.alpharogroup.file.compare.api.IFileCompareResultBean;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
@@ -82,7 +82,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 * Gets the absolute path equality.
 	 *
 	 * @return the absolute path equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#getAbsolutePathEquality()
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#getAbsolutePathEquality()
 	 */
 	@Override
 	public boolean getAbsolutePathEquality()
@@ -94,7 +94,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 * Gets the file extension equality.
 	 *
 	 * @return the file extension equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#getFileExtensionEquality()
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#getFileExtensionEquality()
 	 */
 	@Override
 	public boolean getFileExtensionEquality()
@@ -106,7 +106,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 * Gets the file to compare.
 	 *
 	 * @return the file to compare {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#getFileToCompare()
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#getFileToCompare()
 	 */
 	@Override
 	public File getFileToCompare()
@@ -118,7 +118,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 * Gets the last modified equality.
 	 *
 	 * @return the last modified equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#getLastModifiedEquality()
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#getLastModifiedEquality()
 	 */
 	@Override
 	public boolean getLastModifiedEquality()
@@ -130,7 +130,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 * Gets the length equality.
 	 *
 	 * @return the length equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#getLengthEquality()
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#getLengthEquality()
 	 */
 	@Override
 	public boolean getLengthEquality()
@@ -142,7 +142,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 * Gets the name equality.
 	 *
 	 * @return the name equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#getNameEquality()
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#getNameEquality()
 	 */
 	@Override
 	public boolean getNameEquality()
@@ -154,7 +154,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 * Gets the source file.
 	 *
 	 * @return the source file {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#getSourceFile()
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#getSourceFile()
 	 */
 	@Override
 	public File getSourceFile()
@@ -179,7 +179,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param fileExtensionEquality
 	 *            the new file extension equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#setFileExtensionEquality(java.lang.Boolean)
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#setFileExtensionEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setFileExtensionEquality(final Boolean fileExtensionEquality)
@@ -192,7 +192,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param lastModifiedEquality
 	 *            the new last modified equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#setLastModifiedEquality(java.lang.Boolean)
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#setLastModifiedEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setLastModifiedEquality(final Boolean lastModifiedEquality)
@@ -205,7 +205,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param lengthEquality
 	 *            the new length equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#setLengthEquality(java.lang.Boolean)
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#setLengthEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setLengthEquality(final Boolean lengthEquality)
@@ -218,7 +218,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param nameEquality
 	 *            the new name equality {@inheritDoc}
-	 * @see de.alpharogroup.file.compare.interfaces.IFileCompareResultBean#setNameEquality(java.lang.Boolean)
+	 * @see de.alpharogroup.file.compare.api.IFileCompareResultBean#setNameEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setNameEquality(final Boolean nameEquality)

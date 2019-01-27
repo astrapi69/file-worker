@@ -43,8 +43,8 @@ import org.testng.annotations.Test;
 import de.alpharogroup.collections.CollectionExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.compare.interfaces.IFileCompareResultBean;
-import de.alpharogroup.file.compare.interfaces.IFileContentResultBean;
+import de.alpharogroup.file.compare.api.IFileCompareResultBean;
+import de.alpharogroup.file.compare.api.IFileContentResultBean;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
