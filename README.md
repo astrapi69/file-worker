@@ -3,7 +3,7 @@
 <div align="center">
 
 [![Build Status](https://travis-ci.org/lightblueseas/file-worker.svg?branch=master)](https://travis-ci.org/lightblueseas/file-worker) 
-[![Coverage Status](https://coveralls.io/repos/github/lightblueseas/file-worker/badge.svg?branch=develop)](https://coveralls.io/github/lightblueseas/file-worker?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/lightblueseas/file-worker/badge.svg?branch=master)](https://coveralls.io/github/lightblueseas/file-worker?branch=master)
 [![Open Issues](https://img.shields.io/github/issues/lightblueseas/file-worker.svg?style=flat)](https://github.com/lightblueseas/file-worker/issues)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker)
 [![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/file-worker.svg)](http://www.javadoc.io/doc/de.alpharogroup/file-worker)
@@ -116,7 +116,7 @@ Open Source:
 
 |**coveralls.io**|
 |     :---:      |
-|[![Coverage Status](https://coveralls.io/repos/github/lightblueseas/file-worker/badge.svg?branch=develop)](https://coveralls.io/github/lightblueseas/file-worker?branch=master)|
+|[![Coverage Status](https://coveralls.io/repos/github/lightblueseas/file-worker/badge.svg?branch=master)](https://coveralls.io/github/lightblueseas/file-worker?branch=master)|
 |Special thanks to [coveralls.io](https://coveralls.io) for providing a free code coverage for open source projects|
 |     <img width=1000/>     |
 
