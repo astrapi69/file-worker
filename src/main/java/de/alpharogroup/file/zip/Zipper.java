@@ -135,7 +135,9 @@ public class Zipper implements ZipModel
 	}
 
 	/**
-	 * Zip.
+	 * Zip the given files of this objects
+	 *
+	 * @return the optional with the possibles errors
 	 */
 	public Optional<ZipErrorCodes> zip()
 	{

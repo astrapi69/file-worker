@@ -383,6 +383,8 @@ public final class WriteFileExtensions
 	 *            The source file.
 	 * @param destFile
 	 *            The destination file.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static void readSourceFileAndWriteDestFile(final String srcfile, final String destFile)
 		throws IOException

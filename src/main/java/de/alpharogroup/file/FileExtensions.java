@@ -145,6 +145,7 @@ public final class FileExtensions
 	 *            The file to check.
 	 * @return Return true if the file is open otherwise false.
 	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static boolean isOpen(final File file) throws IOException
 	{
