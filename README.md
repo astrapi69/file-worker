@@ -116,7 +116,7 @@ Open Source:
 
 |**coveralls.io**|
 |     :---:      |
-|![Coverage Status](https://coveralls.io/repos/github/lightblueseas/file-worker/badge.svg)|
+|[![Coverage Status](https://coveralls.io/repos/github/lightblueseas/file-worker/badge.svg?branch=develop)](https://coveralls.io/github/lightblueseas/file-worker?branch=master)|
 |Special thanks to [coveralls.io](https://coveralls.io) for providing a free code coverage for open source projects|
 |     <img width=1000/>     |
 
