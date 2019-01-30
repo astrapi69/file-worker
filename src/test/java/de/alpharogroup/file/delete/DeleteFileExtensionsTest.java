@@ -46,7 +46,8 @@ import org.testng.annotations.Test;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.create.CreateFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.create.FileCreationState;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
@@ -92,11 +93,11 @@ public class DeleteFileExtensionsTest extends FileTestCase
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             is thrown if the directory all ready exists
 	 */
 	@Test
-	public void testCheckFile() throws IOException, DirectoryAllreadyExistsException
+	public void testCheckFile() throws IOException, DirectoryAlreadyExistsException
 	{
 		if (this.testDir.exists())
 		{
@@ -110,8 +111,8 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		assertTrue("", this.actual);
 		if (!this.testDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.testDir);
-			assertTrue("The directory should be created.", created);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.testDir);
+			assertTrue("The directory should be created.", state.equals(FileCreationState.CREATED));
 		}
 		ex = DeleteFileExtensions.checkFile(this.testDir);
 		this.actual = ex == null;
@@ -197,7 +198,7 @@ public class DeleteFileExtensionsTest extends FileTestCase
 	 * Test method for {@link DeleteFileExtensions#deleteAllFilesWithSuffix(File, String)}.
 	 */
 	@Test
-	public void testDeleteAllFilesWithSuffix() throws DirectoryAllreadyExistsException, IOException
+	public void testDeleteAllFilesWithSuffix() throws DirectoryAlreadyExistsException, IOException
 	{
 		final File testFile1 = new File(this.testDir, "testDeleteAllFilesWithSuffix1.txt");
 		final File testFile2 = new File(this.testDir, "testDeleteAllFilesWithSuffix2.txt");

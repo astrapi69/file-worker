@@ -41,6 +41,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.comparators.StringComparator;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.create.FileCreationState;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
@@ -78,9 +79,9 @@ public class SortFileExtensionsTest
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
-			created = CreateFileExtensions.newDirectory(testResources);
+			FileCreationState state = CreateFileExtensions.newDirectory(testResources);
 			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		resources = new File(testResources, "resources");
 

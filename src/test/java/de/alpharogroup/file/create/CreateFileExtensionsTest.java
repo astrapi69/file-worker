@@ -24,10 +24,14 @@
  */
 package de.alpharogroup.file.create;
 
+import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +44,10 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 
 /**
- * The class {@link CreateFileExtensionsTest} has unit test for the class
- * {@link CreateFileExtensions}.
+ * The unit test class for the class {@link CreateFileExtensions}
  */
 public class CreateFileExtensionsTest extends FileTestCase
 {
@@ -76,24 +79,31 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test create directories.
+	 * Test method for {@link CreateFileExtensions#newDirectories(java.util.Collection)}
 	 *
 	 * @throws IOException
-	 *             the IO exception
-	 * @throws DirectoryAllreadyExistsException
-	 *             the directory allready exists exception
+	 *             Signals that an I/O exception has occurred
+	 * @throws DirectoryAlreadyExistsException
+	 *             is thrown if the directory already exists
 	 */
 	@Test(enabled = true)
-	public void testNewDirectories() throws IOException, DirectoryAllreadyExistsException
+	public void testNewDirectories() throws IOException, DirectoryAlreadyExistsException
 	{
-		final List<File> dirs = new ArrayList<>();
-		final File dir1 = new File("test1.dir");
-		final File dir2 = new File("test2.dir");
-		final File dir3 = new File("test3.dir");
+		FileCreationState actual;
+		FileCreationState expected;
+		List<File> dirs;
+		File dir1;
+		File dir2;
+		File dir3;
+		// new scenario...
+		dirs = new ArrayList<>();
+		dir1 = new File("test1.dir");
+		dir2 = new File("test2.dir");
+		dir3 = new File("test3.dir");
 		dirs.add(dir1);
 		dirs.add(dir2);
 		dirs.add(dir3);
-		// if the directories exist delete them to prevent a DirectoryAllreadyExistsException.
+		// if the directories exist delete them to prevent a DirectoryAlreadyExistsException
 		for (final File dir : dirs)
 		{
 			if (dir.exists())
@@ -101,8 +111,10 @@ public class CreateFileExtensionsTest extends FileTestCase
 				DeleteFileExtensions.delete(dir);
 			}
 		}
-		final boolean created = CreateFileExtensions.newDirectories(dirs);
-		assertTrue("directory should be created.", created);
+		actual = CreateFileExtensions.newDirectories(dirs);
+		expected = FileCreationState.CREATED;
+		assertEquals(expected, actual);
+
 		for (final File dir : dirs)
 		{
 			assertTrue("directory should exist.", dir.exists());
@@ -119,74 +131,172 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test create directory.
+	 * Test method for
+	 * {@link CreateFileExtensions#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
 	 *
-	 * @throws DirectoryAllreadyExistsException
-	 *             the directory allready exists exception
 	 * @throws IOException
-	 *             the IO exception
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test(enabled = true)
-	public void testNewDirectory() throws DirectoryAllreadyExistsException, IOException
+	public void testNewDirectoriesWithPath() throws IOException
 	{
-		final File dir = new File(this.testResources, "testCreateDirectory");
-		// if the directory exist delete it to prevent a DirectoryAllreadyExistsException.
+		boolean actual;
+		boolean expected;
+		Path dirPath;
+		// new scenario...
+		dirPath = Paths.get(this.testResources.getAbsolutePath(), "test", "dir", "last");
+		new File(this.testResources, "testCreateDirectory");
+		// if the directory exist delete it to prevent a DirectoryAlreadyExistsException.
+		if (Files.exists(dirPath))
+		{
+			DeleteFileExtensions.delete(dirPath.toFile());
+		}
+		actual = CreateFileExtensions.newDirectories(dirPath);
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = Files.exists(dirPath);
+		assertEquals(expected, actual);
+
+		actual = dirPath.toFile().isDirectory();
+		assertEquals(expected, actual);
+
+		// Finally delete the test directory...
+		DeleteFileExtensions.delete(dirPath.toFile());
+	}
+
+	/**
+	 * Test method for {@link CreateFileExtensions#newDirectory(File)}.
+	 *
+	 * @throws DirectoryAlreadyExistsException
+	 *             is thrown if the directory already exists
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(enabled = true)
+	public void testNewDirectory() throws DirectoryAlreadyExistsException, IOException
+	{
+		FileCreationState state;
+		boolean actual;
+		boolean expected;
+		File dir;
+		// new scenario...
+		dir = new File(this.testResources, "testCreateDirectory");
+		// if the directory exist delete it to prevent a DirectoryAlreadyExistsException.
 		if (dir.exists())
 		{
 			DeleteFileExtensions.delete(dir);
 		}
-		final boolean created = CreateFileExtensions.newDirectory(dir);
-		assertTrue("directory should be created.", created);
-		assertTrue("directory should exist.", dir.exists());
-		assertTrue("File object should be a directory.", dir.isDirectory());
+		state = CreateFileExtensions.newDirectory(dir);
+		assertEquals(state, FileCreationState.CREATED);
+
+		actual = dir.exists();
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = dir.isDirectory();
+		assertEquals(expected, actual);
+
 		// Finally delete the test directory...
 		DeleteFileExtensions.delete(dir);
 	}
 
 	/**
-	 * Test create file.
+	 * Test method for
+	 * {@link CreateFileExtensions#newDirectory(Path, java.nio.file.attribute.FileAttribute...)}
 	 *
 	 * @throws IOException
-	 *             the IO exception
-	 * @throws DirectoryAllreadyExistsException
-	 *             the directory allready exists exception
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test(enabled = true)
-	public void testNewFile() throws IOException, DirectoryAllreadyExistsException
+	public void testNewDirectoryWithPath() throws IOException
 	{
-		final File file = new File("/tmp/foo/bar/test.file");
-		// if the file exist delete it to prevent a DirectoryAllreadyExistsException.
+		boolean actual;
+		boolean expected;
+		Path dirPath;
+		// new scenario...
+		dirPath = Paths.get(this.testResources.getAbsolutePath(), "testCreateDirectory");
+		new File(this.testResources, "testCreateDirectory");
+		// if the directory exist delete it to prevent a DirectoryAlreadyExistsException.
+		if (Files.exists(dirPath))
+		{
+			DeleteFileExtensions.delete(dirPath.toFile());
+		}
+		actual = CreateFileExtensions.newDirectory(dirPath);
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = Files.exists(dirPath);
+		assertEquals(expected, actual);
+
+		actual = dirPath.toFile().isDirectory();
+		assertEquals(expected, actual);
+
+		// Finally delete the test directory...
+		DeleteFileExtensions.delete(dirPath.toFile());
+	}
+
+	/**
+	 * Test method for {@link CreateFileExtensions#newFile(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws DirectoryAlreadyExistsException
+	 *             is thrown if the directory already exists
+	 */
+	@Test(enabled = true)
+	public void testNewFile() throws IOException, DirectoryAlreadyExistsException
+	{
+		boolean actual;
+		boolean expected;
+		File file;
+
+		file = new File("/tmp/foo/bar/test.file");
+		// if the file exist delete it to prevent a DirectoryAlreadyExistsException.
 		if (file.exists())
 		{
 			DeleteFileExtensions.delete(file);
 		}
-		final boolean created = CreateFileExtensions.newFile(file);
-		assertTrue("File should be created.", created);
-		assertTrue("File should exist.", file.exists());
-		assertTrue("File object should be a file.", file.isFile());
+
+		FileCreationState state = CreateFileExtensions.newFile(file);
+		assertEquals(state, FileCreationState.CREATED);
+
+		actual = file.exists();
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = file.isFile();
+		assertEquals(expected, actual);
 		// Finally delete the test file...
 		DeleteFileExtensions.delete(file);
 	}
 
 	/**
-	 * Test create files.
+	 * Test method for {@link CreateFileExtensions#newFiles(java.util.Collection)}
 	 *
 	 * @throws IOException
-	 *             the IO exception
-	 * @throws DirectoryAllreadyExistsException
-	 *             the directory allready exists exception
+	 *             Signals that an I/O exception has occurred
+	 * @throws DirectoryAlreadyExistsException
+	 *             is thrown if the directory already exists
 	 */
 	@Test(enabled = true)
-	public void testNewFiles() throws IOException, DirectoryAllreadyExistsException
+	public void testNewFiles() throws IOException, DirectoryAlreadyExistsException
 	{
-		final List<File> files = new ArrayList<>();
-		final File file1 = new File("test1.file");
-		final File file2 = new File("test2.file");
-		final File file3 = new File("test3.file");
+		FileCreationState actual;
+		FileCreationState expected;
+		List<File> files;
+		File file1;
+		File file2;
+		File file3;
+
+		files = new ArrayList<>();
+		file1 = new File("test1.file");
+		file2 = new File("test2.file");
+		file3 = new File("test3.file");
 		files.add(file1);
 		files.add(file2);
 		files.add(file3);
-		// if the files exist delete them to prevent a DirectoryAllreadyExistsException.
+		// if the files exist delete them to prevent a DirectoryAlreadyExistsException.
 		for (final File file : files)
 		{
 			if (file.exists())
@@ -194,8 +304,9 @@ public class CreateFileExtensionsTest extends FileTestCase
 				DeleteFileExtensions.delete(file);
 			}
 		}
-		final boolean created = CreateFileExtensions.newFiles(files);
-		assertTrue("files should be created.", created);
+		actual = CreateFileExtensions.newFiles(files);
+		expected = FileCreationState.CREATED;
+		assertEquals(actual, expected);
 		for (final File file : files)
 		{
 			assertTrue("file should exist.", file.exists());

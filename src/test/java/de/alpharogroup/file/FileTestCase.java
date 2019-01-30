@@ -33,8 +33,9 @@ import org.testng.annotations.BeforeMethod;
 
 import de.alpharogroup.BaseTestCase;
 import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.create.FileCreationState;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 
 /**
  * The abstract class FileTestCase is for tests in the package 'de.alpharogroup.file'.
@@ -105,7 +106,7 @@ public abstract class FileTestCase extends BaseTestCase
 	/** The zip directory. Current value:"projectpath"+"/src/test/resources"+"/zipDir". */
 	protected File zipDir;
 
-	private void initDirs() throws DirectoryAllreadyExistsException
+	private void initDirs() throws DirectoryAlreadyExistsException
 	{
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
@@ -115,76 +116,76 @@ public abstract class FileTestCase extends BaseTestCase
 		this.test = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!this.test.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.test);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.test);
 			assertTrue("The directory " + this.test.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		this.zipDir = new File(this.test.getAbsoluteFile(), "zipDir");
 		if (!this.zipDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.zipDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.zipDir);
 			assertTrue("The directory " + this.zipDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		this.unzipDir = new File(this.test.getAbsoluteFile(), "unzipDir");
 		if (!this.unzipDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.unzipDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.unzipDir);
 			assertTrue("The directory " + this.unzipDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		this.resources = new File(this.test.getAbsoluteFile(), "resources");
 		if (!this.resources.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.resources);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.resources);
 			assertTrue("The directory " + this.resources.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		this.testResources = new File(this.test.getAbsoluteFile(), "resources");
 		if (!this.testResources.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.testResources);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.testResources);
 			assertTrue(
 				"The directory " + this.testResources.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		this.testDir = new File(this.testResources.getAbsoluteFile(), "testDir");
 		if (!this.testDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.testDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.testDir);
 			assertTrue("The directory " + this.testDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		this.secondTestDir = new File(this.testResources.getAbsoluteFile(), "secondTestDir");
 		if (!secondTestDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.secondTestDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.secondTestDir);
 			assertTrue(
 				"The directory " + this.secondTestDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		this.deepDir = new File(this.testDir.getAbsoluteFile(), "deepDir");
 		if (!this.deepDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.deepDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.deepDir);
 			assertTrue("The directory " + this.deepDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 
 		}
 		this.deepDir2 = new File(this.testDir.getAbsoluteFile(), "deepDir2");
 		if (!this.deepDir2.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.deepDir2);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.deepDir2);
 			assertTrue("The directory " + this.deepDir2.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 
 		}
 		this.deeperDir = new File(this.deepDir.getAbsoluteFile(), "deeperDir");
 		if (!this.deeperDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(this.deeperDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(this.deeperDir);
 			assertTrue("The directory " + this.deeperDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 	}
 

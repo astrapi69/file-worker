@@ -47,7 +47,8 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.create.CreateFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.create.FileCreationState;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
@@ -343,7 +344,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link RenameFileExtensions#moveFile(File, File)} for directory.
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -352,7 +353,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 */
 	@Test
 	public void testMoveDir()
-		throws DirectoryAllreadyExistsException, IOException, FileIsADirectoryException
+		throws DirectoryAlreadyExistsException, IOException, FileIsADirectoryException
 	{
 		// Test to move a directory...
 		// Create a test directory to move.
@@ -366,9 +367,9 @@ public class RenameFileExtensionsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(srcDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		}
 		// Test to move the dir.

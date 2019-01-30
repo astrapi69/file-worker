@@ -1,6 +1,13 @@
 ## Change log
 ----------------------
 
+Version 5.2-SNAPSHOT
+-------------
+
+ADDED:
+ 
+- new methods created for create directory from a Path obejct
+
 Version 5.1
 -------------
 

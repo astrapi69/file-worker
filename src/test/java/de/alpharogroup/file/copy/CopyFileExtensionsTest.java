@@ -48,7 +48,8 @@ import org.testng.annotations.Test;
 import de.alpharogroup.file.FileExtension;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.create.CreateFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.create.FileCreationState;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
@@ -135,9 +136,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDeepDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(srcDeepDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(srcDeepDir);
 			assertTrue("The directory " + srcDeepDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 			WriteFileExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
 			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
 			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
@@ -162,9 +163,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 
 		if (!srcDeepestDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(srcDeepestDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
 			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
 			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
@@ -176,9 +177,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 		srcFile = new File(this.testDir, filePrefix + txtSuffix);
 		if (!testDir.exists())
 		{
-			final boolean created = CreateFileExtensions.newDirectory(srcDeepDir);
+			final FileCreationState state = CreateFileExtensions.newDirectory(srcDeepDir);
 			assertTrue("The directory " + testDir.getAbsolutePath() + " should be created.",
-				created);
+				state.equals(FileCreationState.CREATED));
 		}
 		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
 		// define a filefilter object...
@@ -255,7 +256,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CopyFileExtensions#copyDirectory(File, File)}
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
@@ -268,7 +269,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 */
 	@Test
 	public void testCopyDirectoryFileFile()
-		throws DirectoryAllreadyExistsException, FileIsSecurityRestrictedException, IOException,
+		throws DirectoryAlreadyExistsException, FileIsSecurityRestrictedException, IOException,
 		FileIsADirectoryException, FileIsNotADirectoryException
 	{
 		// Test to copy the source directory to the destination directory.
@@ -307,13 +308,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	@Test(enabled = true)
 	public void testCopyDirectoryFileFileBoolean()
 		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAllreadyExistsException
+		FileIsNotADirectoryException, DirectoryAlreadyExistsException
 	{
 		// Test to copy the source directory to the destination directory.
 		actual = CopyFileExtensions.copyDirectory(srcDeepDir, destDir, false);
@@ -346,13 +347,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	@Test(enabled = true)
 	public void testCopyDirectoryWithFileFilter()
 		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAllreadyExistsException
+		FileIsNotADirectoryException, DirectoryAlreadyExistsException
 	{
 		// Test to copy the source directory to the destination directory.
 		actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDeepDir, destDir, fileFilter,
@@ -395,13 +396,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	@Test(enabled = true)
 	public void testCopyDirectoryWithFileFilters()
 		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAllreadyExistsException
+		FileIsNotADirectoryException, DirectoryAlreadyExistsException
 	{
 		// Test to copy the source directory to the destination directory.
 		actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDeepDir, destDir,
@@ -461,13 +462,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	@Test(enabled = true)
 	public void testCopyDirectoryWithFileFiltersAndExcudedFileList()
 		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAllreadyExistsException
+		FileIsNotADirectoryException, DirectoryAlreadyExistsException
 	{
 		// list with files to exclude...
 		final List<File> excludeFiles = new ArrayList<>();
@@ -543,13 +544,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             the file is a directory exception
 	 * @throws FileIsSecurityRestrictedException
 	 *             the file is security restricted exception
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 */
 	@Test(enabled = true)
 	public void testCopyDirectoryWithFilenameFilter()
 		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
+		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
 	{
 		// Test to copy the source directory to the destination directory.
 		actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDeepDir, destDir,
@@ -593,13 +594,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             the file is a directory exception
 	 * @throws FileIsSecurityRestrictedException
 	 *             the file is security restricted exception
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 */
 	@Test(enabled = true)
 	public void testCopyDirectoryWithFilenameFilters()
 		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
+		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
 	{
 		// Test to copy the source directory to the destination directory.
 		actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDeepDir, destDir,
@@ -713,7 +714,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CopyFileExtensions#copyFileToDirectory(File, File)}
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 * @throws FileIsNotADirectoryException
 	 *             the file is not a directory exception
@@ -723,7 +724,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             the file is a directory exception
 	 */
 	@Test
-	public void testCopyFileToDirectoryFileFile() throws DirectoryAllreadyExistsException,
+	public void testCopyFileToDirectoryFileFile() throws DirectoryAlreadyExistsException,
 		FileIsNotADirectoryException, IOException, FileIsADirectoryException
 	{
 		// Try to copy the file srcFile into the destination directory.
@@ -746,12 +747,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileIsADirectoryException
 	 *             the file is a directory exception
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 */
 	@Test(enabled = true)
 	public void testCopyFileToDirectoryFileFileBoolean() throws FileIsNotADirectoryException,
-		IOException, FileIsADirectoryException, DirectoryAllreadyExistsException
+		IOException, FileIsADirectoryException, DirectoryAlreadyExistsException
 	{
 		// Try to copy the file srcFile into the destination directory.
 		actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDeepDir, false);

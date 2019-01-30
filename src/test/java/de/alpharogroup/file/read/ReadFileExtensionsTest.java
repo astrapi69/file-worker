@@ -50,7 +50,7 @@ import org.testng.annotations.Test;
 import de.alpharogroup.collections.array.ArrayFactory;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
@@ -111,7 +111,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link ReadFileExtensions#inputStream2String(InputStream)}
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -120,7 +120,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 */
 	@Test
 	public void testInputStream2String()
-		throws DirectoryAllreadyExistsException, IOException, FileDoesNotExistException
+		throws DirectoryAlreadyExistsException, IOException, FileDoesNotExistException
 	{
 
 		final File inputFile = new File(this.testDir, "testInputStream2String.inp");
@@ -200,13 +200,13 @@ public class ReadFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link ReadFileExtensions#readHeadLine(String)}.
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testReadHeadLine() throws DirectoryAllreadyExistsException, IOException
+	public void testReadHeadLine() throws DirectoryAlreadyExistsException, IOException
 	{
 		final File inputFile = new File(this.testDir, "testReadHeadLine.inp");
 		inputFile.createNewFile();
