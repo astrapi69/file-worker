@@ -40,13 +40,13 @@ import java.util.Collection;
 import java.util.List;
 
 import de.alpharogroup.file.FileConst;
-import de.alpharogroup.file.FileExtension;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.io.StreamExtensions;
+import de.alpharogroup.io.file.FileExtension;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -386,9 +386,8 @@ public final class CopyFileExtensions
 	 */
 	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
 		final FilenameFilter includeFilenameFilter, final FilenameFilter excludeFilenameFilter,
-		final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException
+		final boolean lastModified) throws IOException, FileIsNotADirectoryException,
+		FileIsADirectoryException, FileIsSecurityRestrictedException
 	{
 		if (!source.isDirectory())
 		{

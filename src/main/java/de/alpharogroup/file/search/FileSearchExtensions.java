@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
 import de.alpharogroup.regex.RegExExtensions;
 import lombok.experimental.UtilityClass;
 

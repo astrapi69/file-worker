@@ -45,7 +45,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.FileExtension;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.create.FileCreationState;
@@ -53,12 +52,13 @@ import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
-import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.file.filter.TxtFileFilter;
-import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
-import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.io.file.FileExtension;
+import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.io.file.filter.TxtFileFilter;
+import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
+import de.alpharogroup.io.file.namefilter.SimpleFilenameFilter;
 
 /**
  * The unit test class for the class {@link CopyFileExtensions}.

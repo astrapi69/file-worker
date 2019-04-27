@@ -51,10 +51,10 @@ import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
-import de.alpharogroup.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.file.filter.TxtFileFilter;
-import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
 import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.io.file.filter.TxtFileFilter;
+import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
 
 /**
  * The unit test class for the class {@link DeleteFileExtensions}
