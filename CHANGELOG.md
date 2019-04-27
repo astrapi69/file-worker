@@ -19,7 +19,7 @@ CHANGED:
 - removed jcommons-lang dependency
 - removed jobject-evaluate dependency
 - update of silly-collections dependency version to 5.2
-- update of test-objects dependency version to 5.0.1
+- update of test-objects dependency version to 5.1
 
 Version 5.1
 -------------
