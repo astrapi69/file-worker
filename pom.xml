@@ -39,7 +39,7 @@
 		<!-- SILLY-STRINGS version -->
 		<silly-strings.version>5.3</silly-strings.version>
 		<!-- JOBJ-CONTRACT-VERIFIER version -->
-		<jobj-contract-verifier.version>3</jobj-contract-verifier.version>
+		<jobj-contract-verifier.version>3.1</jobj-contract-verifier.version>
 	</properties>
 
 	<licenses>

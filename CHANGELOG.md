@@ -1,14 +1,14 @@
 ## Change log
 ----------------------
 
-Version 5.2-SNAPSHOT
+Version 5.2
 -------------
 
 ADDED:
  
 - new methods created for create directory from a Path obejct
 - new dependency commons-lang3 in version 3.9 added
-- new dependency jobj-contract-verifier in version 3 added
+- new dependency jobj-contract-verifier in version 3.1 added
 - new dependency commons-io in version 2.6 added
 - new dependency silly-io in version 1.1 added
 - new dependency silly-strings in version 5.3 added
