@@ -1,6 +1,26 @@
 ## Change log
 ----------------------
 
+Version 5.2
+-------------
+
+ADDED:
+ 
+- new methods created for create directory from a Path obejct
+- new dependency commons-lang3 in version 3.9 added
+- new dependency jobj-contract-verifier in version 3.1 added
+- new dependency commons-io in version 2.6 added
+- new dependency silly-io in version 1.1 added
+- new dependency silly-strings in version 5.3 added
+
+CHANGED:
+
+- update of parent version to 4.8
+- removed jcommons-lang dependency
+- removed jobject-evaluate dependency
+- update of silly-collections dependency version to 5.2
+- update of test-objects dependency version to 5.1
+
 Version 5.1
 -------------
 

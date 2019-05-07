@@ -40,10 +40,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.list.ListFactory;
-import de.alpharogroup.file.namefilter.MultiplyExtensionsFilenameFilter;
-import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
+import de.alpharogroup.io.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.meanbean.factories.FileFactory;
 
 /**

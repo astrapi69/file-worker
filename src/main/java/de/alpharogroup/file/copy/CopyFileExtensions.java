@@ -40,13 +40,13 @@ import java.util.Collection;
 import java.util.List;
 
 import de.alpharogroup.file.FileConst;
-import de.alpharogroup.file.FileExtension;
 import de.alpharogroup.file.create.CreateFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.io.StreamExtensions;
+import de.alpharogroup.io.file.FileExtension;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -74,12 +74,12 @@ public final class CopyFileExtensions
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectory(final File source, final File destination)
 		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAllreadyExistsException
+		FileIsNotADirectoryException, DirectoryAlreadyExistsException
 	{
 		return copyDirectory(source, destination, true);
 	}
@@ -106,12 +106,12 @@ public final class CopyFileExtensions
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectory(final File source, final File destination,
 		final boolean lastModified) throws FileIsSecurityRestrictedException, IOException,
-		FileIsADirectoryException, FileIsNotADirectoryException, DirectoryAllreadyExistsException
+		FileIsADirectoryException, FileIsNotADirectoryException, DirectoryAlreadyExistsException
 	{
 		return copyDirectoryWithFileFilter(source, destination, null, lastModified);
 	}
@@ -139,13 +139,13 @@ public final class CopyFileExtensions
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
 		final FileFilter fileFilter, final boolean lastModified)
 		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
+		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
 	{
 		return copyDirectoryWithFileFilter(source, destination, fileFilter, null, lastModified);
 	}
@@ -177,14 +177,14 @@ public final class CopyFileExtensions
 	 *             Is thrown if the source or destination file is a directory.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
 		final FileFilter includeFileFilter, final FileFilter excludeFileFilter,
 		final boolean lastModified)
 		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
+		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
 	{
 		return copyDirectoryWithFileFilter(source, destination, includeFileFilter,
 			excludeFileFilter, null, lastModified);
@@ -220,14 +220,14 @@ public final class CopyFileExtensions
 	 *             Is thrown if the source or destination file is a directory.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
 		final FileFilter includeFileFilter, final FileFilter excludeFileFilter,
 		final Collection<File> excludeFiles, final boolean lastModified)
 		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
+		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
 	{
 		if (!source.isDirectory())
 		{
@@ -251,9 +251,9 @@ public final class CopyFileExtensions
 		}
 		if (null != includeFilesArray)
 		{
-			File[] excludeFilesArray = null;
+			File[] excludeFilesArray;
 			List<File> allExcludeFilesList = null;
-			List<File> excludeFileFilterList = null;
+			List<File> excludeFileFilterList;
 			if (null != excludeFileFilter)
 			{
 				excludeFilesArray = source.listFiles(excludeFileFilter);
@@ -344,13 +344,13 @@ public final class CopyFileExtensions
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
 		final FilenameFilter filenameFilter, final boolean lastModified)
 		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
+		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
 	{
 		return copyDirectoryWithFilenameFilter(source, destination, filenameFilter, null,
 			lastModified);
@@ -383,14 +383,11 @@ public final class CopyFileExtensions
 	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAllreadyExistsException
-	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
 		final FilenameFilter includeFilenameFilter, final FilenameFilter excludeFilenameFilter,
-		final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAllreadyExistsException
+		final boolean lastModified) throws IOException, FileIsNotADirectoryException,
+		FileIsADirectoryException, FileIsSecurityRestrictedException
 	{
 		if (!source.isDirectory())
 		{
@@ -413,7 +410,7 @@ public final class CopyFileExtensions
 		}
 		if (null != includeFilesArray)
 		{
-			File[] excludeFilesArray = null;
+			File[] excludeFilesArray;
 			List<File> excludeFilesList = null;
 			if (null != excludeFilenameFilter)
 			{
@@ -506,11 +503,9 @@ public final class CopyFileExtensions
 	 *
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 */
 	public static boolean copyFile(final File source, final File destination,
-		final boolean lastModified) throws IOException, FileIsADirectoryException
+		final boolean lastModified) throws IOException
 	{
 		return copyFile(source, destination, null, null, lastModified);
 	}
@@ -644,7 +639,7 @@ public final class CopyFileExtensions
 	/**
 	 * Creates a backup file in the same directory with the same name of the given file and with the
 	 * extension of '*.bak'.
-	 * 
+	 *
 	 * @param file
 	 *            the file to backup.
 	 * @param sourceEncoding

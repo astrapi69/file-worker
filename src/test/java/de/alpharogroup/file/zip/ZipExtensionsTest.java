@@ -40,9 +40,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileConst;
-import de.alpharogroup.file.namefilter.SimpleFilenameFilter;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
+import de.alpharogroup.io.file.namefilter.SimpleFilenameFilter;
 
 /**
  * The unit test class for the class {@link ZipExtensions}.

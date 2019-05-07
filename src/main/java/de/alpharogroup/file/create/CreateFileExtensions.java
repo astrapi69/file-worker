@@ -26,9 +26,12 @@ package de.alpharogroup.file.create;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -49,13 +52,13 @@ public final class CreateFileExtensions
 	 *
 	 * @return true, if successful
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 */
-	public static boolean newDirectories(final Collection<File> directories)
-		throws DirectoryAllreadyExistsException
+	public static FileCreationState newDirectories(final Collection<File> directories)
+		throws DirectoryAlreadyExistsException
 	{
-		boolean created = false;
+		FileCreationState created = FileCreationState.PENDING;
 		for (final File dir : directories)
 		{
 			created = CreateFileExtensions.newDirectory(dir);
@@ -65,32 +68,71 @@ public final class CreateFileExtensions
 	}
 
 	/**
-	 * Creates a new directory.
+	 * Creates a new directory from the given {@link Path} object and the optional
+	 * {@link FileAttribute}.<br>
+	 * <br>
+	 * Note: this method decorates the {@link Files#createDirectories(Path, FileAttribute...)} and
+	 * returns if the directory is created or not.
 	 *
 	 * @param dir
-	 *            The directory to create.
-	 *
+	 *            the dir the directory to create
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
 	 * @return Returns true if the directory was created otherwise false.
-	 *
-	 * @throws DirectoryAllreadyExistsException
-	 *             Thrown if the directory all ready exists.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @see <code>Files#createDirectories(Path, FileAttribute...)</code>
 	 */
-	public static boolean newDirectory(final File dir) throws DirectoryAllreadyExistsException
+	public static boolean newDirectories(Path dir, FileAttribute<?>... attrs) throws IOException
 	{
-		boolean created = false;
+		Path directory = Files.createDirectories(dir, attrs);
+		return Files.exists(directory);
+	}
+
+	/**
+	 * Creates a new directory from the given {@link Path} object and the optional
+	 * {@link FileAttribute}.<br>
+	 * <br>
+	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
+	 * returns if the directory is created or not.
+	 *
+	 * @param dir
+	 *            the dir the directory to create
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @return Returns true if the directory was created otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @see <code>Files#createDirectory(Path, FileAttribute...)</code>
+	 */
+	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
+	{
+		Path directory = Files.createDirectory(dir, attrs);
+		return Files.exists(directory);
+	}
+
+	/**
+	 * Creates a new directory from the given {@link File} object
+	 *
+	 * @param dir
+	 *            The directory to create
+	 *
+	 * @return the {@link FileCreationState} with the result
+	 */
+	public static FileCreationState newDirectory(final File dir)
+	{
+		FileCreationState fileCreationState = FileCreationState.ALREADY_EXISTS;
 		// If the directory does not exists
 		if (!dir.exists())
 		{ // then
+			fileCreationState = FileCreationState.FAILED;
 			// create it...
-			created = dir.mkdir();
+			if (dir.mkdir())
+			{
+				fileCreationState = FileCreationState.CREATED;
+			}
 		}
-		else
-		{ // otherwise
-			// throw a DirectoryAllreadyExistsException.
-			throw new DirectoryAllreadyExistsException("Directory allready exists.");
-		}
-
-		return created;
+		return fileCreationState;
 	}
 
 	/**
@@ -104,19 +146,19 @@ public final class CreateFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static boolean newFile(final File file) throws IOException
+	public static FileCreationState newFile(final File file) throws IOException
 	{
-		boolean created = false;
+		FileCreationState fileCreationState = FileCreationState.ALREADY_EXISTS;
 		if (!file.exists())
 		{
+			fileCreationState = FileCreationState.FAILED;
 			newParentDirectories(file);
-			created = file.createNewFile();
+			if (file.createNewFile())
+			{
+				fileCreationState = FileCreationState.CREATED;
+			}
 		}
-		else
-		{
-			created = true;
-		}
-		return created;
+		return fileCreationState;
 	}
 
 	/**
@@ -131,9 +173,9 @@ public final class CreateFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static boolean newFiles(final Collection<File> files) throws IOException
+	public static FileCreationState newFiles(final Collection<File> files) throws IOException
 	{
-		boolean created = false;
+		FileCreationState created = FileCreationState.PENDING;
 		for (final File file : files)
 		{
 			created = CreateFileExtensions.newFile(file);
@@ -146,7 +188,12 @@ public final class CreateFileExtensions
 	 *
 	 * @param file
 	 *            the file
+	 * @deprecated use instead the method
+	 *             {@linkplain CreateFileExtensions#newDirectories(Path, FileAttribute...)} <br>
+	 *             <br>
+	 *             Note: will be removed in the next minor release
 	 */
+	@Deprecated
 	public static void newParentDirectories(final File file)
 	{
 		if (!file.exists())

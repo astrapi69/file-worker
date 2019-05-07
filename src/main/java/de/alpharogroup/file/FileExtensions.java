@@ -31,6 +31,7 @@ import java.net.URI;
 import java.nio.channels.FileLock;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.io.file.FilenameExtensions;
 import lombok.experimental.UtilityClass;
 
 /**

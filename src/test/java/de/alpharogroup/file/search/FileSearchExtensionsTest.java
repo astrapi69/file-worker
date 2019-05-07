@@ -44,7 +44,7 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.exceptions.DirectoryAllreadyExistsException;
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
@@ -222,13 +222,13 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#findFiles(File, String)}
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testFindFilesFileString() throws DirectoryAllreadyExistsException, IOException
+	public void testFindFilesFileString() throws DirectoryAlreadyExistsException, IOException
 	{
 		final String test = "testFindFilesFileString.t*";
 
@@ -248,13 +248,13 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#findFilesRecursive(File, String)}
 	 *
-	 * @throws DirectoryAllreadyExistsException
+	 * @throws DirectoryAlreadyExistsException
 	 *             the directory allready exists exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testFindFilesRecursive() throws DirectoryAllreadyExistsException, IOException
+	public void testFindFilesRecursive() throws DirectoryAlreadyExistsException, IOException
 	{
 		final String test = "testFindFilesRecursive.t*";
 		final List<File> expectedFiles = new ArrayList<>();
