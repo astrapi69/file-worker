@@ -26,7 +26,7 @@
 		<!-- COMMONS-IO version -->
 		<commons-io.version>2.6</commons-io.version>
 		<!-- SILLY-COLLECTIONS version -->
-		<silly-collections.version>5.2</silly-collections.version>
+		<silly-collections.version>5.2.1</silly-collections.version>
 		<!-- TEST-OBJECTS version -->
 		<test-objects.version>5.1</test-objects.version>
 		<!-- ZIP4J version -->
