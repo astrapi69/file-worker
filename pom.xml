@@ -27,8 +27,6 @@
 		<commons-io.version>2.6</commons-io.version>
 		<!-- SILLY-COLLECTIONS version -->
 		<silly-collections.version>5.2.1</silly-collections.version>
-		<!-- TEST-OBJECTS version -->
-		<test-objects.version>5.0.1</test-objects.version>
 		<!-- ZIP4J version -->
 		<zip4j.version>1.3.2</zip4j.version>
 		<!-- MYSTIC-CRYPT versions -->
@@ -38,6 +36,9 @@
 		<silly-io.version>1.1</silly-io.version>
 		<!-- SILLY-STRINGS version -->
 		<silly-strings.version>5.3.1</silly-strings.version>
+		<!-- TEST-SCOPE versions -->
+		<!-- TEST-OBJECTS version -->
+		<test-objects.version>5.0.1</test-objects.version>
 		<!-- JOBJ-CONTRACT-VERIFIER version -->
 		<jobj-contract-verifier.version>3.1</jobj-contract-verifier.version>
 	</properties>
@@ -75,23 +76,11 @@
 				<artifactId>zip4j</artifactId>
 				<version>${zip4j.version}</version>
 			</dependency>
-			<!-- TEST-OBJECTS DEPENDENCY -->
-			<dependency>
-				<groupId>de.alpharogroup</groupId>
-				<artifactId>test-objects</artifactId>
-				<version>${test-objects.version}</version>
-			</dependency>
 			<!-- CRYPT-API DEPENDENCY -->
 			<dependency>
 				<groupId>de.alpharogroup</groupId>
 				<artifactId>crypt-api</artifactId>
 				<version>${crypt-api.version}</version>
-			</dependency>
-			<!-- JOBJ-CONTRACT-VERIFIER DEPENDENCY -->
-			<dependency>
-				<groupId>de.alpharogroup</groupId>
-				<artifactId>jobj-contract-verifier</artifactId>
-				<version>${jobj-contract-verifier.version}</version>
 			</dependency>
 			<!-- SILLY-COLLECTIONS DEPENDENCY -->
 			<dependency>
@@ -123,7 +112,19 @@
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
 			</dependency>
-
+			<!-- TEST-SCOPE DEPENDENCIES -->
+			<!-- TEST-OBJECTS DEPENDENCY -->
+			<dependency>
+				<groupId>de.alpharogroup</groupId>
+				<artifactId>test-objects</artifactId>
+				<version>${test-objects.version}</version>
+			</dependency>
+			<!-- JOBJ-CONTRACT-VERIFIER DEPENDENCY -->
+			<dependency>
+				<groupId>de.alpharogroup</groupId>
+				<artifactId>jobj-contract-verifier</artifactId>
+				<version>${jobj-contract-verifier.version}</version>
+			</dependency>
 		</dependencies>
 
 	</dependencyManagement>
@@ -164,6 +165,7 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
+		<!-- TEST-SCOPE DEPENDENCIES -->
 		<!-- JOBJ-CONTRACT-VERIFIER DEPENDENCY -->
 		<dependency>
 			<groupId>de.alpharogroup</groupId>
