@@ -7,8 +7,9 @@ Version 5.3-SNAPSHOT
 CHANGED:
 
 - update of silly-collections dependency version to 5.2.1
-- update of test-objects dependency version to 5.0.1
+- update of test-objects dependency version to 5.2
 - update of silly-strings dependency version to 5.3.1
+- update of jobj-contract-verifier dependency version to 3.1.2
 
 Version 5.2
 -------------

@@ -38,9 +38,9 @@
 		<silly-strings.version>5.3.1</silly-strings.version>
 		<!-- TEST-SCOPE versions -->
 		<!-- TEST-OBJECTS version -->
-		<test-objects.version>5.0.1</test-objects.version>
+		<test-objects.version>5.2</test-objects.version>
 		<!-- JOBJ-CONTRACT-VERIFIER version -->
-		<jobj-contract-verifier.version>3.1</jobj-contract-verifier.version>
+		<jobj-contract-verifier.version>3.1.2</jobj-contract-verifier.version>
 	</properties>
 
 	<licenses>
