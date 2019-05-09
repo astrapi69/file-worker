@@ -7,7 +7,7 @@ Version 5.3-SNAPSHOT
 CHANGED:
 
 - update of silly-collections dependency version to 5.2.1
-- update of test-objects dependency version to 5.1.1
+- update of test-objects dependency version to 5.0.1
 - update of silly-strings dependency version to 5.3.1
 
 Version 5.2
