@@ -76,17 +76,15 @@ public class ModifyFileExtensionsTest
 		});
 		List<String> linesInList = ReadFileExtensions.readLinesInList(outputFile);
 		linesInList.stream().forEach(line -> assertTrue(line.endsWith(add)));
-
+		String pipe = "|";
 		ModifyFileExtensions.modifyFile(inFilePath, outFilePath, ((count, input) -> {
-			String alteredLine = input+"|"+System.lineSeparator();
-			System.out.print(alteredLine);
+			String alteredLine = input + pipe + System.lineSeparator();
 			return alteredLine;
 		}));
+		linesInList = ReadFileExtensions.readLinesInList(outputFile);
+		linesInList.stream().forEach(line -> assertTrue(line.endsWith(pipe)));
 
 		DeleteFileExtensions.delete(outputFile);
-
-
-
 	}
 
 	/**
