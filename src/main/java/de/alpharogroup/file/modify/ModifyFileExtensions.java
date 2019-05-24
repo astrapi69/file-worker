@@ -31,14 +31,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.function.BiFunction;
 
-import de.alpharogroup.file.modify.api.FileChangable;
+import de.alpharogroup.file.modify.api.FileChangeable;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
- * The class {@link ModifyFileExtensions} provides methods for modify files
+ * The class {@link ModifyFileExtensions} provides methods for modifying files
  */
 @UtilityClass
 public class ModifyFileExtensions
@@ -56,13 +59,33 @@ public class ModifyFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void modifyFile(Path inFilePath, Path outFilePath, FileChangable modifier)
-		throws IOException
+	public static void modifyFile(@NonNull Path inFilePath, @NonNull Path outFilePath,
+		@NonNull FileChangeable modifier) throws IOException
+	{
+		modifyFile(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier);
+	}
+
+	/**
+	 * Modifies the input file line by line and writes the modification in the new output file.
+	 *
+	 * @param inFilePath
+	 *            the in file path
+	 * @param outFilePath
+	 *            the out file path
+	 * @param charsetOfOutputFile
+	 *            the charset of output file
+	 * @param modifier
+	 *            the modifier {@linkplain BiFunction}
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void modifyFile(@NonNull Path inFilePath, @NonNull Path outFilePath,
+		@NonNull Charset charsetOfOutputFile, @NonNull FileChangeable modifier) throws IOException
 	{
 		try (
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(inFilePath.toFile()));
-			Writer writer = new BufferedWriter(
-				new OutputStreamWriter(new FileOutputStream(outFilePath.toFile()), "utf-8")))
+			Writer writer = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(outFilePath.toFile()), charsetOfOutputFile)))
 		{
 			String readLine;
 			int counter = 0;

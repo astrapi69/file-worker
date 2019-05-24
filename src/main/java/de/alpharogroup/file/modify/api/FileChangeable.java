@@ -27,8 +27,8 @@ package de.alpharogroup.file.modify.api;
 import java.util.function.BiFunction;
 
 /**
- * The interface {@link FileChangable} is a {@link BiFunction} for modify files
+ * The interface {@link FileChangeable} is a {@link BiFunction} for modify files
  */
-public interface FileChangable extends BiFunction<Integer, String, String>
+public interface FileChangeable extends BiFunction<Integer, String, String>
 {
 }

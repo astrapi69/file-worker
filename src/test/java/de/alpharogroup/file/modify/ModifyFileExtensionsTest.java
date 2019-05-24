@@ -28,6 +28,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.meanbean.factories.ObjectCreationException;
@@ -36,7 +37,7 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.modify.api.FileChangable;
+import de.alpharogroup.file.modify.api.FileChangeable;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
 
@@ -48,7 +49,7 @@ public class ModifyFileExtensionsTest
 
 	/**
 	 * Test method for
-	 * {@link ModifyFileExtensions#modifyFile(java.nio.file.Path, java.nio.file.Path, FileChangable)}.
+	 * {@link ModifyFileExtensions#modifyFile(java.nio.file.Path, java.nio.file.Path, FileChangeable)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -65,15 +66,26 @@ public class ModifyFileExtensionsTest
 		outputFile = new File(
 			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
 			"modified-test-csv-data.csv");
+		Path inFilePath = inputFile.toPath();
+		Path outFilePath = outputFile.toPath();
+
 		String add = "|#foo-bar#|";
-		ModifyFileExtensions.modifyFile(inputFile.toPath(), outputFile.toPath(), (count, input) -> {
+		ModifyFileExtensions.modifyFile(inFilePath, outFilePath, (count, input) -> {
 			String alteredLine = input + add;
 			return alteredLine;
 		});
 		List<String> linesInList = ReadFileExtensions.readLinesInList(outputFile);
 		linesInList.stream().forEach(line -> assertTrue(line.endsWith(add)));
 
+		ModifyFileExtensions.modifyFile(inFilePath, outFilePath, ((count, input) -> {
+			String alteredLine = input+"|"+System.lineSeparator();
+			System.out.print(alteredLine);
+			return alteredLine;
+		}));
+
 		DeleteFileExtensions.delete(outputFile);
+
+
 
 	}
 
