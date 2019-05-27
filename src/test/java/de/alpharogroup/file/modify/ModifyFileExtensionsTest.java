@@ -24,7 +24,7 @@
  */
 package de.alpharogroup.file.modify;
 
-import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;

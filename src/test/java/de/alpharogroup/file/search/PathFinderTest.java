@@ -24,7 +24,7 @@
  */
 package de.alpharogroup.file.search;
 
-import static org.testng.Assert.assertTrue;
+import static org.testng.AssertJUnit.assertTrue;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.File;

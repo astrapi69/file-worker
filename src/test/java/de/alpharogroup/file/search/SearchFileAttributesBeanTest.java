@@ -24,7 +24,7 @@
  */
 package de.alpharogroup.file.search;
 
-import static org.testng.Assert.assertNotNull;
+import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertEquals;
 
 import org.testng.annotations.Test;
