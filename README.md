@@ -14,6 +14,8 @@
 
 Project that holds utility class for file operations.
 
+If you like this project put a ⭐ and donate
+
 ## License
 
 The source code comes under the liberal MIT License, making file-worker great for all types of applications.
