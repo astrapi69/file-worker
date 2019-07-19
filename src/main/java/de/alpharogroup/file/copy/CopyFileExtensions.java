@@ -477,9 +477,9 @@ public final class CopyFileExtensions
 	 * @return 's true if the file is copied, otherwise false.
 	 *
 	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
+	 *             Is thrown if an error occurs by reading or writing
 	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
+	 *             Is thrown if the destination file is a directory
 	 */
 	public static boolean copyFile(final File source, final File destination)
 		throws IOException, FileIsADirectoryException
