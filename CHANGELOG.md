@@ -4,6 +4,10 @@
 Version 5.3-SNAPSHOT
 -------------
 
+ADDED:
+ 
+- new method created for modify a single file
+
 CHANGED:
 
 - update of parent version to 5
