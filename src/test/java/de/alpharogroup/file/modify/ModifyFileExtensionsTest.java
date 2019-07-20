@@ -36,9 +36,7 @@ import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.copy.CopyFileExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.modify.api.FileChangeable;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
@@ -87,38 +85,6 @@ public class ModifyFileExtensionsTest
 		linesInList.stream().forEach(line -> assertTrue(line.endsWith(pipe)));
 
 		DeleteFileExtensions.delete(outputFile);
-	}
-	/**
-	 * Test method for
-	 * {@link ModifyFileExtensions#modifyFile(java.nio.file.Path, java.nio.file.Path, FileChangeable)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory
-	 */
-	@Test
-	public void testModifyFileSameFile() throws IOException, FileIsADirectoryException
-	{
-		File inputFile;
-
-		inputFile = new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"test-csv-data-samefile.csv");
-
-		Path inFilePath = inputFile.toPath();
-
-		String add = "|#foo-bar#|";
-		ModifyFileExtensions.modifyFile(inFilePath, (count, input) -> {
-			String alteredLine = input + add + System.lineSeparator();
-			return alteredLine;
-		});
-		List<String> linesInList = ReadFileExtensions.readLinesInList(inputFile);
-		linesInList.stream().forEach(line -> assertTrue(line.endsWith(add)));
-
-		CopyFileExtensions.copyFile(new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"test-csv-data.csv"), inputFile);
 	}
 
 	/**

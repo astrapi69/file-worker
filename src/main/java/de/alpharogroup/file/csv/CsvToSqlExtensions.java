@@ -226,7 +226,7 @@ public final class CsvToSqlExtensions
 						if (3 < editTypeData.length)
 						{
 							lineItem = lineItem.replace(editTypeData[1], editTypeData[2]);
-							final Boolean lc = Boolean.valueOf(editTypeData[3]);
+							final Boolean lc = new Boolean(editTypeData[3]);
 							if (lc)
 							{
 								final String tlc = lineItem.toLowerCase();

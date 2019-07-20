@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -243,7 +242,6 @@ public class CsvFileExtensionsTest
 		String key;
 		String value;
 		Map<String, String> map;
-		String encoding;
 
 		expected = ListFactory.newArrayList();
 		map = MapFactory.newLinkedHashMap();
@@ -266,14 +264,13 @@ public class CsvFileExtensionsTest
 
 		map = MapFactory.newLinkedHashMap();
 		key = "\"Vorname\",\"Nachname\",\"Email\"";
-		value = new String("\"Jürgen\",\"Dößler\",\"juerg.doesl@gmail.com\"".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
+		value = "\"Jürgen\",\"Dößler\",\"juerg.doesl@gmail.com\"";
 		map.put(key, value);
 		expected.add(map);
 
 		final File res = new File(testResources, "resources");
 		final File input = new File(res, "test-csv-data.csv");
-		encoding = "UTF-8";
-		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input, encoding);
+		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input);
 		for (int i = 0; i < cvsAsListMap.size(); i++)
 		{
 			Map<String, String> map2 = cvsAsListMap.get(i);
@@ -325,7 +322,7 @@ public class CsvFileExtensionsTest
 		final File res = new File(testResources, "resources");
 		final File input = new File(res, "test-csv-data.csv");
 
-		encoding = "UTF-8";
+		encoding = "ISO-8859-1";
 		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input, encoding);
 		for (int i = 0; i < cvsAsListMap.size(); i++)
 		{
@@ -429,7 +426,7 @@ public class CsvFileExtensionsTest
 		String encoding;
 		position = 0;
 		putFirstLine = false;
-		encoding = "UTF-8";
+		encoding = "ISO-8859-1";
 		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
 			encoding);
 		expected = ListFactory.newArrayList("Jaroslav", "Dimitri", "Jim", "Jürgen");
@@ -462,7 +459,7 @@ public class CsvFileExtensionsTest
 		String encoding;
 		position = 0;
 		putFirstLine = false;
-		encoding = "UTF-8";
+		encoding = "ISO-8859-1";
 		splitChar = ",";
 		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
 			splitChar, encoding);
@@ -552,7 +549,7 @@ public class CsvFileExtensionsTest
 
 		final File res = new File(testResources, "resources");
 		File input = new File(res, "test-csv-data.csv");
-		actual = CsvFileExtensions.readFileToList(input, ",", "UTF-8");
+		actual = CsvFileExtensions.readFileToList(input, ",", "ISO-8859-1");
 		assertTrue(ListExtensions.isEqualListOfArrays(actual, expected));
 	}
 
