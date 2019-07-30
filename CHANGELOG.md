@@ -10,6 +10,7 @@ ADDED:
 
 CHANGED:
 
+- changed project nature from maven to gradle nature
 - update of parent version to 5
 - update of silly-collections dependency version to 5.2.1
 - update of test-objects dependency version to 5.2
