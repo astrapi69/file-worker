@@ -16,6 +16,7 @@ CHANGED:
 - update of silly-strings dependency version to 5.3.1
 - update of jobj-contract-verifier dependency version to 3.2
 - update of zip4j dependency version to 1.3.3
+- moved ChecksumExtensions class to mystic-crypt project and tagged as deprecated
 
 Version 5.2
 -------------

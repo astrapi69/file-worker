@@ -44,6 +44,9 @@ import lombok.experimental.UtilityClass;
 /**
  * The class {@link ChecksumExtensions} is a utility class for computing checksum from files and
  * byte arrays.
+ * @deprecated use instead the same name class in the project mystic-crypt.
+ * <br><br>
+ *     Note: will be removed in next minor release.
  *
  * @version 1.0
  * @author Asterios Raptis
