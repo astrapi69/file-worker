@@ -24,7 +24,6 @@ dependencies {
     compile 'de.alpharogroup:crypt-api:5.8'
     compile 'de.alpharogroup:silly-collections:5.2.1'
     compile 'org.apache.commons:commons-lang3:3.9'
-    compile 'org.projectlombok:lombok:1.18.8'
     testCompile 'de.alpharogroup:jobj-contract-verifier:3.2'
     testCompile 'de.alpharogroup:test-objects:5.2'
     testCompile 'org.meanbean:meanbean:2.0.3'
