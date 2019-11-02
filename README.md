@@ -30,7 +30,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 	<properties>
 			...
 		<!-- FILE-WORKER version -->
-		<file-worker.version>5.2</file-worker.version>
+		<file-worker.version>5.3</file-worker.version>
 			...
 	</properties>
 			...
@@ -44,6 +44,24 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 			</dependency>
 			...
 		</dependencies>
+	
+			
+## gradle dependency
+
+You can first define the version in the ext section and add than the following gradle dependency to your project `build.gradle` if you want to import the core functionality of file-worker:
+
+```
+ext {
+			...
+    fileWorkerVersion = "5.3"
+			...
+}
+dependencies {
+			...
+compile "de.alpharogroup:file-worker:${fileWorkerVersion}"
+			...
+}
+```
 
 ## Semantic Versioning
 
