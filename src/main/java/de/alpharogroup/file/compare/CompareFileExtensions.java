@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import de.alpharogroup.crypto.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.FileExtensions;
-import de.alpharogroup.file.checksum.ChecksumExtensions;
 import de.alpharogroup.file.compare.api.IFileCompareResultBean;
 import de.alpharogroup.file.compare.api.IFileContentResultBean;
 import de.alpharogroup.file.search.FileSearchExtensions;

@@ -1,6 +1,24 @@
 ## Change log
 ----------------------
 
+Version 5.3
+-------------
+
+ADDED:
+ 
+- new method created for modify a single file
+- gradle as build system
+
+CHANGED:
+
+- changed project nature from maven to gradle nature
+- update of parent version to 5
+- update of silly-collections dependency version to 5.4
+- update of test-objects dependency version to 5.2
+- update of silly-strings dependency version to 5.3.1
+- update of jobj-contract-verifier dependency version to 3.2
+- moved ChecksumExtensions class to mystic-crypt project and tagged as deprecated
+
 Version 5.2
 -------------
 

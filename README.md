@@ -8,10 +8,13 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker)
 [![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/file-worker.svg)](http://www.javadoc.io/doc/de.alpharogroup/file-worker)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
+[![Donate](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
 
 </div>
 
 Project that holds utility class for file operations.
+
+If you like this project put a ⭐ and donate
 
 ## License
 
@@ -27,7 +30,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 	<properties>
 			...
 		<!-- FILE-WORKER version -->
-		<file-worker.version>5.2</file-worker.version>
+		<file-worker.version>5.3</file-worker.version>
 			...
 	</properties>
 			...
@@ -41,6 +44,24 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 			</dependency>
 			...
 		</dependencies>
+	
+			
+## gradle dependency
+
+You can first define the version in the ext section and add than the following gradle dependency to your project `build.gradle` if you want to import the core functionality of file-worker:
+
+```
+ext {
+			...
+    fileWorkerVersion = "5.3"
+			...
+}
+dependencies {
+			...
+compile "de.alpharogroup:file-worker:${fileWorkerVersion}"
+			...
+}
+```
 
 ## Semantic Versioning
 
