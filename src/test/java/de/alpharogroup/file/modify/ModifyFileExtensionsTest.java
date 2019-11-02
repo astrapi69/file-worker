@@ -88,6 +88,7 @@ public class ModifyFileExtensionsTest
 
 		DeleteFileExtensions.delete(outputFile);
 	}
+
 	/**
 	 * Test method for
 	 * {@link ModifyFileExtensions#modifyFile(java.nio.file.Path, java.nio.file.Path, FileChangeable)}.
@@ -116,9 +117,10 @@ public class ModifyFileExtensionsTest
 		List<String> linesInList = ReadFileExtensions.readLinesInList(inputFile);
 		linesInList.stream().forEach(line -> assertTrue(line.endsWith(add)));
 
-		CopyFileExtensions.copyFile(new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"test-csv-data.csv"), inputFile);
+		CopyFileExtensions.copyFile(
+			new File(PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
+				"test-csv-data.csv"),
+			inputFile);
 	}
 
 	/**

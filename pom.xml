@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>de.alpharogroup</groupId>
 		<artifactId>mvn-java-parent</artifactId>
-		<version>5</version>
+		<version>5.3</version>
 		<relativePath></relativePath>
 	</parent>
 
@@ -26,10 +26,12 @@
 		<!-- COMMONS-IO version -->
 		<commons-io.version>2.6</commons-io.version>
 		<!-- SILLY-COLLECTIONS version -->
-		<silly-collections.version>5.2.1</silly-collections.version>
+		<silly-collections.version>5.4</silly-collections.version>
 		<!-- ZIP4J version -->
-		<zip4j.version>1.3.3</zip4j.version>
-		<crypt-api.version>5.8</crypt-api.version>
+		<zip4j.version>1.3.2</zip4j.version>
+		<crypt-api.version>7.2</crypt-api.version>
+		<!-- MYSTIC-CRYPT version -->
+		<mystic-crypt.version>7.1.2</mystic-crypt.version>
 		<!-- SILLY-IO version -->
 		<silly-io.version>1.1</silly-io.version>
 		<!-- SILLY-STRINGS version -->
@@ -68,6 +70,12 @@
 	<dependencyManagement>
 
 		<dependencies>
+			<!-- MYSTIC-CRYPT DEPENDENCY -->
+			<dependency>
+				<groupId>de.alpharogroup</groupId>
+				<artifactId>mystic-crypt</artifactId>
+				<version>${mystic-crypt.version}</version>
+			</dependency>
 			<!-- ZIP4J DEPENDENCY -->
 			<dependency>
 				<groupId>net.lingala.zip4j</groupId>
@@ -128,6 +136,11 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<!-- MYSTIC-CRYPT DEPENDENCY -->
+		<dependency>
+			<groupId>de.alpharogroup</groupId>
+			<artifactId>mystic-crypt</artifactId>
+		</dependency>
 		<!-- COMMONS-IO DEPENDENCY -->
 		<dependency>
 			<groupId>commons-io</groupId>

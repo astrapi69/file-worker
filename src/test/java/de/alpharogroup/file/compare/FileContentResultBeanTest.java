@@ -24,8 +24,8 @@
  */
 package de.alpharogroup.file.compare;
 
-import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
 
 import org.testng.annotations.Test;
 

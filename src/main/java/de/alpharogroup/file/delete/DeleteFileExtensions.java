@@ -121,8 +121,8 @@ public final class DeleteFileExtensions
 		else
 		{
 			String error = null;
-			// If the file is not deleted
-			if (!file.delete())
+			// If the file exists and is not deleted
+			if (file.exists() && !file.delete())
 			{
 				error = "Cannot delete the File " + file.getAbsolutePath() + ".";
 

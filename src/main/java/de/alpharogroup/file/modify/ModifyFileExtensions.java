@@ -24,7 +24,14 @@
  */
 package de.alpharogroup.file.modify;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -60,8 +67,7 @@ public class ModifyFileExtensions
 	{
 		File file = inFilePath.toFile();
 		List<String> lines = ListFactory.newArrayList();
-		try (
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
 		{
 			String readLine;
 			while ((readLine = bufferedReader.readLine()) != null)
@@ -70,9 +76,8 @@ public class ModifyFileExtensions
 			}
 		}
 
-		try (
-			Writer writer = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(file), charsetOfOutputFile)))
+		try (Writer writer = new BufferedWriter(
+			new OutputStreamWriter(new FileOutputStream(file), charsetOfOutputFile)))
 		{
 			int counter = 0;
 			for (String line : lines)
