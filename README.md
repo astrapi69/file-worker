@@ -108,10 +108,7 @@ or over ether with:
 
 0x588Aa02De98B1Ef70afeDC3ec5290130a3E5e273
 
-or over flattr: 
-<a href="https://flattr.com/submit/auto?fid=r7vp62&url=https%3A%2F%2Fgithub.com%2Flightblueseas%2Ffile-worker" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
-</a>
+or over the donation buttons at the top.
 
 ## Similar projects
 

@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.alpharogroup"
-version = "5.3"
+version = "5.4-SNAPSHOT"
 description = "file-worker"
 sourceCompatibility = "1.8"
 
