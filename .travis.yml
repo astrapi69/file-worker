@@ -13,7 +13,7 @@ addons:
   sonarcloud:
     organization: "lightblueseas"
     token:
-      secure: $SONARCLOUD_TOKEN # encrypted value of your token
+      secure: $SONAR_TOKEN # encrypted value of your token
 
 script:
   - ./gradlew sonarqube
