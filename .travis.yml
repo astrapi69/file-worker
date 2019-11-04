@@ -4,10 +4,19 @@ language: java
 
 cache:
   directories:
-  - $HOME/.m2
+    - '$HOME/.m2/repository'
+    - '$HOME/.sonar/cache'
+    - '$HOME/.gradle'
+    - '.gradle'
   
 jdk:
     - openjdk8
+
+addons:
+  sonarcloud:
+    organization: "lightblueseas"
+    token:
+      secure: $SONAR_TOKEN # encrypted value of your token
 
 notifications:
     email:
@@ -17,4 +26,5 @@ notifications:
         
 after_success:
   - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)  
+  - ./gradlew sonarqube
