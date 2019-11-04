@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/lightblueseas/file-worker.svg?branch=develop)](https://travis-ci.org/lightblueseas/file-worker) 
 [![Coverage Status](https://codecov.io/gh/lightblueseas/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/lightblueseas/file-worker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lightblueseas_file-worker&metric=alert_status)](https://sonarcloud.io/dashboard?id=lightblueseas_file-worker)
 [![Open Issues](https://img.shields.io/github/issues/lightblueseas/file-worker.svg?style=flat)](https://github.com/lightblueseas/file-worker/issues)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker)
 [![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/file-worker.svg)](http://www.javadoc.io/doc/de.alpharogroup/file-worker)
