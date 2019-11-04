@@ -18,9 +18,6 @@ addons:
     token:
       secure: $SONAR_TOKEN # encrypted value of your token
 
-script:
-  - ./gradlew sonarqube
-
 notifications:
     email:
         recipients:
@@ -29,4 +26,5 @@ notifications:
         
 after_success:
   - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)  
+  - ./gradlew sonarqube
