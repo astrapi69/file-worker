@@ -30,7 +30,6 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -57,7 +56,6 @@ import de.alpharogroup.file.create.FileCreationState;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
@@ -108,41 +106,6 @@ public class CsvFileExtensionsTest
 	@AfterMethod
 	protected void tearDown() throws Exception
 	{
-	}
-
-	/**
-	 * Test create sql insert from csv.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @deprecated
-	 */
-	@Deprecated
-	@Test(enabled = false)
-	public void testCreateSqlInsertFromCsv() throws IOException
-	{
-		final File testFile = new File(testResources, "languages_iso639_1.csv");
-		final File output = new File(testResources, "insert_languages.sql");
-		final List<String> list = ReadFileExtensions.readLinesInList(testFile,
-			Charset.forName("Windows-1252"));
-		int id = 1;
-		final int version = 1;
-		final StringBuilder sb = new StringBuilder();
-		for (final String string2 : list)
-		{
-			final String string = string2;
-			final String[] data = CsvFileExtensions.getDataFromLine(string, ";");
-			byte[] destinationBytes = data[0].getBytes("UTF-8");
-			final String languageName = new String(destinationBytes);
-			destinationBytes = data[1].getBytes("UTF-8");
-			final String languageCode = new String(destinationBytes);
-			final String insert = "INSERT INTO languages (id, version, name, iso639_1) VALUES ("
-				+ id + ", " + version + ", '" + languageName + "', '" + languageCode + "');";
-			sb.append(insert);
-			sb.append(System.lineSeparator());
-			id++;
-		}
-		WriteFileExtensions.writeStringToFile(output, sb.toString(), "UTF-8");
 	}
 
 	/**

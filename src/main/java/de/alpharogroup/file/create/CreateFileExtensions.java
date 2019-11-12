@@ -152,7 +152,7 @@ public final class CreateFileExtensions
 		if (!file.exists())
 		{
 			fileCreationState = FileCreationState.FAILED;
-			newParentDirectories(file);
+			newDirectories(file.toPath());
 			if (file.createNewFile())
 			{
 				fileCreationState = FileCreationState.CREATED;
@@ -181,29 +181,6 @@ public final class CreateFileExtensions
 			created = CreateFileExtensions.newFile(file);
 		}
 		return created;
-	}
-
-	/**
-	 * Creates the parent directories from the given file.
-	 *
-	 * @param file
-	 *            the file
-	 * @deprecated use instead the method
-	 *             {@linkplain CreateFileExtensions#newDirectories(Path, FileAttribute...)} <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor release
-	 */
-	@Deprecated
-	public static void newParentDirectories(final File file)
-	{
-		if (!file.exists())
-		{
-			final File parent = file.getParentFile();
-			if (parent != null && !parent.exists())
-			{
-				parent.mkdirs();
-			}
-		}
 	}
 
 }

@@ -54,16 +54,6 @@ import lombok.experimental.FieldDefaults;
 public class Unzipper
 {
 
-	/**
-	 * The password.
-	 * 
-	 * @deprecated <br>
-	 *             <br>
-	 *             Note: will be removed in the next minor version.
-	 */
-	@Deprecated
-	String password;
-
 	/** The to dir. */
 	File toDir;
 
@@ -72,7 +62,7 @@ public class Unzipper
 
 	/**
 	 * Instantiates a new unzipper.
-	 * 
+	 *
 	 * @param zipFile
 	 *            the zip file
 	 * @param toDir
@@ -86,7 +76,7 @@ public class Unzipper
 
 	/**
 	 * Extract zip entry.
-	 * 
+	 *
 	 * @param zipFile
 	 *            the zip file
 	 * @param target
@@ -104,7 +94,7 @@ public class Unzipper
 
 	/**
 	 * Unzip.
-	 * 
+	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -115,7 +105,7 @@ public class Unzipper
 
 	/**
 	 * Unzip.
-	 * 
+	 *
 	 * @param zipFile
 	 *            the zip file
 	 * @param toDir
