@@ -1,6 +1,13 @@
 ## Change log
 ----------------------
 
+Version 5.4-SNAPSHOT
+-------------
+
+CHANGED:
+
+- removed maven related files
+
 Version 5.3
 -------------
 

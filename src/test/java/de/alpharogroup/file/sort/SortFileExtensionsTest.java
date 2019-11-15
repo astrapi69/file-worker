@@ -40,8 +40,8 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.comparators.StringComparator;
 import de.alpharogroup.file.FileExtensions;
-import de.alpharogroup.file.create.CreateFileExtensions;
 import de.alpharogroup.file.create.FileCreationState;
+import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
@@ -79,7 +79,7 @@ public class SortFileExtensionsTest
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
-			FileCreationState state = CreateFileExtensions.newDirectory(testResources);
+			FileCreationState state = FileFactory.newDirectory(testResources);
 			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 		}

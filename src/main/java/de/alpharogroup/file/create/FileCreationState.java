@@ -29,5 +29,17 @@ package de.alpharogroup.file.create;
  */
 public enum FileCreationState
 {
-	ALREADY_EXISTS, CREATED, FAILED, PENDING;
+
+	/** This state signals that the file already exists */
+	ALREADY_EXISTS,
+
+	/** This state signals that the file was created */
+	CREATED,
+
+	/** This state signals that the file creation failed */
+	FAILED,
+
+	/** This state signals that the file creation is pending */
+	PENDING;
+
 }

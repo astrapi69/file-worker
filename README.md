@@ -3,7 +3,8 @@
 <div align="center">
 
 [![Build Status](https://travis-ci.org/lightblueseas/file-worker.svg?branch=develop)](https://travis-ci.org/lightblueseas/file-worker) 
-[![Coverage Status](https://coveralls.io/repos/github/lightblueseas/file-worker/badge.svg?branch=develop)](https://coveralls.io/github/lightblueseas/file-worker?branch=develop)
+[![Coverage Status](https://codecov.io/gh/lightblueseas/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/lightblueseas/file-worker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lightblueseas_file-worker&metric=alert_status)](https://sonarcloud.io/dashboard?id=lightblueseas_file-worker)
 [![Open Issues](https://img.shields.io/github/issues/lightblueseas/file-worker.svg?style=flat)](https://github.com/lightblueseas/file-worker/issues)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.alpharogroup/file-worker)
 [![Javadocs](http://www.javadoc.io/badge/de.alpharogroup/file-worker.svg)](http://www.javadoc.io/doc/de.alpharogroup/file-worker)
@@ -30,7 +31,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 	<properties>
 			...
 		<!-- FILE-WORKER version -->
-		<file-worker.version>5.3</file-worker.version>
+		<file-worker.version>5.4</file-worker.version>
 			...
 	</properties>
 			...
@@ -53,7 +54,7 @@ You can first define the version in the ext section and add than the following g
 ```
 ext {
 			...
-    fileWorkerVersion = "5.3"
+    fileWorkerVersion = "5.4"
 			...
 }
 dependencies {
@@ -108,10 +109,7 @@ or over ether with:
 
 0x588Aa02De98B1Ef70afeDC3ec5290130a3E5e273
 
-or over flattr: 
-<a href="https://flattr.com/submit/auto?fid=r7vp62&url=https%3A%2F%2Fgithub.com%2Flightblueseas%2Ffile-worker" target="_blank">
-<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" />
-</a>
+or over the donation buttons at the top.
 
 ## Similar projects
 

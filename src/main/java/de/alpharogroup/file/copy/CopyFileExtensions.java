@@ -40,7 +40,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.alpharogroup.file.FileConst;
-import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
@@ -236,7 +236,7 @@ public final class CopyFileExtensions
 		}
 		if (!destination.exists())
 		{
-			CreateFileExtensions.newDirectory(destination);
+			FileFactory.newDirectory(destination);
 		}
 		boolean copied = false;
 		File[] includeFilesArray;
@@ -396,7 +396,7 @@ public final class CopyFileExtensions
 		}
 		if (!destination.exists())
 		{
-			CreateFileExtensions.newDirectory(destination);
+			FileFactory.newDirectory(destination);
 		}
 		boolean copied = false;
 		File[] includeFilesArray;
