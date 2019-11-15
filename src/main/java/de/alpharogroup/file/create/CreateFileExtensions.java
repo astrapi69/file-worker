@@ -152,7 +152,7 @@ public final class CreateFileExtensions
 		if (!file.exists())
 		{
 			fileCreationState = FileCreationState.FAILED;
-			newDirectories(file.toPath());
+			newParentDirectories(file);
 			if (file.createNewFile())
 			{
 				fileCreationState = FileCreationState.CREATED;
@@ -181,6 +181,24 @@ public final class CreateFileExtensions
 			created = CreateFileExtensions.newFile(file);
 		}
 		return created;
+	}
+
+	/**
+	 * Creates the parent directories from the given file.
+	 *
+	 * @param file
+	 *            the file
+	 */
+	public static void newParentDirectories(final File file)
+	{
+		if (!file.exists())
+		{
+			final File parent = file.getParentFile();
+			if (parent != null && !parent.exists())
+			{
+				parent.mkdirs();
+			}
+		}
 	}
 
 }
