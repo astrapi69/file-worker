@@ -35,13 +35,13 @@ import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import lombok.experimental.UtilityClass;
 
 /**
- * The class {@link CreateFileExtensions} helps you to create files or directories.
- *
+ * The class {@link FileFactory} helps you to create files or directories
+
  * @author Asterios Raptis
  * @version 1.0
  */
 @UtilityClass
-public final class CreateFileExtensions
+public final class FileFactory
 {
 
 	/**
@@ -61,7 +61,7 @@ public final class CreateFileExtensions
 		FileCreationState created = FileCreationState.PENDING;
 		for (final File dir : directories)
 		{
-			created = CreateFileExtensions.newDirectory(dir);
+			created = FileFactory.newDirectory(dir);
 		}
 		return created;
 
@@ -178,7 +178,7 @@ public final class CreateFileExtensions
 		FileCreationState created = FileCreationState.PENDING;
 		for (final File file : files)
 		{
-			created = CreateFileExtensions.newFile(file);
+			created = FileFactory.newFile(file);
 		}
 		return created;
 	}

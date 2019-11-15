@@ -46,7 +46,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.create.FileCreationState;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
@@ -136,7 +136,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDeepDir.exists())
 		{
-			final FileCreationState state = CreateFileExtensions.newDirectory(srcDeepDir);
+			final FileCreationState state = FileFactory.newDirectory(srcDeepDir);
 			assertTrue("The directory " + srcDeepDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 			WriteFileExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
@@ -163,7 +163,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 
 		if (!srcDeepestDir.exists())
 		{
-			final FileCreationState state = CreateFileExtensions.newDirectory(srcDeepestDir);
+			final FileCreationState state = FileFactory.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
@@ -177,7 +177,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		srcFile = new File(this.testDir, filePrefix + txtSuffix);
 		if (!testDir.exists())
 		{
-			final FileCreationState state = CreateFileExtensions.newDirectory(srcDeepDir);
+			final FileCreationState state = FileFactory.newDirectory(srcDeepDir);
 			assertTrue("The directory " + testDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 		}

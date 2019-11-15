@@ -51,7 +51,7 @@ import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.collections.map.MapFactory;
 import de.alpharogroup.collections.set.SetFactory;
 import de.alpharogroup.file.FileExtensions;
-import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.create.FileCreationState;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
@@ -89,7 +89,7 @@ public class CsvFileExtensionsTest
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
-			final FileCreationState state = CreateFileExtensions.newDirectory(testResources);
+			final FileCreationState state = FileFactory.newDirectory(testResources);
 			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 		}

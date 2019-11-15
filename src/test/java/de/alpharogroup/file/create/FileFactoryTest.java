@@ -47,9 +47,9 @@ import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 
 /**
- * The unit test class for the class {@link CreateFileExtensions}
+ * The unit test class for the class {@link FileFactory}
  */
-public class CreateFileExtensionsTest extends FileTestCase
+public class FileFactoryTest extends FileTestCase
 {
 
 	/**
@@ -79,7 +79,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CreateFileExtensions#newDirectories(java.util.Collection)}
+	 * Test method for {@link FileFactory#newDirectories(java.util.Collection)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
@@ -111,7 +111,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 				DeleteFileExtensions.delete(dir);
 			}
 		}
-		actual = CreateFileExtensions.newDirectories(dirs);
+		actual = FileFactory.newDirectories(dirs);
 		expected = FileCreationState.CREATED;
 		assertEquals(expected, actual);
 
@@ -132,7 +132,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link CreateFileExtensions#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
+	 * {@link FileFactory#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
@@ -151,7 +151,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 		{
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
-		actual = CreateFileExtensions.newDirectories(dirPath);
+		actual = FileFactory.newDirectories(dirPath);
 		expected = true;
 		assertEquals(expected, actual);
 
@@ -166,7 +166,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CreateFileExtensions#newDirectory(File)}.
+	 * Test method for {@link FileFactory#newDirectory(File)}.
 	 *
 	 * @throws DirectoryAlreadyExistsException
 	 *             is thrown if the directory already exists
@@ -187,7 +187,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 		{
 			DeleteFileExtensions.delete(dir);
 		}
-		state = CreateFileExtensions.newDirectory(dir);
+		state = FileFactory.newDirectory(dir);
 		assertEquals(state, FileCreationState.CREATED);
 
 		actual = dir.exists();
@@ -203,7 +203,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for
-	 * {@link CreateFileExtensions#newDirectory(Path, java.nio.file.attribute.FileAttribute...)}
+	 * {@link FileFactory#newDirectory(Path, java.nio.file.attribute.FileAttribute...)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
@@ -222,7 +222,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 		{
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
-		actual = CreateFileExtensions.newDirectory(dirPath);
+		actual = FileFactory.newDirectory(dirPath);
 		expected = true;
 		assertEquals(expected, actual);
 
@@ -237,7 +237,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CreateFileExtensions#newFile(File)}
+	 * Test method for {@link FileFactory#newFile(File)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
@@ -258,7 +258,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 			DeleteFileExtensions.delete(file);
 		}
 
-		FileCreationState state = CreateFileExtensions.newFile(file);
+		FileCreationState state = FileFactory.newFile(file);
 		assertEquals(state, FileCreationState.CREATED);
 
 		actual = file.exists();
@@ -272,7 +272,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CreateFileExtensions#newFiles(java.util.Collection)}
+	 * Test method for {@link FileFactory#newFiles(java.util.Collection)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
@@ -304,7 +304,7 @@ public class CreateFileExtensionsTest extends FileTestCase
 				DeleteFileExtensions.delete(file);
 			}
 		}
-		actual = CreateFileExtensions.newFiles(files);
+		actual = FileFactory.newFiles(files);
 		expected = FileCreationState.CREATED;
 		assertEquals(actual, expected);
 		for (final File file : files)
@@ -323,12 +323,12 @@ public class CreateFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CreateFileExtensions}
+	 * Test method for {@link FileFactory}
 	 */
 	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(CreateFileExtensions.class);
+		beanTester.testBean(FileFactory.class);
 	}
 }

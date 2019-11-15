@@ -46,7 +46,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.create.CreateFileExtensions;
+import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.create.FileCreationState;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
@@ -367,7 +367,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final FileCreationState state = CreateFileExtensions.newDirectory(srcDir);
+			final FileCreationState state = FileFactory.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
