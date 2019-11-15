@@ -12,7 +12,7 @@ plugins {
 apply plugin: "jacoco"
 
 group = "de.alpharogroup"
-version = "5.4"
+version = "5.5-SNAPSHOT"
 description = "file-worker"
 sourceCompatibility = "1.8"
 
