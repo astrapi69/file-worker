@@ -4,6 +4,14 @@
 Version 5.5-SNAPSHOT
 -------------
 
+ADDED:
+ 
+- new idea run configurations for gradle builds created
+
+CHANGED:
+
+- removed idea run configurations for maven
+
 Version 5.4
 -------------
 
