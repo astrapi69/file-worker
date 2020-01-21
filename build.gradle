@@ -175,6 +175,17 @@ jacocoTestReport {
         xml.enabled true
         html.enabled false
     }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ["de/alpharogroup/file/exceptions/**/*.class",
+                              "de/alpharogroup/file/compare/api/**/*.class",
+                              "de/alpharogroup/file/modify/api/**/*.class",
+                              "de/alpharogroup/file/FileConst.class",
+                              "de/alpharogroup/file/zip/ZipState.class",
+                              "de/alpharogroup/file/zip/ZipModel.class"])
+        }))
+    }
 }
 
 check.dependsOn jacocoTestReport
