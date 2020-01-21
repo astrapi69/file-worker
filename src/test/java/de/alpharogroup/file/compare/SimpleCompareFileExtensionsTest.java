@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import de.alpharogroup.crypto.algorithm.Algorithm;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
@@ -82,7 +83,7 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByChecksum(File, File)}
+	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByChecksum(File, File, Algorithm)}
 	 */
 	@Test
 	public void testCompareFilesByChecksum() throws NoSuchAlgorithmException, IOException
