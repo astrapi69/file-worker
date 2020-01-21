@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import de.alpharogroup.crypto.algorithm.Algorithm;
-import de.alpharogroup.crypto.file.checksum.ChecksumExtensions;
+import de.alpharogroup.crypto.file.checksum.FileChecksumExtensions;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -74,8 +74,8 @@ public final class SimpleCompareFileExtensions
 	public static boolean compareFilesByChecksum(final File sourceFile, final File fileToCompare,
 		final Algorithm algorithm) throws NoSuchAlgorithmException, IOException
 	{
-		final String checksumSourceFile = ChecksumExtensions.getChecksum(sourceFile, algorithm);
-		final String checksumFileToCompare = ChecksumExtensions.getChecksum(fileToCompare,
+		final String checksumSourceFile = FileChecksumExtensions.getChecksum(sourceFile, algorithm);
+		final String checksumFileToCompare = FileChecksumExtensions.getChecksum(fileToCompare,
 			algorithm);
 		return checksumSourceFile.equals(checksumFileToCompare);
 	}
@@ -94,8 +94,8 @@ public final class SimpleCompareFileExtensions
 	public static boolean compareFilesByChecksumAdler32(final File sourceFile,
 		final File fileToCompare) throws IOException
 	{
-		final long checksumSourceFile = ChecksumExtensions.getCheckSumAdler32(sourceFile);
-		final long checksumFileToCompare = ChecksumExtensions.getCheckSumAdler32(fileToCompare);
+		final long checksumSourceFile = FileChecksumExtensions.getCheckSumAdler32(sourceFile);
+		final long checksumFileToCompare = FileChecksumExtensions.getCheckSumAdler32(fileToCompare);
 		return checksumSourceFile == checksumFileToCompare;
 	}
 
@@ -113,8 +113,8 @@ public final class SimpleCompareFileExtensions
 	public static boolean compareFilesByChecksumCRC32(final File sourceFile,
 		final File fileToCompare) throws IOException
 	{
-		final long checksumSourceFile = ChecksumExtensions.getCheckSumCRC32(sourceFile);
-		final long checksumFileToCompare = ChecksumExtensions.getCheckSumCRC32(fileToCompare);
+		final long checksumSourceFile = FileChecksumExtensions.getCheckSumCRC32(sourceFile);
+		final long checksumFileToCompare = FileChecksumExtensions.getCheckSumCRC32(fileToCompare);
 		return checksumSourceFile == checksumFileToCompare;
 	}
 

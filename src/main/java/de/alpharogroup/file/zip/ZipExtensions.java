@@ -108,10 +108,6 @@ public final class ZipExtensions
 			}
 			bos.flush();
 		}
-		catch (final IOException e)
-		{
-			throw e;
-		}
 	}
 
 	/**
@@ -152,11 +148,6 @@ public final class ZipExtensions
 				final ZipEntry entry = e.nextElement();
 				extractZipEntry(zipFile, entry, toDir);
 			}
-			zipFile.close();
-		}
-		catch (final IOException e)
-		{
-			throw e;
 		}
 		finally
 		{
@@ -229,7 +220,7 @@ public final class ZipExtensions
 		throws FileNotFoundException, IOException, FileDoesNotExistException
 	{
 		try (FileOutputStream fos = new FileOutputStream(zipFile);
-			ZipOutputStream zos = new ZipOutputStream(fos);)
+			ZipOutputStream zos = new ZipOutputStream(fos))
 		{
 			if (!dirToZip.exists())
 			{
@@ -280,25 +271,11 @@ public final class ZipExtensions
 			List<File> foundedFiles;
 			if (null != fileFilter)
 			{
-				final File[] tmpfList = file.listFiles(fileFilter);
-				final List<File> foundedDirs = FileSearchExtensions.listDirs(file);
-				if (0 < foundedDirs.size())
-				{
-					final List<File> tmp = Arrays.asList(tmpfList);
-					foundedDirs.addAll(tmp);
-					foundedFiles = foundedDirs;
-				}
-				else
-				{
-					final List<File> tmp = Arrays.asList(tmpfList);
-					foundedFiles = tmp;
-				}
+				foundedFiles = getFoundedFiles(file, file.listFiles(fileFilter));
 			}
 			else
 			{
-				fList = file.listFiles();
-				final List<File> tmp = Arrays.asList(fList);
-				foundedFiles = tmp;
+				foundedFiles = Arrays.asList(file.listFiles());
 			}
 			for (int i = 0; i < foundedFiles.size(); i++)
 			{
@@ -309,6 +286,22 @@ public final class ZipExtensions
 		{
 			addFile(file, dirToZip, zos);
 		}
+	}
+
+	static List<File> getFoundedFiles(File file, File[] tmpfList)
+	{
+		List<File> foundedFiles;
+		final List<File> foundedDirs = FileSearchExtensions.listDirs(file);
+		if (0 < foundedDirs.size())
+		{
+			foundedDirs.addAll(Arrays.asList(tmpfList));
+			foundedFiles = foundedDirs;
+		}
+		else
+		{
+			foundedFiles = Arrays.asList(tmpfList);
+		}
+		return foundedFiles;
 	}
 
 }

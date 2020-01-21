@@ -142,7 +142,7 @@ public class Zipper implements ZipModel
 	public Optional<ZipErrorCodes> zip()
 	{
 		try (FileOutputStream fos = new FileOutputStream(this.zipFile);
-			ZipOutputStream zos = new ZipOutputStream(fos);)
+			ZipOutputStream zos = new ZipOutputStream(fos))
 		{
 
 			if (!this.directoryToZip.exists())
@@ -198,25 +198,11 @@ public class Zipper implements ZipModel
 			List<File> foundedFiles;
 			if (null != this.fileFilter)
 			{
-				final File[] tmpfList = file.listFiles(this.fileFilter);
-				final List<File> foundedDirs = FileSearchExtensions.listDirs(file);
-				if (0 < foundedDirs.size())
-				{
-					final List<File> tmp = Arrays.asList(tmpfList);
-					foundedDirs.addAll(tmp);
-					foundedFiles = foundedDirs;
-				}
-				else
-				{
-					final List<File> tmp = Arrays.asList(tmpfList);
-					foundedFiles = tmp;
-				}
+				foundedFiles = ZipExtensions.getFoundedFiles(file, file.listFiles(this.fileFilter));
 			}
 			else
 			{
-				fList = file.listFiles();
-				final List<File> tmp = Arrays.asList(fList);
-				foundedFiles = tmp;
+				foundedFiles = Arrays.asList(file.listFiles());
 			}
 			for (final File foundedFile : foundedFiles)
 			{

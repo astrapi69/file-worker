@@ -59,7 +59,7 @@ ext {
 }
 dependencies {
 			...
-compile "de.alpharogroup:file-worker:${fileWorkerVersion}"
+compile "de.alpharogroup:file-worker:$fileWorkerVersion"
 			...
 }
 ```

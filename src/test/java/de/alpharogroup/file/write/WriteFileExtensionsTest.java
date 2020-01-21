@@ -39,7 +39,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.file.checksum.ChecksumExtensions;
+import de.alpharogroup.crypto.file.checksum.FileChecksumExtensions;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
@@ -104,13 +104,13 @@ public class WriteFileExtensionsTest extends FileTestCase
 		File fileout = new File(PathFinder.getSrcTestResourcesDir(),
 			"testWriteFileExtensionsWrite.out");
 		try (InputStream inputStream = StreamExtensions.getInputStream(testFile, true);
-			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true);)
+			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true))
 		{
 			WriteFileExtensions.write(inputStream, outputStream);
 		}
 
-		actual = ChecksumExtensions.getCheckSumAdler32(testFile);
-		expected = ChecksumExtensions.getCheckSumAdler32(fileout);
+		actual = FileChecksumExtensions.getCheckSumAdler32(testFile);
+		expected = FileChecksumExtensions.getCheckSumAdler32(fileout);
 		assertEquals(expected, actual);
 		fileout.deleteOnExit();
 	}

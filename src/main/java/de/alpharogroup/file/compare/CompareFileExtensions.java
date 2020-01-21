@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.file.checksum.ChecksumExtensions;
+import de.alpharogroup.crypto.file.checksum.FileChecksumExtensions;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.compare.api.IFileCompareResultBean;
 import de.alpharogroup.file.compare.api.IFileContentResultBean;
@@ -172,9 +172,9 @@ public final class CompareFileExtensions
 			boolean contentEquality;
 			try
 			{
-				final String sourceChecksum = ChecksumExtensions.getChecksum(source,
+				final String sourceChecksum = FileChecksumExtensions.getChecksum(source,
 					HashAlgorithm.SHA_512.getAlgorithm());
-				final String compareChecksum = ChecksumExtensions.getChecksum(compare,
+				final String compareChecksum = FileChecksumExtensions.getChecksum(compare,
 					HashAlgorithm.SHA_512.getAlgorithm());
 				contentEquality = sourceChecksum.equals(compareChecksum);
 				fileContentResultBean.setContentEquality(contentEquality);
@@ -184,8 +184,8 @@ public final class CompareFileExtensions
 				// if the algorithm is not supported check it with CRC32.
 				try
 				{
-					contentEquality = ChecksumExtensions
-						.getCheckSumCRC32(source) == ChecksumExtensions.getCheckSumCRC32(compare);
+					contentEquality = FileChecksumExtensions
+						.getCheckSumCRC32(source) == FileChecksumExtensions.getCheckSumCRC32(compare);
 					fileContentResultBean.setContentEquality(contentEquality);
 				}
 				catch (IOException e1)
@@ -226,7 +226,7 @@ public final class CompareFileExtensions
 		if (simpleEquality)
 		{
 			try (InputStream sourceReader = StreamExtensions.getInputStream(sourceFile);
-				InputStream compareReader = StreamExtensions.getInputStream(fileToCompare);)
+				InputStream compareReader = StreamExtensions.getInputStream(fileToCompare))
 			{
 
 				final byte[] source = StreamExtensions.getByteArray(sourceReader);
@@ -280,7 +280,7 @@ public final class CompareFileExtensions
 				BufferedReader sourceReader = (BufferedReader)StreamExtensions
 					.getReader(sourceFile);
 				BufferedReader compareReader = (BufferedReader)StreamExtensions
-					.getReader(fileToCompare);)
+					.getReader(fileToCompare))
 			{
 				String sourceLine;
 				String compareLine;
@@ -341,7 +341,7 @@ public final class CompareFileExtensions
 		boolean equal = true;
 		// boolean sameLastModified = false;
 		// boolean sameAbsolutePath = false;
-		boolean sameFilename = false;
+		boolean sameFilename;
 		// // Check if the files have the same absolute path.
 		// int s = source.compareTo(compare);
 		// sameAbsolutePath = s == 0;
@@ -384,7 +384,7 @@ public final class CompareFileExtensions
 		if (content)
 		{
 			try (BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(source);
-				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(compare);)
+				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(compare))
 			{
 				String sourceLine;
 				String compareLine;
@@ -549,7 +549,7 @@ public final class CompareFileExtensions
 		final boolean ignoreNameEquality)
 	{
 		final List<File> allFiles = FileSearchExtensions.findFilesRecursive(dirToSearch, "*");
-		final List<IFileCompareResultBean> equalFiles = new ArrayList<IFileCompareResultBean>();
+		final List<IFileCompareResultBean> equalFiles = new ArrayList<>();
 		for (int i = 0; i < allFiles.size(); i++)
 		{
 			final File toCompare = allFiles.get(i);
@@ -589,7 +589,7 @@ public final class CompareFileExtensions
 	{
 		final List<File> allSourceFiles = FileSearchExtensions.findFilesRecursive(source, "*");
 		final List<File> allCompareFiles = FileSearchExtensions.findFilesRecursive(compare, "*");
-		final List<IFileCompareResultBean> equalFiles = new ArrayList<IFileCompareResultBean>();
+		final List<IFileCompareResultBean> equalFiles = new ArrayList<>();
 		for (int i = 0; i < allSourceFiles.size(); i++)
 		{
 			final File toCompare = allSourceFiles.get(i);
