@@ -16,10 +16,12 @@ version = "5.5-SNAPSHOT"
 description = "file-worker"
 sourceCompatibility = "1.8"
 
+def releaseVersion = !version.endsWith("SNAPSHOT")
+
 sonarqube {
-  properties {
-	property "sonar.projectKey", "lightblueseas_file-worker"
-  }
+    properties {
+        property "sonar.projectKey", "lightblueseas_file-worker"
+    }
 }
 
 repositories {
@@ -147,13 +149,15 @@ publishing {
             }
             def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
             def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-            url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+            url = releaseVersion ? releasesRepoUrl : snapshotsRepoUrl
         }
     }
 }
 
 signing {
-    sign publishing.publications.mavenJava
+    if (releaseVersion) {
+        sign publishing.publications.mavenJava
+    }
 }
 
 javadoc {
