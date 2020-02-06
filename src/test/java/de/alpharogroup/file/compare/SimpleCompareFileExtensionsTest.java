@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
-import de.alpharogroup.crypto.algorithm.Algorithm;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
@@ -40,6 +39,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.crypto.algorithm.Algorithm;
 import de.alpharogroup.crypto.algorithm.MdAlgorithm;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
@@ -83,7 +83,8 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByChecksum(File, File, Algorithm)}
+	 * Test method for
+	 * {@link SimpleCompareFileExtensions#compareFilesByChecksum(File, File, Algorithm)}
 	 */
 	@Test
 	public void testCompareFilesByChecksum() throws NoSuchAlgorithmException, IOException

@@ -16,8 +16,6 @@ version = "5.5-SNAPSHOT"
 description = "file-worker"
 sourceCompatibility = "1.8"
 
-def releaseVersion = !version.endsWith("SNAPSHOT")
-
 sonarqube {
     properties {
         property "sonar.projectKey", "lightblueseas_file-worker"
@@ -37,6 +35,7 @@ dependencies {
     compile("org.apache.commons:commons-lang3:$commonsLang3Version")
     compile("net.lingala.zip4j:zip4j:$zip4jVersion")
     compile("de.alpharogroup:crypt-api:$cryptApiVersion")
+    compile("de.alpharogroup:throw-able:$throwAbleVersion")
     compile("de.alpharogroup:mystic-crypt:$mysticCryptVersion")
     compile("de.alpharogroup:silly-strings:$sillyStringsVersion")
     compile("de.alpharogroup:silly-io:$sillyIoVersion")
@@ -100,6 +99,8 @@ task javadocJar(type: Jar) {
     archiveClassifier.set("javadoc")
     javadoc.properties.failOnError = true
 }
+
+def releaseVersion = !version.endsWith("SNAPSHOT")
 
 publishing {
     publications {

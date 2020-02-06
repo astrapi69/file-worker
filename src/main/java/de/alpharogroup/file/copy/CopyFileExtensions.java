@@ -47,6 +47,7 @@ import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.io.file.FileExtension;
+import de.alpharogroup.throwable.ThrowableExtensions;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -542,7 +543,7 @@ public final class CopyFileExtensions
 			throw new IllegalArgumentException("The destination File " + destination.getName()
 				+ " should be a File but is a Directory.");
 		}
-		boolean copied = false;
+		boolean copied;
 		try (InputStream inputStream = StreamExtensions.getInputStream(source);
 			InputStreamReader reader = sourceEncoding != null
 				? new InputStreamReader(inputStream, sourceEncoding)
@@ -571,6 +572,35 @@ public final class CopyFileExtensions
 			destination.setLastModified(source.lastModified());
 		}
 		return copied;
+	}
+
+
+	/**
+	 * Copies the given source file to the given destination file with the given source encodings
+	 * and destination encodings.
+	 *
+	 * @param sources
+	 *            the files the have to be copied
+	 * @param destination
+	 *            the destination
+	 * @param sourceEncoding
+	 *            the source encoding
+	 * @param destinationEncoding
+	 *            the destination encoding
+	 * @param lastModified
+	 *            if true the last modified flag is set.
+	 * @return true if the given file is copied otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void copyFiles(final List<File> sources, final File destination,
+		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
+	{
+		sources.stream().forEach(ThrowableExtensions.toRuntimeExceptionIfNeeded(file -> {
+			File destinationFile = new File(destination, file.getName());
+			CopyFileExtensions.copyFile(file, destinationFile, sourceEncoding, destinationEncoding,
+				lastModified);
+		}));
 	}
 
 	/**

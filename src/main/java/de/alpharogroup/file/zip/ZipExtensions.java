@@ -272,7 +272,6 @@ public final class ZipExtensions
 	{
 		if (file.isDirectory())
 		{
-			File[] fList;
 			List<File> foundedFiles;
 			if (null != fileFilter)
 			{

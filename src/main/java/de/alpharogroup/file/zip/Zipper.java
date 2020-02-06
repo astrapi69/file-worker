@@ -36,7 +36,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import de.alpharogroup.file.search.FileSearchExtensions;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -194,7 +193,6 @@ public class Zipper implements ZipModel
 	{
 		if (file.isDirectory())
 		{
-			File[] fList;
 			List<File> foundedFiles;
 			if (null != this.fileFilter)
 			{

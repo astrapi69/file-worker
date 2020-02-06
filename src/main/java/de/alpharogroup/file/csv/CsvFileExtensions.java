@@ -319,8 +319,7 @@ public final class CsvFileExtensions
 				// get the data with the index
 				if (position <= splittedData.length - 1)
 				{
-
-					final String s = StringExtensions.removeQuotationMarks(splittedData[position]);
+					final String s = StringExtensions.removeFirstAndLastCharacter(splittedData[position]);
 					output.add(s);
 				}
 			}

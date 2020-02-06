@@ -32,6 +32,8 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +45,13 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
+import de.alpharogroup.file.copy.CopyFileExtensions;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileIsADirectoryException;
+import de.alpharogroup.file.modify.ModifyFileExtensions;
+import de.alpharogroup.file.rename.RenameFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
@@ -130,6 +137,98 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue("File should not exist in this directory.", contains);
 		this.actual = FileSearchExtensions.containsFileRecursive(this.testDir, testFile3);
 		assertTrue("", this.actual);
+	}
+
+	/**
+	 * Test method for copy run configurations file from a source project to a target project and
+	 * modifies its content
+	 */
+	@Test
+	public void testCopyIdeaRunConfigurations()
+		throws FileDoesNotExistException, IOException, FileIsADirectoryException
+	{
+		File sourceProjectDir;
+		File targetProjectDir;
+		File ideaSourceDir;
+		File ideaTargetDir;
+		File sourceRunConfigDir;
+		File targetRunConfigDir;
+		String sourceFilenamePrefix;
+		String targetFilenamePrefix;
+		String sourceProjectDirName;
+		String targetProjectDirName;
+		String sourceProjectName;
+		String targetProjectName;
+
+		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
+
+		sourceProjectName = "file-worker";
+		targetProjectName = "jobj-compare";
+		sourceFilenamePrefix = "file_worker";
+		targetFilenamePrefix = "jobj_compare";
+		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
+		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
+		sourceProjectDir = new File(sourceProjectDirName);
+		targetProjectDir = new File(targetProjectDirName);
+		ideaSourceDir = new File(sourceProjectDir, CopyGradleRunConfigurations.IDEA_DIR_NAME);
+		ideaTargetDir = new File(targetProjectDir, CopyGradleRunConfigurations.IDEA_DIR_NAME);
+		sourceRunConfigDir = new File(ideaSourceDir,
+			CopyGradleRunConfigurations.RUN_CONFIGURATIONS_DIR_NAME);
+		targetRunConfigDir = new File(ideaTargetDir,
+			CopyGradleRunConfigurations.RUN_CONFIGURATIONS_DIR_NAME);
+
+		copyGradleRunConfigurationsData = CopyGradleRunConfigurations.builder()
+			.sourceProjectDir(sourceProjectDir).targetProjectDir(targetProjectDir)
+			.ideaSourceDir(ideaSourceDir).ideaTargetDir(ideaTargetDir)
+			.sourceRunConfigDir(sourceRunConfigDir).targetRunConfigDir(targetRunConfigDir)
+			.sourceFilenamePrefix(sourceFilenamePrefix).targetFilenamePrefix(targetFilenamePrefix)
+			.sourceProjectName(sourceProjectName).targetProjectName(targetProjectName).build();
+
+		copy(copyGradleRunConfigurationsData);
+	}
+
+	private void copy(CopyGradleRunConfigurations copyGradleRunConfigurationsData)
+		throws IOException, FileIsADirectoryException, FileDoesNotExistException
+	{
+		List<File> allFiles;
+		// find all run configurations files for copy
+		allFiles = FileSearchExtensions.findAllFiles(
+			copyGradleRunConfigurationsData.getSourceRunConfigDir(),
+			copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
+		// copy found run configurations files to the target directory
+		CopyFileExtensions.copyFiles(allFiles,
+			copyGradleRunConfigurationsData.getTargetRunConfigDir(), Charset.forName("UTF-8"),
+			Charset.forName("UTF-8"), true);
+		// find all run configurations files for rename
+		allFiles = FileSearchExtensions.findAllFiles(
+			copyGradleRunConfigurationsData.getTargetRunConfigDir(),
+			copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
+		// rename all run configurations files
+		for (File file : allFiles)
+		{
+			String name = file.getName();
+			String newName = name.replace(
+				copyGradleRunConfigurationsData.getSourceFilenamePrefix(),
+				copyGradleRunConfigurationsData.getTargetFilenamePrefix());
+			RenameFileExtensions.renameFile(file, newName);
+		}
+		// Find all renamed run configurations files
+		allFiles = FileSearchExtensions.findAllFiles(
+			copyGradleRunConfigurationsData.getTargetRunConfigDir(),
+			copyGradleRunConfigurationsData.getTargetFilenamePrefix() + ".*");
+		// replace content of all run configurations files so they can run appropriate to the new
+		// project
+		for (File file : allFiles)
+		{
+			Path inFilePath = file.toPath();
+			ModifyFileExtensions.modifyFile(inFilePath, (count, input) -> {
+				String alteredLine = input.replaceAll(
+					copyGradleRunConfigurationsData.getSourceProjectName(),
+					copyGradleRunConfigurationsData.getTargetProjectName())
+					+ System.lineSeparator();
+				return alteredLine;
+			});
+		}
 	}
 
 	/**
