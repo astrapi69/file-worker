@@ -596,6 +596,9 @@ public final class CopyFileExtensions
 	public static void copyFiles(final List<File> sources, final File destination,
 		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
 	{
+		if(!destination.exists()) {
+			FileFactory.newDirectory(destination);
+		}
 		sources.stream().forEach(ThrowableExtensions.toRuntimeExceptionIfNeeded(file -> {
 			File destinationFile = new File(destination, file.getName());
 			CopyFileExtensions.copyFile(file, destinationFile, sourceEncoding, destinationEncoding,

@@ -163,9 +163,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 
 		sourceProjectName = "file-worker";
-		targetProjectName = "jobj-compare";
+		targetProjectName = "silly-math";
 		sourceFilenamePrefix = "file_worker";
-		targetFilenamePrefix = "jobj_compare";
+		targetFilenamePrefix = "silly_math";
 		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
 		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
 		sourceProjectDir = new File(sourceProjectDirName);
