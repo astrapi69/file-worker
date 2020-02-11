@@ -163,9 +163,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 
 		sourceProjectName = "file-worker";
-		targetProjectName = "silly-math";
+		targetProjectName = "silly-strings";
 		sourceFilenamePrefix = "file_worker";
-		targetFilenamePrefix = "silly_math";
+		targetFilenamePrefix = "silly_strings";
 		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
 		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
 		sourceProjectDir = new File(sourceProjectDirName);
