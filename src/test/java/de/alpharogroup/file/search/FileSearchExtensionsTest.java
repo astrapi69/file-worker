@@ -36,7 +36,18 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import de.alpharogroup.collections.array.ArrayExtensions;
+import de.alpharogroup.collections.list.ListExtensions;
+import de.alpharogroup.collections.list.ListFactory;
+import de.alpharogroup.collections.properties.PropertiesExtensions;
+import de.alpharogroup.file.create.FileFactory;
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.io.StreamExtensions;
+import de.alpharogroup.string.StringExtensions;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
@@ -163,9 +174,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 
 		sourceProjectName = "file-worker";
-		targetProjectName = "silly-strings";
+		targetProjectName = "time-machine";
 		sourceFilenamePrefix = "file_worker";
-		targetFilenamePrefix = "silly_strings";
+		targetFilenamePrefix = "time_machine";
 		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
 		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
 		sourceProjectDir = new File(sourceProjectDirName);
@@ -185,6 +196,103 @@ public class FileSearchExtensionsTest extends FileTestCase
 			.sourceProjectName(sourceProjectName).targetProjectName(targetProjectName).build();
 
 		copy(copyGradleRunConfigurationsData);
+
+		externalizeVersionFromBuildGradle(targetProjectDir);
+
+	}
+
+	private void externalizeVersionFromBuildGradle(File targetProjectDir) throws IOException
+	{
+		File buildGradle = new File(targetProjectDir, DependenciesData.BUILD_GRADLE_NAME);
+		File gradleProperties = new File(targetProjectDir, DependenciesData.GRADLE_PROPERTIES_NAME);
+		FileFactory.newFile(gradleProperties);
+		String dependenciesContent = getDependenciesContent(buildGradle);
+		List<String> stringList = getDependenciesAsStringList(dependenciesContent);
+		DependenciesData dependenciesData = getGradlePropertiesWithVersions(stringList);
+		String newDependenciesContent = getNewDependenciesContent(dependenciesData);
+		String replaceDependenciesContent = replaceDependenciesContent(buildGradle, newDependenciesContent);
+		PropertiesExtensions.export(dependenciesData.getProperties(),
+			StreamExtensions.getOutputStream(gradleProperties));
+		WriteFileExtensions.string2File(buildGradle, replaceDependenciesContent);
+	}
+
+	public String replaceDependenciesContent(File buildGradle, String newDependenciesContent) throws IOException
+	{
+		String buildGradleContent = ReadFileExtensions.readFromFile(buildGradle);
+		int indexOfStart = buildGradleContent.indexOf("dependencies {");
+		int indexOfEnd = buildGradleContent.substring(indexOfStart).indexOf("}")+indexOfStart+1;
+		String dependencies = buildGradleContent.substring(indexOfStart, indexOfEnd);
+		String replacedBuildGradleContent = StringUtils
+			.replace(buildGradleContent, dependencies, newDependenciesContent);
+		String newBuildGradleContent =
+			StringUtils.replace(replacedBuildGradleContent, "'", "\"");
+		return newBuildGradleContent;
+	}
+
+	private String getNewDependenciesContent(DependenciesData dependenciesData)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("dependencies {").append("\n");
+		dependenciesData.getVersionStrings().stream().forEach(entry -> sb.append(entry).append("\n"));
+		sb.append("}");
+		return sb.toString();
+	}
+
+	public String getDependenciesContent(File buildGradle) throws IOException
+	{
+		String buildGradleContent = ReadFileExtensions.readFromFile(buildGradle);
+		int indexOfStart = buildGradleContent.indexOf("dependencies {");
+		int indexOfEnd = buildGradleContent.substring(indexOfStart).indexOf("}")+indexOfStart+1;
+		String dependencies = buildGradleContent.substring(indexOfStart, indexOfEnd);
+		return dependencies;
+	}
+
+	private DependenciesData getGradlePropertiesWithVersions(List<String> stringList)
+	{
+		List<String> versionStrings = ListFactory.newArrayList();
+		Properties properties = new Properties();
+		stringList.stream().forEach(entry -> {
+			String dependency = StringUtils.substringBetween(entry, "'");
+			String[] strings = dependency.split(":");
+			String group = strings[0];
+			String artifact = strings[1];
+			String version = strings[2];
+			String[] split = artifact.split("-");
+			StringBuilder sb = new StringBuilder();
+			if(1<split.length) {
+				for (int i = 0; i<split.length; i++){
+					if(i == 0){
+						sb.append(split[i]);
+						continue;
+					}
+					String artifactPart = split[i];
+					String artifactPartFirstCharacterToUpperCase = StringExtensions
+						.firstCharacterToUpperCase(artifactPart);
+					sb.append(artifactPartFirstCharacterToUpperCase);
+				}
+			} else {
+				sb.append(split[0]);
+			}
+			String propertiesKey = sb.toString().trim()+"Version";
+			properties.setProperty(propertiesKey, version);
+			String newDependency = group + ":" + artifact + ":$" + propertiesKey;
+			String newEntry = StringUtils.replace(entry, dependency, newDependency);
+			versionStrings.add(newEntry);
+		});
+
+		DependenciesData dependenciesData = DependenciesData.builder()
+			.properties(properties)
+			.versionStrings(versionStrings).build();
+		return dependenciesData;
+	}
+
+	private List<String> getDependenciesAsStringList(String dependenciesContent)
+	{
+		String[] lines = dependenciesContent.split("\n");
+		List<String> stringList = ArrayExtensions.asList(lines);
+		ListExtensions.removeFirst(stringList);
+		ListExtensions.removeLast(stringList);
+		return stringList;
 	}
 
 	private void copy(CopyGradleRunConfigurations copyGradleRunConfigurationsData)
