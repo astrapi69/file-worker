@@ -154,7 +154,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * Test method for copy run configurations file from a source project to a target project and
 	 * modifies its content
 	 */
-	@Test
+	@Test(enabled = false)
 	public void testCopyIdeaRunConfigurations()
 		throws FileDoesNotExistException, IOException, FileIsADirectoryException
 	{
@@ -174,9 +174,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 
 		sourceProjectName = "file-worker";
-		targetProjectName = "time-machine";
+		targetProjectName = "swing-components";
 		sourceFilenamePrefix = "file_worker";
-		targetFilenamePrefix = "time_machine";
+		targetFilenamePrefix = "swing_components";
 		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
 		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
 		sourceProjectDir = new File(sourceProjectDirName);
@@ -198,7 +198,23 @@ public class FileSearchExtensionsTest extends FileTestCase
 		copy(copyGradleRunConfigurationsData);
 
 		externalizeVersionFromBuildGradle(targetProjectDir);
+	}
 
+	public String getVersion(String buildGradleContent, Properties gradleProperties) throws IOException {
+		String projectVersionKey = "projectVersion";
+		String versionPrefix = "version = '";
+		int versionPrefixLength = versionPrefix.length();
+		int indexOfVersionStart = buildGradleContent.indexOf(versionPrefix);
+		String substring = buildGradleContent.substring(indexOfVersionStart + versionPrefixLength);
+		int ie = substring.indexOf("'");
+		int indexOfVersionEnd = ie+indexOfVersionStart+versionPrefixLength+1;
+		String versionLine = buildGradleContent.substring(indexOfVersionStart, indexOfVersionEnd);
+		String versionValue = StringUtils.substringsBetween(versionLine , "'", "'")[0];
+		gradleProperties.setProperty(projectVersionKey, versionValue);
+		String newVersionLine = StringUtils.replace(versionLine, versionValue, "$"+projectVersionKey );
+		String replacedBuildGradleContent = StringUtils
+			.replace(buildGradleContent, versionLine, newVersionLine);
+		return replacedBuildGradleContent;
 	}
 
 	private void externalizeVersionFromBuildGradle(File targetProjectDir) throws IOException
@@ -210,13 +226,13 @@ public class FileSearchExtensionsTest extends FileTestCase
 		List<String> stringList = getDependenciesAsStringList(dependenciesContent);
 		DependenciesData dependenciesData = getGradlePropertiesWithVersions(stringList);
 		String newDependenciesContent = getNewDependenciesContent(dependenciesData);
-		String replaceDependenciesContent = replaceDependenciesContent(buildGradle, newDependenciesContent);
+		String replaceDependenciesContent = replaceDependenciesContent(buildGradle, newDependenciesContent, dependenciesData.getProperties());
 		PropertiesExtensions.export(dependenciesData.getProperties(),
 			StreamExtensions.getOutputStream(gradleProperties));
 		WriteFileExtensions.string2File(buildGradle, replaceDependenciesContent);
 	}
 
-	public String replaceDependenciesContent(File buildGradle, String newDependenciesContent) throws IOException
+	public String replaceDependenciesContent(File buildGradle, String newDependenciesContent, Properties gradleProperties) throws IOException
 	{
 		String buildGradleContent = ReadFileExtensions.readFromFile(buildGradle);
 		int indexOfStart = buildGradleContent.indexOf("dependencies {");
@@ -224,6 +240,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		String dependencies = buildGradleContent.substring(indexOfStart, indexOfEnd);
 		String replacedBuildGradleContent = StringUtils
 			.replace(buildGradleContent, dependencies, newDependenciesContent);
+		replacedBuildGradleContent = getVersion(replacedBuildGradleContent, gradleProperties);
 		String newBuildGradleContent =
 			StringUtils.replace(replacedBuildGradleContent, "'", "\"");
 		return newBuildGradleContent;
