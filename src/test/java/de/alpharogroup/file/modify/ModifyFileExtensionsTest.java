@@ -146,7 +146,7 @@ public class ModifyFileExtensionsTest
 	/**
 	 * Test method for {@link ModifyFileExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

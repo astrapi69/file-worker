@@ -27,14 +27,15 @@ package de.alpharogroup.file;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link GeneratorExtensions}.
  */
-@UtilityClass
 public final class GeneratorExtensions
 {
+	private GeneratorExtensions()
+	{
+	}
+
 	/**
 	 * Creates a String list with the String constants from the given String list. For instance:
 	 * List data = new ArrayList(); data.add("foo"); data.add("bar");

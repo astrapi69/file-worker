@@ -174,9 +174,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 
 		sourceProjectName = "file-worker";
-		targetProjectName = "swing-components";
+		targetProjectName = "jobj-clone";
 		sourceFilenamePrefix = "file_worker";
-		targetFilenamePrefix = "swing_components";
+		targetFilenamePrefix = "jobj_clone";
 		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
 		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
 		sourceProjectDir = new File(sourceProjectDirName);
@@ -770,7 +770,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

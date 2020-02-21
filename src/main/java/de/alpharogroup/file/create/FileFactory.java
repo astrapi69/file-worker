@@ -24,6 +24,8 @@
  */
 package de.alpharogroup.file.create;
 
+import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,18 +33,18 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 
-import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link FileFactory} helps you to create files or directories
  * 
  * @author Asterios Raptis
  * @version 1.0
  */
-@UtilityClass
 public final class FileFactory
 {
+
+	private FileFactory()
+	{
+	}
 
 	/**
 	 * Creates the directories.

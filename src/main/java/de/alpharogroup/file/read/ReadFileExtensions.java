@@ -24,28 +24,16 @@
  */
 package de.alpharogroup.file.read;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import de.alpharogroup.file.FileConst;
+import de.alpharogroup.io.StreamExtensions;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
-
-import de.alpharogroup.file.FileConst;
-import de.alpharogroup.io.StreamExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ReadFileExtensions} helps you reading files.
@@ -53,9 +41,12 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class ReadFileExtensions
 {
+
+	private ReadFileExtensions()
+	{
+	}
 
 	/**
 	 * Get a Byte array from the given file.

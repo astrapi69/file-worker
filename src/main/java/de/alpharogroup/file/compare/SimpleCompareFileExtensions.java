@@ -24,20 +24,24 @@
  */
 package de.alpharogroup.file.compare;
 
+import de.alpharogroup.checksum.FileChecksumExtensions;
+import de.alpharogroup.crypto.algorithm.Algorithm;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-import de.alpharogroup.crypto.algorithm.Algorithm;
-import de.alpharogroup.crypto.file.checksum.FileChecksumExtensions;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link SimpleCompareFileExtensions}.
  */
-@UtilityClass
 public final class SimpleCompareFileExtensions
 {
+
+	private SimpleCompareFileExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
 
 	/**
 	 * Compare files by absolute path.

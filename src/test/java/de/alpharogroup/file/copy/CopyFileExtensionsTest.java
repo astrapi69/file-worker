@@ -782,7 +782,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CopyFileExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

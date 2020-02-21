@@ -10,10 +10,13 @@ ADDED:
 - created file gradle.properties
 - new dependency jobj-compare in version 3.2 added
 - new dependency throw-able in version 1.2 added
+- new dependency checksum-up in version 1 added
 - new test method for copy run configurations files from one source project to another target project and modifies its content
 
 CHANGED:
 
+- removed lombok dependency
+- removed all lombok dependent imports
 - removed idea run configurations for maven
 - moved dependency versions to file gradle.properties
 - update of silly-strings dependency version to 5.4

@@ -24,15 +24,14 @@
  */
 package de.alpharogroup.file.search;
 
+import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.regex.RegExExtensions;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
-
-import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.regex.RegExExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link FileSearchExtensions} provides methods for searching in directories.
@@ -40,9 +39,12 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class FileSearchExtensions
 {
+	private FileSearchExtensions()
+	{
+	}
+
 	/**
 	 * Checks if the given file contains only in the parent file, not in the subdirectories.
 	 *

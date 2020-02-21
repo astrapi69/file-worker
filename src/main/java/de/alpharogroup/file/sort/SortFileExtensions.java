@@ -24,6 +24,9 @@
  */
 package de.alpharogroup.file.sort;
 
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.file.write.WriteFileExtensions;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,16 +34,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.write.WriteFileExtensions;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link SortFileExtensions} provides algorithms for sort file content.
  */
-@UtilityClass
-public class SortFileExtensions
+public final class SortFileExtensions
 {
+
+	private SortFileExtensions()
+	{
+	}
 
 	/**
 	 * Sort the file content from the given {@link File}.

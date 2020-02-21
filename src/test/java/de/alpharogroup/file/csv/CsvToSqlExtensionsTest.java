@@ -211,7 +211,7 @@ public class CsvToSqlExtensionsTest
 	/**
 	 * Test method for {@link CsvToSqlExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

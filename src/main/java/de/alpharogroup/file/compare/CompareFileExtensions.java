@@ -24,23 +24,18 @@
  */
 package de.alpharogroup.file.compare;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-
+import de.alpharogroup.checksum.FileChecksumExtensions;
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.crypto.file.checksum.FileChecksumExtensions;
 import de.alpharogroup.file.FileExtensions;
 import de.alpharogroup.file.compare.api.IFileCompareResultBean;
 import de.alpharogroup.file.compare.api.IFileContentResultBean;
 import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.io.StreamExtensions;
-import lombok.experimental.UtilityClass;
+
+import java.io.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class {@link CompareFileExtensions} helps you to compare files.
@@ -48,9 +43,12 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class CompareFileExtensions
 {
+
+	private CompareFileExtensions()
+	{
+	}
 
 	/**
 	 * Sets the flags in the FileCompareResultBean object according to the given boolean flag what

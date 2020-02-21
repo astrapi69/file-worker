@@ -263,7 +263,7 @@ public class ZipExtensionsTest extends ZipTestCase
 	/**
 	 * Test method for {@link ZipExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

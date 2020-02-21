@@ -130,7 +130,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link Zip4jExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

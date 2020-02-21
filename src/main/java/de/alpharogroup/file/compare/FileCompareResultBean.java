@@ -24,12 +24,9 @@
  */
 package de.alpharogroup.file.compare;
 
-import java.io.File;
-
 import de.alpharogroup.file.compare.api.IFileCompareResultBean;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.ToString;
+
+import java.io.File;
 
 /**
  * The class FileCompareResultBean is pojo for comparing two files.
@@ -37,9 +34,6 @@ import lombok.ToString;
  * @version 1.0
  * @author Asterios Raptis
  */
-@Setter
-@EqualsAndHashCode
-@ToString
 public class FileCompareResultBean implements IFileCompareResultBean
 {
 
@@ -226,4 +220,104 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		this.nameEquality = nameEquality;
 	}
 
+	public void setCompare(File compare)
+	{
+		this.compare = compare;
+	}
+
+	public void setSource(File source)
+	{
+		this.source = source;
+	}
+
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof FileCompareResultBean))
+			return false;
+		final FileCompareResultBean other = (FileCompareResultBean)o;
+		if (!other.canEqual((Object)this))
+			return false;
+		final Object this$absolutePathEquality = this.getAbsolutePathEquality();
+		final Object other$absolutePathEquality = other.getAbsolutePathEquality();
+		if (this$absolutePathEquality == null ?
+			other$absolutePathEquality != null :
+			!this$absolutePathEquality.equals(other$absolutePathEquality))
+			return false;
+		final Object this$compare = this.compare;
+		final Object other$compare = other.compare;
+		if (this$compare == null ? other$compare != null : !this$compare.equals(other$compare))
+			return false;
+		final Object this$fileExtensionEquality = this.getFileExtensionEquality();
+		final Object other$fileExtensionEquality = other.getFileExtensionEquality();
+		if (this$fileExtensionEquality == null ?
+			other$fileExtensionEquality != null :
+			!this$fileExtensionEquality.equals(other$fileExtensionEquality))
+			return false;
+		final Object this$lastModifiedEquality = this.getLastModifiedEquality();
+		final Object other$lastModifiedEquality = other.getLastModifiedEquality();
+		if (this$lastModifiedEquality == null ?
+			other$lastModifiedEquality != null :
+			!this$lastModifiedEquality.equals(other$lastModifiedEquality))
+			return false;
+		final Object this$lengthEquality = this.getLengthEquality();
+		final Object other$lengthEquality = other.getLengthEquality();
+		if (this$lengthEquality == null ?
+			other$lengthEquality != null :
+			!this$lengthEquality.equals(other$lengthEquality))
+			return false;
+		final Object this$nameEquality = this.getNameEquality();
+		final Object other$nameEquality = other.getNameEquality();
+		if (this$nameEquality == null ?
+			other$nameEquality != null :
+			!this$nameEquality.equals(other$nameEquality))
+			return false;
+		final Object this$source = this.source;
+		final Object other$source = other.source;
+		if (this$source == null ? other$source != null : !this$source.equals(other$source))
+			return false;
+		return true;
+	}
+
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof FileCompareResultBean;
+	}
+
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = 1;
+		final Object $absolutePathEquality = this.getAbsolutePathEquality();
+		result = result * PRIME + ($absolutePathEquality == null ?
+			43 :
+			$absolutePathEquality.hashCode());
+		final Object $compare = this.compare;
+		result = result * PRIME + ($compare == null ? 43 : $compare.hashCode());
+		final Object $fileExtensionEquality = this.getFileExtensionEquality();
+		result = result * PRIME + ($fileExtensionEquality == null ?
+			43 :
+			$fileExtensionEquality.hashCode());
+		final Object $lastModifiedEquality = this.getLastModifiedEquality();
+		result = result * PRIME + ($lastModifiedEquality == null ?
+			43 :
+			$lastModifiedEquality.hashCode());
+		final Object $lengthEquality = this.getLengthEquality();
+		result = result * PRIME + ($lengthEquality == null ? 43 : $lengthEquality.hashCode());
+		final Object $nameEquality = this.getNameEquality();
+		result = result * PRIME + ($nameEquality == null ? 43 : $nameEquality.hashCode());
+		final Object $source = this.source;
+		result = result * PRIME + ($source == null ? 43 : $source.hashCode());
+		return result;
+	}
+
+	public String toString()
+	{
+		return "FileCompareResultBean(absolutePathEquality=" + this.getAbsolutePathEquality()
+			+ ", compare=" + this.compare + ", fileExtensionEquality=" + this
+			.getFileExtensionEquality() + ", lastModifiedEquality=" + this.getLastModifiedEquality()
+			+ ", lengthEquality=" + this.getLengthEquality() + ", nameEquality=" + this
+			.getNameEquality() + ", source=" + this.source + ")";
+	}
 }

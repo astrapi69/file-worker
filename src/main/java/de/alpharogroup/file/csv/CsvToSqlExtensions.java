@@ -28,14 +28,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link CsvToSqlExtensions}.
  */
-@UtilityClass
 public final class CsvToSqlExtensions
 {
+
+	private CsvToSqlExtensions()
+	{
+	}
 
 	/**
 	 * Extract sql columns.

@@ -325,7 +325,7 @@ public class FileFactoryTest extends FileTestCase
 	/**
 	 * Test method for {@link FileFactory}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

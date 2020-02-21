@@ -24,22 +24,24 @@
  */
 package de.alpharogroup.file.zip;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
-import lombok.experimental.UtilityClass;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The class {@link Zip4jExtensions}.
  */
-@UtilityClass
 public final class Zip4jExtensions
 {
+
+	private Zip4jExtensions()
+	{
+	}
 
 	/**
 	 * Extract.

@@ -24,25 +24,12 @@
  */
 package de.alpharogroup.file.csv;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
-
 import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
-import lombok.experimental.UtilityClass;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Utility class for the use of cvs-files.
@@ -50,9 +37,12 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class CsvFileExtensions
 {
+
+	private CsvFileExtensions()
+	{
+	}
 
 	/**
 	 * Reads every line from the File splits the data through a comma and puts them to the List.

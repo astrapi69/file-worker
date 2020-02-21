@@ -29,36 +29,20 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.FieldDefaults;
-
 /**
  * The class {@link Unzipper}
  *
  * @author Asterios Raptis
  * @version 1.0
  */
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder(toBuilder = true)
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Unzipper
 {
 
 	/** The to dir. */
-	File toDir;
+	private File toDir;
 
 	/** The zip file. */
-	ZipFile zipFile;
+	private ZipFile zipFile;
 
 	/**
 	 * Instantiates a new unzipper.
@@ -72,6 +56,21 @@ public class Unzipper
 	{
 		this.zipFile = zipFile;
 		this.toDir = toDir;
+	}
+
+	public Unzipper(File toDir, ZipFile zipFile)
+	{
+		this.toDir = toDir;
+		this.zipFile = zipFile;
+	}
+
+	public Unzipper()
+	{
+	}
+
+	public static UnzipperBuilder builder()
+	{
+		return new UnzipperBuilder();
 	}
 
 	/**
@@ -118,4 +117,66 @@ public class Unzipper
 		ZipExtensions.unzip(zipFile, toDir);
 	}
 
+	public File getToDir()
+	{
+		return this.toDir;
+	}
+
+	public ZipFile getZipFile()
+	{
+		return this.zipFile;
+	}
+
+	public void setToDir(File toDir)
+	{
+		this.toDir = toDir;
+	}
+
+	public void setZipFile(ZipFile zipFile)
+	{
+		this.zipFile = zipFile;
+	}
+
+	public String toString()
+	{
+		return "Unzipper(toDir=" + this.getToDir() + ", zipFile=" + this.getZipFile() + ")";
+	}
+
+	public UnzipperBuilder toBuilder()
+	{
+		return new UnzipperBuilder().toDir(this.toDir).zipFile(this.zipFile);
+	}
+
+	public static class UnzipperBuilder
+	{
+		private File toDir;
+		private ZipFile zipFile;
+
+		UnzipperBuilder()
+		{
+		}
+
+		public Unzipper.UnzipperBuilder toDir(File toDir)
+		{
+			this.toDir = toDir;
+			return this;
+		}
+
+		public Unzipper.UnzipperBuilder zipFile(ZipFile zipFile)
+		{
+			this.zipFile = zipFile;
+			return this;
+		}
+
+		public Unzipper build()
+		{
+			return new Unzipper(toDir, zipFile);
+		}
+
+		public String toString()
+		{
+			return "Unzipper.UnzipperBuilder(toDir=" + this.toDir + ", zipFile=" + this.zipFile
+				+ ")";
+		}
+	}
 }

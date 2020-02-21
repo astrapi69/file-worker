@@ -24,30 +24,13 @@
  */
 package de.alpharogroup.file.write;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
+import de.alpharogroup.file.FileConst;
+import de.alpharogroup.io.StreamExtensions;
+
+import java.io.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
-
-import de.alpharogroup.file.FileConst;
-import de.alpharogroup.io.StreamExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link WriteFileExtensions} provides methods for writing in files.
@@ -55,10 +38,13 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class WriteFileExtensions
 {
 
+
+	private WriteFileExtensions()
+	{
+	}
 
 	/**
 	 * The Method writeProperties2File(String, Properties) writes the Properties to the file.

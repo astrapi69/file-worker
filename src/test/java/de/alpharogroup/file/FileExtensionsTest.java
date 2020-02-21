@@ -181,7 +181,7 @@ public class FileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

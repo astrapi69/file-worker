@@ -39,7 +39,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.file.checksum.FileChecksumExtensions;
+import de.alpharogroup.checksum.FileChecksumExtensions;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
@@ -80,7 +80,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link WriteFileExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

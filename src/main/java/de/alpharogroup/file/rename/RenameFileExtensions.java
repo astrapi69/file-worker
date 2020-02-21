@@ -24,6 +24,14 @@
  */
 package de.alpharogroup.file.rename;
 
+import de.alpharogroup.file.FileExtensions;
+import de.alpharogroup.file.copy.CopyFileExtensions;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileIsADirectoryException;
+import de.alpharogroup.file.exceptions.FileNotRenamedException;
+import de.alpharogroup.file.search.FileSearchExtensions;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -32,24 +40,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.alpharogroup.file.FileExtensions;
-import de.alpharogroup.file.copy.CopyFileExtensions;
-import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.exceptions.FileIsADirectoryException;
-import de.alpharogroup.file.exceptions.FileNotRenamedException;
-import de.alpharogroup.file.search.FileSearchExtensions;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
  *
  * @author Asterios Raptis
  * @version 1.0
  */
-@UtilityClass
 public final class RenameFileExtensions
 {
+
+	private RenameFileExtensions()
+	{
+	}
 
 	/**
 	 * Returns the filename from the given file with the systemtime.

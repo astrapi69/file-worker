@@ -24,14 +24,11 @@
  */
 package de.alpharogroup.file.zip;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
+import de.alpharogroup.file.FileConst;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.search.FileSearchExtensions;
+
+import java.io.*;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -39,20 +36,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import de.alpharogroup.file.FileConst;
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.search.FileSearchExtensions;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link ZipExtensions} provides functionality for ziping and unzipping files.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class ZipExtensions
 {
+
+	private ZipExtensions()
+	{
+	}
 
 	/**
 	 * Adds the file.

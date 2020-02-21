@@ -24,15 +24,14 @@
  */
 package de.alpharogroup.file;
 
+import de.alpharogroup.file.read.ReadFileExtensions;
+import de.alpharogroup.io.file.FilenameExtensions;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.channels.FileLock;
-
-import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.io.file.FilenameExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for the use of File object.
@@ -40,12 +39,15 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class FileExtensions
 {
 
 	/** The Constant VELOCITY_TEMPLATE_FILE_EXTENSION. */
 	public static final String VELOCITY_TEMPLATE_FILE_EXTENSION = ".vm";
+
+	private FileExtensions()
+	{
+	}
 
 	/**
 	 * Downloads Data from the given URI.

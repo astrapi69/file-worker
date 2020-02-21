@@ -24,21 +24,6 @@
  */
 package de.alpharogroup.file.copy;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
@@ -48,14 +33,23 @@ import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.io.file.FileExtension;
 import de.alpharogroup.throwable.ThrowableExtensions;
-import lombok.experimental.UtilityClass;
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * The class {@link CopyFileExtensions} helps you to copy files or directories.
  */
-@UtilityClass
 public final class CopyFileExtensions
 {
+
+	private CopyFileExtensions()
+	{
+	}
 
 	/**
 	 * Copies the given source directory to the given destination directory.

@@ -24,6 +24,13 @@
  */
 package de.alpharogroup.file.delete;
 
+import de.alpharogroup.file.exceptions.DirectoryHasNoContentException;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
+import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
+import de.alpharogroup.file.search.FileSearchExtensions;
+import lombok.NonNull;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -32,23 +39,18 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import de.alpharogroup.file.exceptions.DirectoryHasNoContentException;
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
-import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
-import de.alpharogroup.file.search.FileSearchExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link DeleteFileExtensions} helps you delete files.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class DeleteFileExtensions
 {
+	private DeleteFileExtensions()
+	{
+	}
+
 	/**
 	 * Checks the File if it is a directory or if its exists or if it is empty.
 	 *

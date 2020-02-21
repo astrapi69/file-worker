@@ -29,12 +29,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The class PathFinder is a helper class for getting source folders from maven projects.
  */
-@UtilityClass
 public final class PathFinder
 {
 	/**
@@ -66,6 +63,10 @@ public final class PathFinder
 	 * 'src/test/java' in maven projects.
 	 */
 	public static final String SOURCE_FOLDER_SRC_TEST_JAVA = "src/test/java";
+
+	private PathFinder()
+	{
+	}
 
 	/**
 	 * Gets the absolute path.

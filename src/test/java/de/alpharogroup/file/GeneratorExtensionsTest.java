@@ -99,7 +99,7 @@ public class GeneratorExtensionsTest
 	/**
 	 * Test method for {@link GeneratorExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
