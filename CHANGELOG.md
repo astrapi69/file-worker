@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 5.5-SNAPSHOT
+Version 5.5
 -------------
 
 ADDED:
@@ -19,11 +19,13 @@ CHANGED:
 - removed all lombok dependent imports
 - removed idea run configurations for maven
 - moved dependency versions to file gradle.properties
-- update of silly-strings dependency version to 5.4
-- update of silly-collections dependency version to 5.9
-- update of mystic-crypt dependency version to 7.3
-- update of junit dependency version to 4.13
-- update of mockito-core dependency version to 3.2.4
+- update of silly-strings dependency version to 5.5
+- update of silly-io dependency version to 1.2
+- update of silly-collections dependency version to 8
+- update of crypt-api dependency version to 7.3
+- removed of mystic-crypt dependency
+- removed of junit dependency
+- removed of mockito-core dependency
 
 Version 5.4
 -------------
