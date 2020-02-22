@@ -24,17 +24,24 @@
  */
 package de.alpharogroup.file.zip;
 
-import de.alpharogroup.file.FileConst;
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.search.FileSearchExtensions;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
+import de.alpharogroup.file.FileConst;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.search.FileSearchExtensions;
 
 /**
  * The class {@link ZipExtensions} provides functionality for ziping and unzipping files.
@@ -44,10 +51,6 @@ import java.util.zip.ZipOutputStream;
  */
 public final class ZipExtensions
 {
-
-	private ZipExtensions()
-	{
-	}
 
 	/**
 	 * Adds the file.
@@ -70,13 +73,6 @@ public final class ZipExtensions
 		zos.putNextEntry(cpZipEntry);
 		zos.write(b, 0, (int)file.length());
 		zos.closeEntry();
-	}
-
-	private static String getZipEntryName(File file, File dirToZip)
-	{
-		final String absolutePath = file.getAbsolutePath();
-		final int index = absolutePath.indexOf(dirToZip.getName());
-		return absolutePath.substring(index, absolutePath.length());
 	}
 
 	/**
@@ -108,6 +104,29 @@ public final class ZipExtensions
 			}
 			bos.flush();
 		}
+	}
+
+	static List<File> getFoundedFiles(File file, File[] tmpfList)
+	{
+		List<File> foundedFiles;
+		final List<File> foundedDirs = FileSearchExtensions.listDirs(file);
+		if (0 < foundedDirs.size())
+		{
+			foundedDirs.addAll(Arrays.asList(tmpfList));
+			foundedFiles = foundedDirs;
+		}
+		else
+		{
+			foundedFiles = Arrays.asList(tmpfList);
+		}
+		return foundedFiles;
+	}
+
+	private static String getZipEntryName(File file, File dirToZip)
+	{
+		final String absolutePath = file.getAbsolutePath();
+		final int index = absolutePath.indexOf(dirToZip.getName());
+		return absolutePath.substring(index, absolutePath.length());
 	}
 
 	/**
@@ -287,20 +306,8 @@ public final class ZipExtensions
 		}
 	}
 
-	static List<File> getFoundedFiles(File file, File[] tmpfList)
+	private ZipExtensions()
 	{
-		List<File> foundedFiles;
-		final List<File> foundedDirs = FileSearchExtensions.listDirs(file);
-		if (0 < foundedDirs.size())
-		{
-			foundedDirs.addAll(Arrays.asList(tmpfList));
-			foundedFiles = foundedDirs;
-		}
-		else
-		{
-			foundedFiles = Arrays.asList(tmpfList);
-		}
-		return foundedFiles;
 	}
 
 }

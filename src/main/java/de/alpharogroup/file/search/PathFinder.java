@@ -35,10 +35,10 @@ import java.util.List;
 public final class PathFinder
 {
 	/**
-	 * The Constant SOURCE_FOLDER_SRC_MAIN_WEBAPP keeps the relative path for the source folder
-	 * 'src/main/webapp' in maven projects.
+	 * The Constant SOURCE_FOLDER_SRC_MAIN_JAVA keeps the relative path for the source folder
+	 * 'src/main/java' in maven projects.
 	 */
-	public static final String SOURCE_FOLDER_SRC_MAIN_WEBAPP = "src/main/webapp";
+	public static final String SOURCE_FOLDER_SRC_MAIN_JAVA = "src/main/java";
 
 	/**
 	 * The Constant SOURCE_FOLDER_SRC_MAIN_RESOURCES keeps the relative path for the source folder
@@ -47,16 +47,10 @@ public final class PathFinder
 	public static final String SOURCE_FOLDER_SRC_MAIN_RESOURCES = "src/main/resources";
 
 	/**
-	 * The Constant SOURCE_FOLDER_SRC_MAIN_JAVA keeps the relative path for the source folder
-	 * 'src/main/java' in maven projects.
+	 * The Constant SOURCE_FOLDER_SRC_MAIN_WEBAPP keeps the relative path for the source folder
+	 * 'src/main/webapp' in maven projects.
 	 */
-	public static final String SOURCE_FOLDER_SRC_MAIN_JAVA = "src/main/java";
-
-	/**
-	 * The Constant SOURCE_FOLDER_SRC_TEST_RESOURCES keeps the relative path for the source folder
-	 * 'src/test/resources' in maven projects.
-	 */
-	public static final String SOURCE_FOLDER_SRC_TEST_RESOURCES = "src/test/resources";
+	public static final String SOURCE_FOLDER_SRC_MAIN_WEBAPP = "src/main/webapp";
 
 	/**
 	 * The Constant SOURCE_FOLDER_SRC_TEST_JAVA keeps the relative path for the source folder
@@ -64,9 +58,11 @@ public final class PathFinder
 	 */
 	public static final String SOURCE_FOLDER_SRC_TEST_JAVA = "src/test/java";
 
-	private PathFinder()
-	{
-	}
+	/**
+	 * The Constant SOURCE_FOLDER_SRC_TEST_RESOURCES keeps the relative path for the source folder
+	 * 'src/test/resources' in maven projects.
+	 */
+	public static final String SOURCE_FOLDER_SRC_TEST_RESOURCES = "src/test/resources";
 
 	/**
 	 * Gets the absolute path.
@@ -193,7 +189,6 @@ public final class PathFinder
 		return new File(projectDirectory, PathFinder.SOURCE_FOLDER_SRC_MAIN_JAVA);
 	}
 
-
 	/**
 	 * Gets the src main resources dir.
 	 *
@@ -203,6 +198,7 @@ public final class PathFinder
 	{
 		return new File(getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_MAIN_RESOURCES);
 	}
+
 
 	/**
 	 * Gets the src main resources dir.
@@ -216,7 +212,6 @@ public final class PathFinder
 		return new File(projectDirectory, PathFinder.SOURCE_FOLDER_SRC_MAIN_RESOURCES);
 	}
 
-
 	/**
 	 * Gets the src test java dir.
 	 *
@@ -226,6 +221,7 @@ public final class PathFinder
 	{
 		return new File(getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_TEST_JAVA);
 	}
+
 
 	/**
 	 * Gets the src test java dir.
@@ -259,6 +255,10 @@ public final class PathFinder
 	public static File getSrcTestResourcesDir(final File projectDirectory)
 	{
 		return new File(projectDirectory, PathFinder.SOURCE_FOLDER_SRC_TEST_RESOURCES);
+	}
+
+	private PathFinder()
+	{
 	}
 
 }

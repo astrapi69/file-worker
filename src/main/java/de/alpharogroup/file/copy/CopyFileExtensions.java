@@ -24,6 +24,21 @@
  */
 package de.alpharogroup.file.copy;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import de.alpharogroup.file.FileConst;
 import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
@@ -34,22 +49,11 @@ import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.io.file.FileExtension;
 import de.alpharogroup.throwable.ThrowableExtensions;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * The class {@link CopyFileExtensions} helps you to copy files or directories.
  */
 public final class CopyFileExtensions
 {
-
-	private CopyFileExtensions()
-	{
-	}
 
 	/**
 	 * Copies the given source directory to the given destination directory.
@@ -568,7 +572,6 @@ public final class CopyFileExtensions
 		return copied;
 	}
 
-
 	/**
 	 * Copies the given source file to the given destination file with the given source encodings
 	 * and destination encodings.
@@ -582,15 +585,13 @@ public final class CopyFileExtensions
 	 * @param destinationEncoding
 	 *            the destination encoding
 	 * @param lastModified
-	 *            if true the last modified flag is set.
-	 * @return true if the given file is copied otherwise false.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *            if true the last modified flag is set
 	 */
 	public static void copyFiles(final List<File> sources, final File destination,
 		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
 	{
-		if(!destination.exists()) {
+		if (!destination.exists())
+		{
 			FileFactory.newDirectory(destination);
 		}
 		sources.stream().forEach(ThrowableExtensions.toRuntimeExceptionIfNeeded(file -> {
@@ -599,6 +600,7 @@ public final class CopyFileExtensions
 				lastModified);
 		}));
 	}
+
 
 	/**
 	 * Copies the given source file to the given destination directory.
@@ -683,6 +685,10 @@ public final class CopyFileExtensions
 		final File backup = new File(file.getAbsolutePath() + FileExtension.BACKUP.getExtension());
 		CopyFileExtensions.copyFile(file, backup, sourceEncoding, destinationEncoding, true);
 		return backup;
+	}
+
+	private CopyFileExtensions()
+	{
 	}
 
 }

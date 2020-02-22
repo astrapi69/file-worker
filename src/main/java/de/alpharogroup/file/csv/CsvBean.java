@@ -24,16 +24,16 @@
  */
 package de.alpharogroup.file.csv;
 
-import de.alpharogroup.collections.CollectionExtensions;
-import de.alpharogroup.collections.array.ArrayExtensions;
-import de.alpharogroup.collections.list.ListExtensions;
-import de.alpharogroup.collections.list.ListFactory;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.alpharogroup.collections.CollectionExtensions;
+import de.alpharogroup.collections.array.ArrayExtensions;
+import de.alpharogroup.collections.list.ListExtensions;
+import de.alpharogroup.collections.list.ListFactory;
 
 /**
  * The class {@link CsvBean}.
@@ -41,8 +41,70 @@ import java.util.Map;
 public class CsvBean implements Serializable, Cloneable
 {
 
+	public static class CsvBeanBuilder
+	{
+		private String[] columnTypes;
+		private String[] columnTypesEdit;
+		private String[] headers;
+		private Map<Integer, Integer> lineOrder;
+		private List<String[]> lines;
+
+		CsvBeanBuilder()
+		{
+		}
+
+		public CsvBean build()
+		{
+			return new CsvBean(columnTypes, columnTypesEdit, headers, lineOrder, lines);
+		}
+
+		public CsvBean.CsvBeanBuilder columnTypes(String[] columnTypes)
+		{
+			this.columnTypes = columnTypes;
+			return this;
+		}
+
+		public CsvBean.CsvBeanBuilder columnTypesEdit(String[] columnTypesEdit)
+		{
+			this.columnTypesEdit = columnTypesEdit;
+			return this;
+		}
+
+		public CsvBean.CsvBeanBuilder headers(String[] headers)
+		{
+			this.headers = headers;
+			return this;
+		}
+
+		public CsvBean.CsvBeanBuilder lineOrder(Map<Integer, Integer> lineOrder)
+		{
+			this.lineOrder = lineOrder;
+			return this;
+		}
+
+		public CsvBean.CsvBeanBuilder lines(List<String[]> lines)
+		{
+			this.lines = lines;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "CsvBean.CsvBeanBuilder(columnTypes=" + Arrays.deepToString(this.columnTypes)
+				+ ", columnTypesEdit=" + Arrays.deepToString(this.columnTypesEdit) + ", headers="
+				+ Arrays.deepToString(this.headers) + ", lineOrder=" + this.lineOrder + ", lines="
+				+ this.lines + ")";
+		}
+	}
+
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1648936246997896598L;
+
+	public static CsvBeanBuilder builder()
+	{
+		return new CsvBeanBuilder();
+	}
 
 	/** The column types. */
 	private String[] columnTypes;
@@ -50,15 +112,19 @@ public class CsvBean implements Serializable, Cloneable
 	/** The column types edit. */
 	private String[] columnTypesEdit;
 
+
 	/** The headers. */
 	private String[] headers;
 
 	/** The line order. */
 	private Map<Integer, Integer> lineOrder;
 
-
 	/** The lines. */
 	private List<String[]> lines;
+
+	public CsvBean()
+	{
+	}
 
 	/**
 	 * Instantiates a new {@link CsvBean} object.
@@ -106,15 +172,6 @@ public class CsvBean implements Serializable, Cloneable
 		this.headers = headers;
 		this.lineOrder = lineOrder;
 		this.lines = lines;
-	}
-
-	public CsvBean()
-	{
-	}
-
-	public static CsvBeanBuilder builder()
-	{
-		return new CsvBeanBuilder();
 	}
 
 	/**
@@ -166,20 +223,6 @@ public class CsvBean implements Serializable, Cloneable
 		return headersEquality && columnTypesEquality && linesEquality;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int hashCode()
-	{
-		int hashCode = 1;
-		final int prime = 31;
-		hashCode = prime * hashCode + Arrays.hashCode(columnTypes);
-		hashCode = prime * hashCode + Arrays.hashCode(headers);
-		hashCode = prime * hashCode * CollectionExtensions.hashCode(lines);
-		return hashCode;
-	}
-
 	public String[] getColumnTypes()
 	{
 		return this.columnTypes;
@@ -203,6 +246,20 @@ public class CsvBean implements Serializable, Cloneable
 	public List<String[]> getLines()
 	{
 		return this.lines;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int hashCode()
+	{
+		int hashCode = 1;
+		final int prime = 31;
+		hashCode = prime * hashCode + Arrays.hashCode(columnTypes);
+		hashCode = prime * hashCode + Arrays.hashCode(headers);
+		hashCode = prime * hashCode * CollectionExtensions.hashCode(lines);
+		return hashCode;
 	}
 
 	public void setColumnTypes(String[] columnTypes)
@@ -230,14 +287,6 @@ public class CsvBean implements Serializable, Cloneable
 		this.lines = lines;
 	}
 
-	public String toString()
-	{
-		return "CsvBean(columnTypes=" + Arrays.deepToString(this.getColumnTypes())
-			+ ", columnTypesEdit=" + Arrays.deepToString(this.getColumnTypesEdit()) + ", headers="
-			+ Arrays.deepToString(this.getHeaders()) + ", lineOrder=" + this.getLineOrder()
-			+ ", lines=" + this.getLines() + ")";
-	}
-
 	public CsvBeanBuilder toBuilder()
 	{
 		return new CsvBeanBuilder().columnTypes(this.columnTypes)
@@ -245,59 +294,12 @@ public class CsvBean implements Serializable, Cloneable
 			.lines(this.lines);
 	}
 
-	public static class CsvBeanBuilder
+	@Override
+	public String toString()
 	{
-		private String[] columnTypes;
-		private String[] columnTypesEdit;
-		private String[] headers;
-		private Map<Integer, Integer> lineOrder;
-		private List<String[]> lines;
-
-		CsvBeanBuilder()
-		{
-		}
-
-		public CsvBean.CsvBeanBuilder columnTypes(String[] columnTypes)
-		{
-			this.columnTypes = columnTypes;
-			return this;
-		}
-
-		public CsvBean.CsvBeanBuilder columnTypesEdit(String[] columnTypesEdit)
-		{
-			this.columnTypesEdit = columnTypesEdit;
-			return this;
-		}
-
-		public CsvBean.CsvBeanBuilder headers(String[] headers)
-		{
-			this.headers = headers;
-			return this;
-		}
-
-		public CsvBean.CsvBeanBuilder lineOrder(Map<Integer, Integer> lineOrder)
-		{
-			this.lineOrder = lineOrder;
-			return this;
-		}
-
-		public CsvBean.CsvBeanBuilder lines(List<String[]> lines)
-		{
-			this.lines = lines;
-			return this;
-		}
-
-		public CsvBean build()
-		{
-			return new CsvBean(columnTypes, columnTypesEdit, headers, lineOrder, lines);
-		}
-
-		public String toString()
-		{
-			return "CsvBean.CsvBeanBuilder(columnTypes=" + Arrays.deepToString(this.columnTypes)
-				+ ", columnTypesEdit=" + Arrays.deepToString(this.columnTypesEdit) + ", headers="
-				+ Arrays.deepToString(this.headers) + ", lineOrder=" + this.lineOrder + ", lines="
-				+ this.lines + ")";
-		}
+		return "CsvBean(columnTypes=" + Arrays.deepToString(this.getColumnTypes())
+			+ ", columnTypesEdit=" + Arrays.deepToString(this.getColumnTypesEdit()) + ", headers="
+			+ Arrays.deepToString(this.getHeaders()) + ", lineOrder=" + this.getLineOrder()
+			+ ", lines=" + this.getLines() + ")";
 	}
 }

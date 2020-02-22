@@ -32,6 +32,10 @@ package de.alpharogroup.file.exceptions;
  */
 public class DirectoryAlreadyExistsException extends Exception
 {
+	public DirectoryAlreadyExistsException()
+	{
+	}
+
 	/**
 	 * Constructs a new DirectoryAlreadyExistsException with the specified detail message.
 	 *
@@ -66,9 +70,5 @@ public class DirectoryAlreadyExistsException extends Exception
 	public DirectoryAlreadyExistsException(final Throwable cause)
 	{
 		super(cause);
-	}
-
-	public DirectoryAlreadyExistsException()
-	{
 	}
 }

@@ -34,10 +34,6 @@ import java.util.Map;
 public final class CsvToSqlExtensions
 {
 
-	private CsvToSqlExtensions()
-	{
-	}
-
 	/**
 	 * Extract sql columns.
 	 *
@@ -116,7 +112,6 @@ public final class CsvToSqlExtensions
 		return sb.toString();
 	}
 
-
 	/**
 	 * Gets the csv file as sql insert script.
 	 *
@@ -135,6 +130,7 @@ public final class CsvToSqlExtensions
 	{
 		return getCsvFileAsSqlInsertScript(tableName, new CsvBean(headers, columnTypes, lines));
 	}
+
 
 	/**
 	 * Gets the csv file as sql insert script.
@@ -308,6 +304,10 @@ public final class CsvToSqlExtensions
 			}
 		}
 		return sb;
+	}
+
+	private CsvToSqlExtensions()
+	{
 	}
 
 }

@@ -32,8 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

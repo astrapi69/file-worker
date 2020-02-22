@@ -24,14 +24,14 @@
  */
 package de.alpharogroup.file.search;
 
-import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.regex.RegExExtensions;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
+
+import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.regex.RegExExtensions;
 
 /**
  * The class {@link FileSearchExtensions} provides methods for searching in directories.
@@ -41,10 +41,6 @@ import java.util.Stack;
  */
 public final class FileSearchExtensions
 {
-	private FileSearchExtensions()
-	{
-	}
-
 	/**
 	 * Checks if the given file contains only in the parent file, not in the subdirectories.
 	 *
@@ -378,7 +374,6 @@ public final class FileSearchExtensions
 		return foundedFileList;
 	}
 
-
 	/**
 	 * Gets all the files from directory recursive.
 	 *
@@ -407,6 +402,7 @@ public final class FileSearchExtensions
 		return fileLength / 1024;
 	}
 
+
 	/**
 	 * Gets the file length from the given file in Megabytes.
 	 *
@@ -419,7 +415,6 @@ public final class FileSearchExtensions
 	{
 		return getFileLengthInKilobytes(dir) / 1024;
 	}
-
 
 	/**
 	 * Gets a regex search file pattern that can be used for searching files with a Matcher.
@@ -452,6 +447,7 @@ public final class FileSearchExtensions
 		}
 		return searchFilePatternPrefix + sb.toString().trim() + searchFilePatternSuffix;
 	}
+
 
 	/**
 	 * List the directories from the given file(directory).
@@ -499,6 +495,10 @@ public final class FileSearchExtensions
 			}
 		}
 		return false;
+	}
+
+	private FileSearchExtensions()
+	{
 	}
 
 }

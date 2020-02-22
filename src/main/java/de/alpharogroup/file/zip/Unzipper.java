@@ -38,11 +38,60 @@ import java.util.zip.ZipFile;
 public class Unzipper
 {
 
+	public static class UnzipperBuilder
+	{
+		private File toDir;
+		private ZipFile zipFile;
+
+		UnzipperBuilder()
+		{
+		}
+
+		public Unzipper build()
+		{
+			return new Unzipper(toDir, zipFile);
+		}
+
+		public Unzipper.UnzipperBuilder toDir(File toDir)
+		{
+			this.toDir = toDir;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "Unzipper.UnzipperBuilder(toDir=" + this.toDir + ", zipFile=" + this.zipFile
+				+ ")";
+		}
+
+		public Unzipper.UnzipperBuilder zipFile(ZipFile zipFile)
+		{
+			this.zipFile = zipFile;
+			return this;
+		}
+	}
+
+	public static UnzipperBuilder builder()
+	{
+		return new UnzipperBuilder();
+	}
+
 	/** The to dir. */
 	private File toDir;
 
 	/** The zip file. */
 	private ZipFile zipFile;
+
+	public Unzipper()
+	{
+	}
+
+	public Unzipper(File toDir, ZipFile zipFile)
+	{
+		this.toDir = toDir;
+		this.zipFile = zipFile;
+	}
 
 	/**
 	 * Instantiates a new unzipper.
@@ -56,21 +105,6 @@ public class Unzipper
 	{
 		this.zipFile = zipFile;
 		this.toDir = toDir;
-	}
-
-	public Unzipper(File toDir, ZipFile zipFile)
-	{
-		this.toDir = toDir;
-		this.zipFile = zipFile;
-	}
-
-	public Unzipper()
-	{
-	}
-
-	public static UnzipperBuilder builder()
-	{
-		return new UnzipperBuilder();
 	}
 
 	/**
@@ -89,6 +123,37 @@ public class Unzipper
 		final File toDirectory) throws IOException
 	{
 		ZipExtensions.extractZipEntry(zipFile, target, toDirectory);
+	}
+
+	public File getToDir()
+	{
+		return this.toDir;
+	}
+
+	public ZipFile getZipFile()
+	{
+		return this.zipFile;
+	}
+
+	public void setToDir(File toDir)
+	{
+		this.toDir = toDir;
+	}
+
+	public void setZipFile(ZipFile zipFile)
+	{
+		this.zipFile = zipFile;
+	}
+
+	public UnzipperBuilder toBuilder()
+	{
+		return new UnzipperBuilder().toDir(this.toDir).zipFile(this.zipFile);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Unzipper(toDir=" + this.getToDir() + ", zipFile=" + this.getZipFile() + ")";
 	}
 
 	/**
@@ -115,68 +180,5 @@ public class Unzipper
 	public void unzip(final ZipFile zipFile, final File toDir) throws IOException
 	{
 		ZipExtensions.unzip(zipFile, toDir);
-	}
-
-	public File getToDir()
-	{
-		return this.toDir;
-	}
-
-	public ZipFile getZipFile()
-	{
-		return this.zipFile;
-	}
-
-	public void setToDir(File toDir)
-	{
-		this.toDir = toDir;
-	}
-
-	public void setZipFile(ZipFile zipFile)
-	{
-		this.zipFile = zipFile;
-	}
-
-	public String toString()
-	{
-		return "Unzipper(toDir=" + this.getToDir() + ", zipFile=" + this.getZipFile() + ")";
-	}
-
-	public UnzipperBuilder toBuilder()
-	{
-		return new UnzipperBuilder().toDir(this.toDir).zipFile(this.zipFile);
-	}
-
-	public static class UnzipperBuilder
-	{
-		private File toDir;
-		private ZipFile zipFile;
-
-		UnzipperBuilder()
-		{
-		}
-
-		public Unzipper.UnzipperBuilder toDir(File toDir)
-		{
-			this.toDir = toDir;
-			return this;
-		}
-
-		public Unzipper.UnzipperBuilder zipFile(ZipFile zipFile)
-		{
-			this.zipFile = zipFile;
-			return this;
-		}
-
-		public Unzipper build()
-		{
-			return new Unzipper(toDir, zipFile);
-		}
-
-		public String toString()
-		{
-			return "Unzipper.UnzipperBuilder(toDir=" + this.toDir + ", zipFile=" + this.zipFile
-				+ ")";
-		}
 	}
 }

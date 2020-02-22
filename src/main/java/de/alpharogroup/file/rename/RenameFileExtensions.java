@@ -24,14 +24,6 @@
  */
 package de.alpharogroup.file.rename;
 
-import de.alpharogroup.file.FileExtensions;
-import de.alpharogroup.file.copy.CopyFileExtensions;
-import de.alpharogroup.file.delete.DeleteFileExtensions;
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.exceptions.FileIsADirectoryException;
-import de.alpharogroup.file.exceptions.FileNotRenamedException;
-import de.alpharogroup.file.search.FileSearchExtensions;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -39,6 +31,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import de.alpharogroup.file.FileExtensions;
+import de.alpharogroup.file.copy.CopyFileExtensions;
+import de.alpharogroup.file.delete.DeleteFileExtensions;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileIsADirectoryException;
+import de.alpharogroup.file.exceptions.FileNotRenamedException;
+import de.alpharogroup.file.search.FileSearchExtensions;
 
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
@@ -48,10 +48,6 @@ import java.util.List;
  */
 public final class RenameFileExtensions
 {
-
-	private RenameFileExtensions()
-	{
-	}
 
 	/**
 	 * Returns the filename from the given file with the systemtime.
@@ -380,6 +376,10 @@ public final class RenameFileExtensions
 		final File fileWithNewName = new File(fileToRename.getParent(), newFilenameWithSystemtime);
 		renameFile(fileToRename, fileWithNewName, true);
 		return fileWithNewName;
+	}
+
+	private RenameFileExtensions()
+	{
 	}
 
 

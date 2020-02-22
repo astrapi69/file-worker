@@ -24,24 +24,18 @@
  */
 package de.alpharogroup.file.compare;
 
-import de.alpharogroup.checksum.FileChecksumExtensions;
-import de.alpharogroup.crypto.algorithm.Algorithm;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+
+import de.alpharogroup.checksum.FileChecksumExtensions;
+import de.alpharogroup.crypto.algorithm.Algorithm;
 
 /**
  * The class {@link SimpleCompareFileExtensions}.
  */
 public final class SimpleCompareFileExtensions
 {
-
-	private SimpleCompareFileExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
-	}
 
 	/**
 	 * Compare files by absolute path.
@@ -202,6 +196,12 @@ public final class SimpleCompareFileExtensions
 		return CompareFileExtensions
 			.compareFiles(sourceFile, fileToCompare, true, true, true, true, false, true)
 			.getNameEquality();
+	}
+
+	private SimpleCompareFileExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
 	}
 
 }

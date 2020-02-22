@@ -6,11 +6,61 @@ import java.util.Properties;
 
 public class DependenciesData
 {
+	public static class DependenciesDataBuilder
+	{
+		private File buildGradle;
+		private Properties properties;
+		private List<String> versionStrings;
+
+		DependenciesDataBuilder()
+		{
+		}
+
+		public DependenciesData build()
+		{
+			return new DependenciesData(buildGradle, versionStrings, properties);
+		}
+
+		public DependenciesData.DependenciesDataBuilder buildGradle(File buildGradle)
+		{
+			this.buildGradle = buildGradle;
+			return this;
+		}
+
+		public DependenciesData.DependenciesDataBuilder properties(Properties properties)
+		{
+			this.properties = properties;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "DependenciesData.DependenciesDataBuilder(buildGradle=" + this.buildGradle
+				+ ", versionStrings=" + this.versionStrings + ", properties=" + this.properties
+				+ ")";
+		}
+
+		public DependenciesData.DependenciesDataBuilder versionStrings(List<String> versionStrings)
+		{
+			this.versionStrings = versionStrings;
+			return this;
+		}
+	}
+
 	public static final String BUILD_GRADLE_NAME = "build.gradle";
 	public static final String GRADLE_PROPERTIES_NAME = "gradle.properties";
+
+	public static DependenciesDataBuilder builder()
+	{
+		return new DependenciesDataBuilder();
+	}
+
 	File buildGradle;
-	List<String> versionStrings;
+
 	Properties properties;
+
+	List<String> versionStrings;
 
 	DependenciesData(File buildGradle, List<String> versionStrings, Properties properties)
 	{
@@ -19,41 +69,12 @@ public class DependenciesData
 		this.properties = properties;
 	}
 
-	public static DependenciesDataBuilder builder()
+	protected boolean canEqual(final Object other)
 	{
-		return new DependenciesDataBuilder();
+		return other instanceof DependenciesData;
 	}
 
-	public File getBuildGradle()
-	{
-		return this.buildGradle;
-	}
-
-	public List<String> getVersionStrings()
-	{
-		return this.versionStrings;
-	}
-
-	public Properties getProperties()
-	{
-		return this.properties;
-	}
-
-	public void setBuildGradle(File buildGradle)
-	{
-		this.buildGradle = buildGradle;
-	}
-
-	public void setVersionStrings(List<String> versionStrings)
-	{
-		this.versionStrings = versionStrings;
-	}
-
-	public void setProperties(Properties properties)
-	{
-		this.properties = properties;
-	}
-
+	@Override
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -61,34 +82,45 @@ public class DependenciesData
 		if (!(o instanceof DependenciesData))
 			return false;
 		final DependenciesData other = (DependenciesData)o;
-		if (!other.canEqual((Object)this))
+		if (!other.canEqual(this))
 			return false;
 		final Object this$buildGradle = this.getBuildGradle();
 		final Object other$buildGradle = other.getBuildGradle();
-		if (this$buildGradle == null ?
-			other$buildGradle != null :
-			!this$buildGradle.equals(other$buildGradle))
+		if (this$buildGradle == null
+			? other$buildGradle != null
+			: !this$buildGradle.equals(other$buildGradle))
 			return false;
 		final Object this$versionStrings = this.getVersionStrings();
 		final Object other$versionStrings = other.getVersionStrings();
-		if (this$versionStrings == null ?
-			other$versionStrings != null :
-			!this$versionStrings.equals(other$versionStrings))
+		if (this$versionStrings == null
+			? other$versionStrings != null
+			: !this$versionStrings.equals(other$versionStrings))
 			return false;
 		final Object this$properties = this.getProperties();
 		final Object other$properties = other.getProperties();
-		if (this$properties == null ?
-			other$properties != null :
-			!this$properties.equals(other$properties))
+		if (this$properties == null
+			? other$properties != null
+			: !this$properties.equals(other$properties))
 			return false;
 		return true;
 	}
 
-	protected boolean canEqual(final Object other)
+	public File getBuildGradle()
 	{
-		return other instanceof DependenciesData;
+		return this.buildGradle;
 	}
 
+	public Properties getProperties()
+	{
+		return this.properties;
+	}
+
+	public List<String> getVersionStrings()
+	{
+		return this.versionStrings;
+	}
+
+	@Override
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -102,50 +134,25 @@ public class DependenciesData
 		return result;
 	}
 
-	public String toString()
+	public void setBuildGradle(File buildGradle)
 	{
-		return "DependenciesData(buildGradle=" + this.getBuildGradle() + ", versionStrings=" + this
-			.getVersionStrings() + ", properties=" + this.getProperties() + ")";
+		this.buildGradle = buildGradle;
 	}
 
-	public static class DependenciesDataBuilder
+	public void setProperties(Properties properties)
 	{
-		private File buildGradle;
-		private List<String> versionStrings;
-		private Properties properties;
+		this.properties = properties;
+	}
 
-		DependenciesDataBuilder()
-		{
-		}
+	public void setVersionStrings(List<String> versionStrings)
+	{
+		this.versionStrings = versionStrings;
+	}
 
-		public DependenciesData.DependenciesDataBuilder buildGradle(File buildGradle)
-		{
-			this.buildGradle = buildGradle;
-			return this;
-		}
-
-		public DependenciesData.DependenciesDataBuilder versionStrings(List<String> versionStrings)
-		{
-			this.versionStrings = versionStrings;
-			return this;
-		}
-
-		public DependenciesData.DependenciesDataBuilder properties(Properties properties)
-		{
-			this.properties = properties;
-			return this;
-		}
-
-		public DependenciesData build()
-		{
-			return new DependenciesData(buildGradle, versionStrings, properties);
-		}
-
-		public String toString()
-		{
-			return "DependenciesData.DependenciesDataBuilder(buildGradle=" + this.buildGradle
-				+ ", versionStrings=" + this.versionStrings + ", properties=" + this.properties
-				+ ")";
-		}
+	@Override
+	public String toString()
+	{
+		return "DependenciesData(buildGradle=" + this.getBuildGradle() + ", versionStrings="
+			+ this.getVersionStrings() + ", properties=" + this.getProperties() + ")";
 	}
 }

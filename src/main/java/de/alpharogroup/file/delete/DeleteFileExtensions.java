@@ -24,12 +24,6 @@
  */
 package de.alpharogroup.file.delete;
 
-import de.alpharogroup.file.exceptions.DirectoryHasNoContentException;
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
-import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
-import de.alpharogroup.file.search.FileSearchExtensions;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
@@ -39,6 +33,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import de.alpharogroup.file.exceptions.DirectoryHasNoContentException;
+import de.alpharogroup.file.exceptions.FileDoesNotExistException;
+import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
+import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
+import de.alpharogroup.file.search.FileSearchExtensions;
+
 /**
  * The class {@link DeleteFileExtensions} helps you delete files.
  *
@@ -47,10 +47,6 @@ import java.util.Objects;
  */
 public final class DeleteFileExtensions
 {
-	private DeleteFileExtensions()
-	{
-	}
-
 	/**
 	 * Checks the File if it is a directory or if its exists or if it is empty.
 	 *
@@ -464,6 +460,10 @@ public final class DeleteFileExtensions
 			throw new FileIsSecurityRestrictedException(
 				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
+	}
+
+	private DeleteFileExtensions()
+	{
 	}
 
 }
