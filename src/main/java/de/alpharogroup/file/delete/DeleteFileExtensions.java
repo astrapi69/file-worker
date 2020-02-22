@@ -29,7 +29,6 @@ import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import lombok.NonNull;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -38,6 +37,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The class {@link DeleteFileExtensions} helps you delete files.
@@ -114,8 +114,9 @@ public final class DeleteFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void delete(final @NonNull File file) throws IOException
+	public static void delete(final File file) throws IOException
 	{
+		Objects.requireNonNull(file);
 		if (file.isDirectory())
 		{
 			DeleteFileExtensions.deleteAllFiles(file);
