@@ -32,8 +32,6 @@ import java.io.FilenameFilter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -263,7 +261,7 @@ public class ZipExtensionsTest extends ZipTestCase
 	/**
 	 * Test method for {@link ZipExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

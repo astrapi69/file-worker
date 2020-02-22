@@ -32,7 +32,6 @@ import java.nio.channels.FileLock;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.io.file.FilenameExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for the use of File object.
@@ -40,7 +39,6 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class FileExtensions
 {
 
@@ -165,6 +163,10 @@ public final class FileExtensions
 			}
 		}
 		return open;
+	}
+
+	private FileExtensions()
+	{
 	}
 
 }

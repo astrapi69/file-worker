@@ -42,7 +42,6 @@ import java.util.StringTokenizer;
 import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * Utility class for the use of cvs-files.
@@ -50,7 +49,6 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class CsvFileExtensions
 {
 
@@ -319,8 +317,8 @@ public final class CsvFileExtensions
 				// get the data with the index
 				if (position <= splittedData.length - 1)
 				{
-
-					final String s = StringExtensions.removeQuotationMarks(splittedData[position]);
+					final String s = StringExtensions
+						.removeFirstAndLastCharacter(splittedData[position]);
 					output.add(s);
 				}
 			}
@@ -372,7 +370,6 @@ public final class CsvFileExtensions
 	{
 		return readFileToList(file, null);
 	}
-
 
 	/**
 	 * Reads every line from the given File into a List and returns the List.
@@ -463,6 +460,7 @@ public final class CsvFileExtensions
 		}
 		return fn;
 	}
+
 
 	/**
 	 * Reads every line from the File and puts them to the List.
@@ -634,6 +632,10 @@ public final class CsvFileExtensions
 			sb.append("\n");
 		}
 		WriteFileExtensions.writeStringToFile(output, sb.toString(), encoding);
+	}
+
+	private CsvFileExtensions()
+	{
 	}
 
 }

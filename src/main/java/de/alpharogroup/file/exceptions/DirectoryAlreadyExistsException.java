@@ -24,17 +24,18 @@
  */
 package de.alpharogroup.file.exceptions;
 
-import lombok.NoArgsConstructor;
-
 /**
  * Exception that is thrown if an attempt is made to create a directory that already exists
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-@NoArgsConstructor
 public class DirectoryAlreadyExistsException extends Exception
 {
+	public DirectoryAlreadyExistsException()
+	{
+	}
+
 	/**
 	 * Constructs a new DirectoryAlreadyExistsException with the specified detail message.
 	 *
@@ -70,5 +71,4 @@ public class DirectoryAlreadyExistsException extends Exception
 	{
 		super(cause);
 	}
-
 }

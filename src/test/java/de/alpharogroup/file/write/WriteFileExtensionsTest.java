@@ -32,14 +32,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.crypto.file.checksum.ChecksumExtensions;
+import de.alpharogroup.checksum.FileChecksumExtensions;
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.search.PathFinder;
@@ -80,7 +78,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link WriteFileExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();
@@ -104,13 +102,13 @@ public class WriteFileExtensionsTest extends FileTestCase
 		File fileout = new File(PathFinder.getSrcTestResourcesDir(),
 			"testWriteFileExtensionsWrite.out");
 		try (InputStream inputStream = StreamExtensions.getInputStream(testFile, true);
-			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true);)
+			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true))
 		{
 			WriteFileExtensions.write(inputStream, outputStream);
 		}
 
-		actual = ChecksumExtensions.getCheckSumAdler32(testFile);
-		expected = ChecksumExtensions.getCheckSumAdler32(fileout);
+		actual = FileChecksumExtensions.getCheckSumAdler32(testFile);
+		expected = FileChecksumExtensions.getCheckSumAdler32(fileout);
 		assertEquals(expected, actual);
 		fileout.deleteOnExit();
 	}

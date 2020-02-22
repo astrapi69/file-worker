@@ -32,7 +32,6 @@ import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link FileFactory} helps you to create files or directories
@@ -40,7 +39,6 @@ import lombok.experimental.UtilityClass;
  * @author Asterios Raptis
  * @version 1.0
  */
-@UtilityClass
 public final class FileFactory
 {
 
@@ -90,28 +88,6 @@ public final class FileFactory
 	}
 
 	/**
-	 * Creates a new directory from the given {@link Path} object and the optional
-	 * {@link FileAttribute}.<br>
-	 * <br>
-	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
-	 * returns if the directory is created or not.
-	 *
-	 * @param dir
-	 *            the dir the directory to create
-	 * @param attrs
-	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return Returns true if the directory was created otherwise false.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @see <code>Files#createDirectory(Path, FileAttribute...)</code>
-	 */
-	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
-	{
-		Path directory = Files.createDirectory(dir, attrs);
-		return Files.exists(directory);
-	}
-
-	/**
 	 * Creates a new directory from the given {@link File} object
 	 *
 	 * @param dir
@@ -133,6 +109,28 @@ public final class FileFactory
 			}
 		}
 		return fileCreationState;
+	}
+
+	/**
+	 * Creates a new directory from the given {@link Path} object and the optional
+	 * {@link FileAttribute}.<br>
+	 * <br>
+	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
+	 * returns if the directory is created or not.
+	 *
+	 * @param dir
+	 *            the dir the directory to create
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @return Returns true if the directory was created otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @see <code>Files#createDirectory(Path, FileAttribute...)</code>
+	 */
+	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
+	{
+		Path directory = Files.createDirectory(dir, attrs);
+		return Files.exists(directory);
 	}
 
 	/**
@@ -199,6 +197,10 @@ public final class FileFactory
 				parent.mkdirs();
 			}
 		}
+	}
+
+	private FileFactory()
+	{
 	}
 
 }

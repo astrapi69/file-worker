@@ -37,8 +37,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -233,7 +231,7 @@ public class CsvFileExtensionsTest
 
 		final File res = new File(testResources, "resources");
 		final File input = new File(res, "test-csv-data.csv");
-		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input);
+		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input, "UTF-8");
 		for (int i = 0; i < cvsAsListMap.size(); i++)
 		{
 			Map<String, String> map2 = cvsAsListMap.get(i);
@@ -285,7 +283,7 @@ public class CsvFileExtensionsTest
 		final File res = new File(testResources, "resources");
 		final File input = new File(res, "test-csv-data.csv");
 
-		encoding = "ISO-8859-1";
+		encoding = "UTF-8";
 		List<Map<String, String>> cvsAsListMap = CsvFileExtensions.getCvsAsListMap(input, encoding);
 		for (int i = 0; i < cvsAsListMap.size(); i++)
 		{
@@ -389,7 +387,7 @@ public class CsvFileExtensionsTest
 		String encoding;
 		position = 0;
 		putFirstLine = false;
-		encoding = "ISO-8859-1";
+		encoding = "UTF-8";
 		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
 			encoding);
 		expected = ListFactory.newArrayList("Jaroslav", "Dimitri", "Jim", "Jürgen");
@@ -422,7 +420,7 @@ public class CsvFileExtensionsTest
 		String encoding;
 		position = 0;
 		putFirstLine = false;
-		encoding = "ISO-8859-1";
+		encoding = "UTF-8";
 		splitChar = ",";
 		actual = CsvFileExtensions.readDataFromCVSFileToList(input, position, putFirstLine,
 			splitChar, encoding);
@@ -512,7 +510,7 @@ public class CsvFileExtensionsTest
 
 		final File res = new File(testResources, "resources");
 		File input = new File(res, "test-csv-data.csv");
-		actual = CsvFileExtensions.readFileToList(input, ",", "ISO-8859-1");
+		actual = CsvFileExtensions.readFileToList(input, ",", "UTF-8");
 		assertTrue(ListExtensions.isEqualListOfArrays(actual, expected));
 	}
 
@@ -609,7 +607,7 @@ public class CsvFileExtensionsTest
 	/**
 	 * Test method for {@link CsvFileExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

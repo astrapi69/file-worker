@@ -31,8 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
@@ -211,7 +209,7 @@ public class CsvToSqlExtensionsTest
 	/**
 	 * Test method for {@link CsvToSqlExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

@@ -42,77 +42,77 @@ public interface ZipModel
 	 * 
 	 * @return The field <code>compressionMethod</code>.
 	 */
-	public int getCompressionMethod();
+	int getCompressionMethod();
 
 	/**
 	 * Returns the field <code>directoryToZip</code>.
 	 * 
 	 * @return The field <code>directoryToZip</code>.
 	 */
-	public File getDirectoryToZip();
+	File getDirectoryToZip();
 
 	/**
 	 * Returns the field <code>dirToStart</code>.
 	 * 
 	 * @return The field <code>dirToStart</code>.
 	 */
-	public String getDirToStart();
+	String getDirToStart();
 
 	/**
 	 * Returns the field <code>fileCounter</code>.
 	 * 
 	 * @return The field <code>fileCounter</code>.
 	 */
-	public int getFileCounter();
+	int getFileCounter();
 
 	/**
 	 * Returns the field <code>fileFilter</code>.
 	 * 
 	 * @return The field <code>fileFilter</code>.
 	 */
-	public FilenameFilter getFileFilter();
+	FilenameFilter getFileFilter();
 
 	/**
 	 * Returns the field <code>fileLength</code>.
 	 * 
 	 * @return The field <code>fileLength</code>.
 	 */
-	public long getFileLength();
+	long getFileLength();
 
 	/**
 	 * Returns the field <code>zipFile</code>.
 	 * 
 	 * @return The field <code>zipFile</code>.
 	 */
-	public File getZipFile();
+	File getZipFile();
 
 	/**
 	 * Returns the field <code>zipFileComment</code>.
 	 * 
 	 * @return The field <code>zipFileComment</code>.
 	 */
-	public String getZipFileComment();
+	String getZipFileComment();
 
 	/**
 	 * Returns the field <code>zipFileName</code>.
 	 * 
 	 * @return The field <code>zipFileName</code>.
 	 */
-	public String getZipFileName();
+	String getZipFileName();
 
 	/**
 	 * Returns the field <code>zipFileObj</code>.
 	 * 
 	 * @return The field <code>zipFileObj</code>.
 	 */
-	public ZipFile getZipFileObj();
+	ZipFile getZipFileObj();
 
 	/**
 	 * Returns the field <code>zipLevel</code>.
 	 * 
 	 * @return The field <code>zipLevel</code>.
 	 */
-	public int getZipLevel();
+	int getZipLevel();
 
 	/**
 	 * Sets the field <code>compressionMethod</code>.
@@ -120,7 +120,7 @@ public interface ZipModel
 	 * @param compressionMethod
 	 *            The <code>compressionMethod</code> to set
 	 */
-	public void setCompressionMethod(final int compressionMethod);
+	void setCompressionMethod(final int compressionMethod);
 
 	/**
 	 * Sets the field <code>directoryToZip</code>.
@@ -128,7 +128,7 @@ public interface ZipModel
 	 * @param directoryToZip
 	 *            The <code>directoryToZip</code> to set
 	 */
-	public void setDirectoryToZip(final File directoryToZip);
+	void setDirectoryToZip(final File directoryToZip);
 
 	/**
 	 * Sets the field <code>dirToStart</code>.
@@ -136,7 +136,7 @@ public interface ZipModel
 	 * @param dirToStart
 	 *            The <code>dirToStart</code> to set
 	 */
-	public void setDirToStart(final String dirToStart);
+	void setDirToStart(final String dirToStart);
 
 	/**
 	 * Sets the field <code>fileCounter</code>.
@@ -144,7 +144,7 @@ public interface ZipModel
 	 * @param fileCounter
 	 *            The <code>fileCounter</code> to set
 	 */
-	public void setFileCounter(final int fileCounter);
+	void setFileCounter(final int fileCounter);
 
 	/**
 	 * Sets the field <code>fileFilter</code>.
@@ -152,7 +152,7 @@ public interface ZipModel
 	 * @param fileFilter
 	 *            The <code>fileFilter</code> to set
 	 */
-	public void setFileFilter(final FilenameFilter fileFilter);
+	void setFileFilter(final FilenameFilter fileFilter);
 
 	/**
 	 * Sets the field <code>fileLength</code>.
@@ -160,7 +160,7 @@ public interface ZipModel
 	 * @param fileLength
 	 *            The <code>fileLength</code> to set
 	 */
-	public void setFileLength(final long fileLength);
+	void setFileLength(final long fileLength);
 
 	/**
 	 * Sets the field <code>zipFile</code>.
@@ -168,7 +168,7 @@ public interface ZipModel
 	 * @param zipFile
 	 *            The <code>zipFile</code> to set
 	 */
-	public void setZipFile(final File zipFile);
+	void setZipFile(final File zipFile);
 
 	/**
 	 * Sets the field <code>zipFileComment</code>.
@@ -176,7 +176,7 @@ public interface ZipModel
 	 * @param zipFileComment
 	 *            The <code>zipFileComment</code> to set
 	 */
-	public void setZipFileComment(final String zipFileComment);
+	void setZipFileComment(final String zipFileComment);
 
 	/**
 	 * Sets the field <code>zipFileName</code>.
@@ -184,7 +184,7 @@ public interface ZipModel
 	 * @param zipFileName
 	 *            The <code>zipFileName</code> to set
 	 */
-	public void setZipFileName(final String zipFileName);
+	void setZipFileName(final String zipFileName);
 
 	/**
 	 * Sets the field <code>zipFileObj</code>.
@@ -192,7 +192,7 @@ public interface ZipModel
 	 * @param zipFileObj
 	 *            The <code>zipFileObj</code> to set
 	 */
-	public void setZipFileObj(final ZipFile zipFileObj);
+	void setZipFileObj(final ZipFile zipFileObj);
 
 	/**
 	 * Sets the field <code>zipLevel</code>.
@@ -200,6 +200,6 @@ public interface ZipModel
 	 * @param zipLevel
 	 *            The <code>zipLevel</code> to set
 	 */
-	public void setZipLevel(final int zipLevel);
+	void setZipLevel(final int zipLevel);
 
 }

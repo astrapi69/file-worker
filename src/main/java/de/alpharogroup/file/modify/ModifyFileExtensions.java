@@ -36,18 +36,16 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.file.modify.api.FileChangeable;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link ModifyFileExtensions} provides methods for modifying files
  */
-@UtilityClass
-public class ModifyFileExtensions
+public final class ModifyFileExtensions
 {
 
 	/**
@@ -62,9 +60,12 @@ public class ModifyFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void modifyFile(@NonNull Path inFilePath, @NonNull Charset charsetOfOutputFile,
-		@NonNull FileChangeable modifier) throws IOException
+	public static void modifyFile(Path inFilePath, Charset charsetOfOutputFile,
+		FileChangeable modifier) throws IOException
 	{
+		Objects.requireNonNull(inFilePath);
+		Objects.requireNonNull(charsetOfOutputFile);
+		Objects.requireNonNull(modifier);
 		File file = inFilePath.toFile();
 		List<String> lines = ListFactory.newArrayList();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
@@ -98,28 +99,11 @@ public class ModifyFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void modifyFile(@NonNull Path inFilePath, @NonNull FileChangeable modifier)
-		throws IOException
+	public static void modifyFile(Path inFilePath, FileChangeable modifier) throws IOException
 	{
+		Objects.requireNonNull(inFilePath);
+		Objects.requireNonNull(modifier);
 		modifyFile(inFilePath, StandardCharsets.UTF_8, modifier);
-	}
-
-	/**
-	 * Modifies the input file line by line and writes the modification in the new output file
-	 *
-	 * @param inFilePath
-	 *            the in file path
-	 * @param outFilePath
-	 *            the out file path
-	 * @param modifier
-	 *            the modifier {@linkplain BiFunction}
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static void modifyFile(@NonNull Path inFilePath, @NonNull Path outFilePath,
-		@NonNull FileChangeable modifier) throws IOException
-	{
-		modifyFile(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier);
 	}
 
 	/**
@@ -136,9 +120,13 @@ public class ModifyFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void modifyFile(@NonNull Path inFilePath, @NonNull Path outFilePath,
-		@NonNull Charset charsetOfOutputFile, @NonNull FileChangeable modifier) throws IOException
+	public static void modifyFile(Path inFilePath, Path outFilePath, Charset charsetOfOutputFile,
+		FileChangeable modifier) throws IOException
 	{
+		Objects.requireNonNull(inFilePath);
+		Objects.requireNonNull(outFilePath);
+		Objects.requireNonNull(charsetOfOutputFile);
+		Objects.requireNonNull(modifier);
 		try (
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(inFilePath.toFile()));
 			Writer writer = new BufferedWriter(new OutputStreamWriter(
@@ -152,5 +140,30 @@ public class ModifyFileExtensions
 				counter++;
 			}
 		}
+	}
+
+	/**
+	 * Modifies the input file line by line and writes the modification in the new output file
+	 *
+	 * @param inFilePath
+	 *            the in file path
+	 * @param outFilePath
+	 *            the out file path
+	 * @param modifier
+	 *            the modifier {@linkplain BiFunction}
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void modifyFile(Path inFilePath, Path outFilePath, FileChangeable modifier)
+		throws IOException
+	{
+		Objects.requireNonNull(inFilePath);
+		Objects.requireNonNull(outFilePath);
+		Objects.requireNonNull(modifier);
+		modifyFile(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier);
+	}
+
+	private ModifyFileExtensions()
+	{
 	}
 }

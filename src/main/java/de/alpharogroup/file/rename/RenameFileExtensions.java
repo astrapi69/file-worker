@@ -39,7 +39,6 @@ import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.exceptions.FileNotRenamedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
@@ -47,7 +46,6 @@ import lombok.experimental.UtilityClass;
  * @author Asterios Raptis
  * @version 1.0
  */
-@UtilityClass
 public final class RenameFileExtensions
 {
 
@@ -378,6 +376,10 @@ public final class RenameFileExtensions
 		final File fileWithNewName = new File(fileToRename.getParent(), newFilenameWithSystemtime);
 		renameFile(fileToRename, fileWithNewName, true);
 		return fileWithNewName;
+	}
+
+	private RenameFileExtensions()
+	{
 	}
 
 

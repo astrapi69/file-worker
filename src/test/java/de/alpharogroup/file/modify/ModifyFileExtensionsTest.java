@@ -24,15 +24,15 @@
  */
 package de.alpharogroup.file.modify;
 
+import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
@@ -102,31 +102,49 @@ public class ModifyFileExtensionsTest
 	public void testModifyFileSameFile() throws IOException, FileIsADirectoryException
 	{
 		File inputFile;
+		Path inFilePath;
+		String originalContent;
+		String add;
+		List<String> linesInList;
 
 		inputFile = new File(
 			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
 			"test-csv-data-samefile.csv");
 
-		Path inFilePath = inputFile.toPath();
+		inFilePath = inputFile.toPath();
 
-		String add = "|#foo-bar#|";
+		add = "|#foo-bar#|";
 		ModifyFileExtensions.modifyFile(inFilePath, (count, input) -> {
 			String alteredLine = input + add + System.lineSeparator();
 			return alteredLine;
 		});
-		List<String> linesInList = ReadFileExtensions.readLinesInList(inputFile);
+		linesInList = ReadFileExtensions.readLinesInList(inputFile);
 		linesInList.stream().forEach(line -> assertTrue(line.endsWith(add)));
+
+
+		String find = "Jaroslav";
+		String replaceWith = "Wilhelm";
+		ModifyFileExtensions.modifyFile(inFilePath, (count, input) -> {
+			String alteredLine = input.replaceAll(find, replaceWith) + System.lineSeparator();
+			return alteredLine;
+		});
+
+		originalContent = ReadFileExtensions.readFromFile(inputFile);
+
+		assertFalse(originalContent.contains(find));
+		assertTrue(originalContent.contains(replaceWith));
 
 		CopyFileExtensions.copyFile(
 			new File(PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
 				"test-csv-data.csv"),
-			inputFile);
+			inputFile, Charset.forName("UTF-8"), Charset.forName("UTF-8"), true);
+
 	}
 
 	/**
 	 * Test method for {@link ModifyFileExtensions}
 	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
+	@Test
 	public void testWithBeanTester()
 	{
 		final BeanTester beanTester = new BeanTester();

@@ -28,12 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link CsvToSqlExtensions}.
  */
-@UtilityClass
 public final class CsvToSqlExtensions
 {
 
@@ -115,7 +112,6 @@ public final class CsvToSqlExtensions
 		return sb.toString();
 	}
 
-
 	/**
 	 * Gets the csv file as sql insert script.
 	 *
@@ -134,6 +130,7 @@ public final class CsvToSqlExtensions
 	{
 		return getCsvFileAsSqlInsertScript(tableName, new CsvBean(headers, columnTypes, lines));
 	}
+
 
 	/**
 	 * Gets the csv file as sql insert script.
@@ -307,6 +304,10 @@ public final class CsvToSqlExtensions
 			}
 		}
 		return sb;
+	}
+
+	private CsvToSqlExtensions()
+	{
 	}
 
 }

@@ -27,9 +27,6 @@ package de.alpharogroup.file.compare;
 import java.io.File;
 
 import de.alpharogroup.file.compare.api.IFileContentResultBean;
-import lombok.EqualsAndHashCode;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * Bean that tells if the content from the given files are equal.
@@ -37,9 +34,6 @@ import lombok.ToString;
  * @version 1.0
  * @author Asterios Raptis
  */
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 public class FileContentResultBean extends FileCompareResultBean implements IFileContentResultBean
 {
 
@@ -59,6 +53,29 @@ public class FileContentResultBean extends FileCompareResultBean implements IFil
 		super(source, compare);
 	}
 
+	@Override
+	protected boolean canEqual(final Object other)
+	{
+		return other instanceof FileContentResultBean;
+	}
+
+	@Override
+	public boolean equals(final Object o)
+	{
+		if (o == this)
+			return true;
+		if (!(o instanceof FileContentResultBean))
+			return false;
+		final FileContentResultBean other = (FileContentResultBean)o;
+		if (!other.canEqual(this))
+			return false;
+		if (!super.equals(o))
+			return false;
+		if (this.contentEquality != other.contentEquality)
+			return false;
+		return true;
+	}
+
 	/**
 	 * Gets the content equality.
 	 *
@@ -69,6 +86,15 @@ public class FileContentResultBean extends FileCompareResultBean implements IFil
 	public boolean getContentEquality()
 	{
 		return this.contentEquality;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = super.hashCode();
+		result = result * PRIME + (this.contentEquality ? 79 : 97);
+		return result;
 	}
 
 	/**
@@ -84,4 +110,10 @@ public class FileContentResultBean extends FileCompareResultBean implements IFil
 		this.contentEquality = contentEquality;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "FileContentResultBean(super=" + super.toString() + ", contentEquality="
+			+ this.contentEquality + ")";
+	}
 }

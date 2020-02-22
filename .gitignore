@@ -6,9 +6,15 @@
 ##################
 # intellij files #
 ##################
+*.iws
 *.iml
-.idea
-*/.idea
+*.ipr
+!.idea/runConfigurations
+.idea/inspectionProfiles
+.idea/libraries
+.idea/codeStyles
+.idea/shelf
+.idea/*.*
 
 #################
 # eclipse files #
@@ -22,7 +28,6 @@
 # maven generated files #
 #########################
 /target
-/pom.xml.bak
 
 #############
 # Zip files #
@@ -51,12 +56,14 @@
 ############################
 /bin
 
+
 ################
 # gradle files #
 ################
 /build
 /.gradle
 /gradle
+/out
 # Ignore Gradle GUI config
 gradle-app.setting
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)

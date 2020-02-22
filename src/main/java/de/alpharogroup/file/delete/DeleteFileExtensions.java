@@ -31,14 +31,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import de.alpharogroup.file.exceptions.DirectoryHasNoContentException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.file.search.FileSearchExtensions;
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link DeleteFileExtensions} helps you delete files.
@@ -46,7 +45,6 @@ import lombok.experimental.UtilityClass;
  * @version 1.0
  * @author Asterios Raptis
  */
-@UtilityClass
 public final class DeleteFileExtensions
 {
 	/**
@@ -112,8 +110,9 @@ public final class DeleteFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void delete(final @NonNull File file) throws IOException
+	public static void delete(final File file) throws IOException
 	{
+		Objects.requireNonNull(file);
 		if (file.isDirectory())
 		{
 			DeleteFileExtensions.deleteAllFiles(file);
@@ -461,6 +460,10 @@ public final class DeleteFileExtensions
 			throw new FileIsSecurityRestrictedException(
 				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
+	}
+
+	private DeleteFileExtensions()
+	{
 	}
 
 }

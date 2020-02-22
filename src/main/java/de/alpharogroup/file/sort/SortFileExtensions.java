@@ -33,13 +33,11 @@ import java.util.List;
 
 import de.alpharogroup.file.read.ReadFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
-import lombok.experimental.UtilityClass;
 
 /**
  * The class {@link SortFileExtensions} provides algorithms for sort file content.
  */
-@UtilityClass
-public class SortFileExtensions
+public final class SortFileExtensions
 {
 
 	/**
@@ -62,6 +60,10 @@ public class SortFileExtensions
 		List<String> lines = ReadFileExtensions.readLinesInList(file);
 		Collections.sort(lines, comparator);
 		WriteFileExtensions.writeLinesToFile(file, lines, encoding);
+	}
+
+	private SortFileExtensions()
+	{
 	}
 
 }

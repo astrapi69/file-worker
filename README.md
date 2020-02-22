@@ -31,7 +31,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 	<properties>
 			...
 		<!-- FILE-WORKER version -->
-		<file-worker.version>5.4</file-worker.version>
+		<file-worker.version>5.5</file-worker.version>
 			...
 	</properties>
 			...
@@ -54,12 +54,12 @@ You can first define the version in the ext section and add than the following g
 ```
 ext {
 			...
-    fileWorkerVersion = "5.4"
+    fileWorkerVersion = "5.5"
 			...
 }
 dependencies {
 			...
-compile "de.alpharogroup:file-worker:${fileWorkerVersion}"
+compile "de.alpharogroup:file-worker:$fileWorkerVersion"
 			...
 }
 ```

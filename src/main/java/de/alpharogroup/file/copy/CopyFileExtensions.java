@@ -47,12 +47,11 @@ import de.alpharogroup.file.exceptions.FileIsNotADirectoryException;
 import de.alpharogroup.file.exceptions.FileIsSecurityRestrictedException;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.io.file.FileExtension;
-import lombok.experimental.UtilityClass;
+import de.alpharogroup.throwable.ThrowableExtensions;
 
 /**
  * The class {@link CopyFileExtensions} helps you to copy files or directories.
  */
-@UtilityClass
 public final class CopyFileExtensions
 {
 
@@ -542,7 +541,7 @@ public final class CopyFileExtensions
 			throw new IllegalArgumentException("The destination File " + destination.getName()
 				+ " should be a File but is a Directory.");
 		}
-		boolean copied = false;
+		boolean copied;
 		try (InputStream inputStream = StreamExtensions.getInputStream(source);
 			InputStreamReader reader = sourceEncoding != null
 				? new InputStreamReader(inputStream, sourceEncoding)
@@ -572,6 +571,36 @@ public final class CopyFileExtensions
 		}
 		return copied;
 	}
+
+	/**
+	 * Copies the given source file to the given destination file with the given source encodings
+	 * and destination encodings.
+	 *
+	 * @param sources
+	 *            the files the have to be copied
+	 * @param destination
+	 *            the destination
+	 * @param sourceEncoding
+	 *            the source encoding
+	 * @param destinationEncoding
+	 *            the destination encoding
+	 * @param lastModified
+	 *            if true the last modified flag is set
+	 */
+	public static void copyFiles(final List<File> sources, final File destination,
+		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
+	{
+		if (!destination.exists())
+		{
+			FileFactory.newDirectory(destination);
+		}
+		sources.stream().forEach(ThrowableExtensions.toRuntimeExceptionIfNeeded(file -> {
+			File destinationFile = new File(destination, file.getName());
+			CopyFileExtensions.copyFile(file, destinationFile, sourceEncoding, destinationEncoding,
+				lastModified);
+		}));
+	}
+
 
 	/**
 	 * Copies the given source file to the given destination directory.
@@ -656,6 +685,10 @@ public final class CopyFileExtensions
 		final File backup = new File(file.getAbsolutePath() + FileExtension.BACKUP.getExtension());
 		CopyFileExtensions.copyFile(file, backup, sourceEncoding, destinationEncoding, true);
 		return backup;
+	}
+
+	private CopyFileExtensions()
+	{
 	}
 
 }

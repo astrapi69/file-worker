@@ -27,12 +27,9 @@ package de.alpharogroup.file;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * The class {@link GeneratorExtensions}.
  */
-@UtilityClass
 public final class GeneratorExtensions
 {
 	/**
@@ -131,6 +128,10 @@ public final class GeneratorExtensions
 		}
 		sb.append("};");
 		return sb.toString();
+	}
+
+	private GeneratorExtensions()
+	{
 	}
 
 }
