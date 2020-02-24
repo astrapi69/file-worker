@@ -335,9 +335,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 
 		sourceProjectName = "file-worker";
-		targetProjectName = "jobj-clone";
-		sourceFilenamePrefix = "file_worker";
-		targetFilenamePrefix = "jobj_clone";
+		targetProjectName = "meanbean-factories";
+		sourceFilenamePrefix = StringUtils.replace(sourceProjectName, "-", "_");
+		targetFilenamePrefix = StringUtils.replace(targetProjectName, "-", "_");
 		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
 		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
 		sourceProjectDir = new File(sourceProjectDirName);
