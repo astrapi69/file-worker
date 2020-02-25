@@ -4,6 +4,10 @@
 Version 5.6-SNAPSHOT
 -------------
 
+CHANGED:
+
+- update of test dependency meanbean-factories to new version 1.2
+
 Version 5.5
 -------------
 
