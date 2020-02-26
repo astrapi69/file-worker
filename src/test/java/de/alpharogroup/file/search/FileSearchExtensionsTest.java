@@ -327,6 +327,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 		File targetRunConfigDir;
 		String sourceFilenamePrefix;
 		String targetFilenamePrefix;
+		String sourceProjectDirNamePrefix;
+		String targetProjectDirNamePrefix;
 		String sourceProjectDirName;
 		String targetProjectDirName;
 		String sourceProjectName;
@@ -335,11 +337,13 @@ public class FileSearchExtensionsTest extends FileTestCase
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 
 		sourceProjectName = "file-worker";
-		targetProjectName = "meanbean-factories";
+		targetProjectName = "json-extensions";
+		sourceProjectDirNamePrefix = "/home/astrapi69/git/";
+		targetProjectDirNamePrefix = "/home/astrapi69/git/";
 		sourceFilenamePrefix = StringUtils.replace(sourceProjectName, "-", "_");
 		targetFilenamePrefix = StringUtils.replace(targetProjectName, "-", "_");
-		targetProjectDirName = "/home/astrapi69/git/" + targetProjectName;
-		sourceProjectDirName = "/home/astrapi69/git/" + sourceProjectName;
+		sourceProjectDirName = sourceProjectDirNamePrefix + sourceProjectName;
+		targetProjectDirName = targetProjectDirNamePrefix + targetProjectName;
 		sourceProjectDir = new File(sourceProjectDirName);
 		targetProjectDir = new File(targetProjectDirName);
 		ideaSourceDir = new File(sourceProjectDir, CopyGradleRunConfigurations.IDEA_DIR_NAME);
