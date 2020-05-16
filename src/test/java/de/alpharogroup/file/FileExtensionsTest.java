@@ -149,6 +149,7 @@ public class FileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileExtensions#getTempDir()}.
 	 */
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testGetTempDir()
 	{

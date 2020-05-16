@@ -46,6 +46,7 @@ import java.util.List;
 import java.util.Properties;
 
 import de.alpharogroup.file.FileConst;
+import de.alpharogroup.file.system.SystemPropertiesExtensions;
 import de.alpharogroup.io.StreamExtensions;
 
 /**
@@ -396,7 +397,7 @@ public final class WriteFileExtensions
 	public static void writeLinesToFile(final File output, final List<String> input,
 		final String encoding) throws FileNotFoundException, IOException
 	{
-		final String lineSeparator = System.getProperty("line.separator");
+		final String lineSeparator = SystemPropertiesExtensions.getLineSeparator();
 		try (FileOutputStream fos = new FileOutputStream(output);
 			OutputStreamWriter osw = (null == encoding)
 				? new OutputStreamWriter(fos)

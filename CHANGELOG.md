@@ -1,6 +1,22 @@
 ## Change log
 ----------------------
 
+Version 5.6
+-------------
+
+ADDED:
+ 
+- new class that provides most user environment variables like users home
+- new class in test sources that can copy gradle config files after a migration from maven
+
+CHANGED:
+
+- update of jobj-compare dependency to new version 3.4
+- update of silly-collections dependency to new version 8.1
+- update of commons-lang3 dependency to new version 3.10
+- update of test dependency testng to new version 7.2.0
+- update of test dependency meanbean-factories to new version 1.2
+
 Version 5.5
 -------------
 

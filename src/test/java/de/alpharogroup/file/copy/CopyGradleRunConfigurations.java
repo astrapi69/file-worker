@@ -22,12 +22,13 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package de.alpharogroup.file.search;
+package de.alpharogroup.file.copy;
 
 import java.io.File;
 
 public class CopyGradleRunConfigurations
 {
+
 	public static class CopyGradleRunConfigurationsBuilder
 	{
 		private File ideaSourceDir;

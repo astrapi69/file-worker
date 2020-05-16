@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="code coverage" type="TestNG">
+  <configuration default="false" name="file-worker [code coverage]" type="TestNG">
+    <useClassPathOnly />
     <option name="SUITE_NAME" value="" />
     <option name="PACKAGE_NAME" value="" />
     <option name="MAIN_CLASS_NAME" value="" />
