@@ -6,7 +6,8 @@ Version 5.6-SNAPSHOT
 
 ADDED:
  
-- new class that provides most user enviroment variables like users home
+- new class that provides most user environment variables like users home
+- new class in test sources that can copy gradle config files after a migration from maven
 
 CHANGED:
 
