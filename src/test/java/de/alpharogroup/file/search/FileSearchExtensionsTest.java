@@ -32,35 +32,22 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.collections.array.ArrayExtensions;
-import de.alpharogroup.collections.list.ListExtensions;
-import de.alpharogroup.collections.list.ListFactory;
-import de.alpharogroup.collections.properties.PropertiesExtensions;
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.copy.CopyFileExtensions;
-import de.alpharogroup.file.create.FileFactory;
+import de.alpharogroup.file.copy.CopyGradleRunConfigurations;
+import de.alpharogroup.file.copy.GradleRunConfigurationsCopier;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;
-import de.alpharogroup.file.modify.ModifyFileExtensions;
-import de.alpharogroup.file.read.ReadFileExtensions;
-import de.alpharogroup.file.rename.RenameFileExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
-import de.alpharogroup.io.StreamExtensions;
-import de.alpharogroup.string.StringExtensions;
 
 /**
  * The unit test class for the class {@link FileSearchExtensions}.
@@ -157,10 +144,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 	{
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
 		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier
-				.newCopyGradleRunConfigurations("file-worker",
-				"lottery-app",
-				"/home/astrapi69/dev/github/lightblueseas/",
-				"/home/astrapi69/dev/bitbucket/");
+			.newCopyGradleRunConfigurations("file-worker", "lottery-app",
+				"/home/astrapi69/dev/github/lightblueseas/", "/home/astrapi69/dev/bitbucket/");
 
 		GradleRunConfigurationsCopier.of(copyGradleRunConfigurationsData).copy();
 	}
