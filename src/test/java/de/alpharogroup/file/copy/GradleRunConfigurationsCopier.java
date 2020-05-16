@@ -38,7 +38,6 @@ import de.alpharogroup.collections.array.ArrayExtensions;
 import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.collections.properties.PropertiesExtensions;
-import de.alpharogroup.file.copy.CopyFileExtensions;
 import de.alpharogroup.file.create.FileFactory;
 import de.alpharogroup.file.exceptions.FileDoesNotExistException;
 import de.alpharogroup.file.exceptions.FileIsADirectoryException;

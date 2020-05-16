@@ -41,12 +41,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
-import de.alpharogroup.file.copy.CopyGradleRunConfigurations;
-import de.alpharogroup.file.copy.GradleRunConfigurationsCopier;
 import de.alpharogroup.file.delete.DeleteFileExtensions;
 import de.alpharogroup.file.exceptions.DirectoryAlreadyExistsException;
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 import de.alpharogroup.file.write.WriteFileExtensions;
 
 /**
@@ -132,22 +128,6 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue("File should not exist in this directory.", contains);
 		this.actual = FileSearchExtensions.containsFileRecursive(this.testDir, testFile3);
 		assertTrue("", this.actual);
-	}
-
-	/**
-	 * Test method for copy run configurations file from a source project to a target project and
-	 * modifies its content
-	 */
-	@Test(enabled = true)
-	public void testCopyIdeaRunConfigurations()
-		throws FileDoesNotExistException, IOException, FileIsADirectoryException
-	{
-		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
-		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier
-			.newCopyGradleRunConfigurations("file-worker", "lottery-app",
-				"/home/astrapi69/dev/github/lightblueseas/", "/home/astrapi69/dev/bitbucket/");
-
-		GradleRunConfigurationsCopier.of(copyGradleRunConfigurationsData).copy();
 	}
 
 
