@@ -4,6 +4,10 @@
 Version 5.6-SNAPSHOT
 -------------
 
+ADDED:
+ 
+- new class that provides most user enviroment variables like users home
+
 CHANGED:
 
 - update of jobj-compare dependency to new version 3.4

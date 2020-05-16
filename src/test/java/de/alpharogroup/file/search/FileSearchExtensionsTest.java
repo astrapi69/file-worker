@@ -68,170 +68,6 @@ import de.alpharogroup.string.StringExtensions;
 public class FileSearchExtensionsTest extends FileTestCase
 {
 
-	private void copy(CopyGradleRunConfigurations copyGradleRunConfigurationsData)
-		throws IOException, FileIsADirectoryException, FileDoesNotExistException
-	{
-		List<File> allFiles;
-		// find all run configurations files for copy
-		allFiles = FileSearchExtensions.findAllFiles(
-			copyGradleRunConfigurationsData.getSourceRunConfigDir(),
-			copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
-		// copy found run configurations files to the target directory
-		CopyFileExtensions.copyFiles(allFiles,
-			copyGradleRunConfigurationsData.getTargetRunConfigDir(), Charset.forName("UTF-8"),
-			Charset.forName("UTF-8"), true);
-		// find all run configurations files for rename
-		allFiles = FileSearchExtensions.findAllFiles(
-			copyGradleRunConfigurationsData.getTargetRunConfigDir(),
-			copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
-		// rename all run configurations files
-		for (File file : allFiles)
-		{
-			String name = file.getName();
-			String newName = name.replace(copyGradleRunConfigurationsData.getSourceFilenamePrefix(),
-				copyGradleRunConfigurationsData.getTargetFilenamePrefix());
-			RenameFileExtensions.renameFile(file, newName);
-		}
-		// Find all renamed run configurations files
-		allFiles = FileSearchExtensions.findAllFiles(
-			copyGradleRunConfigurationsData.getTargetRunConfigDir(),
-			copyGradleRunConfigurationsData.getTargetFilenamePrefix() + ".*");
-		// replace content of all run configurations files so they can run appropriate to the new
-		// project
-		for (File file : allFiles)
-		{
-			Path inFilePath = file.toPath();
-			ModifyFileExtensions.modifyFile(inFilePath, (count, input) -> {
-				String alteredLine = input.replaceAll(
-					copyGradleRunConfigurationsData.getSourceProjectName(),
-					copyGradleRunConfigurationsData.getTargetProjectName())
-					+ System.lineSeparator();
-				return alteredLine;
-			});
-		}
-	}
-
-	private void externalizeVersionFromBuildGradle(File targetProjectDir) throws IOException
-	{
-		File buildGradle = new File(targetProjectDir, DependenciesData.BUILD_GRADLE_NAME);
-		File gradleProperties = new File(targetProjectDir, DependenciesData.GRADLE_PROPERTIES_NAME);
-		FileFactory.newFile(gradleProperties);
-		String dependenciesContent = getDependenciesContent(buildGradle);
-		List<String> stringList = getDependenciesAsStringList(dependenciesContent);
-		DependenciesData dependenciesData = getGradlePropertiesWithVersions(stringList);
-		String newDependenciesContent = getNewDependenciesContent(dependenciesData);
-		String replaceDependenciesContent = replaceDependenciesContent(buildGradle,
-			newDependenciesContent, dependenciesData.getProperties());
-		PropertiesExtensions.export(dependenciesData.getProperties(),
-			StreamExtensions.getOutputStream(gradleProperties));
-		WriteFileExtensions.string2File(buildGradle, replaceDependenciesContent);
-	}
-
-	private List<String> getDependenciesAsStringList(String dependenciesContent)
-	{
-		String[] lines = dependenciesContent.split("\n");
-		List<String> stringList = ArrayExtensions.asList(lines);
-		ListExtensions.removeFirst(stringList);
-		ListExtensions.removeLast(stringList);
-		return stringList;
-	}
-
-	public String getDependenciesContent(File buildGradle) throws IOException
-	{
-		String buildGradleContent = ReadFileExtensions.readFromFile(buildGradle);
-		int indexOfStart = buildGradleContent.indexOf("dependencies {");
-		int indexOfEnd = buildGradleContent.substring(indexOfStart).indexOf("}") + indexOfStart + 1;
-		String dependencies = buildGradleContent.substring(indexOfStart, indexOfEnd);
-		return dependencies;
-	}
-
-	private DependenciesData getGradlePropertiesWithVersions(List<String> stringList)
-	{
-		List<String> versionStrings = ListFactory.newArrayList();
-		Properties properties = new Properties();
-		stringList.stream().forEach(entry -> {
-			String dependency = StringUtils.substringBetween(entry, "'");
-			String[] strings = dependency.split(":");
-			String group = strings[0];
-			String artifact = strings[1];
-			String version = strings[2];
-			String[] split = artifact.split("-");
-			StringBuilder sb = new StringBuilder();
-			if (1 < split.length)
-			{
-				for (int i = 0; i < split.length; i++)
-				{
-					if (i == 0)
-					{
-						sb.append(split[i]);
-						continue;
-					}
-					String artifactPart = split[i];
-					String artifactPartFirstCharacterToUpperCase = StringExtensions
-						.firstCharacterToUpperCase(artifactPart);
-					sb.append(artifactPartFirstCharacterToUpperCase);
-				}
-			}
-			else
-			{
-				sb.append(split[0]);
-			}
-			String propertiesKey = sb.toString().trim() + "Version";
-			properties.setProperty(propertiesKey, version);
-			String newDependency = group + ":" + artifact + ":$" + propertiesKey;
-			String newEntry = StringUtils.replace(entry, dependency, newDependency);
-			versionStrings.add(newEntry);
-		});
-
-		DependenciesData dependenciesData = DependenciesData.builder().properties(properties)
-			.versionStrings(versionStrings).build();
-		return dependenciesData;
-	}
-
-	private String getNewDependenciesContent(DependenciesData dependenciesData)
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("dependencies {").append("\n");
-		dependenciesData.getVersionStrings().stream()
-			.forEach(entry -> sb.append(entry).append("\n"));
-		sb.append("}");
-		return sb.toString();
-	}
-
-	public String getVersion(String buildGradleContent, Properties gradleProperties)
-		throws IOException
-	{
-		String projectVersionKey = "projectVersion";
-		String versionPrefix = "version = '";
-		int versionPrefixLength = versionPrefix.length();
-		int indexOfVersionStart = buildGradleContent.indexOf(versionPrefix);
-		String substring = buildGradleContent.substring(indexOfVersionStart + versionPrefixLength);
-		int ie = substring.indexOf("'");
-		int indexOfVersionEnd = ie + indexOfVersionStart + versionPrefixLength + 1;
-		String versionLine = buildGradleContent.substring(indexOfVersionStart, indexOfVersionEnd);
-		String versionValue = StringUtils.substringsBetween(versionLine, "'", "'")[0];
-		gradleProperties.setProperty(projectVersionKey, versionValue);
-		String newVersionLine = StringUtils.replace(versionLine, versionValue,
-			"$" + projectVersionKey);
-		String replacedBuildGradleContent = StringUtils.replace(buildGradleContent, versionLine,
-			newVersionLine);
-		return replacedBuildGradleContent;
-	}
-
-	public String replaceDependenciesContent(File buildGradle, String newDependenciesContent,
-		Properties gradleProperties) throws IOException
-	{
-		String buildGradleContent = ReadFileExtensions.readFromFile(buildGradle);
-		int indexOfStart = buildGradleContent.indexOf("dependencies {");
-		int indexOfEnd = buildGradleContent.substring(indexOfStart).indexOf("}") + indexOfStart + 1;
-		String dependencies = buildGradleContent.substring(indexOfStart, indexOfEnd);
-		String replacedBuildGradleContent = StringUtils.replace(buildGradleContent, dependencies,
-			newDependenciesContent);
-		replacedBuildGradleContent = getVersion(replacedBuildGradleContent, gradleProperties);
-		String newBuildGradleContent = StringUtils.replace(replacedBuildGradleContent, "'", "\"");
-		return newBuildGradleContent;
-	}
-
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
 	 *
@@ -315,55 +151,20 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * Test method for copy run configurations file from a source project to a target project and
 	 * modifies its content
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCopyIdeaRunConfigurations()
 		throws FileDoesNotExistException, IOException, FileIsADirectoryException
 	{
-		File sourceProjectDir;
-		File targetProjectDir;
-		File ideaSourceDir;
-		File ideaTargetDir;
-		File sourceRunConfigDir;
-		File targetRunConfigDir;
-		String sourceFilenamePrefix;
-		String targetFilenamePrefix;
-		String sourceProjectDirNamePrefix;
-		String targetProjectDirNamePrefix;
-		String sourceProjectDirName;
-		String targetProjectDirName;
-		String sourceProjectName;
-		String targetProjectName;
-
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
+		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier
+				.newCopyGradleRunConfigurations("file-worker",
+				"lottery-app",
+				"/home/astrapi69/dev/github/lightblueseas/",
+				"/home/astrapi69/dev/bitbucket/");
 
-		sourceProjectName = "file-worker";
-		targetProjectName = "json-extensions";
-		sourceProjectDirNamePrefix = "/home/astrapi69/git/";
-		targetProjectDirNamePrefix = "/home/astrapi69/git/";
-		sourceFilenamePrefix = StringUtils.replace(sourceProjectName, "-", "_");
-		targetFilenamePrefix = StringUtils.replace(targetProjectName, "-", "_");
-		sourceProjectDirName = sourceProjectDirNamePrefix + sourceProjectName;
-		targetProjectDirName = targetProjectDirNamePrefix + targetProjectName;
-		sourceProjectDir = new File(sourceProjectDirName);
-		targetProjectDir = new File(targetProjectDirName);
-		ideaSourceDir = new File(sourceProjectDir, CopyGradleRunConfigurations.IDEA_DIR_NAME);
-		ideaTargetDir = new File(targetProjectDir, CopyGradleRunConfigurations.IDEA_DIR_NAME);
-		sourceRunConfigDir = new File(ideaSourceDir,
-			CopyGradleRunConfigurations.RUN_CONFIGURATIONS_DIR_NAME);
-		targetRunConfigDir = new File(ideaTargetDir,
-			CopyGradleRunConfigurations.RUN_CONFIGURATIONS_DIR_NAME);
-
-		copyGradleRunConfigurationsData = CopyGradleRunConfigurations.builder()
-			.sourceProjectDir(sourceProjectDir).targetProjectDir(targetProjectDir)
-			.ideaSourceDir(ideaSourceDir).ideaTargetDir(ideaTargetDir)
-			.sourceRunConfigDir(sourceRunConfigDir).targetRunConfigDir(targetRunConfigDir)
-			.sourceFilenamePrefix(sourceFilenamePrefix).targetFilenamePrefix(targetFilenamePrefix)
-			.sourceProjectName(sourceProjectName).targetProjectName(targetProjectName).build();
-
-		copy(copyGradleRunConfigurationsData);
-
-		externalizeVersionFromBuildGradle(targetProjectDir);
+		GradleRunConfigurationsCopier.of(copyGradleRunConfigurationsData).copy();
 	}
+
 
 	/**
 	 * Test method for {@link FileSearchExtensions#countAllFilesInDirectory(File, long, boolean)}.

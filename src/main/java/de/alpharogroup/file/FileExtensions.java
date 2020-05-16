@@ -131,6 +131,9 @@ public final class FileExtensions
 	 * Gets the temporary directory from the system as File object.
 	 *
 	 * @return the temporary directory from the system.
+	 * @deprecated use instead the same name method in class <code>SystemFileExtensions</code>
+	 * <br><br>
+	 *     Note: will be removed in next minor version
 	 */
 	public static File getTempDir()
 	{

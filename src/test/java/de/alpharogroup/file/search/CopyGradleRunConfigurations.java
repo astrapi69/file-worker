@@ -28,6 +28,7 @@ import java.io.File;
 
 public class CopyGradleRunConfigurations
 {
+
 	public static class CopyGradleRunConfigurationsBuilder
 	{
 		private File ideaSourceDir;
