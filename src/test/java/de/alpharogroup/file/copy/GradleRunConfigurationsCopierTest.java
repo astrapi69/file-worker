@@ -11,14 +11,12 @@ import de.alpharogroup.file.exceptions.FileIsADirectoryException;
 public class GradleRunConfigurationsCopierTest
 {
 
-
 	/**
 	 * Test method for copy run configurations file from a source project to a target project and
 	 * modifies its content
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testCopyIdeaRunConfigurations()
-		throws FileDoesNotExistException, IOException, FileIsADirectoryException
 	{
 		String sourceProjectDirNamePrefix;
 		String targetProjectDirNamePrefix;
