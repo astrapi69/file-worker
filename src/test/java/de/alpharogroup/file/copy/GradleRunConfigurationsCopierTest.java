@@ -16,14 +16,22 @@ public class GradleRunConfigurationsCopierTest
 	 * Test method for copy run configurations file from a source project to a target project and
 	 * modifies its content
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testCopyIdeaRunConfigurations()
 		throws FileDoesNotExistException, IOException, FileIsADirectoryException
 	{
+		String sourceProjectDirNamePrefix;
+		String targetProjectDirNamePrefix;
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
+		String sourceProjectName;
+		String targetProjectName;
+		sourceProjectName = "file-worker";
+		targetProjectName = "net-extensions";
+		sourceProjectDirNamePrefix = "/home/astrapi69/dev/github/lightblueseas/";
+		targetProjectDirNamePrefix = "/home/astrapi69/dev/github/lightblueseas/";
 		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier
-			.newCopyGradleRunConfigurations("file-worker", "lottery-app",
-				"/home/astrapi69/dev/github/lightblueseas/", "/home/astrapi69/dev/bitbucket/");
+			.newCopyGradleRunConfigurations(sourceProjectName, targetProjectName,
+					sourceProjectDirNamePrefix, targetProjectDirNamePrefix);
 
 		GradleRunConfigurationsCopier.of(copyGradleRunConfigurationsData).copy();
 	}
