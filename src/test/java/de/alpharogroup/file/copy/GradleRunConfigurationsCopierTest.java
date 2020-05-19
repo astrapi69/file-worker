@@ -1,12 +1,6 @@
 package de.alpharogroup.file.copy;
 
-import java.io.IOException;
-
 import org.testng.annotations.Test;
-
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.exceptions.FileIsADirectoryException;
-
 
 public class GradleRunConfigurationsCopierTest
 {
