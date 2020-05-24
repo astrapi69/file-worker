@@ -10,7 +10,7 @@ plugins {
 
 apply plugin: "jacoco"
 
-group = "de.alpharogroup"
+group = "$groupPackage"
 version = "$projectVersion"
 description = "$rootProject.name"
 sourceCompatibility = "1.8"
@@ -28,22 +28,22 @@ repositories {
 }
 
 dependencies {
-    compile("commons-io:commons-io:$commonsIoVersion")
-    compile("org.apache.commons:commons-lang3:$commonsLang3Version")
-    compile("net.lingala.zip4j:zip4j:$zip4jVersion")
-    compile("de.alpharogroup:crypt-api:$cryptApiVersion")
-    compile("de.alpharogroup:throw-able:$throwAbleVersion")
-    compile("de.alpharogroup:silly-beans:$sillyBeansVersion")
-    compile("de.alpharogroup:silly-strings:$sillyStringsVersion")
-    compile("de.alpharogroup:silly-io:$sillyIoVersion")
-    compile("de.alpharogroup:silly-collections:$sillyCollectionsVersion")
-    compile("de.alpharogroup:jobj-compare:$jobjCompareVersion")
-    compile("de.alpharogroup:checksum-up:$checksumUpVersion")
-    testCompile("de.alpharogroup:jobj-contract-verifier:$jobjContractVerifierVersion")
-    testCompile("de.alpharogroup:test-objects:$testObjectsVersion")
-    testCompile("org.meanbean:meanbean:$meanbeanVersion")
-    testCompile("de.alpharogroup:meanbean-factories:$meanbeanFactoriesVersion")
-    testCompile("org.testng:testng:$testngVersion")
+    implementation("commons-io:commons-io:$commonsIoVersion")
+    implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
+    implementation("net.lingala.zip4j:zip4j:$zip4jVersion")
+    implementation("de.alpharogroup:crypt-api:$cryptApiVersion")
+    implementation("de.alpharogroup:throw-able:$throwAbleVersion")
+    implementation("de.alpharogroup:silly-beans:$sillyBeansVersion")
+    implementation("de.alpharogroup:silly-strings:$sillyStringsVersion")
+    implementation("de.alpharogroup:silly-io:$sillyIoVersion")
+    implementation("de.alpharogroup:silly-collections:$sillyCollectionsVersion")
+    implementation("de.alpharogroup:jobj-compare:$jobjCompareVersion")
+    implementation("de.alpharogroup:checksum-up:$checksumUpVersion")
+    testImplementation("de.alpharogroup:jobj-contract-verifier:$jobjContractVerifierVersion")
+    testImplementation("de.alpharogroup:test-objects:$testObjectsVersion")
+    testImplementation("org.meanbean:meanbean:$meanbeanVersion")
+    testImplementation("de.alpharogroup:meanbean-factories:$meanbeanFactoriesVersion")
+    testImplementation("org.testng:testng:$testngVersion")
 }
 
 license {

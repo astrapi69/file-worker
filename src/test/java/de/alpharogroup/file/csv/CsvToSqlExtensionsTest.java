@@ -199,7 +199,7 @@ public class CsvToSqlExtensionsTest
 
 		withEndSemicolon = false;
 
-		StringBuffer sqlData = CsvToSqlExtensions.getSqlData(columns, columnTypes, columnTypesEdit,
+		StringBuilder sqlData = CsvToSqlExtensions.getSqlData(columns, columnTypes, columnTypesEdit,
 			lineOrder, lines, withEndSemicolon);
 		actual = sqlData.toString();
 		expected = "(\"john\", \"23\", \"male\"),\n(\"jim\", \"25\", \"male\"),\n(\"mary\", \"21\", \"female\"),\n";

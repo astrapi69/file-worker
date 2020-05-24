@@ -1,8 +1,8 @@
 /**
  * The MIT License
- *
+ * <p>
  * Copyright (C) 2015 Asterios Raptis
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -41,6 +41,7 @@ public class CopyGradleRunConfigurations
 		private File targetProjectDir;
 		private String targetProjectName;
 		private File targetRunConfigDir;
+		boolean onlyRunConfigurations;
 
 		CopyGradleRunConfigurationsBuilder()
 		{
@@ -50,7 +51,16 @@ public class CopyGradleRunConfigurations
 		{
 			return new CopyGradleRunConfigurations(ideaSourceDir, ideaTargetDir,
 				sourceFilenamePrefix, sourceProjectDir, sourceProjectName, sourceRunConfigDir,
-				targetFilenamePrefix, targetProjectDir, targetProjectName, targetRunConfigDir);
+				targetFilenamePrefix, targetProjectDir, targetProjectName, targetRunConfigDir,
+				onlyRunConfigurations);
+		}
+
+
+		public CopyGradleRunConfigurations.CopyGradleRunConfigurationsBuilder onlyRunConfigurations(
+			boolean onlyRunConfigurations)
+		{
+			this.onlyRunConfigurations = onlyRunConfigurations;
+			return this;
 		}
 
 		public CopyGradleRunConfigurations.CopyGradleRunConfigurationsBuilder ideaSourceDir(
@@ -123,17 +133,9 @@ public class CopyGradleRunConfigurations
 			return this;
 		}
 
-		@Override
-		public String toString()
+		@Override public String toString()
 		{
-			return "CopyGradleRunConfigurations.CopyGradleRunConfigurationsBuilder(ideaSourceDir="
-				+ this.ideaSourceDir + ", ideaTargetDir=" + this.ideaTargetDir
-				+ ", sourceFilenamePrefix=" + this.sourceFilenamePrefix + ", sourceProjectDir="
-				+ this.sourceProjectDir + ", sourceProjectName=" + this.sourceProjectName
-				+ ", sourceRunConfigDir=" + this.sourceRunConfigDir + ", targetFilenamePrefix="
-				+ this.targetFilenamePrefix + ", targetProjectDir=" + this.targetProjectDir
-				+ ", targetProjectName=" + this.targetProjectName + ", targetRunConfigDir="
-				+ this.targetRunConfigDir + ")";
+			return "CopyGradleRunConfigurations.CopyGradleRunConfigurationsBuilder(ideaSourceDir=" + this.ideaSourceDir + ", ideaTargetDir=" + this.ideaTargetDir + ", sourceFilenamePrefix=" + this.sourceFilenamePrefix + ", sourceProjectDir=" + this.sourceProjectDir + ", sourceProjectName=" + this.sourceProjectName + ", sourceRunConfigDir=" + this.sourceRunConfigDir + ", targetFilenamePrefix=" + this.targetFilenamePrefix + ", targetProjectDir=" + this.targetProjectDir + ", targetProjectName=" + this.targetProjectName + ", targetRunConfigDir=" + this.targetRunConfigDir + ")";
 		}
 	}
 
@@ -154,6 +156,17 @@ public class CopyGradleRunConfigurations
 	String targetFilenamePrefix;
 	File targetProjectDir;
 
+	public boolean isOnlyRunConfigurations()
+	{
+		return onlyRunConfigurations;
+	}
+
+	public void setOnlyRunConfigurations(boolean onlyRunConfigurations)
+	{
+		this.onlyRunConfigurations = onlyRunConfigurations;
+	}
+
+	boolean onlyRunConfigurations;
 	String targetProjectName;
 
 	File targetRunConfigDir;
@@ -161,7 +174,7 @@ public class CopyGradleRunConfigurations
 	CopyGradleRunConfigurations(File ideaSourceDir, File ideaTargetDir, String sourceFilenamePrefix,
 		File sourceProjectDir, String sourceProjectName, File sourceRunConfigDir,
 		String targetFilenamePrefix, File targetProjectDir, String targetProjectName,
-		File targetRunConfigDir)
+		File targetRunConfigDir, boolean onlyRunConfigurations)
 	{
 		this.ideaSourceDir = ideaSourceDir;
 		this.ideaTargetDir = ideaTargetDir;
@@ -173,6 +186,7 @@ public class CopyGradleRunConfigurations
 		this.targetProjectDir = targetProjectDir;
 		this.targetProjectName = targetProjectName;
 		this.targetRunConfigDir = targetRunConfigDir;
+		this.onlyRunConfigurations = onlyRunConfigurations;
 	}
 
 	protected boolean canEqual(final Object other)
@@ -180,8 +194,7 @@ public class CopyGradleRunConfigurations
 		return other instanceof CopyGradleRunConfigurations;
 	}
 
-	@Override
-	public boolean equals(final Object o)
+	@Override public boolean equals(final Object o)
 	{
 		if (o == this)
 			return true;
@@ -192,65 +205,63 @@ public class CopyGradleRunConfigurations
 			return false;
 		final Object this$ideaSourceDir = this.getIdeaSourceDir();
 		final Object other$ideaSourceDir = other.getIdeaSourceDir();
-		if (this$ideaSourceDir == null
-			? other$ideaSourceDir != null
-			: !this$ideaSourceDir.equals(other$ideaSourceDir))
+		if (this$ideaSourceDir == null ?
+			other$ideaSourceDir != null :
+			!this$ideaSourceDir.equals(other$ideaSourceDir))
 			return false;
 		final Object this$ideaTargetDir = this.getIdeaTargetDir();
 		final Object other$ideaTargetDir = other.getIdeaTargetDir();
-		if (this$ideaTargetDir == null
-			? other$ideaTargetDir != null
-			: !this$ideaTargetDir.equals(other$ideaTargetDir))
+		if (this$ideaTargetDir == null ?
+			other$ideaTargetDir != null :
+			!this$ideaTargetDir.equals(other$ideaTargetDir))
 			return false;
 		final Object this$sourceFilenamePrefix = this.getSourceFilenamePrefix();
 		final Object other$sourceFilenamePrefix = other.getSourceFilenamePrefix();
-		if (this$sourceFilenamePrefix == null
-			? other$sourceFilenamePrefix != null
-			: !this$sourceFilenamePrefix.equals(other$sourceFilenamePrefix))
+		if (this$sourceFilenamePrefix == null ?
+			other$sourceFilenamePrefix != null :
+			!this$sourceFilenamePrefix.equals(other$sourceFilenamePrefix))
 			return false;
 		final Object this$sourceProjectDir = this.getSourceProjectDir();
 		final Object other$sourceProjectDir = other.getSourceProjectDir();
-		if (this$sourceProjectDir == null
-			? other$sourceProjectDir != null
-			: !this$sourceProjectDir.equals(other$sourceProjectDir))
+		if (this$sourceProjectDir == null ?
+			other$sourceProjectDir != null :
+			!this$sourceProjectDir.equals(other$sourceProjectDir))
 			return false;
 		final Object this$sourceProjectName = this.getSourceProjectName();
 		final Object other$sourceProjectName = other.getSourceProjectName();
-		if (this$sourceProjectName == null
-			? other$sourceProjectName != null
-			: !this$sourceProjectName.equals(other$sourceProjectName))
+		if (this$sourceProjectName == null ?
+			other$sourceProjectName != null :
+			!this$sourceProjectName.equals(other$sourceProjectName))
 			return false;
 		final Object this$sourceRunConfigDir = this.getSourceRunConfigDir();
 		final Object other$sourceRunConfigDir = other.getSourceRunConfigDir();
-		if (this$sourceRunConfigDir == null
-			? other$sourceRunConfigDir != null
-			: !this$sourceRunConfigDir.equals(other$sourceRunConfigDir))
+		if (this$sourceRunConfigDir == null ?
+			other$sourceRunConfigDir != null :
+			!this$sourceRunConfigDir.equals(other$sourceRunConfigDir))
 			return false;
 		final Object this$targetFilenamePrefix = this.getTargetFilenamePrefix();
 		final Object other$targetFilenamePrefix = other.getTargetFilenamePrefix();
-		if (this$targetFilenamePrefix == null
-			? other$targetFilenamePrefix != null
-			: !this$targetFilenamePrefix.equals(other$targetFilenamePrefix))
+		if (this$targetFilenamePrefix == null ?
+			other$targetFilenamePrefix != null :
+			!this$targetFilenamePrefix.equals(other$targetFilenamePrefix))
 			return false;
 		final Object this$targetProjectDir = this.getTargetProjectDir();
 		final Object other$targetProjectDir = other.getTargetProjectDir();
-		if (this$targetProjectDir == null
-			? other$targetProjectDir != null
-			: !this$targetProjectDir.equals(other$targetProjectDir))
+		if (this$targetProjectDir == null ?
+			other$targetProjectDir != null :
+			!this$targetProjectDir.equals(other$targetProjectDir))
 			return false;
 		final Object this$targetProjectName = this.getTargetProjectName();
 		final Object other$targetProjectName = other.getTargetProjectName();
-		if (this$targetProjectName == null
-			? other$targetProjectName != null
-			: !this$targetProjectName.equals(other$targetProjectName))
+		if (this$targetProjectName == null ?
+			other$targetProjectName != null :
+			!this$targetProjectName.equals(other$targetProjectName))
 			return false;
 		final Object this$targetRunConfigDir = this.getTargetRunConfigDir();
 		final Object other$targetRunConfigDir = other.getTargetRunConfigDir();
-		if (this$targetRunConfigDir == null
-			? other$targetRunConfigDir != null
-			: !this$targetRunConfigDir.equals(other$targetRunConfigDir))
-			return false;
-		return true;
+		return (this$targetRunConfigDir == null ?
+			other$targetRunConfigDir != null :
+			!this$targetRunConfigDir.equals(other$targetRunConfigDir));
 	}
 
 	public File getIdeaSourceDir()
@@ -303,8 +314,7 @@ public class CopyGradleRunConfigurations
 		return this.targetRunConfigDir;
 	}
 
-	@Override
-	public int hashCode()
+	@Override public int hashCode()
 	{
 		final int PRIME = 59;
 		int result = 1;
@@ -313,25 +323,29 @@ public class CopyGradleRunConfigurations
 		final Object $ideaTargetDir = this.getIdeaTargetDir();
 		result = result * PRIME + ($ideaTargetDir == null ? 43 : $ideaTargetDir.hashCode());
 		final Object $sourceFilenamePrefix = this.getSourceFilenamePrefix();
-		result = result * PRIME
-			+ ($sourceFilenamePrefix == null ? 43 : $sourceFilenamePrefix.hashCode());
+		result = result * PRIME + ($sourceFilenamePrefix == null ?
+			43 :
+			$sourceFilenamePrefix.hashCode());
 		final Object $sourceProjectDir = this.getSourceProjectDir();
 		result = result * PRIME + ($sourceProjectDir == null ? 43 : $sourceProjectDir.hashCode());
 		final Object $sourceProjectName = this.getSourceProjectName();
 		result = result * PRIME + ($sourceProjectName == null ? 43 : $sourceProjectName.hashCode());
 		final Object $sourceRunConfigDir = this.getSourceRunConfigDir();
-		result = result * PRIME
-			+ ($sourceRunConfigDir == null ? 43 : $sourceRunConfigDir.hashCode());
+		result = result * PRIME + ($sourceRunConfigDir == null ?
+			43 :
+			$sourceRunConfigDir.hashCode());
 		final Object $targetFilenamePrefix = this.getTargetFilenamePrefix();
-		result = result * PRIME
-			+ ($targetFilenamePrefix == null ? 43 : $targetFilenamePrefix.hashCode());
+		result = result * PRIME + ($targetFilenamePrefix == null ?
+			43 :
+			$targetFilenamePrefix.hashCode());
 		final Object $targetProjectDir = this.getTargetProjectDir();
 		result = result * PRIME + ($targetProjectDir == null ? 43 : $targetProjectDir.hashCode());
 		final Object $targetProjectName = this.getTargetProjectName();
 		result = result * PRIME + ($targetProjectName == null ? 43 : $targetProjectName.hashCode());
 		final Object $targetRunConfigDir = this.getTargetRunConfigDir();
-		result = result * PRIME
-			+ ($targetRunConfigDir == null ? 43 : $targetRunConfigDir.hashCode());
+		result = result * PRIME + ($targetRunConfigDir == null ?
+			43 :
+			$targetRunConfigDir.hashCode());
 		return result;
 	}
 
@@ -385,16 +399,17 @@ public class CopyGradleRunConfigurations
 		this.targetRunConfigDir = targetRunConfigDir;
 	}
 
-	@Override
-	public String toString()
+	@Override public String toString()
 	{
-		return "CopyGradleRunConfigurations(ideaSourceDir=" + this.getIdeaSourceDir()
-			+ ", ideaTargetDir=" + this.getIdeaTargetDir() + ", sourceFilenamePrefix="
-			+ this.getSourceFilenamePrefix() + ", sourceProjectDir=" + this.getSourceProjectDir()
-			+ ", sourceProjectName=" + this.getSourceProjectName() + ", sourceRunConfigDir="
-			+ this.getSourceRunConfigDir() + ", targetFilenamePrefix="
-			+ this.getTargetFilenamePrefix() + ", targetProjectDir=" + this.getTargetProjectDir()
-			+ ", targetProjectName=" + this.getTargetProjectName() + ", targetRunConfigDir="
-			+ this.getTargetRunConfigDir() + ")";
+		return "CopyGradleRunConfigurations(ideaSourceDir=" + this
+			.getIdeaSourceDir() + ", ideaTargetDir=" + this
+			.getIdeaTargetDir() + ", sourceFilenamePrefix=" + this
+			.getSourceFilenamePrefix() + ", sourceProjectDir=" + this
+			.getSourceProjectDir() + ", sourceProjectName=" + this
+			.getSourceProjectName() + ", sourceRunConfigDir=" + this
+			.getSourceRunConfigDir() + ", targetFilenamePrefix=" + this
+			.getTargetFilenamePrefix() + ", targetProjectDir=" + this
+			.getTargetProjectDir() + ", targetProjectName=" + this
+			.getTargetProjectName() + ", targetRunConfigDir=" + this.getTargetRunConfigDir() + ")";
 	}
 }

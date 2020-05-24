@@ -4,6 +4,12 @@
 Version 5.7-SNAPSHOT
 -------------
 
+CHANGED:
+
+- update gradle to new version 6.4.1
+- update of jobj-compare dependency to new version 3.61
+- update of silly-collections dependency to new version 8.2
+
 Version 5.6
 -------------
 
