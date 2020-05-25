@@ -17,9 +17,9 @@ public class GradleRunConfigurationsCopierTest
 		String sourceProjectName;
 		String targetProjectName;
 		sourceProjectName = "file-worker";
-		targetProjectName = "lottery-app";
+		targetProjectName = "bundle-management";
 		sourceProjectDirNamePrefix = "/home/astrapi69/dev/github/lightblueseas/";
-		targetProjectDirNamePrefix = "/home/astrapi69/dev/bitbucket/";
+		targetProjectDirNamePrefix = "/home/astrapi69/dev/github/astrapi69/";
 		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier
 			.newCopyGradleRunConfigurations(sourceProjectName, targetProjectName,
 				sourceProjectDirNamePrefix, targetProjectDirNamePrefix, true);
