@@ -10,10 +10,7 @@
 *.iml
 *.ipr
 !.idea/runConfigurations
-.idea/inspectionProfiles
-.idea/libraries
-.idea/codeStyles
-.idea/shelf
+.idea/**
 .idea/*.*
 
 #################
@@ -24,21 +21,44 @@
 /.settings
 /.tern-project
 
+###########
+### STS ###
+###########
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+
+################
+### NetBeans ###
+################
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+/build/
+
 #########################
 # maven generated files #
 #########################
 /target
+/.mvn/
+*.versionsBackup
 
 #############
 # Zip files #
 #############
 *.tar
+*.tar.gz
 *.zip
 *.7z
 *.dmg
 *.gz
 *.iso
 *.jar
+*.war
+*.ear
 *.rar
 
 ##############
@@ -55,7 +75,6 @@
 # Binaries generated files #
 ############################
 /bin
-
 
 ################
 # gradle files #
