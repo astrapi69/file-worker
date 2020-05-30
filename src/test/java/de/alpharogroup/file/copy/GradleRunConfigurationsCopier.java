@@ -108,15 +108,7 @@ public class GradleRunConfigurationsCopier
 		{
 			copy(this.copyGradleRunConfigurations);
 		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (FileIsADirectoryException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (FileDoesNotExistException e)
+		catch (IOException | FileIsADirectoryException | FileDoesNotExistException e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -246,8 +238,28 @@ public class GradleRunConfigurationsCopier
 			versionStrings.add(newEntry);
 		});
 
+		setDefaultProperties(properties);
+
 		return DependenciesData.builder().properties(properties).versionStrings(versionStrings)
 			.build();
+	}
+
+	private void setDefaultProperties(Properties properties)
+	{
+		properties.setProperty("projectSourceCompatibility", "1.8");
+		properties.setProperty("projectHolderUsername", "astrapi69");
+		properties.setProperty("projectDescription", "");
+		properties.setProperty("projectScmProviderDomain", "github.com");
+		properties.setProperty("projectScmProviderUrl", "https://github.com/");
+		properties.setProperty("projectLicenseName", "MIT License");
+		properties.setProperty("projectLicenseUrl", "http://www.opensource.org/licenses/mit-license.php");
+		properties.setProperty("projectLicenseDistribution", "repo");
+		properties.setProperty("projectOrganizationName", "Alpha Ro Group UG (h.b.)");
+		properties.setProperty("projectOrganizationUrl", "http://www.alpharogroup.de/");
+		properties.setProperty("projectIssueManagementSystem", "GitHub");
+		properties.setProperty("projectRepositoriesReleasesRepoUrl", "https://oss.sonatype.org/service/local/staging/deploy/maven2/");
+		properties.setProperty("projectRepositoriesSnapshotsRepoUrl", "https://oss.sonatype.org/content/repositories/snapshots");
+		properties.setProperty("systemProp.org.gradle.internal.publish.checksums.insecure", "true");
 	}
 
 	private String getNewDependenciesContent(DependenciesData dependenciesData)
