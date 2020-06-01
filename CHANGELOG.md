@@ -4,6 +4,10 @@
 Version 5.7-SNAPSHOT
 -------------
 
+ADDED:
+ 
+- new methods in class SystemFileExtensions for get the download directory as File object
+
 CHANGED:
 
 - update gradle to new version 6.4.1
