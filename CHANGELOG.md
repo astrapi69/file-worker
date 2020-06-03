@@ -10,10 +10,12 @@ ADDED:
 
 CHANGED:
 
-- update gradle to new version 6.4.1
+- update gradle to new version 6.5
 - update of jobj-compare dependency to new version 3.61
 - update of silly-collections dependency to new version 8.2
 - update of checksum-up dependency to new version 1.1
+- update of commons-io dependency to new version 2.7
+- update of gradle plugin sonarqube to new version 3.0
 - extracted project properties to gradle.properties
 
 Version 5.6
