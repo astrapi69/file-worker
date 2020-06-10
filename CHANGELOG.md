@@ -15,6 +15,7 @@ CHANGED:
 - update of silly-collections dependency to new version 8.2
 - update of checksum-up dependency to new version 1.1
 - update of commons-io dependency to new version 2.7
+- update of zip4j dependency to new version 2.6.1
 - update of gradle plugin sonarqube to new version 3.0
 - extracted project properties to gradle.properties
 

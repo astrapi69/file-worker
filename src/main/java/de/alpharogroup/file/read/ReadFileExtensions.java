@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -80,7 +81,7 @@ public final class ReadFileExtensions
 	 */
 	public static String inputStream2String(final InputStream inputStream) throws IOException
 	{
-		return inputStream2String(inputStream, Charset.forName("UTF-8"));
+		return inputStream2String(inputStream, StandardCharsets.UTF_8);
 	}
 
 	/**
@@ -111,10 +112,7 @@ public final class ReadFileExtensions
 	 */
 	public static Reader openFileReader(final String fileName) throws IOException
 	{
-		BufferedReader bufferedReader = null;
-		final File file = new File(fileName);
-		bufferedReader = (BufferedReader)StreamExtensions.getReader(file);
-		return bufferedReader;
+		return StreamExtensions.getReader(new File(fileName));
 	}
 
 	/**
@@ -130,14 +128,14 @@ public final class ReadFileExtensions
 	 */
 	public static String reader2String(final Reader reader) throws IOException
 	{
-		final StringBuffer stringBuffer = new StringBuffer();
+		final StringBuilder stringBuilder = new StringBuilder();
 		final char[] charArray = new char[FileConst.BLOCKSIZE];
 		int tmp;
 		while ((tmp = reader.read(charArray)) > 0)
 		{
-			stringBuffer.append(charArray, 0, tmp);
+			stringBuilder.append(charArray, 0, tmp);
 		}
-		return stringBuffer.toString();
+		return stringBuilder.toString();
 	}
 
 	/**
@@ -191,14 +189,14 @@ public final class ReadFileExtensions
 	 *            The Path to the File and name from the file from where we read.
 	 * @return The first line from the file.
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static String readHeadLine(final String inputFile)
 		throws FileNotFoundException, IOException
 	{
-		String headLine = null;
+		String headLine;
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)))
 		{
 			headLine = reader.readLine();
@@ -311,7 +309,7 @@ public final class ReadFileExtensions
 		throws IOException
 	{
 		// return the list with all lines from the file.
-		return readLinesInList(input, Charset.forName("UTF-8"), trim);
+		return readLinesInList(input, StandardCharsets.UTF_8, trim);
 	}
 
 	/**
@@ -336,10 +334,10 @@ public final class ReadFileExtensions
 			InputStreamReader isr = encoding == null
 				? new InputStreamReader(input)
 				: new InputStreamReader(input, encoding);
-			BufferedReader reader = new BufferedReader(isr);)
+			BufferedReader reader = new BufferedReader(isr))
 		{
 			// the line.
-			String line = null;
+			String line;
 			// read all lines from the file
 			do
 			{
@@ -397,7 +395,7 @@ public final class ReadFileExtensions
 		if (tmpFile.exists() && !tmpFile.isDirectory())
 		{
 			try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(tmpFile));
-				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileConst.KILOBYTE);)
+				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileConst.KILOBYTE))
 			{
 				StreamExtensions.writeInputStreamToOutputStream(bis, bos);
 				data = bos.toByteArray();

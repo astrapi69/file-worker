@@ -9,7 +9,7 @@ public class GradleRunConfigurationsCopierTest
 	 * Test method for copy run configurations file from a source project to a target project and
 	 * modifies its content
 	 */
-	@Test(enabled = false) public void testCopyIdeaRunConfigurations()
+	@Test(enabled = true) public void testCopyIdeaRunConfigurations()
 	{
 		String sourceProjectDirNamePrefix;
 		String targetProjectDirNamePrefix;
@@ -17,7 +17,7 @@ public class GradleRunConfigurationsCopierTest
 		String sourceProjectName;
 		String targetProjectName;
 		sourceProjectName = "file-worker";
-		targetProjectName = "bundle-management";
+		targetProjectName = "checksum-up";
 		sourceProjectDirNamePrefix = "/home/astrapi69/dev/github/lightblueseas/";
 		targetProjectDirNamePrefix = "/home/astrapi69/dev/github/astrapi69/";
 		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier

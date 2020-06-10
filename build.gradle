@@ -136,7 +136,7 @@ publishing {
                 developers {
                     developer {
                         id = "$projectHolderUsername"
-                        name = "Asterios Raptis"
+                        name = "$projectLeaderName"
                     }
                 }
                 scm {
