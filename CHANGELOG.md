@@ -4,6 +4,14 @@
 Version 5.8-SNAPSHOT
 -------------
 
+ADDED:
+ 
+- added java area in build.gradle for activate support of module path inference
+
+CHANGED:
+
+- update to jdk version 11
+
 Version 5.7
 -------------
 
