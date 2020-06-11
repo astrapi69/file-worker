@@ -1,5 +1,6 @@
 # file-worker .travis.yml
-
+before_install:
+  - chmod +x gradlew
 language: java
 
 cache:
