@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import net.lingala.zip4j.model.enums.CompressionLevel;
+import net.lingala.zip4j.model.enums.CompressionMethod;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -38,9 +40,8 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.file.FileTestCase;
 import de.alpharogroup.file.write.WriteFileExtensions;
-import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
-
 
 /**
  * The unit test class for the class {@link Zip4jExtensions}.
@@ -50,7 +51,6 @@ import net.lingala.zip4j.exception.ZipException;
  */
 public class Zip4jExtensionsTest extends FileTestCase
 {
-
 
 	/**
 	 * {@inheritDoc}
@@ -72,15 +72,16 @@ public class Zip4jExtensionsTest extends FileTestCase
 		super.tearDown();
 	}
 
-
 	/**
 	 * Test for {@link Zip4jExtensions#extract(ZipFile, File, String)}
 	 * 
 	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 * @throws FileNotFoundException
+	 *             is thrown if the given file is not found.
 	 */
 	@Test(enabled = true)
-	public void testExtract() throws ZipException, FileNotFoundException, IOException
+	public void testExtract() throws FileNotFoundException, IOException
 	{
 		final File zipFile = new File(this.zipDir.getAbsoluteFile(), "Zip4j.zip");
 
@@ -139,7 +140,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 	 * Test for {@link Zip4jExtensions#zipFiles(ZipFile, File...)}
 	 */
 	@Test(enabled = true)
-	public void testZipFilesZipFileFileArray() throws ZipException, IOException
+	public void testZipFilesZipFileFileArray() throws IOException
 	{
 
 		final File zipFile = new File(this.zipDir.getAbsoluteFile(), "Zip4j.zip");
@@ -169,7 +170,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test for {@link Zip4jExtensions#zipFiles(ZipFile, int, int, File...)}
+	 * Test for {@link Zip4jExtensions#zipFiles(ZipFile, CompressionMethod, CompressionLevel, File...)}
 	 */
 	@Test(enabled = false)
 	public void testZipFilesZipFileIntIntFileArray()

@@ -1,6 +1,24 @@
 ## Change log
 ----------------------
 
+Version 5.7
+-------------
+
+ADDED:
+ 
+- new methods in class SystemFileExtensions for get the download directory as File object
+
+CHANGED:
+
+- update gradle to new version 6.5
+- update of jobj-compare dependency to new version 3.61
+- update of silly-collections dependency to new version 8.2
+- update of checksum-up dependency to new version 1.1
+- update of commons-io dependency to new version 2.7
+- update of zip4j dependency to new version 2.6.1
+- update of gradle plugin sonarqube to new version 3.0
+- extracted project properties to gradle.properties
+
 Version 5.6
 -------------
 

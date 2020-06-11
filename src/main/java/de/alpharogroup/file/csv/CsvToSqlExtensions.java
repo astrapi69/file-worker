@@ -43,18 +43,13 @@ public final class CsvToSqlExtensions
 	 */
 	public static String extractSqlColumns(final String[] headers)
 	{
-		final StringBuffer sqlColumns = new StringBuffer();
-		sqlColumns.append("");
+		final StringBuilder sqlColumns = new StringBuilder();
 		for (int i = 0; i < headers.length; i++)
 		{
 			sqlColumns.append(headers[i]);
 			if (i < headers.length - 1)
 			{
 				sqlColumns.append(", ");
-			}
-			else
-			{
-				sqlColumns.append("");
 			}
 		}
 		return sqlColumns.toString();
@@ -90,22 +85,26 @@ public final class CsvToSqlExtensions
 	public static String getCsvFileAsSqlInsertScript(final String tableName, final CsvBean csvBean,
 		final boolean withHeader, final boolean withEndSemicolon)
 	{
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		if (withHeader)
 		{
 			final String sqlColumns = extractSqlColumns(csvBean.getHeaders());
-			sb.append("INSERT INTO " + tableName + " ( " + sqlColumns + ") VALUES \n");
+			sb.append("INSERT INTO ")
+				.append(tableName)
+				.append(" ( ")
+				.append(sqlColumns)
+				.append(") VALUES \n");
 		}
 		final String[] columnTypesEdit = csvBean.getColumnTypesEdit();
 		if (columnTypesEdit != null)
 		{
-			final StringBuffer sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
+			final StringBuilder sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
 				columnTypesEdit, csvBean.getLineOrder(), csvBean.getLines(), withEndSemicolon);
 			sb.append(sqlData.toString());
 		}
 		else
 		{
-			final StringBuffer sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
+			final StringBuilder sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
 				null, null, csvBean.getLines(), withEndSemicolon);
 			sb.append(sqlData.toString());
 		}
@@ -165,8 +164,7 @@ public final class CsvToSqlExtensions
 	 */
 	public static String[] getDataFromLine(final String line, final String seperator)
 	{
-		final String[] splittedLine = line.split(seperator);
-		return splittedLine;
+		return line.split(seperator);
 	}
 
 	/**
@@ -186,11 +184,11 @@ public final class CsvToSqlExtensions
 	 *            the with end semicolon
 	 * @return the sql data
 	 */
-	public static StringBuffer getSqlData(final String[] columns, final String[] columnTypes,
+	public static StringBuilder getSqlData(final String[] columns, final String[] columnTypes,
 		final String[] columnTypesEdit, final Map<Integer, Integer> lineOrder,
 		final List<String[]> lines, final boolean withEndSemicolon)
 	{
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		int autoincrement = 0;
 		for (final Iterator<String[]> iterator = lines.iterator(); iterator.hasNext();)
 		{
@@ -198,7 +196,7 @@ public final class CsvToSqlExtensions
 			if (lineOrder != null)
 			{
 				final String[] trueLine = iterator.next();
-				final String newLine[] = new String[columnTypes.length];
+				final String[] newLine = new String[columnTypes.length];
 				for (final Integer index : lineOrder.keySet())
 				{
 					newLine[lineOrder.get(index)] = trueLine[index];
@@ -223,20 +221,20 @@ public final class CsvToSqlExtensions
 						if (3 < editTypeData.length)
 						{
 							lineItem = lineItem.replace(editTypeData[1], editTypeData[2]);
-							final Boolean lc = new Boolean(editTypeData[3]);
+							final boolean lc = Boolean.valueOf(editTypeData[3]);
 							if (lc)
 							{
 								final String tlc = lineItem.toLowerCase();
-								sb.append("\"" + tlc + "\"");
+								sb.append("\"").append(tlc).append("\"");
 							}
 							else
 							{
-								sb.append("\"" + lineItem + "\"");
+								sb.append("\"").append(lineItem).append("\"");
 							}
 						}
 						else
 						{
-							sb.append("\"" + lineItem + "\"");
+							sb.append("\"").append(lineItem).append("\"");
 						}
 					}
 					else if (editType.equals("autoincrement"))
@@ -254,7 +252,7 @@ public final class CsvToSqlExtensions
 						final String type = editTypeData[1];
 						if (type.equals("text"))
 						{
-							sb.append("\"" + editTypeData[2] + "\"");
+							sb.append("\"").append(editTypeData[2]).append("\"");
 						}
 						else
 						{
@@ -268,7 +266,7 @@ public final class CsvToSqlExtensions
 					{
 						if (columnTypes[i].endsWith("text"))
 						{
-							sb.append("\"" + lineItem + "\"");
+							sb.append("\"").append(lineItem).append("\"");
 						}
 						else
 						{

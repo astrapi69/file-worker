@@ -1,30 +1,52 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package de.alpharogroup.file.copy;
-
-import java.io.IOException;
 
 import org.testng.annotations.Test;
 
-import de.alpharogroup.file.exceptions.FileDoesNotExistException;
-import de.alpharogroup.file.exceptions.FileIsADirectoryException;
-
-
 public class GradleRunConfigurationsCopierTest
 {
-
 
 	/**
 	 * Test method for copy run configurations file from a source project to a target project and
 	 * modifies its content
 	 */
-	@Test(enabled = false)
-	public void testCopyIdeaRunConfigurations()
-		throws FileDoesNotExistException, IOException, FileIsADirectoryException
+	@Test(enabled = true) public void testCopyIdeaRunConfigurations()
 	{
+		String sourceProjectDirNamePrefix;
+		String targetProjectDirNamePrefix;
 		CopyGradleRunConfigurations copyGradleRunConfigurationsData;
+		String sourceProjectName;
+		String targetProjectName;
+		sourceProjectName = "file-worker";
+		targetProjectName = "checksum-up";
+		sourceProjectDirNamePrefix = "/home/astrapi69/dev/github/lightblueseas/";
+		targetProjectDirNamePrefix = "/home/astrapi69/dev/github/astrapi69/";
 		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier
-			.newCopyGradleRunConfigurations("file-worker", "lottery-app",
-				"/home/astrapi69/dev/github/lightblueseas/", "/home/astrapi69/dev/bitbucket/");
-
+			.newCopyGradleRunConfigurations(sourceProjectName, targetProjectName,
+				sourceProjectDirNamePrefix, targetProjectDirNamePrefix, true);
 		GradleRunConfigurationsCopier.of(copyGradleRunConfigurationsData).copy();
 	}
 

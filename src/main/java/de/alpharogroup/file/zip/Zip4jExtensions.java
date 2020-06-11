@@ -28,10 +28,11 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
+import net.lingala.zip4j.model.enums.CompressionMethod;
+import net.lingala.zip4j.model.enums.CompressionLevel;
 
 /**
  * The class {@link Zip4jExtensions}.
@@ -56,7 +57,7 @@ public final class Zip4jExtensions
 	{
 		if (zipFile4j.isEncrypted())
 		{
-			zipFile4j.setPassword(password);
+			zipFile4j.setPassword(password.toCharArray());
 		}
 		zipFile4j.extractAll(destination.getAbsolutePath());
 	}
@@ -75,7 +76,7 @@ public final class Zip4jExtensions
 	 */
 	public static void zipFiles(final ZipFile zipFile4j, final File... toAdd) throws ZipException
 	{
-		zipFiles(zipFile4j, Zip4jConstants.COMP_DEFLATE, Zip4jConstants.DEFLATE_LEVEL_NORMAL,
+		zipFiles(zipFile4j, CompressionMethod.DEFLATE, CompressionLevel.NORMAL,
 			toAdd);
 	}
 
@@ -94,8 +95,8 @@ public final class Zip4jExtensions
 	 * @throws ZipException
 	 *             the zip exception
 	 */
-	public static void zipFiles(final ZipFile zipFile4j, final int compressionMethod,
-		final int compressionLevel, final File... toAdd) throws ZipException
+	public static void zipFiles(final ZipFile zipFile4j, final CompressionMethod compressionMethod,
+		final CompressionLevel compressionLevel, final File... toAdd) throws ZipException
 	{
 		// Initiate Zip Parameters which define various properties such
 		// as compression method, etc.

@@ -24,16 +24,6 @@
  */
 package de.alpharogroup.file.copy;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-
-import org.apache.commons.lang3.StringUtils;
-
 import de.alpharogroup.collections.array.ArrayExtensions;
 import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
@@ -49,13 +39,30 @@ import de.alpharogroup.file.search.FileSearchExtensions;
 import de.alpharogroup.file.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 
 public class GradleRunConfigurationsCopier
 {
 
+	private final CopyGradleRunConfigurations copyGradleRunConfigurations;
+
+	private GradleRunConfigurationsCopier(CopyGradleRunConfigurations copyGradleRunConfigurations)
+	{
+		Objects.requireNonNull(copyGradleRunConfigurations);
+		this.copyGradleRunConfigurations = copyGradleRunConfigurations;
+	}
+
 	public static CopyGradleRunConfigurations newCopyGradleRunConfigurations(
 		String sourceProjectName, String targetProjectName, String sourceProjectDirNamePrefix,
-		String targetProjectDirNamePrefix)
+		String targetProjectDirNamePrefix, boolean onlyRunConfigurations)
 	{
 		File sourceProjectDir;
 		File targetProjectDir;
@@ -81,13 +88,12 @@ public class GradleRunConfigurationsCopier
 		targetRunConfigDir = new File(ideaTargetDir,
 			CopyGradleRunConfigurations.RUN_CONFIGURATIONS_DIR_NAME);
 
-		CopyGradleRunConfigurations copyGradleRunConfigurationsData = CopyGradleRunConfigurations
-			.builder().sourceProjectDir(sourceProjectDir).targetProjectDir(targetProjectDir)
+		return CopyGradleRunConfigurations.builder().onlyRunConfigurations(onlyRunConfigurations)
+			.sourceProjectDir(sourceProjectDir).targetProjectDir(targetProjectDir)
 			.ideaSourceDir(ideaSourceDir).ideaTargetDir(ideaTargetDir)
 			.sourceRunConfigDir(sourceRunConfigDir).targetRunConfigDir(targetRunConfigDir)
 			.sourceFilenamePrefix(sourceFilenamePrefix).targetFilenamePrefix(targetFilenamePrefix)
 			.sourceProjectName(sourceProjectName).targetProjectName(targetProjectName).build();
-		return copyGradleRunConfigurationsData;
 	}
 
 	public static GradleRunConfigurationsCopier of(
@@ -96,29 +102,13 @@ public class GradleRunConfigurationsCopier
 		return new GradleRunConfigurationsCopier(copyGradleRunConfigurations);
 	}
 
-	private final CopyGradleRunConfigurations copyGradleRunConfigurations;
-
-	private GradleRunConfigurationsCopier(CopyGradleRunConfigurations copyGradleRunConfigurations)
-	{
-		Objects.requireNonNull(copyGradleRunConfigurations);
-		this.copyGradleRunConfigurations = copyGradleRunConfigurations;
-	}
-
 	public void copy()
 	{
 		try
 		{
 			copy(this.copyGradleRunConfigurations);
 		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (FileIsADirectoryException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (FileDoesNotExistException e)
+		catch (IOException | FileIsADirectoryException | FileDoesNotExistException e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -127,19 +117,31 @@ public class GradleRunConfigurationsCopier
 	private void copy(CopyGradleRunConfigurations copyGradleRunConfigurationsData)
 		throws IOException, FileIsADirectoryException, FileDoesNotExistException
 	{
+		copyRunConfigurations(copyGradleRunConfigurationsData);
+
+		if (!copyGradleRunConfigurationsData.isOnlyRunConfigurations())
+		{
+			externalizeVersionFromBuildGradle(
+				copyGradleRunConfigurationsData.getTargetProjectDir());
+		}
+	}
+
+	private void copyRunConfigurations(CopyGradleRunConfigurations copyGradleRunConfigurationsData)
+		throws IOException, FileIsADirectoryException, FileDoesNotExistException
+	{
 		List<File> allFiles;
 		// find all run configurations files for copy
-		allFiles = FileSearchExtensions.findAllFiles(
-			copyGradleRunConfigurationsData.getSourceRunConfigDir(),
-			copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
+		allFiles = FileSearchExtensions
+			.findAllFiles(copyGradleRunConfigurationsData.getSourceRunConfigDir(),
+				copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
 		// copy found run configurations files to the target directory
-		CopyFileExtensions.copyFiles(allFiles,
-			copyGradleRunConfigurationsData.getTargetRunConfigDir(), Charset.forName("UTF-8"),
-			Charset.forName("UTF-8"), true);
+		CopyFileExtensions
+			.copyFiles(allFiles, copyGradleRunConfigurationsData.getTargetRunConfigDir(),
+				StandardCharsets.UTF_8, StandardCharsets.UTF_8, true);
 		// find all run configurations files for rename
-		allFiles = FileSearchExtensions.findAllFiles(
-			copyGradleRunConfigurationsData.getTargetRunConfigDir(),
-			copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
+		allFiles = FileSearchExtensions
+			.findAllFiles(copyGradleRunConfigurationsData.getTargetRunConfigDir(),
+				copyGradleRunConfigurationsData.getSourceFilenamePrefix() + ".*");
 		// rename all run configurations files
 		for (File file : allFiles)
 		{
@@ -149,24 +151,20 @@ public class GradleRunConfigurationsCopier
 			RenameFileExtensions.renameFile(file, newName);
 		}
 		// Find all renamed run configurations files
-		allFiles = FileSearchExtensions.findAllFiles(
-			copyGradleRunConfigurationsData.getTargetRunConfigDir(),
-			copyGradleRunConfigurationsData.getTargetFilenamePrefix() + ".*");
+		allFiles = FileSearchExtensions
+			.findAllFiles(copyGradleRunConfigurationsData.getTargetRunConfigDir(),
+				copyGradleRunConfigurationsData.getTargetFilenamePrefix() + ".*");
 		// replace content of all run configurations files so they can run appropriate to the new
 		// project
 		for (File file : allFiles)
 		{
 			Path inFilePath = file.toPath();
 			ModifyFileExtensions.modifyFile(inFilePath, (count, input) -> {
-				String alteredLine = input.replaceAll(
-					copyGradleRunConfigurationsData.getSourceProjectName(),
-					copyGradleRunConfigurationsData.getTargetProjectName())
-					+ System.lineSeparator();
-				return alteredLine;
+				return input.replaceAll(copyGradleRunConfigurationsData.getSourceProjectName(),
+					copyGradleRunConfigurationsData.getTargetProjectName()) + System
+					.lineSeparator();
 			});
 		}
-
-		externalizeVersionFromBuildGradle(copyGradleRunConfigurationsData.getTargetProjectDir());
 	}
 
 	private void externalizeVersionFromBuildGradle(File targetProjectDir) throws IOException
@@ -199,15 +197,14 @@ public class GradleRunConfigurationsCopier
 		String buildGradleContent = ReadFileExtensions.readFromFile(buildGradle);
 		int indexOfStart = buildGradleContent.indexOf("dependencies {");
 		int indexOfEnd = buildGradleContent.substring(indexOfStart).indexOf("}") + indexOfStart + 1;
-		String dependencies = buildGradleContent.substring(indexOfStart, indexOfEnd);
-		return dependencies;
+		return buildGradleContent.substring(indexOfStart, indexOfEnd);
 	}
 
 	private DependenciesData getGradlePropertiesWithVersions(List<String> stringList)
 	{
 		List<String> versionStrings = ListFactory.newArrayList();
 		Properties properties = new Properties();
-		stringList.stream().forEach(entry -> {
+		stringList.forEach(entry -> {
 			String dependency = StringUtils.substringBetween(entry, "'");
 			String[] strings = dependency.split(":");
 			String group = strings[0];
@@ -241,41 +238,59 @@ public class GradleRunConfigurationsCopier
 			versionStrings.add(newEntry);
 		});
 
-		DependenciesData dependenciesData = DependenciesData.builder().properties(properties)
-			.versionStrings(versionStrings).build();
-		return dependenciesData;
+		setDefaultProperties(properties);
+
+		return DependenciesData.builder().properties(properties).versionStrings(versionStrings)
+			.build();
+	}
+
+	private void setDefaultProperties(Properties properties)
+	{
+		properties.setProperty("projectSourceCompatibility", "1.8");
+		properties.setProperty("projectHolderUsername", "astrapi69");
+		properties.setProperty("projectDescription", "");
+		properties.setProperty("projectScmProviderDomain", "github.com");
+		properties.setProperty("projectScmProviderUrl", "https://github.com/");
+		properties.setProperty("projectLicenseName", "MIT License");
+		properties.setProperty("projectLicenseUrl", "http://www.opensource.org/licenses/mit-license.php");
+		properties.setProperty("projectLicenseDistribution", "repo");
+		properties.setProperty("projectOrganizationName", "Alpha Ro Group UG (h.b.)");
+		properties.setProperty("projectOrganizationUrl", "http://www.alpharogroup.de/");
+		properties.setProperty("projectIssueManagementSystem", "GitHub");
+		properties.setProperty("projectRepositoriesReleasesRepoUrl", "https://oss.sonatype.org/service/local/staging/deploy/maven2/");
+		properties.setProperty("projectRepositoriesSnapshotsRepoUrl", "https://oss.sonatype.org/content/repositories/snapshots");
+		properties.setProperty("systemProp.org.gradle.internal.publish.checksums.insecure", "true");
 	}
 
 	private String getNewDependenciesContent(DependenciesData dependenciesData)
 	{
 		StringBuilder sb = new StringBuilder();
 		sb.append("dependencies {").append("\n");
-		dependenciesData.getVersionStrings().stream()
-			.forEach(entry -> sb.append(entry).append("\n"));
+		dependenciesData.getVersionStrings().forEach(entry -> sb.append(entry).append("\n"));
 		sb.append("}");
 		return sb.toString();
 	}
 
 	private String getVersion(String buildGradleContent, Properties gradleProperties)
-		throws IOException
 	{
-		String versionQuotationMark = "\"";
 		String projectVersionKey = "projectVersion";
-		String versionPrefix = "version = " + versionQuotationMark;
+		String versionPrefix = "version = ";
 		int versionPrefixLength = versionPrefix.length();
 		int indexOfVersionStart = buildGradleContent.indexOf(versionPrefix);
-		String substring = buildGradleContent.substring(indexOfVersionStart + versionPrefixLength);
+		String versionQuotationMark = buildGradleContent
+			.substring(indexOfVersionStart + versionPrefixLength,
+				indexOfVersionStart + versionPrefixLength + 1);
+		String substring = buildGradleContent
+			.substring(indexOfVersionStart + versionPrefixLength + 1);
 		int ie = substring.indexOf(versionQuotationMark);
-		int indexOfVersionEnd = ie + indexOfVersionStart + versionPrefixLength + 1;
+		int indexOfVersionEnd = ie + indexOfVersionStart + versionPrefixLength + 2;
 		String versionLine = buildGradleContent.substring(indexOfVersionStart, indexOfVersionEnd);
-		String versionValue = StringUtils.substringsBetween(versionLine, versionQuotationMark,
-			versionQuotationMark)[0];
+		String versionValue = StringUtils
+			.substringsBetween(versionLine, versionQuotationMark, versionQuotationMark)[0];
 		gradleProperties.setProperty(projectVersionKey, versionValue);
-		String newVersionLine = StringUtils.replace(versionLine, versionValue,
-			"$" + projectVersionKey);
-		String replacedBuildGradleContent = StringUtils.replace(buildGradleContent, versionLine,
-			newVersionLine);
-		return replacedBuildGradleContent;
+		String newVersionLine = StringUtils
+			.replace(versionLine, versionValue, "$" + projectVersionKey);
+		return StringUtils.replace(buildGradleContent, versionLine, newVersionLine);
 	}
 
 	public String replaceDependenciesContent(File buildGradle, String newDependenciesContent,
@@ -285,11 +300,10 @@ public class GradleRunConfigurationsCopier
 		int indexOfStart = buildGradleContent.indexOf("dependencies {");
 		int indexOfEnd = buildGradleContent.substring(indexOfStart).indexOf("}") + indexOfStart + 1;
 		String dependencies = buildGradleContent.substring(indexOfStart, indexOfEnd);
-		String replacedBuildGradleContent = StringUtils.replace(buildGradleContent, dependencies,
-			newDependenciesContent);
+		String replacedBuildGradleContent = StringUtils
+			.replace(buildGradleContent, dependencies, newDependenciesContent);
 		replacedBuildGradleContent = getVersion(replacedBuildGradleContent, gradleProperties);
-		String newBuildGradleContent = StringUtils.replace(replacedBuildGradleContent, "'", "\"");
-		return newBuildGradleContent;
+		return StringUtils.replace(replacedBuildGradleContent, "'", "\"");
 	}
 
 }
