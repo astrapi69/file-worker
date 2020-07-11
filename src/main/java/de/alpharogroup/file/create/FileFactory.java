@@ -49,12 +49,8 @@ public final class FileFactory
 	 *            the directories
 	 *
 	 * @return true, if successful
-	 *
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
 	 */
 	public static FileCreationState newDirectories(final Collection<File> directories)
-		throws DirectoryAlreadyExistsException
 	{
 		FileCreationState created = FileCreationState.PENDING;
 		for (final File dir : directories)
@@ -79,7 +75,7 @@ public final class FileFactory
 	 * @return Returns true if the directory was created otherwise false.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 * @see <code>Files#createDirectories(Path, FileAttribute...)</code>
+	 * @see Files#createDirectories(Path, FileAttribute...)
 	 */
 	public static boolean newDirectories(Path dir, FileAttribute<?>... attrs) throws IOException
 	{
@@ -125,7 +121,7 @@ public final class FileFactory
 	 * @return Returns true if the directory was created otherwise false.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 * @see <code>Files#createDirectory(Path, FileAttribute...)</code>
+	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
 	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
 	{
@@ -150,8 +146,7 @@ public final class FileFactory
 		if (!file.exists())
 		{
 			fileCreationState = FileCreationState.FAILED;
-			newParentDirectories(file);
-			if (file.createNewFile())
+			if (mkParentDirs(file) && file.createNewFile())
 			{
 				fileCreationState = FileCreationState.CREATED;
 			}
@@ -186,7 +181,11 @@ public final class FileFactory
 	 *
 	 * @param file
 	 *            the file
+	 * @deprecated use instead new method {@link FileFactory#mkParentDirs(File)} that returns a result
+	 * Note:<br><br>
+	 * will be removed in next minor version
 	 */
+	@Deprecated
 	public static void newParentDirectories(final File file)
 	{
 		if (!file.exists())
@@ -197,6 +196,25 @@ public final class FileFactory
 				parent.mkdirs();
 			}
 		}
+	}
+
+	/**
+	 * Creates the parent directories from the given file.
+	 *
+	 * @param file
+	 *            the file
+	 */
+	public static boolean mkParentDirs(final File file)
+	{
+		if (!file.exists())
+		{
+			final File parent = file.getParentFile();
+			if (parent != null && !parent.exists())
+			{
+				return parent.mkdirs();
+			}
+		}
+		return true;
 	}
 
 	private FileFactory()

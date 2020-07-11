@@ -11,6 +11,8 @@ ADDED:
 CHANGED:
 
 - update to jdk version 11
+- update gradle to new version 6.5.1
+- update of throw-able dependency to new version 1.4
 
 Version 5.7
 -------------
