@@ -464,7 +464,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile6, "Its a beautifull night!!!");
 
 		actual = CompareFileExtensions.findEqualFiles(this.secondTestDir, this.testDir, false,
-			false, false, false, false);
+			false, false, true, false);
 		FileCompareResultBean one = new FileCompareResultBean(testFile4, this.testFile4);
 		one.setAbsolutePathEquality(false);
 		one.setFileExtensionEquality(true);
