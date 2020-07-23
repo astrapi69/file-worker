@@ -441,7 +441,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
 		throws FileNotFoundException, IOException
 	{
