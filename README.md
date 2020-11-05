@@ -72,7 +72,7 @@ And then add it to the dependencies area of the build.gradle:
 ```
 dependencies {
 			...
-compile "de.alpharogroup:file-worker:$fileWorkerVersion"
+	implementation("de.alpharogroup:file-worker:$fileWorkerVersion")
 			...
 }
 ```

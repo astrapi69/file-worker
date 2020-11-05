@@ -100,7 +100,7 @@ public class ZipperTest extends ZipTestCase
 					try
 					{
 						zipFile = new ZipFile(
-							new File(ZipperTest.this.resources.getAbsoluteFile(), "test.testzip"));
+							new File(ZipperTest.this.resources.getAbsoluteFile(), "test.zip"));
 					}
 					catch (IOException e)
 					{

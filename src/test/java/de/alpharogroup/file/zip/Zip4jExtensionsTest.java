@@ -108,7 +108,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 	@Test(enabled = true)
 	public void testExtractWithPassword() throws ZipException
 	{
-		final File zipFile = new File(this.testResources, "autotextWithPassword.testzip");
+		final File zipFile = new File(this.testResources, "autotextWithPassword.zip");
 		final File unzippedFile = new File(this.unzipDir, "autotext");
 		// unzipped file should not exists in file system...
 		expected = false;
