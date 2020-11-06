@@ -105,7 +105,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 	/**
 	 * Test for {@link Zip4jExtensions#extract(ZipFile, File, String)}
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testExtractWithPassword() throws ZipException
 	{
 		final File zipFile = new File(this.testResources, "autotextWithPassword.zip");
