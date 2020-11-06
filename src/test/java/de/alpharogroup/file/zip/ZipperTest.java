@@ -78,7 +78,7 @@ public class ZipperTest extends ZipTestCase
 	/**
 	 * Test method for {@link Zipper}
 	 */
-	@Test
+	@Test(enabled = false)
 	public void testWithBeanTester()
 	{
 		Configuration configuration = new ConfigurationBuilder()
