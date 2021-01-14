@@ -10,7 +10,7 @@ ADDED:
 
 CHANGED:
 
-- update to jdk version 11
+- update jdk from version 8 to 11
 
 - update gradle to new version 6.7
 - update of throw-able dependency to new version 1.4
