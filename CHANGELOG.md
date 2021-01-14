@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 6-SNAPSHOT
+Version 6
 -------------
 
 ADDED:
@@ -12,7 +12,9 @@ CHANGED:
 
 - update jdk from version 8 to 11
 
-- update gradle to new version 6.7
+- update gradle to new version 6.8
+- changed to new package io.github.astrapi69
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.36.0
 - update of throw-able dependency to new version 1.4
 - update of jobj-compare dependency to new version 3.7
 - update of silly-collections dependency to new version 8.4
@@ -73,7 +75,6 @@ CHANGED:
 
 - removed lombok dependency
 - removed all lombok dependent imports
-- changed to new package io.github.astrapi69
 - removed idea run configurations for maven
 - moved dependency versions to file gradle.properties
 - update of silly-strings dependency version to 5.5

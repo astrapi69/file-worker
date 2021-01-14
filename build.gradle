@@ -162,12 +162,12 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-                    exclude: ["de/alpharogroup/file/exceptions/**/*.class",
-                              "de/alpharogroup/file/compare/api/**/*.class",
-                              "de/alpharogroup/file/modify/api/**/*.class",
-                              "de/alpharogroup/file/FileConst.class",
-                              "de/alpharogroup/file/zip/ZipState.class",
-                              "de/alpharogroup/file/zip/ZipModel.class"])
+                    exclude: ["io/github/astrapi69/file/exceptions/**/*.class",
+                              "io/github/astrapi69/file/compare/api/**/*.class",
+                              "io/github/astrapi69/file/modify/api/**/*.class",
+                              "io/github/astrapi69/file/FileConst.class",
+                              "io/github/astrapi69/file/zip/ZipState.class",
+                              "io/github/astrapi69/file/zip/ZipModel.class"])
         }))
     }
 }
