@@ -3,22 +3,21 @@
 <suite name="Suite">
   <test name="Test">
     <classes>
-      <class name="de.alpharogroup.file.zip.ZipperTest"/>
-      <class name="de.alpharogroup.file.csv.CsvFileExtensionsTest"/>
-      <class name="de.alpharogroup.file.search.PathFinderTest"/>
-      <class name="de.alpharogroup.file.FileTestCase"/>
-      <class name="de.alpharogroup.file.zip.ZipTestCase"/>
-      <class name="de.alpharogroup.file.namefilter.SimpleFilenameFilterTest"/>
-      <class name="de.alpharogroup.file.csv.CsvToSqlExtensionsTest"/>
-      <class name="de.alpharogroup.file.compare.SimpleCompareFileExtensionsTest"/>
-      <class name="de.alpharogroup.file.zip.ZipExtensionsTest"/>
-      <class name="de.alpharogroup.file.GeneratorExtensionsTest"/>
-      <class name="de.alpharogroup.file.FileExtensionsTest"/>
-      <class name="de.alpharogroup.file.compare.CompareFileExtensionsTest"/>
-      <class name="de.alpharogroup.file.zip.UnzipperTest"/>
-      <class name="de.alpharogroup.file.search.FileSearchExtensionsTest"/>
-      <class name="de.alpharogroup.file.sort.SortFileExtensionsTest"/>
-      <class name="de.alpharogroup.file.copy.CopyFileExtensionsTest"/>
+      <class name="io.github.astrapi69.zip.ZipperTest"/>
+      <class name="io.github.astrapi69.csv.CsvFileExtensionsTest"/>
+      <class name="io.github.astrapi69.search.PathFinderTest"/>
+      <class name="io.github.astrapi69.FileTestCase"/>
+      <class name="io.github.astrapi69.zip.ZipTestCase"/>
+      <class name="io.github.astrapi69.csv.CsvToSqlExtensionsTest"/>
+      <class name="io.github.astrapi69.compare.SimpleCompareFileExtensionsTest"/>
+      <class name="io.github.astrapi69.zip.ZipExtensionsTest"/>
+      <class name="io.github.astrapi69.GeneratorExtensionsTest"/>
+      <class name="io.github.astrapi69.FileExtensionsTest"/>
+      <class name="io.github.astrapi69.compare.CompareFileExtensionsTest"/>
+      <class name="io.github.astrapi69.zip.UnzipperTest"/>
+      <class name="io.github.astrapi69.search.FileSearchExtensionsTest"/>
+      <class name="io.github.astrapi69.sort.SortFileExtensionsTest"/>
+      <class name="io.github.astrapi69.copy.CopyFileExtensionsTest"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->

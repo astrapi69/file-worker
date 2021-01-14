@@ -73,6 +73,7 @@ CHANGED:
 
 - removed lombok dependency
 - removed all lombok dependent imports
+- changed to new package io.github.astrapi69
 - removed idea run configurations for maven
 - moved dependency versions to file gradle.properties
 - update of silly-strings dependency version to 5.5
