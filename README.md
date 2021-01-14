@@ -49,9 +49,17 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 			
 ## gradle dependency
 
-You can first define the version in the ext section and add than the following gradle dependency to your project `build.gradle` if you want to import the core functionality of file-worker:
+You can first define the version in the ext section and add than the following gradle dependency to 
+your project `build.gradle` if you want to import the core functionality of file-worker:
 
-Define version property in the ext area of the build.gradle:
+
+define version in file gradle.properties
+```
+fileWorkerVersion=5.7
+```
+
+or in build.gradle ext area
+
 ```
 ext {
 			...
@@ -60,15 +68,8 @@ ext {
 }
 ```
 
- or as property value in gradle.properties:
+and than add the dependency to the dependencies area
 
-```
-...
-fileWorkerVersion=5.7
-...
-
-```
-And then add it to the dependencies area of the build.gradle:
 ```
 dependencies {
 			...
