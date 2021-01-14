@@ -12,12 +12,6 @@ cache:
 jdk:
     - openjdk11
 
-addons:
-  sonarcloud:
-    organization: "lightblueseas"
-    token:
-      secure: $SONAR_TOKEN # encrypted value of your token
-
 notifications:
     email:
         recipients:
@@ -26,5 +20,4 @@ notifications:
         
 after_success:
   - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
-  - bash <(curl -s https://codecov.io/bash)  
-  - ./gradlew sonarqube
+  - bash <(curl -s https://codecov.io/bash)
