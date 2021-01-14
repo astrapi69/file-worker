@@ -38,10 +38,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.checksum.FileChecksumExtensions;
+import de.alpharogroup.io.StreamExtensions;
 import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.read.ReadFileExtensions;
 import io.github.astrapi69.search.PathFinder;
-import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link WriteFileExtensions}

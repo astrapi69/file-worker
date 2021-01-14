@@ -35,11 +35,11 @@ import java.util.List;
 
 import de.alpharogroup.checksum.FileChecksumExtensions;
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import de.alpharogroup.io.StreamExtensions;
 import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.compare.api.IFileContentResultBean;
 import io.github.astrapi69.search.FileSearchExtensions;
-import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The class {@link CompareFileExtensions} helps you to compare files.
@@ -49,6 +49,10 @@ import de.alpharogroup.io.StreamExtensions;
  */
 public final class CompareFileExtensions
 {
+
+	private CompareFileExtensions()
+	{
+	}
 
 	/**
 	 * Sets the flags in the FileCompareResultBean object according to the given boolean flag what
@@ -572,7 +576,6 @@ public final class CompareFileExtensions
 		return equalFiles;
 	}
 
-
 	/**
 	 * Find equal files from the given directories.
 	 *
@@ -759,7 +762,6 @@ public final class CompareFileExtensions
 		return equalFiles;
 	}
 
-
 	/**
 	 * Find equal files from the given directories.
 	 *
@@ -906,10 +908,6 @@ public final class CompareFileExtensions
 			&& fileContentResultBean.getLastModifiedEquality()
 			&& fileContentResultBean.getNameEquality()
 			&& fileContentResultBean.getContentEquality();
-	}
-
-	private CompareFileExtensions()
-	{
 	}
 
 }

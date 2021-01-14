@@ -31,17 +31,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import io.github.astrapi69.FileTestCase;
-import net.lingala.zip4j.model.enums.CompressionLevel;
-import net.lingala.zip4j.model.enums.CompressionMethod;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.write.WriteFileExtensions;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.enums.CompressionLevel;
+import net.lingala.zip4j.model.enums.CompressionMethod;
 
 /**
  * The unit test class for the class {@link Zip4jExtensions}.
@@ -170,7 +170,8 @@ public class Zip4jExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test for {@link Zip4jExtensions#zipFiles(ZipFile, CompressionMethod, CompressionLevel, File...)}
+	 * Test for
+	 * {@link Zip4jExtensions#zipFiles(ZipFile, CompressionMethod, CompressionLevel, File...)}
 	 */
 	@Test(enabled = false)
 	public void testZipFilesZipFileIntIntFileArray()

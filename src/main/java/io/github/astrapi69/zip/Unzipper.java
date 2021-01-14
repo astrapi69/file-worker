@@ -38,48 +38,8 @@ import java.util.zip.ZipFile;
 public class Unzipper
 {
 
-	public static class UnzipperBuilder
-	{
-		private File toDir;
-		private ZipFile zipFile;
-
-		UnzipperBuilder()
-		{
-		}
-
-		public Unzipper build()
-		{
-			return new Unzipper(toDir, zipFile);
-		}
-
-		public Unzipper.UnzipperBuilder toDir(File toDir)
-		{
-			this.toDir = toDir;
-			return this;
-		}
-
-		@Override
-		public String toString()
-		{
-			return "Unzipper.UnzipperBuilder(toDir=" + this.toDir + ", zipFile=" + this.zipFile
-				+ ")";
-		}
-
-		public Unzipper.UnzipperBuilder zipFile(ZipFile zipFile)
-		{
-			this.zipFile = zipFile;
-			return this;
-		}
-	}
-
-	public static UnzipperBuilder builder()
-	{
-		return new UnzipperBuilder();
-	}
-
 	/** The to dir. */
 	private File toDir;
-
 	/** The zip file. */
 	private ZipFile zipFile;
 
@@ -107,6 +67,11 @@ public class Unzipper
 		this.toDir = toDir;
 	}
 
+	public static UnzipperBuilder builder()
+	{
+		return new UnzipperBuilder();
+	}
+
 	/**
 	 * Extract zip entry.
 	 *
@@ -130,14 +95,14 @@ public class Unzipper
 		return this.toDir;
 	}
 
-	public ZipFile getZipFile()
-	{
-		return this.zipFile;
-	}
-
 	public void setToDir(File toDir)
 	{
 		this.toDir = toDir;
+	}
+
+	public ZipFile getZipFile()
+	{
+		return this.zipFile;
 	}
 
 	public void setZipFile(ZipFile zipFile)
@@ -180,5 +145,39 @@ public class Unzipper
 	public void unzip(final ZipFile zipFile, final File toDir) throws IOException
 	{
 		ZipExtensions.unzip(zipFile, toDir);
+	}
+
+	public static class UnzipperBuilder
+	{
+		private File toDir;
+		private ZipFile zipFile;
+
+		UnzipperBuilder()
+		{
+		}
+
+		public Unzipper build()
+		{
+			return new Unzipper(toDir, zipFile);
+		}
+
+		public Unzipper.UnzipperBuilder toDir(File toDir)
+		{
+			this.toDir = toDir;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "Unzipper.UnzipperBuilder(toDir=" + this.toDir + ", zipFile=" + this.zipFile
+				+ ")";
+		}
+
+		public Unzipper.UnzipperBuilder zipFile(ZipFile zipFile)
+		{
+			this.zipFile = zipFile;
+			return this;
+		}
 	}
 }

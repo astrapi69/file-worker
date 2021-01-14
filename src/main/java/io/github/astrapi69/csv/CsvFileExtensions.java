@@ -39,9 +39,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import io.github.astrapi69.write.WriteFileExtensions;
 import de.alpharogroup.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
+import io.github.astrapi69.write.WriteFileExtensions;
 
 /**
  * Utility class for the use of cvs-files.
@@ -51,6 +51,10 @@ import de.alpharogroup.string.StringExtensions;
  */
 public final class CsvFileExtensions
 {
+
+	private CsvFileExtensions()
+	{
+	}
 
 	/**
 	 * Reads every line from the File splits the data through a comma and puts them to the List.
@@ -414,7 +418,6 @@ public final class CsvFileExtensions
 		return fn;
 	}
 
-
 	/**
 	 * Reads every line from the given File into a List of String arrays and returns the List.
 	 *
@@ -460,7 +463,6 @@ public final class CsvFileExtensions
 		}
 		return fn;
 	}
-
 
 	/**
 	 * Reads every line from the File and puts them to the List.
@@ -632,10 +634,6 @@ public final class CsvFileExtensions
 			sb.append("\n");
 		}
 		WriteFileExtensions.writeStringToFile(output, sb.toString(), encoding);
-	}
-
-	private CsvFileExtensions()
-	{
 	}
 
 }

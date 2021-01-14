@@ -41,6 +41,10 @@ import de.alpharogroup.regex.RegExExtensions;
  */
 public final class FileSearchExtensions
 {
+	private FileSearchExtensions()
+	{
+	}
+
 	/**
 	 * Checks if the given file contains only in the parent file, not in the subdirectories.
 	 *
@@ -387,7 +391,6 @@ public final class FileSearchExtensions
 		return findFilesRecursive(dir, "*");
 	}
 
-
 	/**
 	 * Gets the file length from the given file in Kilobytes.
 	 *
@@ -401,7 +404,6 @@ public final class FileSearchExtensions
 		final long fileLength = dir.getTotalSpace();
 		return fileLength / 1024;
 	}
-
 
 	/**
 	 * Gets the file length from the given file in Megabytes.
@@ -447,7 +449,6 @@ public final class FileSearchExtensions
 		}
 		return searchFilePatternPrefix + sb.toString().trim() + searchFilePatternSuffix;
 	}
-
 
 	/**
 	 * List the directories from the given file(directory).
@@ -495,10 +496,6 @@ public final class FileSearchExtensions
 			}
 		}
 		return false;
-	}
-
-	private FileSearchExtensions()
-	{
 	}
 
 }

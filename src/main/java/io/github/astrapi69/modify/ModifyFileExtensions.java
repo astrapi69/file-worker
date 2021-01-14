@@ -48,6 +48,10 @@ import io.github.astrapi69.modify.api.FileChangeable;
 public final class ModifyFileExtensions
 {
 
+	private ModifyFileExtensions()
+	{
+	}
+
 	/**
 	 * Modifies the input file line by line and writes the modification in the same file
 	 *
@@ -161,9 +165,5 @@ public final class ModifyFileExtensions
 		Objects.requireNonNull(outFilePath);
 		Objects.requireNonNull(modifier);
 		modifyFile(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier);
-	}
-
-	private ModifyFileExtensions()
-	{
 	}
 }

@@ -44,8 +44,8 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-import io.github.astrapi69.FileConst;
 import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.FileConst;
 
 /**
  * The class {@link ReadFileExtensions} helps you reading files.
@@ -55,6 +55,10 @@ import de.alpharogroup.io.StreamExtensions;
  */
 public final class ReadFileExtensions
 {
+
+	private ReadFileExtensions()
+	{
+	}
 
 	/**
 	 * Get a Byte array from the given file.
@@ -430,10 +434,6 @@ public final class ReadFileExtensions
 	private static Byte[] toObject(final byte[] byteArray)
 	{
 		return ArrayUtils.toObject(byteArray);
-	}
-
-	private ReadFileExtensions()
-	{
 	}
 
 }

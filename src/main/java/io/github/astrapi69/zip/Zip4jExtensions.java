@@ -31,14 +31,18 @@ import java.util.List;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.model.enums.CompressionMethod;
 import net.lingala.zip4j.model.enums.CompressionLevel;
+import net.lingala.zip4j.model.enums.CompressionMethod;
 
 /**
  * The class {@link Zip4jExtensions}.
  */
 public final class Zip4jExtensions
 {
+
+	private Zip4jExtensions()
+	{
+	}
 
 	/**
 	 * Extract.
@@ -76,8 +80,7 @@ public final class Zip4jExtensions
 	 */
 	public static void zipFiles(final ZipFile zipFile4j, final File... toAdd) throws ZipException
 	{
-		zipFiles(zipFile4j, CompressionMethod.DEFLATE, CompressionLevel.NORMAL,
-			toAdd);
+		zipFiles(zipFile4j, CompressionMethod.DEFLATE, CompressionLevel.NORMAL, toAdd);
 	}
 
 	/**
@@ -154,10 +157,6 @@ public final class Zip4jExtensions
 		{
 			zipFile4j.addFile(element, parameters);
 		}
-	}
-
-	private Zip4jExtensions()
-	{
 	}
 
 }

@@ -45,154 +45,154 @@ public interface ZipModel
 	int getCompressionMethod();
 
 	/**
-	 * Returns the field <code>directoryToZip</code>.
-	 * 
-	 * @return The field <code>directoryToZip</code>.
-	 */
-	File getDirectoryToZip();
-
-	/**
-	 * Returns the field <code>dirToStart</code>.
-	 * 
-	 * @return The field <code>dirToStart</code>.
-	 */
-	String getDirToStart();
-
-	/**
-	 * Returns the field <code>fileCounter</code>.
-	 * 
-	 * @return The field <code>fileCounter</code>.
-	 */
-	int getFileCounter();
-
-	/**
-	 * Returns the field <code>fileFilter</code>.
-	 * 
-	 * @return The field <code>fileFilter</code>.
-	 */
-	FilenameFilter getFileFilter();
-
-	/**
-	 * Returns the field <code>fileLength</code>.
-	 * 
-	 * @return The field <code>fileLength</code>.
-	 */
-	long getFileLength();
-
-	/**
-	 * Returns the field <code>zipFile</code>.
-	 * 
-	 * @return The field <code>zipFile</code>.
-	 */
-	File getZipFile();
-
-	/**
-	 * Returns the field <code>zipFileComment</code>.
-	 * 
-	 * @return The field <code>zipFileComment</code>.
-	 */
-	String getZipFileComment();
-
-	/**
-	 * Returns the field <code>zipFileName</code>.
-	 * 
-	 * @return The field <code>zipFileName</code>.
-	 */
-	String getZipFileName();
-
-	/**
-	 * Returns the field <code>zipFileObj</code>.
-	 * 
-	 * @return The field <code>zipFileObj</code>.
-	 */
-	ZipFile getZipFileObj();
-
-	/**
-	 * Returns the field <code>zipLevel</code>.
-	 * 
-	 * @return The field <code>zipLevel</code>.
-	 */
-	int getZipLevel();
-
-	/**
 	 * Sets the field <code>compressionMethod</code>.
-	 * 
+	 *
 	 * @param compressionMethod
 	 *            The <code>compressionMethod</code> to set
 	 */
 	void setCompressionMethod(final int compressionMethod);
 
 	/**
+	 * Returns the field <code>directoryToZip</code>.
+	 *
+	 * @return The field <code>directoryToZip</code>.
+	 */
+	File getDirectoryToZip();
+
+	/**
 	 * Sets the field <code>directoryToZip</code>.
-	 * 
+	 *
 	 * @param directoryToZip
 	 *            The <code>directoryToZip</code> to set
 	 */
 	void setDirectoryToZip(final File directoryToZip);
 
 	/**
+	 * Returns the field <code>dirToStart</code>.
+	 *
+	 * @return The field <code>dirToStart</code>.
+	 */
+	String getDirToStart();
+
+	/**
 	 * Sets the field <code>dirToStart</code>.
-	 * 
+	 *
 	 * @param dirToStart
 	 *            The <code>dirToStart</code> to set
 	 */
 	void setDirToStart(final String dirToStart);
 
 	/**
+	 * Returns the field <code>fileCounter</code>.
+	 *
+	 * @return The field <code>fileCounter</code>.
+	 */
+	int getFileCounter();
+
+	/**
 	 * Sets the field <code>fileCounter</code>.
-	 * 
+	 *
 	 * @param fileCounter
 	 *            The <code>fileCounter</code> to set
 	 */
 	void setFileCounter(final int fileCounter);
 
 	/**
+	 * Returns the field <code>fileFilter</code>.
+	 *
+	 * @return The field <code>fileFilter</code>.
+	 */
+	FilenameFilter getFileFilter();
+
+	/**
 	 * Sets the field <code>fileFilter</code>.
-	 * 
+	 *
 	 * @param fileFilter
 	 *            The <code>fileFilter</code> to set
 	 */
 	void setFileFilter(final FilenameFilter fileFilter);
 
 	/**
+	 * Returns the field <code>fileLength</code>.
+	 *
+	 * @return The field <code>fileLength</code>.
+	 */
+	long getFileLength();
+
+	/**
 	 * Sets the field <code>fileLength</code>.
-	 * 
+	 *
 	 * @param fileLength
 	 *            The <code>fileLength</code> to set
 	 */
 	void setFileLength(final long fileLength);
 
 	/**
+	 * Returns the field <code>zipFile</code>.
+	 *
+	 * @return The field <code>zipFile</code>.
+	 */
+	File getZipFile();
+
+	/**
 	 * Sets the field <code>zipFile</code>.
-	 * 
+	 *
 	 * @param zipFile
 	 *            The <code>zipFile</code> to set
 	 */
 	void setZipFile(final File zipFile);
 
 	/**
+	 * Returns the field <code>zipFileComment</code>.
+	 *
+	 * @return The field <code>zipFileComment</code>.
+	 */
+	String getZipFileComment();
+
+	/**
 	 * Sets the field <code>zipFileComment</code>.
-	 * 
+	 *
 	 * @param zipFileComment
 	 *            The <code>zipFileComment</code> to set
 	 */
 	void setZipFileComment(final String zipFileComment);
 
 	/**
+	 * Returns the field <code>zipFileName</code>.
+	 *
+	 * @return The field <code>zipFileName</code>.
+	 */
+	String getZipFileName();
+
+	/**
 	 * Sets the field <code>zipFileName</code>.
-	 * 
+	 *
 	 * @param zipFileName
 	 *            The <code>zipFileName</code> to set
 	 */
 	void setZipFileName(final String zipFileName);
 
 	/**
+	 * Returns the field <code>zipFileObj</code>.
+	 *
+	 * @return The field <code>zipFileObj</code>.
+	 */
+	ZipFile getZipFileObj();
+
+	/**
 	 * Sets the field <code>zipFileObj</code>.
-	 * 
+	 *
 	 * @param zipFileObj
 	 *            The <code>zipFileObj</code> to set
 	 */
 	void setZipFileObj(final ZipFile zipFileObj);
+
+	/**
+	 * Returns the field <code>zipLevel</code>.
+	 *
+	 * @return The field <code>zipLevel</code>.
+	 */
+	int getZipLevel();
 
 	/**
 	 * Sets the field <code>zipLevel</code>.

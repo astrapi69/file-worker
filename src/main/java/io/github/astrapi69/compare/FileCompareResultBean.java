@@ -37,26 +37,20 @@ import io.github.astrapi69.compare.api.IFileCompareResultBean;
 public class FileCompareResultBean implements IFileCompareResultBean
 {
 
-	/** The absolute path equality. */
-	private Boolean absolutePathEquality = Boolean.FALSE;
-
 	/** The compare file. */
 	protected File compare;
-
-	/** The file extension equality. */
-	private Boolean fileExtensionEquality = Boolean.FALSE;
-
-	/** The same last modified. */
-	private Boolean lastModifiedEquality = Boolean.FALSE;
-
-	/** The same length. */
-	private Boolean lengthEquality = Boolean.FALSE;
-
-	/** The same name. */
-	private Boolean nameEquality = Boolean.FALSE;
-
 	/** The source file. */
 	protected File source;
+	/** The absolute path equality. */
+	private Boolean absolutePathEquality = Boolean.FALSE;
+	/** The file extension equality. */
+	private Boolean fileExtensionEquality = Boolean.FALSE;
+	/** The same last modified. */
+	private Boolean lastModifiedEquality = Boolean.FALSE;
+	/** The same length. */
+	private Boolean lengthEquality = Boolean.FALSE;
+	/** The same name. */
+	private Boolean nameEquality = Boolean.FALSE;
 
 	/**
 	 * Instantiates a new file compare result bean.
@@ -140,6 +134,18 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		return this.absolutePathEquality;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see io.github.astrapi69.compare.interfaces.IFileCompareResultBean#setAbsolutePathEquality
+	 * (java.lang.Boolean)
+	 */
+	@Override
+	public void setAbsolutePathEquality(final Boolean absolutePathEquality)
+	{
+		this.absolutePathEquality = absolutePathEquality;
+	}
+
 	/**
 	 * Gets the file extension equality.
 	 *
@@ -150,6 +156,19 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	public boolean getFileExtensionEquality()
 	{
 		return this.fileExtensionEquality;
+	}
+
+	/**
+	 * Sets the file extension equality.
+	 *
+	 * @param fileExtensionEquality
+	 *            the new file extension equality {@inheritDoc}
+	 * @see IFileCompareResultBean#setFileExtensionEquality(java.lang.Boolean)
+	 */
+	@Override
+	public void setFileExtensionEquality(final Boolean fileExtensionEquality)
+	{
+		this.fileExtensionEquality = fileExtensionEquality;
 	}
 
 	/**
@@ -177,6 +196,19 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	}
 
 	/**
+	 * Sets the last modified equality.
+	 *
+	 * @param lastModifiedEquality
+	 *            the new last modified equality {@inheritDoc}
+	 * @see IFileCompareResultBean#setLastModifiedEquality(java.lang.Boolean)
+	 */
+	@Override
+	public void setLastModifiedEquality(final Boolean lastModifiedEquality)
+	{
+		this.lastModifiedEquality = lastModifiedEquality;
+	}
+
+	/**
 	 * Gets the length equality.
 	 *
 	 * @return the length equality {@inheritDoc}
@@ -189,6 +221,19 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	}
 
 	/**
+	 * Sets the length equality.
+	 *
+	 * @param lengthEquality
+	 *            the new length equality {@inheritDoc}
+	 * @see IFileCompareResultBean#setLengthEquality(java.lang.Boolean)
+	 */
+	@Override
+	public void setLengthEquality(final Boolean lengthEquality)
+	{
+		this.lengthEquality = lengthEquality;
+	}
+
+	/**
 	 * Gets the name equality.
 	 *
 	 * @return the name equality {@inheritDoc}
@@ -198,6 +243,19 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	public boolean getNameEquality()
 	{
 		return this.nameEquality;
+	}
+
+	/**
+	 * Sets the name equality.
+	 *
+	 * @param nameEquality
+	 *            the new name equality {@inheritDoc}
+	 * @see IFileCompareResultBean#setNameEquality(java.lang.Boolean)
+	 */
+	@Override
+	public void setNameEquality(final Boolean nameEquality)
+	{
+		this.nameEquality = nameEquality;
 	}
 
 	/**
@@ -237,73 +295,9 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see io.github.astrapi69.compare.interfaces.IFileCompareResultBean#setAbsolutePathEquality
-	 * (java.lang.Boolean)
-	 */
-	@Override
-	public void setAbsolutePathEquality(final Boolean absolutePathEquality)
-	{
-		this.absolutePathEquality = absolutePathEquality;
-	}
-
 	public void setCompare(File compare)
 	{
 		this.compare = compare;
-	}
-
-	/**
-	 * Sets the file extension equality.
-	 *
-	 * @param fileExtensionEquality
-	 *            the new file extension equality {@inheritDoc}
-	 * @see IFileCompareResultBean#setFileExtensionEquality(java.lang.Boolean)
-	 */
-	@Override
-	public void setFileExtensionEquality(final Boolean fileExtensionEquality)
-	{
-		this.fileExtensionEquality = fileExtensionEquality;
-	}
-
-	/**
-	 * Sets the last modified equality.
-	 *
-	 * @param lastModifiedEquality
-	 *            the new last modified equality {@inheritDoc}
-	 * @see IFileCompareResultBean#setLastModifiedEquality(java.lang.Boolean)
-	 */
-	@Override
-	public void setLastModifiedEquality(final Boolean lastModifiedEquality)
-	{
-		this.lastModifiedEquality = lastModifiedEquality;
-	}
-
-	/**
-	 * Sets the length equality.
-	 *
-	 * @param lengthEquality
-	 *            the new length equality {@inheritDoc}
-	 * @see IFileCompareResultBean#setLengthEquality(java.lang.Boolean)
-	 */
-	@Override
-	public void setLengthEquality(final Boolean lengthEquality)
-	{
-		this.lengthEquality = lengthEquality;
-	}
-
-	/**
-	 * Sets the name equality.
-	 *
-	 * @param nameEquality
-	 *            the new name equality {@inheritDoc}
-	 * @see IFileCompareResultBean#setNameEquality(java.lang.Boolean)
-	 */
-	@Override
-	public void setNameEquality(final Boolean nameEquality)
-	{
-		this.nameEquality = nameEquality;
 	}
 
 	public void setSource(File source)

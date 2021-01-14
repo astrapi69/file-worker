@@ -40,6 +40,10 @@ import io.github.astrapi69.write.WriteFileExtensions;
 public final class SortFileExtensions
 {
 
+	private SortFileExtensions()
+	{
+	}
+
 	/**
 	 * Sort the file content from the given {@link File}.
 	 *
@@ -60,10 +64,6 @@ public final class SortFileExtensions
 		List<String> lines = ReadFileExtensions.readLinesInList(file);
 		Collections.sort(lines, comparator);
 		WriteFileExtensions.writeLinesToFile(file, lines, encoding);
-	}
-
-	private SortFileExtensions()
-	{
 	}
 
 }

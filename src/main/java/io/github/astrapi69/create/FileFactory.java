@@ -40,6 +40,10 @@ import java.util.Collection;
 public final class FileFactory
 {
 
+	private FileFactory()
+	{
+	}
+
 	/**
 	 * Creates the directories.
 	 *
@@ -179,9 +183,10 @@ public final class FileFactory
 	 *
 	 * @param file
 	 *            the file
-	 * @deprecated use instead new method {@link FileFactory#mkParentDirs(File)} that returns a result
-	 * Note:<br><br>
-	 * will be removed in next minor version
+	 * @deprecated use instead new method {@link FileFactory#mkParentDirs(File)} that returns a
+	 *             result Note:<br>
+	 *             <br>
+	 *             will be removed in next minor version
 	 */
 	@Deprecated
 	public static void newParentDirectories(final File file)
@@ -213,10 +218,6 @@ public final class FileFactory
 			}
 		}
 		return true;
-	}
-
-	private FileFactory()
-	{
 	}
 
 }

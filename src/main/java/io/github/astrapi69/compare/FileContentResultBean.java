@@ -88,15 +88,6 @@ public class FileContentResultBean extends FileCompareResultBean implements IFil
 		return this.contentEquality;
 	}
 
-	@Override
-	public int hashCode()
-	{
-		final int PRIME = 59;
-		int result = super.hashCode();
-		result = result * PRIME + (this.contentEquality ? 79 : 97);
-		return result;
-	}
-
 	/**
 	 * Sets the content equality.
 	 *
@@ -108,6 +99,15 @@ public class FileContentResultBean extends FileCompareResultBean implements IFil
 	public void setContentEquality(final boolean contentEquality)
 	{
 		this.contentEquality = contentEquality;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int PRIME = 59;
+		int result = super.hashCode();
+		result = result * PRIME + (this.contentEquality ? 79 : 97);
+		return result;
 	}
 
 	@Override

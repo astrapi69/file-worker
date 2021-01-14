@@ -43,85 +43,85 @@ public interface IFileCompareResultBean
 	boolean getAbsolutePathEquality();
 
 	/**
-	 * Gets the file extension equality.
-	 * 
-	 * @return the file extension equality
-	 */
-	boolean getFileExtensionEquality();
-
-	/**
-	 * Gets the file to compare.
-	 * 
-	 * @return Returns the file to compare.
-	 */
-	File getFileToCompare();
-
-	/**
-	 * Gets the last modified equality.
-	 * 
-	 * @return the last modified equality
-	 */
-	boolean getLastModifiedEquality();
-
-	/**
-	 * Gets the length equality.
-	 * 
-	 * @return the length equality
-	 */
-	boolean getLengthEquality();
-
-	/**
-	 * Gets the name equality.
-	 * 
-	 * @return the name equality
-	 */
-	boolean getNameEquality();
-
-	/**
-	 * Gets the source file.
-	 * 
-	 * @return Returns the source file.
-	 */
-	File getSourceFile();
-
-	/**
 	 * Sets the absolute path equality.
-	 * 
+	 *
 	 * @param absolutePathEquality
 	 *            the new absolute path equality
 	 */
 	void setAbsolutePathEquality(final Boolean absolutePathEquality);
 
 	/**
+	 * Gets the file extension equality.
+	 *
+	 * @return the file extension equality
+	 */
+	boolean getFileExtensionEquality();
+
+	/**
 	 * Sets the file extension equality.
-	 * 
+	 *
 	 * @param fileExtensionEquality
 	 *            the new file extension equality
 	 */
 	void setFileExtensionEquality(final Boolean fileExtensionEquality);
 
 	/**
+	 * Gets the file to compare.
+	 *
+	 * @return Returns the file to compare.
+	 */
+	File getFileToCompare();
+
+	/**
+	 * Gets the last modified equality.
+	 *
+	 * @return the last modified equality
+	 */
+	boolean getLastModifiedEquality();
+
+	/**
 	 * Sets the last modified equality.
-	 * 
+	 *
 	 * @param lastModifiedEquality
 	 *            the new last modified equality
 	 */
 	void setLastModifiedEquality(final Boolean lastModifiedEquality);
 
 	/**
+	 * Gets the length equality.
+	 *
+	 * @return the length equality
+	 */
+	boolean getLengthEquality();
+
+	/**
 	 * Sets the length equality.
-	 * 
+	 *
 	 * @param lengthEquality
 	 *            the new length equality
 	 */
 	void setLengthEquality(final Boolean lengthEquality);
 
 	/**
+	 * Gets the name equality.
+	 *
+	 * @return the name equality
+	 */
+	boolean getNameEquality();
+
+	/**
 	 * Sets the name equality.
-	 * 
+	 *
 	 * @param nameEquality
 	 *            the new name equality
 	 */
 	void setNameEquality(final Boolean nameEquality);
+
+	/**
+	 * Gets the source file.
+	 *
+	 * @return Returns the source file.
+	 */
+	File getSourceFile();
 
 }

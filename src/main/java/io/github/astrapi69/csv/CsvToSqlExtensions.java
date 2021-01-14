@@ -34,6 +34,10 @@ import java.util.Map;
 public final class CsvToSqlExtensions
 {
 
+	private CsvToSqlExtensions()
+	{
+	}
+
 	/**
 	 * Extract sql columns.
 	 *
@@ -89,10 +93,7 @@ public final class CsvToSqlExtensions
 		if (withHeader)
 		{
 			final String sqlColumns = extractSqlColumns(csvBean.getHeaders());
-			sb.append("INSERT INTO ")
-				.append(tableName)
-				.append(" ( ")
-				.append(sqlColumns)
+			sb.append("INSERT INTO ").append(tableName).append(" ( ").append(sqlColumns)
 				.append(") VALUES \n");
 		}
 		final String[] columnTypesEdit = csvBean.getColumnTypesEdit();
@@ -129,7 +130,6 @@ public final class CsvToSqlExtensions
 	{
 		return getCsvFileAsSqlInsertScript(tableName, new CsvBean(headers, columnTypes, lines));
 	}
-
 
 	/**
 	 * Gets the csv file as sql insert script.
@@ -302,10 +302,6 @@ public final class CsvToSqlExtensions
 			}
 		}
 		return sb;
-	}
-
-	private CsvToSqlExtensions()
-	{
 	}
 
 }

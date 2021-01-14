@@ -39,21 +39,25 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import de.alpharogroup.io.StreamExtensions;
+import de.alpharogroup.io.file.FileExtension;
+import de.alpharogroup.throwable.ThrowableExtensions;
 import io.github.astrapi69.FileConst;
 import io.github.astrapi69.create.FileFactory;
 import io.github.astrapi69.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.exceptions.FileIsADirectoryException;
 import io.github.astrapi69.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.exceptions.FileIsSecurityRestrictedException;
-import de.alpharogroup.io.StreamExtensions;
-import de.alpharogroup.io.file.FileExtension;
-import de.alpharogroup.throwable.ThrowableExtensions;
 
 /**
  * The class {@link CopyFileExtensions} helps you to copy files or directories.
  */
 public final class CopyFileExtensions
 {
+
+	private CopyFileExtensions()
+	{
+	}
 
 	/**
 	 * Copies the given source directory to the given destination directory.
@@ -601,7 +605,6 @@ public final class CopyFileExtensions
 		}));
 	}
 
-
 	/**
 	 * Copies the given source file to the given destination directory.
 	 *
@@ -685,10 +688,6 @@ public final class CopyFileExtensions
 		final File backup = new File(file.getAbsolutePath() + FileExtension.BACKUP.getExtension());
 		CopyFileExtensions.copyFile(file, backup, sourceEncoding, destinationEncoding, true);
 		return backup;
-	}
-
-	private CopyFileExtensions()
-	{
 	}
 
 }

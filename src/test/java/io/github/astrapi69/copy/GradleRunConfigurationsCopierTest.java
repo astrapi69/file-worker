@@ -22,7 +22,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package de.alpharogroup.file.copy;
+package io.github.astrapi69.copy;
 
 import org.testng.annotations.Test;
 
@@ -33,7 +33,8 @@ public class GradleRunConfigurationsCopierTest
 	 * Test method for copy run configurations file from a source project to a target project and
 	 * modifies its content
 	 */
-	@Test(enabled = false) public void testCopyIdeaRunConfigurations()
+	@Test(enabled = false)
+	public void testCopyIdeaRunConfigurations()
 	{
 		String sourceProjectDirNamePrefix;
 		String targetProjectDirNamePrefix;
@@ -41,7 +42,7 @@ public class GradleRunConfigurationsCopierTest
 		String sourceProjectName;
 		String targetProjectName;
 		sourceProjectName = "file-worker";
-		targetProjectName = "spring-tool-extensions";
+		targetProjectName = "resourcebundle-core";
 		sourceProjectDirNamePrefix = "/home/astrapi69/dev/github/lightblueseas/";
 		targetProjectDirNamePrefix = "/home/astrapi69/dev/github/astrapi69/";
 		copyGradleRunConfigurationsData = GradleRunConfigurationsCopier

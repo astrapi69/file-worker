@@ -33,8 +33,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import io.github.astrapi69.FileTestCase;
-import io.github.astrapi69.write.WriteFileExtensions;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -42,9 +40,11 @@ import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.CollectionExtensions;
 import de.alpharogroup.collections.list.ListFactory;
+import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.compare.api.IFileContentResultBean;
 import io.github.astrapi69.delete.DeleteFileExtensions;
+import io.github.astrapi69.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link CompareFileExtensions}.

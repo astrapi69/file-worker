@@ -52,6 +52,10 @@ import io.github.astrapi69.search.FileSearchExtensions;
 public final class ZipExtensions
 {
 
+	private ZipExtensions()
+	{
+	}
+
 	/**
 	 * Adds the file.
 	 *
@@ -304,10 +308,6 @@ public final class ZipExtensions
 		{
 			addFile(file, dirToZip, zos);
 		}
-	}
-
-	private ZipExtensions()
-	{
 	}
 
 }

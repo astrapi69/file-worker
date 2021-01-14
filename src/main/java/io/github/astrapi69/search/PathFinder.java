@@ -64,6 +64,10 @@ public final class PathFinder
 	 */
 	public static final String SOURCE_FOLDER_SRC_TEST_RESOURCES = "src/test/resources";
 
+	private PathFinder()
+	{
+	}
+
 	/**
 	 * Gets the absolute path.
 	 *
@@ -199,7 +203,6 @@ public final class PathFinder
 		return new File(getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_MAIN_RESOURCES);
 	}
 
-
 	/**
 	 * Gets the src main resources dir.
 	 *
@@ -221,7 +224,6 @@ public final class PathFinder
 	{
 		return new File(getProjectDirectory(), PathFinder.SOURCE_FOLDER_SRC_TEST_JAVA);
 	}
-
 
 	/**
 	 * Gets the src test java dir.
@@ -255,10 +257,6 @@ public final class PathFinder
 	public static File getSrcTestResourcesDir(final File projectDirectory)
 	{
 		return new File(projectDirectory, PathFinder.SOURCE_FOLDER_SRC_TEST_RESOURCES);
-	}
-
-	private PathFinder()
-	{
 	}
 
 }

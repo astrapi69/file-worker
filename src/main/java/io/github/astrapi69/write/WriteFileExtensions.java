@@ -45,9 +45,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
+import de.alpharogroup.io.StreamExtensions;
 import io.github.astrapi69.FileConst;
 import io.github.astrapi69.system.SystemPropertiesExtensions;
-import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The class {@link WriteFileExtensions} provides methods for writing in files.
@@ -58,6 +58,10 @@ import de.alpharogroup.io.StreamExtensions;
 public final class WriteFileExtensions
 {
 
+
+	private WriteFileExtensions()
+	{
+	}
 
 	/**
 	 * Writes the source file with the best performance to the destination file.
@@ -466,10 +470,6 @@ public final class WriteFileExtensions
 			printWriter.write(string2write);
 		}
 		return iswritten;
-	}
-
-	private WriteFileExtensions()
-	{
 	}
 
 }

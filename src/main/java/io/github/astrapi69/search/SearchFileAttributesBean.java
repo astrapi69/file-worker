@@ -33,87 +33,14 @@ package io.github.astrapi69.search;
 public class SearchFileAttributesBean
 {
 
-	public static class SearchFileAttributesBeanBuilder
-	{
-		private boolean ignoreContentEquality;
-		private boolean ignoreExtensionEquality;
-		private boolean ignoreLastModified;
-		private boolean ignoreLengthEquality;
-		private boolean ignoreNameEquality;
-
-		SearchFileAttributesBeanBuilder()
-		{
-		}
-
-		public SearchFileAttributesBean build()
-		{
-			return new SearchFileAttributesBean(ignoreContentEquality, ignoreExtensionEquality,
-				ignoreLastModified, ignoreLengthEquality, ignoreNameEquality);
-		}
-
-		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreContentEquality(
-			boolean ignoreContentEquality)
-		{
-			this.ignoreContentEquality = ignoreContentEquality;
-			return this;
-		}
-
-		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreExtensionEquality(
-			boolean ignoreExtensionEquality)
-		{
-			this.ignoreExtensionEquality = ignoreExtensionEquality;
-			return this;
-		}
-
-		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreLastModified(
-			boolean ignoreLastModified)
-		{
-			this.ignoreLastModified = ignoreLastModified;
-			return this;
-		}
-
-		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreLengthEquality(
-			boolean ignoreLengthEquality)
-		{
-			this.ignoreLengthEquality = ignoreLengthEquality;
-			return this;
-		}
-
-		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreNameEquality(
-			boolean ignoreNameEquality)
-		{
-			this.ignoreNameEquality = ignoreNameEquality;
-			return this;
-		}
-
-		@Override
-		public String toString()
-		{
-			return "SearchFileAttributesBean.SearchFileAttributesBeanBuilder(ignoreContentEquality="
-				+ this.ignoreContentEquality + ", ignoreExtensionEquality="
-				+ this.ignoreExtensionEquality + ", ignoreLastModified=" + this.ignoreLastModified
-				+ ", ignoreLengthEquality=" + this.ignoreLengthEquality + ", ignoreNameEquality="
-				+ this.ignoreNameEquality + ")";
-		}
-	}
-
-	public static SearchFileAttributesBeanBuilder builder()
-	{
-		return new SearchFileAttributesBeanBuilder();
-	}
-
 	/** The ignore content equality. */
 	private final boolean ignoreContentEquality;
-
 	/** The ignore extension equality. */
 	private final boolean ignoreExtensionEquality;
-
 	/** The ignore last modified. */
 	private final boolean ignoreLastModified;
-
 	/** The ignore length equality. */
 	private final boolean ignoreLengthEquality;
-
 	/** The ignore name equality. */
 	private final boolean ignoreNameEquality;
 
@@ -125,6 +52,11 @@ public class SearchFileAttributesBean
 		this.ignoreLastModified = ignoreLastModified;
 		this.ignoreLengthEquality = ignoreLengthEquality;
 		this.ignoreNameEquality = ignoreNameEquality;
+	}
+
+	public static SearchFileAttributesBeanBuilder builder()
+	{
+		return new SearchFileAttributesBeanBuilder();
 	}
 
 	protected boolean canEqual(final Object other)
@@ -211,5 +143,69 @@ public class SearchFileAttributesBean
 			+ ", ignoreLastModified=" + this.isIgnoreLastModified() + ", ignoreLengthEquality="
 			+ this.isIgnoreLengthEquality() + ", ignoreNameEquality=" + this.isIgnoreNameEquality()
 			+ ")";
+	}
+
+	public static class SearchFileAttributesBeanBuilder
+	{
+		private boolean ignoreContentEquality;
+		private boolean ignoreExtensionEquality;
+		private boolean ignoreLastModified;
+		private boolean ignoreLengthEquality;
+		private boolean ignoreNameEquality;
+
+		SearchFileAttributesBeanBuilder()
+		{
+		}
+
+		public SearchFileAttributesBean build()
+		{
+			return new SearchFileAttributesBean(ignoreContentEquality, ignoreExtensionEquality,
+				ignoreLastModified, ignoreLengthEquality, ignoreNameEquality);
+		}
+
+		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreContentEquality(
+			boolean ignoreContentEquality)
+		{
+			this.ignoreContentEquality = ignoreContentEquality;
+			return this;
+		}
+
+		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreExtensionEquality(
+			boolean ignoreExtensionEquality)
+		{
+			this.ignoreExtensionEquality = ignoreExtensionEquality;
+			return this;
+		}
+
+		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreLastModified(
+			boolean ignoreLastModified)
+		{
+			this.ignoreLastModified = ignoreLastModified;
+			return this;
+		}
+
+		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreLengthEquality(
+			boolean ignoreLengthEquality)
+		{
+			this.ignoreLengthEquality = ignoreLengthEquality;
+			return this;
+		}
+
+		public SearchFileAttributesBean.SearchFileAttributesBeanBuilder ignoreNameEquality(
+			boolean ignoreNameEquality)
+		{
+			this.ignoreNameEquality = ignoreNameEquality;
+			return this;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "SearchFileAttributesBean.SearchFileAttributesBeanBuilder(ignoreContentEquality="
+				+ this.ignoreContentEquality + ", ignoreExtensionEquality="
+				+ this.ignoreExtensionEquality + ", ignoreLastModified=" + this.ignoreLastModified
+				+ ", ignoreLengthEquality=" + this.ignoreLengthEquality + ", ignoreNameEquality="
+				+ this.ignoreNameEquality + ")";
+		}
 	}
 }

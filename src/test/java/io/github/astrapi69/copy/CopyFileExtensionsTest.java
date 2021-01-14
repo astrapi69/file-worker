@@ -38,12 +38,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import io.github.astrapi69.FileTestCase;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import de.alpharogroup.io.file.FileExtension;
+import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.io.file.filter.TxtFileFilter;
+import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
+import de.alpharogroup.io.file.namefilter.SimpleFilenameFilter;
+import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.create.FileCreationState;
 import io.github.astrapi69.create.FileFactory;
 import io.github.astrapi69.exceptions.DirectoryAlreadyExistsException;
@@ -52,11 +57,6 @@ import io.github.astrapi69.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.exceptions.FileIsSecurityRestrictedException;
 import io.github.astrapi69.read.ReadFileExtensions;
 import io.github.astrapi69.write.WriteFileExtensions;
-import de.alpharogroup.io.file.FileExtension;
-import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.io.file.filter.TxtFileFilter;
-import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
-import de.alpharogroup.io.file.namefilter.SimpleFilenameFilter;
 
 /**
  * The unit test class for the class {@link CopyFileExtensions}.

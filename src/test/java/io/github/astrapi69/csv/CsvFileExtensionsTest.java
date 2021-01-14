@@ -48,13 +48,13 @@ import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.collections.map.MapFactory;
 import de.alpharogroup.collections.set.SetFactory;
+import de.alpharogroup.io.StreamExtensions;
 import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.create.FileCreationState;
 import io.github.astrapi69.create.FileFactory;
 import io.github.astrapi69.delete.DeleteFileExtensions;
 import io.github.astrapi69.exceptions.FileDoesNotExistException;
 import io.github.astrapi69.read.ReadFileExtensions;
-import de.alpharogroup.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link CsvFileExtensions}.

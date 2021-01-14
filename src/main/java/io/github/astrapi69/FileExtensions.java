@@ -30,8 +30,8 @@ import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.channels.FileLock;
 
-import io.github.astrapi69.read.ReadFileExtensions;
 import de.alpharogroup.io.file.FilenameExtensions;
+import io.github.astrapi69.read.ReadFileExtensions;
 
 /**
  * Utility class for the use of File object.
@@ -44,6 +44,10 @@ public final class FileExtensions
 
 	/** The Constant VELOCITY_TEMPLATE_FILE_EXTENSION. */
 	public static final String VELOCITY_TEMPLATE_FILE_EXTENSION = ".vm";
+
+	private FileExtensions()
+	{
+	}
 
 	/**
 	 * Downloads Data from the given URI.
@@ -167,10 +171,6 @@ public final class FileExtensions
 			}
 		}
 		return open;
-	}
-
-	private FileExtensions()
-	{
 	}
 
 }

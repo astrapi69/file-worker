@@ -42,6 +42,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.list.ListFactory;
+import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
+import de.alpharogroup.io.file.filter.TxtFileFilter;
+import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
 import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.create.FileCreationState;
 import io.github.astrapi69.create.FileFactory;
@@ -50,9 +53,6 @@ import io.github.astrapi69.exceptions.FileDoesNotExistException;
 import io.github.astrapi69.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.exceptions.FileIsSecurityRestrictedException;
 import io.github.astrapi69.write.WriteFileExtensions;
-import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.io.file.filter.TxtFileFilter;
-import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
 
 /**
  * The unit test class for the class {@link DeleteFileExtensions}

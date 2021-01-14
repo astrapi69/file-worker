@@ -37,6 +37,12 @@ import de.alpharogroup.crypto.algorithm.Algorithm;
 public final class SimpleCompareFileExtensions
 {
 
+	private SimpleCompareFileExtensions()
+	{
+		throw new UnsupportedOperationException(
+			"This is a utility class and cannot be instantiated");
+	}
+
 	/**
 	 * Compare files by absolute path.
 	 *
@@ -196,12 +202,6 @@ public final class SimpleCompareFileExtensions
 		return CompareFileExtensions
 			.compareFiles(sourceFile, fileToCompare, true, true, true, true, false, true)
 			.getNameEquality();
-	}
-
-	private SimpleCompareFileExtensions()
-	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 }

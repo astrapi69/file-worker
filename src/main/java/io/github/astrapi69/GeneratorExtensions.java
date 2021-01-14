@@ -32,6 +32,10 @@ import java.util.List;
  */
 public final class GeneratorExtensions
 {
+	private GeneratorExtensions()
+	{
+	}
+
 	/**
 	 * Creates a String list with the String constants from the given String list. For instance:
 	 * List data = new ArrayList(); data.add("foo"); data.add("bar");
@@ -128,10 +132,6 @@ public final class GeneratorExtensions
 		}
 		sb.append("};");
 		return sb.toString();
-	}
-
-	private GeneratorExtensions()
-	{
 	}
 
 }

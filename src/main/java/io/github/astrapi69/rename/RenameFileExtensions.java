@@ -49,6 +49,10 @@ import io.github.astrapi69.search.FileSearchExtensions;
 public final class RenameFileExtensions
 {
 
+	private RenameFileExtensions()
+	{
+	}
+
 	/**
 	 * Returns the filename from the given file with the systemtime.
 	 *
@@ -376,10 +380,6 @@ public final class RenameFileExtensions
 		final File fileWithNewName = new File(fileToRename.getParent(), newFilenameWithSystemtime);
 		renameFile(fileToRename, fileWithNewName, true);
 		return fileWithNewName;
-	}
-
-	private RenameFileExtensions()
-	{
 	}
 
 

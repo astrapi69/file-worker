@@ -47,6 +47,10 @@ import io.github.astrapi69.search.FileSearchExtensions;
  */
 public final class DeleteFileExtensions
 {
+	private DeleteFileExtensions()
+	{
+	}
+
 	/**
 	 * Checks the File if it is a directory or if its exists or if it is empty.
 	 *
@@ -460,10 +464,6 @@ public final class DeleteFileExtensions
 			throw new FileIsSecurityRestrictedException(
 				"File '" + source.getAbsolutePath() + "' is security restricted.");
 		}
-	}
-
-	private DeleteFileExtensions()
-	{
 	}
 
 }

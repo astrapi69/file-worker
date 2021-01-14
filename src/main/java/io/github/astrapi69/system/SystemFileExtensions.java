@@ -34,6 +34,10 @@ import java.io.File;
  */
 public final class SystemFileExtensions
 {
+	private SystemFileExtensions()
+	{
+	}
+
 	/**
 	 * Gets the installation directory for Java Runtime Environment (JRE) from the system as
 	 * {@link File} object
@@ -83,14 +87,16 @@ public final class SystemFileExtensions
 	 * Gets the users downloads directory from the system as {@link File} object
 	 *
 	 * @param downloadsDirname
-	 * 			The name of the downloads directory, if null or empty the default value '/Downloads' will be taken
+	 *            The name of the downloads directory, if null or empty the default value
+	 *            '/Downloads' will be taken
 	 *
 	 * @return the users downloads directory from the system as {@link File} object
 	 */
 	public static File getUserDownloadsDir(String downloadsDirname)
 	{
 		String ddn = downloadsDirname;
-		if(downloadsDirname == null || downloadsDirname.isEmpty()){
+		if (downloadsDirname == null || downloadsDirname.isEmpty())
+		{
 			ddn = "/Downloads";
 		}
 		String userHomePath = System.getProperty("user.home");
@@ -106,10 +112,6 @@ public final class SystemFileExtensions
 	{
 		String userWorkingPath = System.getProperty("user.dir");
 		return new File(userWorkingPath);
-	}
-
-	private SystemFileExtensions()
-	{
 	}
 
 }
