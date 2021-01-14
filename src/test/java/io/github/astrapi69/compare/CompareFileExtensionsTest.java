@@ -248,9 +248,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
-		throws FileNotFoundException, IOException
 	{
 		actual = CompareFileExtensions.compareFiles(testFile1, testFile2, false, false, false,
 			false, false, false);
