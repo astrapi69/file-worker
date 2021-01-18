@@ -236,7 +236,7 @@ public final class DeleteFileExtensions
 	 * Tries to delete all files that match to the given includeFileFilter from the given source
 	 * directory.
 	 *
-	 * @param source
+	 * @param sourceDir
 	 *            The source directory.
 	 * @param includeFileFilter
 	 *            The FileFilter for the files to be deleted. If null all files will be deleted.
@@ -248,11 +248,44 @@ public final class DeleteFileExtensions
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
 	 */
-	public static void deleteFilesWithFileFilter(final File source,
+	public static void deleteFilesWithFileFilter(final File sourceDir,
 		final FileFilter includeFileFilter)
 		throws FileIsNotADirectoryException, IOException, FileIsSecurityRestrictedException
 	{
-		DeleteFileExtensions.deleteFilesWithFileFilter(source, includeFileFilter, null);
+		DeleteFileExtensions.deleteFilesWithFileFilter(sourceDir, includeFileFilter, null);
+	}
+
+	/**
+	 * Tries to delete all files that match to the given prefix from the given source
+	 * directory.
+	 *
+	 *
+	 * @param sourceDir
+	 *            The source directory
+	 * @param prefix
+	 *            The prefix from the files to delete
+	 *
+	 * @throws FileIsNotADirectoryException
+	 *             Is thrown if the destination file is a directory.
+	 * @throws IOException
+	 *             Is thrown if an error occurs by reading or writing.
+	 * @throws FileIsSecurityRestrictedException
+	 *             Is thrown if the source file is security restricted.
+	 */
+	public static void deleteAllFilesWithPrefix(final File sourceDir, final String prefix)
+		throws FileIsNotADirectoryException, FileIsSecurityRestrictedException, IOException
+	{
+		DeleteFileExtensions.deleteFilesWithFileFilter(sourceDir, new FileFilter()
+		{
+			@Override public boolean accept(File file)
+			{
+				if (file.isDirectory())
+				{
+					return true;
+				}
+				return file.getName().startsWith(prefix);
+			}
+		});
 	}
 
 	/**

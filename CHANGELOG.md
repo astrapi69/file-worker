@@ -4,6 +4,10 @@
 Version 6.1-SNAPSHOT
 -------------
 
+ADDED:
+
+- new method that can delete files recursively with a given prefix in a source directory 
+
 Version 6
 -------------
 

@@ -249,6 +249,9 @@ public class GradleRunConfigurationsCopier
 	{
 		properties.setProperty("projectSourceCompatibility", "1.8");
 		properties.setProperty("projectHolderUsername", "astrapi69");
+		properties.setProperty("slash", "/");
+		properties.setProperty("colon", ":");
+		properties.setProperty("issuesPath", "/issues");
 		properties.setProperty("projectDescription", "");
 		properties.setProperty("projectScmProviderDomain", "github.com");
 		properties.setProperty("projectScmProviderUrl", "https://github.com/");
@@ -256,8 +259,8 @@ public class GradleRunConfigurationsCopier
 		properties.setProperty("projectLicenseUrl",
 			"http://www.opensource.org/licenses/mit-license.php");
 		properties.setProperty("projectLicenseDistribution", "repo");
-		properties.setProperty("projectOrganizationName", "Alpha Ro Group UG (h.b.)");
-		properties.setProperty("projectOrganizationUrl", "http://www.alpharogroup.de/");
+		properties.setProperty("projectOrganizationName", "Asterios Raptis");
+		properties.setProperty("projectOrganizationUrl", "https://astrapi69.github.io/");
 		properties.setProperty("projectIssueManagementSystem", "GitHub");
 		properties.setProperty("projectRepositoriesReleasesRepoUrl",
 			"https://oss.sonatype.org/service/local/staging/deploy/maven2/");

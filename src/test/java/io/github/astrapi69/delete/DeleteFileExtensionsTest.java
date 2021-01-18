@@ -223,6 +223,46 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		assertTrue("", this.actual);
 	}
 
+
+	/**
+	 * Test method for {@link DeleteFileExtensions#deleteAllFilesWithPrefix(File, String)}
+	 *
+	 * @throws FileIsNotADirectoryException
+	 *             Is thrown if the destination file is a directory.
+	 * @throws IOException
+	 *             Is thrown if an error occurs by reading or writing.
+	 * @throws FileIsSecurityRestrictedException
+	 *             Is thrown if the source file is security restricted.
+	 */
+	@Test
+	public void testDeleteAllFilesWithPrefix()
+		throws FileIsNotADirectoryException, FileIsSecurityRestrictedException, IOException
+	{
+		final File testFile1 = new File(this.testDir, "testDeleteAllFilesWithPrefix1.txt");
+		final File testFile2 = new File(this.testDir, "testDeleteAllFilesWithPrefix2.txt");
+		final File testFile3 = new File(this.deepDir, "testDeleteAllFilesWithPrefix3.txt");
+		final File testFile4 = new File(this.testDir, "foo-bar4.tft");
+		final File testFile5 = new File(this.deepDir, "testDeleteAllFilesWithPrefix5.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+
+		DeleteFileExtensions.deleteAllFilesWithPrefix(this.testDir, "testDeleteAllFilesWithPrefix");
+
+		this.actual = testFile1.exists();
+		assertFalse("", this.actual);
+		this.actual = testFile2.exists();
+		assertFalse("", this.actual);
+		this.actual = testFile3.exists();
+		assertFalse("", this.actual);
+		this.actual = testFile4.exists();
+		assertTrue("", this.actual);
+		this.actual = testFile5.exists();
+		assertFalse("", this.actual);
+	}
+
 	/**
 	 * Test method for {@link DeleteFileExtensions#delete(Collection)}.
 	 *
