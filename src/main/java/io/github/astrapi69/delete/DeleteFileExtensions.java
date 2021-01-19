@@ -37,6 +37,7 @@ import io.github.astrapi69.exceptions.DirectoryHasNoContentException;
 import io.github.astrapi69.exceptions.FileDoesNotExistException;
 import io.github.astrapi69.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.exceptions.FileIsSecurityRestrictedException;
+import io.github.astrapi69.io.file.filter.PrefixFileFilter;
 import io.github.astrapi69.search.FileSearchExtensions;
 
 /**
@@ -275,17 +276,7 @@ public final class DeleteFileExtensions
 	public static void deleteAllFilesWithPrefix(final File sourceDir, final String prefix)
 		throws FileIsNotADirectoryException, FileIsSecurityRestrictedException, IOException
 	{
-		DeleteFileExtensions.deleteFilesWithFileFilter(sourceDir, new FileFilter()
-		{
-			@Override public boolean accept(File file)
-			{
-				if (file.isDirectory())
-				{
-					return true;
-				}
-				return file.getName().startsWith(prefix);
-			}
-		});
+		DeleteFileExtensions.deleteFilesWithFileFilter(sourceDir, new PrefixFileFilter(prefix));
 	}
 
 	/**

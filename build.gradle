@@ -182,7 +182,7 @@ dependencies {
     implementation("de.alpharogroup:throw-able:$throwAbleVersion")
     implementation("de.alpharogroup:silly-beans:$sillyBeansVersion")
     implementation("de.alpharogroup:silly-strings:$sillyStringsVersion")
-    implementation("de.alpharogroup:silly-io:$sillyIoVersion")
+    implementation("io.github.astrapi69:silly-io:$sillyIoVersion")
     implementation("de.alpharogroup:silly-collections:$sillyCollectionsVersion")
     implementation("de.alpharogroup:jobj-compare:$jobjCompareVersion")
     implementation("de.alpharogroup:checksum-up:$checksumUpVersion")

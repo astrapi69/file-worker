@@ -8,6 +8,10 @@ ADDED:
 
 - new method that can delete files recursively with a given prefix in a source directory 
 
+CHANGED:
+
+- update of silly-io dependency to new version 1.4
+
 Version 6
 -------------
 
