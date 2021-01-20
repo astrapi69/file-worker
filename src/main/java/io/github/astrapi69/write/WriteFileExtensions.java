@@ -45,7 +45,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileConst;
 import io.github.astrapi69.system.SystemPropertiesExtensions;
 

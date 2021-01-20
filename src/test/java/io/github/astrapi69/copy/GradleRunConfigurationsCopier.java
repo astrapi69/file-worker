@@ -38,7 +38,7 @@ import de.alpharogroup.collections.array.ArrayExtensions;
 import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.collections.properties.PropertiesExtensions;
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
 import io.github.astrapi69.create.FileFactory;
 import io.github.astrapi69.exceptions.FileDoesNotExistException;

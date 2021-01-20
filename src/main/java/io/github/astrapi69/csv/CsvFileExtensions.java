@@ -39,7 +39,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import de.alpharogroup.string.StringExtensions;
 import io.github.astrapi69.write.WriteFileExtensions;
 

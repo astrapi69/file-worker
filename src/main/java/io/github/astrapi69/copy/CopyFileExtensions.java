@@ -39,8 +39,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import de.alpharogroup.io.StreamExtensions;
-import de.alpharogroup.io.file.FileExtension;
+import io.github.astrapi69.io.StreamExtensions;
+import io.github.astrapi69.io.file.FileExtension;
 import de.alpharogroup.throwable.ThrowableExtensions;
 import io.github.astrapi69.FileConst;
 import io.github.astrapi69.create.FileFactory;

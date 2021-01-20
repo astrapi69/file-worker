@@ -35,7 +35,7 @@ import java.util.List;
 
 import de.alpharogroup.checksum.FileChecksumExtensions;
 import de.alpharogroup.crypto.algorithm.HashAlgorithm;
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.compare.api.IFileContentResultBean;

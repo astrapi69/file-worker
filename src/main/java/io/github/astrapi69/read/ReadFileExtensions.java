@@ -44,7 +44,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileConst;
 
 /**

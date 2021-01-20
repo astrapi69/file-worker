@@ -30,7 +30,7 @@ import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.channels.FileLock;
 
-import de.alpharogroup.io.file.FilenameExtensions;
+import io.github.astrapi69.io.file.FilenameExtensions;
 import io.github.astrapi69.read.ReadFileExtensions;
 
 /**

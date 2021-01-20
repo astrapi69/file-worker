@@ -38,7 +38,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.checksum.FileChecksumExtensions;
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.read.ReadFileExtensions;
 import io.github.astrapi69.search.PathFinder;

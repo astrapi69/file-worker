@@ -42,9 +42,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.list.ListFactory;
-import de.alpharogroup.io.file.filter.MultiplyExtensionsFileFilter;
-import de.alpharogroup.io.file.filter.TxtFileFilter;
-import de.alpharogroup.io.file.namefilter.MultiplyExtensionsFilenameFilter;
+import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
+import io.github.astrapi69.io.file.filter.TxtFileFilter;
+import io.github.astrapi69.io.file.namefilter.MultiplyExtensionsFilenameFilter;
 import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.create.FileCreationState;
 import io.github.astrapi69.create.FileFactory;

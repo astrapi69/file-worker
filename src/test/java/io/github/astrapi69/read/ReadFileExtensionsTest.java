@@ -46,7 +46,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import de.alpharogroup.collections.array.ArrayFactory;
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.delete.DeleteFileExtensions;
 import io.github.astrapi69.exceptions.DirectoryAlreadyExistsException;

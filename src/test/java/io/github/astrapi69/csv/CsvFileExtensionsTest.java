@@ -48,7 +48,7 @@ import de.alpharogroup.collections.list.ListExtensions;
 import de.alpharogroup.collections.list.ListFactory;
 import de.alpharogroup.collections.map.MapFactory;
 import de.alpharogroup.collections.set.SetFactory;
-import de.alpharogroup.io.StreamExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.create.FileCreationState;
 import io.github.astrapi69.create.FileFactory;
