@@ -11,6 +11,7 @@ ADDED:
 CHANGED:
 
 - update of silly-io dependency to new version 1.4
+- update of throw-able dependency to new version 1.5
 
 Version 6
 -------------

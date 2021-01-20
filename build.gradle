@@ -179,7 +179,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
     implementation("net.lingala.zip4j:zip4j:$zip4jVersion")
     implementation("de.alpharogroup:crypt-api:$cryptApiVersion")
-    implementation("de.alpharogroup:throw-able:$throwAbleVersion")
+    implementation("io.github.astrapi69:throw-able:$throwAbleVersion")
     implementation("de.alpharogroup:silly-beans:$sillyBeansVersion")
     implementation("de.alpharogroup:silly-strings:$sillyStringsVersion")
     implementation("io.github.astrapi69:silly-io:$sillyIoVersion")

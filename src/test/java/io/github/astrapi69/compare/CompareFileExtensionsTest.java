@@ -217,7 +217,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
 		throws FileNotFoundException, IOException
 	{
@@ -382,7 +382,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testFindEqualFilesFileBooleanBooleanBooleanBooleanBoolean()
 	{
 		List<IFileCompareResultBean> actual;

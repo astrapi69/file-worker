@@ -39,15 +39,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import io.github.astrapi69.io.StreamExtensions;
-import io.github.astrapi69.io.file.FileExtension;
-import de.alpharogroup.throwable.ThrowableExtensions;
 import io.github.astrapi69.FileConst;
 import io.github.astrapi69.create.FileFactory;
 import io.github.astrapi69.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.exceptions.FileIsADirectoryException;
 import io.github.astrapi69.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.exceptions.FileIsSecurityRestrictedException;
+import io.github.astrapi69.io.StreamExtensions;
+import io.github.astrapi69.io.file.FileExtension;
+import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The class {@link CopyFileExtensions} helps you to copy files or directories.
@@ -598,7 +598,7 @@ public final class CopyFileExtensions
 		{
 			FileFactory.newDirectory(destination);
 		}
-		sources.stream().forEach(ThrowableExtensions.toRuntimeExceptionIfNeeded(file -> {
+		sources.stream().forEach(RuntimeExceptionDecorator.decorate(file -> {
 			File destinationFile = new File(destination, file.getName());
 			CopyFileExtensions.copyFile(file, destinationFile, sourceEncoding, destinationEncoding,
 				lastModified);
