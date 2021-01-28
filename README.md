@@ -52,7 +52,6 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 You can first define the version in the ext section and add than the following gradle dependency to 
 your project `build.gradle` if you want to import the core functionality of file-worker:
 
-
 define version in file gradle.properties
 ```
 fileWorkerVersion=6
