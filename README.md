@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Build Status](https://travis-ci.org/lightblueseas/file-worker.svg?branch=develop)](https://travis-ci.org/lightblueseas/file-worker) 
+[![Build Status](https://travis-ci.com/lightblueseas/file-worker.svg?branch=develop)](https://travis-ci.com/lightblueseas/file-worker) 
 [![Coverage Status](https://codecov.io/gh/lightblueseas/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/lightblueseas/file-worker)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lightblueseas_file-worker&metric=alert_status)](https://sonarcloud.io/dashboard?id=lightblueseas_file-worker)
 [![Open Issues](https://img.shields.io/github/issues/lightblueseas/file-worker.svg?style=flat)](https://github.com/lightblueseas/file-worker/issues)
@@ -137,7 +137,7 @@ Open Source:
 |**Travis CI**|
 |     :---:      |
 |[![Travis CI](https://travis-ci.com/images/logos/TravisCI-Full-Color.png)](https://coveralls.io/github/lightblueseas/file-worker?branch=develop)|
-|Special thanks to [Travis CI](https://travis-ci.org) for providing a free continuous integration service for open source projects|
+|Special thanks to [Travis CI](https://travis-ci.com) for providing a free continuous integration service for open source projects|
 |     <img width=1000/>     |
 
 |**Nexus Sonatype repositories**|
