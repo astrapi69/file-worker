@@ -183,7 +183,6 @@ dependencies {
     implementation("de.alpharogroup:silly-beans:$sillyBeansVersion")
     implementation("de.alpharogroup:silly-strings:$sillyStringsVersion")
     implementation("io.github.astrapi69:silly-io:$sillyIoVersion")
-    implementation("de.alpharogroup:silly-collections:$sillyCollectionsVersion")
     implementation("de.alpharogroup:jobj-compare:$jobjCompareVersion")
     implementation("de.alpharogroup:checksum-up:$checksumUpVersion")
     testImplementation("de.alpharogroup:jobj-contract-verifier:$jobjContractVerifierVersion")

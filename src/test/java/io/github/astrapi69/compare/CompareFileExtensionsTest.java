@@ -91,7 +91,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)}.
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testCompareFileContentByBytes()
 	{
 

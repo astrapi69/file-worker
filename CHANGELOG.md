@@ -11,7 +11,11 @@ ADDED:
 CHANGED:
 
 - update of silly-io dependency to new version 1.4
-- update of throw-able dependency to new version 1.5
+- update of throw-able dependency to new version 1.6
+- update of commons-lang3 dependency to new version 3.12.0
+- remove of unused silly-collections dependency
+- update of zip4j dependency to new version 2.7.0
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.38.0
 
 Version 6
 -------------
