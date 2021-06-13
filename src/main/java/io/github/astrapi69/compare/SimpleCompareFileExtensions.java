@@ -28,8 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-import de.alpharogroup.checksum.FileChecksumExtensions;
-import de.alpharogroup.crypto.algorithm.Algorithm;
+import io.github.astrapi69.checksum.FileChecksumExtensions;
+import io.github.astrapi69.crypto.algorithm.Algorithm;
 
 /**
  * The class {@link SimpleCompareFileExtensions}.

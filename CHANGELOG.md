@@ -1,46 +1,31 @@
 ## Change log
 ----------------------
 
-Version 6.1-SNAPSHOT
--------------
-
-ADDED:
-
-- new method that can delete files recursively with a given prefix in a source directory 
-- new unit test classes for the class SystemFileExtensions and SystemPropertiesExtensions created
-
-CHANGED:
-
-- update of silly-io dependency to new version 1.4
-- update of throw-able dependency to new version 1.6
-- update of commons-lang3 dependency to new version 3.12.0
-- remove of unused silly-collections dependency
-- update of zip4j dependency to new version 2.7.0
-- update of com.github.ben-manes.versions.gradle.plugin to new version 0.38.0
-
-Version 6
+Version 5.8
 -------------
 
 ADDED:
  
 - added java area in build.gradle for activate support of module path inference
+- new method that can delete files recursively with a given prefix in a source directory
+- new unit test classes for the class SystemFileExtensions and SystemPropertiesExtensions created
 
 CHANGED:
 
-- update jdk from version 8 to 11
-
-- update gradle to new version 6.8
+- update gradle to new version 6.9
 - changed to new package io.github.astrapi69
-- update of com.github.ben-manes.versions.gradle.plugin to new version 0.36.0
-- update of throw-able dependency to new version 1.4
+  
+- update of silly-io dependency to new version 1.4
+- update of throw-able dependency to new version 1.6
+- update of commons-lang3 dependency to new version 3.12.0
+- remove of unused silly-collections dependency
+- update of zip4j dependency to new version 2.8.0
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.39.0
+- update of throw-able dependency to new version 1.6
 - update of jobj-compare dependency to new version 3.7
-- update of silly-collections dependency to new version 8.4
 - update of silly-io dependency to new version 1.3
 - update of commons-io dependency to new version 2.8.0
-- update of commons-lang3 dependency to new version 3.11
-- update of zip4j dependency to new version 2.6.4
-- update of test dependency testng to new version 7.3.0
-- update of test dependency meanbean-factories to new version 2
+- update of test dependency testng to new version 7.4.0
 
 Version 5.7
 -------------

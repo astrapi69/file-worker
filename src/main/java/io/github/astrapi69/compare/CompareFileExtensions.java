@@ -33,8 +33,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.alpharogroup.checksum.FileChecksumExtensions;
-import de.alpharogroup.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.checksum.FileChecksumExtensions;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
 import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.compare.api.IFileCompareResultBean;
