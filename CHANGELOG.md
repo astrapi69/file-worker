@@ -1,37 +1,52 @@
 ## Change log
 ----------------------
 
-Version 5.8
+Version 6.1-SNAPSHOT
 -------------
 
 ADDED:
- 
-- added java area in build.gradle for activate support of module path inference
+
 - new method that can delete files recursively with a given prefix in a source directory
 - new unit test classes for the class SystemFileExtensions and SystemPropertiesExtensions created
 
 CHANGED:
 
-- update gradle to new version 6.9
-- changed to new package io.github.astrapi69
-  
 - update of silly-io dependency to new version 1.4
 - update of throw-able dependency to new version 1.6
 - update of commons-lang3 dependency to new version 3.12.0
 - remove of unused silly-collections dependency
 - update of zip4j dependency to new version 2.8.0
 - update of com.github.ben-manes.versions.gradle.plugin to new version 0.39.0
-- update of throw-able dependency to new version 1.6
+
+Version 6
+-------------
+
+ADDED:
+
+- added java area in build.gradle for activate support of module path inference
+
+CHANGED:
+
+- update jdk from version 8 to 11
+
+- update gradle to new version 6.8
+- changed to new package io.github.astrapi69
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.36.0
+- update of throw-able dependency to new version 1.4
 - update of jobj-compare dependency to new version 3.7
+- update of silly-collections dependency to new version 8.4
 - update of silly-io dependency to new version 1.3
 - update of commons-io dependency to new version 2.8.0
-- update of test dependency testng to new version 7.4.0
+- update of commons-lang3 dependency to new version 3.11
+- update of zip4j dependency to new version 2.6.4
+- update of test dependency testng to new version 7.3.0
+- update of test dependency meanbean-factories to new version 2
 
 Version 5.7
 -------------
 
 ADDED:
- 
+
 - new methods in class SystemFileExtensions for get the download directory as File object
 
 CHANGED:
@@ -49,7 +64,7 @@ Version 5.6
 -------------
 
 ADDED:
- 
+
 - new class that provides most user environment variables like users home
 - new class in test sources that can copy gradle config files after a migration from maven
 
@@ -65,7 +80,7 @@ Version 5.5
 -------------
 
 ADDED:
- 
+
 - new idea run configurations for gradle builds created
 - created file gradle.properties
 - new dependency jobj-compare in version 3.2 added
@@ -98,7 +113,7 @@ Version 5.3
 -------------
 
 ADDED:
- 
+
 - new method created for modify a single file
 - gradle as build system
 
@@ -116,7 +131,7 @@ Version 5.2
 -------------
 
 ADDED:
- 
+
 - new methods created for create directory from a Path obejct
 - new dependency commons-lang3 in version 3.9 added
 - new dependency jobj-contract-verifier in version 3.1 added
@@ -136,7 +151,7 @@ Version 5.1
 -------------
 
 ADDED:
- 
+
 - new extension class for modify file content
 - new BiFunction interface created for generic modify file content
 - new unit tests for the new extension class for modify file content
@@ -169,7 +184,7 @@ Version 5
 -------------
 
 ADDED:
- 
+
 - new method for get the checksum from a given byte arrays with a given algorithm
 
 CHANGED:
@@ -194,26 +209,26 @@ Version 4.22
 -------------
 
 ADDED:
- 
+
 - new classes created and moved to them all methods that catches exceptions and handle them in a quietly manner
 
 CHANGED:
 
 - update of parent version to 3.12
 - unit tests extended for improve code coverage
-- removed deprecated methods, enums and classes 
-- update of silly-collections dependency version to 4.31 
+- removed deprecated methods, enums and classes
+- update of silly-collections dependency version to 4.31
 
 Version 4.21
 -------------
 
 ADDED:
- 
+
 - new dependency silly-collections in version 4.30.1
 
 CHANGED:
 
-- update of jcommons-lang dependency version from 4.33 to 4.34 
+- update of jcommons-lang dependency version from 4.33 to 4.34
 
 Version 4.20
 -------------
@@ -222,16 +237,16 @@ CHANGED:
 
 - update of parent version to 3.11
 - removed unneeded .0 at the end of version
-- update of test-objects dependency version from 4.22.0 to 4.26 
-- update of jcommons-lang dependency version from 4.29.0 to 4.33 
-- javadoc improved 
-- tagged URLExtensions and Protocol classes as deprecated. Moved to net-extensions project 
+- update of test-objects dependency version from 4.22.0 to 4.26
+- update of jcommons-lang dependency version from 4.29.0 to 4.33
+- javadoc improved
+- tagged URLExtensions and Protocol classes as deprecated. Moved to net-extensions project
 
 Version 4.19.0
 -------------
 
 ADDED:
- 
+
 - provide package.html for the javadoc of new packages
 - Donation buttons extended for paypal and bitcoin
 - added new meanbean dependency for better unit testing of beans
