@@ -34,6 +34,13 @@ import java.io.File;
  */
 public final class SystemFileExtensions
 {
+
+	/** Constant for the default configuration directory from the current user. current value:".config" */
+	public static final String DEFAULT_USER_CONFIGURATION_DIRECTORY_NAME = ".config";
+
+	/** Constant for the default download directory from the current user. current value:"Downloads" */
+	public static final String DEFAULT_USER_DOWNLOAD_DIRECTORY_NAME = "Downloads";
+
 	private SystemFileExtensions()
 	{
 	}
@@ -88,7 +95,7 @@ public final class SystemFileExtensions
 	 *
 	 * @param downloadsDirname
 	 *            The name of the downloads directory, if null or empty the default value
-	 *            '/Downloads' will be taken
+	 *            'Downloads' will be taken
 	 *
 	 * @return the users downloads directory from the system as {@link File} object
 	 */
@@ -97,10 +104,40 @@ public final class SystemFileExtensions
 		String ddn = downloadsDirname;
 		if (downloadsDirname == null || downloadsDirname.isEmpty())
 		{
-			ddn = "/Downloads";
+			ddn = DEFAULT_USER_DOWNLOAD_DIRECTORY_NAME;
 		}
 		String userHomePath = System.getProperty("user.home");
-		return new File(userHomePath + ddn);
+		return new File(userHomePath + File.separator + ddn);
+	}
+
+	/**
+	 * Gets the users configuration directory from the system as {@link File} object
+	 *
+	 * @param configurationDirname
+	 *            The name of the configuration directory, if null or empty the default value
+	 *            '.config' will be taken
+	 *
+	 * @return the users configuration directory from the system as {@link File} object
+	 */
+	public static File getUserConfigurationDir(String configurationDirname)
+	{
+		String ddn = configurationDirname;
+		if (configurationDirname == null || configurationDirname.isEmpty())
+		{
+			ddn = DEFAULT_USER_CONFIGURATION_DIRECTORY_NAME;
+		}
+		String userHomePath = System.getProperty("user.home");
+		return new File(userHomePath + File.separator + ddn);
+	}
+
+	/**
+	 * Gets the users configuration directory from the system as {@link File} object
+	 *
+	 * @return the users configuration directory from the system as {@link File} object
+	 */
+	public static File getUserConfigurationDir()
+	{
+		return getUserConfigurationDir("");
 	}
 
 	/**

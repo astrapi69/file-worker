@@ -24,6 +24,9 @@
  */
 package io.github.astrapi69.system;
 
+/**
+ * The class {@link SystemPropertiesExtensions} provide methods for get the common system properties
+ */
 public class SystemPropertiesExtensions
 {
 
