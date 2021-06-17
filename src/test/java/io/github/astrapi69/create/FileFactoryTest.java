@@ -43,6 +43,7 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.delete.DeleteFileExtensions;
 import io.github.astrapi69.exceptions.DirectoryAlreadyExistsException;
+import io.github.astrapi69.system.SystemFileExtensions;
 
 /**
  * The unit test class for the class {@link FileFactory}
@@ -235,7 +236,7 @@ public class FileFactoryTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link FileFactory#newFile(File)}
+	 * Test method for {@link FileFactory#newFile(File, String)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
@@ -243,7 +244,54 @@ public class FileFactoryTest extends FileTestCase
 	 *             is thrown if the directory already exists
 	 */
 	@Test(enabled = true)
-	public void testNewFile() throws IOException, DirectoryAlreadyExistsException
+	public void testNewFileFileString() throws IOException
+	{
+		boolean actual;
+		boolean expected;
+		File parentDirectory;
+		String filename;
+		File file;
+
+		parentDirectory = SystemFileExtensions.getTempDir();
+		filename = "foo.txt";
+		file = FileFactory.newFile(parentDirectory, filename);
+
+		actual = file.exists();
+		expected = true;
+		assertEquals(expected, actual);
+		// clean up
+		if (file.exists())
+		{
+			DeleteFileExtensions.delete(file);
+		}
+
+		File newParent = new File(parentDirectory, "tmp");
+		FileFactory.newDirectory(newParent);
+		file = FileFactory.newFile(newParent, filename);
+
+		actual = newParent.exists();
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = file.exists();
+		expected = true;
+		assertEquals(expected, actual);
+		// clean up
+		if (file.exists())
+		{
+			DeleteFileExtensions.delete(file);
+			DeleteFileExtensions.delete(newParent);
+		}
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newFile(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(enabled = true)
+	public void testNewFile() throws IOException
 	{
 		boolean actual;
 		boolean expected;

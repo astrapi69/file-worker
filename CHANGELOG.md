@@ -8,6 +8,7 @@ ADDED:
 
 - new method that can delete files recursively with a given prefix in a source directory
 - new unit test classes for the class SystemFileExtensions and SystemPropertiesExtensions created
+- new factory method for create new File with parent directory and filename in FileFactory class
 
 CHANGED:
 

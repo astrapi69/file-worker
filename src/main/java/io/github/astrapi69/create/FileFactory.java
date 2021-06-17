@@ -1,8 +1,8 @@
 /**
  * The MIT License
- *
+ * <p>
  * Copyright (C) 2015 Asterios Raptis
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -33,7 +33,7 @@ import java.util.Collection;
 
 /**
  * The class {@link FileFactory} helps you to create files or directories
- * 
+ *
  * @author Asterios Raptis
  * @version 1.0
  */
@@ -132,12 +132,13 @@ public final class FileFactory
 	}
 
 	/**
-	 * Creates an empty file if the File does not exists otherwise it lets the file as it is.
+	 * Factory method that creates a new empty {@link File} if it is not exists, otherwise it lets
+	 * the file as it is.
 	 *
 	 * @param file
 	 *            the file.
 	 *
-	 * @return true, if the file is successful created otherwise false.
+	 * @return the appropriate state object that describes what happen
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -154,6 +155,26 @@ public final class FileFactory
 			}
 		}
 		return fileCreationState;
+	}
+
+	/**
+	 * Factory method for creating the new {@link File} if it is not exists.
+	 *
+	 * @param parentDirectory
+	 *            the parent directory
+	 * @param filename
+	 *            the file name
+	 * @return the new {@link File} object
+	 */
+	public static File newFile(final File parentDirectory, final String filename) throws IOException
+	{
+		if (!parentDirectory.isDirectory())
+		{
+			throw new RuntimeException("Given parent file is not a directory");
+		}
+		File file = new File(parentDirectory, filename);
+		newFile(file);
+		return file;
 	}
 
 	/**
