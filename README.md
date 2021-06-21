@@ -1,6 +1,6 @@
 # file-worker
 
-<div align="center">
+<div style="text-align: center">
 
 [![Build Status](https://travis-ci.com/lightblueseas/file-worker.svg?branch=develop)](https://travis-ci.com/lightblueseas/file-worker) 
 [![Coverage Status](https://codecov.io/gh/lightblueseas/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/lightblueseas/file-worker)
