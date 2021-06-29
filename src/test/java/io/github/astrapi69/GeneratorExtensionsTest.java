@@ -32,8 +32,8 @@ import java.util.List;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.collections.CollectionExtensions;
-import de.alpharogroup.collections.list.ListFactory;
+import io.github.astrapi69.collections.CollectionExtensions;
+import io.github.astrapi69.collections.list.ListFactory;
 
 /**
  * The unit test class for the class {@link GeneratorExtensions}.

@@ -41,7 +41,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.collections.list.ListFactory;
+import io.github.astrapi69.collections.list.ListFactory;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.io.file.filter.TxtFileFilter;
 import io.github.astrapi69.io.file.namefilter.MultiplyExtensionsFilenameFilter;

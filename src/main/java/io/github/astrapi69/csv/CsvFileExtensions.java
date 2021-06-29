@@ -40,7 +40,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import io.github.astrapi69.io.StreamExtensions;
-import de.alpharogroup.string.StringExtensions;
+import io.github.astrapi69.string.StringExtensions;
 import io.github.astrapi69.write.WriteFileExtensions;
 
 /**

@@ -36,7 +36,7 @@ import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.comparators.StringComparator;
+import io.github.astrapi69.comparators.StringComparator;
 import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.create.FileCreationState;
 import io.github.astrapi69.create.FileFactory;

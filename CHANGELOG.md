@@ -18,6 +18,7 @@ CHANGED:
 - remove of unused silly-collections dependency
 - update of zip4j dependency to new version 2.8.0
 - update of com.github.ben-manes.versions.gradle.plugin to new version 0.39.0
+- changed dependencies to the new group id io.github.astrapi69
 
 Version 6
 -------------

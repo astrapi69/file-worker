@@ -30,10 +30,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.alpharogroup.collections.CollectionExtensions;
-import de.alpharogroup.collections.array.ArrayExtensions;
-import de.alpharogroup.collections.list.ListExtensions;
-import de.alpharogroup.collections.list.ListFactory;
+import io.github.astrapi69.collections.CollectionExtensions;
+import io.github.astrapi69.collections.array.ArrayExtensions;
+import io.github.astrapi69.collections.list.ListExtensions;
+import io.github.astrapi69.collections.list.ListFactory;
 
 /**
  * The class {@link CsvBean}.

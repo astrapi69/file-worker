@@ -38,8 +38,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.collections.CollectionExtensions;
-import de.alpharogroup.collections.list.ListFactory;
+import io.github.astrapi69.collections.CollectionExtensions;
+import io.github.astrapi69.collections.list.ListFactory;
 import io.github.astrapi69.FileTestCase;
 import io.github.astrapi69.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.compare.api.IFileContentResultBean;

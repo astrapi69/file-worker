@@ -36,12 +36,12 @@ import org.meanbean.test.Configuration;
 import org.meanbean.test.ConfigurationBuilder;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.collections.array.ArrayFactory;
-import de.alpharogroup.collections.list.ListExtensions;
-import de.alpharogroup.collections.list.ListFactory;
-import de.alpharogroup.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
-import de.alpharogroup.meanbean.factories.ListStringArrayFactory;
-import de.alpharogroup.meanbean.factories.StringArrayFactory;
+import io.github.astrapi69.collections.array.ArrayFactory;
+import io.github.astrapi69.collections.list.ListExtensions;
+import io.github.astrapi69.collections.list.ListFactory;
+import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
+import io.github.astrapi69.meanbean.factories.ListStringArrayFactory;
+import io.github.astrapi69.meanbean.factories.StringArrayFactory;
 
 /**
  * The unit test class for the class {@link CsvBean}

@@ -34,8 +34,8 @@ import java.util.Map;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import de.alpharogroup.collections.array.ArrayFactory;
-import de.alpharogroup.collections.list.ListFactory;
+import io.github.astrapi69.collections.array.ArrayFactory;
+import io.github.astrapi69.collections.list.ListFactory;
 
 /**
  * The unit test class for the class {@link CsvToSqlExtensions}.
