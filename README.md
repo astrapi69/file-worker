@@ -31,7 +31,7 @@ Add the following maven dependency to your project `pom.xml` if you want to impo
 	<properties>
 			...
 		<!-- FILE-WORKER version -->
-		<file-worker.version>6</file-worker.version>
+		<file-worker.version>5.9</file-worker.version>
 			...
 	</properties>
 			...
@@ -54,7 +54,7 @@ your project `build.gradle` if you want to import the core functionality of file
 
 define version in file gradle.properties
 ```
-fileWorkerVersion=6
+fileWorkerVersion=5.9
 ```
 
 or in build.gradle ext area
@@ -62,7 +62,7 @@ or in build.gradle ext area
 ```
 ext {
 			...
-    fileWorkerVersion = "6"
+    fileWorkerVersion = "5.9"
 			...
 }
 ```
