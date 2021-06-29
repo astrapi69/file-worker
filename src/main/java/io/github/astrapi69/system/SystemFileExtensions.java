@@ -54,8 +54,7 @@ public final class SystemFileExtensions
 	 */
 	public static File getJavaHomeDir()
 	{
-		String userHomePath = System.getProperty("java.home");
-		return new File(userHomePath);
+		return new File(SystemPropertiesExtensions.getJavaHome());
 	}
 
 	/**
@@ -65,8 +64,7 @@ public final class SystemFileExtensions
 	 */
 	public static File getTempDir()
 	{
-		String tmpdirPath = System.getProperty("java.io.tmpdir");
-		return new File(tmpdirPath);
+		return new File(SystemPropertiesExtensions.getJavaIoTmpdir());
 	}
 
 	/**
@@ -76,8 +74,7 @@ public final class SystemFileExtensions
 	 */
 	public static File getUserHomeDir()
 	{
-		String userHomePath = System.getProperty("user.home");
-		return new File(userHomePath);
+		return new File(SystemPropertiesExtensions.getUserHome());
 	}
 
 	/**
@@ -106,7 +103,7 @@ public final class SystemFileExtensions
 		{
 			ddn = DEFAULT_USER_DOWNLOAD_DIRECTORY_NAME;
 		}
-		String userHomePath = System.getProperty("user.home");
+		String userHomePath = SystemPropertiesExtensions.getUserHome();
 		return new File(userHomePath + File.separator + ddn);
 	}
 
@@ -126,7 +123,7 @@ public final class SystemFileExtensions
 		{
 			ddn = DEFAULT_USER_CONFIGURATION_DIRECTORY_NAME;
 		}
-		String userHomePath = System.getProperty("user.home");
+		String userHomePath = SystemPropertiesExtensions.getUserHome();
 		return new File(userHomePath + File.separator + ddn);
 	}
 
@@ -147,7 +144,7 @@ public final class SystemFileExtensions
 	 */
 	public static File getUserWorkingDir()
 	{
-		String userWorkingPath = System.getProperty("user.dir");
+		String userWorkingPath = SystemPropertiesExtensions.getUserWorkingDirectory();
 		return new File(userWorkingPath);
 	}
 

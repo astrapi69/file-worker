@@ -30,6 +30,25 @@ package io.github.astrapi69.system;
 public class SystemPropertiesExtensions
 {
 
+	public static final String OS_ARCH_PROPERTY_KEY = "os.arch";
+	public static final String OS_NAME_PROPERTY_KEY = "os.name";
+	public static final String OS_VERSION_PROPERTY_KEY = "os.version";
+
+	public static final String USER_HOME_PROPERTY_KEY = "user.home";
+	public static final String USER_NAME_PROPERTY_KEY = "user.name";
+	public static final String USER_DIR_PROPERTY_KEY = "user.dir";
+
+	public static final String FILE_SEPARATOR_PROPERTY_KEY = "file.separator";
+	public static final String LINE_SEPARATOR_PROPERTY_KEY = "line.separator";
+	public static final String PATH_SEPARATOR_PROPERTY_KEY = "path.separator";
+
+	public static final String JAVA_IO_TMPDIR_PROPERTY_KEY = "java.io.tmpdir";
+	public static final String JAVA_CLASS_PATH_PROPERTY_KEY = "java.class.path";
+	public static final String JAVA_VENDOR_PROPERTY_KEY = "java.vendor";
+	public static final String JAVA_HOME_PROPERTY_KEY = "java.home";
+	public static final String JAVA_VERSION_PROPERTY_KEY = "java.version";
+	public static final String JAVA_VENDOR_URL_PROPERTY_KEY = "java.vendor.url";
+
 	/**
 	 * Gets the system file separator character. In other words the character that separates
 	 * components of a file path. This is "/" on UNIX and "\" on Windows.
@@ -38,8 +57,30 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getFileSeparator()
 	{
-		String fileSeparator = System.getProperty("file.separator");
+		String fileSeparator = System.getProperty(FILE_SEPARATOR_PROPERTY_KEY);
 		return fileSeparator;
+	}
+
+	/**
+	 * Gets the path for the temporary directory for java
+	 *
+	 * @return the java class path
+	 */
+	public static String getJavaIoTmpdir()
+	{
+		String fileSeparator = System.getProperty(JAVA_IO_TMPDIR_PROPERTY_KEY);
+		return fileSeparator;
+	}
+
+	/**
+	 * Gets the path of the installed java home
+	 *
+	 * @return the java home path
+	 */
+	public static String getJavaHome()
+	{
+		String userHomePath = System.getProperty(JAVA_HOME_PROPERTY_KEY);
+		return userHomePath;
 	}
 
 	/**
@@ -51,7 +92,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getJavaClassPath()
 	{
-		String fileSeparator = System.getProperty("java.class.path");
+		String fileSeparator = System.getProperty(JAVA_CLASS_PATH_PROPERTY_KEY);
 		return fileSeparator;
 	}
 
@@ -62,7 +103,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getJavaVendor()
 	{
-		String javaVendor = System.getProperty("java.vendor");
+		String javaVendor = System.getProperty(JAVA_VENDOR_PROPERTY_KEY);
 		return javaVendor;
 	}
 
@@ -73,7 +114,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getJavaVendorUrl()
 	{
-		String fileSeparator = System.getProperty("java.vendor.url");
+		String fileSeparator = System.getProperty(JAVA_VENDOR_URL_PROPERTY_KEY);
 		return fileSeparator;
 	}
 
@@ -84,7 +125,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getJavaVersion()
 	{
-		String javaVendor = System.getProperty("java.version");
+		String javaVendor = System.getProperty(JAVA_VERSION_PROPERTY_KEY);
 		return javaVendor;
 	}
 
@@ -96,7 +137,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getLineSeparator()
 	{
-		String fileSeparator = System.getProperty("line.separator");
+		String fileSeparator = System.getProperty(LINE_SEPARATOR_PROPERTY_KEY);
 		return fileSeparator;
 	}
 
@@ -107,7 +148,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getOsArchitecture()
 	{
-		String fileSeparator = System.getProperty("os.arch");
+		String fileSeparator = System.getProperty(OS_ARCH_PROPERTY_KEY);
 		return fileSeparator;
 	}
 
@@ -118,7 +159,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getOsName()
 	{
-		String fileSeparator = System.getProperty("os.name");
+		String fileSeparator = System.getProperty(OS_NAME_PROPERTY_KEY);
 		return fileSeparator;
 	}
 
@@ -129,7 +170,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getOsVersion()
 	{
-		String fileSeparator = System.getProperty("os.version");
+		String fileSeparator = System.getProperty(OS_VERSION_PROPERTY_KEY);
 		return fileSeparator;
 	}
 
@@ -140,7 +181,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getPathSeparator()
 	{
-		String fileSeparator = System.getProperty("path.separator");
+		String fileSeparator = System.getProperty(PATH_SEPARATOR_PROPERTY_KEY);
 		return fileSeparator;
 	}
 
@@ -151,7 +192,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getUserHome()
 	{
-		String userHome = System.getProperty("user.home");
+		String userHome = System.getProperty(USER_HOME_PROPERTY_KEY);
 		return userHome;
 	}
 
@@ -162,7 +203,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getUserName()
 	{
-		String userHome = System.getProperty("user.name");
+		String userHome = System.getProperty(USER_NAME_PROPERTY_KEY);
 		return userHome;
 	}
 
@@ -173,7 +214,7 @@ public class SystemPropertiesExtensions
 	 */
 	public static String getUserWorkingDirectory()
 	{
-		String userHome = System.getProperty("user.dir");
+		String userHome = System.getProperty(USER_DIR_PROPERTY_KEY);
 		return userHome;
 	}
 

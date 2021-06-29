@@ -29,6 +29,24 @@ public class SystemPropertiesExtensionsTest
 	}
 
 	/**
+	 * Test method for {@link SystemPropertiesExtensions#getJavaIoTmpdir()}
+	 */
+	@Test public void testGetJavaIoTmpdir()
+	{
+		String javaIoTmpdir = SystemPropertiesExtensions.getJavaIoTmpdir();
+		assertNotNull(javaIoTmpdir);
+	}
+
+	/**
+	 * Test method for {@link SystemPropertiesExtensions#getJavaHome()}
+	 */
+	@Test public void testGetJavaHome()
+	{
+		String javaHome = SystemPropertiesExtensions.getJavaHome();
+		assertNotNull(javaHome);
+	}
+
+	/**
 	 * Test method for {@link SystemPropertiesExtensions#getJavaVendor()}
 	 */
 	@Test public void testGetJavaVendor()
