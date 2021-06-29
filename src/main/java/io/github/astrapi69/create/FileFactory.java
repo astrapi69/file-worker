@@ -165,6 +165,8 @@ public final class FileFactory
 	 * @param filename
 	 *            the file name
 	 * @return the new {@link File} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public static File newFile(final File parentDirectory, final String filename) throws IOException
 	{
@@ -227,6 +229,7 @@ public final class FileFactory
 	 *
 	 * @param file
 	 *            the file
+	 * @return true, if successful
 	 */
 	public static boolean mkParentDirs(final File file)
 	{
