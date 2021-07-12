@@ -30,8 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import io.github.astrapi69.regex.RegExExtensions;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
+import io.github.astrapi69.regex.RegExExtensions;
 
 /**
  * The class {@link FileSearchExtensions} provides methods for searching in directories.

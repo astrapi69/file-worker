@@ -35,10 +35,15 @@ import java.io.File;
 public final class SystemFileExtensions
 {
 
-	/** Constant for the default configuration directory from the current user. current value:".config" */
+	/**
+	 * Constant for the default configuration directory from the current user. current
+	 * value:".config"
+	 */
 	public static final String DEFAULT_USER_CONFIGURATION_DIRECTORY_NAME = ".config";
 
-	/** Constant for the default download directory from the current user. current value:"Downloads" */
+	/**
+	 * Constant for the default download directory from the current user. current value:"Downloads"
+	 */
 	public static final String DEFAULT_USER_DOWNLOAD_DIRECTORY_NAME = "Downloads";
 
 	private SystemFileExtensions()

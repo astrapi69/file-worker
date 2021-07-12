@@ -45,12 +45,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.collections.array.ArrayFactory;
-import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileTestCase;
+import io.github.astrapi69.collections.array.ArrayFactory;
 import io.github.astrapi69.delete.DeleteFileExtensions;
 import io.github.astrapi69.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.exceptions.FileDoesNotExistException;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.write.WriteFileExtensions;
 
 /**

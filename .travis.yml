@@ -8,16 +8,16 @@ cache:
     - '$HOME/.sonar/cache'
     - '$HOME/.gradle'
     - '.gradle'
-  
+
 jdk:
-    - openjdk11
+  - openjdk8
 
 notifications:
-    email:
-        recipients:
-            - asterios.raptis@web.de
-        on_failure: always
-        
+  email:
+    recipients:
+      - asterios.raptis@web.de
+    on_failure: always
+
 after_success:
   - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
   - bash <(curl -s https://codecov.io/bash)

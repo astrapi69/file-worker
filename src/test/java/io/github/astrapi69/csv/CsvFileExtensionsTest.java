@@ -42,18 +42,18 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.collections.CollectionExtensions;
 import io.github.astrapi69.collections.array.ArrayFactory;
 import io.github.astrapi69.collections.list.ListExtensions;
 import io.github.astrapi69.collections.list.ListFactory;
 import io.github.astrapi69.collections.map.MapFactory;
 import io.github.astrapi69.collections.set.SetFactory;
-import io.github.astrapi69.io.StreamExtensions;
-import io.github.astrapi69.FileExtensions;
 import io.github.astrapi69.create.FileCreationState;
 import io.github.astrapi69.create.FileFactory;
 import io.github.astrapi69.delete.DeleteFileExtensions;
 import io.github.astrapi69.exceptions.FileDoesNotExistException;
+import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.read.ReadFileExtensions;
 
 /**

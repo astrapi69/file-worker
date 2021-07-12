@@ -6,7 +6,8 @@ Version 5.10-SNAPSHOT
 
 ADDED:
 
-- new factory method for create a new File object from a string with the absolut path and a boolean flag if true to create an empty file 
+- new factory method for create a new File object from a string with the absolut path and a boolean
+  flag if true to create an empty file
 
 Version 5.9
 -------------
@@ -82,7 +83,8 @@ ADDED:
 - new dependency jobj-compare in version 3.2 added
 - new dependency throw-able in version 1.2 added
 - new dependency checksum-up in version 1 added
-- new test method for copy run configurations files from one source project to another target project and modifies its content
+- new test method for copy run configurations files from one source project to another target
+  project and modifies its content
 
 CHANGED:
 
@@ -206,7 +208,8 @@ Version 4.22
 
 ADDED:
 
-- new classes created and moved to them all methods that catches exceptions and handle them in a quietly manner
+- new classes created and moved to them all methods that catches exceptions and handle them in a
+  quietly manner
 
 CHANGED:
 
@@ -253,4 +256,5 @@ CHANGED:
 - javadoc extended and improved
 
 Notable links:
-[keep a changelog](http://keepachangelog.com/en/1.0.0/) Don’t let your friends dump git logs into changelogs
+[keep a changelog](http://keepachangelog.com/en/1.0.0/) Don’t let your friends dump git logs into
+changelogs

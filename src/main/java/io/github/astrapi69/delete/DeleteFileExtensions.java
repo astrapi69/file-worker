@@ -257,8 +257,7 @@ public final class DeleteFileExtensions
 	}
 
 	/**
-	 * Tries to delete all files that match to the given prefix from the given source
-	 * directory.
+	 * Tries to delete all files that match to the given prefix from the given source directory.
 	 *
 	 *
 	 * @param sourceDir

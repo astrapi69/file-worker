@@ -44,8 +44,8 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.FileConst;
+import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The class {@link ReadFileExtensions} helps you reading files.
