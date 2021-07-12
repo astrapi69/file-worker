@@ -158,6 +158,46 @@ public final class FileFactory
 	}
 
 	/**
+	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
+	 * new empty file will be created on the file system
+	 *
+	 * @param absolutePath
+	 *            the absolute path
+	 *
+	 * @return the file object
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static File newFile(final String absolutePath) throws IOException
+	{
+		return newFile(absolutePath, false);
+	}
+
+	/**
+	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
+	 * new empty file will be created on the file system
+	 *
+	 * @param absolutePath
+	 *            the absolute path
+	 * @param createIfNotExists
+	 *            if this flag is true the file will be created if it does not exists
+	 *
+	 * @return the file object
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static File newFile(final String absolutePath, boolean createIfNotExists) throws IOException
+	{
+		File file = new File(absolutePath);
+		if(createIfNotExists) {
+			newFile(file);
+		}
+		return file;
+	}
+
+	/**
 	 * Factory method for creating the new {@link File} if it is not exists.
 	 *
 	 * @param parentDirectory

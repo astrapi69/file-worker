@@ -25,6 +25,8 @@
 package io.github.astrapi69.create;
 
 import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
@@ -282,6 +284,54 @@ public class FileFactoryTest extends FileTestCase
 			DeleteFileExtensions.delete(file);
 			DeleteFileExtensions.delete(newParent);
 		}
+	}
+
+
+	/**
+	 * Test method for {@link FileFactory#newFile(String, boolean)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(enabled = true)
+	public void testNewFileStringBoolean() throws IOException
+	{
+		String absolutePath;
+		boolean createIfNotExists;
+		File file;
+
+		absolutePath = "/tmp/foo/bar/test.file";
+		createIfNotExists = false;
+		file = FileFactory.newFile(absolutePath, createIfNotExists);
+		assertFalse(file.exists());
+
+		createIfNotExists = true;
+		file = FileFactory.newFile(absolutePath, createIfNotExists);
+		assertTrue(file.exists());
+
+		createIfNotExists = false;
+		file = FileFactory.newFile(absolutePath, createIfNotExists);
+		assertTrue(file.exists());
+		// clean up
+		DeleteFileExtensions.delete(file);
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newFile(String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(enabled = true)
+	public void testNewFileString() throws IOException
+	{
+		String absolutePath;
+		File file;
+
+		absolutePath = "/tmp/foo/bar/test.file";
+		file = FileFactory.newFile(absolutePath);
+		assertFalse(file.exists());
+		assertNotNull(file);
 	}
 
 	/**

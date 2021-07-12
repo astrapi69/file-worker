@@ -4,6 +4,10 @@
 Version 5.10-SNAPSHOT
 -------------
 
+ADDED:
+
+- new factory method for create a new File object from a string with the absolut path and a boolean flag if true to create an empty file 
+
 Version 5.9
 -------------
 
