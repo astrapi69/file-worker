@@ -29,7 +29,9 @@ import java.util.List;
 
 /**
  * The class {@link GeneratorExtensions}.
+ * @deprecated unused extension, will be deleted in next minor version.
  */
+@Deprecated
 public final class GeneratorExtensions
 {
 	private GeneratorExtensions()
