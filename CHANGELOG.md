@@ -11,9 +11,13 @@ ADDED:
 
 CHANGED:
 
-- update gradle to new version 7.1
+- update gradle to new version 7.2
 - update gradle-plugin dependency of gradle.plugin.com.hierynomus.gradle.plugins:
   license-gradle-plugin to new version 0.16.1
+- update of commons-io dependency to new version 2.11.0
+- update of silly-io dependency to new version 1.6
+- update of throw-able dependency to new version 1.7
+- update of crypt-api dependency to new version to 7.6.1
 - update of test dependency test-objects to new version 5.5
 
 Version 5.9
