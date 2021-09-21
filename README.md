@@ -70,7 +70,7 @@ or in build.gradle ext area
 ```
 ext {
 			...
-    fileWorkerVersion = "5.10~~~~"
+    fileWorkerVersion = "5.10"
 			...
 }
 ```
