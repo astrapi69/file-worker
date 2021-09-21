@@ -19,6 +19,7 @@ CHANGED:
 - update of throw-able dependency to new version 1.7
 - update of crypt-api dependency to new version to 7.6.1
 - update of test dependency test-objects to new version 5.5
+- moved all packages to the 'file' package
 
 Version 5.9
 -------------
