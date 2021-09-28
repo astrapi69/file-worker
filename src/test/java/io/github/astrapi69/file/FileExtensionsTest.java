@@ -147,20 +147,6 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link FileExtensions#getTempDir()}.
-	 */
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testGetTempDir()
-	{
-		File actual;
-		File expected;
-		actual = FileExtensions.getTempDir();
-		expected = new File(System.getProperty("java.io.tmpdir"));
-		assertEquals(actual, expected);
-	}
-
-	/**
 	 * Test method for {@link FileExtensions#isOpen(File)}.
 	 *
 	 * @throws IOException

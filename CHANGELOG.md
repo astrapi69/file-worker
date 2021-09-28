@@ -4,7 +4,9 @@
 Version 5.11-SNAPSHOT
 -------------
 
+CHANGED:
 
+- removed deprecated classes and methods
 
 Version 5.10
 -------------

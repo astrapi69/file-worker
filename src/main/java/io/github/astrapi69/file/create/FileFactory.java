@@ -248,29 +248,6 @@ public final class FileFactory
 	 *
 	 * @param file
 	 *            the file
-	 * @deprecated use instead new method {@link FileFactory#mkParentDirs(File)} that returns a
-	 *             result Note:<br>
-	 *             <br>
-	 *             will be removed in next minor version
-	 */
-	@Deprecated
-	public static void newParentDirectories(final File file)
-	{
-		if (!file.exists())
-		{
-			final File parent = file.getParentFile();
-			if (parent != null && !parent.exists())
-			{
-				parent.mkdirs();
-			}
-		}
-	}
-
-	/**
-	 * Creates the parent directories from the given file.
-	 *
-	 * @param file
-	 *            the file
 	 * @return true, if successful
 	 */
 	public static boolean mkParentDirs(final File file)

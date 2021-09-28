@@ -30,8 +30,8 @@ import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.channels.FileLock;
 
-import io.github.astrapi69.io.file.FilenameExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
+import io.github.astrapi69.io.file.FilenameExtensions;
 
 /**
  * Utility class for the use of File object.
@@ -129,20 +129,6 @@ public final class FileExtensions
 	public static String getFilenameWithoutExtension(final File file)
 	{
 		return FilenameExtensions.getFilenameWithoutExtension(file);
-	}
-
-	/**
-	 * Gets the temporary directory from the system as File object.
-	 *
-	 * @return the temporary directory from the system.
-	 * @deprecated use instead the same name method in class <code>SystemFileExtensions</code> <br>
-	 *             <br>
-	 *             Note: will be removed in next minor version
-	 */
-	@Deprecated
-	public static File getTempDir()
-	{
-		return new File(System.getProperty("java.io.tmpdir"));
 	}
 
 	/**
