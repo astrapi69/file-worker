@@ -39,7 +39,7 @@ functionality of file-worker:
 	<properties>
 			...
 		<!-- FILE-WORKER version -->
-		<file-worker.version>5.10</file-worker.version>
+		<file-worker.version>8</file-worker.version>
 			...
 	</properties>
 			...
@@ -62,7 +62,7 @@ your project `build.gradle` if you want to import the core functionality of file
 define version in file gradle.properties
 
 ```
-fileWorkerVersion=5.10
+fileWorkerVersion=8
 ```
 
 or in build.gradle ext area
@@ -70,7 +70,7 @@ or in build.gradle ext area
 ```
 ext {
 			...
-    fileWorkerVersion = "5.10"
+    fileWorkerVersion = "8"
 			...
 }
 ```
