@@ -130,7 +130,7 @@ public final class ZipExtensions
 	{
 		final String absolutePath = file.getAbsolutePath();
 		final int index = absolutePath.indexOf(dirToZip.getName());
-		return absolutePath.substring(index, absolutePath.length());
+		return absolutePath.substring(index);
 	}
 
 	/**

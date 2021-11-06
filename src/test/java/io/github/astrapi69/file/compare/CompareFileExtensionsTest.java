@@ -38,9 +38,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.collections.CollectionExtensions;
 import io.github.astrapi69.collections.list.ListFactory;
+import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.file.compare.api.IFileContentResultBean;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
@@ -174,7 +174,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)}.
 	 */
 	@Test(enabled = true)
-	public void testCompareFilesFileFileBoolean() throws FileNotFoundException, IOException
+	public void testCompareFilesFileFileBoolean() throws IOException
 	{
 		boolean actual;
 		boolean expected;
@@ -219,7 +219,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 */
 	@Test(enabled = false)
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
-		throws FileNotFoundException, IOException
+		throws IOException
 	{
 		IFileCompareResultBean actual;
 		IFileCompareResultBean expected;
@@ -442,7 +442,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 */
 	@Test(enabled = false)
 	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
-		throws FileNotFoundException, IOException
+		throws IOException
 	{
 		List<IFileCompareResultBean> actual;
 		List<IFileCompareResultBean> expected;
@@ -532,7 +532,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 */
 	@Test(enabled = true)
 	public void testFindEqualFilesWithSameContentFileFile()
-		throws FileNotFoundException, IOException
+		throws IOException
 	{
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 
@@ -562,7 +562,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 */
 	@Test(enabled = false) // TODO FIXME
 	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
-		throws FileNotFoundException, IOException
+		throws IOException
 	{
 		List<IFileContentResultBean> actual;
 		List<IFileContentResultBean> expected;

@@ -117,9 +117,7 @@ public class FileCompareResultBean implements IFileCompareResultBean
 			return false;
 		final Object this$source = this.source;
 		final Object other$source = other.source;
-		if (this$source == null ? other$source != null : !this$source.equals(other$source))
-			return false;
-		return true;
+		return this$source == null ? other$source == null : this$source.equals(other$source);
 	}
 
 	/**

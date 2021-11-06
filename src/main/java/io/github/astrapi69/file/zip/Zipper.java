@@ -369,7 +369,7 @@ public class Zipper implements ZipModel
 				this.dirToStart = this.directoryToZip.getName();
 			}
 			final int index = absolutePath.indexOf(this.dirToStart);
-			final String zipEntryName = absolutePath.substring(index, absolutePath.length());
+			final String zipEntryName = absolutePath.substring(index);
 			final byte[] b = new byte[(int)file.length()];
 			final ZipEntry cpZipEntry = new ZipEntry(zipEntryName);
 			zos.putNextEntry(cpZipEntry);

@@ -93,7 +93,7 @@ public final class RenameFileExtensions
 
 		final String fileName = fileToRename.getName();
 		final int ext_index = fileName.lastIndexOf(".");
-		final String ext = fileName.substring(ext_index, fileName.length());
+		final String ext = fileName.substring(ext_index);
 		String newName = fileName.substring(0, ext_index);
 		newName += "_" + sysTime + ext;
 		return newName;
@@ -151,7 +151,7 @@ public final class RenameFileExtensions
 		boolean success;
 		List<File> notDeletedFiles = null;
 		final String filePath = file.getAbsolutePath();
-		final String suffix[] = { oldSuffix };
+		final String[] suffix = { oldSuffix };
 		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
 		final int fileCount = files.size();
 		for (int i = 0; i < fileCount; i++)

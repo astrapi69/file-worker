@@ -81,7 +81,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * Test method for {@link FileSearchExtensions#containsFile(File, File)}.
 	 */
 	@Test
-	public void testContainsFileFileFile() throws FileNotFoundException, IOException
+	public void testContainsFileFileFile() throws IOException
 	{
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
@@ -96,7 +96,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * Test method for {@link FileSearchExtensions#containsFile(File, String)}.
 	 */
 	@Test
-	public void testContainsFileFileString() throws FileNotFoundException, IOException
+	public void testContainsFileFileString() throws IOException
 	{
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
@@ -111,7 +111,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * Test method for {@link FileSearchExtensions#containsFileRecursive(File, File)}.
 	 */
 	@Test
-	public void testContainsFileRecursive() throws FileNotFoundException, IOException
+	public void testContainsFileRecursive() throws IOException
 	{
 		final File testFile = new File(this.testDir.getAbsoluteFile(),
 			"testContainsFileRecursives.txt");
@@ -138,7 +138,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testCountAllFilesInDirectory() throws FileNotFoundException, IOException
+	public void testCountAllFilesInDirectory() throws IOException
 	{
 		long actual;
 		long expected;
@@ -293,7 +293,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * Test method for {@link FileSearchExtensions#findFiles(String, String[])}
 	 */
 	@Test
-	public void testFindFilesStringStringArray() throws FileNotFoundException, IOException
+	public void testFindFilesStringStringArray() throws IOException
 	{
 		final List<File> expected = new ArrayList<>();
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(),

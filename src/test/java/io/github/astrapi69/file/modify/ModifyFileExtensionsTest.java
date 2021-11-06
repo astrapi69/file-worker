@@ -30,6 +30,7 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -137,7 +138,7 @@ public class ModifyFileExtensionsTest
 		CopyFileExtensions.copyFile(
 			new File(PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
 				"test-csv-data.csv"),
-			inputFile, Charset.forName("UTF-8"), Charset.forName("UTF-8"), true);
+			inputFile, StandardCharsets.UTF_8, StandardCharsets.UTF_8, true);
 
 	}
 

@@ -257,7 +257,7 @@ public final class FileSearchExtensions
 		while (dirs.size() > 0)
 		{
 			final File dirFiles = dirs.pop();
-			final String s[] = dirFiles.list();
+			final String[] s = dirFiles.list();
 			if (s != null)
 			{
 				for (final String element : s)
@@ -481,7 +481,7 @@ public final class FileSearchExtensions
 	 *            An array with suffixes.
 	 * @return Returns true if matches otherwise false.
 	 */
-	public static boolean match(final String stringToMatch, final String suffixes[])
+	public static boolean match(final String stringToMatch, final String[] suffixes)
 	{
 		for (final String suffix : suffixes)
 		{

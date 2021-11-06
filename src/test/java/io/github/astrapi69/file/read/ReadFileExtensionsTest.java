@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,13 +46,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.collections.array.ArrayFactory;
+import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
-import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link ReadFileExtensions}.
@@ -92,7 +93,8 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testCountAllLines()throws IOException{
+	public void testCountAllLines() throws IOException
+	{
 		long actual;
 		long expected;
 		File tmpFile;
@@ -218,7 +220,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		String actual;
 		String expected;
 		final File file = new File(this.test, "testReadSmallFileInput.txt");
-		actual = ReadFileExtensions.readFromFile(file, Charset.forName("UTF-8"));
+		actual = ReadFileExtensions.readFromFile(file, StandardCharsets.UTF_8);
 		expected = "foo bar\n";
 		assertEquals(actual, expected);
 	}

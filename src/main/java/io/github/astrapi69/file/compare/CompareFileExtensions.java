@@ -33,13 +33,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
+import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.file.compare.api.IFileContentResultBean;
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
-import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.file.search.FileSearchExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The class {@link CompareFileExtensions} helps you to compare files.
@@ -362,10 +362,7 @@ public final class CompareFileExtensions
 			{
 				// // Check if the files have same names.
 				sameFilename = source.getName().equals(compare.getName());
-				if (sameFilename)
-				{
-					return true;
-				}
+				return sameFilename;
 			}
 			return false;
 		}

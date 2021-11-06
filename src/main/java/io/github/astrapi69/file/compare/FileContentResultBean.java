@@ -71,9 +71,7 @@ public class FileContentResultBean extends FileCompareResultBean implements IFil
 			return false;
 		if (!super.equals(o))
 			return false;
-		if (this.contentEquality != other.contentEquality)
-			return false;
-		return true;
+		return this.contentEquality == other.contentEquality;
 	}
 
 	/**

@@ -40,6 +40,6 @@ public enum FileCreationState
 	FAILED,
 
 	/** This state signals that the file creation is pending */
-	PENDING;
+	PENDING
 
 }

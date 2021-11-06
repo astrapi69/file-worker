@@ -82,9 +82,7 @@ public class SearchFileAttributesBean
 			return false;
 		if (this.isIgnoreLengthEquality() != other.isIgnoreLengthEquality())
 			return false;
-		if (this.isIgnoreNameEquality() != other.isIgnoreNameEquality())
-			return false;
-		return true;
+		return this.isIgnoreNameEquality() == other.isIgnoreNameEquality();
 	}
 
 	@Override

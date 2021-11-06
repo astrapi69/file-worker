@@ -26,5 +26,5 @@ package io.github.astrapi69.file.zip;
 
 public enum ZipErrorCodes
 {
-	DIRECTORY_TO_ZIP_DOES_NOT_EXIST, IO_ERROR, ZIP_FILE_DOES_NOT_EXIST;
+	DIRECTORY_TO_ZIP_DOES_NOT_EXIST, IO_ERROR, ZIP_FILE_DOES_NOT_EXIST
 }

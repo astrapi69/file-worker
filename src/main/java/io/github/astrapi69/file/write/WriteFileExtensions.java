@@ -46,8 +46,8 @@ import java.util.List;
 import java.util.Properties;
 
 import io.github.astrapi69.file.FileConst;
-import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.file.system.SystemPropertiesExtensions;
+import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The class {@link WriteFileExtensions} provides methods for writing in files.
@@ -79,7 +79,7 @@ public final class WriteFileExtensions
 		try (FileInputStream fis = new FileInputStream(srcfile);
 			FileOutputStream fos = new FileOutputStream(destFile);
 			BufferedInputStream bis = new BufferedInputStream(fis);
-			BufferedOutputStream bos = new BufferedOutputStream(fos);)
+			BufferedOutputStream bos = new BufferedOutputStream(fos))
 		{
 			final int availableLength = bis.available();
 			final byte[] totalBytes = new byte[availableLength];
@@ -101,7 +101,7 @@ public final class WriteFileExtensions
 	public static void storeByteArrayToFile(final byte[] data, final File file) throws IOException
 	{
 		try (FileOutputStream fos = new FileOutputStream(file);
-			BufferedOutputStream bos = new BufferedOutputStream(fos);)
+			BufferedOutputStream bos = new BufferedOutputStream(fos))
 		{
 			bos.write(data);
 			bos.flush();
@@ -189,7 +189,7 @@ public final class WriteFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		int counter;
-		final byte byteArray[] = new byte[FileConst.BLOCKSIZE];
+		final byte[] byteArray = new byte[FileConst.BLOCKSIZE];
 		while ((counter = inputStream.read(byteArray)) != -1)
 		{
 			outputStream.write(byteArray, 0, counter);
@@ -234,7 +234,7 @@ public final class WriteFileExtensions
 		try (FileInputStream fis = new FileInputStream(inputFile);
 			FileOutputStream fos = new FileOutputStream(outputFile);
 			BufferedInputStream bis = new BufferedInputStream(fis);
-			BufferedOutputStream bos = new BufferedOutputStream(fos);)
+			BufferedOutputStream bos = new BufferedOutputStream(fos))
 		{
 			StreamExtensions.writeInputStreamToOutputStream(bis, bos);
 		}
@@ -256,7 +256,7 @@ public final class WriteFileExtensions
 	public static void write2File(final String inputFile, final Writer writer)
 		throws FileNotFoundException, IOException
 	{
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile));)
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile)))
 		{
 			write2File(bufferedReader, writer);
 		}
@@ -280,7 +280,7 @@ public final class WriteFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		try (InputStream inputStream = StreamExtensions.getInputStream(new File(inputFile));
-			OutputStream outputStream = StreamExtensions.getOutputStream(new File(outputFile));)
+			OutputStream outputStream = StreamExtensions.getOutputStream(new File(outputFile)))
 		{
 			WriteFileExtensions.write(inputStream, outputStream);
 		}
@@ -406,7 +406,7 @@ public final class WriteFileExtensions
 			OutputStreamWriter osw = (null == encoding)
 				? new OutputStreamWriter(fos)
 				: new OutputStreamWriter(fos, encoding);
-			PrintWriter out = new PrintWriter(osw);)
+			PrintWriter out = new PrintWriter(osw))
 		{
 			final int size = input.size();
 			final StringBuffer sb = new StringBuffer();
@@ -465,7 +465,7 @@ public final class WriteFileExtensions
 			OutputStreamWriter osw = (null == encoding)
 				? new OutputStreamWriter(bos)
 				: new OutputStreamWriter(bos, encoding);
-			PrintWriter printWriter = new PrintWriter(osw);)
+			PrintWriter printWriter = new PrintWriter(osw))
 		{
 			printWriter.write(string2write);
 		}

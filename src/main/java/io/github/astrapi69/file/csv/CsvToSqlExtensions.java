@@ -101,13 +101,13 @@ public final class CsvToSqlExtensions
 		{
 			final StringBuilder sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
 				columnTypesEdit, csvBean.getLineOrder(), csvBean.getLines(), withEndSemicolon);
-			sb.append(sqlData.toString());
+			sb.append(sqlData);
 		}
 		else
 		{
 			final StringBuilder sqlData = getSqlData(csvBean.getHeaders(), csvBean.getColumnTypes(),
 				null, null, csvBean.getLines(), withEndSemicolon);
-			sb.append(sqlData.toString());
+			sb.append(sqlData);
 		}
 		return sb.toString();
 	}

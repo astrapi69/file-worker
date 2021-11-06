@@ -37,11 +37,11 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
-import io.github.astrapi69.io.StreamExtensions;
+import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link WriteFileExtensions}

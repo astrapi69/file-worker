@@ -41,18 +41,18 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.collections.list.ListFactory;
+import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.FileCreationState;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
 import io.github.astrapi69.file.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.file.exceptions.FileIsSecurityRestrictedException;
+import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.io.file.filter.TxtFileFilter;
 import io.github.astrapi69.io.file.namefilter.MultiplyExtensionsFilenameFilter;
-import io.github.astrapi69.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link DeleteFileExtensions}

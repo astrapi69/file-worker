@@ -89,7 +89,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 * Test method for {@link RenameFileExtensions#appendSystemtimeToFilename(File)}.
 	 */
 	@Test
-	public void testAppendSystemtimeToFilenameFile() throws FileNotFoundException, IOException
+	public void testAppendSystemtimeToFilenameFile() throws IOException
 	{
 		String actual;
 		final File testFile1 = new File(this.testDir, "testRename.txt");
@@ -103,7 +103,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 * Test method for {@link RenameFileExtensions#appendSystemtimeToFilename(File, Date)}.
 	 */
 	@Test
-	public void testAppendSystemtimeToFilenameFileDate() throws FileNotFoundException, IOException
+	public void testAppendSystemtimeToFilenameFileDate() throws IOException
 	{
 		String actual;
 		String expected;

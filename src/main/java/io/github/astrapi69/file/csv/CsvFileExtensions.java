@@ -39,9 +39,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.string.StringExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
 
 /**
  * Utility class for the use of cvs-files.
@@ -563,7 +563,7 @@ public final class CsvFileExtensions
 			throw e;
 		}
 		// convert the list to a String array.
-		final String data[] = fn.toArray(new String[fn.size()]);
+		final String[] data = fn.toArray(new String[fn.size()]);
 		// and sort the array.
 		Arrays.sort(data);
 		return data;

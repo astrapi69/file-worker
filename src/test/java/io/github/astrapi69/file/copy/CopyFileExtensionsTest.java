@@ -34,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,13 +51,13 @@ import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.exceptions.FileIsADirectoryException;
 import io.github.astrapi69.file.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.file.exceptions.FileIsSecurityRestrictedException;
+import io.github.astrapi69.file.read.ReadFileExtensions;
+import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.io.file.FileExtension;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.io.file.filter.TxtFileFilter;
 import io.github.astrapi69.io.file.namefilter.MultiplyExtensionsFilenameFilter;
 import io.github.astrapi69.io.file.namefilter.SimpleFilenameFilter;
-import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link CopyFileExtensions}.
@@ -184,18 +185,18 @@ public class CopyFileExtensionsTest extends FileTestCase
 		fileFilter = new TxtFileFilter();
 		// define the include filefilter object...
 		includeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(new String[] { ".txt", ".rtf" }), true);
+			Arrays.asList(".txt", ".rtf"), true);
 		// define the exclude filefilter object...
 		excludeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(new String[] { ".exe" }));
+			Arrays.asList(".exe"));
 		// define a filenamefilter object...
 		filenameFilter = new SimpleFilenameFilter(".txt", true);
 		// define the include filenamefilter object...
 		includeFilenameFilter = new MultiplyExtensionsFilenameFilter(
-			Arrays.asList(new String[] { ".txt", ".rtf" }), true);
+			Arrays.asList(".txt", ".rtf"), true);
 		// define the exclude filenamefilter object...
 		excludeFilenameFilter = new MultiplyExtensionsFilenameFilter(
-			Arrays.asList(new String[] { ".exe" }));
+			Arrays.asList(".exe"));
 
 	}
 
@@ -473,11 +474,11 @@ public class CopyFileExtensionsTest extends FileTestCase
 		excludeFiles.add(srcFile4);
 		// define the include filefilter object...
 		final FileFilter includeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(new String[] { ".txt", ".rtf" }), true);
+			Arrays.asList(".txt", ".rtf"), true);
 
 		// define the exclude filefilter object...
 		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(new String[] { ".exe" }));
+			Arrays.asList(".exe"));
 		// Test to copy the source directory to the destination directory.
 		actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDeepDir, destDir,
 			includeFileFilter, excludeFileFilter, excludeFiles, false);
@@ -768,8 +769,8 @@ public class CopyFileExtensionsTest extends FileTestCase
 	@Test
 	public void testNewBackupOf() throws IOException
 	{
-		File backupFile = CopyFileExtensions.newBackupOf(srcDeepFile, Charset.forName("UTF-8"),
-			Charset.forName("UTF-8"));
+		File backupFile = CopyFileExtensions.newBackupOf(srcDeepFile, StandardCharsets.UTF_8,
+			StandardCharsets.UTF_8);
 		assertTrue(backupFile.exists());
 		assertTrue(backupFile.getName().endsWith(FileExtension.BACKUP.getExtension()));
 		assertTrue(backupFile.getName()

@@ -37,8 +37,8 @@ import io.github.astrapi69.file.exceptions.DirectoryHasNoContentException;
 import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
 import io.github.astrapi69.file.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.file.exceptions.FileIsSecurityRestrictedException;
-import io.github.astrapi69.io.file.filter.PrefixFileFilter;
 import io.github.astrapi69.file.search.FileSearchExtensions;
+import io.github.astrapi69.io.file.filter.PrefixFileFilter;
 
 /**
  * The class {@link DeleteFileExtensions} helps you delete files.
@@ -189,7 +189,7 @@ public final class DeleteFileExtensions
 		throws IOException
 	{
 		final String filePath = file.getAbsolutePath();
-		final String suffix[] = { theSuffix };
+		final String[] suffix = { theSuffix };
 		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
 		final int fileCount = files.size();
 		for (int i = 0; i < fileCount; i++)
