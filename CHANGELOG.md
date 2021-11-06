@@ -1,8 +1,12 @@
 ## Change log
 ----------------------
 
-Version 5.11-SNAPSHOT
+Version 8-SNAPSHOT
 -------------
+
+ADDED:
+
+- new method for count lines from file in the class ReadFileExtensions
 
 CHANGED:
 

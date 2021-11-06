@@ -27,7 +27,6 @@ package io.github.astrapi69.file.compare;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 
-import io.github.astrapi69.file.compare.FileCompareResultBean;
 import org.testng.annotations.Test;
 
 import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;

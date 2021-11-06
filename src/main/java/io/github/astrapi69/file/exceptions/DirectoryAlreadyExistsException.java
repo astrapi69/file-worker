@@ -32,6 +32,12 @@ package io.github.astrapi69.file.exceptions;
  */
 public class DirectoryAlreadyExistsException extends Exception
 {
+
+	/**
+	 * The serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public DirectoryAlreadyExistsException()
 	{
 	}

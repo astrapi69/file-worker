@@ -86,6 +86,34 @@ public class ReadFileExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link ReadFileExtensions#countAllLines(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testCountAllLines()throws IOException{
+		long actual;
+		long expected;
+		File tmpFile;
+		// new scenario...
+		tmpFile = new File(this.test, "testReadSmallFileInput.txt");
+		actual = ReadFileExtensions.countAllLines(tmpFile);
+		expected = 1;
+		assertEquals(actual, expected);
+		// new scenario...
+		tmpFile = new File(this.test, "insert_languages.sql");
+		actual = ReadFileExtensions.countAllLines(tmpFile);
+		expected = 370;
+		assertEquals(actual, expected);
+		// new scenario...
+		tmpFile = new File(this.test, "resultCodeLeft.txt");
+		actual = ReadFileExtensions.countAllLines(tmpFile);
+		expected = 1936;
+		assertEquals(actual, expected);
+	}
+
+	/**
 	 * Test method for {@link ReadFileExtensions#getFilecontentAsByteObjectArray(File)}.
 	 *
 	 * @throws IOException

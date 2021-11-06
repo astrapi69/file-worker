@@ -37,6 +37,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -434,6 +435,20 @@ public final class ReadFileExtensions
 	private static Byte[] toObject(final byte[] byteArray)
 	{
 		return ArrayUtils.toObject(byteArray);
+	}
+
+	/**
+	 * Count all lines from the given file
+	 *
+	 * @param fileToCountTheLines
+	 *            The File to count the lines
+	 * @return the number of the lines from the given file
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static long countAllLines(File fileToCountTheLines) throws IOException
+	{
+		return Files.lines(fileToCountTheLines.toPath()).count();
 	}
 
 }
