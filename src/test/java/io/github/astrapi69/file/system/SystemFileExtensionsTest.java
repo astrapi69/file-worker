@@ -24,10 +24,12 @@
  */
 package io.github.astrapi69.file.system;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import java.io.File;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.testng.annotations.Test;
 
 /**
@@ -116,5 +118,18 @@ public class SystemFileExtensionsTest
 	{
 		File userWorkingDir = SystemFileExtensions.getUserWorkingDir();
 		assertNotNull(userWorkingDir);
+	}
+
+	/**
+	 * Test method for {@link SystemFileExtensions#getRootDir()}
+	 */
+	@Test
+	public void testGetRootDir()
+	{
+		File rootDir = SystemFileExtensions.getRootDir();
+		assertNotNull(rootDir);
+		if(SystemUtils.IS_OS_WINDOWS) {
+			assertEquals(rootDir.getAbsolutePath(), "C:");
+		}
 	}
 }

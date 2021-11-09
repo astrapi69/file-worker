@@ -4,6 +4,11 @@
 Version 8.1-SNAPSHOT
 -------------
 
+ADDED:
+
+- new method for get the root directory of the current system
+- improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file watch
+
 CHANGED:
 
 - update of silly-strings dependency to new version 8.1

@@ -24,6 +24,8 @@
  */
 package io.github.astrapi69.file.system;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import java.io.File;
 
 /**
@@ -151,6 +153,20 @@ public final class SystemFileExtensions
 	{
 		String userWorkingPath = SystemPropertiesExtensions.getUserWorkingDirectory();
 		return new File(userWorkingPath);
+	}
+
+	/**
+	 * Gets the root directory from the system as {@link File} object
+	 *
+	 * @return the root directory from the system as {@link File} object
+	 */
+	public static File getRootDir()
+	{
+		if(SystemUtils.IS_OS_WINDOWS) {
+			String systemDrive = System.getenv("SystemDrive");
+			return new File(systemDrive);
+		}
+		return new File("/");
 	}
 
 }
