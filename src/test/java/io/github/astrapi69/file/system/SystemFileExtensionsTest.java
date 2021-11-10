@@ -131,7 +131,8 @@ public class SystemFileExtensionsTest
 		File expected;
 		actual = SystemFileExtensions.getRootDir();
 		assertNotNull(actual);
-		if(SystemUtils.IS_OS_WINDOWS) {
+		if (SystemUtils.IS_OS_WINDOWS)
+		{
 			expected = new File("C:");
 			assertEquals(actual, expected);
 		}
@@ -147,7 +148,8 @@ public class SystemFileExtensionsTest
 		Optional<File> expected;
 		actual = SystemFileExtensions.getWindowsRootDriveDir('C');
 		assertNotNull(actual);
-		if(SystemUtils.IS_OS_WINDOWS) {
+		if (SystemUtils.IS_OS_WINDOWS)
+		{
 			expected = Optional.of(new File("C:"));
 			assertEquals(actual, expected);
 		}

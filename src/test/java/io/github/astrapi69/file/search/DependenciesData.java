@@ -77,9 +77,9 @@ public class DependenciesData
 			return false;
 		final Object this$properties = this.getProperties();
 		final Object other$properties = other.getProperties();
-		return this$properties == null ?
-			other$properties == null :
-			this$properties.equals(other$properties);
+		return this$properties == null
+			? other$properties == null
+			: this$properties.equals(other$properties);
 	}
 
 	public File getBuildGradle()

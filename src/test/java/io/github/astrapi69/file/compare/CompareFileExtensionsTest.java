@@ -29,7 +29,6 @@ import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -218,8 +217,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
-	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean()
-		throws IOException
+	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean() throws IOException
 	{
 		IFileCompareResultBean actual;
 		IFileCompareResultBean expected;
@@ -441,8 +439,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
 	@Test(enabled = false)
-	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean()
-		throws IOException
+	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean() throws IOException
 	{
 		List<IFileCompareResultBean> actual;
 		List<IFileCompareResultBean> expected;
@@ -531,8 +528,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)}.
 	 */
 	@Test(enabled = true)
-	public void testFindEqualFilesWithSameContentFileFile()
-		throws IOException
+	public void testFindEqualFilesWithSameContentFileFile() throws IOException
 	{
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 

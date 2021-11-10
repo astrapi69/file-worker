@@ -184,19 +184,16 @@ public class CopyFileExtensionsTest extends FileTestCase
 		// define a filefilter object...
 		fileFilter = new TxtFileFilter();
 		// define the include filefilter object...
-		includeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(".txt", ".rtf"), true);
+		includeFileFilter = new MultiplyExtensionsFileFilter(Arrays.asList(".txt", ".rtf"), true);
 		// define the exclude filefilter object...
-		excludeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(".exe"));
+		excludeFileFilter = new MultiplyExtensionsFileFilter(Arrays.asList(".exe"));
 		// define a filenamefilter object...
 		filenameFilter = new SimpleFilenameFilter(".txt", true);
 		// define the include filenamefilter object...
-		includeFilenameFilter = new MultiplyExtensionsFilenameFilter(
-			Arrays.asList(".txt", ".rtf"), true);
+		includeFilenameFilter = new MultiplyExtensionsFilenameFilter(Arrays.asList(".txt", ".rtf"),
+			true);
 		// define the exclude filenamefilter object...
-		excludeFilenameFilter = new MultiplyExtensionsFilenameFilter(
-			Arrays.asList(".exe"));
+		excludeFilenameFilter = new MultiplyExtensionsFilenameFilter(Arrays.asList(".exe"));
 
 	}
 
