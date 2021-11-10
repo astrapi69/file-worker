@@ -28,6 +28,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import java.io.File;
+import java.util.Optional;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.testng.annotations.Test;
@@ -132,7 +133,23 @@ public class SystemFileExtensionsTest
 		assertNotNull(actual);
 		if(SystemUtils.IS_OS_WINDOWS) {
 			expected = new File("C:");
-			assertEquals(actual, actual);
+			assertEquals(actual, expected);
+		}
+	}
+
+	/**
+	 * Test method for {@link SystemFileExtensions#getWindowsRootDriveDir(char)}
+	 */
+	@Test
+	public void testGetWindowsRootDriveDir()
+	{
+		Optional<File> actual;
+		Optional<File> expected;
+		actual = SystemFileExtensions.getWindowsRootDriveDir('C');
+		assertNotNull(actual);
+		if(SystemUtils.IS_OS_WINDOWS) {
+			expected = Optional.of(new File("C:"));
+			assertEquals(actual, expected);
 		}
 	}
 }
