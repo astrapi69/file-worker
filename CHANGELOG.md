@@ -12,6 +12,7 @@ ADDED:
 
 CHANGED:
 
+- update gradle to new version 7.3
 - update of silly-strings dependency to new version 8.1
 - update of jobj-compare dependency to new version 2.9
 - update of silly-collections dependency to new version 18
