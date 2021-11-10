@@ -126,10 +126,13 @@ public class SystemFileExtensionsTest
 	@Test
 	public void testGetRootDir()
 	{
-		File rootDir = SystemFileExtensions.getRootDir();
-		assertNotNull(rootDir);
+		File actual;
+		File expected;
+		actual = SystemFileExtensions.getRootDir();
+		assertNotNull(actual);
 		if(SystemUtils.IS_OS_WINDOWS) {
-			assertEquals(rootDir.getAbsolutePath(), "C:");
+			expected = new File("C:");
+			assertEquals(actual, actual);
 		}
 	}
 }
