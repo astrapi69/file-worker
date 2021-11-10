@@ -7,6 +7,7 @@ Version 8.1-SNAPSHOT
 ADDED:
 
 - new method for get the root directory of the current system
+- new method for get the root directory from a given file
 - new method for get the drive directory from the given drive letter on windows operating system
 - improve gradle build performance by adding new gradle parameters for caching, parallel, configure on demand and file watch
 

@@ -1,8 +1,8 @@
 /**
  * The MIT License
- *
+ * <p>
  * Copyright (C) 2015 Asterios Raptis
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -24,14 +24,14 @@
  */
 package io.github.astrapi69.file.search;
 
+import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
+import io.github.astrapi69.regex.RegExExtensions;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
-
-import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
-import io.github.astrapi69.regex.RegExExtensions;
 
 /**
  * The class {@link FileSearchExtensions} provides methods for searching in directories.
@@ -39,10 +39,24 @@ import io.github.astrapi69.regex.RegExExtensions;
  * @version 1.0
  * @author Asterios Raptis
  */
-public final class FileSearchExtensions
-{
-	private FileSearchExtensions()
-	{
+public final class FileSearchExtensions {
+	private FileSearchExtensions() {
+	}
+
+	/**
+	 * Gets the root directory from the given {@link File} object
+	 * @param file
+	 *            The file to search.
+	 * @return the root directory from the given {@link File} object
+	 */
+	public static File getRootDirectory(File file) {
+		File previous = file;
+		File parent = previous.getParentFile();
+		while (parent != null) {
+			previous = parent;
+			parent = parent.getParentFile();
+		}
+		return previous;
 	}
 
 	/**
@@ -54,17 +68,14 @@ public final class FileSearchExtensions
 	 *            The file to search.
 	 * @return 's true if the file exists in the parent directory otherwise false.
 	 */
-	public static boolean containsFile(final File parent, final File search)
-	{
+	public static boolean containsFile(final File parent, final File search) {
 		boolean exists = false;
 		final String[] children = parent.list();
-		if (children == null)
-		{
+		if (children == null) {
 			return false;
 		}
 		final List<String> fileList = Arrays.asList(children);
-		if (fileList.contains(search.getName()))
-		{
+		if (fileList.contains(search.getName())) {
 			exists = true;
 		}
 		return exists;
@@ -79,11 +90,9 @@ public final class FileSearchExtensions
 	 *            The file to search.
 	 * @return 's true if the file exists in the parent directory otherwise false.
 	 */
-	public static boolean containsFile(final File fileToSearch, final String pathname)
-	{
+	public static boolean containsFile(final File fileToSearch, final String pathname) {
 		final String[] allFiles = fileToSearch.list();
-		if (allFiles == null)
-		{
+		if (allFiles == null) {
 			return false;
 		}
 		final List<String> list = Arrays.asList(allFiles);
@@ -99,28 +108,22 @@ public final class FileSearchExtensions
 	 *            The file to search.
 	 * @return 's true if the file exists in the parent directory otherwise false.
 	 */
-	public static boolean containsFileRecursive(final File parent, final File search)
-	{
+	public static boolean containsFileRecursive(final File parent, final File search) {
 		final File toSearch = search.getAbsoluteFile();
 		boolean exists = false;
 		final File[] children = parent.getAbsoluteFile().listFiles();
-		if (children == null)
-		{
+		if (children == null) {
 			return false;
 		}
 		final List<File> fileList = Arrays.asList(children);
-		for (final File currentFile : fileList)
-		{
-			if (currentFile.isDirectory())
-			{
+		for (final File currentFile : fileList) {
+			if (currentFile.isDirectory()) {
 				exists = FileSearchExtensions.containsFileRecursive(currentFile, toSearch);
-				if (exists)
-				{
+				if (exists) {
 					return true;
 				}
 			}
-			if (fileList.contains(toSearch))
-			{
+			if (fileList.contains(toSearch)) {
 				return true;
 			}
 		}
@@ -138,31 +141,23 @@ public final class FileSearchExtensions
 	 *            If this is true then the directories are in the count too.
 	 * @return the total number of files.
 	 */
-	public static long countAllFilesInDirectory(final File dir, long length,
-		final boolean includeDirectories)
-	{
+	public static long countAllFilesInDirectory(final File dir, long length, final boolean includeDirectories) {
 		// Get all files
 		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
+		if (children == null || children.length < 1) {
 			return length;
 		}
-		for (final File element : children)
-		{
+		for (final File element : children) {
 			// if the entry is a directory
-			if (element.isDirectory())
-			{ // then
+			if (element.isDirectory()) { // then
 				// if directories shell be include
-				if (includeDirectories)
-				{ // then
+				if (includeDirectories) { // then
 					// increment the length
 					length++;
 				}
 				// find recursively in the directory the files.
 				length = countAllFilesInDirectory(element, length, includeDirectories);
-			}
-			else
-			{
+			} else {
 				// increment length...
 				length++;
 			}
@@ -179,31 +174,24 @@ public final class FileSearchExtensions
 	 *            The regex file search pattern.
 	 * @return A List with all files that matches the search pattern.
 	 */
-	public static List<File> findAllFiles(final File dir, final String fileSearchPattern)
-	{
+	public static List<File> findAllFiles(final File dir, final String fileSearchPattern) {
 		final List<File> foundFiles = new ArrayList<>();
 		// Get all files
 		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
+		if (children == null || children.length < 1) {
 			return foundFiles;
 		}
-		for (final File element : children)
-		{
+		for (final File element : children) {
 			// if the entry is a directory
-			if (element.isDirectory())
-			{ // then
+			if (element.isDirectory()) { // then
 				// find recursively in the directory and put it in a List.
 				final List<File> foundedFiles = findAllFiles(element, fileSearchPattern);
 				// Put the founded files in the main List.
 				foundFiles.addAll(foundedFiles);
-			}
-			else
-			{
+			} else {
 				// entry is a file
 				final String filename = element.getName();
-				if (filename.matches(fileSearchPattern))
-				{
+				if (filename.matches(fileSearchPattern)) {
 					foundFiles.add(element.getAbsoluteFile());
 				}
 			}
@@ -220,15 +208,12 @@ public final class FileSearchExtensions
 	 *            The search pattern. Allowed wildcards are "*" and "?".
 	 * @return A List with all files that matches the search pattern.
 	 */
-	public static List<File> findFiles(final File dir, final String filenameToSearch)
-	{
+	public static List<File> findFiles(final File dir, final String filenameToSearch) {
 		final List<File> foundedFileList = new ArrayList<>();
 		final String regex = RegExExtensions.replaceWildcardsWithRE(filenameToSearch);
 		final String[] children = dir.list();
-		for (final String filename : children)
-		{
-			if (filename.matches(regex))
-			{
+		for (final String filename : children) {
+			if (filename.matches(regex)) {
 				final File foundedFile = new File(filename);
 				foundedFileList.add(foundedFile);
 			}
@@ -245,31 +230,22 @@ public final class FileSearchExtensions
 	 *            The extensions to find.
 	 * @return Returns a Vector all founded files.
 	 */
-	public static List<File> findFiles(final String start, final String[] extensions)
-	{
+	public static List<File> findFiles(final String start, final String[] extensions) {
 		final List<File> files = new ArrayList<>();
 		final Stack<File> dirs = new Stack<>();
 		final File startdir = new File(start);
-		if (startdir.isDirectory())
-		{
+		if (startdir.isDirectory()) {
 			dirs.push(new File(start));
 		}
-		while (dirs.size() > 0)
-		{
+		while (dirs.size() > 0) {
 			final File dirFiles = dirs.pop();
 			final String[] s = dirFiles.list();
-			if (s != null)
-			{
-				for (final String element : s)
-				{
-					final File file = new File(
-						dirFiles.getAbsolutePath() + File.separator + element);
-					if (file.isDirectory())
-					{
+			if (s != null) {
+				for (final String element : s) {
+					final File file = new File(dirFiles.getAbsolutePath() + File.separator + element);
+					if (file.isDirectory()) {
 						dirs.push(file);
-					}
-					else if (match(element, extensions))
-					{
+					} else if (match(element, extensions)) {
 						files.add(file);
 					}
 				}
@@ -287,32 +263,25 @@ public final class FileSearchExtensions
 	 *            The search pattern. Allowed wildcards are "*" and "?".
 	 * @return A List with all files that matches the search pattern.
 	 */
-	public static List<File> findFilesRecursive(final File dir, final String filenameToSearch)
-	{
+	public static List<File> findFilesRecursive(final File dir, final String filenameToSearch) {
 		final List<File> foundedFileList = new ArrayList<>();
 		final String regex = RegExExtensions.replaceWildcardsWithRE(filenameToSearch);
 		// Get all files
 		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
+		if (children == null || children.length < 1) {
 			return foundedFileList;
 		}
-		for (final File element : children)
-		{
+		for (final File element : children) {
 			// if the entry is a directory
-			if (element.isDirectory())
-			{ // then
+			if (element.isDirectory()) { // then
 				// find recursively in the directory and put it in a List.
 				final List<File> foundedFiles = findFilesRecursive(element, filenameToSearch);
 				// Put the founded files in the main List.
 				foundedFileList.addAll(foundedFiles);
-			}
-			else
-			{
+			} else {
 				// entry is a file
 				final String filename = element.getName();
-				if (filename.matches(regex))
-				{
+				if (filename.matches(regex)) {
 					foundedFileList.add(element.getAbsoluteFile());
 				}
 			}
@@ -329,21 +298,16 @@ public final class FileSearchExtensions
 	 *            The extensions to search.
 	 * @return A List with all files that matches the search pattern.
 	 */
-	public static List<File> findFilesWithFilter(final File dir, final String... extension)
-	{
+	public static List<File> findFilesWithFilter(final File dir, final String... extension) {
 		final List<File> foundedFileList = new ArrayList<>();
 		final File[] children = dir.listFiles(new MultiplyExtensionsFileFilter(true, extension));
-		for (final File element : children)
-		{
+		for (final File element : children) {
 			// if the entry is a directory
-			if (element.isDirectory())
-			{ // then
+			if (element.isDirectory()) { // then
 				// find recursively in the directory and put it in a List.
 				// Put the founded files in the main List.
 				foundedFileList.addAll(findFilesWithFilter(element, extension));
-			}
-			else
-			{
+			} else {
 				foundedFileList.add(element.getAbsoluteFile());
 			}
 		}
@@ -357,19 +321,15 @@ public final class FileSearchExtensions
 	 *            the dir
 	 * @return A list with all files from the given directory.
 	 */
-	public static List<File> getAllFilesFromDir(final File dir)
-	{
+	public static List<File> getAllFilesFromDir(final File dir) {
 		final List<File> foundedFileList = new ArrayList<>();
 		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
+		if (children == null || children.length < 1) {
 			return foundedFileList;
 		}
-		for (final File child : children)
-		{
+		for (final File child : children) {
 			// if the entry is not a directory
-			if (!child.isDirectory())
-			{
+			if (!child.isDirectory()) {
 				// then
 				// entry is a file
 				foundedFileList.add(child.getAbsoluteFile());
@@ -386,8 +346,7 @@ public final class FileSearchExtensions
 	 *
 	 * @return the all files from dir recursive
 	 */
-	public static List<File> getAllFilesFromDirRecursive(final File dir)
-	{
+	public static List<File> getAllFilesFromDirRecursive(final File dir) {
 		return findFilesRecursive(dir, "*");
 	}
 
@@ -399,8 +358,7 @@ public final class FileSearchExtensions
 	 *
 	 * @return Returns the file length from the given file in Kilobytes.
 	 */
-	public static long getFileLengthInKilobytes(final File dir)
-	{
+	public static long getFileLengthInKilobytes(final File dir) {
 		final long fileLength = dir.getTotalSpace();
 		return fileLength / 1024;
 	}
@@ -413,8 +371,7 @@ public final class FileSearchExtensions
 	 *
 	 * @return Returns the file length from the given file in Megabytes.
 	 */
-	public static long getFileLengthInMegabytes(final File dir)
-	{
+	public static long getFileLengthInMegabytes(final File dir) {
 		return getFileLengthInKilobytes(dir) / 1024;
 	}
 
@@ -425,24 +382,18 @@ public final class FileSearchExtensions
 	 *            The file extensions that shell exist in the search pattern.
 	 * @return a regex search file pattern that can be used for searching files with a Matcher.
 	 */
-	public static String getSearchFilePattern(final String... fileExtensions)
-	{
-		if (fileExtensions.length == 0)
-		{
+	public static String getSearchFilePattern(final String... fileExtensions) {
+		if (fileExtensions.length == 0) {
 			return "";
 		}
 		final String searchFilePatternPrefix = "([^\\s]+(\\.(?i)(";
 		final String searchFilePatternSuffix = "))$)";
 		final StringBuilder sb = new StringBuilder();
 		int count = 1;
-		for (final String fileExtension : fileExtensions)
-		{
-			if (count < fileExtensions.length)
-			{
+		for (final String fileExtension : fileExtensions) {
+			if (count < fileExtensions.length) {
 				sb.append(fileExtension).append("|");
-			}
-			else
-			{
+			} else {
 				sb.append(fileExtension);
 			}
 			count++;
@@ -457,14 +408,11 @@ public final class FileSearchExtensions
 	 *            the directory.
 	 * @return the list
 	 */
-	public static List<File> listDirs(final File dir)
-	{
+	public static List<File> listDirs(final File dir) {
 		final List<File> foundedDirs = new ArrayList<>();
 		final File[] fileArray = dir.listFiles();
-		for (final File element : fileArray)
-		{
-			if (element.isDirectory())
-			{
+		for (final File element : fileArray) {
+			if (element.isDirectory()) {
 				foundedDirs.add(element);
 			}
 		}
@@ -481,17 +429,14 @@ public final class FileSearchExtensions
 	 *            An array with suffixes.
 	 * @return Returns true if matches otherwise false.
 	 */
-	public static boolean match(final String stringToMatch, final String[] suffixes)
-	{
-		for (final String suffix : suffixes)
-		{
+	public static boolean match(final String stringToMatch, final String[] suffixes) {
+		for (final String suffix : suffixes) {
 			final int suffixesLength = suffix.length();
 			final int stringToMatchLength = stringToMatch.length();
 			final int result = stringToMatchLength - suffixesLength;
 			final String extensionToMatch = stringToMatch.substring(result, stringToMatchLength);
 			final boolean equals = extensionToMatch.equalsIgnoreCase(suffix);
-			if (stringToMatchLength >= suffixesLength && equals)
-			{
+			if (stringToMatchLength >= suffixesLength && equals) {
 				return true;
 			}
 		}

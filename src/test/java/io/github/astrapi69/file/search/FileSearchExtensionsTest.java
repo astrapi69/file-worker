@@ -1,8 +1,8 @@
 /**
  * The MIT License
- *
+ * <p>
  * Copyright (C) 2015 Asterios Raptis
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -10,10 +10,10 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -24,32 +24,29 @@
  */
 package io.github.astrapi69.file.search;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import io.github.astrapi69.file.FileTestCase;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.write.WriteFileExtensions;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.FileTestCase;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * The unit test class for the class {@link FileSearchExtensions}.
  */
-public class FileSearchExtensionsTest extends FileTestCase
-{
+public class FileSearchExtensionsTest extends FileTestCase {
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
@@ -57,10 +54,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws Exception
 	 *             is thrown if an exception occurs
 	 */
-	@Override
-	@BeforeMethod
-	protected void setUp() throws Exception
-	{
+	@Override @BeforeMethod protected void setUp() throws Exception {
 		super.setUp();
 	}
 
@@ -70,19 +64,22 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws Exception
 	 *             is thrown if an exception occurs
 	 */
-	@Override
-	@AfterMethod
-	protected void tearDown() throws Exception
-	{
+	@Override @AfterMethod protected void tearDown() throws Exception {
 		super.tearDown();
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#getRootDirectory(File)}
+	 */
+	@Test public void testGetParentRoot() {
+		final File parentRoot = FileSearchExtensions.getRootDirectory(PathFinder.getProjectDirectory());
+		assertNotNull(parentRoot);
 	}
 
 	/**
 	 * Test method for {@link FileSearchExtensions#containsFile(File, File)}.
 	 */
-	@Test
-	public void testContainsFileFileFile() throws IOException
-	{
+	@Test public void testContainsFileFileFile() throws IOException {
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
@@ -95,9 +92,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#containsFile(File, String)}.
 	 */
-	@Test
-	public void testContainsFileFileString() throws IOException
-	{
+	@Test public void testContainsFileFileString() throws IOException {
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
@@ -110,19 +105,14 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#containsFileRecursive(File, File)}.
 	 */
-	@Test
-	public void testContainsFileRecursive() throws IOException
-	{
-		final File testFile = new File(this.testDir.getAbsoluteFile(),
-			"testContainsFileRecursives.txt");
+	@Test public void testContainsFileRecursive() throws IOException {
+		final File testFile = new File(this.testDir.getAbsoluteFile(), "testContainsFileRecursives.txt");
 		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
 
-		final File testFile3 = new File(this.deepDir.getAbsoluteFile(),
-			"testContainsFileRecursives.cvs");
+		final File testFile3 = new File(this.deepDir.getAbsoluteFile(), "testContainsFileRecursives.cvs");
 		WriteFileExtensions.string2File(testFile3, "Its a beautifull evening!!!");
 		final File currentDir = new File(".").getAbsoluteFile();
-		boolean contains = FileSearchExtensions.containsFileRecursive(currentDir.getAbsoluteFile(),
-			testFile);
+		boolean contains = FileSearchExtensions.containsFileRecursive(currentDir.getAbsoluteFile(), testFile);
 		assertFalse("File should not exist in this directory.", contains);
 		contains = FileSearchExtensions.containsFileRecursive(this.testDir, testFile);
 		assertTrue("File should not exist in this directory.", contains);
@@ -130,23 +120,18 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue("", this.actual);
 	}
 
-
 	/**
 	 * Test method for {@link FileSearchExtensions#countAllFilesInDirectory(File, long, boolean)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public void testCountAllFilesInDirectory() throws IOException
-	{
+	@Test public void testCountAllFilesInDirectory() throws IOException {
 		long actual;
 		long expected;
 		// initialize files to count...
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
@@ -177,14 +162,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
-	public void testFindAllFilesFileString() throws IOException
-	{
+	@Test(enabled = true) public void testFindAllFilesFileString() throws IOException {
 		// 1. initialize expected files to search
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
@@ -210,8 +191,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		System.out.println("execution:" + executionTime);
 		// 3. assert that expected with actual match
 		assertTrue("", expected.size() == actual.size());
-		for (final File file : expected)
-		{
+		for (final File file : expected) {
 			assertTrue("", actual.contains(file));
 		}
 		// 4. cleanup all files from this test
@@ -226,9 +206,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public void testFindFilesFileString() throws DirectoryAlreadyExistsException, IOException
-	{
+	@Test public void testFindFilesFileString() throws DirectoryAlreadyExistsException, IOException {
 		final String test = "testFindFilesFileString.t*";
 
 		final File testFile1 = new File(this.testDir, "testFindFilesFileString.txt");
@@ -252,16 +230,12 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public void testFindFilesRecursive() throws DirectoryAlreadyExistsException, IOException
-	{
+	@Test public void testFindFilesRecursive() throws DirectoryAlreadyExistsException, IOException {
 		final String test = "testFindFilesRecursive.t*";
 		final List<File> expectedFiles = new ArrayList<>();
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.txt");
 		expectedFiles.add(testFile1);
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.tft");
 		expectedFiles.add(testFile2);
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
@@ -272,8 +246,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue(this.actual);
 		this.actual = foundedFiles.size() == 2;
 		assertTrue(this.actual);
-		for (final File expectedFile : expectedFiles)
-		{
+		for (final File expectedFile : expectedFiles) {
 			this.actual = foundedFiles.contains(expectedFile);
 			assertTrue(this.actual);
 		}
@@ -292,31 +265,20 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#findFiles(String, String[])}
 	 */
-	@Test
-	public void testFindFilesStringStringArray() throws IOException
-	{
+	@Test public void testFindFilesStringStringArray() throws IOException {
 		final List<File> expected = new ArrayList<>();
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesStringStringArray1.txt");
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesStringStringArray2.tft");
-		final File testFile3 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesStringStringArray3.txt");
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesStringStringArray1.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesStringStringArray2.tft");
+		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testFindFilesStringStringArray3.txt");
 
-		final File testFile4 = new File(this.deepDir.getAbsoluteFile(),
-			"testFindFilesStringStringArray4.tft");
-		final File testFile5 = new File(this.deepDir.getAbsoluteFile(),
-			"testFindFilesStringStringArray5.cvs");
+		final File testFile4 = new File(this.deepDir.getAbsoluteFile(), "testFindFilesStringStringArray4.tft");
+		final File testFile5 = new File(this.deepDir.getAbsoluteFile(), "testFindFilesStringStringArray5.cvs");
 
-		final File testFile6 = new File(this.deepDir2.getAbsoluteFile(),
-			"testFindFilesStringStringArray6.txt");
-		final File testFile7 = new File(this.deepDir2.getAbsoluteFile(),
-			"testFindFilesStringStringArray7.cvs");
+		final File testFile6 = new File(this.deepDir2.getAbsoluteFile(), "testFindFilesStringStringArray6.txt");
+		final File testFile7 = new File(this.deepDir2.getAbsoluteFile(), "testFindFilesStringStringArray7.cvs");
 
-		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(),
-			"testFindFilesStringStringArray8.txt");
-		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(),
-			"testFindFilesStringStringArray9.cvs");
+		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testFindFilesStringStringArray8.txt");
+		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testFindFilesStringStringArray9.cvs");
 
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
@@ -332,12 +294,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile6);
 		expected.add(testFile8);
 		final String[] txtExtension = { ".txt" };
-		final List<File> compare = FileSearchExtensions.findFiles(this.testDir.getAbsolutePath(),
-			txtExtension);
+		final List<File> compare = FileSearchExtensions.findFiles(this.testDir.getAbsolutePath(), txtExtension);
 		this.actual = expected.size() == compare.size();
 		assertTrue("", this.actual);
-		for (final File file : compare)
-		{
+		for (final File file : compare) {
 			final File currentFile = file;
 			this.actual = expected.contains(currentFile);
 			assertTrue("", this.actual);
@@ -350,14 +310,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
-	public void testFindFileWithFileFilter() throws IOException
-	{
+	@Test(enabled = true) public void testFindFileWithFileFilter() throws IOException {
 		// 1. initialize expected files to search
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
@@ -379,8 +335,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		List<File> actual = FileSearchExtensions.findFilesWithFilter(this.testDir, ".txt");
 		// 3. assert that expected with actual match
 		assertTrue("", expected.size() == actual.size());
-		for (final File file : expected)
-		{
+		for (final File file : expected) {
 			assertTrue("", actual.contains(file));
 		}
 		actual = FileSearchExtensions.findFilesWithFilter(this.testDir, "tft", "cvs");
@@ -388,8 +343,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile2);
 		expected.add(testFile3);
 		assertTrue("", expected.size() == actual.size());
-		for (final File file : expected)
-		{
+		for (final File file : expected) {
 			assertTrue("", actual.contains(file));
 		}
 		// 4. cleanup all files from this test
@@ -402,14 +356,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public void testGetAllFilesFromDir() throws IOException
-	{
+	@Test public void testGetAllFilesFromDir() throws IOException {
 		// initialize files to count...
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
@@ -431,8 +381,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile3);
 		expected.add(testFile4);
 		assertTrue("", expected.size() == fileList.size());
-		for (final File file : expected)
-		{
+		for (final File file : expected) {
 			assertTrue("", fileList.contains(file));
 		}
 		// clean up...
@@ -445,14 +394,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public void testGetAllFilesFromDirRecursive() throws IOException
-	{
+	@Test public void testGetAllFilesFromDirRecursive() throws IOException {
 		// initialize files to count...
-		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.txt");
-		final File testFile2 = new File(this.testDir.getAbsoluteFile(),
-			"testFindFilesRecursive.tft");
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
 		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
@@ -474,8 +419,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile3);
 		expected.add(testFile4);
 		assertTrue("", expected.size() == fileList.size());
-		for (final File file : expected)
-		{
+		for (final File file : expected) {
 			assertTrue("", fileList.contains(file));
 		}
 		// clean up...
@@ -485,9 +429,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#getFileLengthInKilobytes(File)}.
 	 */
-	@Test
-	public void testGetFileLengthInKilobytes()
-	{
+	@Test public void testGetFileLengthInKilobytes() {
 		long actual;
 		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);
 		assertTrue(0 < actual);
@@ -496,9 +438,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#getFileLengthInMegabytes(File)}.
 	 */
-	@Test
-	public void testGetFileLengthInMegabytes()
-	{
+	@Test public void testGetFileLengthInMegabytes() {
 		long actual;
 		actual = FileSearchExtensions.getFileLengthInMegabytes(testDir);
 		assertTrue(0 < actual);
@@ -507,9 +447,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#getSearchFilePattern(String[])}.
 	 */
-	@Test
-	public void testGetSearchFilePattern()
-	{
+	@Test public void testGetSearchFilePattern() {
 		String actual;
 		String expected;
 
@@ -525,9 +463,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#match(String, String[])}.
 	 */
-	@Test
-	public void testMatch()
-	{
+	@Test public void testMatch() {
 		final String filename = "testMatch.txt";
 		final String txtExtension = ".txt";
 		final String rtfExtension = ".rtf";
@@ -545,9 +481,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions}
 	 */
-	@Test
-	public void testWithBeanTester()
-	{
+	@Test public void testWithBeanTester() {
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(FileSearchExtensions.class);
 	}
