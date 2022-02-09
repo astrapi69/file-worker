@@ -1,8 +1,8 @@
-# file-worker
+# Overview
 
 <div style="text-align: center">
 
-[![Build Status](https://travis-ci.com/lightblueseas/file-worker.svg?branch=develop)](https://travis-ci.com/lightblueseas/file-worker)
+[![Java CI with Gradle](https://github.com/lightblueseas/file-worker/actions/workflows/gradle.yml/badge.svg)](https://github.com/lightblueseas/file-worker/actions/workflows/gradle.yml)
 [![Coverage Status](https://codecov.io/gh/lightblueseas/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/lightblueseas/file-worker)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lightblueseas_file-worker&metric=alert_status)](https://sonarcloud.io/dashboard?id=lightblueseas_file-worker)
 [![Open Issues](https://img.shields.io/github/issues/lightblueseas/file-worker.svg?style=flat)](https://github.com/lightblueseas/file-worker/issues)
@@ -10,6 +10,7 @@
 [![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/file-worker.svg)](http://www.javadoc.io/doc/io.github.astrapi69/file-worker)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
+[![Hits Of Code](https://hitsofcode.com/github/astrapi69/file-worker?branch=develop)](https://hitsofcode.com/github/astrapi69/file-worker/view?branch=develop)
 
 </div>
 
@@ -26,6 +27,29 @@ Project that holds utility class for file operations.
 
 The source code comes under the liberal MIT License, making file-worker great for all types of
 applications.
+
+## gradle dependency
+
+You can first define the version in the ext section and add than the following gradle dependency to
+your project `build.gradle` if you want to import the core functionality of file-worker:
+
+define version in file gradle.properties
+
+```
+fileWorkerVersion=8.1
+```
+
+or in build.gradle ext area
+
+```
+    fileWorkerVersion = "8.1"
+```
+
+and then add the dependency to the dependencies area
+
+```
+    implementation("io.github.astrapi69:file-worker:$fileWorkerVersion")
+```
 
 ## Maven dependency
 
@@ -53,37 +77,6 @@ functionality of file-worker:
             </dependency>
             ...
         </dependencies>
-
-## gradle dependency
-
-You can first define the version in the ext section and add than the following gradle dependency to
-your project `build.gradle` if you want to import the core functionality of file-worker:
-
-define version in file gradle.properties
-
-```
-fileWorkerVersion=8.1
-```
-
-or in build.gradle ext area
-
-```
-ext {
-            ...
-    fileWorkerVersion = "8.1"
-            ...
-}
-```
-
-and then add the dependency to the dependencies area
-
-```
-dependencies {
-            ...
-    implementation("io.github.astrapi69:file-worker:$fileWorkerVersion")
-            ...
-}
-```
 
 ## Semantic Versioning
 
