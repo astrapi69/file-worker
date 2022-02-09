@@ -36,23 +36,23 @@ for latest snapshots and releases.
 Add the following maven dependency to your project `pom.xml` if you want to import the core
 functionality of file-worker:
 
-	<properties>
-			...
-		<!-- FILE-WORKER version -->
-		<file-worker.version>8.1</file-worker.version>
-			...
-	</properties>
-			...
-		<dependencies>
-			...
-			<!-- FILE-WORKER DEPENDENCY -->
-			<dependency>
-				<groupId>io.github.astrapi69</groupId>
-				<artifactId>file-worker</artifactId>
-				<version>${file-worker.version}</version>
-			</dependency>
-			...
-		</dependencies>
+    <properties>
+            ...
+        <!-- FILE-WORKER version -->
+        <file-worker.version>8.1</file-worker.version>
+            ...
+    </properties>
+            ...
+        <dependencies>
+            ...
+            <!-- FILE-WORKER DEPENDENCY -->
+            <dependency>
+                <groupId>io.github.astrapi69</groupId>
+                <artifactId>file-worker</artifactId>
+                <version>${file-worker.version}</version>
+            </dependency>
+            ...
+        </dependencies>
 
 ## gradle dependency
 
@@ -69,9 +69,9 @@ or in build.gradle ext area
 
 ```
 ext {
-			...
+            ...
     fileWorkerVersion = "8.1"
-			...
+            ...
 }
 ```
 
@@ -79,9 +79,9 @@ and then add the dependency to the dependencies area
 
 ```
 dependencies {
-			...
-	implementation("io.github.astrapi69:file-worker:$fileWorkerVersion")
-			...
+            ...
+    implementation("io.github.astrapi69:file-worker:$fileWorkerVersion")
+            ...
 }
 ```
 
@@ -214,7 +214,3 @@ Open Source:
 |[![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/file-worker.svg)](http://www.javadoc.io/doc/io.github.astrapi69/file-worker)|
 |Special thanks to [javadoc.io](http://www.javadoc.io) for providing a free javadoc documentation for open source projects|
 |     <img width=1000/>     |
-
-
-
-

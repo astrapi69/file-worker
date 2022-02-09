@@ -88,25 +88,45 @@ public final class FileFactory
 	/**
 	 * Creates a new directory from the given {@link File} object
 	 *
-	 * @param dir
+	 * @param directory
 	 *            The directory to create
 	 *
 	 * @return the {@link FileCreationState} with the result
 	 */
-	public static FileCreationState newDirectory(final File dir)
+	public static FileCreationState newDirectory(final File directory)
 	{
 		FileCreationState fileCreationState = FileCreationState.ALREADY_EXISTS;
 		// If the directory does not exists
-		if (!dir.exists())
+		if (!directory.exists())
 		{ // then
 			fileCreationState = FileCreationState.FAILED;
 			// create it...
-			if (dir.mkdir())
+			if (directory.mkdir())
 			{
 				fileCreationState = FileCreationState.CREATED;
 			}
 		}
 		return fileCreationState;
+	}
+
+	/**
+	 * Factory method for creating the new directory as {@link File} objects if it is not exists.
+	 *
+	 * @param parentDirectory
+	 *            the parent directory
+	 * @param directoryName
+	 *            the directory name
+	 * @return the new directory as {@link File} object
+	 */
+	public static File newDirectory(final File parentDirectory, final String directoryName)
+	{
+		if (!parentDirectory.isDirectory())
+		{
+			throw new RuntimeException("Given parent file is not a directory");
+		}
+		File directory = new File(parentDirectory, directoryName);
+		newDirectory(directory);
+		return directory;
 	}
 
 	/**

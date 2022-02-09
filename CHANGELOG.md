@@ -4,6 +4,23 @@
 Version 8.2-SNAPSHOT
 -------------
 
+ADDED:
+
+- new factory method in class FileFactory for create a new directory with the parent directory and the directory name
+- new gradle plugin spotless for formatting source code
+- new gradle plugin grgit-gradle for create git tags for releases
+
+CHANGED:
+
+- update gradle to new version 7.4
+- update of gradle plugin dependency com.github.ben-manes.versions.gradle.plugin to new version 0.42.0
+- update of test dependency testng to new version 7.5
+- update of dependency zip4j to new version 2.9.1
+- update of dependency silly-io to new version 1.7
+- update of dependency crypt-api to new version to 7.7
+- update of test dependency test-objects to new version 5.7
+- update of test dependency jobj-contract-verifier to new version 3.5
+
 Version 8.1
 -------------
 

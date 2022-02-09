@@ -24,10 +24,14 @@
  */
 package io.github.astrapi69.file.create;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import io.github.astrapi69.file.FileTestCase;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.system.SystemFileExtensions;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,15 +41,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import io.github.astrapi69.file.FileTestCase;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.system.SystemFileExtensions;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 /**
  * The unit test class for the class {@link FileFactory}
@@ -166,16 +165,43 @@ public class FileFactoryTest extends FileTestCase
 		DeleteFileExtensions.delete(dirPath.toFile());
 	}
 
+
 	/**
-	 * Test method for {@link FileFactory#newDirectory(File)}.
+	 * Test method for {@link FileFactory#newDirectory(File, String)}
 	 *
-	 * @throws DirectoryAlreadyExistsException
-	 *             is thrown if the directory already exists
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = true)
-	public void testNewDirectory() throws DirectoryAlreadyExistsException, IOException
+	@Test
+	public void testNewDirectoryWithParentFileAndDirectoryName() throws IOException
+	{
+
+		File actual;
+		File expected;
+		File dir;
+		// new scenario...
+		dir = new File(this.testResources, "newFooBarDir");
+		// if the directory exist delete it
+		if (dir.exists())
+		{
+			DeleteFileExtensions.delete(dir);
+		}
+		actual = FileFactory.newDirectory(this.testResources, "newFooBarDir");
+		expected = dir;
+		assertEquals(actual, expected);
+		assertTrue(actual.exists());
+		// Finally delete the test directory...
+		DeleteFileExtensions.delete(dir);
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newDirectory(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testNewDirectory() throws IOException
 	{
 		FileCreationState state;
 		boolean actual;
@@ -183,7 +209,7 @@ public class FileFactoryTest extends FileTestCase
 		File dir;
 		// new scenario...
 		dir = new File(this.testResources, "testCreateDirectory");
-		// if the directory exist delete it to prevent a DirectoryAlreadyExistsException.
+		// if the directory exist delete it
 		if (dir.exists())
 		{
 			DeleteFileExtensions.delete(dir);
