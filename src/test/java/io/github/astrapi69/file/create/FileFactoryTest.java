@@ -24,14 +24,10 @@
  */
 package io.github.astrapi69.file.create;
 
-import io.github.astrapi69.file.FileTestCase;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.system.SystemFileExtensions;
-import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +37,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import org.meanbean.test.BeanTester;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import io.github.astrapi69.file.FileTestCase;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.system.SystemFileExtensions;
 
 /**
  * The unit test class for the class {@link FileFactory}
