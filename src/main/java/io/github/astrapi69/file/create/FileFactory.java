@@ -24,6 +24,8 @@
  */
 package io.github.astrapi69.file.create;
 
+import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -83,6 +85,37 @@ public final class FileFactory
 	{
 		Path directory = Files.createDirectories(dir, attrs);
 		return Files.exists(directory);
+	}
+
+	/**
+	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
+	 * new empty file will be created on the file system
+	 *
+	 * @param absolutePath
+	 *            the absolute path
+	 *
+	 * @return the file object
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws DirectoryAlreadyExistsException
+	 *             is thrown if the attempt is made to create a directory that already exists
+	 */
+	public static File newDirectory(final String absolutePath)
+		throws IOException, DirectoryAlreadyExistsException
+	{
+		File newDirectory = newFile(absolutePath, false);
+		// assert that file does not exists
+		if (!newDirectory.exists())
+		{
+			newDirectory(newDirectory);
+		}
+		else
+		{
+			throw new DirectoryAlreadyExistsException(
+				"File with path '" + absolutePath + "' already exists");
+		}
+		return newDirectory;
 	}
 
 	/**
@@ -242,13 +275,31 @@ public final class FileFactory
 	}
 
 	/**
+	 * Factory method for creating the new {@link File} if it is not exists.
+	 *
+	 * @param parentDirectory
+	 *            the parent directory
+	 * @param filename
+	 *            the file name
+	 * @return the new {@link File} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static File newFile(final String parentDirectory, String filename) throws IOException
+	{
+		File file = new File(parentDirectory, filename);
+		newFile(file);
+		return file;
+	}
+
+	/**
 	 * Creates all files contained in the collection as empty files if the files does not exists
 	 * otherwise it lets the files as they are.
 	 *
 	 * @param files
 	 *            the Collection with the File objects.
 	 *
-	 * @return true, if successful
+	 * @return the {@link FileCreationState} object that encapsulate the creation result
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.

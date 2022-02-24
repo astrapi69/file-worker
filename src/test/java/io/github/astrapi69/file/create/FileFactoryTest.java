@@ -229,6 +229,43 @@ public class FileFactoryTest extends FileTestCase
 		DeleteFileExtensions.delete(dir);
 	}
 
+
+	/**
+	 * Test method for {@link FileFactory#newDirectory(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws DirectoryAlreadyExistsException
+	 *             is thrown if the attempt is made to create a directory that already exists
+	 */
+	@Test
+	public void testNewDirectoryWithAbsolutePath()
+		throws IOException, DirectoryAlreadyExistsException
+	{
+		FileCreationState state;
+		boolean actual;
+		boolean expected;
+		File dir;
+		File directory;
+		String absolutePath;
+		// new scenario...
+		dir = new File(this.testResources, "testCreateDirectory");
+		absolutePath = dir.getAbsolutePath();
+		// if the directory exist delete it
+		if (dir.exists())
+		{
+			DeleteFileExtensions.delete(dir);
+		}
+		directory = FileFactory.newDirectory(absolutePath);
+
+		assertTrue(directory.exists());
+		assertTrue(directory.isDirectory());
+
+		// Finally delete the test directories...
+		DeleteFileExtensions.delete(dir);
+		DeleteFileExtensions.delete(directory);
+	}
+
 	/**
 	 * Test method for
 	 * {@link FileFactory#newDirectory(Path, java.nio.file.attribute.FileAttribute...)}
@@ -359,6 +396,55 @@ public class FileFactoryTest extends FileTestCase
 		file = FileFactory.newFile(absolutePath);
 		assertFalse(file.exists());
 		assertNotNull(file);
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newFile(String, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(enabled = true)
+	public void testNewFileWithParentChild() throws IOException
+	{
+		boolean actual;
+		boolean expected;
+		File parentDirectory;
+		String parentDirectoryPath;
+		String filename;
+		File file;
+
+		parentDirectory = SystemFileExtensions.getTempDir();
+		parentDirectoryPath = parentDirectory.getAbsolutePath();
+		filename = "foo.txt";
+		file = FileFactory.newFile(parentDirectoryPath, filename);
+
+		actual = file.exists();
+		expected = true;
+		assertEquals(expected, actual);
+		// clean up
+		if (file.exists())
+		{
+			DeleteFileExtensions.delete(file);
+		}
+
+		File newParent = new File(parentDirectory, "tmp");
+		assertEquals(FileFactory.newDirectory(newParent), FileCreationState.CREATED);
+		file = FileFactory.newFile(newParent.getAbsolutePath(), filename);
+
+		actual = newParent.exists();
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = file.exists();
+		expected = true;
+		assertEquals(expected, actual);
+		// clean up
+		if (file.exists())
+		{
+			DeleteFileExtensions.delete(file);
+			DeleteFileExtensions.delete(newParent);
+		}
 	}
 
 	/**
