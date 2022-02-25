@@ -10,6 +10,12 @@ ADDED:
 - new factory method in class FileFactory for create a new file with the parent directory and the file name as string objects
 - new factory method in class FileFactory for create a new directory with the parent directory and the file name as string objects
 
+CHANGED:
+
+- update of dependency silly-io to new version 1.8
+- update of test dependency test-objects to new major version 6
+- update of gradle plugin dependency com.diffplug.spotless:spotless-plugin-gradle to new version 6.3.0
+
 Version 8.2
 -------------
 
