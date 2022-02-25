@@ -24,12 +24,11 @@
  */
 package io.github.astrapi69.file.create;
 
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 
@@ -88,6 +87,28 @@ public final class FileFactory
 	}
 
 	/**
+	 * Creates a new directory from the given {@link Path} object and the optional
+	 * {@link FileAttribute}.<br>
+	 * <br>
+	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
+	 * returns if the directory is created or not.
+	 *
+	 * @param dir
+	 *            the dir the directory to create
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @return Returns true if the directory was created otherwise false.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @see Files#createDirectory(Path, FileAttribute...)
+	 */
+	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
+	{
+		Path directory = Files.createDirectory(dir, attrs);
+		return Files.exists(directory);
+	}
+
+	/**
 	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
 	 * new empty file will be created on the file system
 	 *
@@ -98,24 +119,16 @@ public final class FileFactory
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 * @throws DirectoryAlreadyExistsException
-	 *             is thrown if the attempt is made to create a directory that already exists
 	 */
-	public static File newDirectory(final String absolutePath)
-		throws IOException, DirectoryAlreadyExistsException
+	public static File newDirectory(final String absolutePath) throws IOException
 	{
-		File newDirectory = newFile(absolutePath, false);
-		// assert that file does not exists
-		if (!newDirectory.exists())
+		Path dir = Paths.get(absolutePath);
+		File directory = dir.toFile();
+		if (!directory.exists())
 		{
-			newDirectory(newDirectory);
+			newDirectory(dir);
 		}
-		else
-		{
-			throw new DirectoryAlreadyExistsException(
-				"File with path '" + absolutePath + "' already exists");
-		}
-		return newDirectory;
+		return directory;
 	}
 
 	/**
@@ -163,25 +176,28 @@ public final class FileFactory
 	}
 
 	/**
-	 * Creates a new directory from the given {@link Path} object and the optional
-	 * {@link FileAttribute}.<br>
-	 * <br>
-	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
-	 * returns if the directory is created or not.
+	 * Factory method for creating the new directory as {@link File} objects if it is not exists.
 	 *
-	 * @param dir
-	 *            the dir the directory to create
-	 * @param attrs
-	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return Returns true if the directory was created otherwise false.
+	 * @param parentDirectory
+	 *            the parent directory
+	 * @param directoryName
+	 *            the directory name
+	 * @return the new directory as {@link File} object
+	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
-	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
+	public static File newDirectory(final String parentDirectory, final String directoryName)
+		throws IOException
 	{
-		Path directory = Files.createDirectory(dir, attrs);
-		return Files.exists(directory);
+		Path dir = Paths.get(parentDirectory, directoryName);
+		File directory = dir.toFile();
+		if (!directory.exists())
+		{
+			newDirectory(dir);
+		}
+		return directory;
 	}
 
 	/**

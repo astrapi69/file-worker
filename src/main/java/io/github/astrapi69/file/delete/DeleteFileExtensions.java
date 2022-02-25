@@ -63,7 +63,7 @@ public final class DeleteFileExtensions
 	public static Exception checkFile(final File file)
 	{
 		Exception ex = null;
-		String error = null;
+		String error;
 		// check if the file does not exists...
 		if (!file.exists())
 		{
@@ -124,14 +124,10 @@ public final class DeleteFileExtensions
 		}
 		else
 		{
-			String error = null;
 			// If the file exists and is not deleted
 			if (file.exists() && !file.delete())
 			{
-				error = "Cannot delete the File " + file.getAbsolutePath() + ".";
-
-				throw new IOException(error);
-
+				throw new IOException("Cannot delete the File " + file.getAbsolutePath() + ".");
 			}
 		}
 	}
@@ -147,7 +143,6 @@ public final class DeleteFileExtensions
 	 */
 	public static void deleteAllFiles(final File file) throws IOException
 	{
-		String error = null;
 		if (!file.exists())
 		{
 			return;
@@ -167,10 +162,7 @@ public final class DeleteFileExtensions
 		DeleteFileExtensions.deleteFiles(file);
 		if (!file.delete())
 		{
-			error = "Cannot delete the File " + file.getAbsolutePath() + ".";
-
-			throw new IOException(error);
-
+			throw new IOException("Cannot delete the File " + file.getAbsolutePath() + ".");
 		}
 	}
 
@@ -319,7 +311,7 @@ public final class DeleteFileExtensions
 
 		if (null != includeFilesArray)
 		{
-			File[] excludeFilesArray = null;
+			File[] excludeFilesArray;
 			List<File> excludeFilesList = null;
 			if (null != excludeFileFilter)
 			{
@@ -329,9 +321,8 @@ public final class DeleteFileExtensions
 			// if excludeFilesList is not null and not empty
 			if (null != excludeFilesList && !excludeFilesList.isEmpty())
 			{
-				for (final File element : includeFilesArray)
+				for (final File currentFile : includeFilesArray)
 				{
-					final File currentFile = element;
 					// if the excludeFilesList does not contain the current file do copy...
 					if (!excludeFilesList.contains(currentFile))
 					{
@@ -436,7 +427,7 @@ public final class DeleteFileExtensions
 
 		if (null != includeFilesArray)
 		{
-			File[] excludeFilesArray = null;
+			File[] excludeFilesArray;
 			List<File> excludeFilesList = null;
 			if (null != excludeFilenameFilter)
 			{
@@ -446,9 +437,8 @@ public final class DeleteFileExtensions
 			// if excludeFilesList is not null and not empty
 			if (null != excludeFilesList && !excludeFilesList.isEmpty())
 			{
-				for (final File element : includeFilesArray)
+				for (final File currentFile : includeFilesArray)
 				{
-					final File currentFile = element;
 					// if the excludeFilesList does not contain the current file do copy...
 					if (!excludeFilesList.contains(currentFile))
 					{

@@ -108,7 +108,7 @@ public class FileExtensionsTest extends FileTestCase
 		String absolutePath = this.testDir.getAbsolutePath();
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
 		actual = FileExtensions.getAbsolutPathWithoutFilename(srcFile);
-		expected = absolutePath + "/";
+		expected = absolutePath + File.separator;
 		assertEquals(actual, expected);
 	}
 
@@ -124,8 +124,7 @@ public class FileExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, filePrefix + fileSuffix);
 		final String ap = testFile1.getAbsolutePath();
 		final int ext_index = ap.lastIndexOf(".");
-		final String fileNamePrefix = ap.substring(0, ext_index);
-		final String expected = fileNamePrefix;
+		final String expected = ap.substring(0, ext_index);
 		final String compare = FileExtensions.getFilenamePrefix(testFile1);
 		this.actual = expected.equals(compare);
 		assertTrue("", this.actual);
@@ -139,10 +138,9 @@ public class FileExtensionsTest extends FileTestCase
 	{
 		final String filePrefix = "testAppendSystemtimeToFilename";
 		final String fileSuffix = ".txt";
-		final String expected = fileSuffix;
 		final File testFile1 = new File(this.testDir, filePrefix + fileSuffix);
 		final String compare = FileExtensions.getFilenameSuffix(testFile1);
-		this.actual = expected.equals(compare);
+		this.actual = fileSuffix.equals(compare);
 		assertTrue("", this.actual);
 	}
 

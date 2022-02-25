@@ -45,9 +45,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import io.github.astrapi69.file.FileConst;
 import io.github.astrapi69.file.system.SystemPropertiesExtensions;
 import io.github.astrapi69.io.StreamExtensions;
+import io.github.astrapi69.io.file.FileConstants;
 
 /**
  * The class {@link WriteFileExtensions} provides methods for writing in files.
@@ -189,7 +189,7 @@ public final class WriteFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		int counter;
-		final byte[] byteArray = new byte[FileConst.BLOCKSIZE];
+		final byte[] byteArray = new byte[FileConstants.BLOCKSIZE];
 		while ((counter = inputStream.read(byteArray)) != -1)
 		{
 			outputStream.write(byteArray, 0, counter);
@@ -304,14 +304,6 @@ public final class WriteFileExtensions
 		{
 			bos.write(byteArray);
 		}
-		catch (final FileNotFoundException ex)
-		{
-			throw ex;
-		}
-		catch (final IOException ex)
-		{
-			throw ex;
-		}
 	}
 
 	/**
@@ -347,7 +339,7 @@ public final class WriteFileExtensions
 	public static void writeLinesToFile(final Collection<String> collection, final File output)
 		throws FileNotFoundException, IOException
 	{
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		for (final String element : collection)
 		{
 			sb.append(element);
@@ -374,7 +366,7 @@ public final class WriteFileExtensions
 	public static void writeLinesToFile(final Collection<String> collection, final File output,
 		final String encoding) throws FileNotFoundException, IOException
 	{
-		final StringBuffer sb = new StringBuffer();
+		final StringBuilder sb = new StringBuilder();
 		for (final String element : collection)
 		{
 			sb.append(element);
@@ -409,7 +401,7 @@ public final class WriteFileExtensions
 			PrintWriter out = new PrintWriter(osw))
 		{
 			final int size = input.size();
-			final StringBuffer sb = new StringBuffer();
+			final StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < size; i++)
 			{
 				final String entry = input.get(i);

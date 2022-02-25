@@ -44,7 +44,6 @@ import org.testng.annotations.Test;
 
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.system.SystemFileExtensions;
 
 /**
@@ -84,11 +83,9 @@ public class FileFactoryTest extends FileTestCase
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
-	 * @throws DirectoryAlreadyExistsException
-	 *             is thrown if the directory already exists
 	 */
-	@Test(enabled = true)
-	public void testNewDirectories() throws IOException, DirectoryAlreadyExistsException
+	@Test
+	public void testNewDirectories() throws IOException
 	{
 		FileCreationState actual;
 		FileCreationState expected;
@@ -138,7 +135,7 @@ public class FileFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testNewDirectoriesWithPath() throws IOException
 	{
 		boolean actual;
@@ -166,7 +163,6 @@ public class FileFactoryTest extends FileTestCase
 		DeleteFileExtensions.delete(dirPath.toFile());
 	}
 
-
 	/**
 	 * Test method for {@link FileFactory#newDirectory(File, String)}
 	 *
@@ -188,6 +184,57 @@ public class FileFactoryTest extends FileTestCase
 			DeleteFileExtensions.delete(dir);
 		}
 		actual = FileFactory.newDirectory(this.testResources, "newFooBarDir");
+		expected = dir;
+		assertEquals(actual, expected);
+		assertTrue(actual.exists());
+		// Finally delete the test directory...
+		DeleteFileExtensions.delete(dir);
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newDirectory(File, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(expectedExceptions = RuntimeException.class)
+	public void testNewDirectoryWithParentFileAndDirectoryNameWhereParentIsNoDirectory()
+		throws IOException
+	{
+		File parentDirectory;
+		String filename;
+		File file;
+
+		File dir;
+		// new scenario...
+		parentDirectory = SystemFileExtensions.getTempDir();
+		filename = "foobar";
+		file = FileFactory.newFile(parentDirectory, filename);
+		FileFactory.newDirectory(file, "newFooBarDir");
+	}
+
+
+	/**
+	 * Test method for {@link FileFactory#newDirectory(String, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testNewDirectoryWithParentDirectoryAsStringAndDirectoryName() throws IOException
+	{
+
+		File actual;
+		File expected;
+		File dir;
+		// new scenario...
+		dir = new File(this.testResources, "newFooBarDir");
+		// if the directory exist delete it
+		if (dir.exists())
+		{
+			DeleteFileExtensions.delete(dir);
+		}
+		actual = FileFactory.newDirectory(this.testResources.getAbsolutePath(), "newFooBarDir");
 		expected = dir;
 		assertEquals(actual, expected);
 		assertTrue(actual.exists());
@@ -235,12 +282,9 @@ public class FileFactoryTest extends FileTestCase
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
-	 * @throws DirectoryAlreadyExistsException
-	 *             is thrown if the attempt is made to create a directory that already exists
 	 */
 	@Test
-	public void testNewDirectoryWithAbsolutePath()
-		throws IOException, DirectoryAlreadyExistsException
+	public void testNewDirectoryWithAbsolutePath() throws IOException
 	{
 		FileCreationState state;
 		boolean actual;
@@ -273,7 +317,7 @@ public class FileFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testNewDirectoryWithPath() throws IOException
 	{
 		boolean actual;
@@ -301,16 +345,36 @@ public class FileFactoryTest extends FileTestCase
 		DeleteFileExtensions.delete(dirPath.toFile());
 	}
 
+
+	/**
+	 * Test method for {@link FileFactory#newDirectory(File, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(expectedExceptions = RuntimeException.class)
+	public void testNewFileWithParentAndFileNameWhereParentIsNoDirectory() throws IOException
+	{
+		File parentDirectory;
+		String filename;
+		File file;
+
+		File dir;
+		// new scenario...
+		parentDirectory = SystemFileExtensions.getTempDir();
+		filename = "foobar";
+		file = FileFactory.newFile(parentDirectory, filename);
+		FileFactory.newFile(file, "newFooBarDir");
+	}
+
 	/**
 	 * Test method for {@link FileFactory#newFile(File, String)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
-	 * @throws DirectoryAlreadyExistsException
-	 *             is thrown if the directory already exists
 	 */
-	@Test(enabled = true)
-	public void testNewFileFileString() throws IOException
+	@Test
+	public void testNewFileWithParentAndFileName() throws IOException
 	{
 		boolean actual;
 		boolean expected;
@@ -336,11 +400,9 @@ public class FileFactoryTest extends FileTestCase
 		file = FileFactory.newFile(newParent, filename);
 
 		actual = newParent.exists();
-		expected = true;
 		assertEquals(expected, actual);
 
 		actual = file.exists();
-		expected = true;
 		assertEquals(expected, actual);
 		// clean up
 		if (file.exists())
@@ -357,7 +419,7 @@ public class FileFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testNewFileStringBoolean() throws IOException
 	{
 		String absolutePath;
@@ -386,7 +448,7 @@ public class FileFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testNewFileString() throws IOException
 	{
 		String absolutePath;
@@ -399,12 +461,37 @@ public class FileFactoryTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link FileFactory#newFile(String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testMkParentDirs() throws IOException
+	{
+		String absolutePath;
+		File file;
+
+		absolutePath = "/tmp/foo/bar/bla/fasel/test.file";
+		file = new File(absolutePath);
+
+		FileFactory.mkParentDirs(file);
+		assertNotNull(file);
+		// clean up...
+		DeleteFileExtensions.delete(file);
+		DeleteFileExtensions.delete(new File("/tmp/foo/bar/bla/fasel"));
+		DeleteFileExtensions.delete(new File("/tmp/foo/bar/bla"));
+		DeleteFileExtensions.delete(new File("/tmp/foo/bar"));
+		DeleteFileExtensions.delete(new File("/tmp/foo"));
+	}
+
+	/**
 	 * Test method for {@link FileFactory#newFile(String, String)}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testNewFileWithParentChild() throws IOException
 	{
 		boolean actual;
@@ -433,11 +520,9 @@ public class FileFactoryTest extends FileTestCase
 		file = FileFactory.newFile(newParent.getAbsolutePath(), filename);
 
 		actual = newParent.exists();
-		expected = true;
 		assertEquals(expected, actual);
 
 		actual = file.exists();
-		expected = true;
 		assertEquals(expected, actual);
 		// clean up
 		if (file.exists())
@@ -453,7 +538,7 @@ public class FileFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testNewFile() throws IOException
 	{
 		boolean actual;
@@ -485,11 +570,9 @@ public class FileFactoryTest extends FileTestCase
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
-	 * @throws DirectoryAlreadyExistsException
-	 *             is thrown if the directory already exists
 	 */
-	@Test(enabled = true)
-	public void testNewFiles() throws IOException, DirectoryAlreadyExistsException
+	@Test
+	public void testNewFiles() throws IOException
 	{
 		FileCreationState actual;
 		FileCreationState expected;

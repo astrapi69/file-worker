@@ -37,9 +37,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.FileConst;
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.io.file.FileConstants;
 import io.github.astrapi69.io.file.namefilter.SimpleFilenameFilter;
 
 /**
@@ -82,7 +83,7 @@ public class ZipExtensionsTest extends ZipTestCase
 	 * @throws Exception
 	 *             catch all exception and throw
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testExtractZipEntry() throws Exception
 	{
 
@@ -128,7 +129,7 @@ public class ZipExtensionsTest extends ZipTestCase
 			+ File.separator + "deeperDir" + File.separator + file8);
 		if (!this.unzipDirTestDir.exists())
 		{
-			this.unzipDirTestDir.mkdir();
+			FileFactory.newDirectory(this.unzipDirTestDir);
 		}
 		ZipFile zf = new ZipFile(zipFile);
 		ZipExtensions.extractZipEntry(zf, zipEntry, this.unzipDir);
@@ -152,11 +153,11 @@ public class ZipExtensionsTest extends ZipTestCase
 	@Test
 	public void testIsZip()
 	{
-		final int length = FileConst.ZIP_EXTENSIONS.length;
+		final int length = FileConstants.ZIP_EXTENSIONS.length;
 		for (int i = 0; i < length; i++)
 		{
 			final File testIsZip = new File(this.testResources,
-				"testIsZip" + FileConst.ZIP_EXTENSIONS[i]);
+				"testIsZip" + FileConstants.ZIP_EXTENSIONS[i]);
 			this.actual = ZipExtensions.isZip(testIsZip.getName());
 			assertTrue("The file " + testIsZip.getName() + " should be a zipfile.", this.actual);
 		}
@@ -331,7 +332,7 @@ public class ZipExtensionsTest extends ZipTestCase
 		final File zipFile = new File(this.zipDir.getAbsoluteFile(), "testZip.zip");
 		if (!zipFile.exists())
 		{
-			zipFile.createNewFile();
+			FileFactory.newFile(zipFile);
 		}
 		final long length = zipFile.length();
 		this.actual = length == 0;

@@ -45,8 +45,8 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-import io.github.astrapi69.file.FileConst;
 import io.github.astrapi69.io.StreamExtensions;
+import io.github.astrapi69.io.file.FileConstants;
 
 /**
  * The class {@link ReadFileExtensions} helps you reading files.
@@ -134,7 +134,7 @@ public final class ReadFileExtensions
 	public static String reader2String(final Reader reader) throws IOException
 	{
 		final StringBuilder stringBuilder = new StringBuilder();
-		final char[] charArray = new char[FileConst.BLOCKSIZE];
+		final char[] charArray = new char[FileConstants.BLOCKSIZE];
 		int tmp;
 		while ((tmp = reader.read(charArray)) > 0)
 		{
@@ -400,7 +400,7 @@ public final class ReadFileExtensions
 		if (tmpFile.exists() && !tmpFile.isDirectory())
 		{
 			try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(tmpFile));
-				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileConst.KILOBYTE))
+				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileConstants.KILOBYTE))
 			{
 				StreamExtensions.writeInputStreamToOutputStream(bis, bos);
 				data = bos.toByteArray();

@@ -8,6 +8,7 @@ ADDED:
 
 - new factory method in class FileFactory for create a new directory with the absolute path as string object
 - new factory method in class FileFactory for create a new file with the parent directory and the file name as string objects
+- new factory method in class FileFactory for create a new directory with the parent directory and the file name as string objects
 
 Version 8.2
 -------------

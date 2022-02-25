@@ -29,7 +29,10 @@ package io.github.astrapi69.file;
  * 
  * @version 1.0
  * @author Asterios Raptis
+ * @deprecated use instead the class {@link io.github.astrapi69.io.file.FileConstants}. Will be
+ *             deleted in next minor version.
  */
+@Deprecated
 public abstract class FileConst
 {
 

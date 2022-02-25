@@ -39,9 +39,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import io.github.astrapi69.file.FileConst;
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
 import io.github.astrapi69.file.search.FileSearchExtensions;
+import io.github.astrapi69.io.file.FileConstants;
 
 /**
  * The class {@link ZipExtensions} provides functionality for ziping and unzipping files.
@@ -95,8 +96,7 @@ public final class ZipExtensions
 		final File toDirectory) throws IOException
 	{
 		final File fileToExtract = new File(toDirectory, target.getName());
-		new File(fileToExtract.getParent()).mkdirs();
-
+		FileFactory.mkParentDirs(fileToExtract);
 		try (InputStream is = zipFile.getInputStream(target);
 			BufferedInputStream bis = new BufferedInputStream(is);
 			FileOutputStream fos = new FileOutputStream(fileToExtract);
@@ -142,7 +142,7 @@ public final class ZipExtensions
 	 */
 	public static boolean isZip(final String filename)
 	{
-		for (final String element : FileConst.ZIP_EXTENSIONS)
+		for (final String element : FileConstants.ZIP_EXTENSIONS)
 		{
 			if (filename.endsWith(element))
 			{

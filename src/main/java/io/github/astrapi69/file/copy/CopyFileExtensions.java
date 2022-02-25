@@ -39,13 +39,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import io.github.astrapi69.file.FileConst;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.exceptions.FileIsADirectoryException;
 import io.github.astrapi69.file.exceptions.FileIsNotADirectoryException;
 import io.github.astrapi69.file.exceptions.FileIsSecurityRestrictedException;
 import io.github.astrapi69.io.StreamExtensions;
+import io.github.astrapi69.io.file.FileConstants;
 import io.github.astrapi69.io.file.FileExtension;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
@@ -278,9 +278,8 @@ public final class CopyFileExtensions
 			if (null != allExcludeFilesList && !allExcludeFilesList.isEmpty())
 			{
 
-				for (final File element : includeFilesArray)
+				for (final File currentFile : includeFilesArray)
 				{
-					final File currentFile = element;
 					// if the excludeFilesList does not contain the current file do copy...
 					if (!allExcludeFilesList.contains(currentFile))
 					{
@@ -343,17 +342,12 @@ public final class CopyFileExtensions
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
 	 */
 	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
 		final FilenameFilter filenameFilter, final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
+		throws IOException, FileIsNotADirectoryException, FileIsSecurityRestrictedException
 	{
 		return copyDirectoryWithFilenameFilter(source, destination, filenameFilter, null,
 			lastModified);
@@ -382,15 +376,13 @@ public final class CopyFileExtensions
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the source file is not a directory.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
 	 */
 	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
 		final FilenameFilter includeFilenameFilter, final FilenameFilter excludeFilenameFilter,
-		final boolean lastModified) throws IOException, FileIsNotADirectoryException,
-		FileIsADirectoryException, FileIsSecurityRestrictedException
+		final boolean lastModified)
+		throws IOException, FileIsNotADirectoryException, FileIsSecurityRestrictedException
 	{
 		if (!source.isDirectory())
 		{
@@ -423,9 +415,8 @@ public final class CopyFileExtensions
 			// if excludeFilesList is not null and not empty
 			if (null != excludeFilesList && !excludeFilesList.isEmpty())
 			{
-				for (final File element : includeFilesArray)
+				for (final File currentFile : includeFilesArray)
 				{
-					final File currentFile = element;
 					// if the excludeFilesList does not contain the current file do copy...
 					if (!excludeFilesList.contains(currentFile))
 					{
@@ -481,11 +472,8 @@ public final class CopyFileExtensions
 	 *
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 */
-	public static boolean copyFile(final File source, final File destination)
-		throws IOException, FileIsADirectoryException
+	public static boolean copyFile(final File source, final File destination) throws IOException
 	{
 		return copyFile(source, destination, true);
 	}
@@ -558,16 +546,12 @@ public final class CopyFileExtensions
 				: new OutputStreamWriter(bos))
 		{
 			int tmp;
-			final char[] charArray = new char[FileConst.BLOCKSIZE];
+			final char[] charArray = new char[FileConstants.BLOCKSIZE];
 			while ((tmp = reader.read(charArray)) > 0)
 			{
 				writer.write(charArray, 0, tmp);
 			}
 			copied = true;
-		}
-		catch (final IOException e)
-		{
-			throw e;
 		}
 		if (lastModified)
 		{
@@ -598,7 +582,7 @@ public final class CopyFileExtensions
 		{
 			FileFactory.newDirectory(destination);
 		}
-		sources.stream().forEach(RuntimeExceptionDecorator.decorate(file -> {
+		sources.forEach(RuntimeExceptionDecorator.decorate(file -> {
 			File destinationFile = new File(destination, file.getName());
 			CopyFileExtensions.copyFile(file, destinationFile, sourceEncoding, destinationEncoding,
 				lastModified);
@@ -619,11 +603,9 @@ public final class CopyFileExtensions
 	 *             Is thrown if the source file is not a directory.
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 */
 	public static boolean copyFileToDirectory(final File source, final File destinationDir)
-		throws FileIsNotADirectoryException, IOException, FileIsADirectoryException
+		throws FileIsNotADirectoryException, IOException
 	{
 		return copyFileToDirectory(source, destinationDir, true);
 	}
@@ -646,12 +628,9 @@ public final class CopyFileExtensions
 	 *             Is thrown if the source file is not a directory.
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 */
 	public static boolean copyFileToDirectory(final File source, final File destinationDir,
-		final boolean lastModified)
-		throws FileIsNotADirectoryException, IOException, FileIsADirectoryException
+		final boolean lastModified) throws FileIsNotADirectoryException, IOException
 	{
 		if (null == destinationDir)
 		{
