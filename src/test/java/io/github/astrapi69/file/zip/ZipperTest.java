@@ -116,7 +116,7 @@ public class ZipperTest extends ZipTestCase
 	}
 
 	/**
-	 * Test method for {@link Zipper#zip()}.
+	 * Test method for {@link Zipper#zip()}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -178,7 +178,7 @@ public class ZipperTest extends ZipTestCase
 	}
 
 	/**
-	 * Test method for {@link Zipper#zip()}.
+	 * Test method for {@link Zipper#zip()}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -218,12 +218,12 @@ public class ZipperTest extends ZipTestCase
 		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
 		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
 
-		// ZipUtils.zip( testDir, zipFile );
-
 		final SimpleFilenameFilter txtFilenameFilter = new SimpleFilenameFilter(".txt", false);
 
-		final Zipper zipper = new Zipper(this.testDir, zipFile, txtFilenameFilter);
-
+		final Zipper zipper = Zipper.builder().directoryToZip(this.testDir).zipFile(zipFile)
+			.fileFilter(txtFilenameFilter).build(); // the same as new Zipper(this.testDir, zipFile,
+													// txtFilenameFilter);
+		// execute the zip process ...
 		zipper.zip();
 
 		final long currentLength = zipFile.length();

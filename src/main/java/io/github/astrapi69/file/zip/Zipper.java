@@ -45,29 +45,29 @@ import java.util.zip.ZipOutputStream;
  */
 public class Zipper implements ZipModel
 {
-
+	/** The logger */
 	private static final Logger log = Logger.getLogger(Zipper.class.getName());
-	/** The compression method. */
+	/** The compression method */
 	private int compressionMethod;
-	/** The directory to zip. */
+	/** The directory to zip */
 	private File directoryToZip;
-	/** The dir to start. */
+	/** The directory to start */
 	private String dirToStart;
 	/** The file counter. */
 	private int fileCounter;
-	/** The file filter. */
+	/** The file filter */
 	private FilenameFilter fileFilter;
-	/** The file length. */
+	/** The file length */
 	private long fileLength;
-	/** The zip file. */
+	/** The zip file */
 	private File zipFile;
-	/** The zip file comment. */
+	/** The zip file comment */
 	private String zipFileComment;
-	/** The zip file name. */
+	/** The zip file name */
 	private String zipFileName;
-	/** The zip file obj. */
+	/** The zip file object */
 	private ZipFile zipFileObj;
-	/** The zip level. */
+	/** The zip level */
 	private int zipLevel;
 
 	{
@@ -77,6 +77,9 @@ public class Zipper implements ZipModel
 		compressionMethod = -1;
 	}
 
+	/**
+	 * Instantiates a new {@link Zipper} object
+	 */
 	public Zipper()
 	{
 	}
@@ -111,6 +114,32 @@ public class Zipper implements ZipModel
 		this.setFileFilter(filter);
 	}
 
+	/**
+	 * Instantiates a new {@link Zipper} object
+	 *
+	 * @param compressionMethod
+	 *            the compression method
+	 * @param directoryToZip
+	 *            the directory to zip
+	 * @param dirToStart
+	 *            the directory to start
+	 * @param fileCounter
+	 *            the file counter
+	 * @param fileFilter
+	 *            the file name filter
+	 * @param fileLength
+	 *            the file length
+	 * @param zipFile
+	 *            the zip file
+	 * @param zipFileComment
+	 *            the zip file comment
+	 * @param zipFileName
+	 *            the zip file name
+	 * @param zipFileObj
+	 *            the zip file object
+	 * @param zipLevel
+	 *            the compression level
+	 */
 	public Zipper(int compressionMethod, File directoryToZip, String dirToStart, int fileCounter,
 		FilenameFilter fileFilter, long fileLength, File zipFile, String zipFileComment,
 		String zipFileName, ZipFile zipFileObj, int zipLevel)
@@ -286,7 +315,7 @@ public class Zipper implements ZipModel
 	}
 
 	/**
-	 * Zip the given files of this objects
+	 * Zip the given files of this object
 	 *
 	 * @return the optional with the possibles errors
 	 */
