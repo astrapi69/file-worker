@@ -15,6 +15,7 @@ CHANGED:
 - update of dependency silly-io to new version 1.8
 - update of test dependency test-objects to new major version 6
 - update of gradle plugin dependency com.diffplug.spotless:spotless-plugin-gradle to new version 6.3.0
+- removed deprecated class FileConst
 
 Version 8.2
 -------------
