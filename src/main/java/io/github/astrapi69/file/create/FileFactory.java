@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * The class {@link FileFactory} helps you to create files or directories
@@ -166,6 +167,12 @@ public final class FileFactory
 	 */
 	public static File newDirectory(final File parentDirectory, final String directoryName)
 	{
+		Objects.requireNonNull(parentDirectory);
+		Objects.requireNonNull(directoryName);
+		if (!parentDirectory.exists())
+		{
+			throw new RuntimeException("Given parent directory does not exist");
+		}
 		if (!parentDirectory.isDirectory())
 		{
 			throw new RuntimeException("Given parent file is not a directory");
