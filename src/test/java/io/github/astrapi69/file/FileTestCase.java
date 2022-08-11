@@ -35,7 +35,7 @@ import io.github.astrapi69.BaseTestCase;
 import io.github.astrapi69.file.create.FileCreationState;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 
 /**
  * The abstract class FileTestCase is for tests in the package 'io.github.astrapi69'.

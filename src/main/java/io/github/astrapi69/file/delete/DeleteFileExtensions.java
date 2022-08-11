@@ -33,10 +33,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import io.github.astrapi69.file.exceptions.DirectoryHasNoContentException;
-import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
-import io.github.astrapi69.file.exceptions.FileIsNotADirectoryException;
-import io.github.astrapi69.file.exceptions.FileIsSecurityRestrictedException;
+import io.github.astrapi69.file.exception.DirectoryHasNoContentException;
+import io.github.astrapi69.file.exception.FileDoesNotExistException;
+import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
+import io.github.astrapi69.file.exception.FileIsSecurityRestrictedException;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.io.file.filter.PrefixFileFilter;
 

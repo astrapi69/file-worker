@@ -22,7 +22,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
  * This Exception is thrown when the file is not found or does not exist.

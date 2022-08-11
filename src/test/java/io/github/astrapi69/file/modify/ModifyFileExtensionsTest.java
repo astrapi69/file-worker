@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
 
 import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.FileIsADirectoryException;
+import io.github.astrapi69.file.exception.FileIsADirectoryException;
 import io.github.astrapi69.file.modify.api.FileChangeable;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;

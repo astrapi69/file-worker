@@ -40,10 +40,10 @@ import java.util.Collection;
 import java.util.List;
 
 import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.exceptions.FileIsADirectoryException;
-import io.github.astrapi69.file.exceptions.FileIsNotADirectoryException;
-import io.github.astrapi69.file.exceptions.FileIsSecurityRestrictedException;
+import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.exception.FileIsADirectoryException;
+import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
+import io.github.astrapi69.file.exception.FileIsSecurityRestrictedException;
 import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.io.file.FileConstants;
 import io.github.astrapi69.io.file.FileExtension;

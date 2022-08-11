@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-import io.github.astrapi69.collections.list.ListFactory;
+import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.modify.api.FileChangeable;
 
 /**

@@ -27,20 +27,24 @@ package io.github.astrapi69.file.zip;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import io.github.astrapi69.collection.set.SetFactory;
 import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
+import io.github.astrapi69.file.exception.FileDoesNotExistException;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.io.file.FileConstants;
 
@@ -129,7 +133,8 @@ public final class ZipExtensions
 	private static String getZipEntryName(File file, File dirToZip)
 	{
 		final String absolutePath = file.getAbsolutePath();
-		final int index = absolutePath.indexOf(dirToZip.getName());
+		String name = dirToZip.getName();
+		final int index = absolutePath.indexOf(name);
 		return absolutePath.substring(index);
 	}
 
@@ -245,29 +250,35 @@ public final class ZipExtensions
 		try (FileOutputStream fos = new FileOutputStream(zipFile);
 			ZipOutputStream zos = new ZipOutputStream(fos))
 		{
-			if (!dirToZip.exists())
-			{
-				throw new IOException(
-					"Directory with the name " + dirToZip.getName() + " does not exist.");
-			}
-
-			if (!zipFile.exists())
-			{
-				if (createFile)
-				{
-					zipFile.createNewFile();
-				}
-				else
-				{
-					throw new FileDoesNotExistException(
-						"Zipfile with the name " + zipFile.getName() + " does not exist.");
-				}
-			}
+			newZipFile(dirToZip, zipFile, createFile);
 			zos.setLevel(9);
 			zipFiles(dirToZip, dirToZip, zos, filter);
 			zos.flush();
 			zos.finish();
 			fos.flush();
+		}
+	}
+
+	private static void newZipFile(File dirToZip, File zipFile, boolean createFile)
+		throws IOException, FileDoesNotExistException
+	{
+		if (!dirToZip.exists())
+		{
+			throw new IOException(
+				"Directory with the name " + dirToZip.getName() + " does not exist.");
+		}
+
+		if (!zipFile.exists())
+		{
+			if (createFile)
+			{
+				FileFactory.newFile(zipFile);
+			}
+			else
+			{
+				throw new FileDoesNotExistException(
+					"Zipfile with the name " + zipFile.getName() + " does not exist.");
+			}
 		}
 	}
 
@@ -297,7 +308,15 @@ public final class ZipExtensions
 			}
 			else
 			{
-				foundedFiles = Arrays.asList(file.listFiles());
+				File[] files = file.listFiles();
+				if (files != null)
+				{
+					foundedFiles = Arrays.asList(files);
+				}
+				else
+				{
+					foundedFiles = new ArrayList<>();
+				}
 			}
 			for (int i = 0; i < foundedFiles.size(); i++)
 			{
@@ -310,4 +329,33 @@ public final class ZipExtensions
 		}
 	}
 
+	/**
+	 * Zip files.
+	 *
+	 * @param file
+	 *            the file
+	 * @param dirToZip
+	 *            the dir to zip
+	 * @param excludeFileFilter
+	 *            the file filter for files to exclude
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void zipFiles(final File file, final File dirToZip,
+		final FileFilter... excludeFileFilter) throws IOException
+	{
+		try (FileOutputStream fos = new FileOutputStream(dirToZip);
+			ZipOutputStream zos = new ZipOutputStream(fos))
+		{
+			Set<File> fileSet = FileSearchExtensions.findFiles(file, SetFactory.newHashSet(),
+				excludeFileFilter);
+			for (File foundedFile : fileSet)
+			{
+				final byte[] b = new byte[(int)foundedFile.length()];
+				final ZipEntry cpZipEntry = new ZipEntry(foundedFile.getAbsolutePath());
+				zos.putNextEntry(cpZipEntry);
+				zos.write(b, 0, (int)foundedFile.length());
+			}
+		}
+	}
 }

@@ -25,9 +25,12 @@
 package io.github.astrapi69.file.search;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
@@ -109,6 +112,7 @@ public final class FileSearchExtensions
 		return list.contains(pathname);
 	}
 
+
 	/**
 	 * Checks if the given file contains only in the parent file recursively.
 	 *
@@ -144,6 +148,57 @@ public final class FileSearchExtensions
 			}
 		}
 		return exists;
+	}
+
+	/**
+	 * List the directories from the given file(directory).
+	 *
+	 * @param directory
+	 *            the directory
+	 * @return the {@link Set} with the found files
+	 */
+	public static Set<File> findFiles(final File directory, Set<File> foundedDirs,
+		FileFilter... excludeFileFilters)
+	{
+		if (foundedDirs == null)
+		{
+			foundedDirs = new HashSet<>();
+		}
+		// Get all files
+		final File[] children = directory.getAbsoluteFile().listFiles();
+		if (children == null || children.length < 1)
+		{
+			return foundedDirs;
+		}
+
+		final Set<File> excludeFileList = new HashSet<>();
+		for (FileFilter fileFilter : excludeFileFilters)
+		{
+			File[] excudeFiles = directory.listFiles(fileFilter);
+			if (excudeFiles != null)
+			{
+				excludeFileList.addAll(Arrays.asList(excudeFiles));
+			}
+		}
+
+		for (final File element : children)
+		{
+			// if the entry is a directory
+			if (element.isDirectory())
+			{ // then
+
+				// find recursively in the directory the files.
+				findFiles(element, foundedDirs, excludeFileFilters);
+			}
+			else
+			{
+				if (!excludeFileList.contains(element))
+				{
+					foundedDirs.add(element);
+				}
+			}
+		}
+		return foundedDirs;
 	}
 
 	/**
@@ -488,7 +543,6 @@ public final class FileSearchExtensions
 			}
 		}
 		return foundedDirs;
-
 	}
 
 	/**

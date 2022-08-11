@@ -22,62 +22,62 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
- * Exception if the directory has no content.
- * 
+ * Exception if the file is a directory.
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
-public class DirectoryHasNoContentException extends Exception
+public class FileIsADirectoryException extends Exception
 {
 
 	/**
-	 * The generated serialVersionUID.
+	 * The default serialVersionUID.
 	 */
-	private static final long serialVersionUID = -5145788368840670639L;
+	private static final long serialVersionUID = -2904857746683780551L;
 
 	/**
 	 * Default constructor.
 	 */
-	public DirectoryHasNoContentException()
+	public FileIsADirectoryException()
 	{
 		super();
 	}
 
 	/**
-	 * Constructs a new DirectoryHasNoContentException with the specified detail message.
-	 * 
+	 * Constructs a new FileIsADirectoryException with the specified detail message.
+	 *
 	 * @param message
-	 *            The error message.
+	 *            The message.
 	 */
-	public DirectoryHasNoContentException(final String message)
+	public FileIsADirectoryException(final String message)
 	{
 		super(message);
 	}
 
 	/**
-	 * Constructs a new DirectoryHasNoContentException with the specified detail message and the
+	 * Constructs a new FileIsADirectoryException with the specified detail message and the
 	 * Throwable.
-	 * 
+	 *
 	 * @param message
-	 *            The error message.
+	 *            The message.
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public DirectoryHasNoContentException(final String message, final Throwable cause)
+	public FileIsADirectoryException(final String message, final Throwable cause)
 	{
 		super(message, cause);
 	}
 
 	/**
-	 * Constructs a DirectoryHasNoContentException with the Throwable.
-	 * 
+	 * Constructs a FileIsADirectoryException with the Throwable.
+	 *
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public DirectoryHasNoContentException(final Throwable cause)
+	public FileIsADirectoryException(final Throwable cause)
 	{
 		super(cause);
 	}

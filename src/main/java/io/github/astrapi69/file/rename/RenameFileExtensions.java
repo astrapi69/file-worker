@@ -35,9 +35,9 @@ import java.util.List;
 import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
-import io.github.astrapi69.file.exceptions.FileIsADirectoryException;
-import io.github.astrapi69.file.exceptions.FileNotRenamedException;
+import io.github.astrapi69.file.exception.FileDoesNotExistException;
+import io.github.astrapi69.file.exception.FileIsADirectoryException;
+import io.github.astrapi69.file.exception.FileNotRenamedException;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 
 /**

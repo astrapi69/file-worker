@@ -22,62 +22,61 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
- * Exception if the file is not a directory.
+ * Exception if the file could not be renamed.
  * 
  * @version 1.0
  * @author Asterios Raptis
  */
-public class FileIsNotADirectoryException extends Exception
+public class FileNotRenamedException extends Exception
 {
 
 	/**
 	 * The default serialVersionUID.
 	 */
-	private static final long serialVersionUID = -2904857746683780551L;
+	private static final long serialVersionUID = 6852760469710242067L;
 
 	/**
 	 * Default constructor.
 	 */
-	public FileIsNotADirectoryException()
+	public FileNotRenamedException()
 	{
 		super();
 	}
 
 	/**
-	 * Constructs a new FileIsNotADirectoryException with the specified detail message.
+	 * Constructs a new FileNotRenamedException with the specified detail message.
 	 * 
 	 * @param message
 	 *            The message.
 	 */
-	public FileIsNotADirectoryException(final String message)
+	public FileNotRenamedException(final String message)
 	{
 		super(message);
 	}
 
 	/**
-	 * Constructs a new FileIsNotADirectoryException with the specified detail message and the
-	 * Throwable.
+	 * Constructs a new FileNotRenamedException with the specified detail message and the Throwable.
 	 * 
 	 * @param message
 	 *            The message.
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public FileIsNotADirectoryException(final String message, final Throwable cause)
+	public FileNotRenamedException(final String message, final Throwable cause)
 	{
 		super(message, cause);
 	}
 
 	/**
-	 * Constructs a FileIsNotADirectoryException with the Throwable.
+	 * Constructs a FileNotRenamedException with the Throwable.
 	 * 
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public FileIsNotADirectoryException(final Throwable cause)
+	public FileNotRenamedException(final Throwable cause)
 	{
 		super(cause);
 	}

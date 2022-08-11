@@ -46,10 +46,10 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.FileCreationState;
 import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.exceptions.FileDoesNotExistException;
-import io.github.astrapi69.file.exceptions.FileIsADirectoryException;
-import io.github.astrapi69.file.exceptions.FileNotRenamedException;
+import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.exception.FileDoesNotExistException;
+import io.github.astrapi69.file.exception.FileIsADirectoryException;
+import io.github.astrapi69.file.exception.FileNotRenamedException;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 

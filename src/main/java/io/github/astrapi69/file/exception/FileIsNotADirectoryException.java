@@ -22,15 +22,15 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
- * Exception if the file is a directory.
- *
+ * Exception if the file is not a directory.
+ * 
  * @version 1.0
  * @author Asterios Raptis
  */
-public class FileIsADirectoryException extends Exception
+public class FileIsNotADirectoryException extends Exception
 {
 
 	/**
@@ -41,43 +41,43 @@ public class FileIsADirectoryException extends Exception
 	/**
 	 * Default constructor.
 	 */
-	public FileIsADirectoryException()
+	public FileIsNotADirectoryException()
 	{
 		super();
 	}
 
 	/**
-	 * Constructs a new FileIsADirectoryException with the specified detail message.
-	 *
+	 * Constructs a new FileIsNotADirectoryException with the specified detail message.
+	 * 
 	 * @param message
 	 *            The message.
 	 */
-	public FileIsADirectoryException(final String message)
+	public FileIsNotADirectoryException(final String message)
 	{
 		super(message);
 	}
 
 	/**
-	 * Constructs a new FileIsADirectoryException with the specified detail message and the
+	 * Constructs a new FileIsNotADirectoryException with the specified detail message and the
 	 * Throwable.
-	 *
+	 * 
 	 * @param message
 	 *            The message.
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public FileIsADirectoryException(final String message, final Throwable cause)
+	public FileIsNotADirectoryException(final String message, final Throwable cause)
 	{
 		super(message, cause);
 	}
 
 	/**
-	 * Constructs a FileIsADirectoryException with the Throwable.
-	 *
+	 * Constructs a FileIsNotADirectoryException with the Throwable.
+	 * 
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public FileIsADirectoryException(final Throwable cause)
+	public FileIsNotADirectoryException(final Throwable cause)
 	{
 		super(cause);
 	}

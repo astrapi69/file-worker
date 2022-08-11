@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 8.3-SNAPSHOT
+Version 11-SNAPSHOT
 -------------
 
 ADDED:
@@ -12,10 +12,21 @@ ADDED:
 
 CHANGED:
 
+- update to jdk version 11
+- update gradle to new version 7.5.1
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor
+  version 6.9.0
+- update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' in version 5.0.0
 - update of dependency silly-io to new version 1.8
-- update of test dependency test-objects to new major version 6
-- update of gradle plugin dependency com.diffplug.spotless:spotless-plugin-gradle to new version 6.3.0
+- update of test dependency test-objects to new version 6.1
 - removed deprecated class FileConst
+- update of test dependency testng to new version 7.6.1
+- update of dependency zip4j to new version 2.11.1
+- update of dependency crypt-api to new version to 8.2
+- update of throw-able dependency to new version 2.3
+- update of jobj-compare dependency to new version 11
+- update of checksum-up dependency to new version 2
+- update of silly-collections dependency to new version 19
 
 Version 8.2
 -------------

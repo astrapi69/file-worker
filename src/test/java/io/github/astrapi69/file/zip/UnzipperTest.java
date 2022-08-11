@@ -87,7 +87,7 @@ public class UnzipperTest extends ZipTestCase
 	 * Test method for {@link Unzipper#extractZipEntry(ZipFile, ZipEntry, File)}.
 	 *
 	 * @throws Exception
-	 *             catch all exceptions
+	 *             catch all exception
 	 */
 	@Test(enabled = true)
 	public void testExtractZipEntry() throws Exception

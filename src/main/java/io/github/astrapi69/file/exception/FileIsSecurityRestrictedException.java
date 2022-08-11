@@ -22,59 +22,63 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
- * Exception that is thrown if an attempt is made to create a directory that already exists
+ * Exception if the file or directory is security restricted.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public class DirectoryAlreadyExistsException extends Exception
+public class FileIsSecurityRestrictedException extends Exception
 {
 
 	/**
 	 * The serialVersionUID.
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 896688635590740981L;
 
-	public DirectoryAlreadyExistsException()
+	/**
+	 * Instantiates a new file is security restricted exception.
+	 */
+	public FileIsSecurityRestrictedException()
 	{
+		super();
 	}
 
 	/**
-	 * Constructs a new DirectoryAlreadyExistsException with the specified detail message.
+	 * Instantiates a new file is security restricted exception.
 	 *
 	 * @param message
-	 *            The error message.
+	 *            the message
 	 */
-	public DirectoryAlreadyExistsException(final String message)
+	public FileIsSecurityRestrictedException(final String message)
 	{
 		super(message);
 	}
 
 	/**
-	 * Constructs a new DirectoryAlreadyExistsException with the specified detail message and the
-	 * Throwable.
+	 * Instantiates a new file is security restricted exception.
 	 *
 	 * @param message
-	 *            The error message.
+	 *            the message
 	 * @param cause
-	 *            The Throwable.
+	 *            the cause
 	 */
-	public DirectoryAlreadyExistsException(final String message, final Throwable cause)
+	public FileIsSecurityRestrictedException(final String message, final Throwable cause)
 	{
 		super(message, cause);
 	}
 
 	/**
-	 * Constructs a DirectoryAlreadyExistsException with the Throwable.
+	 * Instantiates a new file is security restricted exception.
 	 *
 	 * @param cause
-	 *            The Throwable.
+	 *            the cause
 	 */
-	public DirectoryAlreadyExistsException(final Throwable cause)
+	public FileIsSecurityRestrictedException(final Throwable cause)
 	{
 		super(cause);
 	}
+
 }

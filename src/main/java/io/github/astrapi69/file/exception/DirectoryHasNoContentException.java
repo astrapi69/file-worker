@@ -22,61 +22,62 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
- * Exception if the file could not be renamed.
+ * Exception if the directory has no content.
  * 
  * @version 1.0
  * @author Asterios Raptis
  */
-public class FileNotRenamedException extends Exception
+public class DirectoryHasNoContentException extends Exception
 {
 
 	/**
-	 * The default serialVersionUID.
+	 * The generated serialVersionUID.
 	 */
-	private static final long serialVersionUID = 6852760469710242067L;
+	private static final long serialVersionUID = -5145788368840670639L;
 
 	/**
 	 * Default constructor.
 	 */
-	public FileNotRenamedException()
+	public DirectoryHasNoContentException()
 	{
 		super();
 	}
 
 	/**
-	 * Constructs a new FileNotRenamedException with the specified detail message.
+	 * Constructs a new DirectoryHasNoContentException with the specified detail message.
 	 * 
 	 * @param message
-	 *            The message.
+	 *            The error message.
 	 */
-	public FileNotRenamedException(final String message)
+	public DirectoryHasNoContentException(final String message)
 	{
 		super(message);
 	}
 
 	/**
-	 * Constructs a new FileNotRenamedException with the specified detail message and the Throwable.
+	 * Constructs a new DirectoryHasNoContentException with the specified detail message and the
+	 * Throwable.
 	 * 
 	 * @param message
-	 *            The message.
+	 *            The error message.
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public FileNotRenamedException(final String message, final Throwable cause)
+	public DirectoryHasNoContentException(final String message, final Throwable cause)
 	{
 		super(message, cause);
 	}
 
 	/**
-	 * Constructs a FileNotRenamedException with the Throwable.
+	 * Constructs a DirectoryHasNoContentException with the Throwable.
 	 * 
 	 * @param cause
 	 *            The Throwable.
 	 */
-	public FileNotRenamedException(final Throwable cause)
+	public DirectoryHasNoContentException(final Throwable cause)
 	{
 		super(cause);
 	}

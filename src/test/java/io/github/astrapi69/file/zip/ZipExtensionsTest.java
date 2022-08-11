@@ -29,6 +29,8 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -41,6 +43,7 @@ import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.io.file.FileConstants;
+import io.github.astrapi69.io.file.filter.SuffixFileFilter;
 import io.github.astrapi69.io.file.namefilter.SimpleFilenameFilter;
 
 /**
@@ -267,6 +270,44 @@ public class ZipExtensionsTest extends ZipTestCase
 	{
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(ZipExtensions.class);
+	}
+
+	@Test
+	public void testZipFiles() throws IOException
+	{
+		String suffix;
+		Set<File> files;
+
+		suffix = ".txt";
+		final File zipFile = new File(this.zipDir.getAbsoluteFile(), "testZip.zip");
+
+		final long length = zipFile.length();
+		this.actual = length == 0;
+		assertTrue("", this.actual);
+		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
+		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
+		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
+
+		final File testFile4 = new File(this.deepDir.getAbsoluteFile(), "testZip4.tft");
+		final File testFile5 = new File(this.deepDir.getAbsoluteFile(), "testZip5.cvs");
+
+		final File testFile6 = new File(this.deepDir2.getAbsoluteFile(), "testZip6.txt");
+		final File testFile7 = new File(this.deepDir2.getAbsoluteFile(), "testZip7.cvs");
+
+		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
+		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
+
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
+		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
+		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
+		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
+		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
+		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		ZipExtensions.zipFiles(this.testDir, zipFile, SuffixFileFilter.of(suffix));
+		System.out.println(zipFile);
 	}
 
 	/**

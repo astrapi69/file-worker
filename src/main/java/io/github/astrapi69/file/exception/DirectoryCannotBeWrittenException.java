@@ -22,61 +22,61 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
- * Exception if the file or directory is security restricted.
+ * Exception to be thrown if the directory cannot be created.
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public class FileIsSecurityRestrictedException extends Exception
+public class DirectoryCannotBeWrittenException extends Exception
 {
 
 	/**
 	 * The serialVersionUID.
 	 */
-	private static final long serialVersionUID = 896688635590740981L;
+	private static final long serialVersionUID = 8391789526844963655L;
 
 	/**
-	 * Instantiates a new file is security restricted exception.
+	 * Instantiates a new directory cannot be created exception.
 	 */
-	public FileIsSecurityRestrictedException()
+	public DirectoryCannotBeWrittenException()
 	{
 		super();
 	}
 
 	/**
-	 * Instantiates a new file is security restricted exception.
+	 * Instantiates a new directory cannot be created exception.
 	 *
 	 * @param message
 	 *            the message
 	 */
-	public FileIsSecurityRestrictedException(final String message)
+	public DirectoryCannotBeWrittenException(final String message)
 	{
 		super(message);
 	}
 
 	/**
-	 * Instantiates a new file is security restricted exception.
+	 * Instantiates a new directory cannot be created exception.
 	 *
 	 * @param message
 	 *            the message
 	 * @param cause
 	 *            the cause
 	 */
-	public FileIsSecurityRestrictedException(final String message, final Throwable cause)
+	public DirectoryCannotBeWrittenException(final String message, final Throwable cause)
 	{
 		super(message, cause);
 	}
 
 	/**
-	 * Instantiates a new file is security restricted exception.
+	 * Instantiates a new directory cannot be created exception.
 	 *
 	 * @param cause
 	 *            the cause
 	 */
-	public FileIsSecurityRestrictedException(final Throwable cause)
+	public DirectoryCannotBeWrittenException(final Throwable cause)
 	{
 		super(cause);
 	}

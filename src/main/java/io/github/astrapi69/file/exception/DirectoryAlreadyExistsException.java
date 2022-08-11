@@ -22,63 +22,59 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.exceptions;
+package io.github.astrapi69.file.exception;
 
 /**
- * Exception to be thrown if the directory cannot be created.
+ * Exception that is thrown if an attempt is made to create a directory that already exists
  *
  * @version 1.0
  * @author Asterios Raptis
  */
-public class DirectoryCannotBeWrittenException extends Exception
+public class DirectoryAlreadyExistsException extends Exception
 {
 
 	/**
 	 * The serialVersionUID.
 	 */
-	private static final long serialVersionUID = 8391789526844963655L;
+	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Instantiates a new directory cannot be created exception.
-	 */
-	public DirectoryCannotBeWrittenException()
+	public DirectoryAlreadyExistsException()
 	{
-		super();
 	}
 
 	/**
-	 * Instantiates a new directory cannot be created exception.
+	 * Constructs a new DirectoryAlreadyExistsException with the specified detail message.
 	 *
 	 * @param message
-	 *            the message
+	 *            The error message.
 	 */
-	public DirectoryCannotBeWrittenException(final String message)
+	public DirectoryAlreadyExistsException(final String message)
 	{
 		super(message);
 	}
 
 	/**
-	 * Instantiates a new directory cannot be created exception.
+	 * Constructs a new DirectoryAlreadyExistsException with the specified detail message and the
+	 * Throwable.
 	 *
 	 * @param message
-	 *            the message
+	 *            The error message.
 	 * @param cause
-	 *            the cause
+	 *            The Throwable.
 	 */
-	public DirectoryCannotBeWrittenException(final String message, final Throwable cause)
+	public DirectoryAlreadyExistsException(final String message, final Throwable cause)
 	{
 		super(message, cause);
 	}
 
 	/**
-	 * Instantiates a new directory cannot be created exception.
+	 * Constructs a DirectoryAlreadyExistsException with the Throwable.
 	 *
 	 * @param cause
-	 *            the cause
+	 *            The Throwable.
 	 */
-	public DirectoryCannotBeWrittenException(final Throwable cause)
+	public DirectoryAlreadyExistsException(final Throwable cause)
 	{
 		super(cause);
 	}
-
 }

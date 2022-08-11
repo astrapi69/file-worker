@@ -33,16 +33,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import io.github.astrapi69.collection.set.SetFactory;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exceptions.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.io.file.filter.SuffixFileFilter;
 
 /**
  * The unit test class for the class {@link FileSearchExtensions}.
@@ -227,16 +230,36 @@ public class FileSearchExtensionsTest extends FileTestCase
 		DeleteFileExtensions.delete(fileList);
 	}
 
+	@Test
+	public void testFindFilesFileFileFilter() throws IOException
+	{
+		String suffix;
+		Set<File> files;
+
+		suffix = ".txt";
+
+		final File testFile1 = new File(this.testDir, "testFindFilesFileString.txt");
+		final File testFile2 = new File(this.testDir, "testFindFilesFileString.tft");
+		final File testFile3 = new File(this.deepDir, "testFindFilesFileString.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		files = SetFactory.newHashSet();
+		files = FileSearchExtensions.findFiles(this.testDir, files, SuffixFileFilter.of(suffix));
+		this.actual = files != null;
+		assertTrue(this.actual);
+		this.actual = files.size() == 2;
+		assertTrue(this.actual);
+	}
+
 	/**
 	 * Test method for {@link FileSearchExtensions#findFiles(File, String)}
 	 *
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testFindFilesFileString() throws DirectoryAlreadyExistsException, IOException
+	public void testFindFilesFileString() throws IOException
 	{
 		final String test = "testFindFilesFileString.t*";
 
