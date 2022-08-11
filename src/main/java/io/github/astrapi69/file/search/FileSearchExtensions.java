@@ -214,6 +214,8 @@ public final class FileSearchExtensions
 	 *
 	 * @param directory
 	 *            the directory
+	 * @param predicate
+	 *            the predicate
 	 * @return the {@link Set} with the found files
 	 */
 	public static Set<File> findFiles(final File directory, Predicate<File> predicate)
@@ -230,10 +232,12 @@ public final class FileSearchExtensions
 	 *
 	 * @param directory
 	 *            the directory
+	 * @param predicate
+	 *            the predicate
 	 * @return the {@link Set} with the found files
 	 */
-	public static Set<File> findFilesRecursive(final File directory, Predicate<File> predicate)
-		throws IOException
+	public static Set<File> findFilesRecursive(final File directory,
+		final Predicate<File> predicate) throws IOException
 	{
 		try (Stream<Path> pathStream = Files.walk(Paths.get(directory.getAbsolutePath())))
 		{
@@ -339,12 +343,15 @@ public final class FileSearchExtensions
 		final List<File> foundedFileList = new ArrayList<>();
 		final String regex = RegExExtensions.replaceWildcardsWithRE(filenameToSearch);
 		final String[] children = dir.list();
-		for (final String filename : children)
+		if (children != null)
 		{
-			if (filename.matches(regex))
+			for (final String filename : children)
 			{
-				final File foundedFile = new File(filename);
-				foundedFileList.add(foundedFile);
+				if (filename.matches(regex))
+				{
+					final File foundedFile = new File(filename);
+					foundedFileList.add(foundedFile);
+				}
 			}
 		}
 		return foundedFileList;
@@ -447,18 +454,21 @@ public final class FileSearchExtensions
 	{
 		final List<File> foundedFileList = new ArrayList<>();
 		final File[] children = dir.listFiles(new MultiplyExtensionsFileFilter(true, extension));
-		for (final File element : children)
+		if (children != null)
 		{
-			// if the entry is a directory
-			if (element.isDirectory())
-			{ // then
-				// find recursively in the directory and put it in a List.
-				// Put the founded files in the main List.
-				foundedFileList.addAll(findFilesWithFilter(element, extension));
-			}
-			else
+			for (final File element : children)
 			{
-				foundedFileList.add(element.getAbsoluteFile());
+				// if the entry is a directory
+				if (element.isDirectory())
+				{ // then
+					// find recursively in the directory and put it in a List.
+					// Put the founded files in the main List.
+					foundedFileList.addAll(findFilesWithFilter(element, extension));
+				}
+				else
+				{
+					foundedFileList.add(element.getAbsoluteFile());
+				}
 			}
 		}
 		return foundedFileList;
@@ -575,11 +585,14 @@ public final class FileSearchExtensions
 	{
 		final List<File> foundedDirs = new ArrayList<>();
 		final File[] fileArray = dir.listFiles();
-		for (final File element : fileArray)
+		if (fileArray != null)
 		{
-			if (element.isDirectory())
+			for (final File element : fileArray)
 			{
-				foundedDirs.add(element);
+				if (element.isDirectory())
+				{
+					foundedDirs.add(element);
+				}
 			}
 		}
 		return foundedDirs;

@@ -232,7 +232,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	}
 
 	@Test
-	public void testFindFilesWithPredicate()throws IOException
+	public void testFindFilesWithPredicate() throws IOException
 	{
 
 		String suffix;
@@ -247,7 +247,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
 		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
 		files = FileSearchExtensions.findFiles(this.testDir, (file -> {
-			if(file.isDirectory()) {
+			if (file.isDirectory())
+			{
 				return false;
 			}
 			FileFilter fileFilter = SuffixFileFilter.of(suffix, false);
@@ -258,7 +259,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 		this.actual = files.size() == 1;
 		assertTrue(this.actual);
 		files = FileSearchExtensions.findFilesRecursive(this.testDir, (file -> {
-			if(file.isDirectory()) {
+			if (file.isDirectory())
+			{
 				return false;
 			}
 			FileFilter fileFilter = SuffixFileFilter.of(suffix, false);

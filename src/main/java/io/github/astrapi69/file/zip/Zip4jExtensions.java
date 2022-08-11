@@ -25,9 +25,13 @@
 package io.github.astrapi69.file.zip;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
+import io.github.astrapi69.file.search.FileSearchExtensions;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
@@ -154,6 +158,30 @@ public final class Zip4jExtensions
 		final List<File> toAdd) throws ZipException
 	{
 		for (final File element : toAdd)
+		{
+			zipFile4j.addFile(element, parameters);
+		}
+	}
+
+	/**
+	 * Adds the given file(s) to the given zip file.
+	 *
+	 * @param zipFile4j
+	 *            the zip file4j
+	 * @param parameters
+	 *            the parameters
+	 * @param directory
+	 *            the directory from where to zip files
+	 * @param predicate
+	 *            the predicate that tells which files should be in the zip file
+	 * @throws ZipException
+	 *             the zip exception
+	 */
+	public static void zipFiles(final ZipFile zipFile4j, final ZipParameters parameters,
+		final File directory, final Predicate<File> predicate) throws IOException
+	{
+		Set<File> filesRecursive = FileSearchExtensions.findFilesRecursive(directory, predicate);
+		for (final File element : filesRecursive)
 		{
 			zipFile4j.addFile(element, parameters);
 		}
