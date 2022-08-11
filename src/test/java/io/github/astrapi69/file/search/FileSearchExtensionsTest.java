@@ -30,6 +30,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -228,6 +229,45 @@ public class FileSearchExtensionsTest extends FileTestCase
 		}
 		// 4. cleanup all files from this test
 		DeleteFileExtensions.delete(fileList);
+	}
+
+	@Test
+	public void testFindFilesWithPredicate()throws IOException
+	{
+
+		String suffix;
+		Set<File> files;
+
+		suffix = ".txt";
+
+		final File testFile1 = new File(this.testDir, "testFindFilesFileString.txt");
+		final File testFile2 = new File(this.testDir, "testFindFilesFileString.tft");
+		final File testFile3 = new File(this.deepDir, "testFindFilesFileString.cvs");
+		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
+		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
+		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		files = FileSearchExtensions.findFiles(this.testDir, (file -> {
+			if(file.isDirectory()) {
+				return false;
+			}
+			FileFilter fileFilter = SuffixFileFilter.of(suffix, false);
+			return !fileFilter.accept(file);
+		}));
+		this.actual = files != null;
+		assertTrue(this.actual);
+		this.actual = files.size() == 1;
+		assertTrue(this.actual);
+		files = FileSearchExtensions.findFilesRecursive(this.testDir, (file -> {
+			if(file.isDirectory()) {
+				return false;
+			}
+			FileFilter fileFilter = SuffixFileFilter.of(suffix, false);
+			return !fileFilter.accept(file);
+		}));
+		this.actual = files != null;
+		assertTrue(this.actual);
+		this.actual = files.size() == 2;
+		assertTrue(this.actual);
 	}
 
 	@Test

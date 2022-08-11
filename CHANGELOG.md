@@ -9,22 +9,23 @@ ADDED:
 - new factory method in class FileFactory for create a new directory with the absolute path as string object
 - new factory method in class FileFactory for create a new file with the parent directory and the file name as string objects
 - new factory method in class FileFactory for create a new directory with the parent directory and the file name as string objects
+- new test dependency comparator-extensions in new version 1.2
 
 CHANGED:
 
 - update to jdk version 11
 - update gradle to new version 7.5.1
 - update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor
-  version 6.9.0
+  version 6.9.1
 - update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' in version 5.0.0
-- update of dependency silly-io to new version 1.8
+- update of dependency silly-io to new version 2.1
 - update of test dependency test-objects to new version 6.1
 - removed deprecated class FileConst
 - update of test dependency testng to new version 7.6.1
 - update of dependency zip4j to new version 2.11.1
 - update of dependency crypt-api to new version to 8.2
 - update of throw-able dependency to new version 2.3
-- update of jobj-compare dependency to new version 11
+- update of jobj-compare dependency to new version 11.1
 - update of checksum-up dependency to new version 2
 - update of silly-collections dependency to new version 19
 

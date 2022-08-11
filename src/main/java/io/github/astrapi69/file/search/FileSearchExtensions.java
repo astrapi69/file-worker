@@ -26,12 +26,19 @@ package io.github.astrapi69.file.search;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.regex.RegExExtensions;
@@ -199,6 +206,39 @@ public final class FileSearchExtensions
 			}
 		}
 		return foundedDirs;
+	}
+
+
+	/**
+	 * List the directories from the given file(directory).
+	 *
+	 * @param directory
+	 *            the directory
+	 * @return the {@link Set} with the found files
+	 */
+	public static Set<File> findFiles(final File directory, Predicate<File> predicate)
+		throws IOException
+	{
+		try (Stream<Path> pathStream = Files.list(Paths.get(directory.getAbsolutePath())))
+		{
+			return pathStream.map(Path::toFile).filter(predicate).collect(Collectors.toSet());
+		}
+	}
+
+	/**
+	 * List the directories from the given file(directory).
+	 *
+	 * @param directory
+	 *            the directory
+	 * @return the {@link Set} with the found files
+	 */
+	public static Set<File> findFilesRecursive(final File directory, Predicate<File> predicate)
+		throws IOException
+	{
+		try (Stream<Path> pathStream = Files.walk(Paths.get(directory.getAbsolutePath())))
+		{
+			return pathStream.map(Path::toFile).filter(predicate).collect(Collectors.toSet());
+		}
 	}
 
 	/**
