@@ -195,7 +195,8 @@ public final class Zip4jExtensions
 	public static void zipFiles(final ZipFile zipFile4j, final ZipParameters parameters,
 		final File directoryToCompress, final Predicate<File> predicate) throws IOException
 	{
-		Set<File> filesRecursive = FileSearchExtensions.findFilesRecursive(directoryToCompress, predicate);
+		Set<File> filesRecursive = FileSearchExtensions.findFilesRecursive(directoryToCompress,
+			predicate);
 		for (final File element : filesRecursive)
 		{
 			zipFile4j.addFile(element, parameters);
