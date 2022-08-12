@@ -105,6 +105,21 @@ public final class Zip4jExtensions
 	public static void zipFiles(final ZipFile zipFile4j, final CompressionMethod compressionMethod,
 		final CompressionLevel compressionLevel, final File... toAdd) throws ZipException
 	{
+		zipFiles(zipFile4j, newZipParameters(compressionMethod, compressionLevel), toAdd);
+	}
+
+	/**
+	 * Factory method for create a new {@link ZipParameters} from the given parameters
+	 *
+	 * @param compressionMethod
+	 *            The compression method
+	 * @param compressionLevel
+	 *            the compression level
+	 * @return the new {@link ZipParameters} object from the given parameters
+	 */
+	public static ZipParameters newZipParameters(CompressionMethod compressionMethod,
+		CompressionLevel compressionLevel)
+	{
 		// Initiate Zip Parameters which define various properties such
 		// as compression method, etc.
 		final ZipParameters parameters = new ZipParameters();
@@ -121,7 +136,7 @@ public final class Zip4jExtensions
 		// DEFLATE_LEVEL_FAST = fast compression
 		// DEFLATE_LEVEL_FASTEST = fastest compression
 		parameters.setCompressionLevel(compressionLevel);
-		zipFiles(zipFile4j, parameters, toAdd);
+		return parameters;
 	}
 
 	/**
