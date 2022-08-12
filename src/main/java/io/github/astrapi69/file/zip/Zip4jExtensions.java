@@ -170,17 +170,17 @@ public final class Zip4jExtensions
 	 *            the zip file4j
 	 * @param parameters
 	 *            the parameters
-	 * @param directory
-	 *            the directory from where to zip files
+	 * @param directoryToCompress
+	 *            the content of this directory will be compressed
 	 * @param predicate
 	 *            the predicate that tells which files should be in the zip file
 	 * @throws ZipException
 	 *             the zip exception
 	 */
 	public static void zipFiles(final ZipFile zipFile4j, final ZipParameters parameters,
-		final File directory, final Predicate<File> predicate) throws IOException
+		final File directoryToCompress, final Predicate<File> predicate) throws IOException
 	{
-		Set<File> filesRecursive = FileSearchExtensions.findFilesRecursive(directory, predicate);
+		Set<File> filesRecursive = FileSearchExtensions.findFilesRecursive(directoryToCompress, predicate);
 		for (final File element : filesRecursive)
 		{
 			zipFile4j.addFile(element, parameters);
