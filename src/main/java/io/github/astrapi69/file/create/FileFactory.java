@@ -316,6 +316,20 @@ public final class FileFactory
 	}
 
 	/**
+	 * Factory method for creating the new {@link File} from the given {@link FileInfo} object
+	 *
+	 * @param fileInfo
+	 *            the {@link FileInfo} object
+	 * @return the new {@link File} object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static File newFile(final FileInfo fileInfo) throws IOException
+	{
+		return newFile(fileInfo.getPath(), fileInfo.getName());
+	}
+
+	/**
 	 * Creates all files contained in the collection as empty files if the files does not exists
 	 * otherwise it lets the files as they are.
 	 *

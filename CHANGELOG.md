@@ -8,7 +8,8 @@ ADDED:
 
 - new factory method in class Zip4jExtensions for create a new ZipParameters object from the given
   parameters
-- new class FileInfo that can be used for file creation
+- new bean class FileInfo that can be used for file creation
+- new factory method in class FileFactory with new bean class FileInfo
 
 CHANGED:
 

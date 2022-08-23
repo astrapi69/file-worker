@@ -198,6 +198,30 @@ public class FileFactoryTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred
 	 */
 	@Test(expectedExceptions = RuntimeException.class)
+	public void testNewDirectoryWithParentFileNotExistsAndDirectoryName() throws IOException
+	{
+
+		File actual;
+		File expected;
+		File dir;
+		// new scenario...
+		dir = new File(this.testResources, "newFooBarDir");
+		// if the directory exist delete it
+		if (dir.exists())
+		{
+			DeleteFileExtensions.delete(dir);
+		}
+		File parentNotExists = new File("tmp", "bla");
+		actual = FileFactory.newDirectory(parentNotExists, "newFooBarDir");
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newDirectory(File, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test(expectedExceptions = RuntimeException.class)
 	public void testNewDirectoryWithParentFileAndDirectoryNameWhereParentIsNoDirectory()
 		throws IOException
 	{
@@ -458,6 +482,29 @@ public class FileFactoryTest extends FileTestCase
 		file = FileFactory.newFile(absolutePath);
 		assertFalse(file.exists());
 		assertNotNull(file);
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newFile(FileInfo)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testNewFileFileInfo() throws IOException
+	{
+		String absolutePath;
+		File file;
+		FileInfo fileInfo;
+
+		fileInfo = FileInfo.builder().path("/tmp/foo/bar")
+			.name("foo.txt")
+			.build();
+		file = FileFactory.newFile(fileInfo);
+		assertTrue(file.exists());
+		assertNotNull(file);
+		absolutePath = file.getAbsolutePath();
+		assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
 	}
 
 	/**
