@@ -162,6 +162,10 @@ public final class FileSearchExtensions
 	 *
 	 * @param directory
 	 *            the directory
+	 * @param foundedDirs
+	 *            the set with the founded directories
+	 * @param excludeFileFilters
+	 *            the file filters that have to be excluded
 	 * @return the {@link Set} with the found files
 	 */
 	public static Set<File> findFiles(final File directory, Set<File> foundedDirs,
@@ -216,6 +220,8 @@ public final class FileSearchExtensions
 	 *            the directory
 	 * @param predicate
 	 *            the predicate
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 * @return the {@link Set} with the found files
 	 */
 	public static Set<File> findFiles(final File directory, Predicate<File> predicate)
@@ -234,6 +240,8 @@ public final class FileSearchExtensions
 	 *            the directory
 	 * @param predicate
 	 *            the predicate
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 * @return the {@link Set} with the found files
 	 */
 	public static Set<File> findFilesRecursive(final File directory,
