@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 11.1-SNAPSHOT
+Version 11.1
 -------------
 
 ADDED:
@@ -16,6 +16,7 @@ CHANGED:
 - update of silly-collection dependency to new version 20
 - update of silly-bean dependency to new version 2
 - update of test dependency jobj-contract-verifier to new version 4
+- update of test dependency test-object to new version 7.1
 
 Version 11
 -------------

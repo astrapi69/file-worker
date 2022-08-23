@@ -39,13 +39,13 @@ your project `build.gradle` if you want to import the core functionality of file
 define version in file gradle.properties
 
 ```
-fileWorkerVersion=11
+fileWorkerVersion=11.1
 ```
 
 or in build.gradle ext area
 
 ```
-    fileWorkerVersion = "11"
+    fileWorkerVersion = "11.1"
 ```
 
 and then add the dependency to the dependencies area
@@ -66,7 +66,7 @@ functionality of file-worker:
     <properties>
             ...
         <!-- FILE-WORKER version -->
-        <file-worker.version>11</file-worker.version>
+        <file-worker.version>11.1</file-worker.version>
             ...
     </properties>
             ...
