@@ -60,14 +60,14 @@ public class FileInfo
 		return this.name;
 	}
 
-	public String getPath()
-	{
-		return this.path;
-	}
-
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	public String getPath()
+	{
+		return this.path;
 	}
 
 	public void setPath(String path)
@@ -144,7 +144,8 @@ public class FileInfo
 	}
 
 	private static final class FileInfoBuilderImpl
-		extends FileInfoBuilder<FileInfo, FileInfoBuilderImpl>
+		extends
+			FileInfoBuilder<FileInfo, FileInfoBuilderImpl>
 	{
 		private FileInfoBuilderImpl()
 		{

@@ -6,7 +6,9 @@ Version 11.1-SNAPSHOT
 
 ADDED:
 
-- new factory method in class Zip4jExtensions for create a new ZipParameters object from the given parameters
+- new factory method in class Zip4jExtensions for create a new ZipParameters object from the given
+  parameters
+- new class FileInfo that can be used for file creation
 
 Version 11
 -------------
