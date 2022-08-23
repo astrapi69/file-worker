@@ -497,9 +497,7 @@ public class FileFactoryTest extends FileTestCase
 		File file;
 		FileInfo fileInfo;
 
-		fileInfo = FileInfo.builder().path("/tmp/foo/bar")
-			.name("foo.txt")
-			.build();
+		fileInfo = FileInfo.builder().path("/tmp/foo/bar").name("foo.txt").build();
 		file = FileFactory.newFile(fileInfo);
 		assertTrue(file.exists());
 		assertNotNull(file);
