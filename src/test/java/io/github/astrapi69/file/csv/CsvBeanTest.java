@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.collection.list.ListExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
-import io.github.astrapi69.evaluate.object.evaluators.EqualsHashCodeAndToStringEvaluator;
+import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.meanbean.factories.ListStringArrayFactory;
 import io.github.astrapi69.meanbean.factories.StringArrayFactory;
 

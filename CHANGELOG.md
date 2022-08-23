@@ -10,6 +10,12 @@ ADDED:
   parameters
 - new class FileInfo that can be used for file creation
 
+CHANGED:
+
+- update of silly-collection dependency to new version 20
+- update of silly-bean dependency to new version 2
+- update of test dependency jobj-contract-verifier to new version 4
+
 Version 11
 -------------
 
