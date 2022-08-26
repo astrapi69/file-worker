@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
-import io.github.astrapi69.crypto.algorithm.Algorithm;
+import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 
 /**
  * The class {@link SimpleCompareFileExtensions}.

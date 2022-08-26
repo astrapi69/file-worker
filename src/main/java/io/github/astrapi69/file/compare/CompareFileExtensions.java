@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
-import io.github.astrapi69.crypto.algorithm.HashAlgorithm;
+import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.file.compare.api.IFileContentResultBean;

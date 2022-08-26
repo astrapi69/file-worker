@@ -10,6 +10,13 @@ ADDED:
 - new factory method in FileInfo class for create the new File object from a FileInfo object
 - new factory method in FileInfo class for create the new FileInfo object from a File object
 
+CHANGED:
+
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor
+  version 6.10.0
+- update of dependency crypt-api to new version to 8.3
+- update of dependency checksum-up to new version 2.1
+
 Version 11.1
 -------------
 
