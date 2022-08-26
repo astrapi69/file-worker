@@ -35,6 +35,29 @@ public class FileInfo
 	private String name;
 	private String path;
 
+	public FileInfo(String name, String path)
+	{
+		this.name = name;
+		this.path = path;
+	}
+
+	public FileInfo()
+	{
+	}
+
+	public FileInfo(final File file)
+	{
+		Objects.requireNonNull(file);
+		this.path = file.getParentFile().getAbsolutePath();
+		this.name = file.getName();
+	}
+
+	protected FileInfo(final FileInfoBuilder<?, ?> b)
+	{
+		this.name = b.name;
+		this.path = b.path;
+	}
+
 	/**
 	 * Factory method for creating the new {@link File} from the given {@link FileInfo} object
 	 *
@@ -59,22 +82,6 @@ public class FileInfo
 		Objects.requireNonNull(file);
 		return FileInfo.builder().path(file.getParentFile().getAbsolutePath()).name(file.getName())
 			.build();
-	}
-
-	public FileInfo(String name, String path)
-	{
-		this.name = name;
-		this.path = path;
-	}
-
-	public FileInfo()
-	{
-	}
-
-	protected FileInfo(FileInfoBuilder<?, ?> b)
-	{
-		this.name = b.name;
-		this.path = b.path;
 	}
 
 	public static FileInfoBuilder<?, ?> builder()
