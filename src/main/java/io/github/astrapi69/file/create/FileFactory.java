@@ -33,6 +33,8 @@ import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 import java.util.Objects;
 
+import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
+
 /**
  * The class {@link FileFactory} helps you to create files or directories
  *
@@ -91,6 +93,25 @@ public final class FileFactory
 	 * Creates a new directory from the given {@link Path} object and the optional
 	 * {@link FileAttribute}.<br>
 	 * <br>
+	 * Note: this method decorates the {@link Files#createDirectories(Path, FileAttribute...)} and
+	 * returns if the directory is created or not.
+	 *
+	 * @param dir
+	 *            the dir the directory to create
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @return Returns true if the directory was created otherwise false.
+	 * @see Files#createDirectories(Path, FileAttribute...)
+	 */
+	public static boolean newDirectoriesQuietly(Path dir, FileAttribute<?>... attrs)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newDirectories(dir, attrs));
+	}
+
+	/**
+	 * Creates a new directory from the given {@link Path} object and the optional
+	 * {@link FileAttribute}.<br>
+	 * <br>
 	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
 	 * returns if the directory is created or not.
 	 *
@@ -107,6 +128,25 @@ public final class FileFactory
 	{
 		Path directory = Files.createDirectory(dir, attrs);
 		return Files.exists(directory);
+	}
+
+	/**
+	 * Creates a new directory from the given {@link Path} object and the optional
+	 * {@link FileAttribute}.<br>
+	 * <br>
+	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
+	 * returns if the directory is created or not.
+	 *
+	 * @param dir
+	 *            the dir the directory to create
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @return Returns true if the directory was created otherwise false.
+	 * @see Files#createDirectory(Path, FileAttribute...)
+	 */
+	public static boolean newDirectoryQuietly(Path dir, FileAttribute<?>... attrs)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newDirectory(dir, attrs));
 	}
 
 	/**
@@ -128,6 +168,26 @@ public final class FileFactory
 		if (!directory.exists())
 		{
 			newDirectory(dir);
+		}
+		return directory;
+	}
+
+	/**
+	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
+	 * new empty file will be created on the file system
+	 *
+	 * @param absolutePath
+	 *            the absolute path
+	 *
+	 * @return the file object
+	 */
+	public static File newDirectoryQuietly(final String absolutePath)
+	{
+		Path dir = Paths.get(absolutePath);
+		File directory = dir.toFile();
+		if (!directory.exists())
+		{
+			newDirectoryQuietly(dir);
 		}
 		return directory;
 	}
@@ -208,6 +268,27 @@ public final class FileFactory
 	}
 
 	/**
+	 * Factory method for creating the new directory as {@link File} objects if it is not exists.
+	 *
+	 * @param parentDirectory
+	 *            the parent directory
+	 * @param directoryName
+	 *            the directory name
+	 * @return the new directory as {@link File} object
+	 * @see Files#createDirectory(Path, FileAttribute...)
+	 */
+	public static File newDirectoryQuietly(final String parentDirectory, final String directoryName)
+	{
+		Path dir = Paths.get(parentDirectory, directoryName);
+		File directory = dir.toFile();
+		if (!directory.exists())
+		{
+			newDirectoryQuietly(dir);
+		}
+		return directory;
+	}
+
+	/**
 	 * Factory method that creates a new empty {@link File} if it is not exists, otherwise it lets
 	 * the file as it is.
 	 *
@@ -234,6 +315,20 @@ public final class FileFactory
 	}
 
 	/**
+	 * Factory method that creates a new empty {@link File} if it is not exists, otherwise it lets
+	 * the file as it is.
+	 *
+	 * @param file
+	 *            the file.
+	 *
+	 * @return the appropriate state object that describes what happen
+	 */
+	public static FileCreationState newFileQuietly(final File file)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newFile(file));
+	}
+
+	/**
 	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
 	 * new empty file will be created on the file system
 	 *
@@ -248,6 +343,20 @@ public final class FileFactory
 	public static File newFile(final String absolutePath) throws IOException
 	{
 		return newFile(absolutePath, false);
+	}
+
+	/**
+	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
+	 * new empty file will be created on the file system
+	 *
+	 * @param absolutePath
+	 *            the absolute path
+	 *
+	 * @return the file object
+	 */
+	public static File newFileQuietly(final String absolutePath)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newFile(absolutePath));
 	}
 
 	/**
@@ -271,6 +380,27 @@ public final class FileFactory
 		if (createIfNotExists)
 		{
 			newFile(file);
+		}
+		return file;
+	}
+
+	/**
+	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
+	 * new empty file will be created on the file system
+	 *
+	 * @param absolutePath
+	 *            the absolute path
+	 * @param createIfNotExists
+	 *            if this flag is true the file will be created if it does not exists
+	 *
+	 * @return the file object
+	 */
+	public static File newFileQuietly(final String absolutePath, boolean createIfNotExists)
+	{
+		File file = new File(absolutePath);
+		if (createIfNotExists)
+		{
+			newFileQuietly(file);
 		}
 		return file;
 	}
@@ -305,6 +435,20 @@ public final class FileFactory
 	 * @param filename
 	 *            the file name
 	 * @return the new {@link File} object
+	 */
+	public static File newFileQuietly(final File parentDirectory, final String filename)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newFile(parentDirectory, filename));
+	}
+
+	/**
+	 * Factory method for creating the new {@link File} if it is not exists.
+	 *
+	 * @param parentDirectory
+	 *            the parent directory
+	 * @param filename
+	 *            the file name
+	 * @return the new {@link File} object
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -313,6 +457,20 @@ public final class FileFactory
 		File file = new File(parentDirectory, filename);
 		newFile(file);
 		return file;
+	}
+
+	/**
+	 * Factory method for creating the new {@link File} if it is not exists.
+	 *
+	 * @param parentDirectory
+	 *            the parent directory
+	 * @param filename
+	 *            the file name
+	 * @return the new {@link File} object
+	 */
+	public static File newFileQuietly(final String parentDirectory, String filename)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newFile(parentDirectory, filename));
 	}
 
 	/**
@@ -327,6 +485,18 @@ public final class FileFactory
 	public static File newFile(final FileInfo fileInfo) throws IOException
 	{
 		return newFile(fileInfo.getPath(), fileInfo.getName());
+	}
+
+	/**
+	 * Factory method for creating the new {@link File} from the given {@link FileInfo} object
+	 *
+	 * @param fileInfo
+	 *            the {@link FileInfo} object
+	 * @return the new {@link File} object
+	 */
+	public static File newFileQuietly(final FileInfo fileInfo)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newFile(fileInfo));
 	}
 
 	/**
@@ -349,6 +519,20 @@ public final class FileFactory
 			created = FileFactory.newFile(file);
 		}
 		return created;
+	}
+
+	/**
+	 * Creates all files contained in the collection as empty files if the files does not exists
+	 * otherwise it lets the files as they are.
+	 *
+	 * @param files
+	 *            the Collection with the File objects.
+	 *
+	 * @return the {@link FileCreationState} object that encapsulate the creation result
+	 */
+	public static FileCreationState newFilesQuietly(final Collection<File> files)
+	{
+		return RuntimeExceptionDecorator.decorate(() -> newFiles(files));
 	}
 
 	/**

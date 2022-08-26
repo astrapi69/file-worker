@@ -4,7 +4,11 @@
 Version 11.2-SNAPSHOT
 -------------
 
+ADDED:
 
+- new factory methods in FileFactory class for create File objects quietly
+- new factory method in FileInfo class for create the new File object from a FileInfo object
+- new factory method in FileInfo class for create the new FileInfo object from a File object
 
 Version 11.1
 -------------

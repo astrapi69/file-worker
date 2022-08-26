@@ -25,6 +25,7 @@
 package io.github.astrapi69.file.create;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * The class {@link FileInfo} provides data for create a {@link File} Object
@@ -33,6 +34,32 @@ public class FileInfo
 {
 	private String name;
 	private String path;
+
+	/**
+	 * Factory method for creating the new {@link File} from the given {@link FileInfo} object
+	 *
+	 * @param fileInfo
+	 *            the {@link FileInfo} object
+	 * @return the new {@link File} object
+	 */
+	public static File toFile(FileInfo fileInfo)
+	{
+		return new File(fileInfo.getPath(), fileInfo.getName());
+	}
+
+	/**
+	 * Converts the given {@link File} object to a {@link FileInfo} object
+	 *
+	 * @param file
+	 *            the {@link File} object to convert to a {@link FileInfo} object
+	 * @return a new {@link FileInfo} object from the given {@link File} object
+	 */
+	public static FileInfo toFileInfo(final File file)
+	{
+		Objects.requireNonNull(file);
+		return FileInfo.builder().path(file.getParentFile().getAbsolutePath()).name(file.getName())
+			.build();
+	}
 
 	public FileInfo(String name, String path)
 	{

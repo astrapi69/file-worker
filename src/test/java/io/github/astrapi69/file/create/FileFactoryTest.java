@@ -128,6 +128,7 @@ public class FileFactoryTest extends FileTestCase
 		}
 	}
 
+
 	/**
 	 * Test method for
 	 * {@link FileFactory#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
@@ -503,6 +504,8 @@ public class FileFactoryTest extends FileTestCase
 		assertNotNull(file);
 		absolutePath = file.getAbsolutePath();
 		assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
+		FileInfo anotherFileInfo = FileInfo.toFileInfo(file);
+		assertEquals(anotherFileInfo, fileInfo);
 	}
 
 	/**

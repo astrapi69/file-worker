@@ -1,11 +1,40 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.file.create;
 
-import io.github.astrapi69.test.object.Company;
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 
 /**
  * The unit test class for the class {@link FileInfo}
@@ -30,6 +59,27 @@ public class FileInfoTest
 		assertTrue(model.equals((Object)FileInfo.builder().build()));
 		int hashCode = model.hashCode();
 		assertTrue(0 < hashCode);
+	}
+
+	/**
+	 * Test method for {@link FileInfo#toFileInfo(File)}
+	 */
+	@Test
+	public void testToFileInfo() throws IOException
+	{
+		String absolutePath;
+		File file;
+		FileInfo fileInfo;
+
+		fileInfo = FileInfo.builder().path("/tmp/foo/bar").name("foo.txt").build();
+		file = FileFactory.newFile(fileInfo);
+		assertTrue(file.exists());
+		assertNotNull(file);
+		absolutePath = file.getAbsolutePath();
+		assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
+		FileInfo anotherFileInfo = FileInfo.toFileInfo(file);
+		assertEquals(anotherFileInfo, fileInfo);
+		DeleteFileExtensions.delete(file);
 	}
 
 	/**
