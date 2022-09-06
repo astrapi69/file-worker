@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import io.github.astrapi69.file.search.FileSearchExtensions;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.CompressionMethod;
+import io.github.astrapi69.file.search.FileSearchExtensions;
 
 /**
  * The class {@link Zip4jExtensions}.

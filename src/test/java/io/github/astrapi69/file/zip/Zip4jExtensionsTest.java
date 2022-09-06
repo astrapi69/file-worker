@@ -32,6 +32,12 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.model.enums.CompressionLevel;
+import net.lingala.zip4j.model.enums.CompressionMethod;
+
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -40,11 +46,6 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.io.file.filter.SuffixFileFilter;
-import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.model.enums.CompressionLevel;
-import net.lingala.zip4j.model.enums.CompressionMethod;
 
 /**
  * The unit test class for the class {@link Zip4jExtensions}.
@@ -83,7 +84,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testExtract() throws FileNotFoundException, IOException
 	{
 		final File zipFile = new File(this.zipDir.getAbsoluteFile(), "Zip4j.zip");
@@ -169,7 +170,7 @@ public class Zip4jExtensionsTest extends FileTestCase
 	/**
 	 * Test for {@link Zip4jExtensions#zipFiles(ZipFile, File...)}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testZipFilesZipFileFileArray() throws IOException
 	{
 
