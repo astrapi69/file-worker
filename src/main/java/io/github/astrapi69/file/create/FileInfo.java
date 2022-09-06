@@ -59,7 +59,10 @@ public class FileInfo
 	}
 
 	/**
-	 * Factory method for creating the new {@link File} from the given {@link FileInfo} object
+	 * Factory method for creating only the new {@link File} object from the given {@link FileInfo}
+	 * object. This means that if the file does not exist it will not be created, if you want this
+	 * behavior use the {@link FileFactory#newFile(FileInfo)} or
+	 * {@link FileFactory#newFileQuietly(FileInfo)} method
 	 *
 	 * @param fileInfo
 	 *            the {@link FileInfo} object
