@@ -29,6 +29,7 @@ import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import org.testng.annotations.Test;
@@ -37,6 +38,7 @@ import io.github.astrapi69.checksum.ByteArrayChecksumExtensions;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.ChecksumAlgorithm;
 import io.github.astrapi69.file.FileExtensions;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
@@ -50,46 +52,30 @@ public class FileContentInfoTest
 	/**
 	 * Test method for {@link FileContentInfo#toFileInfo(File)}
 	 */
-	// @Test
-	// public void testToFileContentInfo() throws IOException
-	// {
-	// String absolutePath;
-	// File file;
-	// FileContentInfo fileInfo;
-	//
-	// fileInfo = FileContentInfo.builder().path("/tmp/foo/bar").name("foo.txt").build();
-	// file = FileFactory.newFile(fileInfo);
-	// assertTrue(file.exists());
-	// assertNotNull(file);
-	// absolutePath = file.getAbsolutePath();
-	// assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
-	// FileContentInfo anotherFileInfo = FileContentInfo.toFileContentInfo(file);
-	// assertEquals(anotherFileInfo, fileInfo);
-	// DeleteFileExtensions.delete(file);
-	// }
-
-	public static FileContentInfo toFileContentInfo(File file)
+	@Test
+	public void testToFileContentInfo() throws IOException
 	{
-		if (file.exists())
-		{
-			return FileContentInfo.builder().name(file.getName())
-				.path(FileExtensions.getAbsolutPathWithoutFilename(file))
-				.checksum(RuntimeExceptionDecorator.decorate(
-					() -> FileChecksumExtensions.getChecksum(file, ChecksumAlgorithm.MD5)))
-				.content(RuntimeExceptionDecorator
-					.decorate(() -> ReadFileExtensions.readFileToBytearray(file)))
-				.build();
-		}
-		return FileContentInfo.builder().name(file.getName())
-			.path(FileExtensions.getAbsolutPathWithoutFilename(file)).build();
-	}
+		String absolutePath;
+		File file;
+		FileContentInfo fileContentInfo;
 
-	public static File toFile(FileContentInfo fileContentInfo)
-	{
-		File file = new File(fileContentInfo.getPath(), fileContentInfo.getName());
-		RuntimeExceptionDecorator.decorate(
-			() -> WriteFileExtensions.storeByteArrayToFile(fileContentInfo.getContent(), file));
-		return file;
+		fileContentInfo = FileContentInfo.builder().path("/tmp/foo/bar").name("foo.txt").build();
+		file = FileFactory.newFile(fileContentInfo);
+		assertTrue(file.exists());
+		fileContentInfo.setChecksum(RuntimeExceptionDecorator
+			.decorate(() -> FileChecksumExtensions.getChecksum(file, ChecksumAlgorithm.MD5)));
+		fileContentInfo.setContent(
+			RuntimeExceptionDecorator.decorate(() -> ReadFileExtensions.readFileToBytearray(file)));
+		assertNotNull(file);
+		absolutePath = file.getAbsolutePath();
+		assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
+
+		FileContentInfo anotherFileInfo = FileContentInfo.toFileContentInfo(file);
+		assertEquals(anotherFileInfo, fileContentInfo);
+
+		File anotherFile = FileContentInfo.toFile(anotherFileInfo);
+		assertEquals(anotherFile, file);
+		DeleteFileExtensions.delete(file);
 	}
 
 	/**
