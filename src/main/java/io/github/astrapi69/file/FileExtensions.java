@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.URI;
 import java.nio.channels.FileLock;
+import java.nio.file.Files;
 
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.io.file.FilenameExtensions;
@@ -99,7 +100,9 @@ public final class FileExtensions
 	 *
 	 * @param file
 	 *            the file.
-	 * @return the filename prefix.
+	 * @return the filename prefix
+	 * @deprecated use instead the same name method in class {@link FilenameExtensions} from module
+	 *             silly-io. Note that this method will be deleted in next major release
 	 */
 	public static String getFilenamePrefix(final File file)
 	{
@@ -113,6 +116,8 @@ public final class FileExtensions
 	 *            the file.
 	 * @return 's the filename suffix or null if no suffix exists or the given file object is a
 	 *         directory.
+	 * @deprecated use instead the same name method in class {@link FilenameExtensions} from module
+	 *             silly-io. Note that this method will be deleted in next major release
 	 */
 	public static String getFilenameSuffix(final File file)
 	{
@@ -120,11 +125,27 @@ public final class FileExtensions
 	}
 
 	/**
+	 * Gets the content type from the given file object
+	 *
+	 * @param file
+	 *            the file
+	 * @return 's the content type from the given file object
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	public static String getContentType(final File file) throws IOException
+	{
+		return Files.probeContentType(file.toPath());
+	}
+
+	/**
 	 * Gets the filename without the extension or null if the given file object is a directory.
 	 *
 	 * @param file
 	 *            the file.
-	 * @return the filename without the extension or null if the given file object is a directory.
+	 * @return the filename without the extension or null if the given file object is a directory
+	 * @deprecated use instead the same name method in class {@link FilenameExtensions} from module
+	 *             silly-io. Note that this method will be deleted in next major release
 	 */
 	public static String getFilenameWithoutExtension(final File file)
 	{

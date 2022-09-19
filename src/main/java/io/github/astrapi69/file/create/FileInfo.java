@@ -32,7 +32,10 @@ import java.util.Objects;
  */
 public class FileInfo
 {
+
+	/** The name of this file */
 	private String name;
+	/** The path of this file */
 	private String path;
 
 	public FileInfo(String name, String path)

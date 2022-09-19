@@ -4,6 +4,10 @@
 Version 11.3-SNAPSHOT
 -------------
 
+ADDED:
+
+- new bean class FileContentInfo that can be used for file creation with content and the corresponding checksum
+- new method in FileExtensions that gets the content type from the file
 
 
 Version 11.2

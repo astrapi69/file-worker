@@ -145,6 +145,25 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link FileExtensions#getContentType(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testGetContentType() throws IOException
+	{
+		String actual;
+		String expected;
+		final String filePrefix = "testAppendSystemtimeToFilename";
+		final String fileSuffix = ".txt";
+		final File testFile1 = new File(this.testDir, filePrefix + fileSuffix);
+		actual = FileExtensions.getContentType(testFile1);
+		expected = "text/plain";
+		assertEquals(expected, actual);
+	}
+
+	/**
 	 * Test method for {@link FileExtensions#isOpen(File)}.
 	 *
 	 * @throws IOException
