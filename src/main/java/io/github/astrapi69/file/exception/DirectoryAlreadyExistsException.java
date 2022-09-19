@@ -38,6 +38,9 @@ public class DirectoryAlreadyExistsException extends Exception
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructs a new {@link DirectoryAlreadyExistsException} object
+	 */
 	public DirectoryAlreadyExistsException()
 	{
 	}
