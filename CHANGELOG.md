@@ -9,6 +9,11 @@ ADDED:
 - new bean class FileContentInfo that can be used for file creation with content and the corresponding checksum
 - new method in FileExtensions that gets the content type from the file
 
+CHANGED:
+
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor
+  version 6.11.0
+- update of dependency zip4j to new version 2.11.2
 
 Version 11.2
 -------------
