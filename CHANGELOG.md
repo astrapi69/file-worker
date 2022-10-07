@@ -1,13 +1,12 @@
 ## Change log
 ----------------------
 
-Version 11.4-SNAPSHOT
+Version 11.4
 -------------
 
 ADDED:
 
 - new module-info.java file
-
 
 CHANGED:
 
