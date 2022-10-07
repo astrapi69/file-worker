@@ -4,6 +4,18 @@
 Version 11.4-SNAPSHOT
 -------------
 
+ADDED:
+
+- new module-info.java file
+
+
+CHANGED:
+
+- removed dependency zip4j and all related classes
+- removed all deprecated methods in class FileExtensions
+- update of dependency silly-collections to new version 20.1
+- update of dependency silly-strings to new version 8.2
+- update of dependency comparator-extensions to new version 1.4
 
 
 Version 11.3

@@ -1,7 +1,6 @@
 dependencies {
     implementation("commons-io:commons-io:$commonsIoVersion")
     implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
-    implementation("net.lingala.zip4j:zip4j:$zip4jVersion")
     implementation("io.github.astrapi69:crypt-api:$cryptApiVersion")
     implementation("io.github.astrapi69:throwable:$throwableVersion")
     implementation("io.github.astrapi69:silly-collection:$sillyCollectionVersion")

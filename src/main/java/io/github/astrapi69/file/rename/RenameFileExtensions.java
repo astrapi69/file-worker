@@ -39,6 +39,7 @@ import io.github.astrapi69.file.exception.FileDoesNotExistException;
 import io.github.astrapi69.file.exception.FileIsADirectoryException;
 import io.github.astrapi69.file.exception.FileNotRenamedException;
 import io.github.astrapi69.file.search.FileSearchExtensions;
+import io.github.astrapi69.io.file.FilenameExtensions;
 
 /**
  * The class {@link RenameFileExtensions} helps you to rename files or directories.
@@ -225,7 +226,7 @@ public final class RenameFileExtensions
 			final String error = "The " + file + " does not exists.";
 			throw new FileDoesNotExistException(error);
 		}
-		final String fileNamePrefix = FileExtensions.getFilenamePrefix(file);
+		final String fileNamePrefix = FilenameExtensions.getFilenamePrefix(file);
 		final String newFilename = fileNamePrefix + newSuffix;
 		final File file2 = new File(newFilename);
 		final boolean success = RenameFileExtensions.renameFile(file, file2, delete);

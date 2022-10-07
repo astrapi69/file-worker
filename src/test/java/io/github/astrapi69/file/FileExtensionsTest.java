@@ -113,38 +113,6 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link FileExtensions#getFilenamePrefix(File)}.
-	 */
-	@Test
-	public void testGetFilenamePrefix()
-	{
-		final String filePrefix = "testGetFilenamePrefix";
-		final String fileSuffix = ".txt";
-
-		final File testFile1 = new File(this.testDir, filePrefix + fileSuffix);
-		final String ap = testFile1.getAbsolutePath();
-		final int ext_index = ap.lastIndexOf(".");
-		final String expected = ap.substring(0, ext_index);
-		final String compare = FileExtensions.getFilenamePrefix(testFile1);
-		this.actual = expected.equals(compare);
-		assertTrue("", this.actual);
-	}
-
-	/**
-	 * Test method for {@link FileExtensions#getFilenameSuffix(File)}.
-	 */
-	@Test
-	public void testGetFilenameSuffix()
-	{
-		final String filePrefix = "testAppendSystemtimeToFilename";
-		final String fileSuffix = ".txt";
-		final File testFile1 = new File(this.testDir, filePrefix + fileSuffix);
-		final String compare = FileExtensions.getFilenameSuffix(testFile1);
-		this.actual = fileSuffix.equals(compare);
-		assertTrue("", this.actual);
-	}
-
-	/**
 	 * Test method for {@link FileExtensions#getContentType(File)}
 	 *
 	 * @throws IOException

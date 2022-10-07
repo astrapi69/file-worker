@@ -35,11 +35,11 @@ import java.util.List;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
-import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.compare.api.IFileCompareResultBean;
 import io.github.astrapi69.file.compare.api.IFileContentResultBean;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.io.StreamExtensions;
+import io.github.astrapi69.io.file.FilenameExtensions;
 
 /**
  * The class {@link CompareFileExtensions} helps you to compare files.
@@ -93,8 +93,8 @@ public final class CompareFileExtensions
 		if (!ignoreExtensionEquality)
 		{
 			// check the file extension...
-			final String sourceFileExtension = FileExtensions.getFilenameSuffix(source);
-			final String compareFileExtension = FileExtensions.getFilenameSuffix(compare);
+			final String sourceFileExtension = FilenameExtensions.getFilenameSuffix(source);
+			final String compareFileExtension = FilenameExtensions.getFilenameSuffix(compare);
 
 			final boolean extensionEquality = compareFileExtension
 				.equalsIgnoreCase(sourceFileExtension);
@@ -130,8 +130,8 @@ public final class CompareFileExtensions
 		if (!ignoreNameEquality)
 		{
 			// check the filename...
-			final String sourceFilename = FileExtensions.getFilenameWithoutExtension(source);
-			final String compareFilename = FileExtensions.getFilenameWithoutExtension(compare);
+			final String sourceFilename = FilenameExtensions.getFilenameWithoutExtension(source);
+			final String compareFilename = FilenameExtensions.getFilenameWithoutExtension(compare);
 			final boolean nameEquality = compareFilename.equalsIgnoreCase(sourceFilename);
 			fileCompareResultBean.setNameEquality(nameEquality);
 		}
