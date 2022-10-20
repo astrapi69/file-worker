@@ -11,6 +11,7 @@ ADDED:
 CHANGED:
 
 - moved all factory methods from FileFactory related to directories to new factory class DirectoryFactory
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.43.0
 
 Version 11.4
 -------------
