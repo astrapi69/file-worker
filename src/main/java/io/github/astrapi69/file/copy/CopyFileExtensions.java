@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import io.github.astrapi69.file.create.FileFactory;
+import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.exception.FileIsADirectoryException;
 import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
@@ -239,7 +239,7 @@ public final class CopyFileExtensions
 		}
 		if (!destination.exists())
 		{
-			FileFactory.newDirectory(destination);
+			DirectoryFactory.newDirectory(destination);
 		}
 		boolean copied = false;
 		File[] includeFilesArray;
@@ -391,7 +391,7 @@ public final class CopyFileExtensions
 		}
 		if (!destination.exists())
 		{
-			FileFactory.newDirectory(destination);
+			DirectoryFactory.newDirectory(destination);
 		}
 		boolean copied = false;
 		File[] includeFilesArray;
@@ -580,7 +580,7 @@ public final class CopyFileExtensions
 	{
 		if (!destination.exists())
 		{
-			FileFactory.newDirectory(destination);
+			DirectoryFactory.newDirectory(destination);
 		}
 		sources.forEach(RuntimeExceptionDecorator.decorate(file -> {
 			File destinationFile = new File(destination, file.getName());

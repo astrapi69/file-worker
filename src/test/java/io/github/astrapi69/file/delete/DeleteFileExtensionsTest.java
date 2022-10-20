@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.github.astrapi69.file.create.DirectoryFactory;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -109,7 +110,7 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		assertTrue("", this.actual);
 		if (!this.testDir.exists())
 		{
-			final FileCreationState state = FileFactory.newDirectory(this.testDir);
+			final FileCreationState state = DirectoryFactory.newDirectory(this.testDir);
 			assertTrue("The directory should be created.", state.equals(FileCreationState.CREATED));
 		}
 		ex = DeleteFileExtensions.checkFile(this.testDir);

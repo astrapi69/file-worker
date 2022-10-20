@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import io.github.astrapi69.file.create.DirectoryFactory;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -132,7 +133,7 @@ public class ZipExtensionsTest extends ZipTestCase
 			+ File.separator + "deeperDir" + File.separator + file8);
 		if (!this.unzipDirTestDir.exists())
 		{
-			FileFactory.newDirectory(this.unzipDirTestDir);
+			DirectoryFactory.newDirectory(this.unzipDirTestDir);
 		}
 		ZipFile zf = new ZipFile(zipFile);
 		ZipExtensions.extractZipEntry(zf, zipEntry, this.unzipDir);

@@ -43,6 +43,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import io.github.astrapi69.collection.set.SetFactory;
+import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.exception.FileDoesNotExistException;
 import io.github.astrapi69.file.search.FileSearchExtensions;
@@ -100,7 +101,7 @@ public final class ZipExtensions
 		final File toDirectory) throws IOException
 	{
 		final File fileToExtract = new File(toDirectory, target.getName());
-		FileFactory.mkParentDirs(fileToExtract);
+		DirectoryFactory.mkParentDirs(fileToExtract);
 		try (InputStream is = zipFile.getInputStream(target);
 			BufferedInputStream bis = new BufferedInputStream(is);
 			FileOutputStream fos = new FileOutputStream(fileToExtract);

@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import io.github.astrapi69.file.create.DirectoryFactory;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -87,7 +88,7 @@ public class CsvFileExtensionsTest
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
-			final FileCreationState state = FileFactory.newDirectory(testResources);
+			final FileCreationState state = DirectoryFactory.newDirectory(testResources);
 			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 		}

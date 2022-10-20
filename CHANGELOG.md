@@ -4,7 +4,13 @@
 Version 11.5-SNAPSHOT
 -------------
 
+ADDED:
 
+- new factory class DirectoryFactory for create directories and directory structures
+
+CHANGED:
+
+- moved all factory methods from FileFactory related to directories to new factory class DirectoryFactory
 
 Version 11.4
 -------------

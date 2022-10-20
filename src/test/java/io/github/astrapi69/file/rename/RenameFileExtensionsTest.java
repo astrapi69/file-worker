@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.github.astrapi69.file.create.DirectoryFactory;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -365,7 +366,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		// if the testfile does not exist create it.
 		if (!srcDir.exists())
 		{
-			final FileCreationState state = FileFactory.newDirectory(srcDir);
+			final FileCreationState state = DirectoryFactory.newDirectory(srcDir);
 			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 			WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
