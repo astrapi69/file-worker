@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.github.astrapi69.collection.array.ArrayFactory;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -78,13 +79,102 @@ public class DirectoryFactoryTest extends FileTestCase
 		super.tearDown();
 	}
 
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryStructure(File, Collection)}
+	 */
 	@Test
-	public void testNewDirectoryStructure() throws IOException
+	public void testNewDirectoryStructureFileCollection() throws IOException
 	{
-		final File parent = DirectoryFactory.newDirectory("C:\\tmp\\foo\\bar");
-		Collection<File> directories = DirectoryFactory.newDirectoryStructure(parent,
-			ListFactory.newArrayList("action", "model", "state", "reducer", "reducer/main"));
-		DeleteFileExtensions.delete(directories);
+		Collection<File> actual;
+		Collection<File> expected;
+		Collection<String> filePaths;
+		File parent;
+		// new scenario...
+		filePaths = ListFactory.newArrayList("action", "model", "state", "reducer", "reducer/main");
+		parent = DirectoryFactory.newDirectory("/tmp/foo/bar");
+		actual = DirectoryFactory.newDirectoryStructure(parent, filePaths);
+		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
+			DirectoryFactory.newDirectory(parent, "model"),
+			DirectoryFactory.newDirectory(parent, "state"),
+			DirectoryFactory.newDirectory(parent, "reducer"),
+			DirectoryFactory.newDirectory(parent, "reducer/main"));
+		assertEquals(expected, actual);
+		DeleteFileExtensions.delete(actual);
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryStructure(String, Collection)}
+	 */
+	@Test
+	public void testNewDirectoryStructureStringCollection() throws IOException
+	{
+		Collection<File> actual;
+		Collection<File> expected;
+		Collection<String> filePaths;
+		String parentAbsolutePath;
+		File parent;
+		// new scenario...
+		filePaths = ListFactory.newArrayList("action", "model", "state", "reducer", "reducer/main");
+		parentAbsolutePath = "/tmp/foo/bar";
+		actual = DirectoryFactory.newDirectoryStructure(parentAbsolutePath, filePaths);
+		parent = DirectoryFactory.newDirectory(parentAbsolutePath);
+		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
+			DirectoryFactory.newDirectory(parent, "model"),
+			DirectoryFactory.newDirectory(parent, "state"),
+			DirectoryFactory.newDirectory(parent, "reducer"),
+			DirectoryFactory.newDirectory(parent, "reducer/main"));
+		assertEquals(expected, actual);
+		DeleteFileExtensions.delete(actual);
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryStructure(String, String...)}
+	 */
+	@Test
+	public void testNewDirectoryStructureStringVararg() throws IOException
+	{
+		Collection<File> actual;
+		Collection<File> expected;
+		String[] filePaths;
+		String parentAbsolutePath;
+		File parent;
+		// new scenario...
+		filePaths = ArrayFactory.newArray("action", "model", "state", "reducer", "reducer/main");
+		parentAbsolutePath = "/tmp/foo/bar";
+		actual = DirectoryFactory.newDirectoryStructure(parentAbsolutePath, filePaths);
+		parent = DirectoryFactory.newDirectory(parentAbsolutePath);
+		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
+			DirectoryFactory.newDirectory(parent, "model"),
+			DirectoryFactory.newDirectory(parent, "state"),
+			DirectoryFactory.newDirectory(parent, "reducer"),
+			DirectoryFactory.newDirectory(parent, "reducer/main"));
+		assertEquals(expected, actual);
+		DeleteFileExtensions.delete(actual);
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryStructure(File, String...)}
+	 */
+	@Test
+	public void testNewDirectoryStructureFileVararg() throws IOException
+	{
+		Collection<File> actual;
+		Collection<File> expected;
+		String[] filePaths;
+		String parentAbsolutePath;
+		File parent;
+		// new scenario...
+		filePaths = ArrayFactory.newArray("action", "model", "state", "reducer", "reducer/main");
+		parentAbsolutePath = "/tmp/foo/bar";
+		parent = DirectoryFactory.newDirectory(parentAbsolutePath);
+		actual = DirectoryFactory.newDirectoryStructure(parent, filePaths);
+		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
+			DirectoryFactory.newDirectory(parent, "model"),
+			DirectoryFactory.newDirectory(parent, "state"),
+			DirectoryFactory.newDirectory(parent, "reducer"),
+			DirectoryFactory.newDirectory(parent, "reducer/main"));
+		assertEquals(expected, actual);
+		DeleteFileExtensions.delete(actual);
 	}
 
 	/**
@@ -160,6 +250,42 @@ public class DirectoryFactoryTest extends FileTestCase
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
 		actual = DirectoryFactory.newDirectories(dirPath);
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = Files.exists(dirPath);
+		assertEquals(expected, actual);
+
+		actual = dirPath.toFile().isDirectory();
+		assertEquals(expected, actual);
+
+		// Finally delete the test directory...
+		DeleteFileExtensions.delete(dirPath.toFile());
+	}
+
+
+	/**
+	 * Test method for
+	 * {@link DirectoryFactory#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testNewDirectoriesQuietlyWithPath() throws IOException
+	{
+		boolean actual;
+		boolean expected;
+		Path dirPath;
+		// new scenario...
+		dirPath = Paths.get(this.testResources.getAbsolutePath(), "test", "dir", "last");
+		new File(this.testResources, "testCreateDirectory");
+		// if the directory exist delete it to prevent a DirectoryAlreadyExistsException.
+		if (Files.exists(dirPath))
+		{
+			DeleteFileExtensions.delete(dirPath.toFile());
+		}
+		actual = DirectoryFactory.newDirectoriesQuietly(dirPath);
 		expected = true;
 		assertEquals(expected, actual);
 
@@ -367,6 +493,41 @@ public class DirectoryFactoryTest extends FileTestCase
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
 		actual = DirectoryFactory.newDirectory(dirPath);
+		expected = true;
+		assertEquals(expected, actual);
+
+		actual = Files.exists(dirPath);
+		assertEquals(expected, actual);
+
+		actual = dirPath.toFile().isDirectory();
+		assertEquals(expected, actual);
+
+		// Finally delete the test directory...
+		DeleteFileExtensions.delete(dirPath.toFile());
+	}
+
+	/**
+	 * Test method for
+	 * {@link DirectoryFactory#newDirectoryQuietly(Path, java.nio.file.attribute.FileAttribute...)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testNewDirectoryQuietlyWithPath() throws IOException
+	{
+		boolean actual;
+		boolean expected;
+		Path dirPath;
+		// new scenario...
+		dirPath = Paths.get(this.testResources.getAbsolutePath(), "testCreateDirectory");
+		new File(this.testResources, "testCreateDirectory");
+		// if the directory exist delete it to prevent a DirectoryAlreadyExistsException.
+		if (Files.exists(dirPath))
+		{
+			DeleteFileExtensions.delete(dirPath.toFile());
+		}
+		actual = DirectoryFactory.newDirectoryQuietly(dirPath);
 		expected = true;
 		assertEquals(expected, actual);
 

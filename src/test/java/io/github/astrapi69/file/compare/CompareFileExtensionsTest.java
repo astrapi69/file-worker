@@ -306,7 +306,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#compare(IFileContentResultBean, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testCompareIFileContentResultBeanBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
 		actual = new FileContentResultBean(testFile1, testFile2);
