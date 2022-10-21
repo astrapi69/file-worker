@@ -79,8 +79,15 @@ public class FileContentInfo extends FileInfo
 	public static File toFile(FileContentInfo fileContentInfo)
 	{
 		File file = new File(fileContentInfo.getPath(), fileContentInfo.getName());
-		RuntimeExceptionDecorator.decorate(
-			() -> WriteFileExtensions.storeByteArrayToFile(fileContentInfo.getContent(), file));
+		if (!fileContentInfo.isDirectory())
+		{
+			if (!file.exists())
+			{
+				RuntimeExceptionDecorator.decorate(() -> FileFactory.newFile(file));
+			}
+			RuntimeExceptionDecorator.decorate(
+				() -> WriteFileExtensions.storeByteArrayToFile(fileContentInfo.getContent(), file));
+		}
 		return file;
 	}
 
