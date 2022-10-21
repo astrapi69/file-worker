@@ -7,6 +7,8 @@ Version 11.5-SNAPSHOT
 ADDED:
 
 - new factory class DirectoryFactory for create directories and directory structures
+- new flag directory in FileInfo class
+- new methods for get the temporary file of the user
 
 CHANGED:
 

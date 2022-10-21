@@ -50,7 +50,7 @@ public class FileInfoTest
 	{
 		FileInfo model = new FileInfo();
 		assertNotNull(model);
-		model = new FileInfo("foo", "bar");
+		model = new FileInfo("foo", "bar", false);
 		assertNotNull(model);
 		model = FileInfo.builder().build();
 		assertNotNull(model);

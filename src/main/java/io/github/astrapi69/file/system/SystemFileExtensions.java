@@ -49,6 +49,11 @@ public final class SystemFileExtensions
 	 */
 	public static final String DEFAULT_USER_DOWNLOAD_DIRECTORY_NAME = "Downloads";
 
+	/**
+	 * Constant for the default temporary directory from the current user. current value:"tmp"
+	 */
+	public static final String DEFAULT_USER_TEMPORARY_DIRECTORY_NAME = "tmp";
+
 	private SystemFileExtensions()
 	{
 	}
@@ -112,6 +117,35 @@ public final class SystemFileExtensions
 		}
 		String userHomePath = SystemPropertiesExtensions.getUserHome();
 		return new File(userHomePath + File.separator + ddn);
+	}
+
+	/**
+	 * Gets the users temporary directory from the system as {@link File} object
+	 *
+	 * @return the users temporary directory from the system as {@link File} object
+	 */
+	public static File getUserTempDir()
+	{
+		return getUserTempDir("");
+	}
+
+	/**
+	 * Gets the users temporary directory from the system as {@link File} object
+	 *
+	 * @param tempDirname
+	 *            The name of the temporary directory, if null or empty the default value
+	 *            'Downloads' will be taken
+	 * @return the users temporary directory from the system as {@link File} object
+	 */
+	public static File getUserTempDir(String tempDirname)
+	{
+		String tdn = tempDirname;
+		if (tempDirname == null || tempDirname.isEmpty())
+		{
+			tdn = DEFAULT_USER_TEMPORARY_DIRECTORY_NAME;
+		}
+		String userHomePath = SystemPropertiesExtensions.getUserHome();
+		return new File(userHomePath + File.separator + tdn);
 	}
 
 	/**

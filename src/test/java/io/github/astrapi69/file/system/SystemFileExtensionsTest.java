@@ -76,7 +76,28 @@ public class SystemFileExtensionsTest
 	public void testGetUserDownloadsDirWithString()
 	{
 		File userDownloadsDir = SystemFileExtensions
-			.getUserDownloadsDir(SystemFileExtensions.DEFAULT_USER_CONFIGURATION_DIRECTORY_NAME);
+			.getUserDownloadsDir(SystemFileExtensions.DEFAULT_USER_DOWNLOAD_DIRECTORY_NAME);
+		assertNotNull(userDownloadsDir);
+	}
+
+	/**
+	 * Test method for {@link SystemFileExtensions#getUserTempDir()}
+	 */
+	@Test
+	public void testGetUserTempDir()
+	{
+		File userHomeDir = SystemFileExtensions.getUserTempDir();
+		assertNotNull(userHomeDir);
+	}
+
+	/**
+	 * Test method for {@link SystemFileExtensions#getUserTempDir(String)}
+	 */
+	@Test
+	public void testGetUserTempDirWithString()
+	{
+		File userDownloadsDir = SystemFileExtensions
+			.getUserTempDir(SystemFileExtensions.DEFAULT_USER_TEMPORARY_DIRECTORY_NAME);
 		assertNotNull(userDownloadsDir);
 	}
 
