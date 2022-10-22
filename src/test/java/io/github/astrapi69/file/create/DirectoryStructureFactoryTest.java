@@ -28,7 +28,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import org.testng.annotations.Test;
@@ -36,13 +35,13 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link DirectoryStructureFactory}
  */
 public class DirectoryStructureFactoryTest
 {
-
 
 	/**
 	 * Test method for {@link DirectoryStructureFactory#newDirectoryStructure(Collection)}
@@ -54,40 +53,18 @@ public class DirectoryStructureFactoryTest
 		Collection<File> expected;
 		Collection<FileContentInfo> fileInfos;
 		String parentAbsolutePath;
-		FileContentInfo fileContentInfo;
 		// new scenario...
-		fileInfos = ListFactory.newArrayList();
+		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
+		File parentFile = DirectoryFactory.newDirectory(absolutePath, "app");
+		parentAbsolutePath = parentFile.getAbsolutePath();
+		fileInfos = DirectoryStructureTestData.newTestData(parentAbsolutePath);
 		expected = ListFactory.newArrayList();
-		parentAbsolutePath = "/tmp/foo/bar";
-		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("action")
-			.directory(true).build();
-		fileInfos.add(fileContentInfo);
-		expected.add(FileInfo.toFile(fileContentInfo));
-		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("model")
-			.directory(true).build();
-		fileInfos.add(fileContentInfo);
-		expected.add(FileInfo.toFile(fileContentInfo));
-
-		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/action")
-			.name("foo.txt").content("foo content".getBytes(StandardCharsets.UTF_8)).build();
-		fileInfos.add(fileContentInfo);
-		expected.add(FileInfo.toFile(fileContentInfo));
-		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/action")
-			.name("bar.txt").content("bar content".getBytes(StandardCharsets.UTF_8)).build();
-		fileInfos.add(fileContentInfo);
-		expected.add(FileInfo.toFile(fileContentInfo));
-
-		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/model")
-			.name("foo.txt").content("foo content".getBytes(StandardCharsets.UTF_8)).build();
-		fileInfos.add(fileContentInfo);
-		expected.add(FileInfo.toFile(fileContentInfo));
-		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/model")
-			.name("bar.txt").content("bar content".getBytes(StandardCharsets.UTF_8)).build();
-		fileInfos.add(fileContentInfo);
-		expected.add(FileInfo.toFile(fileContentInfo));
+		fileInfos.forEach(fileContentInfo1 -> expected.add(FileInfo.toFile(fileContentInfo1)));
 
 		actual = DirectoryStructureFactory.newDirectoryStructure(fileInfos);
 		assertEquals(expected, actual);
+		// cleanup...
+		actual.add(parentFile);
 		DeleteFileExtensions.delete(actual);
 	}
 

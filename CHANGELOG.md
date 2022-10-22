@@ -6,7 +6,8 @@ Version 11.5-SNAPSHOT
 
 ADDED:
 
-- new factory class DirectoryFactory for create directories 
+- new extension class for merge directories in to a target directory
+- new factory class DirectoryFactory for create directories
 - new factory class DirectoryStructureFactory for create directory structures
 - new flag directory in FileInfo class
 - new methods for get the temporary file of the user
