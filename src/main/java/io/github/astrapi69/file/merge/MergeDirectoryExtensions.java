@@ -31,6 +31,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 
+import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
+
 /**
  * The class {@link MergeDirectoryExtensions} provides methods for simple merge of directories
  */
@@ -49,18 +51,22 @@ public class MergeDirectoryExtensions
 	 */
 	public static void merge(File targetDir, File... directoriesToMerge) throws IOException
 	{
-		final Map<String, File> fileStore = new HashMap<>();
-		for (File directoryToMerge : directoriesToMerge)
-		{
-			refreshFileStore(directoryToMerge, fileStore, null);
-		}
-
-		for (final Map.Entry<String, File> fileEntry : fileStore.entrySet())
-		{
+		newFileMergeStore(directoriesToMerge).entrySet().stream().forEach(fileEntry -> {
 			final String relativeName = fileEntry.getKey();
 			final File srcFile = fileEntry.getValue();
-			FileUtils.copyFile(srcFile, new File(targetDir, relativeName));
+			RuntimeExceptionDecorator
+				.decorate(() -> FileUtils.copyFile(srcFile, new File(targetDir, relativeName)));
+		});
+	}
+
+	private static Map<String, File> newFileMergeStore(File... directoriesToMerge)
+	{
+		final Map<String, File> fileMergeStore = new HashMap<>();
+		for (File directoryToMerge : directoriesToMerge)
+		{
+			refreshFileStore(directoryToMerge, fileMergeStore, null);
 		}
+		return fileMergeStore;
 	}
 
 	private static void refreshFileStore(final File baseDirectory,
@@ -69,17 +75,17 @@ public class MergeDirectoryExtensions
 		for (final File file : baseDirectory.listFiles())
 		{
 			final String relativeFileName = getRelativeFileName(relativeName, file.getName());
-			if (file.isDirectory())
-			{
-				refreshFileStore(file, fileStore, relativeFileName);
-			}
-			else
+			if (file.isFile())
 			{
 				final File existingFile = fileStore.get(relativeFileName);
 				if (existingFile == null || file.lastModified() > existingFile.lastModified())
 				{
 					fileStore.put(relativeFileName, file);
 				}
+			}
+			else
+			{
+				refreshFileStore(file, fileStore, relativeFileName);
 			}
 		}
 	}
