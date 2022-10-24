@@ -62,7 +62,7 @@ public class FileContentInfo extends FileInfo
 
 	public static FileContentInfo toFileContentInfo(File file)
 	{
-		if (file.exists())
+		if (file.exists() && file.isFile())
 		{
 			return FileContentInfo.builder().name(file.getName())
 				.path(FileExtensions.getAbsolutPathWithoutFilename(file))
@@ -72,7 +72,7 @@ public class FileContentInfo extends FileInfo
 					.decorate(() -> ReadFileExtensions.readFileToBytearray(file)))
 				.build();
 		}
-		return FileContentInfo.builder().name(file.getName())
+		return FileContentInfo.builder().name(file.getName()).directory(true)
 			.path(FileExtensions.getAbsolutPathWithoutFilename(file)).build();
 	}
 

@@ -24,12 +24,18 @@
  */
 package io.github.astrapi69.file.create;
 
-import io.github.astrapi69.collection.array.ArrayExtensions;
-import io.github.astrapi69.collection.list.ListFactory;
-
 import java.io.File;
 import java.util.Collection;
 
+import io.github.astrapi69.collection.array.ArrayExtensions;
+import io.github.astrapi69.collection.list.ListFactory;
+
+/**
+ * The class {@link DirectoryStructureFactory} helps you to create directory structures
+ *
+ * @author Asterios Raptis
+ * @version 1.0
+ */
 public class DirectoryStructureFactory
 {
 

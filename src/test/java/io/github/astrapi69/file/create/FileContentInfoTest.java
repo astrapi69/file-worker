@@ -37,10 +37,8 @@ import org.testng.annotations.Test;
 import io.github.astrapi69.checksum.ByteArrayChecksumExtensions;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.ChecksumAlgorithm;
-import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
@@ -51,6 +49,9 @@ public class FileContentInfoTest
 
 	/**
 	 * Test method for {@link FileContentInfo#toFileInfo(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	public void testToFileContentInfo() throws IOException

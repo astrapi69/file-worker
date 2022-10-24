@@ -1,9 +1,36 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.file.create;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
+import io.github.astrapi69.checksum.ByteArrayChecksumExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.crypt.api.algorithm.ChecksumAlgorithm;
 
 public class DirectoryStructureTestData
 {
@@ -24,9 +51,9 @@ public class DirectoryStructureTestData
 	 *
 	 * @return the collection with file infos with the above directory structure
 	 */
-	public static Collection<FileContentInfo> newOtherTestData(String parentAbsolutePath)
+	public static List<FileContentInfo> newOtherTestData(String parentAbsolutePath)
 	{
-		Collection<FileContentInfo> fileInfos;
+		List<FileContentInfo> fileInfos;
 		FileContentInfo fileContentInfo;
 		// new scenario...
 		fileInfos = ListFactory.newArrayList();
@@ -90,9 +117,10 @@ public class DirectoryStructureTestData
 	 *
 	 * @return the collection with file infos with the above directory structure
 	 */
-	public static Collection<FileContentInfo> newTestData(String parentAbsolutePath)
+	public static List<FileContentInfo> newTestData(String parentAbsolutePath)
+		throws NoSuchAlgorithmException
 	{
-		Collection<FileContentInfo> fileInfos;
+		List<FileContentInfo> fileInfos;
 		FileContentInfo fileContentInfo;
 		// new scenario...
 		fileInfos = ListFactory.newArrayList();
@@ -112,6 +140,8 @@ public class DirectoryStructureTestData
 		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/action")
 			.name("app.action.ts").content(appActionContent.getBytes(StandardCharsets.UTF_8))
 			.build();
+		fileContentInfo.setChecksum(ByteArrayChecksumExtensions
+			.getChecksum(fileContentInfo.getContent(), ChecksumAlgorithm.MD5));
 		fileInfos.add(fileContentInfo);
 		String homeComponentTsContent = "import { Component } from '@angular/core';\n"
 			+ "import { Store, select } from '@ngrx/store';\n"
@@ -126,6 +156,8 @@ public class DirectoryStructureTestData
 		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/component")
 			.name("home.component.ts")
 			.content(homeComponentTsContent.getBytes(StandardCharsets.UTF_8)).build();
+		fileContentInfo.setChecksum(ByteArrayChecksumExtensions
+			.getChecksum(fileContentInfo.getContent(), ChecksumAlgorithm.MD5));
 		fileInfos.add(fileContentInfo);
 		String homeComponentHtmlContent = "<button id=\"multiply\" (click)=\"multiply()\">Multiply</button>\n\n"
 			+ "<div>Current Value: {{ value$ | async }}</div>\n\n"
@@ -133,6 +165,8 @@ public class DirectoryStructureTestData
 		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/component")
 			.name("home.component.html")
 			.content(homeComponentHtmlContent.getBytes(StandardCharsets.UTF_8)).build();
+		fileContentInfo.setChecksum(ByteArrayChecksumExtensions
+			.getChecksum(fileContentInfo.getContent(), ChecksumAlgorithm.MD5));
 		fileInfos.add(fileContentInfo);
 
 		String articleComponentTsContent = "import { Component } from '@angular/core';\n" + "\n"
@@ -142,11 +176,15 @@ public class DirectoryStructureTestData
 		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/component/article")
 			.name("article.component.ts")
 			.content(articleComponentTsContent.getBytes(StandardCharsets.UTF_8)).build();
+		fileContentInfo.setChecksum(ByteArrayChecksumExtensions
+			.getChecksum(fileContentInfo.getContent(), ChecksumAlgorithm.MD5));
 		fileInfos.add(fileContentInfo);
 		String articleComponentHtmlContent = "<div></div>";
 		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/component/article")
 			.name("article.component.html")
 			.content(articleComponentHtmlContent.getBytes(StandardCharsets.UTF_8)).build();
+		fileContentInfo.setChecksum(ByteArrayChecksumExtensions
+			.getChecksum(fileContentInfo.getContent(), ChecksumAlgorithm.MD5));
 		fileInfos.add(fileContentInfo);
 		return fileInfos;
 	}

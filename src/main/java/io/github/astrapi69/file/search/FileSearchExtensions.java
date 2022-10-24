@@ -273,10 +273,10 @@ public final class FileSearchExtensions
 		{
 			return length;
 		}
-		for (final File element : children)
+		for (final File child : children)
 		{
 			// if the entry is a directory
-			if (element.isDirectory())
+			if (child.isDirectory())
 			{ // then
 				// if directories shell be include
 				if (includeDirectories)
@@ -285,7 +285,7 @@ public final class FileSearchExtensions
 					length++;
 				}
 				// find recursively in the directory the files.
-				length = countAllFilesInDirectory(element, length, includeDirectories);
+				length = countAllFilesInDirectory(child, length, includeDirectories);
 			}
 			else
 			{
@@ -314,23 +314,23 @@ public final class FileSearchExtensions
 		{
 			return foundFiles;
 		}
-		for (final File element : children)
+		for (final File child : children)
 		{
 			// if the entry is a directory
-			if (element.isDirectory())
+			if (child.isDirectory())
 			{ // then
 				// find recursively in the directory and put it in a List.
-				final List<File> foundedFiles = findAllFiles(element, fileSearchPattern);
+				final List<File> foundedFiles = findAllFiles(child, fileSearchPattern);
 				// Put the founded files in the main List.
 				foundFiles.addAll(foundedFiles);
 			}
 			else
 			{
 				// entry is a file
-				final String filename = element.getName();
+				final String filename = child.getName();
 				if (filename.matches(fileSearchPattern))
 				{
-					foundFiles.add(element.getAbsoluteFile());
+					foundFiles.add(child.getAbsoluteFile());
 				}
 			}
 		}
@@ -418,6 +418,21 @@ public final class FileSearchExtensions
 	 */
 	public static List<File> findFilesRecursive(final File dir, final String filenameToSearch)
 	{
+		return findFilesRecursive(dir, false, filenameToSearch);
+	}
+
+	/**
+	 * Finds all files that match the search pattern. The search is recursively.
+	 *
+	 * @param dir
+	 *            The directory to search.
+	 * @param filenameToSearch
+	 *            The search pattern. Allowed wildcards are "*" and "?".
+	 * @return A List with all files that matches the search pattern.
+	 */
+	public static List<File> findFilesRecursive(final File dir, final boolean includeDir,
+		final String filenameToSearch)
+	{
 		final List<File> foundedFileList = new ArrayList<>();
 		final String regex = RegExExtensions.replaceWildcardsWithRE(filenameToSearch);
 		// Get all files
@@ -431,8 +446,14 @@ public final class FileSearchExtensions
 			// if the entry is a directory
 			if (element.isDirectory())
 			{ // then
+				// check if the directory should be included
+				if (includeDir)
+				{
+					foundedFileList.add(element);
+				}
 				// find recursively in the directory and put it in a List.
-				final List<File> foundedFiles = findFilesRecursive(element, filenameToSearch);
+				final List<File> foundedFiles = findFilesRecursive(element, includeDir,
+					filenameToSearch);
 				// Put the founded files in the main List.
 				foundedFileList.addAll(foundedFiles);
 			}
@@ -521,6 +542,19 @@ public final class FileSearchExtensions
 	public static List<File> getAllFilesFromDirRecursive(final File dir)
 	{
 		return findFilesRecursive(dir, "*");
+	}
+
+	/**
+	 * Gets all the files from directory recursive.
+	 *
+	 * @param dir
+	 *            the directory
+	 *
+	 * @return the all files from dir recursive
+	 */
+	public static List<File> getAllFilesFromDirRecursive(final File dir, final boolean includeDir)
+	{
+		return findFilesRecursive(dir, includeDir, "*");
 	}
 
 	/**

@@ -28,6 +28,7 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 import org.testng.annotations.Test;
@@ -47,7 +48,7 @@ public class DirectoryStructureFactoryTest
 	 * Test method for {@link DirectoryStructureFactory#newDirectoryStructure(Collection)}
 	 */
 	@Test
-	public void testNewDirectoryStructureWithContent() throws IOException
+	public void testNewDirectoryStructureWithContent() throws IOException, NoSuchAlgorithmException
 	{
 		Collection<File> actual;
 		Collection<File> expected;

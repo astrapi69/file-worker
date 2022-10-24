@@ -22,52 +22,47 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.merge;
+package io.github.astrapi69.file.create;
+
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
+import java.util.List;
 
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.create.DirectoryFactory;
-import io.github.astrapi69.file.create.DirectoryStructureFactory;
-import io.github.astrapi69.file.create.DirectoryStructureTestData;
-import io.github.astrapi69.file.create.FileContentInfo;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.collection.CollectionExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
-public class MergeDirectoryExtensionsTest
+/**
+ * The unit test class for the class {@link DirectoryStructureExtensions}
+ */
+public class DirectoryStructureExtensionsTest
 {
 
+	/**
+	 * Test method for {@link DirectoryStructureExtensions#getFileContentInfos(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	@Test
-	public void testMergeDirectory() throws IOException, NoSuchAlgorithmException
+	public void testGetFileContentInfos() throws IOException, NoSuchAlgorithmException
 	{
-		Collection<File> leftSide;
-		Collection<File> rightSide;
+		List<FileContentInfo> actual;
+		List<FileContentInfo> expected;
 		Collection<FileContentInfo> fileInfos;
 		String parentAbsolutePath;
 		// new scenario...
 		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		File parentLeftFile = DirectoryFactory.newDirectory(absolutePath, "app");
-		parentAbsolutePath = parentLeftFile.getAbsolutePath();
-		fileInfos = DirectoryStructureTestData.newTestData(parentAbsolutePath);
-
-		leftSide = DirectoryStructureFactory.newDirectoryStructure(fileInfos);
-
-		File parentRightFile = DirectoryFactory.newDirectory(absolutePath, "other");
-		parentAbsolutePath = parentRightFile.getAbsolutePath();
-		fileInfos = DirectoryStructureTestData.newOtherTestData(parentAbsolutePath);
-		rightSide = DirectoryStructureFactory.newDirectoryStructure(fileInfos);
-
-		MergeDirectoryExtensions.merge(parentLeftFile, parentRightFile);
-
-		// cleanup...
-		leftSide.add(parentLeftFile);
-		DeleteFileExtensions.delete(leftSide);
-		rightSide.add(parentRightFile);
-		DeleteFileExtensions.delete(rightSide);
+		File parentFile = DirectoryFactory.newDirectory(absolutePath, "app");
+		parentAbsolutePath = parentFile.getAbsolutePath();
+		actual = DirectoryStructureTestData.newTestData(parentAbsolutePath);
+		DirectoryStructureFactory.newDirectoryStructure(actual);
+		expected = DirectoryStructureExtensions.getFileContentInfos(parentFile);
+		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 	}
-
 }
