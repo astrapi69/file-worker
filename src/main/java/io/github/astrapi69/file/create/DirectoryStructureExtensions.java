@@ -37,9 +37,19 @@ import io.github.astrapi69.file.search.FileSearchExtensions;
  * @author Asterios Raptis
  * @version 1.0
  */
-public class DirectoryStructureExtensions
+public final class DirectoryStructureExtensions
 {
+	private DirectoryStructureExtensions()
+	{
+	}
 
+	/**
+	 * Creates a list of {@link FileContentInfo} objects from the given directory
+	 * 
+	 * @param directory
+	 *            the directory
+	 * @return a list of {@link FileContentInfo} objects from the given directory
+	 */
 	public static List<FileContentInfo> getFileContentInfos(final File directory)
 	{
 		final List<FileContentInfo> fileContentInfos = ListFactory.newArrayList();

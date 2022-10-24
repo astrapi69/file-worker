@@ -32,6 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.CollectionExtensions;
@@ -54,15 +55,15 @@ public class DirectoryStructureExtensionsTest
 	{
 		List<FileContentInfo> actual;
 		List<FileContentInfo> expected;
-		Collection<FileContentInfo> fileInfos;
 		String parentAbsolutePath;
 		// new scenario...
 		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
 		File parentFile = DirectoryFactory.newDirectory(absolutePath, "app");
 		parentAbsolutePath = parentFile.getAbsolutePath();
 		actual = DirectoryStructureTestData.newTestData(parentAbsolutePath);
-		DirectoryStructureFactory.newDirectoryStructure(actual);
+		Collection<File> files = DirectoryStructureFactory.newDirectoryStructure(actual);
 		expected = DirectoryStructureExtensions.getFileContentInfos(parentFile);
 		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
+		DeleteFileExtensions.delete(files);
 	}
 }

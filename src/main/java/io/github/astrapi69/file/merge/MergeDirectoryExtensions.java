@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 
@@ -51,7 +52,7 @@ public class MergeDirectoryExtensions
 	 */
 	public static void merge(File targetDir, File... directoriesToMerge) throws IOException
 	{
-		newFileMergeStore(directoriesToMerge).entrySet().stream().forEach(fileEntry -> {
+		newFileMergeStore(directoriesToMerge).entrySet().forEach(fileEntry -> {
 			final String relativeName = fileEntry.getKey();
 			final File srcFile = fileEntry.getValue();
 			RuntimeExceptionDecorator
@@ -72,7 +73,8 @@ public class MergeDirectoryExtensions
 	private static void refreshFileStore(final File baseDirectory,
 		final Map<String, File> fileStore, final String relativeName)
 	{
-		for (final File file : baseDirectory.listFiles())
+		File[] files = Objects.requireNonNull(baseDirectory.listFiles());
+		for (File file : files)
 		{
 			final String relativeFileName = getRelativeFileName(relativeName, file.getName());
 			if (file.isFile())
