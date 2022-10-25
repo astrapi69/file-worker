@@ -426,6 +426,8 @@ public final class FileSearchExtensions
 	 *
 	 * @param dir
 	 *            The directory to search.
+	 * @param includeDir
+	 *            The flag that tells if the directory files should be added to the returned list
 	 * @param filenameToSearch
 	 *            The search pattern. Allowed wildcards are "*" and "?".
 	 * @return A List with all files that matches the search pattern.
@@ -549,6 +551,8 @@ public final class FileSearchExtensions
 	 *
 	 * @param dir
 	 *            the directory
+	 * @param includeDir
+	 *            The flag that tells if the directory files should be added to the returned list
 	 *
 	 * @return the all files from dir recursive
 	 */
