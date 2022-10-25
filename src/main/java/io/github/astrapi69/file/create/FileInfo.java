@@ -105,24 +105,24 @@ public class FileInfo
 		return this.name;
 	}
 
-	public String getPath()
-	{
-		return this.path;
-	}
-
-	public boolean isDirectory()
-	{
-		return this.directory;
-	}
-
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
+	public String getPath()
+	{
+		return this.path;
+	}
+
 	public void setPath(String path)
 	{
 		this.path = path;
+	}
+
+	public boolean isDirectory()
+	{
+		return this.directory;
 	}
 
 	public void setDirectory(boolean directory)

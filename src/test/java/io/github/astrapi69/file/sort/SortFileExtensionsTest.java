@@ -32,15 +32,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import io.github.astrapi69.file.create.DirectoryFactory;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import io.github.astrapi69.comparator.object.StringComparator;
 import io.github.astrapi69.file.FileExtensions;
+import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.FileCreationState;
-import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 

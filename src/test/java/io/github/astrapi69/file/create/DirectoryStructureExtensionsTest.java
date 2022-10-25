@@ -32,10 +32,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.CollectionExtensions;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**

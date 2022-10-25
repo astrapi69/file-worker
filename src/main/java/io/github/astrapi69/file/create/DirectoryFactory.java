@@ -33,8 +33,6 @@ import java.nio.file.attribute.FileAttribute;
 import java.util.Collection;
 import java.util.Objects;
 
-import io.github.astrapi69.collection.array.ArrayExtensions;
-import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
