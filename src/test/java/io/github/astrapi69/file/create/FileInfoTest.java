@@ -31,6 +31,7 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.Test;
 
@@ -70,13 +71,25 @@ public class FileInfoTest
 		String absolutePath;
 		File file;
 		FileInfo fileInfo;
+		String actual;
+		String expected;
+		String rootPath;
+		String absoluteFilePath;
+		String filename;
 
-		fileInfo = FileInfo.builder().path("/tmp/foo/bar").name("foo.txt").build();
+		rootPath = SystemUtils.IS_OS_WINDOWS ? "C:\\" : "/";
+
+		absoluteFilePath = SystemUtils.IS_OS_WINDOWS
+			? rootPath + "tmp\\foo\\bar"
+			: rootPath + "tmp/foo/bar";
+		filename = "foo.txt";
+		actual = SystemUtils.IS_OS_WINDOWS ? "C:\\tmp\\foo\\bar\\foo.txt" : "/tmp/foo/bar/foo.txt";
+		fileInfo = FileInfo.builder().path(absoluteFilePath).name(filename).build();
 		file = FileFactory.newFile(fileInfo);
 		assertTrue(file.exists());
 		assertNotNull(file);
-		absolutePath = file.getAbsolutePath();
-		assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
+		expected = file.getAbsolutePath();
+		assertEquals(expected, actual);
 		FileInfo anotherFileInfo = FileInfo.toFileInfo(file);
 		assertEquals(anotherFileInfo, fileInfo);
 		DeleteFileExtensions.delete(file);

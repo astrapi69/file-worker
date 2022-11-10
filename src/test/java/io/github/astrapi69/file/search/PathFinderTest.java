@@ -30,6 +30,7 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -79,7 +80,9 @@ public class PathFinderTest extends FileTestCase
 		String actual;
 		String expected;
 		actual = PathFinder.getAbsolutePath(testDir, false);
-		expected = "file-worker/src/test/resources/resources/testDir";
+		expected = SystemUtils.IS_OS_WINDOWS
+			? "file-worker\\src\\test\\resources\\resources\\testDir"
+			: "file-worker/src/test/resources/resources/testDir";
 		assertTrue(actual.endsWith(expected));
 	}
 

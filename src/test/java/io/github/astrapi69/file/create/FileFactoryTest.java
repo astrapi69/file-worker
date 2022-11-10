@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -201,13 +202,25 @@ public class FileFactoryTest extends FileTestCase
 		String absolutePath;
 		File file;
 		FileInfo fileInfo;
+		String actual;
+		String expected;
+		String rootPath;
+		String absoluteFilePath;
+		String filename;
 
-		fileInfo = FileInfo.builder().path("/tmp/foo/bar").name("foo.txt").build();
+		rootPath = SystemUtils.IS_OS_WINDOWS ? "C:\\" : "/";
+
+		absoluteFilePath = SystemUtils.IS_OS_WINDOWS
+			? rootPath + "tmp\\foo\\bar"
+			: rootPath + "tmp/foo/bar";
+		filename = "foo.txt";
+		actual = SystemUtils.IS_OS_WINDOWS ? "C:\\tmp\\foo\\bar\\foo.txt" : "/tmp/foo/bar/foo.txt";
+		fileInfo = FileInfo.builder().path(absoluteFilePath).name(filename).build();
 		file = FileFactory.newFile(fileInfo);
 		assertTrue(file.exists());
 		assertNotNull(file);
-		absolutePath = file.getAbsolutePath();
-		assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
+		expected = file.getAbsolutePath();
+		assertEquals(expected, actual);
 		FileInfo anotherFileInfo = FileInfo.toFileInfo(file);
 		assertEquals(anotherFileInfo, fileInfo);
 	}
@@ -223,18 +236,21 @@ public class FileFactoryTest extends FileTestCase
 	{
 		String absolutePath;
 		File file;
+		String rootPath;
 
-		absolutePath = "/tmp/foo/bar/bla/fasel/test.file";
+		rootPath = SystemUtils.IS_OS_WINDOWS ? "C:\\" : "/";
+
+		absolutePath = rootPath + "tmp/foo/bar/bla/fasel/test.file";
 		file = new File(absolutePath);
 
 		DirectoryFactory.mkParentDirs(file);
 		assertNotNull(file);
 		// clean up...
 		DeleteFileExtensions.delete(file);
-		DeleteFileExtensions.delete(new File("/tmp/foo/bar/bla/fasel"));
-		DeleteFileExtensions.delete(new File("/tmp/foo/bar/bla"));
-		DeleteFileExtensions.delete(new File("/tmp/foo/bar"));
-		DeleteFileExtensions.delete(new File("/tmp/foo"));
+		DeleteFileExtensions.delete(new File(rootPath + "/tmp/foo/bar/bla/fasel"));
+		DeleteFileExtensions.delete(new File(rootPath + "/tmp/foo/bar/bla"));
+		DeleteFileExtensions.delete(new File(rootPath + "/tmp/foo/bar"));
+		DeleteFileExtensions.delete(new File(rootPath + "/tmp/foo"));
 	}
 
 	/**

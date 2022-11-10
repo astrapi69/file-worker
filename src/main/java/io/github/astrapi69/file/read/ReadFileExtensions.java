@@ -140,6 +140,10 @@ public final class ReadFileExtensions
 		{
 			stringBuilder.append(charArray, 0, tmp);
 		}
+		if (reader != null)
+		{
+			reader.close();
+		}
 		return stringBuilder.toString();
 	}
 

@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.testng.annotations.Test;
 
 import io.github.astrapi69.checksum.ByteArrayChecksumExtensions;
@@ -59,8 +60,20 @@ public class FileContentInfoTest
 		String absolutePath;
 		File file;
 		FileContentInfo fileContentInfo;
+		String actual;
+		String expected;
+		String rootPath;
+		String absoluteFilePath;
+		String filename;
 
-		fileContentInfo = FileContentInfo.builder().path("/tmp/foo/bar").name("foo.txt").build();
+		rootPath = SystemUtils.IS_OS_WINDOWS ? "C:\\" : "/";
+
+		absoluteFilePath = SystemUtils.IS_OS_WINDOWS
+			? rootPath + "tmp\\foo\\bar"
+			: rootPath + "tmp/foo/bar";
+		filename = "foo.txt";
+		actual = SystemUtils.IS_OS_WINDOWS ? "C:\\tmp\\foo\\bar\\foo.txt" : "/tmp/foo/bar/foo.txt";
+		fileContentInfo = FileContentInfo.builder().path(absoluteFilePath).name(filename).build();
 		file = FileFactory.newFile(fileContentInfo);
 		assertTrue(file.exists());
 		fileContentInfo.setChecksum(RuntimeExceptionDecorator
@@ -68,8 +81,8 @@ public class FileContentInfoTest
 		fileContentInfo.setContent(
 			RuntimeExceptionDecorator.decorate(() -> ReadFileExtensions.readFileToBytearray(file)));
 		assertNotNull(file);
-		absolutePath = file.getAbsolutePath();
-		assertEquals(absolutePath, "/tmp/foo/bar/foo.txt");
+		expected = file.getAbsolutePath();
+		assertEquals(expected, actual);
 
 		FileContentInfo anotherFileInfo = FileContentInfo.toFileContentInfo(file);
 		assertEquals(anotherFileInfo, fileContentInfo);
