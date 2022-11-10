@@ -1,8 +1,12 @@
 ## Change log
 ----------------------
 
-Version 11.6-SNAPSHOT
+Version 11.5.1
 -------------
+
+CHANGED:
+
+- close reader after read file 
 
 Version 11.5
 -------------
