@@ -236,8 +236,8 @@ public final class ReadFileExtensions
 	 * @return the string
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
-	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File, Charset)} Note: will be
-	 *             deleted in next minor version
+	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File, Charset)} Note: will
+	 *             be deleted in next minor version
 	 */
 	public static String readFromFile(final File file, final Charset encoding) throws IOException
 	{

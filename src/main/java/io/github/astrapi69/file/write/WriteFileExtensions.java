@@ -41,6 +41,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
@@ -299,11 +300,7 @@ public final class WriteFileExtensions
 	public static void writeByteArrayToFile(final File file, final byte[] byteArray)
 		throws IOException
 	{
-		try (FileOutputStream fos = new FileOutputStream(file);
-			BufferedOutputStream bos = new BufferedOutputStream(fos))
-		{
-			bos.write(byteArray);
-		}
+		Files.write(file.toPath(), byteArray);
 	}
 
 	/**

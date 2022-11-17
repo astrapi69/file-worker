@@ -11,7 +11,7 @@ Version 11.5.1
 
 CHANGED:
 
-- close reader after read file 
+- close reader after read file
 
 Version 11.5
 -------------
