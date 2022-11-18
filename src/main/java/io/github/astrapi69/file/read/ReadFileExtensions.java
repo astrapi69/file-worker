@@ -82,7 +82,9 @@ public final class ReadFileExtensions
 	 *            The InputStream from where we read.
 	 * @return The String that we read from the InputStream.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
+	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
+	 *             deleted in next minor version
 	 */
 	public static String inputStream2String(final InputStream inputStream) throws IOException
 	{
@@ -98,7 +100,9 @@ public final class ReadFileExtensions
 	 *            the encoding
 	 * @return The String that we read from the InputStream.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
+	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
+	 *             deleted in next minor version
 	 */
 	public static String inputStream2String(final InputStream inputStream, final Charset encoding)
 		throws IOException
@@ -129,7 +133,9 @@ public final class ReadFileExtensions
 	 *            The Reader from where we read.
 	 * @return The String that we read from the Reader.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
+	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
+	 *             removed in next minor version
 	 */
 	public static String reader2String(final Reader reader) throws IOException
 	{
@@ -162,13 +168,58 @@ public final class ReadFileExtensions
 	}
 
 	/**
+	 * This method reads the given file with the default UTF-8 encoding and returns the content as
+	 * an {@link String} object
+	 *
+	 * @param file
+	 *            The file to read to an {@link String} object
+	 * @return The {@link String} object from the given file
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	public static String fromFile(final File file) throws IOException
+	{
+		return fromFile(file, StandardCharsets.UTF_8);
+	}
+
+	/**
+	 * This method reads the given file with the given encoding and returns the content as an
+	 * {@link String} object
+	 *
+	 * @param file
+	 *            The file to read to an {@link String} object
+	 * @param encoding
+	 *            the encoding for reading the given file
+	 * @return The {@link String} object from the given file
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	public static String fromFile(final File file, final Charset encoding) throws IOException
+	{
+		try (InputStream inputStream = StreamExtensions.getInputStream(file);
+			InputStreamReader reader = new InputStreamReader(inputStream, encoding))
+		{
+			final StringBuilder stringBuilder = new StringBuilder();
+			final char[] charArray = new char[FileConstants.BLOCKSIZE];
+			int tmp;
+			while ((tmp = reader.read(charArray)) > 0)
+			{
+				stringBuilder.append(charArray, 0, tmp);
+			}
+			return stringBuilder.toString();
+		}
+	}
+
+	/**
 	 * The Method readFromFile() reads the filecontent to a String.
 	 *
 	 * @param file
 	 *            The File to read to a String.
 	 * @return The String from the File.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
+	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
+	 *             deleted in next minor version
 	 */
 	public static String readFromFile(final File file) throws IOException
 	{
@@ -184,7 +235,9 @@ public final class ReadFileExtensions
 	 *            the encoding
 	 * @return the string
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
+	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File, Charset)} Note: will
+	 *             be deleted in next minor version
 	 */
 	public static String readFromFile(final File file, final Charset encoding) throws IOException
 	{

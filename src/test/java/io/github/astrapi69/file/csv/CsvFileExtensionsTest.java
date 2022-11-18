@@ -30,6 +30,7 @@ import static org.testng.AssertJUnit.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -591,7 +592,10 @@ public class CsvFileExtensionsTest
 		final File testFileOutput = new File(resources, "testStoreFilelistToProperties.properties");
 		CsvFileExtensions.storeFilelistToProperties(testFileOutput, testFileInput, "Test comment.");
 		final Properties testProperties = new Properties();
-		testProperties.load(StreamExtensions.getInputStream(testFileOutput, true));
+		try (final InputStream inputStream = StreamExtensions.getInputStream(testFileOutput, false))
+		{
+			testProperties.load(inputStream);
+		}
 		final boolean result = expectedProperties.equals(testProperties);
 		assertTrue("", result);
 		try
