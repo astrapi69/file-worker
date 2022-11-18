@@ -589,8 +589,6 @@ public final class CsvFileExtensions
 		{
 			prop.store(out, comments);
 		}
-		final OutputStream out = StreamExtensions.getOutputStream(output, true);
-		prop.store(out, comments);
 	}
 
 	/**

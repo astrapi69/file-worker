@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -107,29 +108,45 @@ public final class DeleteFileExtensions
 	}
 
 	/**
-	 * Tries to delete a file and if its a directory than its deletes all the sub-directories.
+	 * Tries to delete the given {@link File} object and if it's a directory than it will try to
+	 * delete all the subdirectories
 	 *
 	 * @param file
-	 *            The File to delete.
+	 *            The {@link File} object to delete
+	 * @return <code>true</code> if the file or directory is deleted otherwise <code>false</code>
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void delete(final File file) throws IOException
+	public static boolean delete(final File file) throws IOException
 	{
 		Objects.requireNonNull(file);
+		boolean deleted;
 		if (file.isDirectory())
 		{
 			DeleteFileExtensions.deleteAllFiles(file);
+			deleted = true;
 		}
 		else
 		{
+			boolean notDeleted;
+			boolean fileExists;
 			// If the file exists and is not deleted
-			if (file.exists() && !file.delete())
+			deleted = file.delete();
+			notDeleted = !deleted;
+			fileExists = file.exists();
+			if (fileExists && notDeleted)
 			{
-				throw new IOException("Cannot delete the File " + file.getAbsolutePath() + ".");
+				Files.delete(file.toPath());
+				fileExists = file.exists();
+				deleted = !fileExists;
+				if (fileExists)
+				{
+					throw new IOException("Cannot delete the File " + file.getAbsolutePath() + ".");
+				}
 			}
 		}
+		return deleted;
 	}
 
 	/**
