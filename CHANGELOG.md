@@ -5,6 +5,15 @@ Version 11.6-SNAPSHOT
 -------------
 
 
+CHANGED:
+
+- update gradle to new version 7.6-rc-3
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.44.0
+- improvement of method delete in class DeleteFileExtensions
+- update of dependency crypt-api to new version to 8.4
+- update of dependency checksum-up to new version 2.2
+- update of test dependency test-object to new version 7.2
+- tagged obsolete methods with input stream and readers as deprecated
 
 Version 11.5.1
 -------------
