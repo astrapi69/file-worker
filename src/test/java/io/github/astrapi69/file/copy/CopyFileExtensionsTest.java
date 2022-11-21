@@ -670,7 +670,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		actual = CopyFileExtensions.copyFile(source, destination);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
 			+ destination.getName() + ".", actual);
-		final String actual = ReadFileExtensions.readFromFile(destination);
+		final String actual = ReadFileExtensions.fromFile(destination);
 		final String expected = inputString;
 		assertEquals(actual, expected);
 	}
@@ -702,7 +702,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		actual = CopyFileExtensions.copyFile(source, destination, false);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
 			+ destination.getName() + ".", actual);
-		final String actual = ReadFileExtensions.readFromFile(destination);
+		final String actual = ReadFileExtensions.fromFile(destination);
 		final String expected = inputString;
 		assertEquals(actual, expected);
 	}
