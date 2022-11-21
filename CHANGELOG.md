@@ -4,6 +4,9 @@
 Version 11.7-SNAPSHOT
 -------------
 
+CHANGED:
+
+- removed deprecated methods in class ReadFileExtensions
 
 Version 11.6
 -------------
