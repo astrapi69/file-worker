@@ -33,7 +33,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -50,9 +49,7 @@ import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.exception.FileDoesNotExistException;
 import io.github.astrapi69.file.write.WriteFileExtensions;
-import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link ReadFileExtensions}.
@@ -134,27 +131,6 @@ public class ReadFileExtensionsTest extends FileTestCase
 			Byte.valueOf("a".getBytes()[0]), Byte.valueOf("r".getBytes()[0]),
 			Byte.valueOf((byte)10));
 		assertTrue(Arrays.deepEquals(actual, expected));
-	}
-
-	/**
-	 * Test method for {@link ReadFileExtensions#openFileReader(String)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@Test
-	public void testOpenFileReader() throws IOException
-	{
-		final File testFile1 = new File(this.testDir, "testOpenFileReader.txt");
-		final String inputString = "Its a beautifull day!!!";
-		final String expected = inputString;
-		final String ap = testFile1.getAbsolutePath();
-		WriteFileExtensions.string2File(inputString, ap);
-
-		final Reader reader = ReadFileExtensions.openFileReader(ap);
-		final String compare = ReadFileExtensions.fromFile(testFile1);
-		this.actual = expected.equals(compare);
-		assertTrue("", this.actual);
 	}
 
 	/**

@@ -76,20 +76,6 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * The Method openFileReader() opens a BufferedReader from the given file.
-	 *
-	 * @param fileName
-	 *            The file from where to read.
-	 * @return The opened BufferedReader from the specified file.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static Reader openFileReader(final String fileName) throws IOException
-	{
-		return StreamExtensions.getReader(new File(fileName));
-	}
-
-	/**
 	 * Get a byte array from the given file.
 	 *
 	 * @param file
