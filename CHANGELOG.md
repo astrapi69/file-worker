@@ -6,6 +6,7 @@ Version 11.7-SNAPSHOT
 
 CHANGED:
 
+- update gradle to new version 7.6-rc-4
 - removed deprecated methods in class ReadFileExtensions
 
 Version 11.6
