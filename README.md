@@ -2,15 +2,15 @@
 
 <div style="text-align: center">
 
-[![Java CI with Gradle](https://github.com/lightblueseas/file-worker/actions/workflows/gradle.yml/badge.svg)](https://github.com/lightblueseas/file-worker/actions/workflows/gradle.yml)
-[![Coverage Status](https://codecov.io/gh/lightblueseas/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/lightblueseas/file-worker)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lightblueseas_file-worker&metric=alert_status)](https://sonarcloud.io/dashboard?id=lightblueseas_file-worker)
-[![Open Issues](https://img.shields.io/github/issues/lightblueseas/file-worker.svg?style=flat)](https://github.com/lightblueseas/file-worker/issues)
+[![Java CI with Gradle](https://github.com/astrapi69/file-worker/actions/workflows/gradle.yml/badge.svg)](https://github.com/astrapi69/file-worker/actions/workflows/gradle.yml)
+[![Coverage Status](https://codecov.io/gh/astrapi69/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/file-worker)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=astrapi69_file-worker&metric=alert_status)](https://sonarcloud.io/dashboard?id=astrapi69_file-worker)
+[![Open Issues](https://img.shields.io/github/issues/astrapi69/file-worker.svg?style=flat)](https://github.com/astrapi69/file-worker/issues)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker)
 [![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/file-worker.svg)](http://www.javadoc.io/doc/io.github.astrapi69/file-worker)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](http://opensource.org/licenses/MIT)
 [![Donate](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
-[![Hits Of Code](https://hitsofcode.com/github/lightblueseas/file-worker?branch=develop)](https://hitsofcode.com/github/lightblueseas/file-worker/view?branch=develop)
+[![Hits Of Code](https://hitsofcode.com/github/astrapi69/file-worker?branch=develop)](https://hitsofcode.com/github/astrapi69/file-worker/view?branch=develop)
 
 </div>
 
@@ -18,7 +18,7 @@ Project that holds utility class for file operations.
 
 > Please support this project by simply putting a
 > Github <!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/lightblueseas/file-worker" data-icon="octicon-star" aria-label="Star lightblueseas/file-worker on GitHub">
+<a class="github-button" href="https://github.com/astrapi69/file-worker" data-icon="octicon-star" aria-label="Star astrapi69/file-worker on GitHub">
 > Star ⭐</a>
 >
 > Share this library with friends on Twitter and everywhere else you can
@@ -97,10 +97,10 @@ the [wiki page](https://github.com/lightblueseas/mvn-parent-projects/wiki/Semant
 The source code for file-worker are on GitHub. Please feel free to fork and send pull requests!
 
 Create your own fork
-of [lightblueseas/file-worker/fork](https://github.com/lightblueseas/file-worker/fork)
+of [astrapi69/file-worker/fork](https://github.com/astrapi69/file-worker/fork)
 
 To share your
-changes, [submit a pull request](https://github.com/lightblueseas/file-worker/pull/new/develop).
+changes, [submit a pull request](https://github.com/astrapi69/file-worker/pull/new/develop).
 
 Don't forget to add new units tests on your changes.
 
@@ -110,7 +110,7 @@ Do not hesitate to contact the file-worker developers with your questions, conce
 reports, or feature requests.
 
 - Feature requests, questions and bug reports can be reported at
-  the [issues page](https://github.com/lightblueseas/file-worker/issues).
+  the [issues page](https://github.com/astrapi69/file-worker/issues).
 
 ## Note
 
@@ -195,7 +195,7 @@ Open Source:
 
 |**codecov.io**|
 |     :---:      |
-|[![Coverage Status](https://codecov.io/gh/lightblueseas/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/lightblueseas/file-worker)|
+|[![Coverage Status](https://codecov.io/gh/astrapi69/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/file-worker)|
 |Special thanks to [codecov.io](https://codecov.io) for providing a free code coverage for open source projects|
 |     <img width=1000/>     |
 
