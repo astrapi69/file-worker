@@ -4,7 +4,6 @@
 
 [![Java CI with Gradle](https://github.com/astrapi69/file-worker/actions/workflows/gradle.yml/badge.svg)](https://github.com/astrapi69/file-worker/actions/workflows/gradle.yml)
 [![Coverage Status](https://codecov.io/gh/astrapi69/file-worker/branch/develop/graph/badge.svg)](https://codecov.io/gh/astrapi69/file-worker)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=astrapi69_file-worker&metric=alert_status)](https://sonarcloud.io/dashboard?id=astrapi69_file-worker)
 [![Open Issues](https://img.shields.io/github/issues/astrapi69/file-worker.svg?style=flat)](https://github.com/astrapi69/file-worker/issues)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker)
 [![Javadocs](http://www.javadoc.io/badge/io.github.astrapi69/file-worker.svg)](http://www.javadoc.io/doc/io.github.astrapi69/file-worker)
