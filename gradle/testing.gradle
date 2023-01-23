@@ -1,4 +1,5 @@
 test {
+    mustRunAfter(jar)
     useTestNG()
 }
 

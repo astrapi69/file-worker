@@ -30,7 +30,7 @@ module file.worker {
     requires checksum.up;
     requires crypt.api;
     requires java.logging;
-    requires silly.collection.main;
+    requires silly.collection;
     requires silly.strings;
     exports io.github.astrapi69.file;
     exports io.github.astrapi69.file.compare;
