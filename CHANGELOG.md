@@ -6,8 +6,14 @@ Version 11.7-SNAPSHOT
 
 CHANGED:
 
-- update gradle to new version 7.6-rc-4
+- update gradle to new version 7.6
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor
+  version 6.13.0
 - removed deprecated methods in class ReadFileExtensions
+- update of dependency silly-collection to new version 20.3
+- update of test dependency comparator-extensions to new version 1.5
+- update of test dependency testng to new version 7.7.1
+- update of test dependency 'com.github.meanbeanlib:meanbean' to new version 3.0.0-M9
 
 Version 11.6
 -------------
