@@ -33,7 +33,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -50,9 +49,7 @@ import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.exception.FileDoesNotExistException;
 import io.github.astrapi69.file.write.WriteFileExtensions;
-import io.github.astrapi69.io.StreamExtensions;
 
 /**
  * The unit test class for the class {@link ReadFileExtensions}.
@@ -137,65 +134,16 @@ public class ReadFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link ReadFileExtensions#inputStream2String(InputStream)}
-	 *
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws FileDoesNotExistException
-	 *             the file does not exist exception
-	 */
-	@Test
-	public void testInputStream2String()
-		throws DirectoryAlreadyExistsException, IOException, FileDoesNotExistException
-	{
-
-		final File inputFile = new File(this.testDir, "testInputStream2String.inp");
-		inputFile.createNewFile();
-		final String inputString = "Its a beautifull day!!!\n" + "This is the second line.\n"
-			+ "This is the third line. ";
-		WriteFileExtensions.string2File(inputFile, inputString);
-		// --------------------------------
-		final InputStream is = StreamExtensions.getInputStream(inputFile);
-		final String compare = ReadFileExtensions.inputStream2String(is);
-
-		this.actual = inputString.equals(compare);
-		assertTrue("", this.actual);
-	}
-
-	/**
-	 * Test method for {@link ReadFileExtensions#openFileReader(String)}.
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	@Test
-	public void testOpenFileReader() throws IOException
-	{
-		final File testFile1 = new File(this.testDir, "testOpenFileReader.txt");
-		final String inputString = "Its a beautifull day!!!";
-		final String expected = inputString;
-		final String ap = testFile1.getAbsolutePath();
-		WriteFileExtensions.string2File(inputString, ap);
-
-		final Reader reader = ReadFileExtensions.openFileReader(ap);
-		final String compare = ReadFileExtensions.reader2String(reader);
-		this.actual = expected.equals(compare);
-		assertTrue("", this.actual);
-	}
-
-	/**
-	 * Test method for {@link ReadFileExtensions#readFromFile(File)}
+	 * Test method for {@link ReadFileExtensions#fromFile(File)}
 	 */
 	@Test
 	public void testReadFromFileFile() throws IOException
 	{
 		final File source = new File(this.test.getAbsoluteFile(), "testReadFileInput.txt");
-		final String sourceContent = ReadFileExtensions.readFromFile(source);
+		final String sourceContent = ReadFileExtensions.fromFile(source);
 		final File output = new File(this.test.getAbsoluteFile(), "testReadFileOutput.txt");
 		WriteFileExtensions.string2File(output, sourceContent);
-		final String outputContent = ReadFileExtensions.readFromFile(output);
+		final String outputContent = ReadFileExtensions.fromFile(output);
 		assertEquals(sourceContent, outputContent);
 
 		final File testFile1 = new File(this.testDir, "testReadFromFile.txt");
@@ -203,13 +151,13 @@ public class ReadFileExtensionsTest extends FileTestCase
 		WriteFileExtensions.string2File(testFile1, inputString);
 		// --------------------------------
 
-		final String content = ReadFileExtensions.readFromFile(testFile1);
+		final String content = ReadFileExtensions.fromFile(testFile1);
 		this.actual = inputString.equals(content);
 		assertTrue("", this.actual);
 	}
 
 	/**
-	 * Test method for {@link ReadFileExtensions#readFromFile(File, Charset)}.
+	 * Test method for {@link ReadFileExtensions#fromFile(File, Charset)}.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -220,7 +168,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		String actual;
 		String expected;
 		final File file = new File(this.test, "testReadSmallFileInput.txt");
-		actual = ReadFileExtensions.readFromFile(file, StandardCharsets.UTF_8);
+		actual = ReadFileExtensions.fromFile(file, StandardCharsets.UTF_8);
 		expected = "foo bar\n";
 		assertEquals(actual, expected);
 	}

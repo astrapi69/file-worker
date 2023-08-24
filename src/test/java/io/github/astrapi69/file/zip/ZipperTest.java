@@ -78,7 +78,7 @@ public class ZipperTest extends ZipTestCase
 	/**
 	 * Test method for {@link Zipper}
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testWithBeanTester()
 	{
 		Configuration configuration = new ConfigurationBuilder()
@@ -111,8 +111,7 @@ public class ZipperTest extends ZipTestCase
 			}).overrideFactory("zipFile", new FileFactory())
 			.overrideFactory("directoryToZip", new FileFactory()).build();
 		final BeanTester beanTester = new BeanTester();
-		beanTester.addCustomConfiguration(Zipper.class, configuration);
-		beanTester.testBean(Zipper.class);
+		beanTester.testBean(Zipper.class, configuration);
 	}
 
 	/**

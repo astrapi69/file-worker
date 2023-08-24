@@ -183,7 +183,7 @@ public class CsvBeanTest
 	/**
 	 * Test method for {@link CsvBean}
 	 */
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testWithBeanTester()
 	{
 		Configuration configuration = new ConfigurationBuilder()
@@ -192,8 +192,7 @@ public class CsvBeanTest
 			.overrideFactory("columnTypesEdit", new StringArrayFactory())
 			.overrideFactory("lines", new ListStringArrayFactory()).build();
 		final BeanTester beanTester = new BeanTester();
-		beanTester.addCustomConfiguration(CsvBean.class, configuration);
-		beanTester.testBean(CsvBean.class);
+		beanTester.testBean(CsvBean.class, configuration);
 	}
 
 }

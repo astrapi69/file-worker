@@ -129,7 +129,7 @@ public class ModifyFileExtensionsTest
 			return alteredLine;
 		});
 
-		originalContent = ReadFileExtensions.readFromFile(inputFile);
+		originalContent = ReadFileExtensions.fromFile(inputFile);
 
 		assertFalse(originalContent.contains(find));
 		assertTrue(originalContent.contains(replaceWith));

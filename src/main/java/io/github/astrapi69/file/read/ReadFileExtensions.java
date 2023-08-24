@@ -76,84 +76,6 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * The Method inputStream2String() reads the data from the InputStream into a String.
-	 *
-	 * @param inputStream
-	 *            The InputStream from where we read.
-	 * @return The String that we read from the InputStream.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
-	 *             deleted in next minor version
-	 */
-	public static String inputStream2String(final InputStream inputStream) throws IOException
-	{
-		return inputStream2String(inputStream, StandardCharsets.UTF_8);
-	}
-
-	/**
-	 * The Method inputStream2String() reads the data from the InputStream into a String.
-	 *
-	 * @param inputStream
-	 *            The InputStream from where we read.
-	 * @param encoding
-	 *            the encoding
-	 * @return The String that we read from the InputStream.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
-	 *             deleted in next minor version
-	 */
-	public static String inputStream2String(final InputStream inputStream, final Charset encoding)
-		throws IOException
-	{
-		return ReadFileExtensions.reader2String(new InputStreamReader(inputStream, encoding));
-	}
-
-	/**
-	 * The Method openFileReader() opens a BufferedReader from the given file.
-	 *
-	 * @param fileName
-	 *            The file from where to read.
-	 * @return The opened BufferedReader from the specified file.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	public static Reader openFileReader(final String fileName) throws IOException
-	{
-		return StreamExtensions.getReader(new File(fileName));
-	}
-
-	/**
-	 * The Method reader2String() reads the data from the Reader into a String.<br>
-	 * <br>
-	 * Note: Reader will not be closed.
-	 *
-	 * @param reader
-	 *            The Reader from where we read.
-	 * @return The String that we read from the Reader.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
-	 *             removed in next minor version
-	 */
-	public static String reader2String(final Reader reader) throws IOException
-	{
-		final StringBuilder stringBuilder = new StringBuilder();
-		final char[] charArray = new char[FileConstants.BLOCKSIZE];
-		int tmp;
-		while ((tmp = reader.read(charArray)) > 0)
-		{
-			stringBuilder.append(charArray, 0, tmp);
-		}
-		if (reader != null)
-		{
-			reader.close();
-		}
-		return stringBuilder.toString();
-	}
-
-	/**
 	 * Get a byte array from the given file.
 	 *
 	 * @param file
@@ -208,40 +130,6 @@ public final class ReadFileExtensions
 			}
 			return stringBuilder.toString();
 		}
-	}
-
-	/**
-	 * The Method readFromFile() reads the filecontent to a String.
-	 *
-	 * @param file
-	 *            The File to read to a String.
-	 * @return The String from the File.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File)} Note: will be
-	 *             deleted in next minor version
-	 */
-	public static String readFromFile(final File file) throws IOException
-	{
-		return inputStream2String(StreamExtensions.getInputStream(file));
-	}
-
-	/**
-	 * Read from file.
-	 *
-	 * @param file
-	 *            the file
-	 * @param encoding
-	 *            the encoding
-	 * @return the string
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 * @deprecated use instead method {@link ReadFileExtensions#fromFile(File, Charset)} Note: will
-	 *             be deleted in next minor version
-	 */
-	public static String readFromFile(final File file, final Charset encoding) throws IOException
-	{
-		return inputStream2String(StreamExtensions.getInputStream(file), encoding);
 	}
 
 	/**
