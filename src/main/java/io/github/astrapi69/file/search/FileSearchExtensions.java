@@ -85,12 +85,12 @@ public final class FileSearchExtensions
 	 */
 	public static boolean containsFile(final File parent, final File search)
 	{
-		boolean exists = false;
 		final String[] children = parent.list();
 		if (children == null)
 		{
 			return false;
 		}
+		boolean exists = false;
 		final List<String> fileList = Arrays.asList(children);
 		if (fileList.contains(search.getName()))
 		{

@@ -4,6 +4,12 @@
 Version 17.1-SNAPSHOT
 -------------
 
+CHANGED:
+
+- update gradle to new version 8.4-rc-2
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.48.0
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.21.0
+
 Version 17
 -------------
 
