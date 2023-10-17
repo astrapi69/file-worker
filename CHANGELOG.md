@@ -4,11 +4,17 @@
 Version 17.1-SNAPSHOT
 -------------
 
+ADDED:
+
+- new extension class for store string objects to files
+
 CHANGED:
 
-- update gradle to new version 8.4-rc-2
-- update of com.github.ben-manes.versions.gradle.plugin to new version 0.48.0
-- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.21.0
+- update gradle to new version 8.4
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.49.0
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.22.0
+- update of commons-io dependency to the new minor version 2.14.0
+- update of dependency crypt-api to the new minor version to 8.7
 
 Version 17
 -------------

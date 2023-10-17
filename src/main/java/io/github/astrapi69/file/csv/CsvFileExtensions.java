@@ -516,7 +516,7 @@ public final class CsvFileExtensions
 	 *            The encoding to read.
 	 * @return The data from the csv-file as a String-array.
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             When an io-error occurs.
 	 */

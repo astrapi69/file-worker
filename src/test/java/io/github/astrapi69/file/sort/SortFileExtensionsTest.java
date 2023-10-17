@@ -89,7 +89,7 @@ public class SortFileExtensionsTest
 	 * Test method for {@link SortFileExtensions#sort(File, java.util.Comparator, String)}.
 	 *
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
