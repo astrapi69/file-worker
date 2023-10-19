@@ -98,7 +98,10 @@ public final class WriteFileExtensions
 	 *            The file to save the byte array.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated use instead the corresponding method in
+	 *             {{@link StoreFileExtensions#toFile(File, byte[])}}
 	 */
+	@Deprecated
 	public static void storeByteArrayToFile(final byte[] data, final File file) throws IOException
 	{
 		try (FileOutputStream fos = new FileOutputStream(file);
@@ -123,7 +126,10 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated use instead the corresponding method in
+	 *             {{@link StoreFileExtensions#toFile(File, String)}
 	 */
+	@Deprecated
 	public static boolean string2File(final File file, final String string2write)
 		throws FileNotFoundException, IOException
 	{
@@ -146,7 +152,10 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated use instead the corresponding method in
+	 *             {{@link StoreFileExtensions#toFile(File, String, String)}
 	 */
+	@Deprecated
 	public static boolean string2File(final File file, final String string2write,
 		final String encoding) throws FileNotFoundException, IOException
 	{
@@ -182,7 +191,7 @@ public final class WriteFileExtensions
 	 * @param outputStream
 	 *            the output stream
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -444,7 +453,10 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated use instead the corresponding method in
+	 *             {{@link StoreFileExtensions#toFile(File, String, String)}
 	 */
+	@Deprecated
 	public static boolean writeStringToFile(final File file, final String string2write,
 		final String encoding) throws FileNotFoundException, IOException
 	{

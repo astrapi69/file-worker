@@ -192,7 +192,7 @@ public final class ZipExtensions
 	 * @param zipFile
 	 *            the zip file
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
@@ -214,7 +214,7 @@ public final class ZipExtensions
 	 * @param filter
 	 *            the filter
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
@@ -238,7 +238,7 @@ public final class ZipExtensions
 	 * @param createFile
 	 *            the create file
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException

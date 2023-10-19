@@ -233,7 +233,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 * Test method for {@link ReadFileExtensions#readLinesInList(File, Charset)}.
 	 *
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -253,7 +253,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 * Test method for {@link ReadFileExtensions#readLinesInList(File, Charset, boolean)}.
 	 *
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -273,7 +273,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 * Test method for {@link ReadFileExtensions#readLinesInList(InputStream)}.
 	 *
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -316,7 +316,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 * Test method for {@link ReadFileExtensions#toByteArray(InputStream)}.
 	 *
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */

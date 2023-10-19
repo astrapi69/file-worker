@@ -552,7 +552,7 @@ public class CsvFileExtensionsTest
 	 * Test method for {@link CsvFileExtensions#sortData(File, String)}.
 	 *
 	 * @throws FileNotFoundException
-	 *             the file not found exception
+	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
