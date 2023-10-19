@@ -24,8 +24,6 @@
  */
 package io.github.astrapi69.file.write;
 
-import io.github.astrapi69.string.CharsetExtensions;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,6 +33,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Optional;
+
+import io.github.astrapi69.string.CharsetExtensions;
 
 /**
  * The class {@link StoreFileExtensions} provides extension methods for files to store or update
