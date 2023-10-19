@@ -1,12 +1,12 @@
 ## Change log
 ----------------------
 
-Version 17.1-SNAPSHOT
+Version 17.1
 -------------
 
 ADDED:
 
-- new extension class for store string objects to files
+- new extension class for store string objects and byte arrays to files
 
 CHANGED:
 
