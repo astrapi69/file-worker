@@ -24,6 +24,8 @@
  */
 package io.github.astrapi69.file.write;
 
+import io.github.astrapi69.string.CharsetExtensions;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +34,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Optional;
 
 /**
@@ -110,7 +111,7 @@ public final class StoreFileExtensions
 	public static boolean toFile(final File file, final String stringToWrite, final String encoding)
 		throws FileNotFoundException, IOException
 	{
-		Optional<Charset> optionalCharset = getCharset(encoding);
+		Optional<Charset> optionalCharset = CharsetExtensions.getCharset(encoding);
 
 		return optionalCharset.isPresent()
 			? toFile(file, stringToWrite, optionalCharset.get())
@@ -150,24 +151,6 @@ public final class StoreFileExtensions
 			written = true;
 		}
 		return written;
-	}
-
-	private static Optional<Charset> getCharset(final String encoding)
-	{
-		if (encoding == null)
-		{
-			return Optional.empty();
-		}
-		Charset charset = null;
-		try
-		{
-			charset = Charset.forName(encoding);
-		}
-		catch (UnsupportedCharsetException exception)
-		{
-			Optional.empty();
-		}
-		return charset != null ? Optional.of(charset) : Optional.empty();
 	}
 
 }

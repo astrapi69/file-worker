@@ -15,6 +15,7 @@ CHANGED:
 - update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.22.0
 - update of commons-io dependency to the new minor version 2.14.0
 - update of dependency crypt-api to the new minor version to 8.7
+- update of dependency silly-strings to new major version 9
 
 Version 17
 -------------
