@@ -45,7 +45,7 @@ public final class DirectoryStructureExtensions
 
 	/**
 	 * Creates a list of {@link FileContentInfo} objects from the given directory
-	 * 
+	 *
 	 * @param directory
 	 *            the directory
 	 * @return a list of {@link FileContentInfo} objects from the given directory

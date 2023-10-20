@@ -35,7 +35,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
  * The unit test class for the class {@link FileExtensions}.
@@ -86,7 +86,7 @@ public class FileExtensionsTest extends FileTestCase
 
 		final File destination = new File(this.testDir.getAbsoluteFile(), "testDownload.txt");
 
-		WriteFileExtensions.storeByteArrayToFile(expected, destination);
+		StoreFileExtensions.toFile(destination, expected);
 
 		final byte[] compare = FileExtensions.download(destination.toURI());
 

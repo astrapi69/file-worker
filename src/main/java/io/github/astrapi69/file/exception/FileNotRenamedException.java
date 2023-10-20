@@ -26,7 +26,7 @@ package io.github.astrapi69.file.exception;
 
 /**
  * Exception if the file could not be renamed.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -48,7 +48,7 @@ public class FileNotRenamedException extends Exception
 
 	/**
 	 * Constructs a new FileNotRenamedException with the specified detail message.
-	 * 
+	 *
 	 * @param message
 	 *            The message.
 	 */
@@ -59,7 +59,7 @@ public class FileNotRenamedException extends Exception
 
 	/**
 	 * Constructs a new FileNotRenamedException with the specified detail message and the Throwable.
-	 * 
+	 *
 	 * @param message
 	 *            The message.
 	 * @param cause
@@ -72,7 +72,7 @@ public class FileNotRenamedException extends Exception
 
 	/**
 	 * Constructs a FileNotRenamedException with the Throwable.
-	 * 
+	 *
 	 * @param cause
 	 *            The Throwable.
 	 */

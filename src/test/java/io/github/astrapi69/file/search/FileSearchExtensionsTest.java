@@ -45,7 +45,7 @@ import io.github.astrapi69.collection.set.SetFactory;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.io.file.filter.SuffixFileFilter;
 
 /**
@@ -98,7 +98,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	public void testContainsFileFileFile() throws IOException
 	{
 		final File testFile = new File(this.testDir, "beautifull.txt");
-		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
 		assertFalse("File should not exist in this directory.", contains);
 		contains = FileSearchExtensions.containsFile(this.testDir, testFile);
@@ -113,7 +113,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	public void testContainsFileFileString() throws IOException
 	{
 		final File testFile = new File(this.testDir, "beautifull.txt");
-		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
 		assertFalse("File should not exist in this directory.", contains);
 		final String filename = testFile.getName();
@@ -129,11 +129,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 	{
 		final File testFile = new File(this.testDir.getAbsoluteFile(),
 			"testContainsFileRecursives.txt");
-		WriteFileExtensions.string2File(testFile, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile, "Its a beautifull day!!!");
 
 		final File testFile3 = new File(this.deepDir.getAbsoluteFile(),
 			"testContainsFileRecursives.cvs");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull evening!!!");
 		final File currentDir = new File(".").getAbsoluteFile();
 		boolean contains = FileSearchExtensions.containsFileRecursive(currentDir.getAbsoluteFile(),
 			testFile);
@@ -162,10 +162,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull day!!!");
 		// this list is kept for clean up...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);
@@ -200,10 +200,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull day!!!");
 		// this list is kept for clean up...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);
@@ -243,9 +243,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesFileString.txt");
 		final File testFile2 = new File(this.testDir, "testFindFilesFileString.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesFileString.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
 		files = FileSearchExtensions.findFiles(this.testDir, (file -> {
 			if (file.isDirectory())
 			{
@@ -283,9 +283,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesFileString.txt");
 		final File testFile2 = new File(this.testDir, "testFindFilesFileString.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesFileString.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
 		files = SetFactory.newHashSet();
 		files = FileSearchExtensions.findFiles(this.testDir, files, SuffixFileFilter.of(suffix));
 		this.actual = files != null;
@@ -308,9 +308,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final File testFile1 = new File(this.testDir, "testFindFilesFileString.txt");
 		final File testFile2 = new File(this.testDir, "testFindFilesFileString.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesFileString.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
 		final List<File> foundedFiles = FileSearchExtensions.findFiles(this.testDir, test);
 		this.actual = foundedFiles != null;
 		assertTrue(this.actual);
@@ -338,9 +338,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		expectedFiles.add(testFile2);
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
 		List<File> foundedFiles = FileSearchExtensions.findFilesRecursive(this.testDir, test);
 		this.actual = foundedFiles != null;
 		assertTrue(this.actual);
@@ -392,15 +392,15 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(),
 			"testFindFilesStringStringArray9.cvs");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull morning!!!");
+		StoreFileExtensions.toFile(testFile5, "She's a beautifull woman!!!");
+		StoreFileExtensions.toFile(testFile6, "Its a beautifull street!!!");
+		StoreFileExtensions.toFile(testFile7, "He's a beautifull man!!!");
+		StoreFileExtensions.toFile(testFile8, "Its a beautifull city!!!");
+		StoreFileExtensions.toFile(testFile9, "He's a beautifull boy!!!");
 		expected.add(testFile1);
 		expected.add(testFile3);
 		expected.add(testFile6);
@@ -434,10 +434,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull day!!!");
 		// this list is kept for clean up...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);
@@ -486,10 +486,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull day!!!");
 		// this list is kept for clean up...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);
@@ -529,10 +529,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 			"testFindFilesRecursive.tft");
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
 		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive.txt");
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull day!!!");
 		// this list is kept for clean up...
 		final List<File> fileList = new ArrayList<>();
 		fileList.add(testFile1);

@@ -26,7 +26,7 @@ package io.github.astrapi69.file.exception;
 
 /**
  * This Exception is thrown when the file is not found or does not exist.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -48,7 +48,7 @@ public class FileDoesNotExistException extends Exception
 
 	/**
 	 * Constructs a new FileDoesNotExistException with the specified detail message.
-	 * 
+	 *
 	 * @param message
 	 *            The message.
 	 */
@@ -60,7 +60,7 @@ public class FileDoesNotExistException extends Exception
 	/**
 	 * Constructs a new FileDoesNotExistException with the specified detail message and the
 	 * Throwable.
-	 * 
+	 *
 	 * @param message
 	 *            The message.
 	 * @param cause
@@ -73,7 +73,7 @@ public class FileDoesNotExistException extends Exception
 
 	/**
 	 * Constructs a FileDoesNotExistException with the Throwable.
-	 * 
+	 *
 	 * @param cause
 	 *            The Throwable.
 	 */

@@ -52,7 +52,7 @@ import io.github.astrapi69.file.exception.FileIsADirectoryException;
 import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
 import io.github.astrapi69.file.exception.FileIsSecurityRestrictedException;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.io.file.FileExtension;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.io.file.filter.TxtFileFilter;
@@ -138,10 +138,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final FileCreationState state = DirectoryFactory.newDirectory(srcDeepDir);
 			assertTrue("The directory " + srcDeepDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
-			WriteFileExtensions.string2File(srcDeepFile, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcFile3, "Its a beautifull exe morning!!!");
-			WriteFileExtensions.string2File(srcFile4, "Its a beautifull txt evening!!!");
+			StoreFileExtensions.toFile(srcDeepFile, "Its a beautifull day!!!");
+			StoreFileExtensions.toFile(srcFile2, "Its a beautifull night!!!");
+			StoreFileExtensions.toFile(srcFile3, "Its a beautifull exe morning!!!");
+			StoreFileExtensions.toFile(srcFile4, "Its a beautifull txt evening!!!");
 		}
 		deepestDirName = "deepest";
 		srcDeepestDir = new File(srcDeepDir, deepestDirName);
@@ -165,10 +165,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 			final FileCreationState state = DirectoryFactory.newDirectory(srcDeepestDir);
 			assertTrue("The directory " + srcDeepestDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
-			WriteFileExtensions.string2File(srcDeepestFile, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile1, "Its a beautifull day!!!");
-			WriteFileExtensions.string2File(srcDeepestFile2, "Its a beautifull night!!!");
-			WriteFileExtensions.string2File(srcDeepestFile3, "Its a beautifull exe morning!!!");
+			StoreFileExtensions.toFile(srcDeepestFile, "Its a beautifull night!!!");
+			StoreFileExtensions.toFile(srcDeepestFile1, "Its a beautifull day!!!");
+			StoreFileExtensions.toFile(srcDeepestFile2, "Its a beautifull night!!!");
+			StoreFileExtensions.toFile(srcDeepestFile3, "Its a beautifull exe morning!!!");
 		}
 
 		source = new File(this.testDir, "testCopyFileInput.txt");
@@ -180,7 +180,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			assertTrue("The directory " + testDir.getAbsolutePath() + " should be created.",
 				state.equals(FileCreationState.CREATED));
 		}
-		WriteFileExtensions.string2File(srcFile, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
 		// define a filefilter object...
 		fileFilter = new TxtFileFilter();
 		// define the include filefilter object...
@@ -665,7 +665,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			assertTrue("", actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(source, inputString);
+		StoreFileExtensions.toFile(source, inputString);
 
 		actual = CopyFileExtensions.copyFile(source, destination);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "
@@ -697,7 +697,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 			assertTrue("", actual);
 		}
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(source, inputString);
+		StoreFileExtensions.toFile(source, inputString);
 
 		actual = CopyFileExtensions.copyFile(source, destination, false);
 		assertTrue("Source file " + source.getName() + " was not copied in the destination file "

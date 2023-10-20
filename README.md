@@ -32,7 +32,8 @@ applications.
 
 ## gradle dependency
 
-Replace the variable ${latestVersion} with the current latest version: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker)
+Replace the variable ${latestVersion} with the current latest
+version: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker)
 
 You can first define the version in the ext section and add than the following gradle dependency to
 your project `build.gradle` if you want to import the core functionality of file-worker:
@@ -61,10 +62,12 @@ and then add the dependency to the dependencies area
 
 This section describes how to import snapshot versions into your project.
 Add the following code snippet to your gradle file in the repositories section:
+
 ```
 repositories {
    //...
 ```
+
 ```groovy
     maven {
         name "Sonatype Nexus Snapshots"
@@ -74,6 +77,7 @@ repositories {
         }
     }
 ```
+
 ```
 }
 ```

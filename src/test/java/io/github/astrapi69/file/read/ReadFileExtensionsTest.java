@@ -49,6 +49,7 @@ import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 
 /**
@@ -142,13 +143,13 @@ public class ReadFileExtensionsTest extends FileTestCase
 		final File source = new File(this.test.getAbsoluteFile(), "testReadFileInput.txt");
 		final String sourceContent = ReadFileExtensions.fromFile(source);
 		final File output = new File(this.test.getAbsoluteFile(), "testReadFileOutput.txt");
-		WriteFileExtensions.string2File(output, sourceContent);
+		StoreFileExtensions.toFile(output, sourceContent);
 		final String outputContent = ReadFileExtensions.fromFile(output);
 		assertEquals(sourceContent, outputContent);
 
 		final File testFile1 = new File(this.testDir, "testReadFromFile.txt");
 		final String inputString = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(testFile1, inputString);
+		StoreFileExtensions.toFile(testFile1, inputString);
 		// --------------------------------
 
 		final String content = ReadFileExtensions.fromFile(testFile1);
@@ -189,7 +190,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 
 		final String inputString = "Its a beautifull day!!!\n This is the second line.\nThis is the third line. ";
 		final String expected = "Its a beautifull day!!!";
-		WriteFileExtensions.string2File(inputFile, inputString);
+		StoreFileExtensions.toFile(inputFile, inputString);
 		// --------------------------------
 		final String compare = ReadFileExtensions.readHeadLine(inputFile.getAbsolutePath());
 

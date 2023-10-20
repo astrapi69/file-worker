@@ -30,7 +30,7 @@ import java.util.zip.ZipFile;
 
 /**
  * The Interface ZipModel.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -39,7 +39,7 @@ public interface ZipModel
 
 	/**
 	 * Returns the field <code>compressionMethod</code>.
-	 * 
+	 *
 	 * @return The field <code>compressionMethod</code>.
 	 */
 	int getCompressionMethod();
@@ -196,7 +196,7 @@ public interface ZipModel
 
 	/**
 	 * Sets the field <code>zipLevel</code>.
-	 * 
+	 *
 	 * @param zipLevel
 	 *            The <code>zipLevel</code> to set
 	 */

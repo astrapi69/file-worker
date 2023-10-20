@@ -26,7 +26,7 @@ package io.github.astrapi69.file.exception;
 
 /**
  * Exception to be thrown if the directory cannot be created.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */

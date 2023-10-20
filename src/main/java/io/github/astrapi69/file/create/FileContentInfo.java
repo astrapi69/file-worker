@@ -30,7 +30,7 @@ import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.ChecksumAlgorithm;
 import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
@@ -85,8 +85,8 @@ public class FileContentInfo extends FileInfo
 			{
 				RuntimeExceptionDecorator.decorate(() -> FileFactory.newFile(file));
 			}
-			RuntimeExceptionDecorator.decorate(
-				() -> WriteFileExtensions.storeByteArrayToFile(fileContentInfo.getContent(), file));
+			RuntimeExceptionDecorator
+				.decorate(() -> StoreFileExtensions.toFile(file, fileContentInfo.getContent()));
 		}
 		return file;
 	}

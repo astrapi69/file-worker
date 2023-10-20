@@ -26,7 +26,7 @@ package io.github.astrapi69.file.compare.api;
 
 /**
  * The Interface IFileContentResultBean.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -35,14 +35,14 @@ public interface IFileContentResultBean extends IFileCompareResultBean
 
 	/**
 	 * Gets the content equality.
-	 * 
+	 *
 	 * @return the content equality
 	 */
 	boolean getContentEquality();
 
 	/**
 	 * Sets the content equality.
-	 * 
+	 *
 	 * @param contentEquality
 	 *            the new content equality
 	 */

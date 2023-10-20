@@ -4,9 +4,15 @@
 Version 17.2-SNAPSHOT
 -------------
 
+
+ADDED:
+
+- new properties file for spotless for the order of imports
+
 CHANGED:
 
 - update of dependency silly-io to new major version 3
+- removed deprecated methods in extension class WriteFileExtensions
 
 Version 17.1
 -------------
@@ -96,7 +102,6 @@ CHANGED:
 - update of dependency silly-collections to new version 20.1
 - update of dependency silly-strings to new version 8.2
 - update of dependency comparator-extensions to new version 1.4
-
 
 Version 11.3
 -------------

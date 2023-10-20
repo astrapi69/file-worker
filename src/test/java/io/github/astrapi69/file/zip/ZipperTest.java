@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.search.FileSearchExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.io.file.namefilter.MultiplyExtensionsFilenameFilter;
 import io.github.astrapi69.io.file.namefilter.SimpleFilenameFilter;
 import io.github.astrapi69.meanbean.factories.FileFactory;
@@ -145,15 +145,15 @@ public class ZipperTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull morning!!!");
+		StoreFileExtensions.toFile(testFile5, "She's a beautifull woman!!!");
+		StoreFileExtensions.toFile(testFile6, "Its a beautifull street!!!");
+		StoreFileExtensions.toFile(testFile7, "He's a beautifull man!!!");
+		StoreFileExtensions.toFile(testFile8, "Its a beautifull city!!!");
+		StoreFileExtensions.toFile(testFile9, "He's a beautifull boy!!!");
 
 		// ZipUtils.zip( testDir, zipFile );
 
@@ -207,21 +207,21 @@ public class ZipperTest extends ZipTestCase
 		final File testFile8 = new File(this.deeperDir.getAbsoluteFile(), "testZip8.txt");
 		final File testFile9 = new File(this.deeperDir.getAbsoluteFile(), "testZip9.cvs");
 
-		WriteFileExtensions.string2File(testFile1, "Its a beautifull day!!!");
-		WriteFileExtensions.string2File(testFile2, "Its a beautifull evening!!!");
-		WriteFileExtensions.string2File(testFile3, "Its a beautifull night!!!");
-		WriteFileExtensions.string2File(testFile4, "Its a beautifull morning!!!");
-		WriteFileExtensions.string2File(testFile5, "She's a beautifull woman!!!");
-		WriteFileExtensions.string2File(testFile6, "Its a beautifull street!!!");
-		WriteFileExtensions.string2File(testFile7, "He's a beautifull man!!!");
-		WriteFileExtensions.string2File(testFile8, "Its a beautifull city!!!");
-		WriteFileExtensions.string2File(testFile9, "He's a beautifull boy!!!");
+		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
+		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
+		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
+		StoreFileExtensions.toFile(testFile4, "Its a beautifull morning!!!");
+		StoreFileExtensions.toFile(testFile5, "She's a beautifull woman!!!");
+		StoreFileExtensions.toFile(testFile6, "Its a beautifull street!!!");
+		StoreFileExtensions.toFile(testFile7, "He's a beautifull man!!!");
+		StoreFileExtensions.toFile(testFile8, "Its a beautifull city!!!");
+		StoreFileExtensions.toFile(testFile9, "He's a beautifull boy!!!");
 
 		final SimpleFilenameFilter txtFilenameFilter = new SimpleFilenameFilter(".txt", false);
 
 		final Zipper zipper = Zipper.builder().directoryToZip(this.testDir).zipFile(zipFile)
 			.fileFilter(txtFilenameFilter).build(); // the same as new Zipper(this.testDir, zipFile,
-													// txtFilenameFilter);
+		// txtFilenameFilter);
 		// execute the zip process ...
 		zipper.zip();
 

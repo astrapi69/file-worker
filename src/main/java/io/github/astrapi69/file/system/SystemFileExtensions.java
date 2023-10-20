@@ -209,7 +209,7 @@ public final class SystemFileExtensions
 	 *
 	 * @param driveLetter
 	 *            the drive letter
-	 * 
+	 *
 	 * @return the drive directory from the given drive letter as {@link File} object or an empty
 	 *         {@link Optional} if not found
 	 */

@@ -57,7 +57,7 @@ public final class FileSearchExtensions
 
 	/**
 	 * Gets the root directory from the given {@link File} object
-	 * 
+	 *
 	 * @param file
 	 *            The file to search.
 	 * @return the root directory from the given {@link File} object
