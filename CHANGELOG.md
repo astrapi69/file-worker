@@ -13,6 +13,7 @@ CHANGED:
 
 - update of dependency silly-io to new major version 3
 - removed deprecated methods in extension class WriteFileExtensions
+- update of test dependency test-object to new major version 8
 
 Version 17.1
 -------------
