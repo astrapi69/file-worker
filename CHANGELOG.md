@@ -4,7 +4,9 @@
 Version 17.2-SNAPSHOT
 -------------
 
+CHANGED:
 
+- update of dependency silly-io to new major version 3
 
 Version 17.1
 -------------
