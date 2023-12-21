@@ -114,6 +114,9 @@ public class DirectoryStructureTestData
 	 * | - - - - article.component.ts <br>
 	 * | - - - - article.component.html <br>
 	 * <br>
+	 * 
+	 * @throws NoSuchAlgorithmException
+	 *             Is thrown if the algorithm is not supported or does not exist
 	 *
 	 * @return the collection with file infos with the above directory structure
 	 */

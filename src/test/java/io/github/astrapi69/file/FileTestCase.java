@@ -31,11 +31,11 @@ import java.io.File;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-import io.github.astrapi69.BaseTestCase;
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.FileCreationState;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
+import io.github.astrapi69.test.base.BaseTestCase;
 
 /**
  * The abstract class FileTestCase is for tests in the package 'io.github.astrapi69'.

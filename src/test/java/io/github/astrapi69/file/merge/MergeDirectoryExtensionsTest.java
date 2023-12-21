@@ -36,11 +36,25 @@ import io.github.astrapi69.file.create.DirectoryStructureFactory;
 import io.github.astrapi69.file.create.DirectoryStructureTestData;
 import io.github.astrapi69.file.create.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.search.PathFinder;
 
+/**
+ * The unit test class for the class {@link MergeDirectoryExtensions}
+ */
 public class MergeDirectoryExtensionsTest
 {
 
+	/**
+	 * Test method for {@link MergeDirectoryExtensions#merge(File, File...)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 * @throws NoSuchAlgorithmException
+	 *             is thrown if the directory all ready exists
+	 * @throws NoSuchAlgorithmException
+	 *             Is thrown if the algorithm is not supported or does not exist
+	 */
 	@Test
 	public void testMergeDirectory() throws IOException, NoSuchAlgorithmException
 	{
