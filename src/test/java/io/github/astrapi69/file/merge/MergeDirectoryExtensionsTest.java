@@ -36,7 +36,6 @@ import io.github.astrapi69.file.create.DirectoryStructureFactory;
 import io.github.astrapi69.file.create.DirectoryStructureTestData;
 import io.github.astrapi69.file.create.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.search.PathFinder;
 
 /**
