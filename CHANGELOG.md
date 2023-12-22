@@ -18,6 +18,7 @@ CHANGED:
 - update of commons-io dependency to the new minor version 2.15.1
 - update of commons-lang3 dependency to new version 3.14.0
 - update of dependency silly-io to new major version 3
+- update of dependency checksum-up to new major version 3
 - removed deprecated methods in extension class WriteFileExtensions
 - removed all obsolete package.html files
 - update of test dependency test-object to new major version 8.2
