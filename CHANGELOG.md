@@ -11,10 +11,10 @@ ADDED:
 
 CHANGED:
 
-- update gradle to new version 8.5
-- update of com.github.ben-manes.versions.gradle.plugin to new version 0.50.0
+- update gradle to new version 8.6
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.51.0
 - update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' in version 5.2.1
-- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.23.3
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.25.0
 - update of commons-io dependency to the new minor version 2.15.1
 - update of commons-lang3 dependency to new version 3.14.0
 - update of dependency silly-io to new major version 3
@@ -22,6 +22,7 @@ CHANGED:
 - removed deprecated methods in extension class WriteFileExtensions
 - removed all obsolete package.html files
 - update of test dependency test-object to new major version 8.2
+- update of test dependency testng to new version 7.9.0
 
 Version 17.1
 -------------
