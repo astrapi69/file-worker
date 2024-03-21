@@ -83,4 +83,34 @@ public class MergeDirectoryExtensionsTest
 		DeleteFileExtensions.delete(rightSide);
 	}
 
+
+	/**
+	 * Test method for {@link MergeDirectoryExtensions#merge(File, File...)} research case for merge
+	 * strategies for instance: <br>
+	 * <br>
+	 * TargetMasterMergeStrategy will do: <br>
+	 * <br>
+	 * if exists in source, but not in target -> copy from source to target and delete from
+	 * source<br>
+	 * <br>
+	 * if exists in target, but not in source -> do nothing<br>
+	 * <br>
+	 * if exists in both, but content not equal -> try to merge if fail copy from source to target
+	 * and delete from source <br>
+	 * if exists in both, and content is equal -> leave target unchanged and delete from source
+	 *
+	 * another strategy can leave source unchanged for historical issues SourceToTargetMergeStrategy
+	 * will do: <br>
+	 * if exists in source, but not in target -> copy from source to target <br>
+	 * if exists in target, but not in source -> do nothing <br>
+	 * if exists in both, but content not equal -> try to merge if fail copy from source to target
+	 * <br>
+	 * if exists in both, and content is equal -> leave target unchanged<br>
+	 */
+	@Test
+	public void testAndSync()
+	{
+
+	}
+
 }
