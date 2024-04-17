@@ -9,6 +9,7 @@ dependencies {
     implementation("io.github.astrapi69:silly-io:$sillyIoVersion")
     implementation("io.github.astrapi69:jobj-compare:$jobjCompareVersion")
     implementation("io.github.astrapi69:checksum-up:$checksumUpVersion")
+    testImplementation("org.jsoup:jsoup:$jsoupVersion")
     testImplementation("net.lingala.zip4j:zip4j:$zip4jVersion")
     testImplementation("io.github.astrapi69:zip4j-extension:$zip4jExtensionVersion")
     testImplementation("io.github.astrapi69:comparator-extensions:$comparatorExtensionsVersion")
@@ -17,4 +18,5 @@ dependencies {
     testImplementation("com.github.meanbeanlib:meanbean:$meanbeanVersion")
     testImplementation("io.github.astrapi69:meanbean-factories:$meanbeanFactoriesVersion")
     testImplementation("org.testng:testng:$testngVersion")
+    testImplementation("org.mockito:mockito-core:$mockitoCoreVersion")
 }
