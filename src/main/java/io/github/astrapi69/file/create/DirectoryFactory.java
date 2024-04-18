@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileAttribute;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -56,14 +57,16 @@ public class DirectoryFactory
 	 *
 	 * @return true, if successful
 	 */
-	public static FileCreationState newDirectories(final Collection<File> directories)
+	public static Collection<FileCreationState> newDirectories(final Collection<File> directories)
 	{
-		FileCreationState created = FileCreationState.PENDING;
+		Collection<FileCreationState> fileCreationStates = new ArrayList<>();
 		for (final File dir : directories)
 		{
+			FileCreationState created = FileCreationState.PENDING;
 			created = DirectoryFactory.newDirectory(dir);
+			fileCreationStates.add(created);
 		}
-		return created;
+		return fileCreationStates;
 
 	}
 
@@ -150,8 +153,8 @@ public class DirectoryFactory
 	}
 
 	/**
-	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
-	 * new empty file will be created on the file system
+	 * Factory method that creates a new {@link File} object from the given absolute path as
+	 * {@link String} object
 	 *
 	 * @param absolutePath
 	 *            the absolute path
@@ -213,6 +216,7 @@ public class DirectoryFactory
 				fileCreationState = FileCreationState.CREATED;
 			}
 		}
+		fileCreationState.setFile(directory);
 		return fileCreationState;
 	}
 
@@ -306,6 +310,85 @@ public class DirectoryFactory
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Creates a new temporary directory from the given {@link String} object and the optional file
+	 * attributes
+	 *
+	 * @param prefix
+	 *            the prefix string to be used in generating the directory's name; may be
+	 *            {@code null}
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 *
+	 * @return the {@link FileCreationState} with the result
+	 */
+	public static File newTempDirectory(String prefix, FileAttribute<?>... attrs) throws IOException
+	{
+		return Files.createTempDirectory(prefix, attrs).toFile();
+	}
+
+	/**
+	 * Creates a new temporary directory from the given {@link Path} object, the given
+	 * {@link String} object and the optional file attributes
+	 *
+	 *
+	 * @param dir
+	 *            the path to directory in which to create the directory
+	 * @param prefix
+	 *            the prefix string to be used in generating the directory's name; may be
+	 *            {@code null}
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 *
+	 * @return the {@link FileCreationState} with the result
+	 */
+	public static File newTempDirectory(Path dir, String prefix, FileAttribute<?>... attrs)
+		throws IOException
+	{
+		return Files.createTempDirectory(dir, prefix, attrs).toFile();
+	}
+
+	/**
+	 * Creates a new temporary directory from the given {@link String} object and the optional file
+	 * attributes
+	 *
+	 * @param prefix
+	 *            the prefix string to be used in generating the directory's name; may be
+	 *            {@code null}
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 *
+	 * @return the {@link FileCreationState} with the result
+	 */
+	public static FileCreationState newTempDir(String prefix, FileAttribute<?>... attrs)
+		throws IOException
+	{
+		File tempDirectory = newTempDirectory(prefix, attrs);
+		return newDirectory(tempDirectory);
+	}
+
+	/**
+	 * Creates a new temporary directory from the given {@link Path} object, the given
+	 * {@link String} object and the optional file attributes
+	 *
+	 *
+	 * @param dir
+	 *            the path to directory in which to create the directory
+	 * @param prefix
+	 *            the prefix string to be used in generating the directory's name; may be
+	 *            {@code null}
+	 * @param attrs
+	 *            an optional list of file attributes to set atomically when creating the directory
+	 *
+	 * @return the {@link FileCreationState} with the result
+	 */
+	public static FileCreationState newTempDir(Path dir, String prefix, FileAttribute<?>... attrs)
+		throws IOException
+	{
+		File tempDirectory = newTempDirectory(dir, prefix, attrs);
+		return newDirectory(tempDirectory);
 	}
 
 }

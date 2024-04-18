@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.meanbean.test.BeanTester;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -120,17 +121,19 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetFilecontentAsByteObjectArray() throws IOException
+	public void testGetFileContentAsByteObjectArray() throws IOException
 	{
 		Byte[] actual;
 		Byte[] expected;
 		final File tmpFile = new File(this.test, "testReadSmallFileInput.txt");
 		actual = ReadFileExtensions.getFilecontentAsByteObjectArray(tmpFile);
+		final String lineSeparator = System.lineSeparator();
+		final byte[] bytes = lineSeparator.getBytes();
 		expected = ArrayFactory.newArray(Byte.valueOf("f".getBytes()[0]),
 			Byte.valueOf("o".getBytes()[0]), Byte.valueOf("o".getBytes()[0]),
 			Byte.valueOf(" ".getBytes()[0]), Byte.valueOf("b".getBytes()[0]),
-			Byte.valueOf("a".getBytes()[0]), Byte.valueOf("r".getBytes()[0]),
-			Byte.valueOf((byte)10));
+			Byte.valueOf("a".getBytes()[0]), Byte.valueOf("r".getBytes()[0]));
+		expected = ArrayFactory.newArray(expected, ArrayUtils.toObject(bytes));
 		assertTrue(Arrays.deepEquals(actual, expected));
 	}
 
@@ -170,7 +173,9 @@ public class ReadFileExtensionsTest extends FileTestCase
 		String expected;
 		final File file = new File(this.test, "testReadSmallFileInput.txt");
 		actual = ReadFileExtensions.fromFile(file, StandardCharsets.UTF_8);
-		expected = "foo bar\n";
+		final String lineSeparator = System.lineSeparator();
+		final byte[] bytes = lineSeparator.getBytes();
+		expected = "foo bar" + lineSeparator;
 		assertEquals(actual, expected);
 	}
 
@@ -328,13 +333,18 @@ public class ReadFileExtensionsTest extends FileTestCase
 		byte[] expected;
 		final File tmpFile = new File(this.test, "testReadSmallFileInput.txt");
 		actual = ReadFileExtensions.toByteArray(new FileInputStream(tmpFile));
+		final String lineSeparator = System.lineSeparator();
+		final byte[] bytes = lineSeparator.getBytes();
 		expected = ArrayFactory.newByteArray(Byte.valueOf("f".getBytes()[0]).byteValue(),
 			Byte.valueOf("o".getBytes()[0]).byteValue(),
 			Byte.valueOf("o".getBytes()[0]).byteValue(),
 			Byte.valueOf(" ".getBytes()[0]).byteValue(),
 			Byte.valueOf("b".getBytes()[0]).byteValue(),
 			Byte.valueOf("a".getBytes()[0]).byteValue(),
-			Byte.valueOf("r".getBytes()[0]).byteValue(), Byte.valueOf((byte)10).byteValue());
+			Byte.valueOf("r".getBytes()[0]).byteValue());
+		Byte[] expected_Byte_Array = ArrayFactory.newArray(ArrayUtils.toObject(expected),
+			ArrayUtils.toObject(bytes));
+		expected = ArrayUtils.toPrimitive(expected_Byte_Array);
 		assertTrue(Arrays.equals(actual, expected));
 	}
 

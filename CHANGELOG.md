@@ -10,6 +10,7 @@ ADDED:
 - new test dependency mockito-core
 - new properties file for spotless for the order of imports
 - new package-info.java files to packages
+- new factory methods in DirectoryFactory for creation of temporary directory
 
 CHANGED:
 
