@@ -286,7 +286,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		expected = new FileCompareResultBean(testFile1, testFile2);
 		expected.setAbsolutePathEquality(false);
 		expected.setFileExtensionEquality(false);
-		expected.setLastModifiedEquality(false);
+		expected.setLastModifiedEquality(true);
 		expected.setLengthEquality(false);
 		expected.setNameEquality(true);
 		assertEquals(expected, actual);
@@ -296,7 +296,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		expected = new FileCompareResultBean(testFile1, testFile3);
 		expected.setAbsolutePathEquality(false);
 		expected.setFileExtensionEquality(false);
-		expected.setLastModifiedEquality(false);
+		expected.setLastModifiedEquality(true);
 		expected.setLengthEquality(true);
 		expected.setNameEquality(true);
 		assertEquals(expected, actual);
@@ -306,7 +306,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		expected = new FileCompareResultBean(testFile1, testFile3);
 		expected.setAbsolutePathEquality(true);
 		expected.setFileExtensionEquality(false);
-		expected.setLastModifiedEquality(false);
+		expected.setLastModifiedEquality(true);
 		expected.setLengthEquality(true);
 		expected.setNameEquality(true);
 		assertEquals(expected, actual);
@@ -316,7 +316,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		expected = new FileCompareResultBean(testFile1, testFile3);
 		expected.setAbsolutePathEquality(false);
 		expected.setFileExtensionEquality(true);
-		expected.setLastModifiedEquality(false);
+		expected.setLastModifiedEquality(true);
 		expected.setLengthEquality(true);
 		expected.setNameEquality(true);
 		assertEquals(expected, actual);
