@@ -11,6 +11,7 @@ ADDED:
 - new properties file for spotless for the order of imports
 - new package-info.java files to packages
 - new factory methods in DirectoryFactory for creation of temporary directory
+- new libs.versions.toml file for new automatic catalog versions update
 
 CHANGED:
 

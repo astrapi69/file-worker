@@ -15,9 +15,6 @@ dependencies {
     testImplementation libs.zip4j.extension
     testImplementation libs.comparator.extensions
     testImplementation libs.jobj.contract.verifier
-    testImplementation libs.test.object
-    testImplementation libs.meanbean
-    testImplementation libs.meanbean.factories
     // Note: use of bundles...
     testImplementation libs.bundles.unit.testing
 }

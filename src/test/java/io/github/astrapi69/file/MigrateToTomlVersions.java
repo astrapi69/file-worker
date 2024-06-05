@@ -1,3 +1,27 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.file;
 
 import static io.github.astrapi69.gradle.migration.data.DependenciesExtensions.getLibsVersionTomlMapAsString;
@@ -22,47 +46,13 @@ public class MigrateToTomlVersions
 {
 
 
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testWriteToTomlFileWithJackson() throws IOException
 	{
 
 		File projectDirectory = PathFinder.getProjectDirectory();
 		File gradleDirectory = PathFinder.getRelativePath(projectDirectory, "gradle");
-		File dependenciesGradle = PathFinder.getRelativePath(gradleDirectory,
-			"dependencies.gradle");
-
-		File gradlePropertiesFile = PathFinder.getRelativePath(projectDirectory,
-			"gradle.properties");
-		assertTrue(gradlePropertiesFile.exists());
-		// 1. Load all version from gradle.properties
-		Map<String, String> versionMap = DependenciesExtensions.getVersionMap(gradlePropertiesFile,
-			"Version");
-		String dependenciesContent = DependenciesExtensions
-			.getDependenciesContent(dependenciesGradle);
-		List<String> dependenciesAsStringList = DependenciesExtensions
-			.getDependenciesAsStringList(dependenciesContent);
-
-
-		List<DependencyInfo> dependencyInfos = DependenciesExtensions
-			.getDependencyInfos(dependenciesAsStringList, versionMap);
-		assertNotNull(dependencyInfos);
-		assertTrue(dependencyInfos.size() == 21);
-
-		String newDependenciesStructure = DependenciesExtensions
-			.getNewDependenciesStructure(dependencyInfos);
-
-		System.out.println(newDependenciesStructure);
-
-		String libsVersionTomlMapAsString = getLibsVersionTomlMapAsString(dependencyInfos);
-		System.out.println("========");
-		System.out.println(libsVersionTomlMapAsString);
-		// 2. Load all version from libs.versions.toml
-		File libsVersionsToml = PathFinder.getRelativePath(gradleDirectory, "libs.versions.toml");
-		if (!libsVersionsToml.exists())
-		{
-			StoreFileExtensions.toFile(libsVersionsToml, libsVersionTomlMapAsString);
-		}
-		String libsVersionsTomlFileContent = ReadFileExtensions.fromFile(libsVersionsToml);
-		assertEquals(libsVersionsTomlFileContent, libsVersionTomlMapAsString);
+		System.out.println(projectDirectory.getAbsolutePath());
+		System.out.println(gradleDirectory.getAbsolutePath());
 	}
 }

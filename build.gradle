@@ -35,6 +35,13 @@ apply from: "gradle/testing.gradle"
 
 java {
     sourceCompatibility = "$projectSourceCompatibility" as Object
+    toolchain {
+        languageVersion = JavaLanguageVersion.of("$projectSourceCompatibility")
+    }
+}
+
+tasks.named("test") {
+    it.mustRunAfter(tasks.named("jar"))
 }
 
 tasks.withType(JavaCompile) {
@@ -43,8 +50,4 @@ tasks.withType(JavaCompile) {
     // options.compilerArgs << "-Xlint:deprecation"
     // uncomment the next line for build with compiler argument -Xlint:unchecked
     // options.compilerArgs << "-Xlint:unchecked"
-}
-
-tasks.named("test") {
-    it.mustRunAfter(tasks.named("jar"))
 }

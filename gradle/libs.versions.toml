@@ -52,7 +52,9 @@ zip4j-extension = { module = "io.github.astrapi69:zip4j-extension", version.ref 
 [bundles]
 unit-testing = [
     "meanbean",
+    "meanbean-factories",
     "mockito-core",
+    "test-object",
     "testng",
 ]
 
