@@ -14,10 +14,10 @@ ADDED:
 
 CHANGED:
 
-- update gradle to new version 8.7
+- update gradle to new version 8.8
 - update of com.github.ben-manes.versions.gradle.plugin to new version 0.51.0
 - update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' in version 5.2.2
-- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 6.25.0
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 7.0.0.BETA1
 - update of commons-io dependency to the new minor version 2.15.1
 - update of commons-lang3 dependency to new version 3.14.0
 - update of dependency silly-io to new major version 3
