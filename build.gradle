@@ -44,7 +44,7 @@ tasks.named("test") {
     it.mustRunAfter(tasks.named("jar"))
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach { javaCompiler ->
     options.encoding = "UTF-8"
     // uncomment the next line for build with compiler argument -Xlint:deprecation
     // options.compilerArgs << "-Xlint:deprecation"
