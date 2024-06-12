@@ -16,7 +16,7 @@ plugins {
     alias(libs.plugins.license.gradle.plugin)
     alias(libs.plugins.grgit.gradle)
     alias(libs.plugins.spotless.plugin.gradle)
-    alias(libs.plugins.versionCatalogUpdate)
+    alias(libs.plugins.version.catalog.update)
 }
 
 group = "$groupPackage" as Object
