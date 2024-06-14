@@ -10,7 +10,6 @@ dependencies {
     implementation libs.jobj.compare
     implementation libs.checksum.up
     testImplementation libs.jsoup
-    testImplementation libs.gradle.migration.data
     testImplementation libs.zip4j
     testImplementation libs.zip4j.extension
     testImplementation libs.comparator.extensions

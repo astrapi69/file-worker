@@ -4,7 +4,6 @@ commons-io-version = "2.16.1"
 commons-lang3-version = "3.14.0"
 comparator-extensions-version = "1.5"
 crypt-api-version = "9"
-gradle-migration-data-version = "2.1"
 gradle-plugin-grgit-version = "5.2.2"
 gradle-plugin-license-version = "0.16.1"
 gradle-plugin-spotless-version = "7.0.0.BETA1"
@@ -32,7 +31,6 @@ commons-io = { module = "commons-io:commons-io", version.ref = "commons-io-versi
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3-version" }
 comparator-extensions = { module = "io.github.astrapi69:comparator-extensions", version.ref = "comparator-extensions-version" }
 crypt-api = { module = "io.github.astrapi69:crypt-api", version.ref = "crypt-api-version" }
-gradle-migration-data = { module = "io.github.astrapi69:gradle-migration-data", version.ref = "gradle-migration-data-version" }
 jobj-compare = { module = "io.github.astrapi69:jobj-compare", version.ref = "jobj-compare-version" }
 jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier", version.ref = "jobj-contract-verifier-version" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
