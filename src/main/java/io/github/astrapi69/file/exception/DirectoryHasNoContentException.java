@@ -26,7 +26,7 @@ package io.github.astrapi69.file.exception;
 
 /**
  * Exception if the directory has no content.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -48,7 +48,7 @@ public class DirectoryHasNoContentException extends Exception
 
 	/**
 	 * Constructs a new DirectoryHasNoContentException with the specified detail message.
-	 * 
+	 *
 	 * @param message
 	 *            The error message.
 	 */
@@ -60,7 +60,7 @@ public class DirectoryHasNoContentException extends Exception
 	/**
 	 * Constructs a new DirectoryHasNoContentException with the specified detail message and the
 	 * Throwable.
-	 * 
+	 *
 	 * @param message
 	 *            The error message.
 	 * @param cause
@@ -73,7 +73,7 @@ public class DirectoryHasNoContentException extends Exception
 
 	/**
 	 * Constructs a DirectoryHasNoContentException with the Throwable.
-	 * 
+	 *
 	 * @param cause
 	 *            The Throwable.
 	 */

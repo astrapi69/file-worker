@@ -1,18 +1,19 @@
 dependencies {
-    implementation("commons-io:commons-io:$commonsIoVersion")
-    implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
-    implementation("io.github.astrapi69:crypt-api:$cryptApiVersion")
-    implementation("io.github.astrapi69:throwable:$throwableVersion")
-    implementation("io.github.astrapi69:silly-collection:$sillyCollectionVersion")
-    implementation("io.github.astrapi69:silly-bean:$sillyBeanVersion")
-    implementation("io.github.astrapi69:silly-strings:$sillyStringsVersion")
-    implementation("io.github.astrapi69:silly-io:$sillyIoVersion")
-    implementation("io.github.astrapi69:jobj-compare:$jobjCompareVersion")
-    implementation("io.github.astrapi69:checksum-up:$checksumUpVersion")
-    testImplementation("io.github.astrapi69:comparator-extensions:$comparatorExtensionsVersion")
-    testImplementation("io.github.astrapi69:jobj-contract-verifier:$jobjContractVerifierVersion")
-    testImplementation("io.github.astrapi69:test-object:$testObjectVersion")
-    testImplementation("com.github.meanbeanlib:meanbean:$meanbeanVersion")
-    testImplementation("io.github.astrapi69:meanbean-factories:$meanbeanFactoriesVersion")
-    testImplementation("org.testng:testng:$testngVersion")
+    implementation libs.commons.io
+    implementation libs.commons.lang3
+    implementation libs.crypt.api
+    implementation libs.throwable
+    implementation libs.silly.collection
+    implementation libs.silly.bean
+    implementation libs.silly.strings
+    implementation libs.silly.io
+    implementation libs.jobj.compare
+    implementation libs.checksum.up
+    testImplementation libs.jsoup
+    testImplementation libs.zip4j
+    testImplementation libs.zip4j.extension
+    testImplementation libs.comparator.extensions
+    testImplementation libs.jobj.contract.verifier
+    // Note: use of bundles...
+    testImplementation libs.bundles.unit.testing
 }

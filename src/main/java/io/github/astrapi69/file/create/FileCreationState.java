@@ -24,6 +24,8 @@
  */
 package io.github.astrapi69.file.create;
 
+import java.io.File;
+
 /**
  * The enum {@link FileCreationState} provides constants for the file creation state
  */
@@ -40,6 +42,19 @@ public enum FileCreationState
 	FAILED,
 
 	/** This state signals that the file creation is pending */
-	PENDING
+	PENDING;
+
+	File file;
+
+	public File getFile()
+	{
+		return file;
+	}
+
+	public FileCreationState setFile(File file)
+	{
+		this.file = file;
+		return this;
+	}
 
 }

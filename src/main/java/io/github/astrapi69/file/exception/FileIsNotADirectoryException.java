@@ -26,7 +26,7 @@ package io.github.astrapi69.file.exception;
 
 /**
  * Exception if the file is not a directory.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -48,7 +48,7 @@ public class FileIsNotADirectoryException extends Exception
 
 	/**
 	 * Constructs a new FileIsNotADirectoryException with the specified detail message.
-	 * 
+	 *
 	 * @param message
 	 *            The message.
 	 */
@@ -60,7 +60,7 @@ public class FileIsNotADirectoryException extends Exception
 	/**
 	 * Constructs a new FileIsNotADirectoryException with the specified detail message and the
 	 * Throwable.
-	 * 
+	 *
 	 * @param message
 	 *            The message.
 	 * @param cause
@@ -73,7 +73,7 @@ public class FileIsNotADirectoryException extends Exception
 
 	/**
 	 * Constructs a FileIsNotADirectoryException with the Throwable.
-	 * 
+	 *
 	 * @param cause
 	 *            The Throwable.
 	 */

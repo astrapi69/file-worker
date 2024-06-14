@@ -28,7 +28,7 @@ import java.io.File;
 
 /**
  * The Interface IFileCompareResultBean.
- * 
+ *
  * @version 1.0
  * @author Asterios Raptis
  */
@@ -37,7 +37,7 @@ public interface IFileCompareResultBean
 
 	/**
 	 * Gets the absolute path equality.
-	 * 
+	 *
 	 * @return the absolute path equality
 	 */
 	boolean getAbsolutePathEquality();

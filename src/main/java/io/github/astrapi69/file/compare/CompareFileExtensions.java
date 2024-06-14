@@ -119,7 +119,9 @@ public final class CompareFileExtensions
 		if (!ignoreLastModified)
 		{
 			// check the last modified date...
-			final boolean lastModified = source.lastModified() == compare.lastModified();
+			final long lastModified1 = source.lastModified();
+			final long lastModified2 = compare.lastModified();
+			final boolean lastModified = lastModified1 == lastModified2;
 			fileCompareResultBean.setLastModifiedEquality(lastModified);
 		}
 		else

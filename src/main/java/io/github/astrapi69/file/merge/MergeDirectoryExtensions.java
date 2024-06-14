@@ -42,7 +42,7 @@ public class MergeDirectoryExtensions
 
 	/**
 	 * Merge the given directories to merge to the given target directory
-	 * 
+	 *
 	 * @param targetDir
 	 *            the target directory
 	 * @param directoriesToMerge

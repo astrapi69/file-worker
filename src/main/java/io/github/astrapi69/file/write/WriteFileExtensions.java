@@ -46,9 +46,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.system.SystemPropertiesExtensions;
 import io.github.astrapi69.io.StreamExtensions;
-import io.github.astrapi69.io.file.FileConstants;
 
 /**
  * The class {@link WriteFileExtensions} provides methods for writing in files.
@@ -90,79 +90,6 @@ public final class WriteFileExtensions
 	}
 
 	/**
-	 * Saves a byte array to the given file.
-	 *
-	 * @param data
-	 *            The byte array to be saved.
-	 * @param file
-	 *            The file to save the byte array.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @deprecated use instead the corresponding method in
-	 *             {{@link StoreFileExtensions#toFile(File, byte[])}}
-	 */
-	@Deprecated
-	public static void storeByteArrayToFile(final byte[] data, final File file) throws IOException
-	{
-		try (FileOutputStream fos = new FileOutputStream(file);
-			BufferedOutputStream bos = new BufferedOutputStream(fos))
-		{
-			bos.write(data);
-			bos.flush();
-		}
-	}
-
-	/**
-	 * The Method string2File(File, String) writes the String to the File.
-	 *
-	 * @param file
-	 *            The File to write the String.
-	 * @param string2write
-	 *            The String to write into the File.
-	 * @return The Method return true if the String was write successfull to the file otherwise
-	 *         false.
-	 * @throws FileNotFoundException
-	 *             is thrown if an attempt to open the file denoted by a specified pathname has
-	 *             failed.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @deprecated use instead the corresponding method in
-	 *             {{@link StoreFileExtensions#toFile(File, String)}
-	 */
-	@Deprecated
-	public static boolean string2File(final File file, final String string2write)
-		throws FileNotFoundException, IOException
-	{
-		return writeStringToFile(file, string2write, null);
-	}
-
-	/**
-	 * The Method string2File(File, String) writes the String to the File.
-	 *
-	 * @param file
-	 *            The File to write the String.
-	 * @param string2write
-	 *            The String to write into the File.
-	 * @param encoding
-	 *            the encoding
-	 * @return The Method return true if the String was write successfull to the file otherwise
-	 *         false.
-	 * @throws FileNotFoundException
-	 *             is thrown if an attempt to open the file denoted by a specified pathname has
-	 *             failed.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @deprecated use instead the corresponding method in
-	 *             {{@link StoreFileExtensions#toFile(File, String, String)}
-	 */
-	@Deprecated
-	public static boolean string2File(final File file, final String string2write,
-		final String encoding) throws FileNotFoundException, IOException
-	{
-		return writeStringToFile(file, string2write, encoding);
-	}
-
-	/**
 	 * The Method string2File() writes a String to the file.
 	 *
 	 * @param string2write
@@ -198,12 +125,7 @@ public final class WriteFileExtensions
 	public static void write(final InputStream inputStream, final OutputStream outputStream)
 		throws FileNotFoundException, IOException
 	{
-		int counter;
-		final byte[] byteArray = new byte[FileConstants.BLOCKSIZE];
-		while ((counter = inputStream.read(byteArray)) != -1)
-		{
-			outputStream.write(byteArray, 0, counter);
-		}
+		StreamExtensions.writeInputStreamToOutputStream(inputStream, outputStream);
 	}
 
 	/**
@@ -218,11 +140,7 @@ public final class WriteFileExtensions
 	 */
 	public static void write2File(final Reader reader, final Writer writer) throws IOException
 	{
-		int byt;
-		while ((byt = reader.read()) != -1)
-		{
-			writer.write(byt);
-		}
+		StreamExtensions.writeReaderToWriter(reader, writer);
 	}
 
 	/**
@@ -232,21 +150,16 @@ public final class WriteFileExtensions
 	 *            The Name from the File to read and copy.
 	 * @param outputFile
 	 *            The Name from the File to write into.
-	 * @throws FileNotFoundException
-	 *             is thrown if an attempt to open the file denoted by a specified pathname has
-	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static void write2File(final String inputFile, final String outputFile)
-		throws FileNotFoundException, IOException
+		throws IOException
 	{
-		try (FileInputStream fis = new FileInputStream(inputFile);
-			FileOutputStream fos = new FileOutputStream(outputFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			BufferedOutputStream bos = new BufferedOutputStream(fos))
+		try (InputStream is = StreamExtensions.getInputStream(inputFile);
+			OutputStream os = StreamExtensions.getOutputStream(outputFile))
 		{
-			StreamExtensions.writeInputStreamToOutputStream(bis, bos);
+			write(is, os);
 		}
 	}
 
@@ -325,15 +238,14 @@ public final class WriteFileExtensions
 	public static void writeByteArrayToFile(final String filename, final byte[] byteArray)
 		throws IOException
 	{
-		final File file = new File(filename);
-		writeByteArrayToFile(file, byteArray);
+		writeByteArrayToFile(FileFactory.newFile(filename), byteArray);
 	}
 
 	/**
-	 * Writes the input from the collection into the file.
+	 * Writes the input from the lines into the file.
 	 *
-	 * @param collection
-	 *            The collection to write to file.
+	 * @param lines
+	 *            The lines to write to file.
 	 * @param output
 	 *            The output-file.
 	 * @throws FileNotFoundException
@@ -342,23 +254,23 @@ public final class WriteFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void writeLinesToFile(final Collection<String> collection, final File output)
+	public static void writeLinesToFile(final Collection<String> lines, final File output)
 		throws FileNotFoundException, IOException
 	{
 		final StringBuilder sb = new StringBuilder();
-		for (final String element : collection)
+		for (final String line : lines)
 		{
-			sb.append(element);
+			sb.append(line);
 			sb.append("\n");
 		}
-		string2File(output, sb.toString());
+		StoreFileExtensions.toFile(output, sb.toString());
 	}
 
 	/**
-	 * Writes the input from the collection into the file.
+	 * Writes the input from the lines into the file.
 	 *
-	 * @param collection
-	 *            The collection to write to file.
+	 * @param lines
+	 *            The lines to write to file.
 	 * @param output
 	 *            The output-file.
 	 * @param encoding
@@ -369,16 +281,17 @@ public final class WriteFileExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void writeLinesToFile(final Collection<String> collection, final File output,
+	public static void writeLinesToFile(final Collection<String> lines, final File output,
 		final String encoding) throws FileNotFoundException, IOException
 	{
 		final StringBuilder sb = new StringBuilder();
-		for (final String element : collection)
+		final String lineSeparator = SystemPropertiesExtensions.getLineSeparator();
+		for (final String line : lines)
 		{
-			sb.append(element);
-			sb.append("\n");
+			sb.append(line);
+			sb.append(lineSeparator);
 		}
-		string2File(output, sb.toString(), encoding);
+		StoreFileExtensions.toFile(output, sb.toString(), encoding);
 	}
 
 	/**
@@ -435,42 +348,6 @@ public final class WriteFileExtensions
 		{
 			properties.store(fos, null);
 		}
-	}
-
-	/**
-	 * The Method writeStringToFile(File, String, String) writes the String to the File.
-	 *
-	 * @param file
-	 *            The File to write the String.
-	 * @param string2write
-	 *            The String to write into the File.
-	 * @param encoding
-	 *            The encoding from the file.
-	 * @return The Method return true if the String was write successfull to the file otherwise
-	 *         false.
-	 * @throws FileNotFoundException
-	 *             is thrown if an attempt to open the file denoted by a specified pathname has
-	 *             failed.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @deprecated use instead the corresponding method in
-	 *             {{@link StoreFileExtensions#toFile(File, String, String)}
-	 */
-	@Deprecated
-	public static boolean writeStringToFile(final File file, final String string2write,
-		final String encoding) throws FileNotFoundException, IOException
-	{
-		boolean iswritten = true;
-		try (FileOutputStream fos = new FileOutputStream(file);
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			OutputStreamWriter osw = (null == encoding)
-				? new OutputStreamWriter(bos)
-				: new OutputStreamWriter(bos, encoding);
-			PrintWriter printWriter = new PrintWriter(osw))
-		{
-			printWriter.write(string2write);
-		}
-		return iswritten;
 	}
 
 }

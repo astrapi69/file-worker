@@ -1,6 +1,35 @@
 ## Change log
 ----------------------
 
+Version 17.2
+-------------
+
+ADDED:
+
+- new test dependency jsoup
+- new test dependency mockito-core
+- new properties file for spotless for the order of imports
+- new package-info.java files to packages
+- new factory methods in DirectoryFactory for creation of temporary directory
+- new libs.versions.toml file for new automatic catalog versions update
+
+CHANGED:
+
+- update gradle to new version 8.8
+- update of com.github.ben-manes.versions.gradle.plugin to new version 0.51.0
+- update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' in version 5.2.2
+- update of gradle-plugin dependency 'com.diffplug.spotless:spotless-plugin-gradle' to new minor version 7.0.0.BETA1
+- update of commons-io dependency to the new minor version 2.15.1
+- update of commons-lang3 dependency to new version 3.14.0
+- update of dependency silly-io to new major version 3
+- update of dependency silly-collection to new version 27.1
+- update of dependency checksum-up to new major version 3
+- removed deprecated methods in extension class WriteFileExtensions
+- removed all obsolete package.html files
+- update of test dependency test-object to new major version 8.2
+- update of test dependency testng to new version7.10.1
+- update of test dependency zip4j to new version 2.11.5
+
 Version 17.1
 -------------
 
@@ -89,7 +118,6 @@ CHANGED:
 - update of dependency silly-collections to new version 20.1
 - update of dependency silly-strings to new version 8.2
 - update of dependency comparator-extensions to new version 1.4
-
 
 Version 11.3
 -------------

@@ -39,6 +39,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.file.write.WriteFileExtensions;
 import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.string.StringExtensions;
@@ -147,7 +148,7 @@ public final class CsvFileExtensions
 	{
 		final List<String> list = readLinesInList(input, "UTF-8");
 		final String sb = formatListToString(list);
-		WriteFileExtensions.writeStringToFile(output, sb, encoding);
+		StoreFileExtensions.toFile(output, sb, encoding);
 	}
 
 	/**
@@ -625,13 +626,7 @@ public final class CsvFileExtensions
 	public static void writeLinesToFile(final Collection<String> collection, final File output,
 		final String encoding) throws IOException
 	{
-		final StringBuffer sb = new StringBuffer();
-		for (final String element : collection)
-		{
-			sb.append(element);
-			sb.append("\n");
-		}
-		WriteFileExtensions.writeStringToFile(output, sb.toString(), encoding);
+		WriteFileExtensions.writeLinesToFile(collection, output, encoding);
 	}
 
 }
