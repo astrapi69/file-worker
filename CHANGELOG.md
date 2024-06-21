@@ -32,7 +32,7 @@ CHANGED:
 - removed deprecated methods in extension class WriteFileExtensions
 - removed all obsolete package.html files
 - update of test dependency test-object to new major version 8.2
-- update of test dependency testng to new version7.10.1
+- update of test dependency testng to new version 7.10.1
 - update of test dependency zip4j to new version 2.11.5
 
 Version 17.1
