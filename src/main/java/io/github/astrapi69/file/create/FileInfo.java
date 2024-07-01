@@ -28,18 +28,33 @@ import java.io.File;
 import java.util.Objects;
 
 /**
- * The class {@link FileInfo} provides data for create a {@link File} Object
+ * The class {@link FileInfo} represents file information, including name, path, and directory flag.
+ *
+ * @version 1.0
+ * @author Asterios Raptis
  */
 public class FileInfo
 {
 
-	/** The name of this file */
+	/** The name of this file. */
 	private String name;
-	/** The path of this file */
+
+	/** The path of this file. */
 	private String path;
-	/** The flag if this file is a directory */
+
+	/** Flag indicating if this file is a directory. */
 	private boolean directory;
 
+	/**
+	 * Constructs a new `FileInfo` with the given name, path, and directory flag.
+	 *
+	 * @param name
+	 *            the name of the file
+	 * @param path
+	 *            the path of the file
+	 * @param directory
+	 *            true if the file is a directory, false otherwise
+	 */
 	public FileInfo(String name, String path, boolean directory)
 	{
 		this.name = name;
@@ -47,10 +62,21 @@ public class FileInfo
 		this.directory = directory;
 	}
 
+	/**
+	 * Constructs a new empty `FileInfo`.
+	 */
 	public FileInfo()
 	{
 	}
 
+	/**
+	 * Constructs a new `FileInfo` from the given {@link File} object.
+	 *
+	 * @param file
+	 *            the file from which to construct the `FileInfo`
+	 * @throws NullPointerException
+	 *             if the file is null
+	 */
 	public FileInfo(final File file)
 	{
 		Objects.requireNonNull(file);
@@ -59,6 +85,12 @@ public class FileInfo
 		this.directory = file.isDirectory();
 	}
 
+	/**
+	 * Constructs a new `FileInfo` from the builder.
+	 *
+	 * @param b
+	 *            the builder used to construct the `FileInfo`
+	 */
 	protected FileInfo(FileInfoBuilder<?, ?> b)
 	{
 		this.name = b.name;
@@ -67,26 +99,13 @@ public class FileInfo
 	}
 
 	/**
-	 * Factory method for creating only the new {@link File} object from the given {@link FileInfo}
-	 * object. This means that if the file does not exist it will not be created, if you want this
-	 * behavior use the {@link FileFactory#newFile(FileInfo)} or
-	 * {@link FileFactory#newFileQuietly(FileInfo)} method
-	 *
-	 * @param fileInfo
-	 *            the {@link FileInfo} object
-	 * @return the new {@link File} object
-	 */
-	public static File toFile(FileInfo fileInfo)
-	{
-		return new File(fileInfo.getPath(), fileInfo.getName());
-	}
-
-	/**
-	 * Converts the given {@link File} object to a {@link FileInfo} object
+	 * Converts the given {@link File} object to a `FileInfo` object.
 	 *
 	 * @param file
-	 *            the {@link File} object to convert to a {@link FileInfo} object
-	 * @return a new {@link FileInfo} object from the given {@link File} object
+	 *            the file to convert to `FileInfo`
+	 * @return a new `FileInfo` object from the given file
+	 * @throws NullPointerException
+	 *             if the file is null
 	 */
 	public static FileInfo toFileInfo(final File file)
 	{
@@ -95,41 +114,98 @@ public class FileInfo
 			.directory(file.isDirectory()).build();
 	}
 
+	/**
+	 * Converts this `FileInfo` object to a {@link File} object.
+	 *
+	 * @param fileInfo
+	 *            the `FileInfo` object to convert to `File`
+	 * @return the new `File` object from this `FileInfo`
+	 */
+	public static File toFile(FileInfo fileInfo)
+	{
+		return new File(fileInfo.getPath(), fileInfo.getName());
+	}
+
+	/**
+	 * Returns a builder for constructing `FileInfo` objects.
+	 *
+	 * @return a new instance of `FileInfoBuilder`
+	 */
 	public static FileInfoBuilder<?, ?> builder()
 	{
 		return new FileInfoBuilderImpl();
 	}
 
+	/**
+	 * Retrieves the name of the file.
+	 *
+	 * @return the name of the file
+	 */
 	public String getName()
 	{
 		return this.name;
 	}
 
+	/**
+	 * Sets the name of the file.
+	 *
+	 * @param name
+	 *            the new name to set
+	 */
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
+	/**
+	 * Retrieves the path of the file.
+	 *
+	 * @return the path of the file
+	 */
 	public String getPath()
 	{
 		return this.path;
 	}
 
+	/**
+	 * Sets the path of the file.
+	 *
+	 * @param path
+	 *            the new path to set
+	 */
 	public void setPath(String path)
 	{
 		this.path = path;
 	}
 
+	/**
+	 * Checks if the file is a directory.
+	 *
+	 * @return true if the file is a directory, false otherwise
+	 */
 	public boolean isDirectory()
 	{
 		return this.directory;
 	}
 
+	/**
+	 * Sets whether the file is a directory.
+	 *
+	 * @param directory
+	 *            true if the file is a directory, false otherwise
+	 */
 	public void setDirectory(boolean directory)
 	{
 		this.directory = directory;
 	}
 
+	/**
+	 * Indicates whether some other object is "equal to" this one.
+	 *
+	 * @param o
+	 *            the object to compare
+	 * @return true if this object is the same as the o argument; false otherwise
+	 */
 	public boolean equals(final Object o)
 	{
 		if (o == this)
@@ -147,16 +223,26 @@ public class FileInfo
 		final Object other$path = other.getPath();
 		if (this$path == null ? other$path != null : !this$path.equals(other$path))
 			return false;
-		if (this.isDirectory() != other.isDirectory())
-			return false;
-		return true;
+		return this.isDirectory() == other.isDirectory();
 	}
 
+	/**
+	 * Internal method for checking equality with another object.
+	 *
+	 * @param other
+	 *            the object to compare with
+	 * @return true if the objects can be considered equal, false otherwise
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof FileInfo;
 	}
 
+	/**
+	 * Returns a hash code value for the object.
+	 *
+	 * @return a hash code value for this object
+	 */
 	public int hashCode()
 	{
 		final int PRIME = 59;
@@ -169,23 +255,53 @@ public class FileInfo
 		return result;
 	}
 
+	/**
+	 * Returns a string representation of the object.
+	 *
+	 * @return a string representation of the object
+	 */
 	public String toString()
 	{
-		return "FileInfo(name=" + this.getName() + ", path=" + this.getPath() + ", directory="
-			+ this.isDirectory() + ")";
+		return "FileInfo{" + "name='" + this.getName() + '\'' + ", path='" + this.getPath() + '\''
+			+ ", directory=" + this.isDirectory() + '}';
 	}
 
+	/**
+	 * Returns a builder initialized with the values of this `FileInfo` object.
+	 *
+	 * @return a new `FileInfoBuilder` initialized with this `FileInfo` values
+	 */
 	public FileInfoBuilder<?, ?> toBuilder()
 	{
 		return new FileInfoBuilderImpl().$fillValuesFrom(this);
 	}
 
+	/**
+	 * The builder class for constructing `FileInfo` objects.
+	 *
+	 * @param <C>
+	 *            the type of `FileInfo` to build
+	 * @param <B>
+	 *            the type of builder for `FileInfo`
+	 */
 	public static abstract class FileInfoBuilder<C extends FileInfo, B extends FileInfoBuilder<C, B>>
 	{
+
+		/** The name of the file. */
 		private String name;
+
+		/** The path of the file. */
 		private String path;
+
+		/** Flag indicating if the file is a directory. */
 		private boolean directory;
 
+		/**
+		 * Internal method to fill the builder with values from an existing `FileInfo` instance.
+		 *
+		 * @param instance
+		 *            the `FileInfo` instance to copy values from
+		 */
 		private static void $fillValuesFromInstanceIntoBuilder(FileInfo instance,
 			FileInfoBuilder<?, ?> b)
 		{
@@ -194,54 +310,114 @@ public class FileInfo
 			b.directory(instance.directory);
 		}
 
+		/**
+		 * Sets the name of the file.
+		 *
+		 * @param name
+		 *            the name of the file
+		 * @return this builder instance
+		 */
 		public B name(String name)
 		{
 			this.name = name;
 			return self();
 		}
 
+		/**
+		 * Sets the path of the file.
+		 *
+		 * @param path
+		 *            the path of the file
+		 * @return this builder instance
+		 */
 		public B path(String path)
 		{
 			this.path = path;
 			return self();
 		}
 
+		/**
+		 * Sets whether the file is a directory.
+		 *
+		 * @param directory
+		 *            true if the file is a directory, false otherwise
+		 * @return this builder instance
+		 */
 		public B directory(boolean directory)
 		{
 			this.directory = directory;
 			return self();
 		}
 
+		/**
+		 * Internal method to fill the builder with values from an existing `FileInfo` instance.
+		 *
+		 * @param instance
+		 *            the `FileInfo` instance to copy values from
+		 * @return this builder instance
+		 */
 		protected B $fillValuesFrom(C instance)
 		{
 			FileInfoBuilder.$fillValuesFromInstanceIntoBuilder(instance, this);
 			return self();
 		}
 
+		/**
+		 * Returns this builder instance.
+		 *
+		 * @return this builder instance
+		 */
 		protected abstract B self();
 
+		/**
+		 * Builds the `FileInfo` object.
+		 *
+		 * @return the constructed `FileInfo` object
+		 */
 		public abstract C build();
 
+		/**
+		 * Returns a string representation of the builder.
+		 *
+		 * @return a string representation of the builder
+		 */
 		public String toString()
 		{
-			return "FileInfo.FileInfoBuilder(name=" + this.name + ", path=" + this.path
-				+ ", directory=" + this.directory + ")";
+			return "FileInfoBuilder{" + "name='" + this.name + '\'' + ", path='" + this.path + '\''
+				+ ", directory=" + this.directory + '}';
 		}
 	}
 
+	/**
+	 * The concrete builder class for constructing `FileInfo` objects.
+	 */
 	private static final class FileInfoBuilderImpl
 		extends
 			FileInfoBuilder<FileInfo, FileInfoBuilderImpl>
 	{
+
+		/**
+		 * Constructs a new `FileInfoBuilderImpl`.
+		 */
 		private FileInfoBuilderImpl()
 		{
 		}
 
+		/**
+		 * Returns this builder instance.
+		 *
+		 * @return this builder instance
+		 */
 		protected FileInfoBuilderImpl self()
 		{
 			return this;
 		}
 
+		/**
+		 * Builds the `FileInfo` object.
+		 *
+		 * @return the constructed `FileInfo` object
+		 */
 		public FileInfo build()
 		{
 			return new FileInfo(this);

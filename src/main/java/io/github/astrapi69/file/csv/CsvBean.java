@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.file.csv;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -36,37 +37,43 @@ import io.github.astrapi69.collection.list.ListExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
 
 /**
- * The class {@link CsvBean}.
+ * The `CsvBean` class represents a structured data model for CSV files. It includes headers, column
+ * types, lines of data, and supports operations like cloning, equality comparison, and fluent
+ * construction using the builder pattern.
  */
 public class CsvBean implements Serializable, Cloneable
 {
 
 	/** The Constant serialVersionUID. */
+	@Serial
 	private static final long serialVersionUID = 1648936246997896598L;
-	/** The column types. */
+	/** The types of each column. */
 	private String[] columnTypes;
-	/** The column types edit. */
+	/** The editable types of each column. */
 	private String[] columnTypesEdit;
-	/** The headers. */
+	/** The headers of the CSV. */
 	private String[] headers;
-	/** The line order. */
+	/** The order of lines in the CSV. */
 	private Map<Integer, Integer> lineOrder;
-	/** The lines. */
+	/** The lines of data in the CSV. */
 	private List<String[]> lines;
 
+	/**
+	 * Default constructor.
+	 */
 	public CsvBean()
 	{
 	}
 
 	/**
-	 * Instantiates a new {@link CsvBean} object.
+	 * Constructs a new `CsvBean` object with specified headers, column types, and lines.
 	 *
 	 * @param headers
-	 *            the headers
+	 *            the headers of the CSV
 	 * @param columnTypes
-	 *            the column types
+	 *            the types of each column
 	 * @param lines
-	 *            the lines
+	 *            the lines of data in the CSV
 	 */
 	public CsvBean(final String[] headers, final String[] columnTypes, final List<String[]> lines)
 	{
@@ -76,16 +83,17 @@ public class CsvBean implements Serializable, Cloneable
 	}
 
 	/**
-	 * Instantiates a new {@link CsvBean} object.
+	 * Constructs a new `CsvBean` object with specified headers, column types, editable types, and
+	 * lines.
 	 *
 	 * @param headers
-	 *            the headers
+	 *            the headers of the CSV
 	 * @param columnTypes
-	 *            the column types
+	 *            the types of each column
 	 * @param columnTypesEdit
-	 *            the column types edit
+	 *            the editable types of each column
 	 * @param lines
-	 *            the lines
+	 *            the lines of data in the CSV
 	 */
 	public CsvBean(final String[] headers, final String[] columnTypes,
 		final String[] columnTypesEdit, final List<String[]> lines)
@@ -96,6 +104,21 @@ public class CsvBean implements Serializable, Cloneable
 		this.lines = lines;
 	}
 
+	/**
+	 * Constructs a new `CsvBean` object with specified column types, editable types, headers, line
+	 * order, and lines.
+	 *
+	 * @param columnTypes
+	 *            the types of each column
+	 * @param columnTypesEdit
+	 *            the editable types of each column
+	 * @param headers
+	 *            the headers of the CSV
+	 * @param lineOrder
+	 *            the order of lines in the CSV
+	 * @param lines
+	 *            the lines of data in the CSV
+	 */
 	public CsvBean(String[] columnTypes, String[] columnTypesEdit, String[] headers,
 		Map<Integer, Integer> lineOrder, List<String[]> lines)
 	{
@@ -106,6 +129,11 @@ public class CsvBean implements Serializable, Cloneable
 		this.lines = lines;
 	}
 
+	/**
+	 * Creates a builder for constructing `CsvBean` objects.
+	 *
+	 * @return a new `CsvBeanBuilder` instance
+	 */
 	public static CsvBeanBuilder builder()
 	{
 		return new CsvBeanBuilder();
@@ -139,17 +167,13 @@ public class CsvBean implements Serializable, Cloneable
 		{
 			return true;
 		}
-		if (o == null)
-		{
-			return false;
-		}
-		if (o.getClass() != getClass())
+		if (o == null || getClass() != o.getClass())
 		{
 			return false;
 		}
 		final CsvBean other = (CsvBean)o;
-		boolean headersEquality = java.util.Arrays.equals(headers, other.headers);
-		boolean columnTypesEquality = java.util.Arrays.equals(columnTypes, other.columnTypes);
+		boolean headersEquality = Arrays.equals(headers, other.headers);
+		boolean columnTypesEquality = Arrays.equals(columnTypes, other.columnTypes);
 		boolean linesEquality = false;
 		if (lines == null)
 		{
@@ -160,51 +184,106 @@ public class CsvBean implements Serializable, Cloneable
 		return headersEquality && columnTypesEquality && linesEquality;
 	}
 
+	/**
+	 * Gets the types of each column in the CSV.
+	 *
+	 * @return an array representing the types of each column
+	 */
 	public String[] getColumnTypes()
 	{
 		return this.columnTypes;
 	}
 
+	/**
+	 * Sets the types of each column in the CSV.
+	 *
+	 * @param columnTypes
+	 *            an array representing the types of each column
+	 */
 	public void setColumnTypes(String[] columnTypes)
 	{
 		this.columnTypes = columnTypes;
 	}
 
+	/**
+	 * Gets the editable types of each column in the CSV.
+	 *
+	 * @return an array representing the editable types of each column
+	 */
 	public String[] getColumnTypesEdit()
 	{
 		return this.columnTypesEdit;
 	}
 
+	/**
+	 * Sets the editable types of each column in the CSV.
+	 *
+	 * @param columnTypesEdit
+	 *            an array representing the editable types of each column
+	 */
 	public void setColumnTypesEdit(String[] columnTypesEdit)
 	{
 		this.columnTypesEdit = columnTypesEdit;
 	}
 
+	/**
+	 * Gets the headers of the CSV.
+	 *
+	 * @return an array representing the headers of the CSV
+	 */
 	public String[] getHeaders()
 	{
 		return this.headers;
 	}
 
+	/**
+	 * Sets the headers of the CSV.
+	 *
+	 * @param headers
+	 *            an array representing the headers of the CSV
+	 */
 	public void setHeaders(String[] headers)
 	{
 		this.headers = headers;
 	}
 
+	/**
+	 * Gets the order of lines in the CSV.
+	 *
+	 * @return a map representing the order of lines in the CSV
+	 */
 	public Map<Integer, Integer> getLineOrder()
 	{
 		return this.lineOrder;
 	}
 
+	/**
+	 * Sets the order of lines in the CSV.
+	 *
+	 * @param lineOrder
+	 *            a map representing the order of lines in the CSV
+	 */
 	public void setLineOrder(Map<Integer, Integer> lineOrder)
 	{
 		this.lineOrder = lineOrder;
 	}
 
+	/**
+	 * Gets the lines of data in the CSV.
+	 *
+	 * @return a list containing arrays representing the lines of data in the CSV
+	 */
 	public List<String[]> getLines()
 	{
 		return this.lines;
 	}
 
+	/**
+	 * Sets the lines of data in the CSV.
+	 *
+	 * @param lines
+	 *            a list containing arrays representing the lines of data in the CSV
+	 */
 	public void setLines(List<String[]> lines)
 	{
 		this.lines = lines;
@@ -224,6 +303,11 @@ public class CsvBean implements Serializable, Cloneable
 		return hashCode;
 	}
 
+	/**
+	 * Creates a builder initialized with the current `CsvBean` instance's properties.
+	 *
+	 * @return a new `CsvBeanBuilder` initialized with the current instance's properties
+	 */
 	public CsvBeanBuilder toBuilder()
 	{
 		return new CsvBeanBuilder().columnTypes(this.columnTypes)
@@ -231,6 +315,12 @@ public class CsvBean implements Serializable, Cloneable
 			.lines(this.lines);
 	}
 
+	/**
+	 * Returns a string representation of the `CsvBean` object, showing its current column types,
+	 * editable types, headers, line order, and lines of data.
+	 *
+	 * @return a string representation of the `CsvBean` object
+	 */
 	@Override
 	public String toString()
 	{
@@ -240,6 +330,9 @@ public class CsvBean implements Serializable, Cloneable
 			+ ", lines=" + this.getLines() + ")";
 	}
 
+	/**
+	 * Builder class for constructing `CsvBean` objects.
+	 */
 	public static class CsvBeanBuilder
 	{
 		private String[] columnTypes;
@@ -248,45 +341,94 @@ public class CsvBean implements Serializable, Cloneable
 		private Map<Integer, Integer> lineOrder;
 		private List<String[]> lines;
 
+		/**
+		 * Default constructor.
+		 */
 		CsvBeanBuilder()
 		{
 		}
 
+		/**
+		 * Constructs a new `CsvBean` object based on the current builder state.
+		 *
+		 * @return a new `CsvBean` object
+		 */
 		public CsvBean build()
 		{
 			return new CsvBean(columnTypes, columnTypesEdit, headers, lineOrder, lines);
 		}
 
-		public CsvBean.CsvBeanBuilder columnTypes(String[] columnTypes)
+		/**
+		 * Sets the types of each column for the `CsvBean` object being built.
+		 *
+		 * @param columnTypes
+		 *            an array representing the types of each column
+		 * @return the current `CsvBeanBuilder` instance
+		 */
+		public CsvBeanBuilder columnTypes(String[] columnTypes)
 		{
 			this.columnTypes = columnTypes;
 			return this;
 		}
 
-		public CsvBean.CsvBeanBuilder columnTypesEdit(String[] columnTypesEdit)
+		/**
+		 * Sets the editable types of each column for the `CsvBean` object being built.
+		 *
+		 * @param columnTypesEdit
+		 *            an array representing the editable types of each column
+		 * @return the current `CsvBeanBuilder` instance
+		 */
+		public CsvBeanBuilder columnTypesEdit(String[] columnTypesEdit)
 		{
 			this.columnTypesEdit = columnTypesEdit;
 			return this;
 		}
 
-		public CsvBean.CsvBeanBuilder headers(String[] headers)
+		/**
+		 * Sets the headers for the `CsvBean` object being built.
+		 *
+		 * @param headers
+		 *            an array representing the headers of the CSV
+		 * @return the current `CsvBeanBuilder` instance
+		 */
+		public CsvBeanBuilder headers(String[] headers)
 		{
 			this.headers = headers;
 			return this;
 		}
 
-		public CsvBean.CsvBeanBuilder lineOrder(Map<Integer, Integer> lineOrder)
+		/**
+		 * Sets the line order for the `CsvBean` object being built.
+		 *
+		 * @param lineOrder
+		 *            a map representing the order of lines in the CSV
+		 * @return the current `CsvBeanBuilder` instance
+		 */
+		public CsvBeanBuilder lineOrder(Map<Integer, Integer> lineOrder)
 		{
 			this.lineOrder = lineOrder;
 			return this;
 		}
 
-		public CsvBean.CsvBeanBuilder lines(List<String[]> lines)
+		/**
+		 * Sets the lines of data for the `CsvBean` object being built.
+		 *
+		 * @param lines
+		 *            a list containing arrays representing the lines of data in the CSV
+		 * @return the current `CsvBeanBuilder` instance
+		 */
+		public CsvBeanBuilder lines(List<String[]> lines)
 		{
 			this.lines = lines;
 			return this;
 		}
 
+		/**
+		 * Returns a string representation of the `CsvBeanBuilder` object, showing its current
+		 * column types, editable types, headers, line order, and lines of data.
+		 *
+		 * @return a string representation of the `CsvBeanBuilder` object
+		 */
 		@Override
 		public String toString()
 		{

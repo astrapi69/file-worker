@@ -66,11 +66,21 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		this.compare = compare;
 	}
 
+	/**
+	 * Internal method for checking if another object can be considered equal to this one.
+	 *
+	 * @param other
+	 *            the object to compare with
+	 * @return true if the objects can be considered equal, false otherwise
+	 */
 	protected boolean canEqual(final Object other)
 	{
 		return other instanceof FileCompareResultBean;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean equals(final Object o)
 	{
@@ -268,6 +278,9 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		return this.source;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int hashCode()
 	{
@@ -293,11 +306,23 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		return result;
 	}
 
+	/**
+	 * Sets the file to compare against.
+	 *
+	 * @param compare
+	 *            the file to compare against
+	 */
 	public void setCompare(File compare)
 	{
 		this.compare = compare;
 	}
 
+	/**
+	 * Sets the source file used as reference for comparison.
+	 *
+	 * @param source
+	 *            the source file
+	 */
 	public void setSource(File source)
 	{
 		this.source = source;

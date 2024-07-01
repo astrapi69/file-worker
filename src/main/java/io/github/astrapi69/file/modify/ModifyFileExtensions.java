@@ -71,13 +71,13 @@ public final class ModifyFileExtensions
 		Objects.requireNonNull(charsetOfOutputFile);
 		Objects.requireNonNull(modifier);
 		File file = inFilePath.toFile();
-		List<String> lines = ListFactory.newArrayList();
+		List<String> linesRead = ListFactory.newArrayList();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
 		{
-			String readLine;
-			while ((readLine = bufferedReader.readLine()) != null)
+			String currentLine;
+			while ((currentLine = bufferedReader.readLine()) != null)
 			{
-				lines.add(readLine);
+				linesRead.add(currentLine);
 			}
 		}
 
@@ -85,9 +85,13 @@ public final class ModifyFileExtensions
 			new OutputStreamWriter(new FileOutputStream(file), charsetOfOutputFile)))
 		{
 			int counter = 0;
-			for (String line : lines)
+			for (String currentLine : linesRead)
 			{
-				writer.write(modifier.apply(counter, line));
+				String modified = modifier.apply(counter, currentLine);
+				if (modified != null)
+				{
+					writer.write(modified);
+				}
 				counter++;
 			}
 		}
@@ -136,11 +140,15 @@ public final class ModifyFileExtensions
 			Writer writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(outFilePath.toFile()), charsetOfOutputFile)))
 		{
-			String readLine;
+			String currentLine;
 			int counter = 0;
-			while ((readLine = bufferedReader.readLine()) != null)
+			while ((currentLine = bufferedReader.readLine()) != null)
 			{
-				writer.write(modifier.apply(counter, readLine));
+				String modified = modifier.apply(counter, currentLine);
+				if (modified != null)
+				{
+					writer.write(modified);
+				}
 				counter++;
 			}
 		}

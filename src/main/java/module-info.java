@@ -21,7 +21,6 @@
 module file.worker
 {
 	requires silly.io.main;
-	requires throwable;
 	requires org.apache.commons.io;
 	requires org.apache.commons.lang3;
 	requires checksum.up;
@@ -29,6 +28,7 @@ module file.worker
 	requires java.logging;
 	requires silly.collection;
 	requires silly.strings;
+	requires io.github.astrapisixtynine.throwable;
 
 	exports io.github.astrapi69.file;
 	exports io.github.astrapi69.file.compare;

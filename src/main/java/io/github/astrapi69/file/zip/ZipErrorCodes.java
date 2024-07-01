@@ -24,7 +24,21 @@
  */
 package io.github.astrapi69.file.zip;
 
+/**
+ * The {@code ZipErrorCodes} enum represents error codes related to ZIP file operations.
+ *
+ * @version 1.0
+ * @author Asterios Raptis
+ */
 public enum ZipErrorCodes
 {
-	DIRECTORY_TO_ZIP_DOES_NOT_EXIST, IO_ERROR, ZIP_FILE_DOES_NOT_EXIST
+
+	/** Error code indicating that the directory to be zipped does not exist. */
+	DIRECTORY_TO_ZIP_DOES_NOT_EXIST,
+
+	/** Error code indicating an I/O error during ZIP file operations. */
+	IO_ERROR,
+
+	/** Error code indicating that the ZIP file does not exist. */
+	ZIP_FILE_DOES_NOT_EXIST
 }

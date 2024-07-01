@@ -46,11 +46,23 @@ public enum FileCreationState
 
 	File file;
 
+	/**
+	 * Gets file
+	 *
+	 * @return the file
+	 */
 	public File getFile()
 	{
 		return file;
 	}
 
+	/**
+	 * Sets file
+	 *
+	 * @param file
+	 *            the file
+	 * @return the file
+	 */
 	public FileCreationState setFile(File file)
 	{
 		this.file = file;

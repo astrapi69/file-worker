@@ -25,197 +25,207 @@
 package io.github.astrapi69.file.system;
 
 /**
- * The class {@link SystemPropertiesExtensions} provide methods for get the common system properties
+ * The {@code SystemPropertiesExtensions} class provides utility methods to retrieve common system
+ * properties.
+ *
+ * @version 1.0
+ * @author Asterios Raptis
  */
 public class SystemPropertiesExtensions
 {
 
+	/** Key for the OS architecture system property. */
 	public static final String OS_ARCH_PROPERTY_KEY = "os.arch";
+
+	/** Key for the OS name system property. */
 	public static final String OS_NAME_PROPERTY_KEY = "os.name";
+
+	/** Key for the OS version system property. */
 	public static final String OS_VERSION_PROPERTY_KEY = "os.version";
 
+	/** Key for the user home directory system property. */
 	public static final String USER_HOME_PROPERTY_KEY = "user.home";
+
+	/** Key for the user name system property. */
 	public static final String USER_NAME_PROPERTY_KEY = "user.name";
+
+	/** Key for the user working directory system property. */
 	public static final String USER_DIR_PROPERTY_KEY = "user.dir";
 
+	/** Key for the file separator system property. */
 	public static final String FILE_SEPARATOR_PROPERTY_KEY = "file.separator";
+
+	/** Key for the line separator system property. */
 	public static final String LINE_SEPARATOR_PROPERTY_KEY = "line.separator";
+
+	/** Key for the path separator system property. */
 	public static final String PATH_SEPARATOR_PROPERTY_KEY = "path.separator";
 
+	/** Key for the Java temporary directory system property. */
 	public static final String JAVA_IO_TMPDIR_PROPERTY_KEY = "java.io.tmpdir";
+
+	/** Key for the Java class path system property. */
 	public static final String JAVA_CLASS_PATH_PROPERTY_KEY = "java.class.path";
+
+	/** Key for the Java vendor system property. */
 	public static final String JAVA_VENDOR_PROPERTY_KEY = "java.vendor";
+
+	/** Key for the Java home directory system property. */
 	public static final String JAVA_HOME_PROPERTY_KEY = "java.home";
+
+	/** Key for the Java version system property. */
 	public static final String JAVA_VERSION_PROPERTY_KEY = "java.version";
+
+	/** Key for the Java vendor URL system property. */
 	public static final String JAVA_VENDOR_URL_PROPERTY_KEY = "java.vendor.url";
 
 	/**
-	 * Gets the system file separator character. In other words the character that separates
-	 * components of a file path. This is "/" on UNIX and "\" on Windows.
+	 * Retrieves the system file separator character.
 	 *
 	 * @return the system file separator character
 	 */
 	public static String getFileSeparator()
 	{
-		String fileSeparator = System.getProperty(FILE_SEPARATOR_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(FILE_SEPARATOR_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the path for the temporary directory for java
+	 * Retrieves the path for the Java temporary directory.
 	 *
-	 * @return the java class path
+	 * @return the Java temporary directory path
 	 */
 	public static String getJavaIoTmpdir()
 	{
-		String fileSeparator = System.getProperty(JAVA_IO_TMPDIR_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(JAVA_IO_TMPDIR_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the path of the installed java home
+	 * Retrieves the path of the installed Java home directory.
 	 *
-	 * @return the java home path
+	 * @return the Java home directory path
 	 */
 	public static String getJavaHome()
 	{
-		String userHomePath = System.getProperty(JAVA_HOME_PROPERTY_KEY);
-		return userHomePath;
+		return System.getProperty(JAVA_HOME_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the Path used to find directories and JAR archives containing class files. Elements of
-	 * the class path are separated by a platform-specific character specified in the path.separator
-	 * property.
+	 * Retrieves the Java class path.
 	 *
-	 * @return the java class path
+	 * @return the Java class path
 	 */
 	public static String getJavaClassPath()
 	{
-		String fileSeparator = System.getProperty(JAVA_CLASS_PATH_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(JAVA_CLASS_PATH_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the name of JRE vendor name
+	 * Retrieves the name of the JRE vendor.
 	 *
-	 * @return the name of JRE vendor name
+	 * @return the name of the JRE vendor
 	 */
 	public static String getJavaVendor()
 	{
-		String javaVendor = System.getProperty(JAVA_VENDOR_PROPERTY_KEY);
-		return javaVendor;
+		return System.getProperty(JAVA_VENDOR_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the name of JRE vendor url
+	 * Retrieves the URL of the JRE vendor.
 	 *
-	 * @return the name of JRE vendor url
+	 * @return the URL of the JRE vendor
 	 */
 	public static String getJavaVendorUrl()
 	{
-		String fileSeparator = System.getProperty(JAVA_VENDOR_URL_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(JAVA_VENDOR_URL_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the JRE version
+	 * Retrieves the JRE version.
 	 *
 	 * @return the JRE version
 	 */
 	public static String getJavaVersion()
 	{
-		String javaVendor = System.getProperty(JAVA_VERSION_PROPERTY_KEY);
-		return javaVendor;
+		return System.getProperty(JAVA_VERSION_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the system line separator character. In other words the sequence used by operating
-	 * system to separate lines in text files
+	 * Retrieves the system line separator character.
 	 *
 	 * @return the system line separator character
 	 */
 	public static String getLineSeparator()
 	{
-		String fileSeparator = System.getProperty(LINE_SEPARATOR_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(LINE_SEPARATOR_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the operating system architecture
+	 * Retrieves the operating system architecture.
 	 *
 	 * @return the operating system architecture
 	 */
 	public static String getOsArchitecture()
 	{
-		String fileSeparator = System.getProperty(OS_ARCH_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(OS_ARCH_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the operating system name
+	 * Retrieves the operating system name.
 	 *
 	 * @return the operating system name
 	 */
 	public static String getOsName()
 	{
-		String fileSeparator = System.getProperty(OS_NAME_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(OS_NAME_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the operating system version
+	 * Retrieves the operating system version.
 	 *
 	 * @return the operating system version
 	 */
 	public static String getOsVersion()
 	{
-		String fileSeparator = System.getProperty(OS_VERSION_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(OS_VERSION_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the system path separator character used in java.class.path
+	 * Retrieves the system path separator character used in java.class.path.
 	 *
 	 * @return the system path separator character used in java.class.path
 	 */
 	public static String getPathSeparator()
 	{
-		String fileSeparator = System.getProperty(PATH_SEPARATOR_PROPERTY_KEY);
-		return fileSeparator;
+		return System.getProperty(PATH_SEPARATOR_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the user home directory
+	 * Retrieves the user home directory.
 	 *
 	 * @return the user home directory
 	 */
 	public static String getUserHome()
 	{
-		String userHome = System.getProperty(USER_HOME_PROPERTY_KEY);
-		return userHome;
+		return System.getProperty(USER_HOME_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the user name
+	 * Retrieves the user name.
 	 *
 	 * @return the user name
 	 */
 	public static String getUserName()
 	{
-		String userHome = System.getProperty(USER_NAME_PROPERTY_KEY);
-		return userHome;
+		return System.getProperty(USER_NAME_PROPERTY_KEY);
 	}
 
 	/**
-	 * Gets the user working directory
+	 * Retrieves the user working directory.
 	 *
 	 * @return the user working directory
 	 */
 	public static String getUserWorkingDirectory()
 	{
-		String userHome = System.getProperty(USER_DIR_PROPERTY_KEY);
-		return userHome;
+		return System.getProperty(USER_DIR_PROPERTY_KEY);
 	}
-
 }

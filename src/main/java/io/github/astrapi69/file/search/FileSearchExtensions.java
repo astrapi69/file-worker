@@ -24,8 +24,10 @@
  */
 package io.github.astrapi69.file.search;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -383,7 +385,7 @@ public final class FileSearchExtensions
 		{
 			dirs.push(new File(start));
 		}
-		while (dirs.size() > 0)
+		while (!dirs.isEmpty())
 		{
 			final File dirFiles = dirs.pop();
 			final String[] s = dirFiles.list();
@@ -503,6 +505,35 @@ public final class FileSearchExtensions
 			}
 		}
 		return foundedFileList;
+	}
+
+	/**
+	 * Finds the index of the line in a File object that starts with the given string
+	 *
+	 * @param file
+	 *            the File object to search
+	 * @param searchString
+	 *            the string to search for
+	 * @return the index of the line that contains the string, or -1 if not found
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static int findLineIndex(File file, String searchString) throws IOException
+	{
+		try (BufferedReader reader = new BufferedReader(new FileReader(file)))
+		{
+			String line;
+			int index = 0;
+			while ((line = reader.readLine()) != null)
+			{
+				if (line.startsWith(searchString))
+				{
+					return index;
+				}
+				index++;
+			}
+		}
+		return -1;
 	}
 
 	/**
