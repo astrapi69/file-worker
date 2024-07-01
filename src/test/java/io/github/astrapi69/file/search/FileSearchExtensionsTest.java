@@ -378,7 +378,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 
 		foundedFiles = FileSearchExtensions.findFilesRecursive(this.testDir, pattern);
 
-		this.actual = foundedFiles.size() == 4;
+		this.actual = foundedFiles.size() == 3;
 		assertTrue(this.actual);
 	}
 

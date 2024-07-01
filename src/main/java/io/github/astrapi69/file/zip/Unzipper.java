@@ -30,23 +30,32 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * The class {@link Unzipper}
- *
- * @author Asterios Raptis
- * @version 1.0
+ * The `Unzipper` class provides methods to extract zip entries to a specified directory. It
+ * utilizes `ZipExtensions` for performing the extraction operations.
  */
 public class Unzipper
 {
 
-	/** The to dir. */
+	/** The directory to extract files to. */
 	private File toDir;
-	/** The zip file. */
+	/** The zip file to extract entries from. */
 	private ZipFile zipFile;
 
+	/**
+	 * Default constructor.
+	 */
 	public Unzipper()
 	{
 	}
 
+	/**
+	 * Constructs an `Unzipper` with the given target directory and zip file.
+	 *
+	 * @param toDir
+	 *            the directory to extract files to
+	 * @param zipFile
+	 *            the zip file to extract entries from
+	 */
 	public Unzipper(File toDir, ZipFile zipFile)
 	{
 		this.toDir = toDir;
@@ -54,12 +63,12 @@ public class Unzipper
 	}
 
 	/**
-	 * Instantiates a new unzipper.
+	 * Constructs an `Unzipper` with the given zip file and target directory.
 	 *
 	 * @param zipFile
-	 *            the zip file
+	 *            the zip file to extract entries from
 	 * @param toDir
-	 *            the to dir
+	 *            the directory to extract files to
 	 */
 	public Unzipper(final ZipFile zipFile, final File toDir)
 	{
@@ -67,22 +76,27 @@ public class Unzipper
 		this.toDir = toDir;
 	}
 
+	/**
+	 * Creates a builder for constructing `Unzipper` objects.
+	 *
+	 * @return a new `UnzipperBuilder` instance
+	 */
 	public static UnzipperBuilder builder()
 	{
 		return new UnzipperBuilder();
 	}
 
 	/**
-	 * Extract zip entry.
+	 * Extracts a specific zip entry to the target directory.
 	 *
 	 * @param zipFile
-	 *            the zip file
+	 *            the zip file containing the entry
 	 * @param target
-	 *            the target
+	 *            the zip entry to extract
 	 * @param toDirectory
-	 *            the to directory
+	 *            the directory to extract the entry to
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             if an I/O error occurs during extraction
 	 */
 	public void extractZipEntry(final ZipFile zipFile, final ZipEntry target,
 		final File toDirectory) throws IOException
@@ -90,31 +104,64 @@ public class Unzipper
 		ZipExtensions.extractZipEntry(zipFile, target, toDirectory);
 	}
 
+	/**
+	 * Retrieves the current target directory for extraction.
+	 *
+	 * @return the current target directory
+	 */
 	public File getToDir()
 	{
 		return this.toDir;
 	}
 
+	/**
+	 * Sets the target directory for extraction.
+	 *
+	 * @param toDir
+	 *            the directory to set as the target for extraction
+	 */
 	public void setToDir(File toDir)
 	{
 		this.toDir = toDir;
 	}
 
+	/**
+	 * Retrieves the current zip file being used for extraction.
+	 *
+	 * @return the current zip file
+	 */
 	public ZipFile getZipFile()
 	{
 		return this.zipFile;
 	}
 
+	/**
+	 * Sets the zip file to use for extraction.
+	 *
+	 * @param zipFile
+	 *            the zip file to set for extraction
+	 */
 	public void setZipFile(ZipFile zipFile)
 	{
 		this.zipFile = zipFile;
 	}
 
+	/**
+	 * Creates a builder initialized with the current `Unzipper` instance's properties.
+	 *
+	 * @return a new `UnzipperBuilder` initialized with the current instance's properties
+	 */
 	public UnzipperBuilder toBuilder()
 	{
 		return new UnzipperBuilder().toDir(this.toDir).zipFile(this.zipFile);
 	}
 
+	/**
+	 * Returns a string representation of the `Unzipper` object, showing its current target
+	 * directory and zip file.
+	 *
+	 * @return a string representation of the `Unzipper` object
+	 */
 	@Override
 	public String toString()
 	{
@@ -122,10 +169,10 @@ public class Unzipper
 	}
 
 	/**
-	 * Unzip.
+	 * Extracts all entries from the current zip file to the current target directory.
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             if an I/O error occurs during extraction
 	 */
 	public void unzip() throws IOException
 	{
@@ -133,51 +180,82 @@ public class Unzipper
 	}
 
 	/**
-	 * Unzip.
+	 * Extracts all entries from the specified zip file to the specified target directory.
 	 *
 	 * @param zipFile
-	 *            the zip file
+	 *            the zip file to extract entries from
 	 * @param toDir
-	 *            the to dir
+	 *            the directory to extract entries to
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             if an I/O error occurs during extraction
 	 */
 	public void unzip(final ZipFile zipFile, final File toDir) throws IOException
 	{
 		ZipExtensions.unzip(zipFile, toDir);
 	}
 
+	/**
+	 * Builder class for constructing `Unzipper` objects.
+	 */
 	public static class UnzipperBuilder
 	{
 		private File toDir;
 		private ZipFile zipFile;
 
+		/**
+		 * Default constructor.
+		 */
 		UnzipperBuilder()
 		{
 		}
 
+		/**
+		 * Constructs a new `Unzipper` object based on the current builder state.
+		 *
+		 * @return a new `Unzipper` object
+		 */
 		public Unzipper build()
 		{
 			return new Unzipper(toDir, zipFile);
 		}
 
-		public Unzipper.UnzipperBuilder toDir(File toDir)
+		/**
+		 * Sets the target directory for the `Unzipper` object being built.
+		 *
+		 * @param toDir
+		 *            the directory to set as the target for extraction
+		 * @return the current `UnzipperBuilder` instance
+		 */
+		public UnzipperBuilder toDir(File toDir)
 		{
 			this.toDir = toDir;
 			return this;
 		}
 
+		/**
+		 * Sets the zip file for the `Unzipper` object being built.
+		 *
+		 * @param zipFile
+		 *            the zip file to set for extraction
+		 * @return the current `UnzipperBuilder` instance
+		 */
+		public UnzipperBuilder zipFile(ZipFile zipFile)
+		{
+			this.zipFile = zipFile;
+			return this;
+		}
+
+		/**
+		 * Returns a string representation of the `UnzipperBuilder` object, showing its current
+		 * target directory and zip file.
+		 *
+		 * @return a string representation of the `UnzipperBuilder` object
+		 */
 		@Override
 		public String toString()
 		{
 			return "Unzipper.UnzipperBuilder(toDir=" + this.toDir + ", zipFile=" + this.zipFile
 				+ ")";
-		}
-
-		public Unzipper.UnzipperBuilder zipFile(ZipFile zipFile)
-		{
-			this.zipFile = zipFile;
-			return this;
 		}
 	}
 }

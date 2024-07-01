@@ -124,7 +124,7 @@ public class DirectoryFactory
 	 *            an optional list of file attributes to set atomically when creating the directory
 	 * @return Returns true if the directory was created otherwise false.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
 	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
@@ -321,6 +321,8 @@ public class DirectoryFactory
 	 *            {@code null}
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
 	 *
 	 * @return the {@link FileCreationState} with the result
 	 */
@@ -341,6 +343,8 @@ public class DirectoryFactory
 	 *            {@code null}
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
 	 *
 	 * @return the {@link FileCreationState} with the result
 	 */
@@ -359,6 +363,8 @@ public class DirectoryFactory
 	 *            {@code null}
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
 	 *
 	 * @return the {@link FileCreationState} with the result
 	 */
@@ -381,6 +387,8 @@ public class DirectoryFactory
 	 *            {@code null}
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
 	 *
 	 * @return the {@link FileCreationState} with the result
 	 */
