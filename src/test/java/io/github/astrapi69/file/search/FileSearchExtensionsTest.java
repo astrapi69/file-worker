@@ -43,8 +43,9 @@ import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.set.SetFactory;
 import io.github.astrapi69.file.FileTestCase;
+import io.github.astrapi69.file.copy.CopyFileExtensions;
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.io.file.filter.SuffixFileFilter;
 
@@ -78,6 +79,36 @@ public class FileSearchExtensionsTest extends FileTestCase
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
+	}
+
+	/**
+	 * Test method for {@link FileSearchExtensions#findLineIndex(File, String)}
+	 */
+	@Test
+	public void testFindLineIndex() throws IOException
+	{
+
+		File inputFile;
+		File testFile;
+		String searchString;
+		int actual;
+		int expected;
+		File parent = PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources");
+
+		inputFile = FileFactory.newFile(parent, "test-csv-data.csv");
+		testFile = FileFactory.newFile(parent, "test-find-line-data.csv");
+		CopyFileExtensions.copyFile(inputFile, testFile);
+
+		searchString = "\"Dimitri\",\"Vladim\",\"dim.vlad@gmail.com\"";
+		actual = FileSearchExtensions.findLineIndex(testFile, searchString);
+		expected = 2;
+		assertEquals(expected, actual);
+
+		searchString = "\"Dimitri\",\"Vladim\",\"dim.vlad@gmail.com\"";
+		actual = FileSearchExtensions.findLineIndex(testFile, searchString);
+		assertEquals(expected, actual);
+
+		DeleteFileExtensions.deleteFile(testFile);
 	}
 
 	/**
@@ -190,7 +221,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testFindAllFilesFileString() throws IOException
 	{
 		// 1. initialize expected files to search
@@ -222,7 +253,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final long executionTime = end - start;
 		System.out.println("execution:" + executionTime);
 		// 3. assert that expected with actual match
-		assertTrue("", expected.size() == actual.size());
+		assertEquals("", expected.size(), actual.size());
 		for (final File file : expected)
 		{
 			assertTrue("", actual.contains(file));
@@ -288,8 +319,6 @@ public class FileSearchExtensionsTest extends FileTestCase
 		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
 		files = SetFactory.newHashSet();
 		files = FileSearchExtensions.findFiles(this.testDir, files, SuffixFileFilter.of(suffix));
-		this.actual = files != null;
-		assertTrue(this.actual);
 		this.actual = files.size() == 2;
 		assertTrue(this.actual);
 	}
@@ -312,8 +341,6 @@ public class FileSearchExtensionsTest extends FileTestCase
 		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
 		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
 		final List<File> foundedFiles = FileSearchExtensions.findFiles(this.testDir, test);
-		this.actual = foundedFiles != null;
-		assertTrue(this.actual);
 		this.actual = foundedFiles.size() == 2;
 		assertTrue(this.actual);
 	}
@@ -321,13 +348,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link FileSearchExtensions#findFilesRecursive(File, String)}
 	 *
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testFindFilesRecursive() throws DirectoryAlreadyExistsException, IOException
+	public void testFindFilesRecursive() throws IOException
 	{
 		final String test = "testFindFilesRecursive.t*";
 		final List<File> expectedFiles = new ArrayList<>();
@@ -342,8 +367,6 @@ public class FileSearchExtensionsTest extends FileTestCase
 		StoreFileExtensions.toFile(testFile2, "Its a beautifull evening!!!");
 		StoreFileExtensions.toFile(testFile3, "Its a beautifull night!!!");
 		List<File> foundedFiles = FileSearchExtensions.findFilesRecursive(this.testDir, test);
-		this.actual = foundedFiles != null;
-		assertTrue(this.actual);
 		this.actual = foundedFiles.size() == 2;
 		assertTrue(this.actual);
 		for (final File expectedFile : expectedFiles)
@@ -352,13 +375,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 			assertTrue(this.actual);
 		}
 		final String pattern = "*";
-		final File testFile4 = new File(this.deepDir, "testFindFilesRecursive2.cvs");
-		testFile4.createNewFile();
 
 		foundedFiles = FileSearchExtensions.findFilesRecursive(this.testDir, pattern);
 
-		this.actual = foundedFiles != null;
-		assertTrue(this.actual);
 		this.actual = foundedFiles.size() == 4;
 		assertTrue(this.actual);
 	}
@@ -412,8 +431,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue("", this.actual);
 		for (final File file : compare)
 		{
-			final File currentFile = file;
-			this.actual = expected.contains(currentFile);
+			this.actual = expected.contains(file);
 			assertTrue("", this.actual);
 		}
 	}
@@ -424,7 +442,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testFindFileWithFileFilter() throws IOException
 	{
 		// 1. initialize expected files to search
@@ -452,7 +470,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		// 2. run the actual method to test
 		List<File> actual = FileSearchExtensions.findFilesWithFilter(this.testDir, ".txt");
 		// 3. assert that expected with actual match
-		assertTrue("", expected.size() == actual.size());
+		assertEquals("", expected.size(), actual.size());
 		for (final File file : expected)
 		{
 			assertTrue("", actual.contains(file));
@@ -461,7 +479,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.clear();
 		expected.add(testFile2);
 		expected.add(testFile3);
-		assertTrue("", expected.size() == actual.size());
+		assertEquals("", expected.size(), actual.size());
 		for (final File file : expected)
 		{
 			assertTrue("", actual.contains(file));
@@ -504,7 +522,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile2);
 		expected.add(testFile3);
 		expected.add(testFile4);
-		assertTrue("", expected.size() == fileList.size());
+		assertEquals("", expected.size(), fileList.size());
 		for (final File file : expected)
 		{
 			assertTrue("", fileList.contains(file));
@@ -547,7 +565,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile2);
 		expected.add(testFile3);
 		expected.add(testFile4);
-		assertTrue("", expected.size() == fileList.size());
+		assertEquals("", expected.size(), fileList.size());
 		for (final File file : expected)
 		{
 			assertTrue("", fileList.contains(file));

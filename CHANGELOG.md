@@ -7,6 +7,7 @@ Version 17.3-SNAPSHOT
 ADDED:
 
 - new class DeleteLinesByIndexInFile that deletes lines by index in a given file
+- new method for find the index of a given search string that start with in a given file
 
 CHANGED:
 
