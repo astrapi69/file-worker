@@ -15,7 +15,7 @@ CHANGED:
 - update of dependency silly-strings to new minor version 9.1
 - update of dependency throwable to new major version 3
 - update of test dependency jobj-contract-verifier to new minor version 5.1
-- fix of javadoc issues
+- fix of all javadoc issues
 
 
 Version 17.2
