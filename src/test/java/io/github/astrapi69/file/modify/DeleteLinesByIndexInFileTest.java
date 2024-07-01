@@ -1,24 +1,25 @@
 package io.github.astrapi69.file.modify;
 
+import static org.testng.AssertJUnit.assertFalse;
+import static org.testng.AssertJUnit.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import org.testng.annotations.Test;
 
 import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.create.FileFactory;
+import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
-
 /**
- * The class {@link DeleteLinesByIndexInFileTest} provides unit tests for the class {@link DeleteLinesByIndexInFile}
+ * The class {@link DeleteLinesByIndexInFileTest} provides unit tests for the class
+ * {@link DeleteLinesByIndexInFile}
  */
 public class DeleteLinesByIndexInFileTest
 {
@@ -26,7 +27,8 @@ public class DeleteLinesByIndexInFileTest
 	/**
 	 * Test method for {@link DeleteLinesByIndexInFile#apply(Integer, String)}
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
 	 */
 	@Test
 	public void testApply() throws IOException
