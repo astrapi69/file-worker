@@ -26,11 +26,13 @@ package io.github.astrapi69.file.read;
 
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -59,6 +61,8 @@ import io.github.astrapi69.file.write.WriteFileExtensions;
 public class ReadFileExtensionsTest extends FileTestCase
 {
 
+	private File testFile;
+
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
 	 *
@@ -70,6 +74,14 @@ public class ReadFileExtensionsTest extends FileTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
+		// Create a temporary file and write some lines to it
+		testFile = File.createTempFile("testFile", ".txt");
+		try (FileWriter writer = new FileWriter(testFile))
+		{
+			writer.write("First line\n");
+			writer.write("Second line\n");
+			writer.write("Third line\n");
+		}
 	}
 
 	/**
@@ -83,6 +95,23 @@ public class ReadFileExtensionsTest extends FileTestCase
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
+		testFile.delete();
+	}
+
+	@Test
+	public void testReadLineValidIndex() throws IOException
+	{
+		// Test reading a line within the file
+		String line = ReadFileExtensions.readLine(testFile, 1);
+		assertEquals("Second line", line);
+	}
+
+	@Test
+	public void testReadLineInvalidIndex() throws IOException
+	{
+		// Test reading a line that does not exist
+		String line = ReadFileExtensions.readLine(testFile, 10);
+		assertNull(line);
 	}
 
 	/**

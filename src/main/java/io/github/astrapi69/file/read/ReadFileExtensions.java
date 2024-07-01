@@ -171,6 +171,31 @@ public final class ReadFileExtensions
 	}
 
 	/**
+	 * Read a line from the given index in the given File and return it, if index greater than null
+	 * is returned
+	 *
+	 * @param input
+	 *            The File from where the input comes
+	 * @param index
+	 *            The index of the line
+	 * @return The line or null if it does not exist
+	 * @throws FileNotFoundException
+	 *             is thrown if the given file is not found.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static String readLine(final File input, final int index)
+		throws FileNotFoundException, IOException
+	{
+		List<String> linesRead = readLinesInList(input, false);
+		if (index < linesRead.size())
+		{
+			return linesRead.get(index);
+		}
+		return null;
+	}
+
+	/**
 	 * Reads every line from the File and puts them to the List.
 	 *
 	 * @param input

@@ -4,6 +4,16 @@
 Version 17.3-SNAPSHOT
 -------------
 
+ADDED:
+
+- new class DeleteLinesByIndexInFile that deletes lines by index in a given file
+
+CHANGED:
+
+- update of dependency silly-io to new minor version 3.1
+- update of dependency silly-strings to new minor version 9.1
+- update of dependency throwable to new major version 3
+- update of test dependency jobj-contract-verifier to new minor version 5.1
 
 
 Version 17.2
