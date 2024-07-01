@@ -354,6 +354,7 @@ public class FileInfo
 		 *
 		 * @param instance
 		 *            the `FileInfo` instance to copy values from
+		 * @return this builder instance
 		 */
 		protected B $fillValuesFrom(C instance)
 		{

@@ -38,7 +38,8 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
- * The class {@link Zipper}
+ * The {@code Zipper} class provides functionality to create ZIP archives from directories or files.
+ * It supports various compression methods and allows customization through builder pattern.
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -88,7 +89,7 @@ public class Zipper implements ZipModel
 	 * Instantiates a new {@link Zipper} object
 	 *
 	 * @param dirToZip
-	 *            the dir to zip
+	 *            the directory to zip
 	 * @param zipFile
 	 *            the zip file
 	 */
@@ -101,11 +102,11 @@ public class Zipper implements ZipModel
 	 * Instantiates a new {@link Zipper} object
 	 *
 	 * @param dirToZip
-	 *            the dir to zip
+	 *            the directory to zip
 	 * @param zipFile
 	 *            the zip file
 	 * @param filter
-	 *            the filter
+	 *            the file name filter
 	 */
 	public Zipper(final File dirToZip, final File zipFile, final FilenameFilter filter)
 	{
@@ -115,7 +116,7 @@ public class Zipper implements ZipModel
 	}
 
 	/**
-	 * Instantiates a new {@link Zipper} object
+	 * Instantiates a new {@link Zipper} object with detailed parameters.
 	 *
 	 * @param compressionMethod
 	 *            the compression method
@@ -128,7 +129,7 @@ public class Zipper implements ZipModel
 	 * @param fileFilter
 	 *            the file name filter
 	 * @param fileLength
-	 *            the file length
+	 *            the total length of files being zipped
 	 * @param zipFile
 	 *            the zip file
 	 * @param zipFileComment
@@ -157,143 +158,274 @@ public class Zipper implements ZipModel
 		this.zipLevel = zipLevel;
 	}
 
+	/**
+	 * Provides a builder to construct a {@code Zipper} object with desired parameters.
+	 *
+	 * @return a new {@code ZipperBuilder} instance
+	 */
 	public static ZipperBuilder builder()
 	{
 		return new ZipperBuilder();
 	}
 
+	/**
+	 * Gets the compression method used for zipping.
+	 *
+	 * @return the compression method
+	 */
 	@Override
 	public int getCompressionMethod()
 	{
 		return this.compressionMethod;
 	}
 
+	/**
+	 * Sets the compression method for zipping.
+	 *
+	 * @param compressionMethod
+	 *            the new compression method
+	 */
 	@Override
 	public void setCompressionMethod(int compressionMethod)
 	{
 		this.compressionMethod = compressionMethod;
 	}
 
+	/**
+	 * Gets the directory to be zipped.
+	 *
+	 * @return the directory to zip
+	 */
 	@Override
 	public File getDirectoryToZip()
 	{
 		return this.directoryToZip;
 	}
 
+	/**
+	 * Sets the directory to be zipped.
+	 *
+	 * @param directoryToZip
+	 *            the new directory to zip
+	 */
 	@Override
 	public void setDirectoryToZip(File directoryToZip)
 	{
 		this.directoryToZip = directoryToZip;
 	}
 
+	/**
+	 * Gets the starting directory within the ZIP archive.
+	 *
+	 * @return the directory to start zipping
+	 */
 	@Override
 	public String getDirToStart()
 	{
 		return this.dirToStart;
 	}
 
+	/**
+	 * Sets the starting directory within the ZIP archive.
+	 *
+	 * @param dirToStart
+	 *            the new directory to start zipping
+	 */
 	@Override
 	public void setDirToStart(String dirToStart)
 	{
 		this.dirToStart = dirToStart;
 	}
 
+	/**
+	 * Gets the total number of files zipped.
+	 *
+	 * @return the file counter
+	 */
 	@Override
 	public int getFileCounter()
 	{
 		return this.fileCounter;
 	}
 
+	/**
+	 * Sets the total number of files zipped.
+	 *
+	 * @param fileCounter
+	 *            the new file counter
+	 */
 	@Override
 	public void setFileCounter(int fileCounter)
 	{
 		this.fileCounter = fileCounter;
 	}
 
+	/**
+	 * Gets the file name filter used during zipping.
+	 *
+	 * @return the file name filter
+	 */
 	@Override
 	public FilenameFilter getFileFilter()
 	{
 		return this.fileFilter;
 	}
 
+	/**
+	 * Sets the file name filter used during zipping.
+	 *
+	 * @param fileFilter
+	 *            the new file name filter
+	 */
 	@Override
 	public void setFileFilter(FilenameFilter fileFilter)
 	{
 		this.fileFilter = fileFilter;
 	}
 
+	/**
+	 * Gets the total length of files being zipped.
+	 *
+	 * @return the total file length
+	 */
 	@Override
 	public long getFileLength()
 	{
 		return this.fileLength;
 	}
 
+	/**
+	 * Sets the total length of files being zipped.
+	 *
+	 * @param fileLength
+	 *            the new total file length
+	 */
 	@Override
 	public void setFileLength(long fileLength)
 	{
 		this.fileLength = fileLength;
 	}
 
+	/**
+	 * Gets the target ZIP file object.
+	 *
+	 * @return the zip file
+	 */
 	@Override
 	public File getZipFile()
 	{
 		return this.zipFile;
 	}
 
+	/**
+	 * Sets the target ZIP file object.
+	 *
+	 * @param zipFile
+	 *            the new zip file
+	 */
 	@Override
 	public void setZipFile(File zipFile)
 	{
 		this.zipFile = zipFile;
 	}
 
+	/**
+	 * Gets the comment associated with the ZIP file.
+	 *
+	 * @return the zip file comment
+	 */
 	@Override
 	public String getZipFileComment()
 	{
 		return this.zipFileComment;
 	}
 
+	/**
+	 * Sets the comment associated with the ZIP file.
+	 *
+	 * @param zipFileComment
+	 *            the new zip file comment
+	 */
 	@Override
 	public void setZipFileComment(String zipFileComment)
 	{
 		this.zipFileComment = zipFileComment;
 	}
 
+	/**
+	 * Gets the name of the ZIP file.
+	 *
+	 * @return the zip file name
+	 */
 	@Override
 	public String getZipFileName()
 	{
 		return this.zipFileName;
 	}
 
+	/**
+	 * Sets the name of the ZIP file.
+	 *
+	 * @param zipFileName
+	 *            the new zip file name
+	 */
 	@Override
 	public void setZipFileName(String zipFileName)
 	{
 		this.zipFileName = zipFileName;
 	}
 
+	/**
+	 * Gets the ZIP file object.
+	 *
+	 * @return the zip file object
+	 */
 	@Override
 	public ZipFile getZipFileObj()
 	{
 		return this.zipFileObj;
 	}
 
+	/**
+	 * Sets the ZIP file object.
+	 *
+	 * @param zipFileObj
+	 *            the new zip file object
+	 */
 	@Override
 	public void setZipFileObj(ZipFile zipFileObj)
 	{
 		this.zipFileObj = zipFileObj;
 	}
 
+	/**
+	 * Gets the compression level used during zipping.
+	 *
+	 * @return the compression level
+	 */
 	@Override
 	public int getZipLevel()
 	{
 		return this.zipLevel;
 	}
 
+	/**
+	 * Sets the compression level used during zipping.
+	 *
+	 * @param zipLevel
+	 *            the new compression level
+	 */
 	@Override
 	public void setZipLevel(int zipLevel)
 	{
 		this.zipLevel = zipLevel;
 	}
 
+	/**
+	 * Creates a new {@code ZipperBuilder} initialized with current object's properties.
+	 *
+	 * @return a builder instance with current configuration
+	 */
 	public ZipperBuilder toBuilder()
 	{
 		return new ZipperBuilder().compressionMethod(this.compressionMethod)
@@ -303,28 +435,16 @@ public class Zipper implements ZipModel
 			.zipFileObj(this.zipFileObj).zipLevel(this.zipLevel);
 	}
 
-	@Override
-	public String toString()
-	{
-		return "Zipper(compressionMethod=" + this.getCompressionMethod() + ", directoryToZip="
-			+ this.getDirectoryToZip() + ", dirToStart=" + this.getDirToStart() + ", fileCounter="
-			+ this.getFileCounter() + ", fileFilter=" + this.getFileFilter() + ", fileLength="
-			+ this.getFileLength() + ", zipFile=" + this.getZipFile() + ", zipFileComment="
-			+ this.getZipFileComment() + ", zipFileName=" + this.getZipFileName() + ", zipFileObj="
-			+ this.getZipFileObj() + ", zipLevel=" + this.getZipLevel() + ")";
-	}
-
 	/**
-	 * Zip the given files of this object
+	 * Creates a ZIP archive of the specified directory and its contents.
 	 *
-	 * @return the optional with the possibles errors
+	 * @return an optional error code if any issue occurs during the operation
 	 */
 	public Optional<ZipErrorCodes> zip()
 	{
 		try (FileOutputStream fos = new FileOutputStream(this.zipFile);
 			ZipOutputStream zos = new ZipOutputStream(fos))
 		{
-
 			if (!this.directoryToZip.exists())
 			{
 				return Optional.of(ZipErrorCodes.DIRECTORY_TO_ZIP_DOES_NOT_EXIST);
@@ -333,7 +453,7 @@ public class Zipper implements ZipModel
 			{
 				return Optional.of(ZipErrorCodes.ZIP_FILE_DOES_NOT_EXIST);
 			}
-			if (0 < this.zipLevel)
+			if (this.zipLevel > 0)
 			{
 				zos.setLevel(this.zipLevel);
 			}
@@ -341,11 +461,11 @@ public class Zipper implements ZipModel
 			{
 				zos.setLevel(9);
 			}
-			if (null != this.zipFileComment)
+			if (this.zipFileComment != null)
 			{
 				zos.setComment(this.zipFileComment);
 			}
-			if (0 < this.compressionMethod)
+			if (this.compressionMethod > 0)
 			{
 				zos.setMethod(this.compressionMethod);
 			}
@@ -363,29 +483,31 @@ public class Zipper implements ZipModel
 	}
 
 	/**
-	 * Zip files.
+	 * Recursively adds files or directories to the ZIP output stream.
 	 *
 	 * @param file
-	 *            the file
+	 *            the current file or directory to add
+	 * @param zos
+	 *            the ZIP output stream
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             if an I/O error occurs during zipping
 	 */
 	private void zipFiles(final File file, ZipOutputStream zos) throws IOException
 	{
 		if (file.isDirectory())
 		{
-			List<File> foundedFiles;
-			if (null != this.fileFilter)
+			List<File> filesToZip;
+			if (this.fileFilter != null)
 			{
-				foundedFiles = ZipExtensions.getFoundedFiles(file, file.listFiles(this.fileFilter));
+				filesToZip = ZipExtensions.getFoundedFiles(file, file.listFiles(this.fileFilter));
 			}
 			else
 			{
-				foundedFiles = Arrays.asList(file.listFiles());
+				filesToZip = Arrays.asList(file.listFiles());
 			}
-			for (final File foundedFile : foundedFiles)
+			for (final File fileToZip : filesToZip)
 			{
-				this.zipFiles(foundedFile, zos);
+				this.zipFiles(fileToZip, zos);
 			}
 		}
 		else
@@ -399,14 +521,17 @@ public class Zipper implements ZipModel
 			}
 			final int index = absolutePath.indexOf(this.dirToStart);
 			final String zipEntryName = absolutePath.substring(index);
-			final byte[] b = new byte[(int)file.length()];
-			final ZipEntry cpZipEntry = new ZipEntry(zipEntryName);
-			zos.putNextEntry(cpZipEntry);
-			zos.write(b, 0, (int)file.length());
+			final byte[] buffer = new byte[(int)file.length()];
+			final ZipEntry zipEntry = new ZipEntry(zipEntryName);
+			zos.putNextEntry(zipEntry);
+			zos.write(buffer, 0, (int)file.length());
 			zos.closeEntry();
 		}
 	}
 
+	/**
+	 * Builder class for constructing {@code Zipper} objects with desired parameters.
+	 */
 	public static class ZipperBuilder
 	{
 		private int compressionMethod;
@@ -421,88 +546,162 @@ public class Zipper implements ZipModel
 		private ZipFile zipFileObj;
 		private int zipLevel;
 
+		/**
+		 * Constructs a new {@code ZipperBuilder}.
+		 */
 		ZipperBuilder()
 		{
 		}
 
+		/**
+		 * Builds a new {@code Zipper} object with the configured parameters.
+		 *
+		 * @return a new {@code Zipper} instance
+		 */
 		public Zipper build()
 		{
 			return new Zipper(compressionMethod, directoryToZip, dirToStart, fileCounter,
 				fileFilter, fileLength, zipFile, zipFileComment, zipFileName, zipFileObj, zipLevel);
 		}
 
-		public Zipper.ZipperBuilder compressionMethod(int compressionMethod)
+		/**
+		 * Sets the compression method for the ZIP archive being created.
+		 *
+		 * @param compressionMethod
+		 *            the compression method
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder compressionMethod(int compressionMethod)
 		{
 			this.compressionMethod = compressionMethod;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder directoryToZip(File directoryToZip)
+		/**
+		 * Sets the directory to be zipped.
+		 *
+		 * @param directoryToZip
+		 *            the directory to zip
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder directoryToZip(File directoryToZip)
 		{
 			this.directoryToZip = directoryToZip;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder dirToStart(String dirToStart)
+		/**
+		 * Sets the starting directory within the ZIP archive.
+		 *
+		 * @param dirToStart
+		 *            the directory to start zipping
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder dirToStart(String dirToStart)
 		{
 			this.dirToStart = dirToStart;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder fileCounter(int fileCounter)
+		/**
+		 * Sets the file counter for tracking the number of files zipped.
+		 *
+		 * @param fileCounter
+		 *            the file counter
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder fileCounter(int fileCounter)
 		{
 			this.fileCounter = fileCounter;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder fileFilter(FilenameFilter fileFilter)
+		/**
+		 * Sets the filename filter used during zipping.
+		 *
+		 * @param fileFilter
+		 *            the file name filter
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder fileFilter(FilenameFilter fileFilter)
 		{
 			this.fileFilter = fileFilter;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder fileLength(long fileLength)
+		/**
+		 * Sets the total length of files being zipped.
+		 *
+		 * @param fileLength
+		 *            the total file length
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder fileLength(long fileLength)
 		{
 			this.fileLength = fileLength;
 			return this;
 		}
 
-		@Override
-		public String toString()
-		{
-			return "Zipper.ZipperBuilder(compressionMethod=" + this.compressionMethod
-				+ ", directoryToZip=" + this.directoryToZip + ", dirToStart=" + this.dirToStart
-				+ ", fileCounter=" + this.fileCounter + ", fileFilter=" + this.fileFilter
-				+ ", fileLength=" + this.fileLength + ", zipFile=" + this.zipFile
-				+ ", zipFileComment=" + this.zipFileComment + ", zipFileName=" + this.zipFileName
-				+ ", zipFileObj=" + this.zipFileObj + ", zipLevel=" + this.zipLevel + ")";
-		}
-
-		public Zipper.ZipperBuilder zipFile(File zipFile)
+		/**
+		 * Sets the target ZIP file object.
+		 *
+		 * @param zipFile
+		 *            the zip file
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder zipFile(File zipFile)
 		{
 			this.zipFile = zipFile;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder zipFileComment(String zipFileComment)
+		/**
+		 * Sets the comment associated with the ZIP file.
+		 *
+		 * @param zipFileComment
+		 *            the zip file comment
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder zipFileComment(String zipFileComment)
 		{
 			this.zipFileComment = zipFileComment;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder zipFileName(String zipFileName)
+		/**
+		 * Sets the name of the ZIP file.
+		 *
+		 * @param zipFileName
+		 *            the zip file name
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder zipFileName(String zipFileName)
 		{
 			this.zipFileName = zipFileName;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder zipFileObj(ZipFile zipFileObj)
+		/**
+		 * Sets the ZIP file object.
+		 *
+		 * @param zipFileObj
+		 *            the zip file object
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder zipFileObj(ZipFile zipFileObj)
 		{
 			this.zipFileObj = zipFileObj;
 			return this;
 		}
 
-		public Zipper.ZipperBuilder zipLevel(int zipLevel)
+		/**
+		 * Sets the compression level used during zipping.
+		 *
+		 * @param zipLevel
+		 *            the compression level
+		 * @return this builder instance for method chaining
+		 */
+		public ZipperBuilder zipLevel(int zipLevel)
 		{
 			this.zipLevel = zipLevel;
 			return this;
