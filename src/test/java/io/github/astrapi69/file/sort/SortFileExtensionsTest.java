@@ -24,17 +24,17 @@
  */
 package io.github.astrapi69.file.sort;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.comparator.object.StringComparator;
 import io.github.astrapi69.file.FileExtensions;
@@ -66,20 +66,20 @@ public class SortFileExtensionsTest
 	 * @throws Exception
 	 *             the exception
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		// Get the absolut path from the current project.
 		absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		projectPath = new File(absolutePath);
-		assertTrue("The directory " + projectPath.getAbsolutePath() + " should be created.",
-			projectPath.exists());
+		assertTrue(projectPath.exists(),
+			"The directory " + projectPath.getAbsolutePath() + " should be created.");
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
 			FileCreationState state = DirectoryFactory.newDirectory(testResources);
-			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + testResources.getAbsolutePath() + " should be created.");
 		}
 		resources = new File(testResources, "resources");
 

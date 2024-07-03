@@ -24,18 +24,19 @@
  */
 package io.github.astrapi69.file.compare;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.CollectionExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
@@ -59,7 +60,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	File testFile4;
 
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -77,7 +78,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	}
 
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -90,7 +91,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)}.
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testCompareFileContentByBytes()
 	{
 
@@ -118,7 +120,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByLines(File, File)}.
 	 */
-	@Test(enabled = false) // TODO FIXME
+	@Test
+	@Disabled // TODO FIXME
 	public void testCompareFileContentByLines()
 	{
 		actual = CompareFileExtensions.compareFileContentByLines(testFile1, testFile2);
@@ -145,7 +148,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFiles(File, File)}.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testCompareFilesFileFile()
 	{
 		actual = CompareFileExtensions.compareFiles(testFile1, testFile2);
@@ -172,7 +175,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)}.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testCompareFilesFileFileBoolean() throws IOException
 	{
 		boolean actual;
@@ -194,29 +197,30 @@ public class CompareFileExtensionsTest extends FileTestCase
 		File compare = new File(this.deepDir, filePrefix1 + oldFileSuffix);
 
 		actual = CompareFileExtensions.compareFiles(source, compare, false);
-		assertTrue("File should be equal cause they dont exist.", actual);
+		assertTrue(actual, "File should be equal cause they dont exist.");
 		compare = new File(this.deepDir, filePrefix2 + newFileSuffix);
 		actual = CompareFileExtensions.compareFiles(source, compare, false);
-		assertFalse("File should not be equal.", actual);
+		assertFalse(actual, "File should not be equal.");
 		StoreFileExtensions.toFile(source, "Its a beautifull day!!!");
 		StoreFileExtensions.toFile(compare, "Its a beautifull day!!!");
 		actual = CompareFileExtensions.compareFiles(source, compare, false);
-		assertTrue("File should be equal.", actual);
+		assertTrue(actual, "File should be equal.");
 		actual = CompareFileExtensions.compareFiles(source, compare, true);
-		assertTrue("File should be equal.", actual);
+		assertTrue(actual, "File should be equal.");
 		StoreFileExtensions.toFile(compare, "Its a beautifull evening!!!");
 		actual = CompareFileExtensions.compareFiles(source, compare, true);
-		assertFalse("File should not be equal.", actual);
+		assertFalse(actual, "File should not be equal.");
 		StoreFileExtensions.toFile(compare, "Its a beautifull boy!!!");
 		actual = CompareFileExtensions.compareFiles(source, compare, true);
-		assertFalse("File should not be equal.", actual);
+		assertFalse(actual, "File should not be equal.");
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBoolean() throws IOException
 	{
 		IFileCompareResultBean actual;
@@ -246,7 +250,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#compareFiles(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testCompareFilesFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
 		actual = CompareFileExtensions.compareFiles(testFile1, testFile2, false, false, false,
@@ -276,7 +281,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#compare(IFileCompareResultBean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testCompareIFileCompareResultBeanBooleanBooleanBooleanBooleanBoolean()
 	{
 		IFileCompareResultBean actual;
@@ -326,7 +332,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * Test method for
 	 * {@link CompareFileExtensions#compare(IFileContentResultBean, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testCompareIFileContentResultBeanBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
 		actual = new FileContentResultBean(testFile1, testFile2);
@@ -355,7 +362,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#completeCompare(IFileCompareResultBean)}.
 	 */
-	@Test(enabled = false) // TODO FIXME
+	@Test
+	@Disabled // TODO FIXME
 	public void testCompleteCompare()
 	{
 		IFileCompareResultBean actual;
@@ -387,20 +395,21 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testFindEqualFilesFile() throws IOException
 	{
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir);
 
-		assertTrue("found.size() is not equal 2.", found.size() == 2);
+		assertTrue(found.size() == 2, "found.size() is not equal 2.");
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testFindEqualFilesFileBooleanBooleanBooleanBooleanBoolean()
 	{
 		List<IFileCompareResultBean> actual;
@@ -429,7 +438,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testFindEqualFilesFileFile() throws IOException
 	{
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
@@ -451,14 +460,15 @@ public class CompareFileExtensionsTest extends FileTestCase
 		final List<IFileCompareResultBean> found = CompareFileExtensions
 			.findEqualFiles(this.testDir, this.secondTestDir);
 
-		assertTrue("found.size() is not equal 3.", found.size() == 3);
+		assertTrue(found.size() == 3, "found.size() is not equal 3.");
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testFindEqualFilesFileFileBooleanBooleanBooleanBooleanBoolean() throws IOException
 	{
 		List<IFileCompareResultBean> actual;
@@ -506,20 +516,22 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File)}.
 	 */
-	@Test(enabled = false) // TODO FIXME
+	@Test
+	@Disabled // TODO FIXME
 	public void testFindEqualFilesWithSameContentFile()
 	{
 		final List<IFileContentResultBean> found = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir);
 
-		assertTrue("found.size() is not equal 2.", found.size() == 2);
+		assertTrue(found.size() == 2, "found.size() is not equal 2.");
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false) // TODO FIXME
+	@Test
+	@Disabled // TODO FIXME
 	public void testFindEqualFilesWithSameContentFileBooleanBooleanBooleanBooleanBooleanBoolean()
 	{
 		List<IFileContentResultBean> actual;
@@ -547,7 +559,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)}.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testFindEqualFilesWithSameContentFileFile() throws IOException
 	{
 		final File testFile3 = new File(this.deepDir, "testFindFilesRecursive.cvs");
@@ -569,14 +581,15 @@ public class CompareFileExtensionsTest extends FileTestCase
 		final List<IFileContentResultBean> contentfound = CompareFileExtensions
 			.findEqualFilesWithSameContent(this.testDir, this.secondTestDir);
 
-		assertTrue("contentfound() is not equal 3.", contentfound.size() == 3);
+		assertTrue(contentfound.size() == 3, "contentfound() is not equal 3.");
 	}
 
 	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}.
 	 */
-	@Test(enabled = false) // TODO FIXME
+	@Test
+	@Disabled // TODO FIXME
 	public void testFindEqualFilesWithSameContentFileFileBooleanBooleanBooleanBooleanBooleanBoolean()
 		throws IOException
 	{
@@ -628,7 +641,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#simpleCompareFiles(File, File)}.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testSimpleCompareFiles()
 	{
 		IFileCompareResultBean actual;
@@ -655,7 +668,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#validateEquality(IFileCompareResultBean)}.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testValidateEqualityIFileCompareResultBean()
 	{
 		boolean actual;
@@ -708,7 +721,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CompareFileExtensions#validateEquality(IFileContentResultBean)}.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testValidateEqualityIFileContentResultBean()
 	{
 		boolean actual;
@@ -795,9 +808,10 @@ public class CompareFileExtensionsTest extends FileTestCase
 	{
 		File file1 = createTempFile("test1.txt", 100);
 		File file2 = file1; // Same file testing
-		assertTrue("Files should be identical",
+		assertTrue(
 			CompareFileExtensions.compareFiles(file1, file2, false, false, false, false, false)
-				.getFileExtensionEquality());
+				.getFileExtensionEquality(),
+			"Files should be identical");
 	}
 
 	@Test
@@ -805,8 +819,8 @@ public class CompareFileExtensionsTest extends FileTestCase
 	{
 		File file1 = createTempFile("test1.txt", 100);
 		File file2 = createTempFile("test1.jpg", 100);
-		assertFalse("Files should differ in extension", CompareFileExtensions
-			.compareFiles(file1, file2, true, false, true, true, true).getFileExtensionEquality());
+		assertFalse(CompareFileExtensions.compareFiles(file1, file2, true, false, true, true, true)
+			.getFileExtensionEquality(), "Files should differ in extension");
 	}
 
 	@Test
@@ -815,7 +829,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		File file1 = createTempFile("simple1.txt", 100);
 		File file2 = createTempFile("simple1.txt", 100);
 		IFileCompareResultBean result = CompareFileExtensions.simpleCompareFiles(file1, file2);
-		assertTrue("Simple comparison should pass", result.getFileExtensionEquality());
+		assertTrue(result.getFileExtensionEquality(), "Simple comparison should pass");
 	}
 
 	@Test
@@ -823,7 +837,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 	{
 		File file1 = createTempFile("validate.txt", 100);
 		IFileCompareResultBean result = CompareFileExtensions.simpleCompareFiles(file1, file1);
-		assertTrue("Validation should pass", CompareFileExtensions.validateEquality(result));
+		assertTrue(CompareFileExtensions.validateEquality(result), "Validation should pass");
 	}
 
 	@Test
@@ -833,7 +847,7 @@ public class CompareFileExtensionsTest extends FileTestCase
 		File file2 = createTempFile("validate.jpg", 200);
 		IFileCompareResultBean result = CompareFileExtensions.compareFiles(file1, file2, true,
 			false, true, true, false);
-		assertFalse("Validation should fail", CompareFileExtensions.validateEquality(result));
+		assertFalse(CompareFileExtensions.validateEquality(result), "Validation should fail");
 	}
 
 }

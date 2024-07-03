@@ -16,4 +16,5 @@ dependencies {
     testImplementation libs.jobj.contract.verifier
     // Note: use of bundles...
     testImplementation libs.bundles.unit.testing
+    testRuntimeOnly libs.junit.platform.launcher
 }

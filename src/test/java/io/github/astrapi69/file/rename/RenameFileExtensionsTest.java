@@ -24,10 +24,10 @@
  */
 package io.github.astrapi69.file.rename;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,10 +38,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.DirectoryFactory;
@@ -66,7 +67,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -79,7 +80,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -160,7 +161,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix);
 		this.actual = null == notDeletedFiles;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -170,13 +171,13 @@ public class RenameFileExtensionsTest extends FileTestCase
 		notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir, oldFileSuffix,
 			newFileSuffix);
 		this.actual = null == notDeletedFiles;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		for (final File file : filesWithNewSuffixes)
 		{
 			final File currentFile = file;
 			this.actual = FileSearchExtensions.containsFileRecursive(this.deepDir, currentFile);
-			assertTrue("", this.actual);
+			assertTrue(this.actual);
 		}
 	}
 
@@ -223,7 +224,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix, true);
 		this.actual = null == notDeletedFiles;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -237,7 +238,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		{
 			final File currentFile = file;
 			this.actual = FileSearchExtensions.containsFileRecursive(this.deepDir, currentFile);
-			assertTrue("", this.actual);
+			assertTrue(this.actual);
 		}
 	}
 
@@ -269,15 +270,15 @@ public class RenameFileExtensionsTest extends FileTestCase
 		catch (final Exception e)
 		{
 			this.actual = e instanceof FileDoesNotExistException;
-			assertTrue("", this.actual);
+			assertTrue(this.actual);
 		}
 
 		testFile1.createNewFile();
 		this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, fileWithNewSuffix);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 	/**
@@ -306,15 +307,15 @@ public class RenameFileExtensionsTest extends FileTestCase
 		catch (final Exception e)
 		{
 			this.actual = e instanceof FileDoesNotExistException;
-			assertTrue("", this.actual);
+			assertTrue(this.actual);
 		}
 
 		testFile1.createNewFile();
 		this.actual = RenameFileExtensions.changeFilenameSuffix(testFile1, newFileSuffix, true);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, fileWithNewSuffix);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 	/**
@@ -366,13 +367,13 @@ public class RenameFileExtensionsTest extends FileTestCase
 		if (!srcDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(srcDir);
-			assertTrue("The directory " + srcDir.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + srcDir.getAbsolutePath() + " should be created.");
 			StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
 		}
 		// Test to move the dir.
 		this.actual = RenameFileExtensions.moveFile(srcDir, destDir);
-		assertTrue("Directory should be renamed.", this.actual);
+		assertTrue(this.actual, "Directory should be renamed.");
 
 	}
 
@@ -395,9 +396,9 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
-		assertTrue("File should be renamed.", this.actual);
+		assertTrue(this.actual, "File should be renamed.");
 		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destDir);
-		assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue(this.actual, "The renamed file should exist in this directory.");
 	}
 
 	/**
@@ -409,16 +410,19 @@ public class RenameFileExtensionsTest extends FileTestCase
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
-	@Test(expectedExceptions = { FileNotFoundException.class })
+	@Test
 	public void testMoveFileFileNotFoundException() throws IOException, FileIsADirectoryException
 	{
-		// Test to move a file....
-		final String filePrefix1 = "testMoveFile";
-		final String oldFileSuffix = ".txt";
-		final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
-		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+		Assertions.assertThrows(FileNotFoundException.class, () -> {
 
-		RenameFileExtensions.moveFile(srcFile, destDir);
+			// Test to move a file....
+			final String filePrefix1 = "testMoveFile";
+			final String oldFileSuffix = ".txt";
+			final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
+			final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+
+			RenameFileExtensions.moveFile(srcFile, destDir);
+		});
 	}
 
 	/**
@@ -450,12 +454,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final File renamedFile1 = new File(this.deepDir, filePrefix2 + newFileSuffix);
 
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1);
-		assertFalse("File should not exist in this directory.", this.actual);
+		assertFalse(this.actual, "File should not exist in this directory.");
 		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1);
-		assertTrue("File should be renamed.", this.actual);
+		assertTrue(this.actual, "File should be renamed.");
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
-		assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue(this.actual, "The renamed file should exist in this directory.");
 		testFile1.deleteOnExit();
 		renamedFile1.deleteOnExit();
 		expectedRenamedFile.deleteOnExit();
@@ -491,12 +495,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final File renamedFile1 = new File(this.deepDir, filePrefix2 + newFileSuffix);
 
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1, false);
-		assertFalse("File should not exist in this directory.", this.actual);
+		assertFalse(this.actual, "File should not exist in this directory.");
 		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1, false);
-		assertTrue("File should be renamed.", this.actual);
+		assertTrue(this.actual, "File should be renamed.");
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
-		assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue(this.actual, "The renamed file should exist in this directory.");
 		testFile1.deleteOnExit();
 		renamedFile1.deleteOnExit();
 	}
@@ -524,9 +528,9 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
 		this.actual = RenameFileExtensions.renameFile(testFile1, renamedFile1.getName());
-		assertTrue("File should be renamed.", this.actual);
+		assertTrue(this.actual, "File should be renamed.");
 		this.actual = FileSearchExtensions.containsFile(this.deepDir, renamedFile1);
-		assertTrue("The renamed file should exist in this directory.", this.actual);
+		assertTrue(this.actual, "The renamed file should exist in this directory.");
 	}
 
 	/**

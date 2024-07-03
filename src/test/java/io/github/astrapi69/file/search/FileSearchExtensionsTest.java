@@ -24,10 +24,10 @@
  */
 package io.github.astrapi69.file.search;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -36,10 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.set.SetFactory;
 import io.github.astrapi69.file.FileTestCase;
@@ -62,7 +62,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -75,7 +75,7 @@ public class FileSearchExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -131,9 +131,9 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		StoreFileExtensions.toFile(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
-		assertFalse("File should not exist in this directory.", contains);
+		assertFalse(contains, "File should not exist in this directory.");
 		contains = FileSearchExtensions.containsFile(this.testDir, testFile);
-		assertTrue("File should not exist in this directory.", contains);
+		assertTrue(contains, "File should not exist in this directory.");
 		testFile.deleteOnExit();
 	}
 
@@ -146,10 +146,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final File testFile = new File(this.testDir, "beautifull.txt");
 		StoreFileExtensions.toFile(testFile, "Its a beautifull day!!!");
 		boolean contains = FileSearchExtensions.containsFile(new File("."), testFile);
-		assertFalse("File should not exist in this directory.", contains);
+		assertFalse(contains, "File should not exist in this directory.");
 		final String filename = testFile.getName();
 		contains = FileSearchExtensions.containsFile(this.testDir, filename);
-		assertTrue("File should not exist in this directory.", contains);
+		assertTrue(contains, "File should not exist in this directory.");
 	}
 
 	/**
@@ -168,11 +168,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final File currentDir = new File(".").getAbsoluteFile();
 		boolean contains = FileSearchExtensions.containsFileRecursive(currentDir.getAbsoluteFile(),
 			testFile);
-		assertFalse("File should not exist in this directory.", contains);
+		assertFalse(contains, "File should not exist in this directory.");
 		contains = FileSearchExtensions.containsFileRecursive(this.testDir, testFile);
-		assertTrue("File should not exist in this directory.", contains);
+		assertTrue(contains, "File should not exist in this directory.");
 		this.actual = FileSearchExtensions.containsFileRecursive(this.testDir, testFile3);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 	/**
@@ -253,10 +253,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final long executionTime = end - start;
 		System.out.println("execution:" + executionTime);
 		// 3. assert that expected with actual match
-		assertEquals("", expected.size(), actual.size());
+		assertEquals(expected.size(), actual.size());
 		for (final File file : expected)
 		{
-			assertTrue("", actual.contains(file));
+			assertTrue(actual.contains(file));
 		}
 		// 4. cleanup all files from this test
 		DeleteFileExtensions.delete(fileList);
@@ -428,11 +428,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final List<File> compare = FileSearchExtensions.findFiles(this.testDir.getAbsolutePath(),
 			txtExtension);
 		this.actual = expected.size() == compare.size();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		for (final File file : compare)
 		{
 			this.actual = expected.contains(file);
-			assertTrue("", this.actual);
+			assertTrue(this.actual);
 		}
 	}
 
@@ -470,19 +470,19 @@ public class FileSearchExtensionsTest extends FileTestCase
 		// 2. run the actual method to test
 		List<File> actual = FileSearchExtensions.findFilesWithFilter(this.testDir, ".txt");
 		// 3. assert that expected with actual match
-		assertEquals("", expected.size(), actual.size());
+		assertEquals(expected.size(), actual.size());
 		for (final File file : expected)
 		{
-			assertTrue("", actual.contains(file));
+			assertTrue(actual.contains(file));
 		}
 		actual = FileSearchExtensions.findFilesWithFilter(this.testDir, "tft", "cvs");
 		expected.clear();
 		expected.add(testFile2);
 		expected.add(testFile3);
-		assertEquals("", expected.size(), actual.size());
+		assertEquals(expected.size(), actual.size());
 		for (final File file : expected)
 		{
-			assertTrue("", actual.contains(file));
+			assertTrue(actual.contains(file));
 		}
 		// 4. cleanup all files from this test
 		DeleteFileExtensions.delete(fileList);
@@ -522,10 +522,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile2);
 		expected.add(testFile3);
 		expected.add(testFile4);
-		assertEquals("", expected.size(), fileList.size());
+		assertEquals(expected.size(), fileList.size());
 		for (final File file : expected)
 		{
-			assertTrue("", fileList.contains(file));
+			assertTrue(fileList.contains(file));
 		}
 		// clean up...
 		DeleteFileExtensions.delete(fileList);
@@ -565,10 +565,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		expected.add(testFile2);
 		expected.add(testFile3);
 		expected.add(testFile4);
-		assertEquals("", expected.size(), fileList.size());
+		assertEquals(expected.size(), fileList.size());
 		for (final File file : expected)
 		{
-			assertTrue("", fileList.contains(file));
+			assertTrue(fileList.contains(file));
 		}
 		// clean up...
 		DeleteFileExtensions.delete(fileList);
@@ -627,11 +627,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 		final String[] extensions = { txtExtension };
 
 		this.actual = FileSearchExtensions.match(filename, extensions);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		final String[] otherExtensions = { rtfExtension, cvsExtension };
 		this.actual = FileSearchExtensions.match(filename, otherExtensions);
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 	}
 
 	/**

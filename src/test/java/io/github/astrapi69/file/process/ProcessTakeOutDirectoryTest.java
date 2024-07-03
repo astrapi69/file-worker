@@ -27,7 +27,8 @@ package io.github.astrapi69.file.process;
 import java.io.File;
 import java.util.List;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.FileCreationState;
@@ -52,7 +53,8 @@ public class ProcessTakeOutDirectoryTest
 	 *
 	 * # course of action
 	 */
-	@Test(enabled = false)
+	@Test
+	@Disabled
 	public void testProcess() throws ZipException
 	{
 		File takeOutDir;

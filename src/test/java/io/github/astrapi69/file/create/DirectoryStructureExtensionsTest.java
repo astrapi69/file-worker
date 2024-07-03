@@ -24,7 +24,7 @@
  */
 package io.github.astrapi69.file.create;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.collection.CollectionExtensions;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;

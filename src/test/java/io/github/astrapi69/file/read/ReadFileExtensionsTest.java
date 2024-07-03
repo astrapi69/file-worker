@@ -24,10 +24,10 @@
  */
 package io.github.astrapi69.file.read;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertNull;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,10 +43,10 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.file.FileTestCase;
@@ -70,7 +70,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -91,7 +91,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -186,7 +186,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 
 		final String content = ReadFileExtensions.fromFile(testFile1);
 		this.actual = inputString.equals(content);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		final String compare = ReadFileExtensions.readHeadLine(inputFile.getAbsolutePath());
 
 		this.actual = expected.equals(compare);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		final File testFile = new File(this.testResources, "testReadLinesInList.lst");
 		final List<String> testList = ReadFileExtensions.readLinesInList(testFile);
 		this.actual = expected.equals(testList);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 	/**

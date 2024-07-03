@@ -24,9 +24,9 @@
  */
 package io.github.astrapi69.file.create;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,10 +38,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
@@ -60,10 +61,10 @@ public class DirectoryFactoryTest extends FileTestCase
 		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
 
 		File tempFile = DirectoryFactory.newTempDirectory(prefix, attrs);
-		assertNotNull("The returned file should not be null", tempFile);
-		assertTrue("The returned file should be a directory", tempFile.isDirectory());
-		assertTrue("Directory name should start with the prefix",
-			tempFile.getName().startsWith(prefix));
+		assertNotNull(tempFile, "The returned file should not be null");
+		assertTrue(tempFile.isDirectory(), "The returned file should be a directory");
+		assertTrue(tempFile.getName().startsWith(prefix),
+			"Directory name should start with the prefix");
 
 		// Clean up
 		tempFile.delete();
@@ -77,12 +78,12 @@ public class DirectoryFactoryTest extends FileTestCase
 		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
 
 		File tempFile = DirectoryFactory.newTempDirectory(dir, prefix, attrs);
-		assertNotNull("The returned file should not be null", tempFile);
-		assertTrue("The returned file should be a directory", tempFile.isDirectory());
-		assertTrue("Directory should be created in the specified parent directory",
-			tempFile.getParent().equals(dir.toString()));
-		assertTrue("Directory name should start with the prefix",
-			tempFile.getName().startsWith(prefix));
+		assertNotNull(tempFile, "The returned file should not be null");
+		assertTrue(tempFile.isDirectory(), "The returned file should be a directory");
+		assertTrue(tempFile.getParent().equals(dir.toString()),
+			"Directory should be created in the specified parent directory");
+		assertTrue(tempFile.getName().startsWith(prefix),
+			"Directory name should start with the prefix");
 
 		// Clean up
 		tempFile.delete();
@@ -95,11 +96,11 @@ public class DirectoryFactoryTest extends FileTestCase
 		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
 
 		FileCreationState result = DirectoryFactory.newTempDir(prefix, attrs);
-		assertNotNull("The result should not be null", result);
-		assertEquals("The result should indicate success", FileCreationState.ALREADY_EXISTS,
-			result);
-		assertNotNull("The file in the result should not be null", result.getFile());
-		assertTrue("The file should be a directory", result.getFile().isDirectory());
+		assertNotNull(result, "The result should not be null");
+		assertEquals(FileCreationState.ALREADY_EXISTS, result,
+			"The result should indicate success");
+		assertNotNull(result.getFile(), "The file in the result should not be null");
+		assertTrue(result.getFile().isDirectory(), "The file should be a directory");
 
 		// Clean up
 		result.getFile().delete();
@@ -113,13 +114,13 @@ public class DirectoryFactoryTest extends FileTestCase
 		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
 
 		FileCreationState result = DirectoryFactory.newTempDir(dir, prefix, attrs);
-		assertNotNull("The result should not be null", result);
-		assertEquals("The result should indicate success", FileCreationState.ALREADY_EXISTS,
-			result);
-		assertNotNull("The file in the result should not be null", result.getFile());
-		assertTrue("The file should be a directory", result.getFile().isDirectory());
-		assertTrue("Directory should be created in the specified parent directory",
-			result.getFile().getParent().equals(dir.toString()));
+		assertNotNull(result, "The result should not be null");
+		assertEquals(FileCreationState.ALREADY_EXISTS, result,
+			"The result should indicate success");
+		assertNotNull(result.getFile(), "The file in the result should not be null");
+		assertTrue(result.getFile().isDirectory(), "The file should be a directory");
+		assertTrue(result.getFile().getParent().equals(dir.toString()),
+			"Directory should be created in the specified parent directory");
 
 		// Clean up
 		result.getFile().delete();
@@ -132,7 +133,7 @@ public class DirectoryFactoryTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -145,7 +146,7 @@ public class DirectoryFactoryTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -193,8 +194,8 @@ public class DirectoryFactoryTest extends FileTestCase
 
 		for (final File dir : dirs)
 		{
-			assertTrue("directory should exist.", dir.exists());
-			assertTrue("File object should be a directory.", dir.isDirectory());
+			assertTrue(dir.exists(), "directory should exist.");
+			assertTrue(dir.isDirectory(), "File object should be a directory.");
 		}
 		// Finally delete the test directories...
 		for (final File dir : dirs)
@@ -312,22 +313,22 @@ public class DirectoryFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(expectedExceptions = RuntimeException.class)
+	@Test
 	public void testNewDirectoryWithParentFileNotExistsAndDirectoryName() throws IOException
 	{
 
-		File actual;
-		File expected;
-		File dir;
-		// new scenario...
-		dir = new File(this.testResources, "newFooBarDir");
-		// if the directory exist delete it
-		if (dir.exists())
-		{
-			DeleteFileExtensions.delete(dir);
-		}
-		File parentNotExists = new File("tmp", "bla");
-		actual = DirectoryFactory.newDirectory(parentNotExists, "newFooBarDir");
+		Assertions.assertThrows(RuntimeException.class, () -> {
+			File dir;
+			// new scenario...
+			dir = new File(this.testResources, "newFooBarDir");
+			// if the directory exist delete it
+			if (dir.exists())
+			{
+				DeleteFileExtensions.delete(dir);
+			}
+			File parentNotExists = new File("tmp", "bla");
+			DirectoryFactory.newDirectory(parentNotExists, "newFooBarDir");
+		});
 	}
 
 	/**
@@ -336,20 +337,23 @@ public class DirectoryFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(expectedExceptions = RuntimeException.class)
+	@Test
 	public void testNewDirectoryWithParentFileAndDirectoryNameWhereParentIsNoDirectory()
 		throws IOException
 	{
-		File parentDirectory;
-		String filename;
-		File file;
+		Assertions.assertThrows(RuntimeException.class, () -> {
 
-		File dir;
-		// new scenario...
-		parentDirectory = SystemFileExtensions.getTempDir();
-		filename = "foobar";
-		file = FileFactory.newFile(parentDirectory, filename);
-		DirectoryFactory.newDirectory(file, "newFooBarDir");
+			File parentDirectory;
+			String filename;
+			File file;
+
+			File dir;
+			// new scenario...
+			parentDirectory = SystemFileExtensions.getTempDir();
+			filename = "foobar";
+			file = FileFactory.newFile(parentDirectory, filename);
+			DirectoryFactory.newDirectory(file, "newFooBarDir");
+		});
 	}
 
 

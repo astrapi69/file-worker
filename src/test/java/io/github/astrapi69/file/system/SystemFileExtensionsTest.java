@@ -24,14 +24,14 @@
  */
 package io.github.astrapi69.file.system;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.util.Optional;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * The unit test class for the class {@link SystemFileExtensions}

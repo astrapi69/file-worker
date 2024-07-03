@@ -26,8 +26,8 @@ package io.github.astrapi69.file.zip;
 
 import java.io.File;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import io.github.astrapi69.file.FileTestCase;
 
@@ -72,7 +72,7 @@ public abstract class ZipTestCase extends FileTestCase
 	 * @see FileTestCase#setUp()
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -91,7 +91,7 @@ public abstract class ZipTestCase extends FileTestCase
 	 * @see FileTestCase#tearDown()
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();

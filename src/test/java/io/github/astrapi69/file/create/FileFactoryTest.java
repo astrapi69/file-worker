@@ -24,10 +24,10 @@
  */
 package io.github.astrapi69.file.create;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,10 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.SystemUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
@@ -57,7 +58,7 @@ public class FileFactoryTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -70,7 +71,7 @@ public class FileFactoryTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -82,19 +83,21 @@ public class FileFactoryTest extends FileTestCase
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
-	@Test(expectedExceptions = RuntimeException.class)
+	@Test
 	public void testNewFileWithParentAndFileNameWhereParentIsNoDirectory() throws IOException
 	{
-		File parentDirectory;
-		String filename;
-		File file;
+		Assertions.assertThrows(RuntimeException.class, () -> {
 
-		File dir;
-		// new scenario...
-		parentDirectory = SystemFileExtensions.getTempDir();
-		filename = "foobar";
-		file = FileFactory.newFile(parentDirectory, filename);
-		FileFactory.newFile(file, "newFooBarDir");
+			File parentDirectory;
+			String filename;
+			File file;
+			// ...
+			// new scenario...
+			parentDirectory = SystemFileExtensions.getTempDir();
+			filename = "foobar";
+			file = FileFactory.newFile(parentDirectory, filename);
+			FileFactory.newFile(file, "newFooBarDir");
+		});
 	}
 
 	/**
@@ -369,8 +372,8 @@ public class FileFactoryTest extends FileTestCase
 		assertEquals(actual, expected);
 		for (final File file : files)
 		{
-			assertTrue("file should exist.", file.exists());
-			assertTrue("File object should be a file.", file.isFile());
+			assertTrue(file.exists(), "file should exist.");
+			assertTrue(file.isFile(), "File object should be a file.");
 		}
 		// Finally delete the test files...
 		for (final File file : files)

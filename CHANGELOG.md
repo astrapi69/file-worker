@@ -4,7 +4,13 @@
 Version 17.4-SNAPSHOT
 -------------
 
+ADDED:
 
+- new test dependency org.junit.jupiter:junit-jupiter in version 5.11.0-M2
+
+CHANGED:
+
+- remove of test dependency testng
 
 Version 17.3
 -------------

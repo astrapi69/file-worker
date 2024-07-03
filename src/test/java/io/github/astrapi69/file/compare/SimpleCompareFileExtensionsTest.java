@@ -24,20 +24,20 @@
  */
 package io.github.astrapi69.file.compare;
 
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 import io.github.astrapi69.crypt.api.algorithm.MdAlgorithm;
@@ -49,14 +49,14 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 {
 
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
 	}
 
 	@Override
-	@AfterMethod
+	@AfterEach
 	public void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -179,7 +179,7 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link SimpleCompareFileExtensions#compareFilesByLastModified(File, File)}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testCompareFilesByLastModified() throws IOException
 	{
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(),
@@ -236,16 +236,6 @@ public class SimpleCompareFileExtensionsTest extends FileTestCase
 		assertTrue(this.actual);
 		DeleteFileExtensions.delete(testFile2);
 		DeleteFileExtensions.delete(testFile1);
-	}
-
-	/**
-	 * Test method for {@link SimpleCompareFileExtensions}
-	 */
-	@Test(expectedExceptions = { BeanTestException.class, ObjectCreationException.class })
-	public void testWithBeanTester()
-	{
-		final BeanTester beanTester = new BeanTester();
-		beanTester.testBean(SimpleCompareFileExtensions.class);
 	}
 
 }

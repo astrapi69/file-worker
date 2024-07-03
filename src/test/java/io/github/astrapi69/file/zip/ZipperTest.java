@@ -24,20 +24,20 @@
  */
 package io.github.astrapi69.file.zip;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.zip.ZipFile;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.Configuration;
 import org.meanbean.test.ConfigurationBuilder;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.search.FileSearchExtensions;
@@ -59,7 +59,7 @@ public class ZipperTest extends ZipTestCase
 	 * {@inheritDoc}
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -69,7 +69,7 @@ public class ZipperTest extends ZipTestCase
 	 * {@inheritDoc}
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -78,7 +78,7 @@ public class ZipperTest extends ZipTestCase
 	/**
 	 * Test method for {@link Zipper}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testWithBeanTester()
 	{
 		Configuration configuration = new ConfigurationBuilder()
@@ -131,7 +131,7 @@ public class ZipperTest extends ZipTestCase
 		}
 		final long length = zipFile.length();
 		this.actual = length == 0;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -163,16 +163,16 @@ public class ZipperTest extends ZipTestCase
 
 		final long currentLength = zipFile.length();
 		this.actual = 0 < currentLength;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = zipper.getFileCounter() == 9;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = zipper.getZipFile().equals(zipFile);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 	}
 
@@ -193,7 +193,7 @@ public class ZipperTest extends ZipTestCase
 		}
 		final long length = zipFile.length();
 		this.actual = length == 0;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		final File testFile1 = new File(this.testDir.getAbsoluteFile(), "testZip1.txt");
 		final File testFile2 = new File(this.testDir.getAbsoluteFile(), "testZip2.tft");
 		final File testFile3 = new File(this.testDir.getAbsoluteFile(), "testZip3.txt");
@@ -227,17 +227,17 @@ public class ZipperTest extends ZipTestCase
 
 		final long currentLength = zipFile.length();
 		this.actual = 0 < currentLength;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = zipper.getFileCounter() == 4;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = zipper.getZipFile().equals(zipFile);
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = FileSearchExtensions.containsFileRecursive(this.zipDir, zipFile);
 
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 	}
 
