@@ -26,6 +26,7 @@ package io.github.astrapi69.file.zip;
 
 /**
  * The enum {@link ZipState} provides flags for the encryption and decryption of zip files.
+ * 
  * @deprecated all classes from this package has moved to the zip-worker repository, use instead the
  *             classes from that project. Note: will be removed in the next major release.
  */
