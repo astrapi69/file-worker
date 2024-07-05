@@ -33,7 +33,10 @@ import java.util.zip.ZipFile;
  *
  * @version 1.0
  * @author Asterios Raptis
+ * @deprecated all classes from this package has moved to the zip-worker repository, use instead the
+ *             classes from that project. Note: will be removed in the next major release.
  */
+@Deprecated(forRemoval = true)
 public interface ZipModel
 {
 

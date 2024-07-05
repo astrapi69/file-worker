@@ -32,7 +32,10 @@ import java.util.zip.ZipFile;
 /**
  * The `Unzipper` class provides methods to extract zip entries to a specified directory. It
  * utilizes `ZipExtensions` for performing the extraction operations.
+ * @deprecated all classes from this package has moved to the zip-worker repository, use instead the
+ *             classes from that project. Note: will be removed in the next major release.
  */
+@Deprecated(forRemoval = true)
 public class Unzipper
 {
 

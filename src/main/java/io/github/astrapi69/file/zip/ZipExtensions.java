@@ -52,9 +52,10 @@ import io.github.astrapi69.io.file.FileConstants;
 /**
  * The class {@link ZipExtensions} provides functionality for ziping and unzipping files.
  *
- * @version 1.0
- * @author Asterios Raptis
+ * @deprecated all classes from this package has moved to the zip-worker repository, use instead the
+ *             classes from that project. Note: will be removed in the next major release.
  */
+@Deprecated(forRemoval = true)
 public final class ZipExtensions
 {
 
