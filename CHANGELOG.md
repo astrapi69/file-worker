@@ -6,6 +6,7 @@ Version 17.4-SNAPSHOT
 
 ADDED:
 
+- new factory method in FileInfo toFile that creates a new File object from this FileInfo object
 - new test dependency org.junit.jupiter:junit-jupiter in version 5.11.0-M2
 
 CHANGED:

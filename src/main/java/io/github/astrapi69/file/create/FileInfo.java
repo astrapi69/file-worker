@@ -99,6 +99,16 @@ public class FileInfo
 	}
 
 	/**
+	 * Converts this `FileInfo` object to a {@link File} object.
+	 *
+	 * @return the new `File` object from this `FileInfo`
+	 */
+	public File toFile()
+	{
+		return FileInfo.toFile(this);
+	}
+
+	/**
 	 * Converts the given {@link File} object to a `FileInfo` object.
 	 *
 	 * @param file
@@ -115,11 +125,11 @@ public class FileInfo
 	}
 
 	/**
-	 * Converts this `FileInfo` object to a {@link File} object.
+	 * Converts the given `FileInfo` object to a {@link File} object
 	 *
 	 * @param fileInfo
 	 *            the `FileInfo` object to convert to `File`
-	 * @return the new `File` object from this `FileInfo`
+	 * @return the new `File` object the given `FileInfo` object
 	 */
 	public static File toFile(FileInfo fileInfo)
 	{
