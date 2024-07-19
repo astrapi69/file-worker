@@ -74,12 +74,16 @@ public class HtmlToEnumGenerator
 				if (algo != null)
 				{
 					String enumConstant = algo.toUpperCase().replaceAll("[<>\\-\\./]", "_");
-					if(enumConstant.contains(" ")) {
+					if (enumConstant.contains(" "))
+					{
 						String[] split = enumConstant.split(" ");
-						for(int i = 0; i < split.length; i++) {
+						for (int i = 0; i < split.length; i++)
+						{
 							sb.append("    ").append(split[i]).append(",\n");
 						}
-					} else {
+					}
+					else
+					{
 						sb.append("    ").append(enumConstant).append(",\n");
 					}
 				}
