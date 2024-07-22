@@ -11,8 +11,12 @@ ADDED:
 
 CHANGED:
 
+- update gradle to new version 8.9
 - remove of test dependency testng
 - tagged all files in zip package as deprecated because there moved to another module zip.worker
+- update of dependency crypt-api to the new minor version 9.3
+- update of dependency commons-lang3 to the new minor version 3.15.0
+- update of test dependency jsoup to new patch version 1.18.1
 
 Version 17.3
 -------------

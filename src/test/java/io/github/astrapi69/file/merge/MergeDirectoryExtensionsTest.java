@@ -26,7 +26,6 @@ package io.github.astrapi69.file.merge;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +35,6 @@ import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.DirectoryStructureFactory;
