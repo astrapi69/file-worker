@@ -2,21 +2,28 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven {
-        name "Sonatype Nexus Releases"
-        url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+        name = "github jobj-contract-verifier releases"
+        url "https://github.com/astrapi69/jobj-contract-verifier/raw/master/releases"
+    }
+    /**
+     * This repository is intended for release versions
+     **/
+    maven {
+        name "$projectRepositoriesReleasesName"
+        url "$projectRepositoriesReleasesRepoUrl"
         mavenContent {
             releasesOnly()
         }
     }
+    /**
+     * This repository is intended for snapshot versions that are previously deployed
+     * on the specified url for snapshots
+     **/
     maven {
-        name "Sonatype Nexus Snapshots"
-        url "https://oss.sonatype.org/content/repositories/snapshots"
+        name "$projectRepositoriesSnapshotsName"
+        url "$projectRepositoriesSnapshotsRepoUrl"
         mavenContent {
             snapshotsOnly()
         }
-    }
-    maven {
-        name = "github jobj-contract-verifier releases"
-        url "https://github.com/astrapi69/jobj-contract-verifier/raw/master/releases"
     }
 }
