@@ -27,7 +27,7 @@ module file.worker
 	requires java.logging;
 	requires silly.collection;
 	requires silly.strings;
-	requires io.github.astrapisixtynine.crypt.api;
+	requires crypt.api;
 	requires io.github.astrapisixtynine.throwable;
 
 	exports io.github.astrapi69.file;
