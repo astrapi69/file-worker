@@ -12,10 +12,10 @@ ADDED:
 
 CHANGED:
 
-- update gradle to new version 8.9
+- update gradle to new version 8.10-rc-1
 - remove of test dependency testng
 - tagged all files in zip package as deprecated because there moved to another module zip.worker
-- update of dependency commons-lang3 to the new minor version 3.15.0
+- update of dependency commons-lang3 to the new minor version 3.16.0
 - update of test dependency jsoup to new patch version 1.18.1
 
 Version 17.3

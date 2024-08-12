@@ -44,7 +44,7 @@ import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.io.file.namefilter.MultiplyExtensionsFilenameFilter;
 import io.github.astrapi69.io.file.namefilter.SimpleFilenameFilter;
-import io.github.astrapi69.meanbean.factories.FileFactory;
+import io.github.astrapi69.meanbean.factory.FileFactory;
 
 /**
  * The unit test class for the class Zipper.

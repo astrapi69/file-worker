@@ -40,8 +40,8 @@ import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.collection.list.ListExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
-import io.github.astrapi69.meanbean.factories.ListStringArrayFactory;
-import io.github.astrapi69.meanbean.factories.StringArrayFactory;
+import io.github.astrapi69.meanbean.factory.ListStringArrayFactory;
+import io.github.astrapi69.meanbean.factory.StringArrayFactory;
 
 /**
  * The unit test class for the class {@link CsvBean}
