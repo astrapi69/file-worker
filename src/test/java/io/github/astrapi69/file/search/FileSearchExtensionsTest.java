@@ -86,6 +86,117 @@ public class FileSearchExtensionsTest extends FileTestCase
 		// Create a subdirectory with files
 		Path subDir = Files.createDirectory(testDirectory.resolve("subDir"));
 		Files.createFile(subDir.resolve("logfile3.txt"));
+		Files.createFile(subDir.resolve("logfile4.log"));
+	}
+
+	/**
+	 * Tear down method will be invoked after every unit test method in this class.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Override
+	@AfterEach
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+		// Clean up
+		Files.walk(testDirectory).map(Path::toFile).forEach(File::delete);
+	}
+
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtensionRecursive(File, String, String)}
+	 */
+	@Test
+	public void testFindFilesWithPrefixAndExtensionRecursive_BasicMatch()
+	{
+		File dir = testDirectory.toFile();
+		String prefix = "logfile";
+		String extension = "txt";
+
+		List<File> files = FileSearchExtensions.findFilesWithPrefixAndExtensionRecursive(dir,
+			prefix, extension);
+
+		assertEquals(3, files.size());
+		assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile1.txt")));
+		assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile2.txt")));
+		assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile3.txt")));
+	}
+
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtensionRecursive(File, String, String)}
+	 */
+	@Test
+	public void testFindFilesWithPrefixAndExtensionRecursive_NoMatch()
+	{
+		File dir = testDirectory.toFile();
+		String prefix = "nonexistent";
+		String extension = "txt";
+
+		List<File> files = FileSearchExtensions.findFilesWithPrefixAndExtensionRecursive(dir,
+			prefix, extension);
+
+		assertTrue(files.isEmpty());
+	}
+
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtensionRecursive(File, String, String)}
+	 */
+	@Test
+	public void testFindFilesWithPrefixAndExtensionRecursive_DifferentExtension() throws IOException
+	{
+
+		// Create a subdirectory with files
+		File dir = testDirectory.toFile();
+		String prefix = "logfile";
+		String extension = "log";
+
+		List<File> files = FileSearchExtensions.findFilesWithPrefixAndExtensionRecursive(dir,
+			prefix, extension);
+
+		assertEquals(2, files.size());
+		assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile1.log")));
+		assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile4.log")));
+	}
+
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtensionRecursive(File, String, String)}
+	 */
+	@Test
+	public void testFindFilesWithPrefixAndExtensionRecursive_EmptyDirectory() throws IOException
+	{
+		Path emptyDir = Files.createDirectory(testDirectory.resolve("emptyDir"));
+		File dir = emptyDir.toFile();
+		String prefix = "logfile";
+		String extension = "txt";
+
+		List<File> files = FileSearchExtensions.findFilesWithPrefixAndExtensionRecursive(dir,
+			prefix, extension);
+
+		assertTrue(files.isEmpty());
+	}
+
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtensionRecursive(File, String, String)}
+	 */
+	@Test
+	public void testFindFilesWithPrefixAndExtensionRecursive_MixedContent()
+	{
+		File dir = testDirectory.toFile();
+		String prefix = "logfile";
+		String extension = "txt";
+
+		List<File> files = FileSearchExtensions.findFilesWithPrefixAndExtensionRecursive(dir,
+			prefix, extension);
+
+		assertEquals(3, files.size());
+		assertTrue(files.stream().allMatch(file -> file.getName().startsWith("logfile")));
+		assertTrue(files.stream().allMatch(file -> file.getName().endsWith(".txt")));
 	}
 
 	/**
@@ -110,6 +221,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile_special.txt")));
 	}
 
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtension(File, String, String)}
+	 */
 	@Test
 	public void testFindFilesWithPrefixAndExtension_BasicMatch()
 	{
@@ -125,6 +240,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile2.txt")));
 	}
 
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtension(File, String, String)}
+	 */
 	@Test
 	public void testFindFilesWithPrefixAndExtension_NoMatch()
 	{
@@ -138,6 +257,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue(files.isEmpty());
 	}
 
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtension(File, String, String)}
+	 */
 	@Test
 	public void testFindFilesWithPrefixAndExtension_DifferentExtension()
 	{
@@ -152,6 +275,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertEquals("logfile1.log", files.get(0).getName());
 	}
 
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtension(File, String, String)}
+	 */
 	@Test
 	public void testFindFilesWithPrefixAndExtension_EmptyDirectory() throws IOException
 	{
@@ -166,6 +293,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue(files.isEmpty());
 	}
 
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtension(File, String, String)}
+	 */
 	@Test
 	public void testFindFilesWithPrefixAndExtension_DirectoryOnly()
 	{
@@ -179,6 +310,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		assertTrue(files.isEmpty()); // subDir is a directory, should not be included
 	}
 
+	/**
+	 * Test method for
+	 * {@link FileSearchExtensions#findFilesWithPrefixAndExtension(File, String, String)}
+	 */
 	@Test
 	public void testFindFilesWithPrefixAndExtension_RecursiveSearch()
 	{
@@ -186,31 +321,11 @@ public class FileSearchExtensionsTest extends FileTestCase
 		String prefix = "logfile";
 		String extension = "txt";
 
-		// Uncomment the recursive line in the method before running this test
-		// Ensure the method is searching recursively
-		// foundedFileList.addAll(findFilesWithPrefixAndExtension(child, prefix, extension));
-
 		List<File> files = FileSearchExtensions.findFilesWithPrefixAndExtension(dir, prefix,
 			extension);
 
 		assertEquals(2, files.size()); // Should only find files in the top directory
 
-		// Uncomment below if you test recursively
-		// assertEquals(3, files.size()); // Should include files from subdirectories
-		// assertTrue(files.stream().anyMatch(file -> file.getName().equals("logfile3.txt")));
-	}
-
-	/**
-	 * Tear down method will be invoked after every unit test method in this class.
-	 *
-	 * @throws Exception
-	 *             is thrown if an exception occurs
-	 */
-	@Override
-	@AfterEach
-	protected void tearDown() throws Exception
-	{
-		super.tearDown();
 	}
 
 	/**
