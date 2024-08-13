@@ -24,8 +24,8 @@
  */
 package io.github.astrapi69.file.csv;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,10 +38,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.CollectionExtensions;
 import io.github.astrapi69.collection.array.ArrayFactory;
@@ -77,20 +77,20 @@ public class CsvFileExtensionsTest
 	 * @throws Exception
 	 *             the exception
 	 */
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		final File projectPath = new File(absolutePath);
-		assertTrue("The directory " + projectPath.getAbsolutePath() + " should be created.",
-			projectPath.exists());
+		assertTrue(projectPath.exists(),
+			"The directory " + projectPath.getAbsolutePath() + " should be created.");
 		testResources = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!testResources.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(testResources);
-			assertTrue("The directory " + testResources.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + testResources.getAbsolutePath() + " should be created.");
 		}
 		resources = new File(testResources, "resources");
 
@@ -102,7 +102,7 @@ public class CsvFileExtensionsTest
 	 * @throws Exception
 	 *             the exception
 	 */
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 	}
@@ -113,7 +113,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testFormatKommaSeperatedFileToList() throws IOException
 	{
 		final File input = new File(resources, "testFormatKommaSeperatedFileToList.dat");
@@ -152,7 +152,7 @@ public class CsvFileExtensionsTest
 		expected.add("sala1");
 		expected.add("bim1");
 		final boolean result = expected.equals(testdata);
-		assertTrue("The List testdate should be equal with the expected List.", result);
+		assertTrue(result, "The List testdate should be equal with the expected List.");
 
 	}
 
@@ -162,7 +162,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testFormatToCSV() throws IOException
 	{
 		final File testInputFile = new File(resources, "testFormatToCSVinput.lst");
@@ -188,7 +188,7 @@ public class CsvFileExtensionsTest
 		final List<String> testList = CsvFileExtensions
 			.formatKommaSeperatedFileToList(testOutputFile, null);
 		final boolean result = expected.equals(testList);
-		assertTrue("", result);
+		assertTrue(result);
 	}
 
 	/**
@@ -300,7 +300,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testGetDataFromLine() throws IOException
 	{
 		List<String[]> actual;
@@ -357,7 +357,7 @@ public class CsvFileExtensionsTest
 	 *             Signals that an I/O exception has occurred.
 	 *             {@link CsvFileExtensions#readDataFromCVSFileToList(File, int, boolean, String)}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadDataFromCVSFileToList() throws IOException
 	{
 		final File res = new File(testResources, "resources");
@@ -366,7 +366,7 @@ public class CsvFileExtensionsTest
 		final List<String> output = CsvFileExtensions.readDataFromCVSFileToList(input, 1, false,
 			"UTF-8");
 		final boolean result = output.size() == 5;
-		assertTrue("", result);
+		assertTrue(result);
 	}
 
 	/**
@@ -441,7 +441,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadFilelistToProperties() throws IOException
 	{
 		final String[] expected = { "test1", "test2", "test3", "bla", "fasel", "and", "so", "on",
@@ -454,7 +454,7 @@ public class CsvFileExtensionsTest
 		final File testFile = new File(resources, "testReadKommaSeperatedFileToProperties.lst");
 		final Properties testProperties = CsvFileExtensions.readFilelistToProperties(testFile);
 		final boolean result = expectedProperties.equals(testProperties);
-		assertTrue("", result);
+		assertTrue(result);
 	}
 
 	/**
@@ -464,7 +464,7 @@ public class CsvFileExtensionsTest
 	 *             Signals that an I/O exception has occurred.
 	 *             {@link CsvFileExtensions#readFileToList(File, String)} .
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadFileToList() throws IOException
 	{
 		final List<String> expected = new ArrayList<>();
@@ -521,7 +521,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testReadLinesInList() throws IOException
 	{
 		final List<String> expected = new ArrayList<>();
@@ -544,7 +544,7 @@ public class CsvFileExtensionsTest
 		final File testFile = new File(resources, "testReadLinesInList.lst");
 		final List<String> testList = CsvFileExtensions.readLinesInList(testFile, null);
 		final boolean result = expected.equals(testList);
-		assertTrue("", result);
+		assertTrue(result);
 
 	}
 
@@ -556,7 +556,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testSortData() throws FileNotFoundException, IOException
 	{
 		final String[] expected = { "and", "bar", "bim", "bla", "fasel", "foo", "on", "sala", "sim",
@@ -566,7 +566,7 @@ public class CsvFileExtensionsTest
 		for (int i = 0; i < sortedData.length; i++)
 		{
 			final boolean result = expected[i].equals(sortedData[i]);
-			assertTrue("", result);
+			assertTrue(result);
 		}
 	}
 
@@ -578,7 +578,7 @@ public class CsvFileExtensionsTest
 	 * @throws FileDoesNotExistException
 	 *             the file does not exist exception
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testStoreFilelistToProperties() throws IOException, FileDoesNotExistException
 	{
 		final String[] expected = { "test1", "test2", "test3", "bla", "fasel", "and", "so", "on",
@@ -597,7 +597,7 @@ public class CsvFileExtensionsTest
 			testProperties.load(inputStream);
 		}
 		final boolean result = expectedProperties.equals(testProperties);
-		assertTrue("", result);
+		assertTrue(result);
 		try
 		{
 			DeleteFileExtensions.delete(testFileOutput);
@@ -624,7 +624,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testWriteLines() throws IOException
 	{
 		final Set<String> expected = SetFactory.newHashSet();
@@ -649,7 +649,7 @@ public class CsvFileExtensionsTest
 		final Set<String> actual = SetFactory
 			.newHashSet(CsvFileExtensions.readLinesInList(testFile, null));
 		final boolean result = CollectionExtensions.isEqualCollection(expected, actual);
-		assertTrue("", result);
+		assertTrue(result);
 
 	}
 
@@ -659,7 +659,7 @@ public class CsvFileExtensionsTest
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testWriteLinesToFile() throws IOException
 	{
 		final List<String> expected = new ArrayList<>();
@@ -683,7 +683,7 @@ public class CsvFileExtensionsTest
 		CsvFileExtensions.writeLinesToFile(expected, testFile, null);
 		final List<String> testList = CsvFileExtensions.readLinesInList(testFile, null);
 		final boolean result = expected.equals(testList);
-		assertTrue("", result);
+		assertTrue(result);
 	}
 
 }

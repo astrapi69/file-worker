@@ -1,6 +1,26 @@
 ## Change log
 ----------------------
 
+Version 17.4
+-------------
+
+ADDED:
+
+- new search method that find all files in the specified directory that match the given prefix and file extension
+- new factory method in FileInfo toFile that creates a new File object from this FileInfo object
+- new test dependency org.junit.jupiter:junit-jupiter in version 5.11.0-M2
+
+CHANGED:
+
+- update gradle to new version 8.10-rc-1
+- remove of test dependency testng
+- tagged all files in zip package as deprecated because there moved to another module zip.worker
+- update of dependency commons-lang3 to the new minor version 3.16.0
+- update of test dependency jsoup to new patch version 1.18.1
+- remove of zip package
+- update of dependency checksum-up to new minor version 3.1
+- update of dependency crypt-api to the new minor version to 9.3
+
 Version 17.3
 -------------
 

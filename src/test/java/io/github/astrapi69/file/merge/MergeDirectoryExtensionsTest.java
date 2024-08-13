@@ -24,9 +24,8 @@
  */
 package io.github.astrapi69.file.merge;
 
-import static org.mockito.Mockito.*;
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +34,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
-import org.mockito.Mockito;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.DirectoryStructureFactory;
@@ -72,8 +70,8 @@ public class MergeDirectoryExtensionsTest
 		File expectedFile1 = new File(targetDir, "file1.txt");
 		File expectedFile2 = new File(targetDir, "file2.txt");
 
-		assertTrue("File1 should exist in target directory", expectedFile1.exists());
-		assertTrue("File2 should exist in target directory", expectedFile2.exists());
+		assertTrue(expectedFile1.exists(), "File1 should exist in target directory");
+		assertTrue(expectedFile2.exists(), "File2 should exist in target directory");
 		assertEquals("content1", FileUtils.readFileToString(expectedFile1, "UTF-8"));
 		assertEquals("content2", FileUtils.readFileToString(expectedFile2, "UTF-8"));
 	}
@@ -99,7 +97,7 @@ public class MergeDirectoryExtensionsTest
 		// Verification
 		File expectedFile = new File(targetDir, "file.txt");
 
-		assertTrue("File should exist in target directory", expectedFile.exists());
+		assertTrue(expectedFile.exists(), "File should exist in target directory");
 		assertEquals("content2", FileUtils.readFileToString(expectedFile, "UTF-8"));
 	}
 
@@ -113,7 +111,7 @@ public class MergeDirectoryExtensionsTest
 		MergeDirectoryExtensions.merge(targetDir);
 
 		// Verification
-		assertEquals("Target directory should be empty", 0, targetDir.listFiles().length);
+		assertEquals(0, targetDir.listFiles().length, "Target directory should be empty");
 	}
 
 	@Test
@@ -136,8 +134,8 @@ public class MergeDirectoryExtensionsTest
 		File expectedSubDir = new File(targetDir, "subdir");
 		File expectedFile1 = new File(expectedSubDir, "file1.txt");
 
-		assertTrue("Subdirectory should exist in target directory", expectedSubDir.exists());
-		assertTrue("File should exist in subdirectory", expectedFile1.exists());
+		assertTrue(expectedSubDir.exists(), "Subdirectory should exist in target directory");
+		assertTrue(expectedFile1.exists(), "File should exist in subdirectory");
 		assertEquals("content1", FileUtils.readFileToString(expectedFile1, "UTF-8"));
 	}
 

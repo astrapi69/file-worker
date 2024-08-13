@@ -24,24 +24,24 @@
  */
 package io.github.astrapi69.file.csv;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNotNull;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.Configuration;
 import org.meanbean.test.ConfigurationBuilder;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.collection.list.ListExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
-import io.github.astrapi69.meanbean.factories.ListStringArrayFactory;
-import io.github.astrapi69.meanbean.factories.StringArrayFactory;
+import io.github.astrapi69.meanbean.factory.ListStringArrayFactory;
+import io.github.astrapi69.meanbean.factory.StringArrayFactory;
 
 /**
  * The unit test class for the class {@link CsvBean}
@@ -105,7 +105,7 @@ public class CsvBeanTest
 	/**
 	 * Test method for {@link CsvBean#clone()}.
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testClone()
 	{
 		CsvBean actual;
@@ -140,7 +140,7 @@ public class CsvBeanTest
 	 * {@link CsvBean#toString()}
 	 */
 	@SuppressWarnings("unlikely-arg-type")
-	@Test(enabled = true)
+	@Test
 	public void testEqualsHashcodeAndToString()
 	{
 		boolean expected;
@@ -183,7 +183,7 @@ public class CsvBeanTest
 	/**
 	 * Test method for {@link CsvBean}
 	 */
-	@Test(enabled = true)
+	@Test
 	public void testWithBeanTester()
 	{
 		Configuration configuration = new ConfigurationBuilder()

@@ -24,9 +24,9 @@
  */
 package io.github.astrapi69.file.delete;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -36,10 +36,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.FileTestCase;
@@ -67,7 +67,7 @@ public class DeleteFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -80,7 +80,7 @@ public class DeleteFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -104,30 +104,30 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		this.testDir = new File(this.testResources, "testDir");
 		Exception ex = DeleteFileExtensions.checkFile(this.testDir);
 		this.actual = ex != null;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		this.actual = ex instanceof FileDoesNotExistException;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		if (!this.testDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.testDir);
-			assertTrue("The directory should be created.", state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED), "The directory should be created.");
 		}
 		ex = DeleteFileExtensions.checkFile(this.testDir);
 		this.actual = ex == null;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		final File testFile1 = new File(this.testDir, "testCheckFile.txt");
 		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
 		ex = DeleteFileExtensions.checkFile(testFile1);
 		this.actual = ex != null;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		this.actual = ex instanceof FileIsNotADirectoryException;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		final File testFile2 = new File("a");
 		ex = DeleteFileExtensions.checkFile(testFile2);
 		this.actual = ex != null;
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 	/**
@@ -151,45 +151,45 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		StoreFileExtensions.toFile(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile3.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile5.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = this.deepDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile4.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = this.testDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.deleteAllFiles(this.testDir);
 
 		this.actual = this.deepDir.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = this.testDir.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile1.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile2.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile3.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile4.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile5.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 	}
 
 	/**
@@ -212,15 +212,15 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.deleteAllFilesWithSuffix(this.testDir, ".txt");
 
 		this.actual = testFile1.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		this.actual = testFile2.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		this.actual = testFile3.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		this.actual = testFile4.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		this.actual = testFile5.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 	}
 
 
@@ -252,15 +252,15 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		DeleteFileExtensions.deleteAllFilesWithPrefix(this.testDir, "testDeleteAllFilesWithPrefix");
 
 		this.actual = testFile1.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		this.actual = testFile2.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		this.actual = testFile3.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		this.actual = testFile4.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 		this.actual = testFile5.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 	}
 
 	/**
@@ -319,50 +319,50 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		StoreFileExtensions.toFile(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.delete(testFile1);
 
 		this.actual = testFile1.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		// --------------------------------
 		this.actual = testFile3.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.delete(testFile3);
 
 		this.actual = testFile3.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		// --------------------------------
 
 		this.actual = testFile5.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = this.deepDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.delete(this.deepDir);
 
 		this.actual = this.deepDir.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile5.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		// --------------------------------
 
 		this.actual = testFile4.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = this.testDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.delete(this.testDir);
 
 		this.actual = testFile4.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = this.testDir.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 	}
 
 	/**
@@ -386,50 +386,50 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		StoreFileExtensions.toFile(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = testFile1.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.deleteFile(testFile1);
 
 		this.actual = testFile1.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		// --------------------------------
 		this.actual = testFile3.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.deleteFile(testFile3);
 
 		this.actual = testFile3.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		// --------------------------------
 
 		this.actual = testFile5.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = this.deepDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.deleteFile(this.deepDir);
 
 		this.actual = this.deepDir.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile5.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		// --------------------------------
 
 		this.actual = testFile4.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = this.testDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.deleteFile(this.testDir);
 
 		this.actual = testFile4.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = this.testDir.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 		// --------------------------------
 	}
 
@@ -453,45 +453,45 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		StoreFileExtensions.toFile(testFile5, "She's a beautifull woman!!!");
 		// --------------------------------
 		this.actual = this.deepDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile1.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile2.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile3.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile4.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = testFile5.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		this.actual = this.testDir.exists();
-		assertTrue("", this.actual);
+		assertTrue(this.actual);
 
 		DeleteFileExtensions.deleteFiles(this.testDir);
 
 		this.actual = this.deepDir.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile1.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile2.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile3.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile4.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 
 		this.actual = testFile5.exists();
-		assertFalse("", this.actual);
+		assertFalse(this.actual);
 	}
 
 	/**

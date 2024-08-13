@@ -24,18 +24,18 @@
  */
 package io.github.astrapi69.file.write;
 
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.file.FileTestCase;
@@ -56,7 +56,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -69,7 +69,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	 *             is thrown if an exception occurs
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -134,7 +134,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 		for (int i = 0; i < compare.length; i++)
 		{
 			this.actual = compare[i] == expected[i];
-			assertTrue("", this.actual);
+			assertTrue(this.actual);
 		}
 		destination.deleteOnExit();
 	}
@@ -160,7 +160,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 		for (int i = 0; i < compare.length; i++)
 		{
 			this.actual = compare[i] == expected[i];
-			assertTrue("", this.actual);
+			assertTrue(this.actual);
 		}
 		destination.deleteOnExit();
 	}

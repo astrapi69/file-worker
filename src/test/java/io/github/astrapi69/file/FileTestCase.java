@@ -24,12 +24,12 @@
  */
 package io.github.astrapi69.file;
 
-import static org.testng.AssertJUnit.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.FileCreationState;
@@ -111,81 +111,83 @@ public abstract class FileTestCase extends BaseTestCase
 		// Get the absolut path from the current project.
 		final String absolutePath = FileExtensions.getCurrentAbsolutPathWithoutDotAndSlash();
 		projectPath = new File(absolutePath);
-		assertTrue("The directory " + this.projectPath.getAbsolutePath() + " should be created.",
-			projectPath.exists());
+		assertTrue(projectPath.exists(),
+			"The directory " + this.projectPath.getAbsolutePath() + " should be created.");
 		this.test = new File(projectPath.getAbsoluteFile(), "/src/test/resources");
 		if (!this.test.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.test);
-			assertTrue("The directory " + this.test.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.test.getAbsolutePath() + " should be created.");
 		}
 		this.zipDir = new File(this.test.getAbsoluteFile(), "zipDir");
 		if (!this.zipDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.zipDir);
-			assertTrue("The directory " + this.zipDir.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.zipDir.getAbsolutePath() + " should be created.");
 		}
 		this.unzipDir = new File(this.test.getAbsoluteFile(), "unzipDir");
 		if (!this.unzipDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.unzipDir);
-			assertTrue("The directory " + this.unzipDir.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.unzipDir.getAbsolutePath() + " should be created.");
 		}
 		this.resources = new File(this.test.getAbsoluteFile(), "resources");
 		if (!this.resources.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.resources);
-			assertTrue("The directory " + this.resources.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.resources.getAbsolutePath() + " should be created.");
 		}
 		this.testResources = new File(this.test.getAbsoluteFile(), "resources");
 		if (!this.testResources.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.testResources);
 			assertTrue(
-				"The directory " + this.testResources.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+
+				state.equals(FileCreationState.CREATED),
+				"The directory " + this.testResources.getAbsolutePath() + " should be created.");
 		}
 		this.testDir = new File(this.testResources.getAbsoluteFile(), "testDir");
 		if (!this.testDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.testDir);
-			assertTrue("The directory " + this.testDir.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.testDir.getAbsolutePath() + " should be created.");
 		}
 		this.secondTestDir = new File(this.testResources.getAbsoluteFile(), "secondTestDir");
 		if (!secondTestDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.secondTestDir);
 			assertTrue(
-				"The directory " + this.secondTestDir.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+
+				state.equals(FileCreationState.CREATED),
+				"The directory " + this.secondTestDir.getAbsolutePath() + " should be created.");
 		}
 		this.deepDir = new File(this.testDir.getAbsoluteFile(), "deepDir");
 		if (!this.deepDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.deepDir);
-			assertTrue("The directory " + this.deepDir.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.deepDir.getAbsolutePath() + " should be created.");
 
 		}
 		this.deepDir2 = new File(this.testDir.getAbsoluteFile(), "deepDir2");
 		if (!this.deepDir2.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.deepDir2);
-			assertTrue("The directory " + this.deepDir2.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.deepDir2.getAbsolutePath() + " should be created.");
 
 		}
 		this.deeperDir = new File(this.deepDir.getAbsoluteFile(), "deeperDir");
 		if (!this.deeperDir.exists())
 		{
 			final FileCreationState state = DirectoryFactory.newDirectory(this.deeperDir);
-			assertTrue("The directory " + this.deeperDir.getAbsolutePath() + " should be created.",
-				state.equals(FileCreationState.CREATED));
+			assertTrue(state.equals(FileCreationState.CREATED),
+				"The directory " + this.deeperDir.getAbsolutePath() + " should be created.");
 		}
 	}
 
@@ -193,7 +195,7 @@ public abstract class FileTestCase extends BaseTestCase
 	 * {@inheritDoc}
 	 */
 	@Override
-	@BeforeMethod
+	@BeforeEach
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -207,7 +209,7 @@ public abstract class FileTestCase extends BaseTestCase
 	 *             the exception {@inheritDoc}
 	 */
 	@Override
-	@AfterMethod
+	@AfterEach
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();

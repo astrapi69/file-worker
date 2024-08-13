@@ -701,4 +701,86 @@ public final class FileSearchExtensions
 		return false;
 	}
 
+	/**
+	 * Finds all files in the specified directory that match the given prefix and file extension.
+	 *
+	 * @param dir
+	 *            The directory in which to search for files.
+	 * @param prefix
+	 *            The prefix that the filenames should start with.
+	 * @param extension
+	 *            The file extension that the filenames should have.
+	 * @return A list of files that match the specified prefix and extension.
+	 */
+	public static List<File> findFilesWithPrefixAndExtension(final File dir, final String prefix,
+		final String extension)
+	{
+		final List<File> foundedFileList = new ArrayList<>();
+		final String regex = "^" + prefix + ".*\\." + extension + "$";
+		// Get all files in the directory
+		final File[] children = dir.getAbsoluteFile().listFiles();
+		if (children == null || children.length < 1)
+		{
+			return foundedFileList;
+		}
+		for (final File child : children)
+		{
+			// if the entry is a not directory, you can add the files that matches
+			if (!child.isDirectory())
+			{
+				// entry is a file
+				final String filename = child.getName();
+				if (filename.matches(regex))
+				{
+					foundedFileList.add(child.getAbsoluteFile());
+				}
+			}
+		}
+		return foundedFileList;
+	}
+
+	/**
+	 * Finds all files recursively in the specified directory that match the given prefix and file
+	 * extension.
+	 *
+	 * @param dir
+	 *            The directory in which to search for files.
+	 * @param prefix
+	 *            The prefix that the filenames should start with.
+	 * @param extension
+	 *            The file extension that the filenames should have.
+	 * @return A list of files that match the specified prefix and extension.
+	 */
+	public static List<File> findFilesWithPrefixAndExtensionRecursive(final File dir,
+		final String prefix, final String extension)
+	{
+		final List<File> foundedFileList = new ArrayList<>();
+		final String regex = "^" + prefix + ".*\\." + extension + "$";
+		// Get all files in the directory
+		final File[] children = dir.getAbsoluteFile().listFiles();
+		if (children == null || children.length < 1)
+		{
+			return foundedFileList;
+		}
+		for (final File child : children)
+		{
+			// if the entry is a directory
+			if (child.isDirectory())
+			{
+				foundedFileList
+					.addAll(findFilesWithPrefixAndExtensionRecursive(child, prefix, extension));
+			}
+			else
+			{
+				// entry is a file
+				final String filename = child.getName();
+				if (filename.matches(regex))
+				{
+					foundedFileList.add(child.getAbsoluteFile());
+				}
+			}
+		}
+		return foundedFileList;
+	}
+
 }
