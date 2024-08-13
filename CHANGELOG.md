@@ -17,6 +17,9 @@ CHANGED:
 - tagged all files in zip package as deprecated because there moved to another module zip.worker
 - update of dependency commons-lang3 to the new minor version 3.16.0
 - update of test dependency jsoup to new patch version 1.18.1
+- remove of zip package
+- update of dependency checksum-up to new minor version 3.1
+- update of dependency crypt-api to the new minor version to 9.3
 
 Version 17.3
 -------------
