@@ -4,6 +4,9 @@
 Version 17.5-SNAPSHOT
 -------------
 
+ADDED:
+
+- new method in class WriteFileExtensions for append lines in a given file
 
 Version 17.4
 -------------

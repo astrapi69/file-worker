@@ -42,10 +42,12 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
+import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.system.SystemPropertiesExtensions;
 import io.github.astrapi69.io.StreamExtensions;
@@ -59,9 +61,24 @@ import io.github.astrapi69.io.StreamExtensions;
 public final class WriteFileExtensions
 {
 
-
 	private WriteFileExtensions()
 	{
+	}
+
+	/**
+	 * Appends the given lines to the given {@link File} object
+	 *
+	 * @param file
+	 *            The source file
+	 * @param lineToAppend
+	 *            The lines to append
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static void appendLines(File file, String... lineToAppend) throws IOException
+	{
+		Files.write(file.toPath(), ListFactory.newArrayList(lineToAppend),
+			StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 	}
 
 	/**
