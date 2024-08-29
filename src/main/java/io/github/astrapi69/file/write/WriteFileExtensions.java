@@ -24,16 +24,11 @@
  */
 package io.github.astrapi69.file.write;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -48,6 +43,7 @@ import java.util.List;
 import java.util.Properties;
 
 import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.system.SystemPropertiesExtensions;
 import io.github.astrapi69.io.StreamExtensions;
@@ -90,20 +86,13 @@ public final class WriteFileExtensions
 	 *            The destination file.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link CopyFileExtensions#copyFile(File, File)} instead.
 	 */
+	@Deprecated
 	public static void readSourceFileAndWriteDestFile(final String srcfile, final String destFile)
 		throws IOException
 	{
-		try (FileInputStream fis = new FileInputStream(srcfile);
-			FileOutputStream fos = new FileOutputStream(destFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			BufferedOutputStream bos = new BufferedOutputStream(fos))
-		{
-			final int availableLength = bis.available();
-			final byte[] totalBytes = new byte[availableLength];
-			bis.read(totalBytes, 0, availableLength);
-			bos.write(totalBytes, 0, availableLength);
-		}
+		CopyFileExtensions.copyFile(new File(srcfile), new File(destFile));
 	}
 
 	/**
@@ -116,15 +105,13 @@ public final class WriteFileExtensions
 	 *            String.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, String)} instead.
 	 */
+	@Deprecated
 	public static void string2File(final String string2write, final String nameOfFile)
 		throws IOException
 	{
-		try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(nameOfFile)))
-		{
-			bufferedWriter.write(string2write);
-			bufferedWriter.flush();
-		}
+		StoreFileExtensions.toFile(new File(nameOfFile), string2write);
 	}
 
 	/**
@@ -169,15 +156,13 @@ public final class WriteFileExtensions
 	 *            The Name from the File to write into.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link CopyFileExtensions#copyFile(File, File)} instead.
 	 */
+	@Deprecated
 	public static void write2File(final String inputFile, final String outputFile)
 		throws IOException
 	{
-		try (InputStream is = StreamExtensions.getInputStream(inputFile);
-			OutputStream os = StreamExtensions.getOutputStream(outputFile))
-		{
-			write(is, os);
-		}
+		CopyFileExtensions.copyFile(new File(inputFile), new File(outputFile));
 	}
 
 	/**
