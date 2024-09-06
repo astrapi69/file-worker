@@ -1,12 +1,23 @@
 ## Change log
 ----------------------
 
-Version 17.5-SNAPSHOT
+Version 18-SNAPSHOT
 -------------
 
 ADDED:
 
-- new method in class WriteFileExtensions for append lines in a given file
+- new class LineAppender for appending lines of text to a file
+
+CHANGED:
+
+- rename of module name 'file.worker' to new name 'io.github.astrapisixtynine.file.worker'
+- update gradle to new version 8.10
+- update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA2
+- update of dependency commons-lang3 to the new minor version 3.17.0
+- update of dependency silly-collection to the new major version 28
+- update of test dependency mockito-core to the new minor version 5.13.0
+- update of test dependency junit-jupiter to the new minor version 5.11.0
+- tagged all methods from class WriteFileExtensions as deprecated
 
 Version 17.4
 -------------

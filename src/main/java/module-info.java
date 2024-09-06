@@ -18,14 +18,14 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-module file.worker
+module io.github.astrapisixtynine.file.worker
 {
 	requires silly.io.main;
 	requires org.apache.commons.io;
 	requires org.apache.commons.lang3;
 	requires java.logging;
-	requires silly.collection;
 	requires silly.strings;
+	requires io.github.astrapisixtynine.silly.collection;
 	requires io.github.astrapisixtynine.checksum.up;
 	requires io.github.astrapisixtynine.crypt.api;
 	requires io.github.astrapisixtynine.throwable;
