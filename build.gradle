@@ -40,7 +40,7 @@ tasks.named("test") {
 tasks.withType(JavaCompile).configureEach { javaCompiler ->
     options.encoding = "UTF-8"
     // uncomment the next line for build with compiler argument -Xlint:deprecation
-     options.compilerArgs << "-Xlint:deprecation"
+    // options.compilerArgs << "-Xlint:deprecation"
     // uncomment the next line for build with compiler argument -Xlint:unchecked
     // options.compilerArgs << "-Xlint:unchecked"
 }
