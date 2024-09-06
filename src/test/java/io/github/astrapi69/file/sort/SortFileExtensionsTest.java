@@ -41,7 +41,7 @@ import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.FileCreationState;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
  * The unit test class for the class {@link SortFileExtensions}.
@@ -125,7 +125,7 @@ public class SortFileExtensionsTest
 			assertEquals(expected, actual);
 		}
 		// create initial state...
-		WriteFileExtensions.writeLinesToFile(epfFile, originalLines, "UTF-8");
+		StoreFileExtensions.toFile(epfFile, originalLines, "UTF-8");
 	}
 
 	/**

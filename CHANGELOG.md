@@ -10,6 +10,7 @@ ADDED:
 
 CHANGED:
 
+- update to jdk version 21
 - rename of module name 'file.worker' to new name 'io.github.astrapisixtynine.file.worker'
 - update gradle to new version 8.10
 - update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA2

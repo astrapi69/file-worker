@@ -118,7 +118,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeByteArrayToFile(File, byte[])}.
+	 * Test method for {@link StoreFileExtensions#toFile(File, byte[])}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -130,8 +130,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 		final File destination = new File(this.testDir.getAbsoluteFile(),
 			"testStoreByteArrayToFile.txt");
-
-		WriteFileExtensions.writeByteArrayToFile(destination, expected);
+		StoreFileExtensions.toFile(destination, expected);
 
 		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
 
@@ -144,7 +143,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeByteArrayToFile(String, byte[])}.
+	 * Test method for {@link StoreFileExtensions#toFile(File, byte[])}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -156,8 +155,8 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 		final File destination = new File(this.testDir.getAbsoluteFile(),
 			"testStoreByteArrayToFile.txt");
+		StoreFileExtensions.toFile(destination, expected);
 
-		WriteFileExtensions.writeByteArrayToFile(destination.getAbsolutePath(), expected);
 
 		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
 
