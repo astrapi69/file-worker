@@ -103,6 +103,25 @@ public class PathFinderTest extends FileTestCase
 		assertEquals(actualPath, expectedPath);
 	}
 
+
+	/**
+	 * Test method for {@link PathFinder#getCurrentDirectory()}.
+	 */
+	@Test
+	public void testGetCurrentDirectory()
+	{
+		File actual;
+		File expected;
+		final File pp = new File(".");
+		actual = PathFinder.getCurrentDirectory();
+		assertTrue(actual.isDirectory());
+		expected = pp.getAbsoluteFile();
+		String expectedPath = expected.getPath();
+		expectedPath = expectedPath.substring(0, expectedPath.length() - 2);
+		String actualPath = actual.getPath();
+		assertEquals(actualPath, expectedPath);
+	}
+
 	/**
 	 * Test method for {@link PathFinder#getProjectDirectory(File)}.
 	 */

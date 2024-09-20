@@ -25,6 +25,8 @@
 package io.github.astrapi69.file.search;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,13 +90,25 @@ public final class PathFinder
 	}
 
 	/**
+	 * Gets the current directory
+	 *
+	 * @return the current directory
+	 */
+	public static File getCurrentDirectory()
+	{
+		Path currentRelativePath = Paths.get("").toAbsolutePath();
+		return currentRelativePath.toFile();
+	}
+
+
+	/**
 	 * Gets the project directory.
 	 *
 	 * @return the project directory
 	 */
 	public static File getProjectDirectory()
 	{
-		return getProjectDirectory(new File("."));
+		return getProjectDirectory(getCurrentDirectory());
 	}
 
 	/**

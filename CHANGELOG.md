@@ -7,6 +7,7 @@ Version 18-SNAPSHOT
 ADDED:
 
 - new class LineAppender for appending lines of text to a file
+- new method in PathFinder for get the current directory
 
 CHANGED:
 
