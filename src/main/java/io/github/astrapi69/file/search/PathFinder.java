@@ -108,7 +108,7 @@ public final class PathFinder
 	 */
 	public static File getProjectDirectory()
 	{
-		return getProjectDirectory(getCurrentDirectory());
+		return getProjectDirectory(new File("."));
 	}
 
 	/**
