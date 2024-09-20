@@ -13,10 +13,13 @@ CHANGED:
 
 - update to jdk version 21
 - rename of module name 'file.worker' to new name 'io.github.astrapisixtynine.file.worker'
-- update gradle to new version 8.10
+- update gradle to new version 8.10.1
 - update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA2
 - update of dependency commons-lang3 to the new minor version 3.17.0
 - update of dependency silly-collection to the new major version 28
+- update of dependency comparator-extensions to new major version 2
+- update of dependency commons-io to the new minor version 2.17.0
+- update of test dependency test-object to new major version 9
 - update of test dependency mockito-core to the new minor version 5.13.0
 - update of test dependency junit-jupiter to the new minor version 5.11.0
 - tagged all methods from class WriteFileExtensions as deprecated
@@ -83,7 +86,7 @@ CHANGED:
 - update of dependency checksum-up to new major version 3
 - removed deprecated methods in extension class WriteFileExtensions
 - removed all obsolete package.html files
-- update of test dependency test-object to new major version 8.2
+- update of test dependency test-object to new minor version 8.2
 - update of test dependency testng to new version 7.10.1
 - update of test dependency zip4j to new version 2.11.5
 
