@@ -23,6 +23,7 @@ CHANGED:
 - update of test dependency mockito-core to the new minor version 5.13.0
 - update of test dependency junit-jupiter to the new minor version 5.11.0
 - tagged all methods from class WriteFileExtensions as deprecated
+- tagged all classes from package 'io.github.astrapi69.file.csv' as deprecated. Moved to its own module 'cvs-worker'
 
 Version 17.4
 -------------

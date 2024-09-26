@@ -46,9 +46,12 @@ import io.github.astrapi69.string.StringExtensions;
 /**
  * Utility class for the use of cvs-files.
  *
+ * @deprecated Use instead the class with the same name from module 'cvs-worker'. Note: will be
+ *             removed with next minor version
  * @version 1.0
  * @author Asterios Raptis
  */
+@Deprecated
 public final class CsvFileExtensions
 {
 
