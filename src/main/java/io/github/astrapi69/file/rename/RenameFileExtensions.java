@@ -50,6 +50,9 @@ import io.github.astrapi69.io.file.FilenameExtensions;
 public final class RenameFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private RenameFileExtensions()
 	{
 	}

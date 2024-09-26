@@ -53,6 +53,10 @@ import io.github.astrapi69.regex.RegExExtensions;
  */
 public final class FileSearchExtensions
 {
+
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private FileSearchExtensions()
 	{
 	}

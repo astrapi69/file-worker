@@ -66,6 +66,9 @@ public final class PathFinder
 	 */
 	public static final String SOURCE_FOLDER_SRC_TEST_RESOURCES = "src/test/resources";
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private PathFinder()
 	{
 	}

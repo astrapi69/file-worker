@@ -39,6 +39,9 @@ import io.github.astrapi69.file.write.StoreFileExtensions;
 public final class SortFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private SortFileExtensions()
 	{
 	}

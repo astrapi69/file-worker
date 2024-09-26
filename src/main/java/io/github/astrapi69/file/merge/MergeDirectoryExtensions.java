@@ -37,8 +37,15 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 /**
  * The class {@link MergeDirectoryExtensions} provides methods for simple merge of directories
  */
-public class MergeDirectoryExtensions
+public final class MergeDirectoryExtensions
 {
+
+	/**
+	 * Private constructor to prevent instantiation
+	 */
+	private MergeDirectoryExtensions()
+	{
+	}
 
 	/**
 	 * Merge the given directories to merge to the given target directory

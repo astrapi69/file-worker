@@ -47,7 +47,9 @@ import io.github.astrapi69.string.CharsetExtensions;
 public final class StoreFileExtensions
 {
 
-
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private StoreFileExtensions()
 	{
 	}

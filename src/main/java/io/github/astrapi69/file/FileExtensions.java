@@ -42,6 +42,9 @@ import io.github.astrapi69.file.read.ReadFileExtensions;
 public final class FileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private FileExtensions()
 	{
 	}

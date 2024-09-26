@@ -55,6 +55,9 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 public final class CopyFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private CopyFileExtensions()
 	{
 	}

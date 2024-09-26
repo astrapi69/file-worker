@@ -37,10 +37,11 @@ import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 public final class SimpleCompareFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private SimpleCompareFileExtensions()
 	{
-		throw new UnsupportedOperationException(
-			"This is a utility class and cannot be instantiated");
 	}
 
 	/**

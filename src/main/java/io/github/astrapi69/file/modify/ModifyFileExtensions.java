@@ -48,6 +48,9 @@ import io.github.astrapi69.file.modify.api.FileChangeable;
 public final class ModifyFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private ModifyFileExtensions()
 	{
 	}

@@ -56,6 +56,9 @@ import io.github.astrapi69.io.file.FileConstants;
 public final class ReadFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private ReadFileExtensions()
 	{
 	}

@@ -39,6 +39,9 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 public final class FileFactory
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private FileFactory()
 	{
 	}
