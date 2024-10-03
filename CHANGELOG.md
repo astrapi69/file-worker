@@ -8,6 +8,7 @@ ADDED:
 
 - new class LineAppender for appending lines of text to a file
 - new method in PathFinder for get the current directory
+- new method in ModifyFileExtensions that concatenate the given list of text files into a single result text file
 
 CHANGED:
 
