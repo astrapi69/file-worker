@@ -27,12 +27,11 @@ package io.github.astrapi69.file.sort;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
  * The class {@link SortFileExtensions} provides algorithms for sort file content.
@@ -40,6 +39,9 @@ import io.github.astrapi69.file.write.WriteFileExtensions;
 public final class SortFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private SortFileExtensions()
 	{
 	}
@@ -62,8 +64,8 @@ public final class SortFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		List<String> lines = ReadFileExtensions.readLinesInList(file);
-		Collections.sort(lines, comparator);
-		WriteFileExtensions.writeLinesToFile(file, lines, encoding);
+		lines.sort(comparator);
+		StoreFileExtensions.toFile(file, lines, encoding);
 	}
 
 }

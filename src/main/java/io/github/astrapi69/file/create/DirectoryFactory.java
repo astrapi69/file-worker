@@ -42,9 +42,12 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
  * @author Asterios Raptis
  * @version 1.0
  */
-public class DirectoryFactory
+public final class DirectoryFactory
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private DirectoryFactory()
 	{
 	}

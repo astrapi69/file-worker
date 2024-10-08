@@ -30,7 +30,11 @@ import java.util.Map;
 
 /**
  * The class {@link CsvToSqlExtensions}.
+ * 
+ * @deprecated Use instead the class with the same name from module 'cvs-worker'. Note: will be
+ *             removed with next minor version
  */
+@Deprecated
 public final class CsvToSqlExtensions
 {
 

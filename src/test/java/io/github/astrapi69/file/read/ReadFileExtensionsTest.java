@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,11 +50,11 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
+import io.github.astrapi69.collection.properties.PropertiesExtensions;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 import io.github.astrapi69.file.write.StoreFileExtensions;
-import io.github.astrapi69.file.write.WriteFileExtensions;
 
 /**
  * The unit test class for the class {@link ReadFileExtensions}.
@@ -339,7 +340,7 @@ public class ReadFileExtensionsTest extends FileTestCase
 		properties.setProperty("testkey1", "testvalue1");
 		properties.setProperty("testkey2", "testvalue2");
 		properties.setProperty("testkey3", "testvalue3");
-		WriteFileExtensions.writeProperties2File(ap, properties);
+		PropertiesExtensions.export(properties, new FileOutputStream(ap));
 		compare = ReadFileExtensions.readPropertiesFromFile(ap);
 		this.actual = properties.equals(compare);
 		assertTrue(this.actual);

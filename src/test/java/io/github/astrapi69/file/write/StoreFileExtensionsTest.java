@@ -28,7 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +38,7 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
+import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.read.ReadFileExtensions;
@@ -179,6 +182,56 @@ public class StoreFileExtensionsTest extends FileTestCase
 		expected = "foo bar";
 		StoreFileExtensions.toFile(destination, expected, StandardCharsets.UTF_8);
 		actual = ReadFileExtensions.fromFile(destination);
+		assertEquals(actual, expected);
+		destination.deleteOnExit();
+	}
+
+	/**
+	 * Test method for {@link StoreFileExtensions#toFile(File, String, Charset)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testTestToFileWithCollectionLinesAndCharset() throws IOException
+	{
+		String actual;
+		String expected;
+		File destination;
+
+		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
+			"testStoreStringToFile.txt");
+		String line = "foo bar";
+		List<String> lines = ListFactory.newSortedUniqueList(line, "bla", "fasel");
+		StoreFileExtensions.toFile(destination, lines, StandardCharsets.UTF_8);
+		actual = ReadFileExtensions.fromFile(destination);
+		String lineSeperator = System.lineSeparator();
+		expected = line + lineSeperator + "bla" + lineSeperator + "fasel" + lineSeperator;
+		assertEquals(actual, expected);
+		destination.deleteOnExit();
+	}
+
+	/**
+	 * Test method for {@link StoreFileExtensions#toFile(File, String, Charset)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testTestToFileWithCollectionLines() throws IOException
+	{
+		String actual;
+		String expected;
+		File destination;
+
+		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
+			"testStoreStringToFile.txt");
+		String line = "foo bar";
+		List<String> lines = ListFactory.newSortedUniqueList(line, "bla", "fasel");
+		StoreFileExtensions.toFile(destination, lines);
+		actual = ReadFileExtensions.fromFile(destination);
+		String lineSeperator = System.lineSeparator();
+		expected = line + lineSeperator + "bla" + lineSeperator + "fasel" + lineSeperator;
 		assertEquals(actual, expected);
 		destination.deleteOnExit();
 	}

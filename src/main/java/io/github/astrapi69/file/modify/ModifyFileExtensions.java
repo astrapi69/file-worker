@@ -41,6 +41,8 @@ import java.util.function.BiFunction;
 
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.modify.api.FileChangeable;
+import io.github.astrapi69.file.read.ReadFileExtensions;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
  * The class {@link ModifyFileExtensions} provides methods for modifying files
@@ -48,8 +50,34 @@ import io.github.astrapi69.file.modify.api.FileChangeable;
 public final class ModifyFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private ModifyFileExtensions()
 	{
+	}
+
+	/**
+	 * Concatenates the content of the given list of text files into a single result text file
+	 *
+	 * @param textFiles
+	 *            the list of text files to concatenate
+	 * @param resultTextFile
+	 *            the result text file where the concatenated content will be stored
+	 * @throws IOException
+	 *             if an I/O error occurs during reading from text files or writing to the result
+	 *             text file
+	 */
+	public static void concatenateAll(List<File> textFiles, File resultTextFile) throws IOException
+	{
+		StringBuilder text = new StringBuilder();
+		for (int i = 0; i < textFiles.size(); ++i)
+		{
+			File textFile = textFiles.get(i);
+			String content = ReadFileExtensions.fromFile(textFile);
+			text.append(content);
+		}
+		StoreFileExtensions.toFile(resultTextFile, text.toString());
 	}
 
 	/**

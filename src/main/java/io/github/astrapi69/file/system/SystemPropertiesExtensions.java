@@ -31,7 +31,7 @@ package io.github.astrapi69.file.system;
  * @version 1.0
  * @author Asterios Raptis
  */
-public class SystemPropertiesExtensions
+public final class SystemPropertiesExtensions
 {
 
 	/** Key for the OS architecture system property. */
@@ -78,6 +78,13 @@ public class SystemPropertiesExtensions
 
 	/** Key for the Java vendor URL system property. */
 	public static final String JAVA_VENDOR_URL_PROPERTY_KEY = "java.vendor.url";
+
+	/**
+	 * Private constructor to prevent instantiation
+	 */
+	private SystemPropertiesExtensions()
+	{
+	}
 
 	/**
 	 * Retrieves the system file separator character.

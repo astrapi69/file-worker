@@ -32,8 +32,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Collection;
 import java.util.Optional;
 
+import io.github.astrapi69.file.system.SystemPropertiesExtensions;
 import io.github.astrapi69.string.CharsetExtensions;
 
 /**
@@ -44,7 +47,9 @@ import io.github.astrapi69.string.CharsetExtensions;
 public final class StoreFileExtensions
 {
 
-
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private StoreFileExtensions()
 	{
 	}
@@ -61,12 +66,7 @@ public final class StoreFileExtensions
 	 */
 	public static void toFile(final File file, final byte[] data) throws IOException
 	{
-		try (FileOutputStream fos = new FileOutputStream(file);
-			BufferedOutputStream bos = new BufferedOutputStream(fos))
-		{
-			bos.write(data);
-			bos.flush();
-		}
+		Files.write(file.toPath(), data);
 	}
 
 	/**
@@ -88,6 +88,78 @@ public final class StoreFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		return toFile(file, stringToWrite, (String)null);
+	}
+
+	/**
+	 * Writes the given lines in the collection into the given file
+	 *
+	 * @param file
+	 *            The {@link File} object to write
+	 * @param lines
+	 *            The lines to write to file
+	 * @return true if given {@link Collection} of {@link String} objects was written successfully
+	 *         to the given {@link File} object otherwise false
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static boolean toFile(final File file, final Collection<String> lines) throws IOException
+	{
+		final String sb = concatenate(lines);
+		return StoreFileExtensions.toFile(file, sb);
+	}
+
+	private static String concatenate(Collection<String> lines)
+	{
+		final StringBuilder sb = new StringBuilder();
+		final String lineSeparator = SystemPropertiesExtensions.getLineSeparator();
+		for (final String line : lines)
+		{
+			sb.append(line);
+			sb.append(lineSeparator);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Writes the given lines in the collection into the given file
+	 *
+	 * @param file
+	 *            The {@link File} object to write
+	 * @param lines
+	 *            The lines to write to file
+	 * @param encoding
+	 *            The encoding from the file as {@link String} object
+	 * @return true if given {@link Collection} of {@link String} objects was written successfully
+	 *         to the given {@link File} object otherwise false
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static boolean toFile(final File file, final Collection<String> lines,
+		final String encoding) throws IOException
+	{
+		final String sb = concatenate(lines);
+		return StoreFileExtensions.toFile(file, sb, encoding);
+	}
+
+	/**
+	 * Writes the given lines in the collection into the given file
+	 *
+	 * @param file
+	 *            The {@link File} object to write
+	 * @param lines
+	 *            The lines to write to file
+	 * @param charset
+	 *            The charset from the file.
+	 * @return true if given {@link Collection} of {@link String} objects was written successfully
+	 *         to the given {@link File} object otherwise false
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static boolean toFile(final File file, final Collection<String> lines,
+		final Charset charset) throws IOException
+	{
+		final String sb = concatenate(lines);
+		return StoreFileExtensions.toFile(file, sb, charset);
 	}
 
 	/**

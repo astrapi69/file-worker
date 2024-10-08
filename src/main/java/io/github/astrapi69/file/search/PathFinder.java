@@ -25,6 +25,8 @@
 package io.github.astrapi69.file.search;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -64,6 +66,9 @@ public final class PathFinder
 	 */
 	public static final String SOURCE_FOLDER_SRC_TEST_RESOURCES = "src/test/resources";
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private PathFinder()
 	{
 	}
@@ -86,6 +91,18 @@ public final class PathFinder
 		}
 		return absolutePath;
 	}
+
+	/**
+	 * Gets the current directory
+	 *
+	 * @return the current directory
+	 */
+	public static File getCurrentDirectory()
+	{
+		Path currentRelativePath = Paths.get("").toAbsolutePath();
+		return currentRelativePath.toFile();
+	}
+
 
 	/**
 	 * Gets the project directory.

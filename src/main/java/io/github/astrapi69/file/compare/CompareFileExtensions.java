@@ -50,6 +50,9 @@ import io.github.astrapi69.io.file.FilenameExtensions;
 public final class CompareFileExtensions
 {
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private CompareFileExtensions()
 	{
 	}

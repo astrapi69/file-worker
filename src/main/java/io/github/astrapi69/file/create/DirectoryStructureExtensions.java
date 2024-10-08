@@ -39,6 +39,10 @@ import io.github.astrapi69.file.search.FileSearchExtensions;
  */
 public final class DirectoryStructureExtensions
 {
+
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private DirectoryStructureExtensions()
 	{
 	}

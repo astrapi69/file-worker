@@ -36,8 +36,15 @@ import io.github.astrapi69.collection.list.ListFactory;
  * @author Asterios Raptis
  * @version 1.0
  */
-public class DirectoryStructureFactory
+public final class DirectoryStructureFactory
 {
+
+	/**
+	 * Private constructor to prevent instantiation
+	 */
+	private DirectoryStructureFactory()
+	{
+	}
 
 	/**
 	 * Factory method for create an initial directory structure that can contain also files with

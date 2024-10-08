@@ -49,6 +49,8 @@ import io.github.astrapi69.io.StreamExtensions;
 public class WriteFileExtensionsTest extends FileTestCase
 {
 
+	private File tempFile;
+
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
 	 *
@@ -60,6 +62,8 @@ public class WriteFileExtensionsTest extends FileTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
+		// Create a temporary file for testing
+		tempFile = File.createTempFile("test-file", ".txt");
 	}
 
 	/**
@@ -104,7 +108,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 		try (InputStream inputStream = StreamExtensions.getInputStream(testFile, true);
 			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true))
 		{
-			WriteFileExtensions.write(inputStream, outputStream);
+			StreamExtensions.writeInputStreamToOutputStream(inputStream, outputStream);
 		}
 
 		actual = FileChecksumExtensions.getCheckSumAdler32(testFile);
@@ -114,7 +118,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeByteArrayToFile(File, byte[])}.
+	 * Test method for {@link StoreFileExtensions#toFile(File, byte[])}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -126,8 +130,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 		final File destination = new File(this.testDir.getAbsoluteFile(),
 			"testStoreByteArrayToFile.txt");
-
-		WriteFileExtensions.writeByteArrayToFile(destination, expected);
+		StoreFileExtensions.toFile(destination, expected);
 
 		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
 
@@ -140,7 +143,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#writeByteArrayToFile(String, byte[])}.
+	 * Test method for {@link StoreFileExtensions#toFile(File, byte[])}
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -152,8 +155,8 @@ public class WriteFileExtensionsTest extends FileTestCase
 
 		final File destination = new File(this.testDir.getAbsoluteFile(),
 			"testStoreByteArrayToFile.txt");
+		StoreFileExtensions.toFile(destination, expected);
 
-		WriteFileExtensions.writeByteArrayToFile(destination.getAbsolutePath(), expected);
 
 		final byte[] compare = ReadFileExtensions.readFileToBytearray(destination);
 

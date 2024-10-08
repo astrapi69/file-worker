@@ -54,6 +54,9 @@ public final class SystemFileExtensions
 	 */
 	public static final String DEFAULT_USER_TEMPORARY_DIRECTORY_NAME = "tmp";
 
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private SystemFileExtensions()
 	{
 	}

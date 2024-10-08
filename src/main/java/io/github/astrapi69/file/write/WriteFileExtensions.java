@@ -24,16 +24,11 @@
  */
 package io.github.astrapi69.file.write;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,10 +37,14 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
+import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.collection.properties.PropertiesExtensions;
+import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.system.SystemPropertiesExtensions;
 import io.github.astrapi69.io.StreamExtensions;
@@ -59,9 +58,29 @@ import io.github.astrapi69.io.StreamExtensions;
 public final class WriteFileExtensions
 {
 
-
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private WriteFileExtensions()
 	{
+	}
+
+	/**
+	 * Appends the given lines to the given {@link File} object
+	 *
+	 * @param file
+	 *            The source file
+	 * @param lineToAppend
+	 *            The lines to append
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link LineAppender#appendLines(File, String...)} instead.
+	 */
+	@Deprecated
+	public static void appendLines(File file, String... lineToAppend) throws IOException
+	{
+		Files.write(file.toPath(), ListFactory.newArrayList(lineToAppend),
+			StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 	}
 
 	/**
@@ -73,20 +92,13 @@ public final class WriteFileExtensions
 	 *            The destination file.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link CopyFileExtensions#copyFile(File, File)} instead.
 	 */
+	@Deprecated
 	public static void readSourceFileAndWriteDestFile(final String srcfile, final String destFile)
 		throws IOException
 	{
-		try (FileInputStream fis = new FileInputStream(srcfile);
-			FileOutputStream fos = new FileOutputStream(destFile);
-			BufferedInputStream bis = new BufferedInputStream(fis);
-			BufferedOutputStream bos = new BufferedOutputStream(fos))
-		{
-			final int availableLength = bis.available();
-			final byte[] totalBytes = new byte[availableLength];
-			bis.read(totalBytes, 0, availableLength);
-			bos.write(totalBytes, 0, availableLength);
-		}
+		CopyFileExtensions.copyFile(new File(srcfile), new File(destFile));
 	}
 
 	/**
@@ -99,15 +111,13 @@ public final class WriteFileExtensions
 	 *            String.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, String)} instead.
 	 */
+	@Deprecated
 	public static void string2File(final String string2write, final String nameOfFile)
 		throws IOException
 	{
-		try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(nameOfFile)))
-		{
-			bufferedWriter.write(string2write);
-			bufferedWriter.flush();
-		}
+		StoreFileExtensions.toFile(new File(nameOfFile), string2write);
 	}
 
 	/**
@@ -121,7 +131,11 @@ public final class WriteFileExtensions
 	 *             is thrown if the given file is not found
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use
+	 *             {@link StreamExtensions#writeInputStreamToOutputStream(InputStream, OutputStream)}
+	 *             instead
 	 */
+	@Deprecated
 	public static void write(final InputStream inputStream, final OutputStream outputStream)
 		throws FileNotFoundException, IOException
 	{
@@ -137,7 +151,9 @@ public final class WriteFileExtensions
 	 *            The opened Writer.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StreamExtensions#writeReaderToWriter(Reader, Writer)} instead.
 	 */
+	@Deprecated
 	public static void write2File(final Reader reader, final Writer writer) throws IOException
 	{
 		StreamExtensions.writeReaderToWriter(reader, writer);
@@ -152,15 +168,13 @@ public final class WriteFileExtensions
 	 *            The Name from the File to write into.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link CopyFileExtensions#copyFile(File, File)} instead.
 	 */
+	@Deprecated
 	public static void write2File(final String inputFile, final String outputFile)
 		throws IOException
 	{
-		try (InputStream is = StreamExtensions.getInputStream(inputFile);
-			OutputStream os = StreamExtensions.getOutputStream(outputFile))
-		{
-			write(is, os);
-		}
+		CopyFileExtensions.copyFile(new File(inputFile), new File(outputFile));
 	}
 
 	/**
@@ -175,7 +189,9 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, String)} instead.
 	 */
+	@Deprecated
 	public static void write2File(final String inputFile, final Writer writer)
 		throws FileNotFoundException, IOException
 	{
@@ -198,7 +214,9 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, String)} instead.
 	 */
+	@Deprecated
 	public static void write2FileWithBuffer(final String inputFile, final String outputFile)
 		throws FileNotFoundException, IOException
 	{
@@ -218,7 +236,9 @@ public final class WriteFileExtensions
 	 *            The byte array.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, byte[])}
 	 */
+	@Deprecated
 	public static void writeByteArrayToFile(final File file, final byte[] byteArray)
 		throws IOException
 	{
@@ -234,7 +254,9 @@ public final class WriteFileExtensions
 	 *            The byte array.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, byte[])}
 	 */
+	@Deprecated
 	public static void writeByteArrayToFile(final String filename, final byte[] byteArray)
 		throws IOException
 	{
@@ -253,7 +275,9 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, Collection)}
 	 */
+	@Deprecated
 	public static void writeLinesToFile(final Collection<String> lines, final File output)
 		throws FileNotFoundException, IOException
 	{
@@ -280,7 +304,9 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, Collection, String)}
 	 */
+	@Deprecated
 	public static void writeLinesToFile(final Collection<String> lines, final File output,
 		final String encoding) throws FileNotFoundException, IOException
 	{
@@ -308,7 +334,9 @@ public final class WriteFileExtensions
 	 *             failed.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link StoreFileExtensions#toFile(File, Collection, String)}
 	 */
+	@Deprecated
 	public static void writeLinesToFile(final File output, final List<String> input,
 		final String encoding) throws FileNotFoundException, IOException
 	{
@@ -339,14 +367,16 @@ public final class WriteFileExtensions
 	 *            The properties.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @deprecated Use {@link PropertiesExtensions#export(Properties, OutputStream)}
 	 */
+	@Deprecated
 	public static void writeProperties2File(final String filename, final Properties properties)
 		throws IOException
 	{
 		// Write properties to the file.
 		try (FileOutputStream fos = new FileOutputStream(filename))
 		{
-			properties.store(fos, null);
+			PropertiesExtensions.export(properties, fos);
 		}
 	}
 

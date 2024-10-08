@@ -40,7 +40,11 @@ import io.github.astrapi69.collection.list.ListFactory;
  * The `CsvBean` class represents a structured data model for CSV files. It includes headers, column
  * types, lines of data, and supports operations like cloning, equality comparison, and fluent
  * construction using the builder pattern.
+ * 
+ * @deprecated Use instead the class with the same name from module 'cvs-worker'. Note: will be
+ *             removed with next minor version
  */
+@Deprecated
 public class CsvBean implements Serializable, Cloneable
 {
 

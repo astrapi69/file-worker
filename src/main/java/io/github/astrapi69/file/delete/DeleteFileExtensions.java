@@ -49,6 +49,10 @@ import io.github.astrapi69.io.file.filter.PrefixFileFilter;
  */
 public final class DeleteFileExtensions
 {
+
+	/**
+	 * Private constructor to prevent instantiation
+	 */
 	private DeleteFileExtensions()
 	{
 	}

@@ -24,6 +24,7 @@
  */
 package io.github.astrapi69.file.modify;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,23 +32,61 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
+import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.FileIsADirectoryException;
 import io.github.astrapi69.file.modify.api.FileChangeable;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.file.write.LineAppender;
 
 /**
  * The unit test class for the class {@link ModifyFileExtensions}
  */
 public class ModifyFileExtensionsTest
 {
+
+	/**
+	 * Test method for {@link ModifyFileExtensions#concatenateAll(List, File)} Simple test case to
+	 * ensure that the method executes without throwing an exception
+	 */
+	@Test
+	@DisplayName("Test concatenateAll with example files")
+	void concatenateEmptyFiles() throws IOException
+	{
+
+		List<File> textFiles = new ArrayList<>();
+		File first = new File(PathFinder.getSrcTestResourcesDir(), "test1.txt");
+		File second = new File(PathFinder.getSrcTestResourcesDir(), "test2.txt");
+		textFiles.add(first);
+		textFiles.add(second);
+		String expected;
+		String actual;
+
+		String[] linesToAppend = ArrayFactory.newArray("Line 1", "Line 2", "Line 3");
+
+		LineAppender.appendLines(first, linesToAppend);
+		linesToAppend = ArrayFactory.newArray("Line 4", "Line 5", "Line 6");
+
+		LineAppender.appendLines(second, linesToAppend);
+
+		File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(), "result.txt");
+
+		ModifyFileExtensions.concatenateAll(textFiles, resultTextFile);
+		expected = "Line 1\n" + "Line 2\n" + "Line 3\n" + "Line 4\n" + "Line 5\n" + "Line 6\n";
+		actual = ReadFileExtensions.fromFile(resultTextFile);
+		assertEquals(expected, actual);
+		DeleteFileExtensions.deleteFile(resultTextFile);
+		DeleteFileExtensions.delete(textFiles);
+	}
 
 	/**
 	 * Test method for
