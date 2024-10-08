@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 18-SNAPSHOT
+Version 18.0-SNAPSHOT
 -------------
 
 ADDED:
@@ -12,19 +12,23 @@ ADDED:
 
 CHANGED:
 
-- update to jdk version 21
 - rename of module name 'file.worker' to new name 'io.github.astrapisixtynine.file.worker'
-- update gradle to new version 8.10.1
+- update gradle to new version 8.10.2
+- update of gradle-plugin dependency 'org.ajoberstar.grgit:grgit-gradle' in version 5.3.0
 - update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA2
 - update of dependency commons-lang3 to the new minor version 3.17.0
-- update of dependency silly-collection to the new major version 28
+- update of dependency silly-collection to the new minor version 28.1
 - update of dependency comparator-extensions to new major version 2
 - update of dependency commons-io to the new minor version 2.17.0
+- update of dependency silly-bean to the new major version 3.0
+- update of dependency silly-io to the new minor version 3.2
+- update of dependency silly-strings to new minor version 9.2
 - update of test dependency test-object to new major version 9
-- update of test dependency mockito-core to the new minor version 5.13.0
-- update of test dependency junit-jupiter to the new minor version 5.11.0
+- update of test dependency mockito-core to the new patch version 5.14.1
+- update of test dependency junit-jupiter to the new minor version 5.11.2
 - tagged all methods from class WriteFileExtensions as deprecated
 - tagged all classes from package 'io.github.astrapi69.file.csv' as deprecated. Moved to its own module 'cvs-worker'
+- dependencies are managed now over bundles
 
 Version 17.4
 -------------

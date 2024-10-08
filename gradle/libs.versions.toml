@@ -4,7 +4,7 @@ commons-io-version = "2.17.0"
 commons-lang3-version = "3.17.0"
 comparator-extensions-version = "2"
 crypt-api-version = "9.3"
-gradle-plugin-grgit-version = "5.2.2"
+gradle-plugin-grgit-version = "5.3.0"
 gradle-plugin-license-version = "0.16.1"
 gradle-plugin-spotless-version = "7.0.0.BETA2"
 gradle-plugin-version-catalog-update-version = "0.8.4"
@@ -12,16 +12,15 @@ gradle-plugin-versions-version = "0.51.0"
 jobj-compare-version = "11.1"
 jobj-contract-verifier-version = "5.2"
 jsoup-version = "1.18.1"
-junit-jupiter-params-version = "5.11.0"
-junit-jupiter-version = "5.11.0"
-junit-platform-launcher-version = "1.11.0"
+junit-jupiter-params-version = "5.11.2"
+junit-jupiter-version = "5.11.2"
 meanbean-factories-version = "3"
 meanbean-version = "3.0.0-M9"
-mockito-core-version = "5.13.0"
-silly-bean-version = "2"
-silly-collection-version = "28"
-silly-io-version = "3.1"
-silly-strings-version = "9.1"
+mockito-core-version = "5.14.1"
+silly-bean-version = "3.0"
+silly-collection-version = "28.1"
+silly-io-version = "3.2"
+silly-strings-version = "9.2"
 test-object-version = "9"
 throwable-version = "3"
 zip4j-extension-version = "1"
@@ -38,7 +37,7 @@ jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier"
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter-version" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter-params-version" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher-version" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 meanbean = { module = "com.github.meanbeanlib:meanbean", version.ref = "meanbean-version" }
 meanbean-factories = { module = "io.github.astrapi69:meanbean-factories", version.ref = "meanbean-factories-version" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core-version" }
@@ -52,13 +51,36 @@ zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j-version" }
 zip4j-extension = { module = "io.github.astrapi69:zip4j-extension", version.ref = "zip4j-extension-version" }
 
 [bundles]
+# The core dependencies
+core-dependencies = [
+    "commons-io",
+    "commons-lang3",
+    "crypt-api",
+    "throwable",
+    "silly-collection",
+    "silly-bean",
+    "silly-strings",
+    "silly-io",
+    "jobj-compare",
+    "checksum-up",
+]
+# Dependencies required for unit testing
 unit-testing = [
+    "comparator-extensions",
+    "jobj-contract-verifier",
+    "jsoup",
     "junit-jupiter",
     "junit-jupiter-params",
     "meanbean",
     "meanbean-factories",
     "mockito-core",
     "test-object",
+    "zip4j",
+    "zip4j-extension",
+]
+# Dependencies required only at test runtime, such as test execution platforms
+test-runtime-only = [
+    "junit-platform-launcher",
 ]
 
 [plugins]

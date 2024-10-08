@@ -1,22 +1,6 @@
 dependencies {
-
-    implementation libs.commons.io
-    implementation libs.commons.lang3
-    implementation libs.crypt.api
-    implementation libs.throwable
-    implementation libs.silly.collection
-    implementation libs.silly.bean
-    implementation libs.silly.strings
-    implementation libs.silly.io
-    implementation libs.jobj.compare
-    implementation libs.checksum.up
-
-    testImplementation libs.jsoup
-    testImplementation libs.zip4j
-    testImplementation libs.zip4j.extension
-    testImplementation libs.comparator.extensions
-    testImplementation libs.jobj.contract.verifier
     // Note: use of bundles...
+    implementation libs.bundles.core.dependencies
     testImplementation libs.bundles.unit.testing
-    testRuntimeOnly libs.junit.platform.launcher
+    testRuntimeOnly libs.bundles.test.runtime.only
 }
