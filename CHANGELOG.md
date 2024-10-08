@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 18.0-SNAPSHOT
+Version 18.0
 -------------
 
 ADDED:
