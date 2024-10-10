@@ -4,6 +4,9 @@
 Version 18.1-SNAPSHOT
 -------------
 
+CHANGED:
+
+- removed all deprecated classes from package 'io.github.astrapi69.file.csv'
 
 Version 18.0
 -------------
