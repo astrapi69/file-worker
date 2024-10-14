@@ -45,8 +45,8 @@ import io.github.astrapi69.file.exception.FileIsADirectoryException;
 import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
 import io.github.astrapi69.file.exception.FileIsSecurityRestrictedException;
 import io.github.astrapi69.io.StreamExtensions;
-import io.github.astrapi69.io.file.FileConstants;
 import io.github.astrapi69.io.file.FileExtension;
+import io.github.astrapi69.io.file.FileSize;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
@@ -549,7 +549,7 @@ public final class CopyFileExtensions
 				: new OutputStreamWriter(bos))
 		{
 			int tmp;
-			final char[] charArray = new char[FileConstants.BLOCKSIZE];
+			final char[] charArray = new char[FileSize.DEFAULT_BLOCK_SIZE.getSize()];
 			while ((tmp = reader.read(charArray)) > 0)
 			{
 				writer.write(charArray, 0, tmp);

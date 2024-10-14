@@ -35,7 +35,6 @@ module io.github.astrapisixtynine.file.worker
 	exports io.github.astrapi69.file.compare.api;
 	exports io.github.astrapi69.file.copy;
 	exports io.github.astrapi69.file.create;
-	exports io.github.astrapi69.file.csv;
 	exports io.github.astrapi69.file.delete;
 	exports io.github.astrapi69.file.exception;
 	exports io.github.astrapi69.file.modify;
