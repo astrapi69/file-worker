@@ -53,16 +53,20 @@ zip4j-extension = { module = "io.github.astrapi69:zip4j-extension", version.ref 
 [bundles]
 # The core dependencies
 core-dependencies = [
+    "checksum-up",
     "commons-io",
     "commons-lang3",
     "crypt-api",
-    "throwable",
-    "silly-collection",
-    "silly-bean",
-    "silly-strings",
-    "silly-io",
     "jobj-compare",
-    "checksum-up",
+    "silly-bean",
+    "silly-collection",
+    "silly-io",
+    "silly-strings",
+    "throwable",
+]
+# Dependencies required only at test runtime, such as test execution platforms
+test-runtime-only = [
+    "junit-platform-launcher",
 ]
 # Dependencies required for unit testing
 unit-testing = [
@@ -77,10 +81,6 @@ unit-testing = [
     "test-object",
     "zip4j",
     "zip4j-extension",
-]
-# Dependencies required only at test runtime, such as test execution platforms
-test-runtime-only = [
-    "junit-platform-launcher",
 ]
 
 [plugins]
