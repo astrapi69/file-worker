@@ -69,17 +69,17 @@ public final class DeleteFileExtensions
 	{
 		Exception ex = null;
 		String error;
-		// check if the file does not exists...
+		// check if the file does not exist...
 		if (!file.exists())
 		{
-			error = "The " + file + " does not exists.";
+			error = "The directory " + file + " does not exists.";
 			ex = new FileDoesNotExistException(error);
 			return ex;
 		}
 		// check if the file is not a directory...
 		if (!file.isDirectory())
 		{
-			error = "The " + file + " is not a directory.";
+			error = "The given file '" + file + "' is not a directory.";
 			ex = new FileIsNotADirectoryException(error);
 			return ex;
 		}
@@ -88,7 +88,7 @@ public final class DeleteFileExtensions
 		// If the file is null
 		if (ff == null)
 		{ // it is security restricted
-			error = "The " + file + " could not list the content.";
+			error = "The directory " + file + " is empty or security restricted";
 			ex = new DirectoryHasNoContentException(error);
 		}
 		return ex;
@@ -105,9 +105,12 @@ public final class DeleteFileExtensions
 	 */
 	public static void delete(final Collection<File> files) throws IOException
 	{
-		for (final File file : files)
+		if (files != null && !files.isEmpty())
 		{
-			delete(file);
+			for (final File file : files)
+			{
+				delete(file);
+			}
 		}
 	}
 
