@@ -4,9 +4,15 @@
 Version 18.1-SNAPSHOT
 -------------
 
+ADDED:
+
+- new class CopyDirectoryExtensions with all methods for copy directories
+- new methods in class CopyFileExtensions with the new classes from the nio package
+
 CHANGED:
 
 - removed all deprecated classes from package 'io.github.astrapi69.file.csv'
+- moved all methods related with copy directories in CopyFileExtensions to new class CopyDirectoryExtensions
 
 Version 18.0
 -------------
