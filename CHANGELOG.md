@@ -6,16 +6,27 @@ Version 18.1-SNAPSHOT
 
 ADDED:
 
+- new interface Storable for store files
+- new interface Searchable for search files
+- new interface Renameable for rename files or directories
+- new interface Readable for read files
+- new interface Erasable for delete files or directories
+- new interface Createable for create files or directories
 - new interface Copyable for copy files or directories
 - new class CopyDirectoryExtensions with all methods for copy directories
 - new methods in class CopyFileExtensions with classes from the nio package
 
 CHANGED:
 
+- update gradle to new version 8.11-rc-1
+- update of gradle-plugin with id 'com.diffplug.spotless' to new beta version 7.0.0.BETA4
+- update of gradle-plugin with id 'nl.littlerobots.version-catalog-update' to new patch version 0.8.5
 - removed all deprecated classes from package 'io.github.astrapi69.file.csv'
 - move all methods related to copy directories from CopyFileExtensions to the new class CopyDirectoryExtensions
 - optimized class DirectoryFactory with classes from the nio package
 - optimized class DeleteFileExtensions with classes from the nio package
+- update of test dependency mockito-core to the new patch version 5.14.2
+- update of test dependency junit-jupiter to the new minor version 5.11.3
 
 Version 18.0
 -------------

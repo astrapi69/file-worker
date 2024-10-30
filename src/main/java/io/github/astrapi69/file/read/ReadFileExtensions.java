@@ -24,16 +24,7 @@
  */
 package io.github.astrapi69.file.read;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -48,7 +39,7 @@ import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.io.file.FileSize;
 
 /**
- * The class {@link ReadFileExtensions} helps you reading files.
+ * The class {@link ReadFileExtensions} helps in reading files.
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -64,11 +55,11 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * Get a Byte array from the given file.
+	 * Gets the file content as Byte array from the given file
 	 *
 	 * @param tmpFile
-	 *            the tmp file
-	 * @return the filecontent as Byte array object.
+	 *            the temporary file
+	 * @return the file content as Byte array object
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -78,11 +69,11 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * Get a byte array from the given file.
+	 * Reads the given file to a byte array
 	 *
 	 * @param file
-	 *            The file.
-	 * @return Returns a byte array or null.
+	 *            the file to read
+	 * @return byte array of the file content or null
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -92,12 +83,11 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * This method reads the given file with the default UTF-8 encoding and returns the content as
-	 * an {@link String} object
+	 * Reads the given file with UTF-8 encoding and returns the content as String
 	 *
 	 * @param file
-	 *            The file to read to an {@link String} object
-	 * @return The {@link String} object from the given file
+	 *            the file to read
+	 * @return String content from the file
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
@@ -107,14 +97,13 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * This method reads the given file with the given encoding and returns the content as an
-	 * {@link String} object
+	 * Reads the given file with the specified encoding and returns the content as String
 	 *
 	 * @param file
-	 *            The file to read to an {@link String} object
+	 *            the file to read
 	 * @param encoding
-	 *            the encoding for reading the given file
-	 * @return The {@link String} object from the given file
+	 *            the encoding to use
+	 * @return String content from the file
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
@@ -135,11 +124,11 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * The Method readHeadLine() opens the File and reads the first line from the file.
+	 * Reads the first line from the specified file
 	 *
 	 * @param inputFile
-	 *            The Path to the File and name from the file from where we read.
-	 * @return The first line from the file.
+	 *            the file path
+	 * @return first line from the file
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -148,37 +137,31 @@ public final class ReadFileExtensions
 	public static String readHeadLine(final String inputFile)
 		throws FileNotFoundException, IOException
 	{
-		String headLine;
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)))
 		{
-			headLine = reader.readLine();
+			return reader.readLine();
 		}
-		return headLine;
 	}
 
 	/**
-	 * Reads every line from the File and puts them to the List.
+	 * Reads all lines from the specified file into a list
 	 *
 	 * @param input
-	 *            The File from where the input comes.
-	 * @return The List with all lines from the file.
-	 * @throws FileNotFoundException
-	 *             is thrown if the given file is not found.
+	 *            the file to read
+	 * @return list of lines from the file
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static List<String> readLinesInList(final File input)
-		throws FileNotFoundException, IOException
+	public static List<String> readLinesInList(final File input) throws IOException
 	{
-		return readLinesInList(input, false);
+		return Files.readAllLines(input.toPath());
 	}
 
 	/**
-	 * Read a line from the given index in the given File and return it, if index greater than null
-	 * is returned
+	 * Reads a line at the specified index from the file, or null if the line does not exist
 	 *
 	 * @param input
-	 *            The File from where the input comes
+	 *            the file to read
 	 * @param index
 	 *            The index of the line
 	 * @return The line or null if it does not exist
@@ -338,47 +321,38 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * The Method readFromFile(String) reads from the properties-file all Properties and saves them
-	 * into a Properties-Object.
+	 * Reads properties from a properties file
 	 *
 	 * @param filename
-	 *            The Filename from the Properties-file.
-	 * @return The Properties or null if an error occurs.
+	 *            the properties file path
+	 * @return Properties object or null if error occurs
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static Properties readPropertiesFromFile(final String filename) throws IOException
 	{
-		final Properties properties = new Properties();
-		try (FileInputStream fis = new FileInputStream(filename))
+		Properties properties = new Properties();
+		try (InputStream inputStream = Files.newInputStream(new File(filename).toPath()))
 		{
-			properties.load(fis);
+			properties.load(inputStream);
 		}
 		return properties;
 	}
 
 	/**
-	 * Get a byte array from the given file.
+	 * Reads file content into a byte array
 	 *
 	 * @param tmpFile
-	 *            The file.
-	 * @return Returns a byte array or null.
+	 *            the file to read
+	 * @return byte array of file content or null
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static byte[] toByteArray(final File tmpFile) throws IOException
 	{
-		byte[] data = null;
-		if (tmpFile.exists() && !tmpFile.isDirectory())
-		{
-			try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(tmpFile));
-				ByteArrayOutputStream bos = new ByteArrayOutputStream(FileSize.KILOBYTE.getSize()))
-			{
-				StreamExtensions.writeInputStreamToOutputStream(bis, bos);
-				data = bos.toByteArray();
-			}
-		}
-		return data;
+		return tmpFile.exists() && !tmpFile.isDirectory()
+			? Files.readAllBytes(tmpFile.toPath())
+			: null;
 	}
 
 	/**
@@ -410,11 +384,11 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * Count all lines from the given file
+	 * Counts all lines in the specified file
 	 *
 	 * @param fileToCountTheLines
-	 *            The File to count the lines
-	 * @return the number of the lines from the given file
+	 *            the file to count lines from
+	 * @return line count
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */

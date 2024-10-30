@@ -213,7 +213,7 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Factory method for creating the new directory as {@link File} objects if it is not exists.
+	 * Factory method for creating the new directory as {@link File} objects if it does not exist
 	 *
 	 * @param parentDirectory
 	 *            the parent directory
