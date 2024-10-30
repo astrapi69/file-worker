@@ -31,12 +31,13 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
-import io.github.astrapi69.file.create.model.FileContentInfo;
-import io.github.astrapi69.file.create.model.FileInfo;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.file.create.model.DirectoryStructureTestData;
+import io.github.astrapi69.file.create.model.FileContentInfo;
+import io.github.astrapi69.file.create.model.FileInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
@@ -57,8 +58,7 @@ public class DirectoryStructureFactoryTest
 		Collection<FileContentInfo> fileInfos;
 		String parentAbsolutePath;
 		// new scenario...
-		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		File parentFile = DirectoryFactory.newDirectory(absolutePath, "app");
+		File parentFile = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(), "app");
 		parentAbsolutePath = parentFile.getAbsolutePath();
 		fileInfos = DirectoryStructureTestData.newTestData(parentAbsolutePath);
 		expected = ListFactory.newArrayList();
@@ -84,8 +84,7 @@ public class DirectoryStructureFactoryTest
 		File parent;
 		// new scenario...
 		filePaths = ListFactory.newArrayList("action", "model", "state", "reducer", "reducer/main");
-		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		parent = DirectoryFactory.newDirectory(absolutePath, "app");
+		parent = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(), "app");
 		actual = DirectoryStructureFactory.newDirectoryStructure(parent, filePaths);
 		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
 			DirectoryFactory.newDirectory(parent, "model"),
@@ -109,8 +108,8 @@ public class DirectoryStructureFactoryTest
 		File parent;
 		// new scenario...
 		filePaths = ListFactory.newArrayList("action", "model", "state", "reducer", "reducer/main");
-		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		parent = DirectoryFactory.newDirectory(absolutePath, "app");
+
+		parent = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(), "app");
 		parentAbsolutePath = parent.getAbsolutePath();
 		actual = DirectoryStructureFactory.newDirectoryStructure(parentAbsolutePath, filePaths);
 		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
@@ -135,8 +134,8 @@ public class DirectoryStructureFactoryTest
 		File parent;
 		// new scenario...
 		filePaths = ArrayFactory.newArray("action", "model", "state", "reducer", "reducer/main");
-		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		parent = DirectoryFactory.newDirectory(absolutePath, "app");
+
+		parent = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(), "app");
 		parentAbsolutePath = parent.getAbsolutePath();
 		actual = DirectoryStructureFactory.newDirectoryStructure(parentAbsolutePath, filePaths);
 		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
@@ -161,8 +160,8 @@ public class DirectoryStructureFactoryTest
 		File parent;
 		// new scenario...
 		filePaths = ArrayFactory.newArray("action", "model", "state", "reducer", "reducer/main");
-		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		parent = DirectoryFactory.newDirectory(absolutePath, "app");
+
+		parent = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(), "app");
 		actual = DirectoryStructureFactory.newDirectoryStructure(parent, filePaths);
 		expected = ListFactory.newArrayList(DirectoryFactory.newDirectory(parent, "action"),
 			DirectoryFactory.newDirectory(parent, "model"),

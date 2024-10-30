@@ -28,9 +28,15 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,7 +48,8 @@ import io.github.astrapi69.file.search.FileSearchExtensions;
 import io.github.astrapi69.io.file.filter.PrefixFileFilter;
 
 /**
- * The class {@link DeleteFileExtensions} helps you delete files.
+ * The class {@link DeleteFileExtensions} helps delete files, leveraging new functionalities from
+ * java.nio.file introduced in JDK 17 for optimized handling
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -58,12 +65,11 @@ public final class DeleteFileExtensions
 	}
 
 	/**
-	 * Checks the File if it is a directory or if its exists or if it is empty.
+	 * Checks if the File is a directory, exists, and is accessible
 	 *
 	 * @param file
-	 *            The File to check.
-	 *
-	 * @return Null if nothing is wrong otherwise an Exception.
+	 *            The File to check
+	 * @return Null if all checks pass; otherwise, an appropriate Exception
 	 */
 	public static Exception checkFile(final File file)
 	{
@@ -72,22 +78,19 @@ public final class DeleteFileExtensions
 		// check if the file does not exist...
 		if (!file.exists())
 		{
-			error = "The directory " + file + " does not exists.";
+			error = "The directory " + file + " does not exist";
 			ex = new FileDoesNotExistException(error);
 			return ex;
 		}
 		// check if the file is not a directory...
 		if (!file.isDirectory())
 		{
-			error = "The given file '" + file + "' is not a directory.";
+			error = "The given file '" + file + "' is not a directory";
 			ex = new FileIsNotADirectoryException(error);
 			return ex;
 		}
-
-		final File[] ff = file.listFiles();
-		// If the file is null
-		if (ff == null)
-		{ // it is security restricted
+		if (!Files.isReadable(file.toPath()) || !Files.isWritable(file.toPath()))
+		{
 			error = "The directory " + file + " is empty or security restricted";
 			ex = new DirectoryHasNoContentException(error);
 		}
@@ -95,11 +98,10 @@ public final class DeleteFileExtensions
 	}
 
 	/**
-	 * Tries to delete all given files in the list. Caution: This can not be undone.
+	 * Tries to delete all given files in the collection. Caution: This can not be undone.
 	 *
 	 * @param files
-	 *            The files to delete.
-	 *
+	 *            The files to delete
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -107,7 +109,7 @@ public final class DeleteFileExtensions
 	{
 		if (files != null && !files.isEmpty())
 		{
-			for (final File file : files)
+			for (File file : files)
 			{
 				delete(file);
 			}
@@ -115,45 +117,57 @@ public final class DeleteFileExtensions
 	}
 
 	/**
-	 * Tries to delete the given {@link File} object and if it's a directory than it will try to
-	 * delete all the subdirectories
+	 * Tries to delete the specified file or directory recursively if it is a directory
 	 *
 	 * @param file
-	 *            The {@link File} object to delete
-	 * @return <code>true</code> if the file or directory is deleted otherwise <code>false</code>
-	 *
+	 *            The file or directory to delete
+	 * @return <code>true</code> if deletion is successful; <code>false</code> otherwise
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static boolean delete(final File file) throws IOException
 	{
 		Objects.requireNonNull(file);
-		boolean deleted;
 		if (file.isDirectory())
 		{
-			DeleteFileExtensions.deleteAllFiles(file);
-			deleted = true;
+			deleteAllFiles(file.toPath());
+			return Files.deleteIfExists(file.toPath());
 		}
 		else
 		{
-			boolean notDeleted;
-			boolean fileExists;
-			// If the file exists and is not deleted
-			deleted = file.delete();
-			notDeleted = !deleted;
-			fileExists = file.exists();
-			if (fileExists && notDeleted)
-			{
-				Files.delete(file.toPath());
-				fileExists = file.exists();
-				deleted = !fileExists;
-				if (fileExists)
-				{
-					throw new IOException("Cannot delete the File " + file.getAbsolutePath() + ".");
-				}
-			}
+			return Files.deleteIfExists(file.toPath());
 		}
-		return deleted;
+	}
+
+	/**
+	 * Deletes all files and directories recursively within the specified directory
+	 *
+	 * @param dirPath
+	 *            The path of the directory to delete files within
+	 * @throws IOException
+	 *             if an I/O exception occurs
+	 */
+	public static void deleteAllFiles(Path dirPath) throws IOException
+	{
+		Files.walkFileTree(dirPath, EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE,
+			new SimpleFileVisitor<Path>()
+			{
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+					throws IOException
+				{
+					Files.delete(file);
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+					throws IOException
+				{
+					Files.delete(dir);
+					return FileVisitResult.CONTINUE;
+				}
+			});
 	}
 
 	/**
@@ -193,33 +207,30 @@ public final class DeleteFileExtensions
 	/**
 	 * Deletes all files with the given suffix recursively.
 	 *
-	 * @param file
-	 *            The directory from where to delete the files wiht the given suffix.
+	 * @param directory
+	 *            The directory from where to delete the files with the given suffix.
 	 * @param theSuffix
 	 *            The suffix from the files to delete.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public static void deleteAllFilesWithSuffix(final File file, final String theSuffix)
+	public static void deleteAllFilesWithSuffix(final File directory, final String theSuffix)
 		throws IOException
 	{
-		final String filePath = file.getAbsolutePath();
-		final String[] suffix = { theSuffix };
-		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
-		final int fileCount = files.size();
-		for (int i = 0; i < fileCount; i++)
+		final List<File> files = FileSearchExtensions.findFiles(directory.getAbsolutePath(),
+			new String[] { theSuffix });
+		for (File file : files)
 		{
-			DeleteFileExtensions.deleteFile(files.get(i));
+			deleteFile(file);
 		}
 	}
 
 	/**
-	 * Tries to delete the given file.
+	 * Attempts to delete a specific file
 	 *
 	 * @param fileToDelete
-	 *            The file to delete.
-	 *
+	 *            The file to delete
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */

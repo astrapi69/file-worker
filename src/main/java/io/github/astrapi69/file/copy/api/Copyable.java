@@ -81,8 +81,8 @@ public interface Copyable
 	 *             Is thrown if the directory already exists.
 	 */
 	default boolean copyDirectory(final File source, final File destination)
-			throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-			FileIsNotADirectoryException, DirectoryAlreadyExistsException
+		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
+		FileIsNotADirectoryException, DirectoryAlreadyExistsException
 	{
 		return CopyDirectoryExtensions.copyDirectory(source, destination);
 	}

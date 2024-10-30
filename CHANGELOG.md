@@ -6,14 +6,16 @@ Version 18.1-SNAPSHOT
 
 ADDED:
 
-- new interface Copyable for copy files or directories 
+- new interface Copyable for copy files or directories
 - new class CopyDirectoryExtensions with all methods for copy directories
-- new methods in class CopyFileExtensions with the new classes from the nio package
+- new methods in class CopyFileExtensions with classes from the nio package
 
 CHANGED:
 
 - removed all deprecated classes from package 'io.github.astrapi69.file.csv'
-- moved all methods related with copy directories in CopyFileExtensions to new class CopyDirectoryExtensions
+- move all methods related to copy directories from CopyFileExtensions to the new class CopyDirectoryExtensions
+- optimized class DirectoryFactory with classes from the nio package
+- optimized class DeleteFileExtensions with classes from the nio package
 
 Version 18.0
 -------------

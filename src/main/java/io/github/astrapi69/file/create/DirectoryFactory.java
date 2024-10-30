@@ -40,7 +40,6 @@ import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 /**
  * The class {@link DirectoryFactory} helps you to create directories
  *
- * @author Asterios Raptis
  * @version 1.0
  */
 public final class DirectoryFactory
@@ -58,8 +57,7 @@ public final class DirectoryFactory
 	 *
 	 * @param directories
 	 *            the directories
-	 *
-	 * @return true, if successful
+	 * @return collection of {@link FileCreationState} with the result of each directory creation
 	 */
 	public static Collection<FileCreationState> newDirectories(final Collection<File> directories)
 	{
@@ -71,23 +69,18 @@ public final class DirectoryFactory
 			fileCreationStates.add(created);
 		}
 		return fileCreationStates;
-
 	}
 
 	/**
-	 * Creates a new directory from the given {@link Path} object and the optional
-	 * {@link FileAttribute}.<br>
-	 * <br>
-	 * Note: this method decorates the {@link Files#createDirectories(Path, FileAttribute...)} and
-	 * returns if the directory is created or not.
+	 * Creates a new directory from the given {@link Path} object and optional {@link FileAttribute}
 	 *
 	 * @param dir
-	 *            the dir the directory to create
+	 *            the directory to create
 	 * @param attrs
-	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return Returns true if the directory was created otherwise false.
+	 *            optional file attributes to set atomically when creating the directory
+	 * @return true if the directory was created; false otherwise
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals an I/O exception occurred
 	 * @see Files#createDirectories(Path, FileAttribute...)
 	 */
 	public static boolean newDirectories(Path dir, FileAttribute<?>... attrs) throws IOException
@@ -97,18 +90,14 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Creates a new directory from the given {@link Path} object and the optional
-	 * {@link FileAttribute}.<br>
-	 * <br>
-	 * Note: this method decorates the {@link Files#createDirectories(Path, FileAttribute...)} and
-	 * returns if the directory is created or not.
+	 * Creates a new directory from the given {@link Path} object quietly without throwing
+	 * exceptions
 	 *
 	 * @param dir
-	 *            the dir the directory to create
+	 *            the directory to create
 	 * @param attrs
-	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return Returns true if the directory was created otherwise false.
-	 * @see Files#createDirectories(Path, FileAttribute...)
+	 *            optional file attributes to set atomically when creating the directory
+	 * @return true if the directory was created; false otherwise
 	 */
 	public static boolean newDirectoriesQuietly(Path dir, FileAttribute<?>... attrs)
 	{
@@ -203,8 +192,7 @@ public final class DirectoryFactory
 	 * Creates a new directory from the given {@link File} object
 	 *
 	 * @param directory
-	 *            The directory to create
-	 *
+	 *            the directory to create
 	 * @return the {@link FileCreationState} with the result
 	 */
 	public static FileCreationState newDirectory(final File directory)
@@ -251,16 +239,15 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Factory method for creating the new directory as {@link File} objects if it is not exists.
+	 * Creates a new directory under the given parent directory and directory name
 	 *
 	 * @param parentDirectory
 	 *            the parent directory
 	 * @param directoryName
-	 *            the directory name
-	 * @return the new directory as {@link File} object
-	 *
+	 *            the name of the directory to create
+	 * @return the new {@link File} directory object
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals an I/O exception occurred
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
 	public static File newDirectory(final String parentDirectory, final String directoryName)
@@ -297,11 +284,11 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Creates the parent directories from the given file.
+	 * Creates a new parent directories if not existing for the given file
 	 *
 	 * @param file
-	 *            the file
-	 * @return true, if successful
+	 *            the file for which parent directories need to be created
+	 * @return true if successful, false otherwise
 	 */
 	public static boolean mkParentDirs(final File file)
 	{

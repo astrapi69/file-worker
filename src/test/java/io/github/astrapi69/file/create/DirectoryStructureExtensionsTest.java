@@ -32,10 +32,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 
-import io.github.astrapi69.file.create.model.FileContentInfo;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.collection.CollectionExtensions;
+import io.github.astrapi69.file.create.model.DirectoryStructureTestData;
+import io.github.astrapi69.file.create.model.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 
@@ -58,8 +59,8 @@ public class DirectoryStructureExtensionsTest
 		List<FileContentInfo> expected;
 		String parentAbsolutePath;
 		// new scenario...
-		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		File parentFile = DirectoryFactory.newDirectory(absolutePath, "app");
+
+		File parentFile = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(), "app");
 		parentAbsolutePath = parentFile.getAbsolutePath();
 		actual = DirectoryStructureTestData.newTestData(parentAbsolutePath);
 		Collection<File> files = DirectoryStructureFactory.newDirectoryStructure(actual);

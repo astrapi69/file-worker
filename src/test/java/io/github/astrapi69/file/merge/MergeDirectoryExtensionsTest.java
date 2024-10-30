@@ -38,7 +38,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.DirectoryStructureFactory;
-import io.github.astrapi69.file.create.DirectoryStructureTestData;
+import io.github.astrapi69.file.create.model.DirectoryStructureTestData;
 import io.github.astrapi69.file.create.model.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
@@ -157,14 +157,15 @@ public class MergeDirectoryExtensionsTest
 		Collection<FileContentInfo> fileInfos;
 		String parentAbsolutePath;
 		// new scenario...
-		String absolutePath = PathFinder.getSrcTestResourcesDir().getAbsolutePath();
-		File parentLeftFile = DirectoryFactory.newDirectory(absolutePath, "app");
+		File parentLeftFile = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(),
+			"app");
 		parentAbsolutePath = parentLeftFile.getAbsolutePath();
 		fileInfos = DirectoryStructureTestData.newTestData(parentAbsolutePath);
 
 		leftSide = DirectoryStructureFactory.newDirectoryStructure(fileInfos);
 
-		File parentRightFile = DirectoryFactory.newDirectory(absolutePath, "other");
+		File parentRightFile = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(),
+			"other");
 		parentAbsolutePath = parentRightFile.getAbsolutePath();
 		fileInfos = DirectoryStructureTestData.newOtherTestData(parentAbsolutePath);
 		rightSide = DirectoryStructureFactory.newDirectoryStructure(fileInfos);

@@ -22,7 +22,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.create;
+package io.github.astrapi69.file.create.model;
 
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -31,7 +31,6 @@ import java.util.List;
 import io.github.astrapi69.checksum.ByteArrayChecksumExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.crypt.api.algorithm.ChecksumAlgorithm;
-import io.github.astrapi69.file.create.model.FileContentInfo;
 
 public class DirectoryStructureTestData
 {
