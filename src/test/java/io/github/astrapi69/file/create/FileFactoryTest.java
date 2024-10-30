@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.astrapi69.file.create.model.FileCreationState;
+import io.github.astrapi69.file.create.model.FileInfo;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.List;
 
 import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.file.create.model.FileContentInfo;
 import io.github.astrapi69.file.search.FileSearchExtensions;
 
 /**

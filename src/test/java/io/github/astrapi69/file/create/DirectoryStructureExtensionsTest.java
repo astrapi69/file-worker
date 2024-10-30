@@ -32,6 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 
+import io.github.astrapi69.file.create.model.FileContentInfo;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.collection.CollectionExtensions;

@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import io.github.astrapi69.file.create.model.FileContentInfo;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 

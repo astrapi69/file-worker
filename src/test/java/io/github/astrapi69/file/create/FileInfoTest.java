@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
+import io.github.astrapi69.file.create.model.FileInfo;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;

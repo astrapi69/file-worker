@@ -36,7 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
@@ -92,7 +92,7 @@ public final class CopyFileExtensions
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
 	 */
-	public static void copyFiles(List<Path> sources, Path destination) throws IOException
+	public static void copyFiles(Collection<Path> sources, Path destination) throws IOException
 	{
 		Objects.requireNonNull(sources, "sources must not be null");
 		Objects.requireNonNull(destination, "destination must not be null");
@@ -236,9 +236,9 @@ public final class CopyFileExtensions
 	 * @param destinationEncoding
 	 *            the destination encoding
 	 * @param lastModified
-	 *            if true the last modified flag is set
+	 *            if true, the last modified flag is set
 	 */
-	public static void copyFiles(final List<File> sources, final File destination,
+	public static void copyFiles(final Collection<File> sources, final File destination,
 		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
 	{
 		if (!destination.exists())

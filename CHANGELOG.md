@@ -6,6 +6,7 @@ Version 18.1-SNAPSHOT
 
 ADDED:
 
+- new interface Copyable for copy files or directories 
 - new class CopyDirectoryExtensions with all methods for copy directories
 - new methods in class CopyFileExtensions with the new classes from the nio package
 

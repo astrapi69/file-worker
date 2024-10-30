@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.DirectoryStructureFactory;
 import io.github.astrapi69.file.create.DirectoryStructureTestData;
-import io.github.astrapi69.file.create.FileContentInfo;
+import io.github.astrapi69.file.create.model.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
 

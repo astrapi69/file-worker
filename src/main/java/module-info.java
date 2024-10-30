@@ -45,4 +45,6 @@ module io.github.astrapisixtynine.file.worker
 	exports io.github.astrapi69.file.sort;
 	exports io.github.astrapi69.file.system;
 	exports io.github.astrapi69.file.write;
+	exports io.github.astrapi69.file.copy.api;
+	exports io.github.astrapi69.file.create.model;
 }

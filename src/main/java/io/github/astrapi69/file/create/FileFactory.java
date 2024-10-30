@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import io.github.astrapi69.file.create.model.FileCreationState;
+import io.github.astrapi69.file.create.model.FileInfo;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
