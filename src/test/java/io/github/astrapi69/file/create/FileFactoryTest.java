@@ -42,6 +42,8 @@ import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.FileTestCase;
+import io.github.astrapi69.file.create.model.FileCreationState;
+import io.github.astrapi69.file.create.model.FileInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.system.SystemFileExtensions;
 

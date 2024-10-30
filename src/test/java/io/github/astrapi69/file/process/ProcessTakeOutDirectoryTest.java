@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
-import io.github.astrapi69.file.create.FileCreationState;
+import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.system.SystemFileExtensions;
 import io.github.astrapi69.io.file.FileExtension;
 import io.github.astrapi69.zip4j.Zip4jExtensions;

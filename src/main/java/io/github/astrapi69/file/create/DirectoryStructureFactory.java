@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import io.github.astrapi69.collection.array.ArrayExtensions;
 import io.github.astrapi69.collection.list.ListFactory;
+import io.github.astrapi69.file.create.model.FileContentInfo;
 
 /**
  * The class {@link DirectoryStructureFactory} helps you to create directory structures

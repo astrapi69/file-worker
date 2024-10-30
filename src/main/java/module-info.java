@@ -34,16 +34,25 @@ module io.github.astrapisixtynine.file.worker
 	exports io.github.astrapi69.file.compare;
 	exports io.github.astrapi69.file.compare.api;
 	exports io.github.astrapi69.file.copy;
+	exports io.github.astrapi69.file.copy.api;
 	exports io.github.astrapi69.file.create;
-	exports io.github.astrapi69.file.csv;
+	exports io.github.astrapi69.file.create.api;
+	exports io.github.astrapi69.file.create.model;
 	exports io.github.astrapi69.file.delete;
+	exports io.github.astrapi69.file.delete.api;
 	exports io.github.astrapi69.file.exception;
+	exports io.github.astrapi69.file.merge;
+	exports io.github.astrapi69.file.merge.strategy;
 	exports io.github.astrapi69.file.modify;
 	exports io.github.astrapi69.file.modify.api;
 	exports io.github.astrapi69.file.read;
+	exports io.github.astrapi69.file.read.api;
 	exports io.github.astrapi69.file.rename;
+	exports io.github.astrapi69.file.rename.api;
 	exports io.github.astrapi69.file.search;
+	exports io.github.astrapi69.file.search.api;
 	exports io.github.astrapi69.file.sort;
 	exports io.github.astrapi69.file.system;
 	exports io.github.astrapi69.file.write;
+	exports io.github.astrapi69.file.write.api;
 }

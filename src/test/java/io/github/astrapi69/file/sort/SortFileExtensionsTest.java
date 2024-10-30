@@ -39,7 +39,7 @@ import org.meanbean.test.BeanTester;
 import io.github.astrapi69.comparator.object.StringComparator;
 import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.create.DirectoryFactory;
-import io.github.astrapi69.file.create.FileCreationState;
+import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.write.StoreFileExtensions;
 

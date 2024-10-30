@@ -28,12 +28,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import io.github.astrapi69.file.create.model.FileCreationState;
+import io.github.astrapi69.file.create.model.FileInfo;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
- * The class {@link FileFactory} helps you to create files
+ * The class {@link FileFactory} provides utility methods for creating files
  *
- * @author Asterios Raptis
  * @version 1.0
  */
 public final class FileFactory
@@ -46,15 +47,14 @@ public final class FileFactory
 	{
 	}
 
-
 	/**
-	 * Factory method that creates a new empty {@link File} if it is not exists, otherwise it lets
-	 * the file as it is.
+	 * Factory method that creates a new empty {@link File} if it does not exist, otherwise it
+	 * leaves the file as it is
 	 *
 	 * @param file
 	 *            the file.
 	 *
-	 * @return the appropriate state object that describes what happen
+	 * @return the state describing the creation outcome
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -74,13 +74,13 @@ public final class FileFactory
 	}
 
 	/**
-	 * Factory method that creates a new empty {@link File} if it is not exists, otherwise it lets
-	 * the file as it is.
+	 * Factory method that creates a new empty {@link File} if it does not exist, otherwise it
+	 * leaves the file as it is
 	 *
 	 * @param file
-	 *            the file.
+	 *            the file
 	 *
-	 * @return the appropriate state object that describes what happen
+	 * @return the state describing the creation outcome
 	 */
 	public static FileCreationState newFileQuietly(final File file)
 	{
@@ -119,13 +119,13 @@ public final class FileFactory
 	}
 
 	/**
-	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
-	 * new empty file will be created on the file system
+	 * Creates a new {@link File} object; if the specified flag is true, an empty file is created on
+	 * the file system
 	 *
 	 * @param absolutePath
 	 *            the absolute path
 	 * @param createIfNotExists
-	 *            if this flag is true the file will be created if it does not exists
+	 *            if true, creates the file if it does not exist
 	 *
 	 * @return the file object
 	 *
@@ -144,13 +144,13 @@ public final class FileFactory
 	}
 
 	/**
-	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
-	 * new empty file will be created on the file system
+	 * Creates a new {@link File} object; if the specified flag is true, an empty file is created on
+	 * the file system
 	 *
 	 * @param absolutePath
 	 *            the absolute path
 	 * @param createIfNotExists
-	 *            if this flag is true the file will be created if it does not exists
+	 *            if true, creates the file if it does not exist
 	 *
 	 * @return the file object
 	 */
@@ -165,7 +165,7 @@ public final class FileFactory
 	}
 
 	/**
-	 * Factory method for creating the new {@link File} if it is not exists.
+	 * Creates a new {@link File} object in the specified directory if it does not exist
 	 *
 	 * @param parentDirectory
 	 *            the parent directory
@@ -259,13 +259,13 @@ public final class FileFactory
 	}
 
 	/**
-	 * Creates all files contained in the collection as empty files if the files does not exists
-	 * otherwise it lets the files as they are.
+	 * Creates all files in the collection as empty files if they do not exist, otherwise leaves
+	 * them as they are
 	 *
 	 * @param files
-	 *            the Collection with the File objects.
+	 *            the collection of {@link File} objects
 	 *
-	 * @return the {@link FileCreationState} object that encapsulate the creation result
+	 * @return the {@link FileCreationState} object representing the overall creation result
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -281,13 +281,13 @@ public final class FileFactory
 	}
 
 	/**
-	 * Creates all files contained in the collection as empty files if the files does not exists
-	 * otherwise it lets the files as they are.
+	 * Creates all files in the collection as empty files if they do not exist, otherwise leaves
+	 * them as they are
 	 *
 	 * @param files
-	 *            the Collection with the File objects.
+	 *            the collection of {@link File} objects
 	 *
-	 * @return the {@link FileCreationState} object that encapsulate the creation result
+	 * @return the {@link FileCreationState} object representing the overall creation result
 	 */
 	public static FileCreationState newFilesQuietly(final Collection<File> files)
 	{

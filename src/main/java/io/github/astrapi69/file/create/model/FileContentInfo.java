@@ -22,7 +22,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package io.github.astrapi69.file.create;
+package io.github.astrapi69.file.create.model;
 
 import java.io.File;
 import java.util.Arrays;
@@ -30,6 +30,7 @@ import java.util.Arrays;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.ChecksumAlgorithm;
 import io.github.astrapi69.file.FileExtensions;
+import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;

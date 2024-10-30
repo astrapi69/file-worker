@@ -35,9 +35,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,11 +44,8 @@ import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.DirectoryFactory;
-import io.github.astrapi69.file.create.FileCreationState;
-import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.exception.FileIsADirectoryException;
+import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
-import io.github.astrapi69.file.exception.FileIsSecurityRestrictedException;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.write.StoreFileExtensions;
 import io.github.astrapi69.io.file.FileExtension;
@@ -250,409 +245,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link CopyFileExtensions#copyDirectory(File, File)}
-	 *
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 */
-	@Test
-	public void testCopyDirectoryFileFile()
-		throws DirectoryAlreadyExistsException, FileIsSecurityRestrictedException, IOException,
-		FileIsADirectoryException, FileIsNotADirectoryException
-	{
-		// Test to copy the source directory to the destination directory.
-		actual = CopyFileExtensions.copyDirectory(srcDeepDir, destDir);
-		// Check if the destination directory was copied.
-		assertTrue(actual, "Directory " + destDir.getAbsolutePath() + " should be copied.");
-		// Check if the directory inside the destination directory was copied.
-		assertTrue(expectedDeeperDir.exists(),
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the directory inside the destination directory was copied.
-		assertTrue(expectedDeeperFile.exists(),
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.");
-		// Check the long lastModified from the file that they are equal.
-		assertTrue(srcDeepFile.lastModified() == expectedDeeperFile.lastModified(),
-			"long lastModified was not set.");
-		// Check if the directory in the directory inside the destination directory was copied.
-		assertTrue(expectedDeepestDir.exists(),
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the deeper directory inside the directory from the destination
-		// directory was copied.
-		assertTrue(expectedDeepestFile.exists(),
-			"File " + expectedDeepestFile.getAbsolutePath() + " should be copied.");
-		// Check the long lastModified from the file that they are equal.
-		assertTrue(srcDeepestFile.lastModified() == expectedDeepestFile.lastModified(),
-			"long lastModified was not set.");
-	}
-
-	/**
-	 * Test method for {@link CopyFileExtensions#copyDirectory(File, File, boolean)}
-	 *
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
-	 */
-	@Test
-	public void testCopyDirectoryFileFileBoolean()
-		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAlreadyExistsException
-	{
-		// Test to copy the source directory to the destination directory.
-		actual = CopyFileExtensions.copyDirectory(srcDeepDir, destDir, false);
-		// Check if the destination directory was copied.
-		assertTrue(actual, "Directory " + destDir.getAbsolutePath() + " should be copied.");
-		// Check if the directory inside the destination directory was copied.
-		assertTrue(expectedDeeperDir.exists(),
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the directory inside the destination directory was copied.
-		assertTrue(expectedDeeperFile.exists(),
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.");
-		// Check if the directory in the directory inside the destination directory was copied.
-		assertTrue(expectedDeepestDir.exists(),
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the deeper directory inside the directory from the destination
-		// directory was copied.
-		assertTrue(expectedDeepestFile.exists(),
-			"File " + expectedDeepestFile.getAbsolutePath() + " should be copied.");
-	}
-
-	/**
-	 * Test method for
-	 * {@link CopyFileExtensions#copyDirectoryWithFileFilter(File, File, FileFilter, boolean)}
-	 *
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
-	 */
-	@Test
-	public void testCopyDirectoryWithFileFilter()
-		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAlreadyExistsException
-	{
-		// Test to copy the source directory to the destination directory.
-		actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDeepDir, destDir, fileFilter,
-			false);
-		// Check if the destination directory was copied.
-		assertTrue(actual, "Directory " + destDir.getAbsolutePath() + " should be copied.");
-		// Check if the directory inside the destination directory was copied.
-		assertTrue(expectedDeeperDir.exists(),
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the directory inside the destination directory was copied.
-		assertTrue(expectedDeeperFile.exists(),
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.");
-		// Check if the file that is not included in the FileFilter was not copied in the
-		// destination directory.
-		final File notCopied1 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		assertFalse(notCopied1.exists(),
-			"File " + notCopied1.getAbsolutePath() + " should not be copied.");
-		// Check if the directory in the directory inside the destination directory was copied.
-		assertTrue(expectedDeepestDir.exists(),
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the deeper directory inside the directory from the destination
-		// directory was copied.
-		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		assertTrue(expectedDeepestFile1.exists(),
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.");
-		final File notExpectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		assertFalse(notExpectedDeepestFile2.exists(),
-			"File " + notExpectedDeepestFile2.getAbsolutePath() + " should not be copied.");
-	}
-
-	/**
-	 * Test method for
-	 * {@link CopyFileExtensions#copyDirectoryWithFileFilter(File, File, FileFilter, FileFilter, boolean)}
-	 *
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
-	 */
-	@Test
-	public void testCopyDirectoryWithFileFilters()
-		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAlreadyExistsException
-	{
-		// Test to copy the source directory to the destination directory.
-		actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDeepDir, destDir,
-			includeFileFilter, excludeFileFilter, false);
-
-		// Check if the destination directory was copied.
-		assertTrue(actual, "Directory " + destDir.getAbsolutePath() + " should be copied.");
-		// Check if the directory inside the destination directory was copied.
-		final File expectedDeeperDir = new File(deeperDir, dirToCopyName);
-		assertTrue(expectedDeeperDir.exists(),
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the first directory inside the destination directory was copied.
-		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		assertTrue(expectedDeeperFile.exists(),
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.");
-
-		// Check if the file in the second directory inside the destination directory was copied.
-		final File expectedDeeperFile2 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		assertTrue(expectedDeeperFile2.exists(),
-			"File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.");
-		// Check if the excluded file inside the deeper destination directory was not copied
-		final File notExpectedDeeperFile1 = new File(expectedDeeperDir, filePrefix + exeSuffix);
-		assertFalse(notExpectedDeeperFile1.exists(),
-			"File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.");
-		// Check if the directory in the directory inside the destination directory was copied.
-		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		assertTrue(expectedDeepestDir.exists(),
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.");
-		// Check if the first file in the deeper directory inside the directory from the destination
-		// directory was copied.
-		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		assertTrue(expectedDeepestFile1.exists(),
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.");
-
-		// Check if the second file in the deeper directory inside the directory from the
-		// destination directory was copied.
-		final File expectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		assertTrue(expectedDeepestFile2.exists(),
-			"File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.");
-
-		// Check if the excluded file inside the deepest destination directory was not copied
-		final File notExpectedDeepestFile3 = new File(expectedDeepestDir, srcDeepestFileName3);
-		assertFalse(notExpectedDeepestFile3.exists(),
-			"File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.");
-	}
-
-	/**
-	 * Test method for
-	 * {@link CopyFileExtensions#copyDirectoryWithFileFilter(File, File, FileFilter, FileFilter, boolean)}
-	 * .
-	 *
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
-	 */
-	@Test
-	public void testCopyDirectoryWithFileFiltersAndExcudedFileList()
-		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAlreadyExistsException
-	{
-		// list with files to exclude...
-		final List<File> excludeFiles = new ArrayList<>();
-		excludeFiles.add(srcFile4);
-		// define the include filefilter object...
-		final FileFilter includeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(".txt", ".rtf"), true);
-
-		// define the exclude filefilter object...
-		final FileFilter excludeFileFilter = new MultiplyExtensionsFileFilter(
-			Arrays.asList(".exe"));
-		// Test to copy the source directory to the destination directory.
-		actual = CopyFileExtensions.copyDirectoryWithFileFilter(srcDeepDir, destDir,
-			includeFileFilter, excludeFileFilter, excludeFiles, false);
-		// Check if the destination directory was copied.
-		assertTrue(actual, "Directory " + destDir.getAbsolutePath() + " should be copied.");
-		// Check if the directory inside the destination directory was copied.
-		final File expectedDeeperDir = new File(deeperDir, dirToCopyName);
-		assertTrue(expectedDeeperDir.exists(),
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the first directory inside the destination directory was copied.
-		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		assertTrue(expectedDeeperFile.exists(),
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.");
-
-		// Check if the file in the second directory inside the destination directory was copied.
-		final File expectedDeeperFile2 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		assertTrue(expectedDeeperFile2.exists(),
-			"File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.");
-		// Check if the excluded file inside the deeper destination directory was not copied
-		final File notExpectedDeeperFile1 = new File(expectedDeeperDir, filePrefix + exeSuffix);
-		assertFalse(notExpectedDeeperFile1.exists(),
-			"File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.");
-
-		// Check if the explicit excluded file inside the deeper destination directory was not
-		// copied
-		final File notExpectedDeeperFile2 = new File(expectedDeeperDir,
-			excludeFilePrefix + exeSuffix);
-		assertFalse(notExpectedDeeperFile2.exists(),
-			"File " + notExpectedDeeperFile2.getAbsolutePath() + " should not be copied.");
-
-		// Check if the directory in the directory inside the destination directory was copied.
-		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		assertTrue(expectedDeepestDir.exists(),
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.");
-		// Check if the first file in the deeper directory inside the directory from the destination
-		// directory was copied.
-		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		assertTrue(expectedDeepestFile1.exists(),
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.");
-
-		// Check if the second file in the deeper directory inside the directory from the
-		// destination directory was copied.
-		final File expectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		assertTrue(expectedDeepestFile2.exists(),
-			"File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.");
-
-		// Check if the excluded file inside the deepest destination directory was not copied
-		final File notExpectedDeepestFile3 = new File(expectedDeepestDir, srcDeepestFileName3);
-		assertFalse(notExpectedDeepestFile3.exists(),
-			"File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.");
-	}
-
-	/**
-	 * Test method for
-	 * {@link CopyFileExtensions#copyDirectoryWithFilenameFilter(File, File, FilenameFilter, boolean)}
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws FileIsNotADirectoryException
-	 *             the file is not a directory exception
-	 * @throws FileIsADirectoryException
-	 *             the file is a directory exception
-	 * @throws FileIsSecurityRestrictedException
-	 *             the file is security restricted exception
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
-	 */
-	@Test
-	public void testCopyDirectoryWithFilenameFilter()
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
-	{
-		// Test to copy the source directory to the destination directory.
-		actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDeepDir, destDir,
-			filenameFilter, false);
-		// Check if the destination directory was copied.
-		assertTrue(actual, "Directory " + destDir.getAbsolutePath() + " should be copied.");
-		// Check if the directory inside the destination directory was copied.
-		final File expectedDeeperDir = new File(deeperDir, dirToCopyName);
-		assertTrue(expectedDeeperDir.exists(),
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the directory inside the destination directory was copied.
-		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		assertTrue(expectedDeeperFile.exists(),
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.");
-		final File notCopied1 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		assertFalse(notCopied1.exists(),
-			"File " + notCopied1.getAbsolutePath() + " should not be copied.");
-		// Check if the directory in the directory inside the destination directory was copied.
-		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		assertTrue(expectedDeepestDir.exists(),
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the deeper directory inside the directory from the destination
-		// directory was copied.
-		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		assertTrue(expectedDeepestFile1.exists(),
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.");
-		final File notExpectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		assertFalse(notExpectedDeepestFile2.exists(),
-			"File " + notExpectedDeepestFile2.getAbsolutePath() + " should not be copied.");
-	}
-
-	/**
-	 * Test method for
-	 * {@link CopyFileExtensions#copyDirectoryWithFilenameFilter(File, File, FilenameFilter, FilenameFilter, boolean)}
-	 *
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 * @throws FileIsNotADirectoryException
-	 *             the file is not a directory exception
-	 * @throws FileIsADirectoryException
-	 *             the file is a directory exception
-	 * @throws FileIsSecurityRestrictedException
-	 *             the file is security restricted exception
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
-	 */
-	@Test
-	public void testCopyDirectoryWithFilenameFilters()
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
-	{
-		// Test to copy the source directory to the destination directory.
-		actual = CopyFileExtensions.copyDirectoryWithFilenameFilter(srcDeepDir, destDir,
-			includeFilenameFilter, excludeFilenameFilter, false);
-
-		// Check if the destination directory was copied.
-		assertTrue(actual, "Directory " + destDir.getAbsolutePath() + " should be copied.");
-		// Check if the directory inside the destination directory was copied.
-		final File expectedDeeperDir = new File(deeperDir, dirToCopyName);
-		assertTrue(expectedDeeperDir.exists(),
-			"Directory " + expectedDeeperDir.getAbsolutePath() + " should be copied.");
-		// Check if the file in the first directory inside the destination directory was copied.
-		final File expectedDeeperFile = new File(expectedDeeperDir, filePrefix + txtSuffix);
-		assertTrue(expectedDeeperFile.exists(),
-			"File " + expectedDeeperFile.getAbsolutePath() + " should be copied.");
-
-		// Check if the file in the second directory inside the destination directory was copied.
-		final File expectedDeeperFile2 = new File(expectedDeeperDir, filePrefix + rtfSuffix);
-		assertTrue(expectedDeeperFile2.exists(),
-			"File " + expectedDeeperFile2.getAbsolutePath() + " should be copied.");
-		// Check if the excluded file inside the deeper destination directory was not copied
-		final File notExpectedDeeperFile1 = new File(expectedDeeperDir, filePrefix + exeSuffix);
-		assertFalse(notExpectedDeeperFile1.exists(),
-			"File " + notExpectedDeeperFile1.getAbsolutePath() + " should not be copied.");
-		// Check if the directory in the directory inside the destination directory was copied.
-		final File expectedDeepestDir = new File(expectedDeeperDir, deepestDirName);
-		assertTrue(expectedDeepestDir.exists(),
-			"Directory " + expectedDeepestDir.getAbsolutePath() + " should be copied.");
-		// Check if the first file in the deeper directory inside the directory from the destination
-		// directory was copied.
-		final File expectedDeepestFile1 = new File(expectedDeepestDir, srcDeepestFileName1);
-		assertTrue(expectedDeepestFile1.exists(),
-			"File " + expectedDeepestFile1.getAbsolutePath() + " should be copied.");
-
-		// Check if the second file in the deeper directory inside the directory from the
-		// destination directory was copied.
-		final File expectedDeepestFile2 = new File(expectedDeepestDir, srcDeepestFileName2);
-		assertTrue(expectedDeepestFile2.exists(),
-			"File " + expectedDeepestFile2.getAbsolutePath() + " should be copied.");
-
-		// Check if the excluded file inside the deepest destination directory was not copied
-		final File notExpectedDeepestFile3 = new File(expectedDeepestDir, srcDeepestFileName3);
-		assertFalse(notExpectedDeepestFile3.exists(),
-			"File " + notExpectedDeepestFile3.getAbsolutePath() + " should not be copied.");
-	}
-
-	/**
 	 * Test method for {@link CopyFileExtensions#copyFile(File, File)}
 	 *
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 */
 	@Test
-	public void testCopyFileFileFile() throws IOException, FileIsADirectoryException
+	public void testCopyFileFileFile() throws IOException
 	{
 		try
 		{
@@ -680,11 +279,9 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
 	 */
 	@Test
-	public void testCopyFileFileFileBoolean() throws IOException, FileIsADirectoryException
+	public void testCopyFileFileFileBoolean() throws IOException
 	{
 		try
 		{
@@ -710,18 +307,13 @@ public class CopyFileExtensionsTest extends FileTestCase
 	/**
 	 * Test method for {@link CopyFileExtensions#copyFileToDirectory(File, File)}
 	 *
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
 	 * @throws FileIsNotADirectoryException
 	 *             the file is not a directory exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 * @throws FileIsADirectoryException
-	 *             the file is a directory exception
 	 */
 	@Test
-	public void testCopyFileToDirectoryFileFile() throws DirectoryAlreadyExistsException,
-		FileIsNotADirectoryException, IOException, FileIsADirectoryException
+	public void testCopyFileToDirectoryFileFile() throws FileIsNotADirectoryException, IOException
 	{
 		// Try to copy the file srcFile into the destination directory.
 		actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDeepDir);
@@ -741,14 +333,10 @@ public class CopyFileExtensionsTest extends FileTestCase
 	 *             the file is not a directory exception
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
-	 * @throws FileIsADirectoryException
-	 *             the file is a directory exception
-	 * @throws DirectoryAlreadyExistsException
-	 *             the directory allready exists exception
 	 */
 	@Test
-	public void testCopyFileToDirectoryFileFileBoolean() throws FileIsNotADirectoryException,
-		IOException, FileIsADirectoryException, DirectoryAlreadyExistsException
+	public void testCopyFileToDirectoryFileFileBoolean()
+		throws FileIsNotADirectoryException, IOException
 	{
 		// Try to copy the file srcFile into the destination directory.
 		actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDeepDir, false);

@@ -26,31 +26,28 @@ package io.github.astrapi69.file.copy;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
-import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
-import io.github.astrapi69.file.exception.FileIsADirectoryException;
 import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
-import io.github.astrapi69.file.exception.FileIsSecurityRestrictedException;
 import io.github.astrapi69.io.StreamExtensions;
-import io.github.astrapi69.io.file.FileConstants;
 import io.github.astrapi69.io.file.FileExtension;
+import io.github.astrapi69.io.file.FileSize;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
- * The class {@link CopyFileExtensions} helps you to copy files or directories.
+ * The class {@link CopyFileExtensions} helps you to copy files.
  */
 public final class CopyFileExtensions
 {
@@ -63,404 +60,67 @@ public final class CopyFileExtensions
 	}
 
 	/**
-	 * Copies the given source directory to the given destination directory.
+	 * Copies the given source file to the destination file
 	 *
 	 * @param source
-	 *            The source directory.
+	 *            The source file
 	 * @param destination
-	 *            The destination directory.
-	 *
-	 * @return 's true if the directory is copied, otherwise false.
-	 *
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
+	 *            The destination file
+	 * @return true if the file was successfully copied, otherwise false
 	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
+	 *             if an I/O error occurs during the copy
 	 */
-	public static boolean copyDirectory(final File source, final File destination)
-		throws FileIsSecurityRestrictedException, IOException, FileIsADirectoryException,
-		FileIsNotADirectoryException, DirectoryAlreadyExistsException
+	public static boolean copyFile(Path source, Path destination) throws IOException
 	{
-		return copyDirectory(source, destination, true);
+		Objects.requireNonNull(source, "source must not be null");
+		Objects.requireNonNull(destination, "destination must not be null");
+		if (Files.isDirectory(source))
+		{
+			throw new IllegalArgumentException("Source must be a file: " + source);
+		}
+		Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+		return true;
 	}
 
 	/**
-	 * Copies the given source directory to the given destination directory with the option to set
-	 * the lastModified time from the given destination file or directory.
+	 * Copies multiple files to the destination directory
 	 *
-	 * @param source
-	 *            The source directory.
+	 * @param sources
+	 *            List of source files to copy
 	 * @param destination
-	 *            The destination directory.
-	 * @param lastModified
-	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
-	 *            the destination file.
-	 *
-	 * @return 's true if the directory is copied, otherwise false.
-	 *
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
+	 *            The destination directory
 	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
+	 *             if an I/O error occurs during the copy
 	 */
-	public static boolean copyDirectory(final File source, final File destination,
-		final boolean lastModified) throws FileIsSecurityRestrictedException, IOException,
-		FileIsADirectoryException, FileIsNotADirectoryException, DirectoryAlreadyExistsException
+	public static void copyFiles(Collection<Path> sources, Path destination) throws IOException
 	{
-		return copyDirectoryWithFileFilter(source, destination, null, lastModified);
+		Objects.requireNonNull(sources, "sources must not be null");
+		Objects.requireNonNull(destination, "destination must not be null");
+		if (!Files.isDirectory(destination))
+		{
+			Files.createDirectories(destination);
+		}
+		for (Path source : sources)
+		{
+			copyFile(source, destination.resolve(source.getFileName()));
+		}
 	}
 
 	/**
-	 * Copies all files that match to the FileFilter from the given source directory to the given
-	 * destination directory with the option to set the lastModified time from the given destination
-	 * file or directory.
+	 * Creates a backup file with ".bak" extension in the same directory as the original file
 	 *
-	 * @param source
-	 *            The source directory.
-	 * @param destination
-	 *            The destination directory.
-	 * @param fileFilter
-	 *            The FileFilter for the files to be copied. If null all files will be copied.
-	 * @param lastModified
-	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
-	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @param file
+	 *            The file to back up
+	 * @return the path to the backup file
 	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the destination file is a directory.
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
+	 *             if an I/O error occurs during the copy
 	 */
-	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
-		final FileFilter fileFilter, final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
+	public static Path newBackupOf(Path file) throws IOException
 	{
-		return copyDirectoryWithFileFilter(source, destination, fileFilter, null, lastModified);
-	}
-
-	/**
-	 * Copies all files that match to the given includeFileFilter and does not copy all the files
-	 * that match the excludeFileFilter from the given source directory to the given destination
-	 * directory with the option to set the lastModified time from the given destination file or
-	 * directory.
-	 *
-	 * @param source
-	 *            The source directory.
-	 * @param destination
-	 *            The destination directory.
-	 * @param includeFileFilter
-	 *            The FileFilter for the files to be copied. If null all files will be copied.
-	 * @param excludeFileFilter
-	 *            The FileFilter for the files to be not copied. If null no files will be excluded
-	 *            by copy process.
-	 * @param lastModified
-	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
-	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the source or destination file is a directory.
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
-	 */
-	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
-		final FileFilter includeFileFilter, final FileFilter excludeFileFilter,
-		final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
-	{
-		return copyDirectoryWithFileFilter(source, destination, includeFileFilter,
-			excludeFileFilter, null, lastModified);
-	}
-
-	/**
-	 * Copies all files that match to the given includeFileFilter and does not copy all the files
-	 * that match the excludeFileFilter from the given source directory to the given destination
-	 * directory with the option to set the lastModified time from the given destination file or
-	 * directory.
-	 *
-	 * @param source
-	 *            The source directory.
-	 * @param destination
-	 *            The destination directory.
-	 * @param includeFileFilter
-	 *            The FileFilter for the files to be copied. If null all files will be copied.
-	 * @param excludeFileFilter
-	 *            The FileFilter for the files to be not copied. If null no files will be excluded
-	 *            by copy process.
-	 * @param excludeFiles
-	 *            A list of files that should be not copied. If null no files will be excluded by
-	 *            copy process.
-	 * @param lastModified
-	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
-	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws FileIsADirectoryException
-	 *             Is thrown if the source or destination file is a directory.
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 * @throws DirectoryAlreadyExistsException
-	 *             Is thrown if the directory all ready exists.
-	 */
-	public static boolean copyDirectoryWithFileFilter(final File source, final File destination,
-		final FileFilter includeFileFilter, final FileFilter excludeFileFilter,
-		final Collection<File> excludeFiles, final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsADirectoryException,
-		FileIsSecurityRestrictedException, DirectoryAlreadyExistsException
-	{
-		if (!source.isDirectory())
-		{
-			throw new FileIsNotADirectoryException(
-				"Source file '" + source.getAbsolutePath() + "' is not a directory.");
-		}
-		if (!destination.exists())
-		{
-			DirectoryFactory.newDirectory(destination);
-		}
-		boolean copied = false;
-		File[] includeFilesArray;
-
-		if (null != includeFileFilter)
-		{
-			includeFilesArray = source.listFiles(includeFileFilter);
-		}
-		else
-		{
-			includeFilesArray = source.listFiles();
-		}
-		if (null != includeFilesArray)
-		{
-			File[] excludeFilesArray;
-			List<File> allExcludeFilesList = null;
-			List<File> excludeFileFilterList;
-			if (null != excludeFileFilter)
-			{
-				excludeFilesArray = source.listFiles(excludeFileFilter);
-				excludeFileFilterList = Arrays.asList(excludeFilesArray);
-				allExcludeFilesList = new ArrayList<>(excludeFileFilterList);
-			}
-			if (excludeFiles != null && !excludeFiles.isEmpty())
-			{
-				if (allExcludeFilesList != null)
-				{
-					allExcludeFilesList.addAll(excludeFiles);
-				}
-				else
-				{
-					allExcludeFilesList = new ArrayList<>(excludeFiles);
-				}
-			}
-			// if excludeFilesList is not null and not empty
-			if (null != allExcludeFilesList && !allExcludeFilesList.isEmpty())
-			{
-
-				for (final File currentFile : includeFilesArray)
-				{
-					// if the excludeFilesList does not contain the current file do copy...
-					if (!allExcludeFilesList.contains(currentFile))
-					{
-						final File copy = new File(destination, currentFile.getName());
-						if (currentFile.isDirectory())
-						{
-							// copy directory recursive...
-							copied = copyDirectoryWithFileFilter(currentFile, copy,
-								includeFileFilter, excludeFileFilter, lastModified);
-						}
-						else
-						{
-							copied = copyFile(currentFile, copy, lastModified);
-						}
-					} // otherwise do not copy the current file...
-				}
-			}
-			else
-			{ // otherwise copy all files and directories
-				for (final File currentFile : includeFilesArray)
-				{
-					final File copy = new File(destination, currentFile.getName());
-					if (currentFile.isDirectory())
-					{
-						// copy directory recursive...
-						copied = copyDirectoryWithFileFilter(currentFile, copy, includeFileFilter,
-							excludeFileFilter, lastModified);
-					}
-					else
-					{
-						copied = copyFile(currentFile, copy, lastModified);
-					}
-				}
-			}
-		}
-		else
-		{
-			throw new FileIsSecurityRestrictedException(
-				"File '" + source.getAbsolutePath() + "' is security restricted.");
-		}
-		return copied;
-	}
-
-	/**
-	 * Copies all files that match to the FilenameFilter from the given source directory to the
-	 * given destination directory with the option to set the lastModified time from the given
-	 * destination file or directory.
-	 *
-	 * @param source
-	 *            The source directory.
-	 * @param destination
-	 *            The destination directory.
-	 * @param filenameFilter
-	 *            The FilenameFilter for the files to be copied. If null all files will be copied.
-	 * @param lastModified
-	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
-	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 */
-	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
-		final FilenameFilter filenameFilter, final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsSecurityRestrictedException
-	{
-		return copyDirectoryWithFilenameFilter(source, destination, filenameFilter, null,
-			lastModified);
-	}
-
-	/**
-	 * Copies all files that match to the given includeFilenameFilter and does not copy all the
-	 * files that match the excludeFilenameFilter from the given source directory to the given
-	 * destination directory with the option to set the lastModified time from the given destination
-	 * file or directory.
-	 *
-	 * @param source
-	 *            The source directory.
-	 * @param destination
-	 *            The destination directory.
-	 * @param includeFilenameFilter
-	 *            The FilenameFilter for the files to be copied. If null all files will be copied.
-	 * @param excludeFilenameFilter
-	 *            The FilenameFilter for the files to be not copied. If null no files will be
-	 *            excluded by copy process.
-	 * @param lastModified
-	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
-	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
-	 * @throws IOException
-	 *             Is thrown if an error occurs by reading or writing.
-	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
-	 * @throws FileIsSecurityRestrictedException
-	 *             Is thrown if the source file is security restricted.
-	 */
-	public static boolean copyDirectoryWithFilenameFilter(final File source, final File destination,
-		final FilenameFilter includeFilenameFilter, final FilenameFilter excludeFilenameFilter,
-		final boolean lastModified)
-		throws IOException, FileIsNotADirectoryException, FileIsSecurityRestrictedException
-	{
-		if (!source.isDirectory())
-		{
-			throw new FileIsNotADirectoryException(
-				"Source file '" + source.getAbsolutePath() + "' is not a directory.");
-		}
-		if (!destination.exists())
-		{
-			DirectoryFactory.newDirectory(destination);
-		}
-		boolean copied = false;
-		File[] includeFilesArray;
-		if (null != includeFilenameFilter)
-		{
-			includeFilesArray = source.listFiles(includeFilenameFilter);
-		}
-		else
-		{
-			includeFilesArray = source.listFiles();
-		}
-		if (null != includeFilesArray)
-		{
-			File[] excludeFilesArray;
-			List<File> excludeFilesList = null;
-			if (null != excludeFilenameFilter)
-			{
-				excludeFilesArray = source.listFiles(excludeFilenameFilter);
-				excludeFilesList = Arrays.asList(excludeFilesArray);
-			}
-			// if excludeFilesList is not null and not empty
-			if (null != excludeFilesList && !excludeFilesList.isEmpty())
-			{
-				for (final File currentFile : includeFilesArray)
-				{
-					// if the excludeFilesList does not contain the current file do copy...
-					if (!excludeFilesList.contains(currentFile))
-					{
-						final File copy = new File(destination, currentFile.getName());
-						if (currentFile.isDirectory())
-						{
-							// copy directory recursive...
-							copied = copyDirectoryWithFilenameFilter(currentFile, copy,
-								includeFilenameFilter, excludeFilenameFilter, lastModified);
-						}
-						else
-						{
-							copied = copyFile(currentFile, copy, lastModified);
-						}
-					} // otherwise do not copy the current file...
-				}
-			}
-			else
-			{
-				for (final File currentFile : includeFilesArray)
-				{
-					final File copy = new File(destination, currentFile.getName());
-					if (currentFile.isDirectory())
-					{
-						// copy directory recursive...
-						copied = copyDirectoryWithFilenameFilter(currentFile, copy,
-							includeFilenameFilter, excludeFilenameFilter, lastModified);
-					}
-					else
-					{
-						copied = copyFile(currentFile, copy, lastModified);
-					}
-				}
-			}
-		}
-		else
-		{
-			throw new FileIsSecurityRestrictedException(
-				"File '" + source.getAbsolutePath() + "' is security restricted.");
-		}
-		return copied;
+		Objects.requireNonNull(file, "file must not be null");
+		Path backup = Paths.get(file.toString() + ".bak");
+		copyFile(file, backup);
+		return backup;
 	}
 
 	/**
@@ -549,7 +209,7 @@ public final class CopyFileExtensions
 				: new OutputStreamWriter(bos))
 		{
 			int tmp;
-			final char[] charArray = new char[FileConstants.BLOCKSIZE];
+			final char[] charArray = new char[FileSize.DEFAULT_BLOCK_SIZE.getSize()];
 			while ((tmp = reader.read(charArray)) > 0)
 			{
 				writer.write(charArray, 0, tmp);
@@ -576,9 +236,9 @@ public final class CopyFileExtensions
 	 * @param destinationEncoding
 	 *            the destination encoding
 	 * @param lastModified
-	 *            if true the last modified flag is set
+	 *            if true, the last modified flag is set
 	 */
-	public static void copyFiles(final List<File> sources, final File destination,
+	public static void copyFiles(final Collection<File> sources, final File destination,
 		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
 	{
 		if (!destination.exists())

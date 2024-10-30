@@ -32,7 +32,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
-import io.github.astrapi69.file.create.FileCreationState;
+import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.DirectoryAlreadyExistsException;
 import io.github.astrapi69.test.base.BaseTestCase;
