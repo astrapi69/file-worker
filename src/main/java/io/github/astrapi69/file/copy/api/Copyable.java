@@ -104,30 +104,40 @@ public interface Copyable
 	}
 
 	/**
-	 * Copies multiple files to the destination directory.
+	 * Copies the given source file to the given destination file with the given source encodings
+	 * and destination encodings.
 	 *
 	 * @param sources
-	 *            List of source files to copy
+	 *            the files the have to be copied
 	 * @param destination
-	 *            The destination directory
-	 * @throws IOException
-	 *             if an I/O error occurs during the copy
+	 *            the destination
+	 * @param sourceEncoding
+	 *            the source encoding
+	 * @param destinationEncoding
+	 *            the destination encoding
+	 * @param lastModified
+	 *            if true, the last modified flag is set
 	 */
 	default void copyFiles(Collection<File> sources, File destination, final Charset sourceEncoding,
-		final Charset destinationEncoding, final boolean lastModified) throws IOException
+		final Charset destinationEncoding, final boolean lastModified)
 	{
 		CopyFileExtensions.copyFiles(sources, destination, sourceEncoding, destinationEncoding,
 			lastModified);
 	}
 
 	/**
-	 * Creates a backup file with ".bak" extension in the same directory as the original file.
+	 * Creates a backup file in the same directory with the same name of the given file and with the
+	 * extension of '*.bak'.
 	 *
 	 * @param file
-	 *            The file to back up
-	 * @return the path to the backup file
+	 *            the file to backup.
+	 * @param sourceEncoding
+	 *            the source encoding of the file to backup.
+	 * @param destinationEncoding
+	 *            the destination encoding of the backup file. This can be null.
+	 * @return the created backup file.
 	 * @throws IOException
-	 *             if an I/O error occurs during the copy
+	 *             Signals that an I/O exception has occurred.
 	 */
 	default File newBackupOf(File file, final Charset sourceEncoding,
 		final Charset destinationEncoding) throws IOException
