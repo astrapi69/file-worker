@@ -1,9 +1,12 @@
 ## Change log
 ----------------------
 
-Version 18.2-SNAPSHOT
+Version 19.0-SNAPSHOT
 -------------
 
+CHANGED:
+
+- update to jdk version to version 21
 
 Version 18.1
 -------------
