@@ -177,7 +177,7 @@ public final class FileFactory
 	 */
 	public static File newFile(final File parentDirectory, final String filename) throws IOException
 	{
-		if (!parentDirectory.isDirectory())
+		if (parentDirectory.exists() && !parentDirectory.isDirectory())
 		{
 			throw new RuntimeException("Given parent file is not a directory");
 		}
@@ -187,7 +187,7 @@ public final class FileFactory
 	}
 
 	/**
-	 * Factory method for creating the new {@link File} if it is not exists.
+	 * Factory method for creating the new {@link File} object if it does not exist
 	 *
 	 * @param parentDirectory
 	 *            the parent directory
