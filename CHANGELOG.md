@@ -1,17 +1,18 @@
 ## Change log
 ----------------------
 
-Version 19.0-SNAPSHOT
+Version 19.0
 -------------
 
 ADDED:
 
 - `setSystemProperties` method to set system properties from a provided `Properties` object, allowing convenient bulk assignment of system properties
+- added new property for the gradle-plugin version-catalog-update for resolve dependency-versions with ease
 
 CHANGED:
 
-- update gradle to new version 8.11-rc-3
 - update to jdk version to version 21
+- update gradle to new version 8.11-rc-3
 
 Version 18.1
 -------------

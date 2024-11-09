@@ -1,6 +1,7 @@
 dependencies {
     // Note: use of bundles...
     implementation libs.bundles.core.dependencies
+
     testImplementation libs.bundles.unit.testing
     testRuntimeOnly libs.bundles.test.runtime.only
 }
