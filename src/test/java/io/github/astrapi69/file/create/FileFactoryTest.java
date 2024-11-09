@@ -45,6 +45,7 @@ import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.create.model.FileInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.file.system.SystemFileExtensions;
 
 /**
@@ -67,7 +68,7 @@ public class FileFactoryTest extends FileTestCase
 	}
 
 	/**
-	 * Tear down method will be invoked after every unit test method in this class.
+	 * Teardown method will be invoked after every unit test method in this class.
 	 *
 	 * @throws Exception
 	 *             is thrown if an exception occurs
@@ -100,6 +101,29 @@ public class FileFactoryTest extends FileTestCase
 			file = FileFactory.newFile(parentDirectory, filename);
 			FileFactory.newFile(file, "newFooBarDir");
 		});
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newFile(File, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void testNewFileWithParentAndFileNameWhereParentDoesntExist() throws IOException
+	{
+		String newDirectoryName;
+		File newDirectory;
+		File newFile;
+		// new scenario...
+		newDirectoryName = "foobar";
+		newDirectory = new File(PathFinder.getSrcTestResourcesDir(), newDirectoryName);
+		assertFalse(newDirectory.exists());
+		newFile = FileFactory.newFile(newDirectory, "newFooBarFile");
+		assertTrue(newFile.exists());
+		// clean up
+		DeleteFileExtensions.delete(newFile);
+		DeleteFileExtensions.delete(newDirectory);
 	}
 
 	/**

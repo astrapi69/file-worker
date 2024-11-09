@@ -203,7 +203,7 @@ public abstract class FileTestCase extends BaseTestCase
 	}
 
 	/**
-	 * Tear down.
+	 * Teardown method will be invoked after every unit test method in this class.
 	 *
 	 * @throws Exception
 	 *             the exception {@inheritDoc}

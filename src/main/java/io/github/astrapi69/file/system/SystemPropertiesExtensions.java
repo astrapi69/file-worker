@@ -24,6 +24,8 @@
  */
 package io.github.astrapi69.file.system;
 
+import java.util.Properties;
+
 /**
  * The {@code SystemPropertiesExtensions} class provides utility methods to retrieve common system
  * properties.
@@ -234,5 +236,16 @@ public final class SystemPropertiesExtensions
 	public static String getUserWorkingDirectory()
 	{
 		return System.getProperty(USER_DIR_PROPERTY_KEY);
+	}
+
+	/**
+	 * Sets each entry from the specified {@link Properties} as a system property
+	 *
+	 * @param properties
+	 *            the {@link Properties} to set as system properties
+	 */
+	public static void setSystemProperties(final Properties properties)
+	{
+		properties.forEach((key, value) -> System.setProperty(key.toString(), value.toString()));
 	}
 }
