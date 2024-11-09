@@ -4,8 +4,13 @@
 Version 19.0-SNAPSHOT
 -------------
 
+ADDED:
+
+- `setSystemProperties` method to set system properties from a provided `Properties` object, allowing convenient bulk assignment of system properties
+
 CHANGED:
 
+- update gradle to new version 8.11-rc-3
 - update to jdk version to version 21
 
 Version 18.1

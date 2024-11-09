@@ -74,7 +74,7 @@ public class DeleteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Tear down method will be invoked after every unit test method in this class.
+	 * Teardown method will be invoked after every unit test method in this class.
 	 *
 	 * @throws Exception
 	 *             is thrown if an exception occurs

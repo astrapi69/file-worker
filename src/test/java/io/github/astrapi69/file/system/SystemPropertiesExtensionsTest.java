@@ -24,8 +24,13 @@
  */
 package io.github.astrapi69.file.system;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.Properties;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -33,6 +38,53 @@ import org.junit.jupiter.api.Test;
  */
 public class SystemPropertiesExtensionsTest
 {
+
+	/**
+	 * Teardown method will be invoked after every unit test method in this class
+	 */
+	@AfterEach
+	void tearDown()
+	{
+		// Remove test properties after each test to avoid side effects
+		System.clearProperty("test.key1");
+		System.clearProperty("test.key2");
+	}
+
+	/**
+	 * Test method for {@link SystemPropertiesExtensions#setSystemProperties(Properties)}
+	 */
+	@Test
+	void testSetSystemProperties()
+	{
+		// Arrange
+		Properties properties = new Properties();
+		properties.setProperty("test.key1", "value1");
+		properties.setProperty("test.key2", "value2");
+
+		// Act
+		SystemPropertiesExtensions.setSystemProperties(properties);
+
+		// Assert
+		assertEquals("value1", System.getProperty("test.key1"));
+		assertEquals("value2", System.getProperty("test.key2"));
+	}
+
+	/**
+	 * Test method for {@link SystemPropertiesExtensions#setSystemProperties(Properties)}
+	 */
+	@Test
+	void testSetEmptySystemProperties()
+	{
+		// Arrange
+		Properties properties = new Properties();
+
+		// Act
+		SystemPropertiesExtensions.setSystemProperties(properties);
+
+		// Assert
+		assertNull(System.getProperty("test.key1"));
+		assertNull(System.getProperty("test.key2"));
+	}
 
 	/**
 	 * Test method for {@link SystemPropertiesExtensions#getFileSeparator()}
