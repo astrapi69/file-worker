@@ -35,6 +35,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.meanbean.test.BeanTester;
@@ -54,6 +55,44 @@ import io.github.astrapi69.file.write.LineAppender;
 public class ModifyFileExtensionsTest
 {
 
+
+	/**
+	 * Test method for {@link ModifyFileExtensions#concatenateAll(List, File)} Simple test case to
+	 * ensure that the method executes without throwing an exception
+	 */
+	@Test
+	@DisplayName("Test concatenateAll with example files")
+	@Disabled("only for local tests")
+	void concatenateContentOfAllFiles() throws IOException
+	{
+		List<File> textFiles;
+		List<String> textFilenames;
+		String baseDir;
+
+		baseDir = "/run/media/astrapi69/backups/git/hub/BürgerFreundlichePartei/grundsatzprogramm/";
+
+		textFiles = new ArrayList<>();
+		textFilenames = new ArrayList<>();
+		textFilenames.add("README.md");
+		textFilenames.add("Parteiprogramm.md");
+		textFilenames.add("Satzung.md");
+		textFilenames.add("Ziele.md");
+		textFilenames.add("FAQ.md");
+
+		for (String text : textFilenames)
+		{
+			textFiles.add(new File(baseDir + text));
+		}
+
+		File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(),
+			"concat-partei-docs.txt");
+
+		ModifyFileExtensions.concatenateAll(textFiles, resultTextFile);
+
+		// DeleteFileExtensions.deleteFile(resultTextFile);
+		// DeleteFileExtensions.delete(textFiles);
+	}
+
 	/**
 	 * Test method for {@link ModifyFileExtensions#concatenateAll(List, File)} Simple test case to
 	 * ensure that the method executes without throwing an exception
@@ -62,8 +101,9 @@ public class ModifyFileExtensionsTest
 	@DisplayName("Test concatenateAll with example files")
 	void concatenateEmptyFiles() throws IOException
 	{
+		List<File> textFiles;
 
-		List<File> textFiles = new ArrayList<>();
+		textFiles = new ArrayList<>();
 		File first = new File(PathFinder.getSrcTestResourcesDir(), "test1.txt");
 		File second = new File(PathFinder.getSrcTestResourcesDir(), "test2.txt");
 		textFiles.add(first);
