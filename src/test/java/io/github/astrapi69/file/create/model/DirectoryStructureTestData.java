@@ -101,6 +101,41 @@ public class DirectoryStructureTestData
 		return fileInfos;
 	}
 
+	public static List<FileContentInfo> newDataScienceDirStructure(String parentAbsolutePath)
+	{
+		List<FileContentInfo> fileInfos;
+		FileContentInfo fileContentInfo;
+		// new scenario...
+		fileInfos = ListFactory.newArrayList();
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("data")
+			.directory(true).build();
+		fileInfos.add(fileContentInfo);
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("models")
+			.directory(true).build();
+		fileInfos.add(fileContentInfo);
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("docs")
+			.directory(true).build();
+		fileInfos.add(fileContentInfo);
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("models")
+			.directory(true).build();
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("notebooks")
+			.directory(true).build();
+		fileInfos.add(fileContentInfo);
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("references")
+			.directory(true).build();
+		fileInfos.add(fileContentInfo);
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("reports")
+			.directory(true).build();
+		fileInfos.add(fileContentInfo);
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath + "/component")
+			.name("requirements.txt").content("".getBytes(StandardCharsets.UTF_8)).build();
+		fileInfos.add(fileContentInfo);
+		fileContentInfo = FileContentInfo.builder().path(parentAbsolutePath).name("src")
+			.directory(true).build();
+		fileInfos.add(fileContentInfo);
+		return fileInfos;
+	}
+
 	/**
 	 * create a collection with file infos with the following directory structure: <br>
 	 * <br>

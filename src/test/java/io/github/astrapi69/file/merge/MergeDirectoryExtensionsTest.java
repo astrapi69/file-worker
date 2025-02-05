@@ -179,7 +179,6 @@ public class MergeDirectoryExtensionsTest
 		DeleteFileExtensions.delete(rightSide);
 	}
 
-
 	/**
 	 * Test method for {@link MergeDirectoryExtensions#merge(File, File...)} research case for merge
 	 * strategies for instance: <br>

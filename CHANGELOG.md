@@ -4,6 +4,22 @@
 Version 19.1-SNAPSHOT
 -------------
 
+### Changed
+- Updated `commons-io` to version 2.18.0
+- Updated `gradle-plugin-spotless` to version 7.0.2
+- Updated `gradle-plugin-versions` to version 0.52.0
+- Updated `jsoup` to version 1.18.3
+- Updated `junit-jupiter` and `junit-jupiter-params` to version 5.12.0-M1
+- Updated `mockito-core` to version 5.15.2
+- Updated `silly-io` to version 3.6
+- Upgraded `Gradle Wrapper` to version 8.12.1
+
+### Added
+- Added `newDataScienceDirStructure` method to `DirectoryStructureTestData` for structured test data generation.
+
+### Fixed
+- Disabled `nl.littlerobots.vcu.resolver` in `gradle.properties`
+- Removed unnecessary blank line in `MergeDirectoryExtensionsTest`
 
 Version 19.0
 -------------
