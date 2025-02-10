@@ -32,15 +32,12 @@ For detailed documentation, visit the **[File-Worker Wiki](https://github.com/as
 
 </div>
 
-> Please support this project by simply putting a
-> Github <!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/astrapi69/file-worker" data-icon="octicon-star" aria-label="Star astrapi69/file-worker on GitHub">
-> Star ⭐</a>
+> Please support this project by simply putting a Github <!-- Place this tag where you want the button to render. -->
+<a class="github-button" href="https://github.com/astrapi69/file-worker" data-icon="octicon-star" aria-label="Star astrapi69/file-worker on GitHub">Star ⭐</a>
 >
 > Share this library with friends on Twitter and everywhere else you can
 >
-> If you love this
-> project [![donation](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
+> If you love this project [![donation](https://img.shields.io/badge/donate-❤-ff2244.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GVBTWLRAZ7HB8)
 
 ## License
 
