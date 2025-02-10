@@ -10,7 +10,7 @@ Managing files and directories is a fundamental task in Java development. The **
 - Works across different platforms with system-level optimizations.
 - Actively maintained and open-source!
 
-📖 **Want to learn more?**  
+📖 **Want to learn more?**
 Check out the **[File-Worker Wiki](https://github.com/astrapi69/file-worker/wiki)** for complete documentation, usage guides, and code examples.
 
 # Overview
