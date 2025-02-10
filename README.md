@@ -1,4 +1,23 @@
+# File-Worker Library 📂
+
+**Effortless File and Directory Management in Java**
+
+Managing files and directories is a fundamental task in Java development. The **File-Worker** library provides a rich set of utilities to simplify operations such as file creation, deletion, renaming, modification, and more. Whether you're processing large datasets, managing log files, or handling structured file operations, File-Worker is your go-to solution.
+
+🚀 **Why Use File-Worker?**
+- Easy-to-use API for common file operations.
+- Robust utilities for searching, sorting, and modifying files.
+- Works across different platforms with system-level optimizations.
+- Actively maintained and open-source!
+
+📖 **Want to learn more?**  
+Check out the **[File-Worker Wiki](https://github.com/astrapi69/file-worker/wiki)** for complete documentation, usage guides, and code examples.
+
 # Overview
+
+## 📖 Documentation
+
+For detailed documentation, visit the **[File-Worker Wiki](https://github.com/astrapi69/file-worker/wiki)**.
 
 <div style="text-align: center">
 
@@ -12,8 +31,6 @@
 [![Hits Of Code](https://hitsofcode.com/github/astrapi69/file-worker?branch=develop)](https://hitsofcode.com/github/astrapi69/file-worker/view?branch=develop)
 
 </div>
-
-Project that holds utility class for file operations.
 
 > Please support this project by simply putting a
 > Github <!-- Place this tag where you want the button to render. -->
@@ -30,101 +47,11 @@ Project that holds utility class for file operations.
 The source code comes under the liberal MIT License, making file-worker great for all types of
 applications.
 
-## gradle dependency
+## Dependencies
 
-Replace the variable ${latestVersion} with the current latest
-version: [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.astrapi69/file-worker)
+For installation and dependencies, refer to the [Getting Started](https://github.com/astrapi69/file-worker/wiki/Getting-Started) guide.
 
-You can first define the version in the ext section and add than the following gradle dependency to
-your project `build.gradle` if you want to import the core functionality of file-worker:
-
-define version in file gradle.properties
-
-```
-fileWorkerVersion=${latestVersion}
-```
-
-or in build.gradle ext area
-
-```
-    fileWorkerVersion = "${latestVersion}"
-```
-
-and then add the dependency to the dependencies area
-
-```
-    implementation("io.github.astrapi69:file-worker:$fileWorkerVersion")
-```
-
-# with new libs.versions.toml file
-
-If you use the new libs.versions.toml file for new automatic catalog versions update
-
-```
-[versions]
-file-worker-version=${latestVersion}
-
-[libraries]
-file-worker = { module = "io.github.astrapi69:file-worker", version.ref = "file-worker-version" }
-```
-then add the dependency to the dependencies area
-
-```
-    implementation libs.file.worker
-```
-
-## 📸 Snapshots
-
-[![Snapshot](https://img.shields.io/badge/dynamic/xml?url=https://oss.sonatype.org/service/local/repositories/snapshots/content/io/github/astrapi69/file-worker/maven-metadata.xml&label=snapshot&color=red&query=.//versioning/latest)](https://oss.sonatype.org/content/repositories/snapshots/io/github/astrapi69/file-worker/)
-
-This section describes how to import snapshot versions into your project.
-Add the following code snippet to your gradle file in the repositories section:
-
-```
-repositories {
-   //...
-```
-
-```groovy
-    maven {
-        name "Sonatype Nexus Snapshots"
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-        mavenContent {
-            snapshotsOnly()
-        }
-    }
-```
-
-```
-}
-```
-
-## Maven dependency
-
-Maven dependency is now on sonatype. Check
-out [sonatype repository](https://oss.sonatype.org/index.html#nexus-search;gav~io.github.astrapi69~file-worker~~~)
-for latest snapshots and releases.
-
-Add the following maven dependency to your project `pom.xml` if you want to import the core
-functionality of file-worker:
-
-    <properties>
-            ...
-        <!-- FILE-WORKER version -->
-        <file-worker.version>${latestVersion}</file-worker.version>
-            ...
-    </properties>
-            ...
-        <dependencies>
-            ...
-            <!-- FILE-WORKER DEPENDENCY -->
-            <dependency>
-                <groupId>io.github.astrapi69</groupId>
-                <artifactId>file-worker</artifactId>
-                <version>${file-worker.version}</version>
-            </dependency>
-            ...
-        </dependencies>
+---
 
 ## Semantic Versioning
 
