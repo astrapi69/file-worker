@@ -1,16 +1,12 @@
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        name = "github jobj-contract-verifier releases"
-        url "https://github.com/astrapi69/jobj-contract-verifier/raw/master/releases"
-    }
     /**
      * This repository is intended for release versions
      **/
     maven {
-        name "$projectRepositoriesReleasesName"
-        url "$projectRepositoriesReleasesRepoUrl"
+        setName(projectRepositoriesReleasesName)
+        setUrl(projectRepositoriesReleasesRepoUrl)
         mavenContent {
             releasesOnly()
         }
@@ -20,8 +16,8 @@ repositories {
      * on the specified url for snapshots
      **/
     maven {
-        name "$projectRepositoriesSnapshotsName"
-        url "$projectRepositoriesSnapshotsRepoUrl"
+        setName(projectRepositoriesSnapshotsName)
+        setUrl(projectRepositoriesSnapshotsRepoUrl)
         mavenContent {
             snapshotsOnly()
         }

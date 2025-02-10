@@ -1,4 +1,5 @@
-def releaseVersion = !version.endsWith("SNAPSHOT")
+def snapshotVersion = version.endsWith("SNAPSHOT")
+def releaseVersion = !snapshotVersion
 
 task sourcesJar(type: Jar) {
     archiveClassifier.set("sources")
@@ -62,13 +63,15 @@ publishing {
     }
     repositories {
         maven {
-            credentials {
-                username System.getenv("$projectRepositoriesUserNameKey") ?: project.property("$projectRepositoriesUserNameKey")
-                password System.getenv("$projectRepositoriesPasswordKey") ?: project.property("$projectRepositoriesPasswordKey")
+            if (releaseVersion) {
+                credentials {
+                    setUsername(System.getenv("$projectRepositoriesUserNameKey") ?: project.property("$projectRepositoriesUserNameKey") as String)
+                    setPassword(System.getenv("$projectRepositoriesPasswordKey") ?: project.property("$projectRepositoriesPasswordKey") as String)
+                }
             }
-            def releasesRepoUrl = "$projectRepositoriesReleasesRepoUrl"
-            def snapshotsRepoUrl = "$projectRepositoriesSnapshotsRepoUrl"
-            url = releaseVersion ? releasesRepoUrl : snapshotsRepoUrl
+            def releasesRepoUrl = "$projectRepositoriesReleasesRepoUrl" as Object
+            def snapshotsRepoUrl = "$projectRepositoriesSnapshotsRepoUrl" as Object
+            setUrl(releaseVersion ? releasesRepoUrl : snapshotsRepoUrl)
         }
     }
 }

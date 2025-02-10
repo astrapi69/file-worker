@@ -4,12 +4,28 @@
 Version 19.1-SNAPSHOT
 -------------
 
+## [Unreleased]
+
+### 🔄 Refactor
+- **Gradle Configuration Cleanup**
+  - Moved exclusion lists to `gradle/list/` for better organization.
+  - Introduced `java-compile.gradle` for Java compilation settings.
+  - Updated `apply-gradle-files.gradle` to handle exclusions properly.
+  - Improved property handling in `repositories.gradle`, `packaging.gradle`, and `publishing.gradle`.
+
+### 🗑️ Cleanup
+- **Removed obsolete IntelliJ run configurations**
+  - Deleted outdated Gradle run configurations for `dependencyUpdates`, `spotlessJavaApply`, and `spotlessMiscApply`.
+
+### ⬆️ Dependency Updates
+- **JUnit Jupiter**
+  - Upgraded `junit-jupiter` and `junit-jupiter-params` to `5.12.0-RC1`.
+
 ### Changed
 - Updated `commons-io` to version 2.18.0
 - Updated `gradle-plugin-spotless` to version 7.0.2
 - Updated `gradle-plugin-versions` to version 0.52.0
 - Updated `jsoup` to version 1.18.3
-- Updated `junit-jupiter` and `junit-jupiter-params` to version 5.12.0-M1
 - Updated `mockito-core` to version 5.15.2
 - Updated `silly-io` to version 3.6
 - Upgraded `Gradle Wrapper` to version 8.12.1
