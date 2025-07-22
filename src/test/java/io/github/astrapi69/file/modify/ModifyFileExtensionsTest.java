@@ -61,7 +61,7 @@ public class ModifyFileExtensionsTest
 	 */
 	@Test
 	@DisplayName("Test concatenateAll with example files")
-//	@Disabled("only for local tests")
+	@Disabled("only for local tests")
 	void concatenateContentOfAllMarkdownFiles() throws IOException
 	{
 		List<File> markdownFiles;
