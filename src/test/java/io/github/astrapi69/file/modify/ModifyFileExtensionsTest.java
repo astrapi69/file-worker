@@ -55,6 +55,30 @@ import io.github.astrapi69.file.write.LineAppender;
 public class ModifyFileExtensionsTest
 {
 
+	/**
+	 * Test method for {@link ModifyFileExtensions#concatenateAll(List, File)} Simple test case to
+	 * ensure that the method executes without throwing an exception
+	 */
+	@Test
+	@DisplayName("Test concatenateAll with example files")
+	@Disabled("only for local tests")
+	void concatenateContentOfAllMarkdownFiles() throws IOException
+	{
+		List<File> markdownFiles;
+		String baseDir;
+		baseDir = "/run/media/astrapi69/backups/git/hub/astrapi69/chats-with-ai/prompts/";
+
+		try {
+			markdownFiles = MarkdownFileCollector.getMarkdownFiles(baseDir);
+
+			File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(),
+					"concat-prompts.md");
+
+			ModifyFileExtensions.concatenateAll(markdownFiles, resultTextFile);
+		} catch (IOException e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+	}
 
 	/**
 	 * Test method for {@link ModifyFileExtensions#concatenateAll(List, File)} Simple test case to
@@ -69,7 +93,7 @@ public class ModifyFileExtensionsTest
 		List<String> textFilenames;
 		String baseDir;
 
-		baseDir = "/run/media/astrapi69/backups/git/hub/BürgerFreundlichePartei/grundsatzprogramm/";
+		baseDir = "/run/media/astrapi69/backups/git/hub/astrapi69/chats-with-ai/prompts/zugewinnausgleich/";
 
 		textFiles = new ArrayList<>();
 		textFilenames = new ArrayList<>();
