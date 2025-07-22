@@ -61,7 +61,7 @@ public class ModifyFileExtensionsTest
 	 */
 	@Test
 	@DisplayName("Test concatenateAll with example files")
-	@Disabled("only for local tests")
+//	@Disabled("only for local tests")
 	void concatenateContentOfAllMarkdownFiles() throws IOException
 	{
 		List<File> markdownFiles;
@@ -69,7 +69,7 @@ public class ModifyFileExtensionsTest
 		baseDir = "/run/media/astrapi69/backups/git/hub/astrapi69/chats-with-ai/prompts/";
 
 		try {
-			markdownFiles = MarkdownFileCollector.getMarkdownFiles(baseDir);
+			markdownFiles = MarkdownFileCollector.getFilesWithExtension(baseDir, ".md");
 
 			File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(),
 					"concat-prompts.md");

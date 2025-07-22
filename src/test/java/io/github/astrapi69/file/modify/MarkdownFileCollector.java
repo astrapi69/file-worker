@@ -21,13 +21,7 @@ public class MarkdownFileCollector {
     }
 
     public static List<File> getMarkdownFiles(String directoryPath) throws IOException {
-        try (Stream<Path> paths = Files.walk(Paths.get(directoryPath))) {
-            return paths
-                .filter(Files::isRegularFile)
-                .filter(path -> path.toString().endsWith(".md"))
-                .map(Path::toFile)
-                .collect(Collectors.toList());
-        }
+        return getFilesWithExtension(directoryPath, "md");
     }
     /**
      * Returns a list of files with the given extension in the specified directory and its subdirectories
