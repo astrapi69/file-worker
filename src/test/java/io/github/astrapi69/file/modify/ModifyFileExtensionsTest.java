@@ -68,14 +68,17 @@ public class ModifyFileExtensionsTest
 		String baseDir;
 		baseDir = "/run/media/astrapi69/backups/git/hub/astrapi69/chats-with-ai/prompts/";
 
-		try {
+		try
+		{
 			markdownFiles = MarkdownFileCollector.getFilesWithExtension(baseDir, ".md");
 
 			File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(),
-					"concat-prompts.md");
+				"concat-prompts.md");
 
 			ModifyFileExtensions.concatenateAll(markdownFiles, resultTextFile);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			System.err.println("Error: " + e.getMessage());
 		}
 	}

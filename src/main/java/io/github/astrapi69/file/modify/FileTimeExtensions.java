@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 /**
- * Utility class for retrieving specific file timestamps such as creation, last modified, and last access time
- * from a given {@link File} or {@link Path} and converting them to {@link LocalDateTime}
+ * Utility class for retrieving specific file timestamps such as creation, last modified, and last
+ * access time from a given {@link File} or {@link Path} and converting them to
+ * {@link LocalDateTime}
  */
 public class FileTimeExtensions
 {
@@ -54,16 +55,16 @@ public class FileTimeExtensions
 
 		switch (type)
 		{
-			case CREATION:
+			case CREATION :
 				instant = attrs.creationTime().toInstant();
 				break;
-			case LAST_MODIFIED:
+			case LAST_MODIFIED :
 				instant = attrs.lastModifiedTime().toInstant();
 				break;
-			case LAST_ACCESS:
+			case LAST_ACCESS :
 				instant = attrs.lastAccessTime().toInstant();
 				break;
-			default:
+			default :
 				throw new IllegalArgumentException("Unsupported timestamp type: " + type);
 		}
 

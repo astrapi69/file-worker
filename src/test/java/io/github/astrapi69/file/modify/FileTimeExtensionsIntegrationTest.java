@@ -1,10 +1,6 @@
 package io.github.astrapi69.file.modify;
 
-import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.search.PathFinder;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +11,12 @@ import java.nio.file.attribute.FileTime;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import io.github.astrapi69.file.create.FileFactory;
+import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * Integration tests for {@link FileTimeExtensions}
@@ -23,8 +24,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileTimeExtensionsIntegrationTest
 {
 	/**
-	 * Verifies that the last modified timestamp changes after calling {@link BasicFileAttributeView#setTimes}
-	 * and {@link Files#setLastModifiedTime(Path, FileTime)} on a temporary copy of the foo.pdf test resource
+	 * Verifies that the last modified timestamp changes after calling
+	 * {@link BasicFileAttributeView#setTimes} and {@link Files#setLastModifiedTime(Path, FileTime)}
+	 * on a temporary copy of the foo.pdf test resource
 	 *
 	 * @param tempDir
 	 *            JUnit-provided temporary directory (unique per test run)
@@ -43,15 +45,19 @@ class FileTimeExtensionsIntegrationTest
 		Files.copy(sourceFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
 
 		// Ensure the FS supports BasicFileAttributeView
-		BasicFileAttributeView view = Files.getFileAttributeView(targetPath, BasicFileAttributeView.class);
-		Assumptions.assumeTrue(view != null, "BasicFileAttributeView not supported on this filesystem; skipping test");
+		BasicFileAttributeView view = Files.getFileAttributeView(targetPath,
+			BasicFileAttributeView.class);
+		Assumptions.assumeTrue(view != null,
+			"BasicFileAttributeView not supported on this filesystem; skipping test");
 
 		// Read original timestamp
-		LocalDateTime originalLastModified = FileTimeExtensions.getTimestamp(targetPath, FileTimestampType.LAST_MODIFIED);
+		LocalDateTime originalLastModified = FileTimeExtensions.getTimestamp(targetPath,
+			FileTimestampType.LAST_MODIFIED);
 
 		// Prepare new timestamp (same as your example)
 		LocalDateTime newDateTime = LocalDateTime.of(2016, 4, 16, 14, 23);
-		FileTime newFileTime = FileTime.from(newDateTime.atZone(ZoneId.systemDefault()).toInstant());
+		FileTime newFileTime = FileTime
+			.from(newDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		// --- Act -------------------------------------------------------------
 		// NOTE: order is (lastModifiedTime, lastAccessTime, createTime)
@@ -61,7 +67,8 @@ class FileTimeExtensionsIntegrationTest
 		Files.setLastModifiedTime(targetPath, newFileTime);
 
 		// --- Assert ----------------------------------------------------------
-		LocalDateTime changedLastModified = FileTimeExtensions.getTimestamp(targetPath, FileTimestampType.LAST_MODIFIED);
+		LocalDateTime changedLastModified = FileTimeExtensions.getTimestamp(targetPath,
+			FileTimestampType.LAST_MODIFIED);
 		System.out.println("Original last modified: " + originalLastModified);
 		System.out.println("Changed  last modified: " + changedLastModified);
 
@@ -71,8 +78,10 @@ class FileTimeExtensionsIntegrationTest
 		long diff = Math.abs(expectedMillis - actualMillis);
 
 		// Accept difference <= 1000ms (coarse FS) but assert changed value from original
-		assertNotEquals(originalLastModified, changedLastModified, "Last modified timestamp should have changed");
-		assertTrue(diff <= 1000 || changedLastModified.isEqual(newDateTime), "Timestamp not updated as expected");
+		assertNotEquals(originalLastModified, changedLastModified,
+			"Last modified timestamp should have changed");
+		assertTrue(diff <= 1000 || changedLastModified.isEqual(newDateTime),
+			"Timestamp not updated as expected");
 	}
 
 	/**
@@ -109,7 +118,8 @@ class FileTimeExtensionsIntegrationTest
 	}
 
 	/**
-	 * Verifies that the last modified timestamp changes after setting a new timestamp using BasicFileAttributeView
+	 * Verifies that the last modified timestamp changes after setting a new timestamp using
+	 * BasicFileAttributeView
 	 *
 	 * @param tempDir
 	 *            the temporary directory provided by JUnit
@@ -122,24 +132,28 @@ class FileTimeExtensionsIntegrationTest
 		Files.writeString(testFile, "Initial content");
 
 		// Ensure FS supports BasicFileAttributeView
-		BasicFileAttributeView view = Files.getFileAttributeView(testFile, BasicFileAttributeView.class);
+		BasicFileAttributeView view = Files.getFileAttributeView(testFile,
+			BasicFileAttributeView.class);
 		Assumptions.assumeTrue(view != null, "BasicFileAttributeView not supported; skipping test");
 
-		LocalDateTime original = FileTimeExtensions.getTimestamp(testFile, FileTimestampType.LAST_MODIFIED);
+		LocalDateTime original = FileTimeExtensions.getTimestamp(testFile,
+			FileTimestampType.LAST_MODIFIED);
 
 		LocalDateTime newDateTime = LocalDateTime.of(2016, 4, 16, 14, 23);
-		FileTime newFileTime = FileTime.from(newDateTime.atZone(ZoneId.systemDefault()).toInstant());
+		FileTime newFileTime = FileTime
+			.from(newDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
 		// --- Act ------------------------------------------------------------
 		view.setTimes(newFileTime, newFileTime, newFileTime);
 		Files.setLastModifiedTime(testFile, newFileTime);
 
-		LocalDateTime updated = FileTimeExtensions.getTimestamp(testFile, FileTimestampType.LAST_MODIFIED);
+		LocalDateTime updated = FileTimeExtensions.getTimestamp(testFile,
+			FileTimestampType.LAST_MODIFIED);
 
 		// --- Assert ---------------------------------------------------------
 		assertNotEquals(original, updated);
 		long diff = Math.abs(updated.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-				- newFileTime.toMillis());
+			- newFileTime.toMillis());
 		assertTrue(diff <= 1000, "Modified time difference too large: " + diff + " ms");
 	}
 

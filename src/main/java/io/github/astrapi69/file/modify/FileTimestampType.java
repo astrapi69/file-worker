@@ -1,8 +1,8 @@
 package io.github.astrapi69.file.modify;
 
 /**
- * Enum representing the types of timestamps available for files
- * Can be used to retrieve creation time, last modified time, or last access time from a file
+ * Enum representing the types of timestamps available for files Can be used to retrieve creation
+ * time, last modified time, or last access time from a file
  */
 public enum FileTimestampType
 {
