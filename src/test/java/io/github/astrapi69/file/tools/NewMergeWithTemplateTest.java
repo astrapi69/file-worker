@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,10 +88,19 @@ class NewMergeWithTemplateTest
 	private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName)
 		throws Exception
 	{
+		String templateProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
+		String templateProjectName = "write-book-template";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
+			templateProjectName);
+	}
+
+	private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName,
+		String templateProjectBaseDir, String templateProjectName) throws Exception
+	{
+		String defaultSrcBase = templateProjectBaseDir + "/" + templateProjectName;
 		String defaultDstBase = bookProjectBaseDir + "/" + bookProjectName;
 		// Dein JSON-String
-		String json = "{\n"
-			+ "  \"default_src_base\": \"/run/media/astrapi69/backups/git/hub/astrapi69/write-book-template\",\n"
+		String json = "{\n" + "  \"default_src_base\": \"" + defaultSrcBase + "\",\n"
 			+ "  \"default_dst_base\": \"" + defaultDstBase + "\",\n"
 			+ "  \"default_dirs\": [\"scripts\", \"tests\"]\n" + "}";
 
@@ -104,6 +114,20 @@ class NewMergeWithTemplateTest
 
 		// Test: keine Args -> liest Defaults
 		MergeWithTemplate.main(new String[] { });
+
+		// overwrite .gitignore
+		String gitignore = ".gitignore";
+		String tmplGitignore = templateProjectBaseDir + "/" + gitignore;
+		String bookGitignore = bookProjectBaseDir + "/" + gitignore;
+		Files.copy(Path.of(tmplGitignore), Path.of(bookGitignore),
+			StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+
+		// overwrite pyproject.toml
+		String pyprojectToml = "pyproject.toml";
+		String tmplPyprojectToml = templateProjectBaseDir + "/" + pyprojectToml;
+		String bookPyprojectToml = bookProjectBaseDir + "/" + pyprojectToml;
+		Files.copy(Path.of(tmplPyprojectToml), Path.of(bookPyprojectToml),
+			StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 
 		// Danach kannst du prüfen, ob Dateien im Ziel vorhanden sind
 		assertTrue(Files.exists(Path.of(defaultDstBase + "/scripts")));
