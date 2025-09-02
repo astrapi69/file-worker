@@ -117,15 +117,15 @@ class NewMergeWithTemplateTest
 
 		// overwrite .gitignore
 		String gitignore = ".gitignore";
-		String tmplGitignore = templateProjectBaseDir + "/" + gitignore;
-		String bookGitignore = bookProjectBaseDir + "/" + gitignore;
+		String tmplGitignore = defaultSrcBase + "/" + gitignore;
+		String bookGitignore = defaultDstBase + "/" + gitignore;
 		Files.copy(Path.of(tmplGitignore), Path.of(bookGitignore),
 			StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 
 		// overwrite pyproject.toml
 		String pyprojectToml = "pyproject.toml";
-		String tmplPyprojectToml = templateProjectBaseDir + "/" + pyprojectToml;
-		String bookPyprojectToml = bookProjectBaseDir + "/" + pyprojectToml;
+		String tmplPyprojectToml = defaultSrcBase + "/" + pyprojectToml;
+		String bookPyprojectToml = defaultDstBase + "/" + pyprojectToml;
 		Files.copy(Path.of(tmplPyprojectToml), Path.of(bookPyprojectToml),
 			StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 
