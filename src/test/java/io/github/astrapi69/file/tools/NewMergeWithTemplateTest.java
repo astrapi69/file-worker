@@ -75,41 +75,43 @@ class NewMergeWithTemplateTest
 	}
 
 
-    @Test
-    @Disabled("only for internal and local use")
-    void usesRealJsonDefaults() throws Exception
-    {
-        String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
-        String bookProjectName = "die-galaxis-der-traenen";
-        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
-    }
+	@Test
+	@Disabled("only for internal and local use")
+	void usesRealJsonDefaults() throws Exception
+	{
+		String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
+		String bookProjectName = "die-galaxis-der-traenen";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
 
-    private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName) throws Exception {
-        String defaultDstBase = bookProjectBaseDir + "/" + bookProjectName;
-        // Dein JSON-String
-        String json = "{\n"
-                + "  \"default_src_base\": \"/run/media/astrapi69/backups/git/hub/astrapi69/write-book-template\",\n"
-                + "  \"default_dst_base\": \"" + defaultDstBase + "\",\n"
-                + "  \"default_dirs\": [\"scripts\", \"tests\"]\n" + "}";
+	private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName)
+		throws Exception
+	{
+		String defaultDstBase = bookProjectBaseDir + "/" + bookProjectName;
+		// Dein JSON-String
+		String json = "{\n"
+			+ "  \"default_src_base\": \"/run/media/astrapi69/backups/git/hub/astrapi69/write-book-template\",\n"
+			+ "  \"default_dst_base\": \"" + defaultDstBase + "\",\n"
+			+ "  \"default_dirs\": [\"scripts\", \"tests\"]\n" + "}";
 
-        // Sicherstellen, dass ./config existiert
-        Path configDir = Path.of("config");
-        Files.createDirectories(configDir);
-        Path configFile = configDir.resolve("merge_defaults.json");
+		// Sicherstellen, dass ./config existiert
+		Path configDir = Path.of("config");
+		Files.createDirectories(configDir);
+		Path configFile = configDir.resolve("merge_defaults.json");
 
-        // JSON reinschreiben
-        Files.writeString(configFile, json, StandardCharsets.UTF_8);
+		// JSON reinschreiben
+		Files.writeString(configFile, json, StandardCharsets.UTF_8);
 
-        // Test: keine Args -> liest Defaults
-        MergeWithTemplate.main(new String[] { });
+		// Test: keine Args -> liest Defaults
+		MergeWithTemplate.main(new String[] { });
 
-        // Danach kannst du prüfen, ob Dateien im Ziel vorhanden sind
-        assertTrue(Files.exists(Path.of(defaultDstBase + "/scripts")));
-        assertTrue(Files.exists(Path.of(defaultDstBase + "/tests")));
-        DeleteFileExtensions.delete(configFile);
-    }
+		// Danach kannst du prüfen, ob Dateien im Ziel vorhanden sind
+		assertTrue(Files.exists(Path.of(defaultDstBase + "/scripts")));
+		assertTrue(Files.exists(Path.of(defaultDstBase + "/tests")));
+		DeleteFileExtensions.delete(configFile);
+	}
 
-    @Test
+	@Test
 	@Disabled("only for internal and local use")
 	void mergesIntoExistingDirectory_overwritesTargetFiles_last_spark() throws Exception
 	{
