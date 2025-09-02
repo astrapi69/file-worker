@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
@@ -219,40 +221,33 @@ public class MergeWithTemplate
 	}
 
 	// --------- ultra-light JSON extractors (sufficient for simple config) ---------
+	// ... keep the rest of your class
 
 	private static String jsonString(String json, String key)
 	{
-		String pattern = quote(key) + "\\s*:\\s*\"";
-		int k = json.indexOf(pattern);
-		if (k < 0)
-			return null;
-		int start = k + pattern.length();
-		int end = json.indexOf('"', start);
-		if (end < 0)
-			return null;
-		return json.substring(start, end);
+		// Matches: "key" : "value"
+		Pattern p = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*\"([^\"]*)\"",
+			Pattern.DOTALL);
+		Matcher m = p.matcher(json);
+		return m.find() ? m.group(1) : null;
 	}
 
 	private static List<String> jsonStringArray(String json, String key)
 	{
-		String pattern = quote(key) + "\\s*:\\s*\\[";
-		int k = json.indexOf(pattern);
-		if (k < 0)
+		// Matches: "key" : [ ...anything until closing bracket... ]
+		Pattern p = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*\\[(.*?)\\]",
+			Pattern.DOTALL);
+		Matcher m = p.matcher(json);
+		if (!m.find())
 			return null;
-		int start = k + pattern.length();
-		int end = json.indexOf(']', start);
-		if (end < 0)
-			return null;
-		String body = json.substring(start, end);
+
+		String body = m.group(1);
+		// Extract each "string" element inside the array (simple, no escaped quotes support)
+		Matcher q = Pattern.compile("\"([^\"]*)\"").matcher(body);
+
 		List<String> out = new ArrayList<>();
-		for (String part : body.split(","))
-		{
-			String p = part.trim();
-			if (p.startsWith("\"") && p.endsWith("\"") && p.length() >= 2)
-			{
-				out.add(p.substring(1, p.length() - 1));
-			}
-		}
+		while (q.find())
+			out.add(q.group(1));
 		return out;
 	}
 

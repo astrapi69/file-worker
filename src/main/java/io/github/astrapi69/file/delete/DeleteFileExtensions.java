@@ -117,6 +117,30 @@ public final class DeleteFileExtensions
 	}
 
 	/**
+	 * Tries to delete the specified path. If it is a directory, deletes all its contents
+	 * recursively first.
+	 *
+	 * @param path
+	 *            The path to a file or directory
+	 * @return <code>true</code> if deletion is successful; <code>false</code> otherwise
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static boolean delete(final Path path) throws IOException
+	{
+		Objects.requireNonNull(path);
+		if (Files.isDirectory(path))
+		{
+			deleteAllFiles(path);
+			return Files.deleteIfExists(path);
+		}
+		else
+		{
+			return Files.deleteIfExists(path);
+		}
+	}
+
+	/**
 	 * Tries to delete the specified file or directory recursively if it is a directory
 	 *
 	 * @param file
