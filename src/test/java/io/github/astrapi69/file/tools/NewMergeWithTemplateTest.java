@@ -76,15 +76,33 @@ class NewMergeWithTemplateTest
 	}
 
 
-	@Test
+    @Test
 	@Disabled("only for internal and local use")
-	void usesRealJsonDefaults() throws Exception
-	{
-		String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
-		String bookProjectName = "die-galaxis-der-traenen";
-		// mergeWithTemplate(bookProjectBaseDir, bookProjectName);
-        mergeWithOtherBookScripts(bookProjectBaseDir, bookProjectName);
-	}
+    void usesRealJsonDefaults() throws Exception
+    {
+        String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
+        String bookProjectName = "Shadows-over-New-Eden";
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+//        mergeWithOtherBookScripts(bookProjectBaseDir, bookProjectName);
+    }
+
+    @Test
+    @Disabled("only for internal and local use")
+    void usesRealJsonDefaultsAI_For_Everyone() throws Exception
+    {
+        String bookProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
+        String bookProjectName = "ai-for-everyone";
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+    }
+
+    @Test
+//    @Disabled("only for internal and local use")
+    void usesRealJsonDefaultsEternity_Ebook() throws Exception
+    {
+        String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
+        String bookProjectName = "eternity-ebook";
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+    }
 
     private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName)
             throws Exception
