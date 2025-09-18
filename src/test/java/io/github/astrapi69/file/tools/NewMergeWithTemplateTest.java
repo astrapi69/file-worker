@@ -96,7 +96,7 @@ class NewMergeWithTemplateTest
     }
 
     @Test
-//    @Disabled("only for internal and local use")
+    @Disabled("only for internal and local use")
     void usesRealJsonDefaultsEternity_Ebook() throws Exception
     {
         String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
