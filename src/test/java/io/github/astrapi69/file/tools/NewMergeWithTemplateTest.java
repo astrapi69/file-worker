@@ -76,51 +76,51 @@ class NewMergeWithTemplateTest
 	}
 
 
-    @Test
+	@Test
 	@Disabled("only for internal and local use")
-    void usesRealJsonDefaults() throws Exception
-    {
-        String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
-        String bookProjectName = "Shadows-over-New-Eden";
-        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
-//        mergeWithOtherBookScripts(bookProjectBaseDir, bookProjectName);
-    }
+	void usesRealJsonDefaults() throws Exception
+	{
+		String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
+		String bookProjectName = "Shadows-over-New-Eden";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+		// mergeWithOtherBookScripts(bookProjectBaseDir, bookProjectName);
+	}
 
-    @Test
-    @Disabled("only for internal and local use")
-    void usesRealJsonDefaultsAI_For_Everyone() throws Exception
-    {
-        String bookProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
-        String bookProjectName = "ai-for-everyone";
-        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
-    }
+	@Test
+	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsAI_For_Everyone() throws Exception
+	{
+		String bookProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
+		String bookProjectName = "ai-for-everyone";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
 
-    @Test
-    @Disabled("only for internal and local use")
-    void usesRealJsonDefaultsEternity_Ebook() throws Exception
-    {
-        String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
-        String bookProjectName = "eternity-ebook";
-        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
-    }
+	@Test
+	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsEternity_Ebook() throws Exception
+	{
+		String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
+		String bookProjectName = "eternity-ebook";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
 
-    private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName)
-            throws Exception
-    {
-        String templateProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
-        String templateProjectName = "write-book-template";
-        mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
-                templateProjectName);
-    }
+	private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName)
+		throws Exception
+	{
+		String templateProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
+		String templateProjectName = "write-book-template";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
+			templateProjectName);
+	}
 
-    private static void mergeWithOtherBookScripts(String bookProjectBaseDir, String bookProjectName)
-            throws Exception
-    {
-        String templateProjectBaseDir = "/home/astrapi69/PycharmProjects";
-        String templateProjectName = "last-spark";
-        mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
-                templateProjectName);
-    }
+	private static void mergeWithOtherBookScripts(String bookProjectBaseDir, String bookProjectName)
+		throws Exception
+	{
+		String templateProjectBaseDir = "/home/astrapi69/PycharmProjects";
+		String templateProjectName = "last-spark";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
+			templateProjectName);
+	}
 
 	private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName,
 		String templateProjectBaseDir, String templateProjectName) throws Exception
