@@ -27,6 +27,9 @@ import io.github.astrapi69.file.delete.DeleteFileExtensions;
  */
 class NewMergeWithTemplateTest
 {
+    private static String homeGithubBookProjectBaseDir = "/home/astrapi69/dev/git/hub";
+    private static String driveBookProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
+    private static String pyCharmBookProjectBaseDir = "/home/astrapi69/PycharmProjects";
 
 	private static String jsonString(String json, String key)
 	{
@@ -80,7 +83,7 @@ class NewMergeWithTemplateTest
 	@Disabled("only for internal and local use")
 	void usesRealJsonDefaults() throws Exception
 	{
-		String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
+		String bookProjectBaseDir = pyCharmBookProjectBaseDir;
 		String bookProjectName = "Shadows-over-New-Eden";
 		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
 		// mergeWithOtherBookScripts(bookProjectBaseDir, bookProjectName);
@@ -90,33 +93,70 @@ class NewMergeWithTemplateTest
 	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsAI_For_Everyone() throws Exception
 	{
-		String bookProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
+		String bookProjectBaseDir = driveBookProjectBaseDir;
 		String bookProjectName = "ai-for-everyone";
 		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
 	}
 
-	@Test
-	@Disabled("only for internal and local use")
-	void usesRealJsonDefaultsEternity_Ebook() throws Exception
-	{
-		String bookProjectBaseDir = "/home/astrapi69/PycharmProjects";
-		String bookProjectName = "eternity-ebook";
-		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
-	}
+    @Test
+    @Disabled("only for internal and local use")
+    void usesRealJsonDefaultsEternity_Ebook() throws Exception
+    {
+        String bookProjectBaseDir = pyCharmBookProjectBaseDir;
+        String bookProjectName = "eternity-ebook";
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+    }
+
+    @Test
+    @Disabled("only for internal and local use")
+    void usesRealJsonDefaultsAI_DesignsNewWorld() throws Exception
+    {
+        String bookProjectBaseDir = pyCharmBookProjectBaseDir;
+        String bookProjectName = "ai-designs-new-world";
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+    }
+
+
+    @Test
+    @Disabled("only for internal and local use")
+    void usesRealJsonDefaultsCurrencyOfMind() throws Exception
+    {
+        String bookProjectBaseDir = homeGithubBookProjectBaseDir;
+        String bookProjectName = "currency-of-mind-storybook";
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+    }
+
+    @Test
+    @Disabled("only for internal and local use")
+    void usesRealJsonDefaultsMerge_AI_For_EveryoneWithMitDenAugenEinesVaters() throws Exception
+    {
+        String bookProjectBaseDir = pyCharmBookProjectBaseDir;
+        String bookProjectName = "mit-den-augen-eines-vaters";
+        mergeWithAI_For_Everyone(bookProjectBaseDir, bookProjectName);
+    }
+
+    private static void mergeWithAI_For_Everyone(String bookProjectBaseDir, String bookProjectName)
+            throws Exception
+    {
+        String templateProjectBaseDir = driveBookProjectBaseDir;
+        String templateProjectName = "ai-for-everyone";
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
+                templateProjectName);
+    }
 
 	private static void mergeWithTemplate(String bookProjectBaseDir, String bookProjectName)
 		throws Exception
 	{
-		String templateProjectBaseDir = "/run/media/astrapi69/backups/git/hub/astrapi69";
+		String templateProjectBaseDir = driveBookProjectBaseDir;
 		String templateProjectName = "write-book-template";
 		mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
 			templateProjectName);
 	}
 
-	private static void mergeWithOtherBookScripts(String bookProjectBaseDir, String bookProjectName)
+	private static void mergeWithLastSpark(String bookProjectBaseDir, String bookProjectName)
 		throws Exception
 	{
-		String templateProjectBaseDir = "/home/astrapi69/PycharmProjects";
+		String templateProjectBaseDir = pyCharmBookProjectBaseDir;
 		String templateProjectName = "last-spark";
 		mergeWithTemplate(bookProjectBaseDir, bookProjectName, templateProjectBaseDir,
 			templateProjectName);
