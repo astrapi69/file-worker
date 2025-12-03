@@ -100,8 +100,8 @@ class NewMergeWithTemplateTest
 	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsEternity_Ebook() throws Exception
 	{
-		String bookProjectBaseDir = ProjectPaths.getPyCharmBookProjectBaseDir();
-		;
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
+
 		String bookProjectName = "eternity-ebook";
 		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
 	}
@@ -127,11 +127,20 @@ class NewMergeWithTemplateTest
 	}
 
 	@Test
-	// @Disabled("only for internal and local use")
+	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsNasenbohrerChronicles() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getPyCharmBookProjectBaseDir();
 		String bookProjectName = "nasenbohrer-chronicles";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
+
+	@Test
+	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsFipsAbenteuer() throws Exception
+	{
+		String bookProjectBaseDir = ProjectPaths.getPyCharmBookProjectBaseDir();
+		String bookProjectName = "fips-abenteuer";
 		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
 	}
 
