@@ -38,6 +38,7 @@ public class MergeWithTemplate
 		String srcBase = firstOrDefault(cli.get("--src_base"), (String)cfg.get("default_src_base"));
 		String dstBase = firstOrDefault(cli.get("--dst_base"), (String)cfg.get("default_dst_base"));
 		List<String> dirs = orDefault(cli.get("--dirs"), castList(cfg.get("default_dirs")));
+		List<String> files = castList(cfg.get("default_files"));
 		boolean dryRun = cli.containsKey("--dry-run");
 
 		if (dirs == null || dirs.isEmpty())
@@ -53,9 +54,13 @@ public class MergeWithTemplate
 		log("🔎 Source base: " + srcBase);
 		log("📦 Destination base: " + dstBase);
 		log("📂 Dirs to process: " + dirs + (dryRun ? " (dry-run)" : ""));
-
+		if (files != null && !files.isEmpty())
+		{
+			log("📄 Files to process: " + files + (dryRun ? " (dry-run)" : ""));
+		}
 		Path dstBasePath = Path.of(dstBase);
 		Files.createDirectories(dstBasePath);
+		copyFiles(srcBase, dstBase, files, dryRun);
 
 		for (String d : dirs)
 		{
@@ -101,6 +106,36 @@ public class MergeWithTemplate
 	}
 
 	// ---------- helpers ----------
+
+	private static void copyFiles(String srcBase, String dstBase, List<String> files,
+		boolean dryRun) throws IOException
+	{
+		if (files == null || files.isEmpty())
+			return;
+
+		for (String fileName : files)
+		{
+			Path src = Path.of(srcBase, fileName);
+			Path dst = Path.of(dstBase, fileName);
+
+			if (!Files.exists(src))
+			{
+				warn("❌ File not found in template (skip): " + src.toAbsolutePath());
+				continue;
+			}
+
+			if (dryRun)
+			{
+				log("📄 DRY-RUN copy file " + src.toAbsolutePath() + " -> " + dst.toAbsolutePath());
+				continue;
+			}
+
+			Files.createDirectories(dst.getParent()); // falls im Unterordner
+			Files.copy(src, dst, java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+				java.nio.file.StandardCopyOption.COPY_ATTRIBUTES);
+			log("📄 Copied file " + src.toAbsolutePath() + " -> " + dst.toAbsolutePath());
+		}
+	}
 
 	private static void preview(File srcDir, File dstDir) throws IOException
 	{
@@ -212,6 +247,7 @@ public class MergeWithTemplate
 			out.put("default_src_base", jsonString(s, "default_src_base"));
 			out.put("default_dst_base", jsonString(s, "default_dst_base"));
 			out.put("default_dirs", jsonStringArray(s, "default_dirs"));
+			out.put("default_files", jsonStringArray(s, "default_files"));
 		}
 		catch (Exception e)
 		{

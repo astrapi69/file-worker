@@ -9,8 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.*;
 
 import org.junit.jupiter.api.Disabled;
@@ -28,53 +26,12 @@ import io.github.astrapi69.file.delete.DeleteFileExtensions;
 class NewMergeWithTemplateTest
 {
 
-	private static String jsonString(String json, String key)
-	{
-		Pattern p = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*\"([^\"]*)\"",
-			Pattern.DOTALL);
-		Matcher m = p.matcher(json);
-		return m.find() ? m.group(1) : null;
-	}
-
-	private static List<String> jsonStringArray(String json, String key)
-	{
-		Pattern p = Pattern.compile("\"" + Pattern.quote(key) + "\"\\s*:\\s*\\[(.*?)]",
-			Pattern.DOTALL);
-		Matcher m = p.matcher(json);
-		if (!m.find())
-			return null;
-
-		String body = m.group(1);
-		List<String> out = new ArrayList<>();
-		Matcher item = Pattern.compile("\"([^\"]*)\"").matcher(body);
-		while (item.find())
-			out.add(item.group(1));
-		return out;
-	}
-
-	private static String quote(String s)
-	{
-		return "\"" + s + "\"";
-	} // optional, wird oben nicht mehr genutzt
-
-
 	private static void write(Path file, String content) throws IOException
 	{
 		Files.createDirectories(file.getParent());
 		Files.writeString(file, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
 			StandardOpenOption.TRUNCATE_EXISTING);
 	}
-
-	private static String read(Path file) throws IOException
-	{
-		return Files.readString(file, StandardCharsets.UTF_8);
-	}
-
-	private static void die(String msg)
-	{
-		throw new IllegalArgumentException(msg);
-	}
-
 
 	@Test
 	@Disabled("only for internal and local use")
@@ -200,7 +157,8 @@ class NewMergeWithTemplateTest
 		// Dein JSON-String
 		String json = "{\n" + "  \"default_src_base\": \"" + defaultSrcBase + "\",\n"
 			+ "  \"default_dst_base\": \"" + defaultDstBase + "\",\n"
-			+ "  \"default_dirs\": [\"scripts\", \"tests\"]\n" + "}";
+			+ "  \"default_dirs\": [\"scripts\", \"tests\"],\n"
+			+ "  \"default_files\": [\".gitignore\", \"pyproject.toml\", \"Makefile\"]\n" + "}";
 
 		// Sicherstellen, dass ./config existiert
 		Path configDir = Path.of("config");
@@ -226,20 +184,19 @@ class NewMergeWithTemplateTest
 		String bookPyprojectToml = defaultDstBase + "/" + pyprojectToml;
 		Files.copy(Path.of(tmplPyprojectToml), Path.of(bookPyprojectToml),
 			StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
-        // overwrite makefile
-        String makefile = "makefile";
-        String tmplMakefile = defaultSrcBase + "/" + makefile;
-        String bookMakefile = defaultDstBase + "/" + makefile;
-        Files.copy(
-                Path.of(tmplMakefile),
-                Path.of(bookMakefile),
-                StandardCopyOption.REPLACE_EXISTING,
-                StandardCopyOption.COPY_ATTRIBUTES
-        );
+		// overwrite makefile
+		String makefile = "Makefile";
+		String tmplMakefile = defaultSrcBase + "/" + makefile;
+		String bookMakefile = defaultDstBase + "/" + makefile;
+		Files.copy(Path.of(tmplMakefile), Path.of(bookMakefile),
+			StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
 
-        // Danach kannst du prüfen, ob Dateien im Ziel vorhanden sind
+		// Danach kannst du prüfen, ob Dateien im Ziel vorhanden sind
 		assertTrue(Files.exists(Path.of(defaultDstBase + "/scripts")));
 		assertTrue(Files.exists(Path.of(defaultDstBase + "/tests")));
+		assertTrue(Files.exists(Path.of(defaultDstBase + "/Makefile")));
+		assertTrue(Files.exists(Path.of(defaultDstBase + "/.gitignore")));
+		assertTrue(Files.exists(Path.of(defaultDstBase + "/pyproject.toml")));
 		DeleteFileExtensions.delete(configFile);
 	}
 
