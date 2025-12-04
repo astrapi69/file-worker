@@ -226,8 +226,18 @@ class NewMergeWithTemplateTest
 		String bookPyprojectToml = defaultDstBase + "/" + pyprojectToml;
 		Files.copy(Path.of(tmplPyprojectToml), Path.of(bookPyprojectToml),
 			StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+        // overwrite makefile
+        String makefile = "makefile";
+        String tmplMakefile = defaultSrcBase + "/" + makefile;
+        String bookMakefile = defaultDstBase + "/" + makefile;
+        Files.copy(
+                Path.of(tmplMakefile),
+                Path.of(bookMakefile),
+                StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES
+        );
 
-		// Danach kannst du prüfen, ob Dateien im Ziel vorhanden sind
+        // Danach kannst du prüfen, ob Dateien im Ziel vorhanden sind
 		assertTrue(Files.exists(Path.of(defaultDstBase + "/scripts")));
 		assertTrue(Files.exists(Path.of(defaultDstBase + "/tests")));
 		DeleteFileExtensions.delete(configFile);
