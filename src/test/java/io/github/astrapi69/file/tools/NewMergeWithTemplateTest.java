@@ -108,6 +108,16 @@ class NewMergeWithTemplateTest
 
 	@Test
 	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsGlobaleSouveraenitaet() throws Exception
+	{
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
+
+		String bookProjectName = "globale-souveraenitaet";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
+
+	@Test
+	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsAI_DesignsNewWorld() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getPyCharmBookProjectBaseDir();
