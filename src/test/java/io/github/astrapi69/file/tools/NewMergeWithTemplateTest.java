@@ -115,10 +115,10 @@ class NewMergeWithTemplateTest
 	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsMerge_AI_For_EveryoneWithMitDenAugenEinesVaters() throws Exception
 	{
-		String bookProjectBaseDir = ProjectPaths.getPyCharmBookProjectBaseDir();
-		;
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
+
 		String bookProjectName = "mit-den-augen-eines-vaters";
-		mergeWithAI_For_Everyone(bookProjectBaseDir, bookProjectName);
+        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
 	}
 
 	private static void mergeWithAI_For_Everyone(String bookProjectBaseDir, String bookProjectName)
