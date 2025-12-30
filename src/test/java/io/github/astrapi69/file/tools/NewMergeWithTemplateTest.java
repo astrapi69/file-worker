@@ -128,7 +128,7 @@ class NewMergeWithTemplateTest
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
 
 		String bookProjectName = "mit-den-augen-eines-vaters";
-        mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
 	}
 
 	private static void mergeWithAI_For_Everyone(String bookProjectBaseDir, String bookProjectName)
