@@ -98,7 +98,7 @@ class NewMergeWithTemplateTest
 	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsCurrencyOfMind() throws Exception
 	{
-		String bookProjectBaseDir = ProjectPaths.getHomeGithubBookProjectBaseDir();
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
 		String bookProjectName = "currency-of-mind-storybook";
 		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
 	}
