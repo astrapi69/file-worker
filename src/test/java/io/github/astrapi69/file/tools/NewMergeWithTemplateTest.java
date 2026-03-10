@@ -65,6 +65,16 @@ class NewMergeWithTemplateTest
 
 	@Test
 	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsRueckkehrOderBefreiung() throws Exception
+	{
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
+
+		String bookProjectName = "Rueckkehr-oder-Befreiung";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
+
+	@Test
+	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsPoliticalProfileInternational() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
@@ -95,7 +105,7 @@ class NewMergeWithTemplateTest
 
 
 	@Test
-//	@Disabled("only for internal and local use")
+	// @Disabled("only for internal and local use")
 	void usesRealJsonDefaultsCurrencyOfMind() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
