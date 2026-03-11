@@ -105,7 +105,7 @@ class NewMergeWithTemplateTest
 
 
 	@Test
-	// @Disabled("only for internal and local use")
+	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsCurrencyOfMind() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
