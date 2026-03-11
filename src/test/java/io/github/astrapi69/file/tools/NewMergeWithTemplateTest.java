@@ -75,6 +75,16 @@ class NewMergeWithTemplateTest
 
 	@Test
 	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsErinnerungUndVergessen() throws Exception
+	{
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
+
+		String bookProjectName = "Erinnerung-und-Vergessen";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
+
+	@Test
+//	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsRueckkehrOderBefreiung() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
