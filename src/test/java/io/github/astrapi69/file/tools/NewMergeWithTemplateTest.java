@@ -84,7 +84,7 @@ class NewMergeWithTemplateTest
 	}
 
 	@Test
-//	@Disabled("only for internal and local use")
+	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsRueckkehrOderBefreiung() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
