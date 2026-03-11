@@ -65,6 +65,16 @@ class NewMergeWithTemplateTest
 
 	@Test
 	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsDieGeisterDerZeit() throws Exception
+	{
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
+
+		String bookProjectName = "Die-Geister-der-Zeit";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
+
+	@Test
+	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsRueckkehrOderBefreiung() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
