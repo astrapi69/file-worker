@@ -95,6 +95,16 @@ class NewMergeWithTemplateTest
 
 	@Test
 	@Disabled("only for internal and local use")
+	void usesRealJsonDefaultsBiologischeSouveraenitaet() throws Exception
+	{
+		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
+
+		String bookProjectName = "Biologische-Souveraenitaet";
+		mergeWithTemplate(bookProjectBaseDir, bookProjectName);
+	}
+
+	@Test
+	@Disabled("only for internal and local use")
 	void usesRealJsonDefaultsPoliticalProfileInternational() throws Exception
 	{
 		String bookProjectBaseDir = ProjectPaths.getDriveBookProjectBaseDir();
