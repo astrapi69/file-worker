@@ -27,9 +27,10 @@ package io.github.astrapi69.file.modify;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -70,6 +71,25 @@ public final class ModifyFileExtensions
 	 */
 	public static void concatenateAll(List<File> textFiles, File resultTextFile) throws IOException
 	{
+		concatenateAllAndGet(textFiles, resultTextFile);
+	}
+
+	/**
+	 * Concatenates the content and returns the result file.
+	 *
+	 * @param textFiles
+	 *            the list of text files to concatenate
+	 * @param resultTextFile
+	 *            the result text file where the concatenated content will be stored
+	 * @return the resultTextFile
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateAllAndGet(List<File> textFiles, File resultTextFile)
+		throws IOException
+	{
+		Objects.requireNonNull(textFiles, "textFiles must not be null");
+		Objects.requireNonNull(resultTextFile, "resultTextFile must not be null");
 		StringBuilder text = new StringBuilder();
 		for (int i = 0; i < textFiles.size(); ++i)
 		{
@@ -78,6 +98,28 @@ public final class ModifyFileExtensions
 			text.append(content);
 		}
 		StoreFileExtensions.toFile(resultTextFile, text.toString());
+		return resultTextFile;
+	}
+
+	/**
+	 * New convenience method: Concatenates files and generates a default result file in the
+	 * system's temporary directory.
+	 *
+	 * @param textFiles
+	 *            the list of text files to concatenate
+	 * @return the generated result file
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateAll(List<File> textFiles) throws IOException
+	{
+		Objects.requireNonNull(textFiles, "textFiles must not be null");
+		if (textFiles.isEmpty())
+		{
+			throw new IllegalArgumentException("textFiles must not be empty");
+		}
+		File resultTextFile = File.createTempFile("concatenated_", ".txt");
+		return concatenateAllAndGet(textFiles, resultTextFile);
 	}
 
 	/**
@@ -95,12 +137,35 @@ public final class ModifyFileExtensions
 	public static void modifyFile(Path inFilePath, Charset charsetOfOutputFile,
 		FileChangeable modifier) throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(charsetOfOutputFile);
-		Objects.requireNonNull(modifier);
+		modifyFileAndGet(inFilePath, charsetOfOutputFile, modifier);
+	}
+
+	/**
+	 * Modifies the input file line by line and writes the modification in the same file. Returns
+	 * the modified Path.
+	 *
+	 * @param inFilePath
+	 *            the in file path
+	 * @param charsetOfOutputFile
+	 *            the charset of output file
+	 * @param modifier
+	 *            the modifier {@linkplain java.util.function.BiFunction}
+	 * @return the modified inFilePath
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Path modifyFileAndGet(Path inFilePath, Charset charsetOfOutputFile,
+		FileChangeable modifier) throws IOException
+	{
+		Objects.requireNonNull(inFilePath, "inFilePath must not be null");
+		Objects.requireNonNull(charsetOfOutputFile, "charsetOfOutputFile must not be null");
+		Objects.requireNonNull(modifier, "modifier must not be null");
+
 		File file = inFilePath.toFile();
 		List<String> linesRead = ListFactory.newArrayList();
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
+
+		try (BufferedReader bufferedReader = new BufferedReader(
+			new InputStreamReader(new FileInputStream(file), charsetOfOutputFile)))
 		{
 			String currentLine;
 			while ((currentLine = bufferedReader.readLine()) != null)
@@ -123,6 +188,7 @@ public final class ModifyFileExtensions
 				counter++;
 			}
 		}
+		return inFilePath;
 	}
 
 	/**
@@ -137,8 +203,6 @@ public final class ModifyFileExtensions
 	 */
 	public static void modifyFile(Path inFilePath, FileChangeable modifier) throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(modifier);
 		modifyFile(inFilePath, StandardCharsets.UTF_8, modifier);
 	}
 
@@ -159,12 +223,36 @@ public final class ModifyFileExtensions
 	public static void modifyFile(Path inFilePath, Path outFilePath, Charset charsetOfOutputFile,
 		FileChangeable modifier) throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(outFilePath);
-		Objects.requireNonNull(charsetOfOutputFile);
-		Objects.requireNonNull(modifier);
+		modifyFileAndGet(inFilePath, outFilePath, charsetOfOutputFile, modifier);
+	}
+
+	/**
+	 * Modifies the input file line by line and writes the modification in the new output file.
+	 * Returns the output Path.
+	 *
+	 * @param inFilePath
+	 *            the in file path
+	 * @param outFilePath
+	 *            the out file path
+	 * @param charsetOfOutputFile
+	 *            the charset of output file
+	 * @param modifier
+	 *            the modifier {@linkplain java.util.function.BiFunction}
+	 * @return the outFilePath
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Path modifyFileAndGet(Path inFilePath, Path outFilePath,
+		Charset charsetOfOutputFile, FileChangeable modifier) throws IOException
+	{
+		Objects.requireNonNull(inFilePath, "inFilePath must not be null");
+		Objects.requireNonNull(outFilePath, "outFilePath must not be null");
+		Objects.requireNonNull(charsetOfOutputFile, "charsetOfOutputFile must not be null");
+		Objects.requireNonNull(modifier, "modifier must not be null");
+
 		try (
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(inFilePath.toFile()));
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+				new FileInputStream(inFilePath.toFile()), charsetOfOutputFile));
 			Writer writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(outFilePath.toFile()), charsetOfOutputFile)))
 		{
@@ -180,6 +268,7 @@ public final class ModifyFileExtensions
 				counter++;
 			}
 		}
+		return outFilePath;
 	}
 
 	/**
@@ -197,9 +286,7 @@ public final class ModifyFileExtensions
 	public static void modifyFile(Path inFilePath, Path outFilePath, FileChangeable modifier)
 		throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(outFilePath);
-		Objects.requireNonNull(modifier);
 		modifyFile(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier);
 	}
+
 }

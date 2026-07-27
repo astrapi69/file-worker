@@ -66,14 +66,15 @@ public class ModifyFileExtensionsTest
 	{
 		List<File> markdownFiles;
 		String baseDir;
+		String concatFilename;
+		concatFilename = "concat-prompts.md";
 		baseDir = "/run/media/astrapi69/backups/git/hub/astrapi69/chats-with-ai/prompts/";
 
 		try
 		{
 			markdownFiles = MarkdownFileCollector.getFilesWithExtension(baseDir, ".md");
 
-			File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(),
-				"concat-prompts.md");
+			File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(), concatFilename);
 
 			ModifyFileExtensions.concatenateAll(markdownFiles, resultTextFile);
 		}
@@ -81,6 +82,36 @@ public class ModifyFileExtensionsTest
 		{
 			System.err.println("Error: " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Test method for {@link ModifyFileExtensions#concatenateAll(List, File)} Simple test case to
+	 * ensure that the method executes without throwing an exception
+	 */
+	@Test
+	@DisplayName("Test concatenateAll with example files")
+	@Disabled("only for local tests")
+	public void testGetRules()
+	{
+		List<File> markdownFiles;
+		String baseDir;
+		String concatFilename;
+		concatFilename = "all-rules.md";
+		baseDir = "/home/astrapi69/dev/git/hub/astrapi69/adaptive-learner/.claude/rules";
+
+		try
+		{
+			markdownFiles = MarkdownFileCollector.getFilesWithExtension(baseDir, ".md");
+
+			File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(), concatFilename);
+
+			ModifyFileExtensions.concatenateAll(markdownFiles, resultTextFile);
+		}
+		catch (IOException e)
+		{
+			System.err.println("Error: " + e.getMessage());
+		}
+
 	}
 
 	/**
