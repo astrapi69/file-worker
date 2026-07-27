@@ -25,6 +25,7 @@
 package io.github.astrapi69.file.merge;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -41,13 +42,75 @@ import io.github.astrapi69.file.create.DirectoryStructureFactory;
 import io.github.astrapi69.file.create.model.DirectoryStructureTestData;
 import io.github.astrapi69.file.create.model.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
+import io.github.astrapi69.file.merge.strategy.MergeStrategy;
+import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.PathFinder;
+import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
  * The unit test class for the class {@link MergeDirectoryExtensions}
  */
 public class MergeDirectoryExtensionsTest
 {
+	@Test
+	public void testMergeAndGet_WithTargetAsMasterStrategy()
+		throws IOException, InterruptedException
+	{
+		// Arrange
+		File targetDir = Files.createTempDirectory("target").toFile();
+		File sourceDir = Files.createTempDirectory("source").toFile();
+
+		File sourceFile = new File(sourceDir, "config.txt");
+		StoreFileExtensions.toFile(sourceFile, "new config data");
+
+		File targetFile = new File(targetDir, "config.txt");
+		StoreFileExtensions.toFile(targetFile, "old config data");
+
+		// Act
+		File resultDir = MergeDirectoryExtensions.mergeAndGet(targetDir,
+			MergeStrategy.TARGET_AS_MASTER, sourceDir);
+
+		// Assert
+		assertEquals(targetDir, resultDir);
+		assertEquals("new config data", ReadFileExtensions.fromFile(targetFile)); // Target was
+																					// updated
+		assertFalse(sourceFile.exists()); // Source file was deleted as per strategy
+
+		// Cleanup
+		DeleteFileExtensions.delete(targetDir);
+		DeleteFileExtensions.delete(sourceDir);
+	}
+
+	@Test
+	public void testMergeAndGet_TwoDirectories_WithConflict()
+		throws IOException, InterruptedException
+	{
+		// Arrange
+		File targetDir = Files.createTempDirectory("target").toFile();
+		File dir1 = Files.createTempDirectory("dir1").toFile();
+		File dir2 = Files.createTempDirectory("dir2").toFile();
+
+		File file1 = new File(dir1, "config.txt");
+		File file2 = new File(dir2, "config.txt");
+
+		StoreFileExtensions.toFile(file1, "old content");
+		Thread.sleep(100); // Ensure different lastModified timestamp
+		StoreFileExtensions.toFile(file2, "new content");
+
+		// Act
+		File resultDir = MergeDirectoryExtensions.mergeAndGet(targetDir, dir1, dir2);
+
+		// Assert
+		assertEquals(targetDir, resultDir);
+		File mergedFile = new File(targetDir, "config.txt");
+		assertTrue(mergedFile.exists());
+		assertEquals("new content", ReadFileExtensions.fromFile(mergedFile)); // Newest file wins
+
+		// Cleanup
+		DeleteFileExtensions.delete(targetDir);
+		DeleteFileExtensions.delete(dir1);
+		DeleteFileExtensions.delete(dir2);
+	}
 
 	@Test
 	public void testMerge_TwoDirectories_NoConflicts() throws IOException
