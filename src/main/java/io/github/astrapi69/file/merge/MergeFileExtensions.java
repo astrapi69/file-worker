@@ -14,8 +14,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -186,6 +188,38 @@ public final class MergeFileExtensions
 		return targetPath;
 	}
 
+	/**
+	 * Merges multiple files based on a specific key column, allowing custom delimiters and key
+	 * indices. If a key appears multiple times, the last encountered line overwrites previous ones.
+	 *
+	 * @param files
+	 *            the list of files to merge
+	 * @param targetFile
+	 *            the target file
+	 * @param keyIndex
+	 *            the zero-based index of the column to use as the key (e.g., 0 for the first
+	 *            column)
+	 * @param delimiter
+	 *            the string used to separate columns (e.g., "," or "\t")
+	 * @return the targetFile
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File mergeByKey(List<File> files, File targetFile, int keyIndex, String delimiter)
+		throws IOException
+	{
+		Objects.requireNonNull(files, "files must not be null");
+		Objects.requireNonNull(targetFile, "targetFile must not be null");
+		Objects.requireNonNull(delimiter, "delimiter must not be null");
+		if (keyIndex < 0)
+			throw new IllegalArgumentException("keyIndex must be >= 0");
+
+		List<String> mergedLines = collectByKeyAdvanced(files, StandardCharsets.UTF_8, keyIndex,
+			delimiter);
+		writeLines(targetFile, mergedLines, StandardCharsets.UTF_8);
+		return targetFile;
+	}
+
 	// =========================================================================
 	// CORE MERGE LOGIC
 	// =========================================================================
@@ -193,7 +227,6 @@ public final class MergeFileExtensions
 	private static List<String> collectAndMerge(List<File> files, Charset charset,
 		MergeFileStrategy strategy) throws IOException
 	{
-
 		switch (strategy)
 		{
 			case APPEND :
@@ -204,6 +237,12 @@ public final class MergeFileExtensions
 				return collectSorted(files, charset, false);
 			case SORTED_UNIQUE :
 				return collectSorted(files, charset, true);
+			case CSV_HEADER_MERGE :
+				return collectCsvWithHeader(files, charset);
+			case MARKDOWN_SECTIONS :
+				return collectMarkdownSections(files, charset);
+			case BY_KEY :
+				return collectByKeyDefault(files, charset); // Nutzt Standardwerte
 			default :
 				throw new IllegalArgumentException("Unknown strategy: " + strategy);
 		}
@@ -283,5 +322,107 @@ public final class MergeFileExtensions
 			}
 			writer.write(System.lineSeparator());
 		}
+	}
+
+
+	// =========================================================================
+	// NEW SPECIALIZED STRATEGY LOGIC
+	// =========================================================================
+
+	private static List<String> collectCsvWithHeader(List<File> files, Charset charset)
+		throws IOException
+	{
+		List<String> result = new ArrayList<>();
+		boolean isFirstFile = true;
+		String expectedHeader = null;
+
+		for (File file : files)
+		{
+			List<String> lines = readLines(file, charset);
+			if (lines.isEmpty())
+				continue;
+
+			if (isFirstFile)
+			{
+				result.addAll(lines);
+				expectedHeader = lines.get(0).trim();
+				isFirstFile = false;
+			}
+			else
+			{
+				// Überspringe die erste Zeile, wenn sie dem Header der ersten Datei entspricht
+				int startIndex = (lines.get(0).trim().equals(expectedHeader)) ? 1 : 0;
+				for (int i = startIndex; i < lines.size(); i++)
+				{
+					result.add(lines.get(i));
+				}
+			}
+		}
+		return result;
+	}
+
+	private static List<String> collectMarkdownSections(List<File> files, Charset charset)
+		throws IOException
+	{
+		List<String> result = new ArrayList<>();
+		boolean isFirstFile = true;
+
+		for (File file : files)
+		{
+			List<String> lines = readLines(file, charset);
+			if (lines.isEmpty())
+				continue;
+
+			if (!isFirstFile)
+			{
+				result.add(""); // Leerzeile für Abstand
+				result.add("---"); // Markdown Trennlinie
+				result.add(""); // Leerzeile für Abstand
+			}
+			result.addAll(lines);
+			isFirstFile = false;
+		}
+		return result;
+	}
+
+	private static List<String> collectByKeyDefault(List<File> files, Charset charset)
+		throws IOException
+	{
+		// Standard: Schlüssel ist die erste Spalte (Index 0), getrennt durch Komma
+		return collectByKeyAdvanced(files, charset, 0, ",");
+	}
+
+	/**
+	 * Advanced method for merging by a specific key column.
+	 * 
+	 * @param keyIndex
+	 *            the zero-based index of the column to use as the key
+	 * @param delimiter
+	 *            the string used to separate columns
+	 */
+	public static List<String> collectByKeyAdvanced(List<File> files, Charset charset, int keyIndex,
+		String delimiter) throws IOException
+	{
+		// LinkedHashMap erhält die Reihenfolge des ersten Auftretens eines Schlüssels
+		Map<String, String> keyToLine = new LinkedHashMap<>();
+
+		for (File file : files)
+		{
+			List<String> lines = readLines(file, charset);
+			for (String line : lines)
+			{
+				if (line.trim().isEmpty())
+					continue;
+
+				String[] parts = line.split(delimiter, -1);
+				// Wenn die Zeile weniger Spalten hat als der keyIndex, ist die ganze Zeile der
+				// Schlüssel
+				String key = (parts.length > keyIndex) ? parts[keyIndex].trim() : line.trim();
+
+				// "Last value wins" Verhalten (aktualisiert bestehende Einträge)
+				keyToLine.put(key, line);
+			}
+		}
+		return new ArrayList<>(keyToLine.values());
 	}
 }
