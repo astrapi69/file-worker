@@ -36,6 +36,9 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -287,6 +290,178 @@ public final class ModifyFileExtensions
 		throws IOException
 	{
 		modifyFile(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier);
+	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory into a single
+	 * result file.
+	 *
+	 * @param directory
+	 *            the directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @param resultTextFile
+	 *            the result file where the concatenated content will be stored
+	 * @return the resultTextFile
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtension(File directory, String extension,
+		File resultTextFile) throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+		Objects.requireNonNull(resultTextFile, "resultTextFile must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		File[] matchingFiles = directory.listFiles((dir, name) -> name.endsWith(extension));
+		if (matchingFiles == null || matchingFiles.length == 0)
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		List<File> fileList = Arrays.asList(matchingFiles);
+		Arrays.sort(matchingFiles); // Sortiere für konsistente Reihenfolge
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory into a temporary
+	 * result file.
+	 *
+	 * @param directory
+	 *            the directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @return the generated result file
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtension(File directory, String extension)
+		throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		File[] matchingFiles = directory.listFiles((dir, name) -> name.endsWith(extension));
+		if (matchingFiles == null || matchingFiles.length == 0)
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		List<File> fileList = Arrays.asList(matchingFiles);
+		Arrays.sort(matchingFiles); // Sortiere für konsistente Reihenfolge
+		File resultTextFile = File.createTempFile("concatenated_", extension);
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory (recursively) into
+	 * a single result file.
+	 *
+	 * @param directory
+	 *            the root directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @param resultTextFile
+	 *            the result file where the concatenated content will be stored
+	 * @return the resultTextFile
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtensionRecursive(File directory, String extension,
+		File resultTextFile) throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+		Objects.requireNonNull(resultTextFile, "resultTextFile must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		List<File> fileList = new ArrayList<>();
+		collectFilesRecursive(directory, extension, fileList);
+
+		if (fileList.isEmpty())
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		Collections.sort(fileList); // Sortiere für konsistente Reihenfolge
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory (recursively) into
+	 * a temporary result file.
+	 *
+	 * @param directory
+	 *            the root directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @return the generated result file
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtensionRecursive(File directory, String extension)
+		throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		List<File> fileList = new ArrayList<>();
+		collectFilesRecursive(directory, extension, fileList);
+
+		if (fileList.isEmpty())
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		Collections.sort(fileList); // Sortiere für konsistente Reihenfolge
+		File resultTextFile = File.createTempFile("concatenated_", extension);
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Helper method to recursively collect files with a specific extension.
+	 */
+	private static void collectFilesRecursive(File directory, String extension, List<File> fileList)
+	{
+		File[] files = directory.listFiles();
+		if (files != null)
+		{
+			for (File file : files)
+			{
+				if (file.isDirectory())
+				{
+					collectFilesRecursive(file, extension, fileList);
+				}
+				else if (file.getName().endsWith(extension))
+				{
+					fileList.add(file);
+				}
+			}
+		}
 	}
 
 }
