@@ -33,8 +33,10 @@ jobs:
       - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+      # From develop only (#15): master follows every release tag, and a push there would upload
+      # the release a second time.
       - name: Publish to Maven Central
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         run: |
           if grep -q -- '-SNAPSHOT' gradle.properties; then
             ./gradlew publishAggregationToCentralSnapshots
