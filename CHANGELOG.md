@@ -35,6 +35,7 @@ Version 19.1-SNAPSHOT
   - Updated `mockito-core` to version 5.15.2
   - Updated `silly-io` to version 3.6
   - Upgraded `Gradle Wrapper` to version 8.12.1
+  - Updated `jobj-compare` to version 12 (#12): 11.1 declared commons-beanutils 1.9.4, which reached every consumer of file-worker; 12 declares 1.11.0
 
 ### ✨ Added
 - Added `newDataScienceDirStructure` method to `DirectoryStructureTestData` for structured test data generation.
