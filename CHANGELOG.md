@@ -1,10 +1,8 @@
 ## Change log
 ----------------------
 
-Version 19.1-SNAPSHOT
+Version 19.1
 -------------
-
-## [Unreleased]
 
 ### 📖 Documentation
 - **Created a comprehensive Wiki for the File-Worker library**
