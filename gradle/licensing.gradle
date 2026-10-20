@@ -1,38 +1,21 @@
+// Define properties early in the configuration phase
+def inceptionYear = project.findProperty("projectInceptionYear") ?: "2025"
+def ownerName = project.findProperty("projectLeaderName") ?: "Asterios Raptis"
+
+// Store in extra properties for global availability
+project.ext.set("inceptionYear", inceptionYear)
+project.ext.set("ownerName", ownerName)
+
+// Load the exclusion patterns from the file
+def exclusionFile = file('gradle/list/exclude-license-files.list')
+def exclusionPatterns = exclusionFile.exists() ? exclusionFile.readLines().findAll { it.trim() } : []
+
 license {
-    ext.year = "$projectInceptionYear"
-    ext.owner = "$projectLeaderName"
-    ignoreFailures = true
-    header rootProject.file("src/main/resources/LICENSE.txt")
-    excludes(["**/README",
-              "**/README.md",
-              "**/LICENSE",
-              "**/NOTICE",
-              "**/package-info.java",
-              "**/*.xml",
-              "**/*.xsl",
-              "**/*.xsd",
-              "**/*.dtd",
-              "**/*.html",
-              "**/*.jsp",
-              "**/*.jpa",
-              "**/*.sql",
-              "**/*.properties",
-              "**/*.bat",
-              "**/*.gradle",
-              "**/*.MF",
-              "**/*.txt",
-              "**/*.vm",
-              "**/*.log",
-              "**/*.map",
-              "**/*.js.map",
-              "**/*.tmpl",
-              "**/*.js.tmpl",
-              "**/*.editorconfig",
-              "src/test/resources/**",
-              "src/main/resources/**",
-              "out/**",
-              "build/**"])
+    // Use the pre-defined properties (avoiding execution-time calls to project)
+    ext.year = inceptionYear
+    ext.owner = ownerName
+
+    setIgnoreFailures(true)
+    setHeader(rootProject.file("src/main/resources/LICENSE.txt"))
+    excludes(exclusionPatterns)
 }
-// workhack for license issue #76
-gradle.startParameter.excludedTaskNames += "licenseMain"
-gradle.startParameter.excludedTaskNames += "licenseTest"

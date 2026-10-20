@@ -1,6 +1,7 @@
 gradle/dependencies.gradle
 gradle/formatting.gradle
 gradle/grgit.gradle
+gradle/java-compile.gradle
 gradle/licensing.gradle
 gradle/packaging.gradle
 gradle/publishing.gradle

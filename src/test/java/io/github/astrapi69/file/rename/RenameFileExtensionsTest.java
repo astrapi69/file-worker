@@ -108,10 +108,14 @@ public class RenameFileExtensionsTest extends FileTestCase
 	{
 		String actual;
 		String expected;
-		final File testFile1 = new File(this.testDir, "testRename.txt");
+		File testFile1;
+		LocalDateTime localDateTime;
+		Date date;
+
+		testFile1 = new File(this.testDir, "testRename.txt");
 		StoreFileExtensions.toFile(testFile1, "Its a beautifull day!!!");
-		LocalDateTime localDateTime = LocalDateTime.parse("2007-11-07T06:34:59");
-		Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+		localDateTime = LocalDateTime.parse("2007-11-07T06:34:59");
+		date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 		actual = RenameFileExtensions.appendSystemtimeToFilename(testFile1, date);
 		assertNotNull(actual);
 		assertTrue(actual.length() == 24);

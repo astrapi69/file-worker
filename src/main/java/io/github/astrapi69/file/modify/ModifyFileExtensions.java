@@ -27,14 +27,18 @@ package io.github.astrapi69.file.modify;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -70,6 +74,25 @@ public final class ModifyFileExtensions
 	 */
 	public static void concatenateAll(List<File> textFiles, File resultTextFile) throws IOException
 	{
+		concatenateAllAndGet(textFiles, resultTextFile);
+	}
+
+	/**
+	 * Concatenates the content and returns the result file.
+	 *
+	 * @param textFiles
+	 *            the list of text files to concatenate
+	 * @param resultTextFile
+	 *            the result text file where the concatenated content will be stored
+	 * @return the resultTextFile
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateAllAndGet(List<File> textFiles, File resultTextFile)
+		throws IOException
+	{
+		Objects.requireNonNull(textFiles, "textFiles must not be null");
+		Objects.requireNonNull(resultTextFile, "resultTextFile must not be null");
 		StringBuilder text = new StringBuilder();
 		for (int i = 0; i < textFiles.size(); ++i)
 		{
@@ -78,6 +101,28 @@ public final class ModifyFileExtensions
 			text.append(content);
 		}
 		StoreFileExtensions.toFile(resultTextFile, text.toString());
+		return resultTextFile;
+	}
+
+	/**
+	 * New convenience method: Concatenates files and generates a default result file in the
+	 * system's temporary directory.
+	 *
+	 * @param textFiles
+	 *            the list of text files to concatenate
+	 * @return the generated result file
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateAll(List<File> textFiles) throws IOException
+	{
+		Objects.requireNonNull(textFiles, "textFiles must not be null");
+		if (textFiles.isEmpty())
+		{
+			throw new IllegalArgumentException("textFiles must not be empty");
+		}
+		File resultTextFile = File.createTempFile("concatenated_", ".txt");
+		return concatenateAllAndGet(textFiles, resultTextFile);
 	}
 
 	/**
@@ -95,12 +140,35 @@ public final class ModifyFileExtensions
 	public static void modifyFile(Path inFilePath, Charset charsetOfOutputFile,
 		FileChangeable modifier) throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(charsetOfOutputFile);
-		Objects.requireNonNull(modifier);
+		modifyFileAndGet(inFilePath, charsetOfOutputFile, modifier);
+	}
+
+	/**
+	 * Modifies the input file line by line and writes the modification in the same file. Returns
+	 * the modified Path.
+	 *
+	 * @param inFilePath
+	 *            the in file path
+	 * @param charsetOfOutputFile
+	 *            the charset of output file
+	 * @param modifier
+	 *            the modifier {@linkplain java.util.function.BiFunction}
+	 * @return the modified inFilePath
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Path modifyFileAndGet(Path inFilePath, Charset charsetOfOutputFile,
+		FileChangeable modifier) throws IOException
+	{
+		Objects.requireNonNull(inFilePath, "inFilePath must not be null");
+		Objects.requireNonNull(charsetOfOutputFile, "charsetOfOutputFile must not be null");
+		Objects.requireNonNull(modifier, "modifier must not be null");
+
 		File file = inFilePath.toFile();
 		List<String> linesRead = ListFactory.newArrayList();
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file)))
+
+		try (BufferedReader bufferedReader = new BufferedReader(
+			new InputStreamReader(new FileInputStream(file), charsetOfOutputFile)))
 		{
 			String currentLine;
 			while ((currentLine = bufferedReader.readLine()) != null)
@@ -123,6 +191,7 @@ public final class ModifyFileExtensions
 				counter++;
 			}
 		}
+		return inFilePath;
 	}
 
 	/**
@@ -137,8 +206,6 @@ public final class ModifyFileExtensions
 	 */
 	public static void modifyFile(Path inFilePath, FileChangeable modifier) throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(modifier);
 		modifyFile(inFilePath, StandardCharsets.UTF_8, modifier);
 	}
 
@@ -159,12 +226,36 @@ public final class ModifyFileExtensions
 	public static void modifyFile(Path inFilePath, Path outFilePath, Charset charsetOfOutputFile,
 		FileChangeable modifier) throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(outFilePath);
-		Objects.requireNonNull(charsetOfOutputFile);
-		Objects.requireNonNull(modifier);
+		modifyFileAndGet(inFilePath, outFilePath, charsetOfOutputFile, modifier);
+	}
+
+	/**
+	 * Modifies the input file line by line and writes the modification in the new output file.
+	 * Returns the output Path.
+	 *
+	 * @param inFilePath
+	 *            the in file path
+	 * @param outFilePath
+	 *            the out file path
+	 * @param charsetOfOutputFile
+	 *            the charset of output file
+	 * @param modifier
+	 *            the modifier {@linkplain java.util.function.BiFunction}
+	 * @return the outFilePath
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Path modifyFileAndGet(Path inFilePath, Path outFilePath,
+		Charset charsetOfOutputFile, FileChangeable modifier) throws IOException
+	{
+		Objects.requireNonNull(inFilePath, "inFilePath must not be null");
+		Objects.requireNonNull(outFilePath, "outFilePath must not be null");
+		Objects.requireNonNull(charsetOfOutputFile, "charsetOfOutputFile must not be null");
+		Objects.requireNonNull(modifier, "modifier must not be null");
+
 		try (
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(inFilePath.toFile()));
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+				new FileInputStream(inFilePath.toFile()), charsetOfOutputFile));
 			Writer writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(outFilePath.toFile()), charsetOfOutputFile)))
 		{
@@ -180,6 +271,7 @@ public final class ModifyFileExtensions
 				counter++;
 			}
 		}
+		return outFilePath;
 	}
 
 	/**
@@ -197,9 +289,179 @@ public final class ModifyFileExtensions
 	public static void modifyFile(Path inFilePath, Path outFilePath, FileChangeable modifier)
 		throws IOException
 	{
-		Objects.requireNonNull(inFilePath);
-		Objects.requireNonNull(outFilePath);
-		Objects.requireNonNull(modifier);
 		modifyFile(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier);
 	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory into a single
+	 * result file.
+	 *
+	 * @param directory
+	 *            the directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @param resultTextFile
+	 *            the result file where the concatenated content will be stored
+	 * @return the resultTextFile
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtension(File directory, String extension,
+		File resultTextFile) throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+		Objects.requireNonNull(resultTextFile, "resultTextFile must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		File[] matchingFiles = directory.listFiles((dir, name) -> name.endsWith(extension));
+		if (matchingFiles == null || matchingFiles.length == 0)
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		List<File> fileList = Arrays.asList(matchingFiles);
+		Arrays.sort(matchingFiles); // Sortiere für konsistente Reihenfolge
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory into a temporary
+	 * result file.
+	 *
+	 * @param directory
+	 *            the directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @return the generated result file
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtension(File directory, String extension)
+		throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		File[] matchingFiles = directory.listFiles((dir, name) -> name.endsWith(extension));
+		if (matchingFiles == null || matchingFiles.length == 0)
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		List<File> fileList = Arrays.asList(matchingFiles);
+		Arrays.sort(matchingFiles); // Sortiere für konsistente Reihenfolge
+		File resultTextFile = File.createTempFile("concatenated_", extension);
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory (recursively) into
+	 * a single result file.
+	 *
+	 * @param directory
+	 *            the root directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @param resultTextFile
+	 *            the result file where the concatenated content will be stored
+	 * @return the resultTextFile
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtensionRecursive(File directory, String extension,
+		File resultTextFile) throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+		Objects.requireNonNull(resultTextFile, "resultTextFile must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		List<File> fileList = new ArrayList<>();
+		collectFilesRecursive(directory, extension, fileList);
+
+		if (fileList.isEmpty())
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		Collections.sort(fileList); // Sortiere für konsistente Reihenfolge
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Concatenates all files with the given extension in the specified directory (recursively) into
+	 * a temporary result file.
+	 *
+	 * @param directory
+	 *            the root directory to search for files
+	 * @param extension
+	 *            the file extension to filter (e.g., ".md", ".txt")
+	 * @return the generated result file
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	public static File concatenateFilesWithExtensionRecursive(File directory, String extension)
+		throws IOException
+	{
+		Objects.requireNonNull(directory, "directory must not be null");
+		Objects.requireNonNull(extension, "extension must not be null");
+
+		if (!directory.isDirectory())
+		{
+			throw new IllegalArgumentException("The given file is not a directory: " + directory);
+		}
+
+		List<File> fileList = new ArrayList<>();
+		collectFilesRecursive(directory, extension, fileList);
+
+		if (fileList.isEmpty())
+		{
+			throw new IllegalArgumentException(
+				"No files with extension '" + extension + "' found in directory: " + directory);
+		}
+
+		Collections.sort(fileList); // Sortiere für konsistente Reihenfolge
+		File resultTextFile = File.createTempFile("concatenated_", extension);
+		return concatenateAllAndGet(fileList, resultTextFile);
+	}
+
+	/**
+	 * Helper method to recursively collect files with a specific extension.
+	 */
+	private static void collectFilesRecursive(File directory, String extension, List<File> fileList)
+	{
+		File[] files = directory.listFiles();
+		if (files != null)
+		{
+			for (File file : files)
+			{
+				if (file.isDirectory())
+				{
+					collectFilesRecursive(file, extension, fileList);
+				}
+				else if (file.getName().endsWith(extension))
+				{
+					fileList.add(file);
+				}
+			}
+		}
+	}
+
 }

@@ -3,20 +3,14 @@ test {
     useJUnitPlatform()
 }
 
+tasks.named("test") {
+    it.mustRunAfter(tasks.named("jar"))
+}
+
 jacocoTestReport {
     reports {
         xml.required.set(true)
         html.required.set(true)
-    }
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: ["io/github/astrapi69/file/exception/**/*.class",
-                              "io/github/astrapi69/file/compare/api/**/*.class",
-                              "io/github/astrapi69/file/modify/api/**/*.class",
-                              "io/github/astrapi69/file/zip/ZipState.class",
-                              "io/github/astrapi69/file/zip/ZipModel.class"])
-        }))
     }
 }
 

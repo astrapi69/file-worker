@@ -1,6 +1,59 @@
 ## Change log
 ----------------------
 
+Version 19.1
+-------------
+
+### 📖 Documentation
+- **Created a comprehensive Wiki for the File-Worker library**
+  - Added a structured [Home Wiki Page](https://github.com/astrapi69/file-worker/wiki) with navigation.
+  - Implemented a **custom sidebar** for easy access to different documentation sections.
+  - Linked the **wiki homepage** in the `README.md` for better accessibility.
+  - Added **"Getting Started"** documentation in the wiki and updated references in README.
+
+### 🔄 Refactor
+- **Gradle Configuration Cleanup**
+  - Moved exclusion lists to `gradle/list/` for better organization.
+  - Introduced `java-compile.gradle` for Java compilation settings.
+  - Updated `apply-gradle-files.gradle` to handle exclusions properly.
+  - Improved property handling in `repositories.gradle`, `packaging.gradle`, and `publishing.gradle`.
+
+### 🗑️ Cleanup
+- **Removed obsolete IntelliJ run configurations**
+  - Deleted outdated Gradle run configurations for `dependencyUpdates`, `spotlessJavaApply`, and `spotlessMiscApply`.
+
+### ⬆️ Dependency Updates
+- **JUnit Jupiter**
+  - Upgraded `junit-jupiter` and `junit-jupiter-params` to `5.12.0-RC1`.
+- **Library Updates**
+  - Updated `commons-io` to version 2.18.0
+  - Updated `gradle-plugin-spotless` to version 7.0.2
+  - Updated `gradle-plugin-versions` to version 0.52.0
+  - Updated `jsoup` to version 1.18.3
+  - Updated `mockito-core` to version 5.15.2
+  - Updated `silly-io` to version 3.6
+  - Upgraded `Gradle Wrapper` to version 8.12.1
+  - Updated `jobj-compare` to version 12 (#12): 11.1 declared commons-beanutils 1.9.4, which reached every consumer of file-worker; 12 declares 1.11.0
+
+### ✨ Added
+- Added `newDataScienceDirStructure` method to `DirectoryStructureTestData` for structured test data generation.
+
+### 🛠 Fixed
+- Disabled `nl.littlerobots.vcu.resolver` in `gradle.properties`.
+- Removed unnecessary blank line in `MergeDirectoryExtensionsTest`.
+
+### 📜 Package Documentation
+- **Added `package-info.java` files** for better package-level documentation:
+  - `io.github.astrapi69.file.copy.api`
+  - `io.github.astrapi69.file.create.api`
+  - `io.github.astrapi69.file.create.model`
+  - `io.github.astrapi69.file.delete.api`
+  - `io.github.astrapi69.file.rename.api`
+  - `io.github.astrapi69.file.read.api`
+  - `io.github.astrapi69.file.search.api`
+  - `io.github.astrapi69.file.write.api`
+  - `io.github.astrapi69.file.merge.strategy`
+
 Version 19.0
 -------------
 

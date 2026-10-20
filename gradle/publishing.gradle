@@ -60,21 +60,60 @@ publishing {
             }
         }
     }
-    repositories {
-        maven {
-            credentials {
-                username System.getenv("$projectRepositoriesUserNameKey") ?: project.property("$projectRepositoriesUserNameKey")
-                password System.getenv("$projectRepositoriesPasswordKey") ?: project.property("$projectRepositoriesPasswordKey")
-            }
-            def releasesRepoUrl = "$projectRepositoriesReleasesRepoUrl"
-            def snapshotsRepoUrl = "$projectRepositoriesSnapshotsRepoUrl"
-            url = releaseVersion ? releasesRepoUrl : snapshotsRepoUrl
+}
+
+// Signing follows the KEY, not the version form, so the snapshot publish on every push
+// (.github/workflows/gradle.yml) rehearses the release signature (#9, as resourcebundle-core#31 and
+// checksum-up#11):
+//
+//   release  + key      sign
+//   snapshot + key      sign, so the rehearsal covers the last step too
+//   snapshot, no key    skip - a local build needs no signature
+//   release,  no key    the upload tasks REFUSE; publishing a release unsigned is worse than
+//                       not publishing it
+def signingKey = System.getenv("GPG_PRIVATE_KEY")
+def signingPassphrase = System.getenv("GPG_PASSPHRASE")
+// The signing subkey's short id, its last 8 hex digits, when GPG_PRIVATE_KEY is an export of that
+// subkey alone and the primary key stays offline (astrapi69/lethenon, docs/launch/release-key.md;
+// #9). Without it Gradle takes the primary key, which such an export holds only as a stub, and
+// fails; Gradle 9.7.1 refused the 16-digit form (astrapi69/lethenon#155). Unset, the call is the one
+// for a full key, as before.
+def signingKeyId = System.getenv("GPG_KEY_ID")
+def hasInMemoryKey = signingKey && signingPassphrase
+def hasLocalKey = ["signing.keyId", "signing.gnupg.keyName", "signing.secretKeyRingFile"]
+    .any { project.hasProperty(it) }
+
+signing {
+    if (hasInMemoryKey) {
+        if (signingKeyId) {
+            useInMemoryPgpKeys(signingKeyId, signingKey, signingPassphrase)
+        } else {
+            useInMemoryPgpKeys(signingKey, signingPassphrase)
         }
+        sign publishing.publications.mavenJava
+    }
+    else if (hasLocalKey) {
+        // the local gpg command with the key from signing.gnupg.keyName
+        useGpgCmd()
+        sign publishing.publications.mavenJava
     }
 }
 
-signing {
-    if (releaseVersion) {
-        sign publishing.publications.mavenJava
+// The refusal sits on the tasks that upload. This build publishes through the nmcp SETTINGS plugin
+// (settings.gradle): a release goes up in nmcpPublishAggregationToCentralPortal, which the
+// publishAggregationToCentralPortal of gradle.yml depends on. The plugin also registers the
+// per-project nmcpPublishAllPublicationsToCentralPortal; the prefixes match both, and their
+// Snapshots variants.
+def uploadTaskPrefixes = [
+    "nmcpPublishAggregationToCentralPortal",
+    "nmcpPublishAllPublicationsToCentralPortal"
+]
+tasks.matching { task -> uploadTaskPrefixes.any { task.name.startsWith(it) } }.configureEach {
+    doFirst {
+        if (releaseVersion && !hasInMemoryKey && !hasLocalKey) {
+            throw new GradleException("Refusing to publish ${project.version} unsigned. "
+                + "Set GPG_PRIVATE_KEY and GPG_PASSPHRASE, or a local signing.keyId / "
+                + "signing.gnupg.keyName / signing.secretKeyRingFile property.")
+        }
     }
 }
