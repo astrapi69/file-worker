@@ -62,9 +62,8 @@ publishing {
     }
 }
 
-// Signing follows the KEY, not the version form, so the snapshot publish on every push
-// (.github/workflows/gradle.yml) rehearses the release signature (#9, as resourcebundle-core#31 and
-// checksum-up#11):
+// Signing follows the KEY, not the version form, so a manual snapshot run of publish.yml rehearses
+// the release signature (#9, #24, as resourcebundle-core#31 and checksum-up#11):
 //
 //   release  + key      sign
 //   snapshot + key      sign, so the rehearsal covers the last step too
@@ -100,20 +99,45 @@ signing {
 }
 
 // The refusal sits on the tasks that upload. This build publishes through the nmcp SETTINGS plugin
-// (settings.gradle): a release goes up in nmcpPublishAggregationToCentralPortal, which the
-// publishAggregationToCentralPortal of gradle.yml depends on. The plugin also registers the
-// per-project nmcpPublishAllPublicationsToCentralPortal; the prefixes match both, and their
-// Snapshots variants.
+// (settings.gradle): a release goes up in nmcpPublishAggregationToCentralPortal, which publish.yml
+// runs on a RELEASE-* tag. The plugin also registers the per-project
+// nmcpPublishAllPublicationsToCentralPortal; the prefixes match both, and their Snapshots variants.
 def uploadTaskPrefixes = [
     "nmcpPublishAggregationToCentralPortal",
     "nmcpPublishAllPublicationsToCentralPortal"
 ]
+// read now, not when the task runs: Task.project at execution time is deprecated and Gradle 10 removes it
+def refusedVersion = version.toString()
 tasks.matching { task -> uploadTaskPrefixes.any { task.name.startsWith(it) } }.configureEach {
     doFirst {
         if (releaseVersion && !hasInMemoryKey && !hasLocalKey) {
-            throw new GradleException("Refusing to publish ${project.version} unsigned. "
+            throw new GradleException("Refusing to publish ${refusedVersion} unsigned. "
                 + "Set GPG_PRIVATE_KEY and GPG_PASSPHRASE, or a local signing.keyId / "
                 + "signing.gnupg.keyName / signing.secretKeyRingFile property.")
+        }
+    }
+}
+
+
+// An upload to the Central Portal leaves only from CI: publish.yml on a RELEASE-* tag for a release, a manual
+// run of publish.yml for a snapshot. Never from a local tree: test-object 9.1 was released from a clone whose
+// commits never reached the repository (astrapi69/test-object#19, #21; #24 here). Read now, not when the task runs, for the
+// configuration cache. The match is the tasks that send to the Central Portal, releases and snapshots; the
+// nmcpPublish...ToMavenLocal task of the same plugin writes to the local repository and stays allowed.
+def uploadInCi = System.getenv("GITHUB_ACTIONS") == "true"
+def uploadRef = System.getenv("GITHUB_REF") ?: ""
+def uploadVersion = version.toString()
+def uploadIsRelease = !uploadVersion.endsWith("SNAPSHOT")
+tasks.matching { it.name.startsWith("nmcpPublish") && it.name.contains("ToCentralPortal") }.configureEach {
+    doFirst {
+        if (!uploadInCi) {
+            throw new GradleException("Uploads to the Central Portal run only in CI: a RELEASE-* tag runs "
+                + "publish.yml for a release, and a manual run of publish.yml publishes a snapshot. This is a "
+                + "local build (GITHUB_ACTIONS is not set), so ${uploadVersion} is not uploaded.")
+        }
+        if (uploadIsRelease && !uploadRef.startsWith("refs/tags/RELEASE-")) {
+            throw new GradleException("A release uploads only from a RELEASE-* tag. This run builds "
+                + "${uploadRef ?: 'no ref'}, so ${uploadVersion} is not uploaded.")
         }
     }
 }
