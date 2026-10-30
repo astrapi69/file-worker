@@ -4,6 +4,12 @@
 Version 19.2-SNAPSHOT
 -------------
 
+CHANGED:
+
+- a release is published from its `RELEASE-*` tag by the new `publish.yml`, as in the rest of the family,
+  and a snapshot by a manual run of it; `gradle.yml` only builds and no longer uploads on every push to
+  `develop`. The build refuses an upload to the Central Portal outside CI, and a release from anything but
+  a `RELEASE-*` tag (#24)
 
 Version 19.1
 -------------

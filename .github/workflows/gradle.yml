@@ -33,22 +33,3 @@ jobs:
       - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-      # From develop only (#15): master follows every release tag, and a push there would upload
-      # the release a second time.
-      - name: Publish to Maven Central
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        run: |
-          if grep -q -- '-SNAPSHOT' gradle.properties; then
-            ./gradlew publishAggregationToCentralSnapshots
-          else
-            ./gradlew publishAggregationToCentralPortal
-          fi
-        env:
-          CENTRAL_PORTAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_PORTAL_TOKEN_USERNAME }}
-          CENTRAL_PORTAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_PORTAL_TOKEN_PASSWORD }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          # the signing subkey's last 8 hex digits, when GPG_PRIVATE_KEY holds that subkey alone
-          # (astrapi69/lethenon, docs/launch/release-key.md; #9); an unset secret arrives empty,
-          # and the full key signs as before
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}

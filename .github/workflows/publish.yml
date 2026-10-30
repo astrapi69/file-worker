@@ -1,0 +1,63 @@
+# Publishes the artifact to Maven Central via the Central Portal (nmcp settings plugin), as the rest of the
+# family does. Triggered by pushing a release tag (RELEASE-*), which always targets the release
+# repository, or manually via workflow_dispatch, which asks where to publish. gradle.yml only builds (#24).
+#
+# The manual snapshot run exists so this path can be EXECUTED rather than only wired: it
+# exercises the checkout, the JDK setup, the Gradle setup, the secrets and the signature -
+# everything the tag run does except the release bundle's check and upload. Run it after any change to
+# this file, on develop, before a release tag depends on it.
+# Required repository secrets:
+#   CENTRAL_PORTAL_TOKEN_USERNAME / CENTRAL_PORTAL_TOKEN_PASSWORD - Central Portal user token
+#   GPG_PRIVATE_KEY / GPG_PASSPHRASE    - ascii-armored signing key and its passphrase
+#   GPG_KEY_ID (optional)               - the signing subkey's last 8 hex digits, when GPG_PRIVATE_KEY
+#                                         holds that subkey alone (astrapi69/lethenon, docs/launch/release-key.md; #9)
+
+name: Publish to Maven Central
+
+on:
+  push:
+    tags: [ 'RELEASE-*' ]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Where to publish (a tag push always publishes a release)'
+        required: true
+        default: snapshot
+        type: choice
+        options:
+          - snapshot
+          - release
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    env:
+      # a tag push publishes a release; a manual run publishes what it was asked for. This build
+      # publishes through the settings plugin, so the tasks are the aggregation's.
+      PUBLISH_TASK: ${{ (github.event_name == 'workflow_dispatch' && inputs.target == 'snapshot') && 'nmcpPublishAggregationToCentralPortalSnapshots' || 'nmcpPublishAggregationToCentralPortal' }}
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v7
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+      - name: Build
+        run: ./gradlew build
+      # nmcp uploads and validates the bundle directly - no separate staging step
+      - name: Publish to the Central Portal
+        run: |
+          echo "publishing with $PUBLISH_TASK"
+          ./gradlew "$PUBLISH_TASK"
+        env:
+          CENTRAL_PORTAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_PORTAL_TOKEN_USERNAME }}
+          CENTRAL_PORTAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_PORTAL_TOKEN_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
