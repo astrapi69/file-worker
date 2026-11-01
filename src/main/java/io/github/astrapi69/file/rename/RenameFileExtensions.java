@@ -129,8 +129,8 @@ public final class RenameFileExtensions
 	}
 
 	/**
-	 * Changes all the Filenames with the new Suffix recursively. If delete is true its deletes the
-	 * existing file with the same name.
+	 * Changes all the Filenames with the new Suffix recursively. A file whose suffix cannot be
+	 * changed goes into the returned list, and the batch goes on with the next file.
 	 *
 	 * @param file
 	 *            The file where to change the Filename with the new Suffix.
@@ -139,10 +139,12 @@ public final class RenameFileExtensions
 	 * @param newSuffix
 	 *            The new suffix.
 	 * @param delete
-	 *            If its true than its deletes the existing file with the same name. But before it
-	 *            copys the contents into the new File.
-	 * @return the files whose suffix could not be changed, an empty list if every file with the old
-	 *         suffix was renamed
+	 *            If true, a file whose rename the operating system refuses, as it does for a move
+	 *            to another file system, is copied to its new name and then deleted; if false, it
+	 *            is left as it is
+	 * @return the files whose suffix could not be changed, because the rename was refused or, with
+	 *         delete, the copy failed; an empty list, never null, if every file with the old suffix
+	 *         was renamed
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
@@ -160,12 +162,30 @@ public final class RenameFileExtensions
 		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
 		for (final File currentFile : files)
 		{
-			if (!RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete))
+			if (!isFilenameSuffixChanged(currentFile, newSuffix, delete))
 			{
 				notRenamedFiles.add(currentFile);
 			}
 		}
 		return notRenamedFiles;
+	}
+
+	/**
+	 * Changes the suffix of the given file and tells whether that worked. A copy with delete that
+	 * fails, onto a directory or into a directory that cannot be written, is a suffix that was not
+	 * changed, so that a batch reports the file instead of stopping half way (file-worker#69)
+	 */
+	private static boolean isFilenameSuffixChanged(final File file, final String newSuffix,
+		final boolean delete) throws FileDoesNotExistException, FileIsADirectoryException
+	{
+		try
+		{
+			return changeFilenameSuffix(file, newSuffix, delete);
+		}
+		catch (final IOException | IllegalArgumentException exception)
+		{
+			return false;
+		}
 	}
 
 	/**

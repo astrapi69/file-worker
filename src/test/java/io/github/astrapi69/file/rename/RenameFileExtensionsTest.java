@@ -29,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
 import java.io.File;
@@ -587,12 +589,19 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}: a
+	 * rename onto an existing directory is refused, and with delete the copy onto it, too, so the
+	 * file is reported and the batch goes on (file-worker#69)
 	 *
+	 * @param call
+	 *            the method under test
 	 * @throws Exception
 	 *             is thrown if an exception occurs
 	 */
-	@Test
-	public void changeAllFilenameSuffix_returnsTheFilesWhoseRenameWasRefused() throws Exception
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsTheFilesWhoseRenameWasRefused(
+		ChangeAllFilenameSuffix call) throws Exception
 	{
 		File renamable = tempDir.resolve("one.txt").toFile();
 		File blockedFirst = tempDir.resolve("two.txt").toFile();
@@ -603,8 +612,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		Files.createDirectory(tempDir.resolve("two.rtf"));
 		Files.createDirectory(tempDir.resolve("three.rtf"));
 
-		List<File> notRenamed = RenameFileExtensions.changeAllFilenameSuffix(tempDir.toFile(),
-			".txt", ".rtf");
+		List<File> notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
 
 		assertEquals(Set.of(blockedFirst, blockedSecond), Set.copyOf(notRenamed));
 		assertEquals(2, notRenamed.size());
@@ -681,6 +689,42 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		assertEquals(List.of(), notRenamed);
 		assertEquals("first", Files.readString(tempDir.resolve("one.md")));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}: in a
+	 * directory that cannot be written the rename is refused, and with delete the copy fails, so
+	 * the file is reported instead of an exception in the middle of the batch (file-worker#69)
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsTheFile_whenItsDirectoryCannotBeWritten(
+		ChangeAllFilenameSuffix call) throws Exception
+	{
+		Path locked = Files.createDirectory(tempDir.resolve("locked"));
+		Path file = Files.writeString(locked.resolve("one.txt"), "first");
+		List<File> notRenamed;
+		try
+		{
+			assumeTrue(locked.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(locked), "the test runs without override rights");
+
+			notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
+		}
+		finally
+		{
+			locked.toFile().setWritable(true);
+		}
+
+		assertEquals(List.of(file.toFile()), notRenamed);
+		assertEquals("first", Files.readString(file));
+		assertFalse(Files.exists(locked.resolve("one.rtf")));
 	}
 
 	/**

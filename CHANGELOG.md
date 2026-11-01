@@ -41,7 +41,10 @@ FIXED:
   without a parent works (#66)
 - `FileFactory.newFiles` reports the overall state: FAILED if any file failed, else CREATED if any was created, else
   ALREADY_EXISTS (#67)
-- `changeAllFilenameSuffix` returns an empty list instead of null when every rename works (#69, in part)
+- `changeAllFilenameSuffix` returns the files it could not rename, an empty list and never null when every rename
+  works; with `delete`, a file whose copy fails goes into that list too, instead of an exception in the middle of
+  the batch. `Renameable#changeAllFilenameSuffix` delegates to it, and the Javadoc of both says what `delete` and
+  the list mean (#69)
 - `write2FileWithBuffer` creates a destination that does not exist (#70)
 - the messages of `RenameFileExtensions` for a missing file read as `Renameable`'s (#71); the Javadoc of `moveFile`
   says it moves to a target file (#65)
