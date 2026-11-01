@@ -338,15 +338,11 @@ public final class MergeFileExtensions
 		try (Writer writer = new BufferedWriter(
 			new OutputStreamWriter(new FileOutputStream(targetFile), charset)))
 		{
-			for (int i = 0; i < lines.size(); i++)
+			for (String line : lines)
 			{
-				writer.write(lines.get(i));
-				if (i < lines.size() - 1)
-				{
-					writer.write(System.lineSeparator());
-				}
+				writer.write(line);
+				writer.write(System.lineSeparator());
 			}
-			writer.write(System.lineSeparator());
 		}
 	}
 

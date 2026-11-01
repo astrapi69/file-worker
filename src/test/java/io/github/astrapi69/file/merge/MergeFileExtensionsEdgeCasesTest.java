@@ -40,6 +40,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import io.github.astrapi69.file.merge.strategy.MergeFileStrategy;
@@ -99,7 +100,9 @@ public class MergeFileExtensionsEdgeCasesTest
 			Arguments.of("a dot delimiter is a plain string, not a regular expression",
 				List.of("1.Alice\n2.Bob"), 0, ".", List.of("1.Alice", "2.Bob")),
 			Arguments.of("a delimiter that is no valid regular expression splits as well",
-				List.of("1[Alice\n1[Root\n2[Bob"), 0, "[", List.of("1[Root", "2[Bob")));
+				List.of("1[Alice\n1[Root\n2[Bob"), 0, "[", List.of("1[Root", "2[Bob")),
+			Arguments.of("files of blank lines only give an empty file", List.of("\n   \n", ""), 0,
+				",", List.of()));
 	}
 
 	private List<File> writeFiles(List<String> contents) throws IOException
@@ -123,6 +126,30 @@ public class MergeFileExtensionsEdgeCasesTest
 		MergeFileExtensions.merge(files, targetFile, MergeFileStrategy.APPEND);
 
 		assertEquals(List.of("a", "b", "c"), Files.readAllLines(targetFile.toPath()));
+	}
+
+	@Test
+	void mergeAndGet_endsEveryLineWithALineSeparator() throws IOException
+	{
+		File targetFile = tempDir.resolve("merged.txt").toFile();
+
+		MergeFileExtensions.mergeAndGet(writeFiles(List.of("a", "b")), targetFile,
+			MergeFileStrategy.APPEND);
+
+		String separator = System.lineSeparator();
+		assertEquals("a" + separator + "b" + separator, Files.readString(targetFile.toPath()));
+	}
+
+	@ParameterizedTest
+	@EnumSource(MergeFileStrategy.class)
+	void mergeAndGet_writesAnEmptyFile_whenEveryFileIsEmpty(MergeFileStrategy strategy)
+		throws IOException
+	{
+		File targetFile = tempDir.resolve("merged.txt").toFile();
+
+		MergeFileExtensions.mergeAndGet(writeFiles(List.of("", "")), targetFile, strategy);
+
+		assertEquals("", Files.readString(targetFile.toPath()));
 	}
 
 	@Test

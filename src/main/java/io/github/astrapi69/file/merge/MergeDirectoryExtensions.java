@@ -85,7 +85,8 @@ public final class MergeDirectoryExtensions
 	}
 
 	/**
-	 * Merge the given directories to the given target directory and returns the target directory.
+	 * Merge the given directories to the given target directory and returns the target directory. A
+	 * directory to merge that is null, does not exist or is no directory is skipped.
 	 *
 	 * @param targetDir
 	 *            the target directory
@@ -110,7 +111,8 @@ public final class MergeDirectoryExtensions
 	}
 
 	/**
-	 * Merge the given directories to merge to the given target directory
+	 * Merge the given directories to merge to the given target directory. A directory to merge that
+	 * is null, does not exist or is no directory is skipped.
 	 *
 	 * @param targetDir
 	 *            the target directory
@@ -129,7 +131,10 @@ public final class MergeDirectoryExtensions
 		final Map<String, File> fileMergeStore = new HashMap<>();
 		for (File directoryToMerge : directoriesToMerge)
 		{
-			refreshFileStore(directoryToMerge, fileMergeStore, null);
+			if (directoryToMerge != null && directoryToMerge.isDirectory())
+			{
+				refreshFileStore(directoryToMerge, fileMergeStore, null);
+			}
 		}
 		return fileMergeStore;
 	}

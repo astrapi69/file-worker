@@ -66,6 +66,28 @@ public class MergeDirectoryExtensionsStrategyTest
 
 	private Path target;
 
+	/**
+	 * Gives a source to merge that is no directory, created in the given directory if it exists
+	 */
+	@FunctionalInterface
+	interface SourceThatIsNoDirectory
+	{
+		File createIn(Path directory) throws IOException;
+	}
+
+	static Stream<Arguments> sourcesThatAreNoDirectory()
+	{
+		return Stream
+			.of(Arguments.of("null", (SourceThatIsNoDirectory)directory -> null),
+				Arguments
+					.of("a missing directory",
+						(SourceThatIsNoDirectory)directory -> directory.resolve("missing")
+							.toFile()),
+				Arguments.of("a regular file",
+					(SourceThatIsNoDirectory)directory -> write(directory.resolve("regular.txt"),
+						"regular", OLDER).toFile()));
+	}
+
 	static Stream<Arguments> directoryOrders()
 	{
 		return Stream.of(Arguments.of("the newer directory first", List.of("newer", "older")),
@@ -123,6 +145,20 @@ public class MergeDirectoryExtensionsStrategyTest
 		assertEquals(Set.of("a.txt"), relativeFilesOf(target));
 		assertEquals("a", Files.readString(target.resolve("a.txt")));
 		assertEquals("regular", Files.readString(regularFile));
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("sourcesThatAreNoDirectory")
+	void mergeWithoutStrategy_skipsASourceThatIsNoDirectory(String displayName,
+		SourceThatIsNoDirectory sourceThatIsNoDirectory) throws IOException
+	{
+		write(source.resolve("a.txt"), "a", OLDER);
+		File noDirectory = sourceThatIsNoDirectory.createIn(tempDir);
+
+		MergeDirectoryExtensions.merge(target.toFile(), noDirectory, source.toFile());
+
+		assertEquals(Set.of("a.txt"), relativeFilesOf(target));
+		assertEquals("a", Files.readString(target.resolve("a.txt")));
 	}
 
 	@ParameterizedTest
