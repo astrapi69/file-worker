@@ -198,6 +198,11 @@ public final class CopyFileExtensions
 			throw new IllegalArgumentException("The destination File " + destination.getName()
 				+ " should be a File but is a Directory.");
 		}
+		if (isSameFile(source, destination))
+		{
+			throw new IllegalArgumentException("The source File " + source.getName()
+				+ " and the destination are the same file, which a copy would empty.");
+		}
 		if (sourceEncoding == null && destinationEncoding == null)
 		{
 			copyBytes(source, destination);
@@ -211,6 +216,20 @@ public final class CopyFileExtensions
 			destination.setLastModified(source.lastModified());
 		}
 		return true;
+	}
+
+	/**
+	 * Tells whether the two files are one: the same file where both exist, else the same absolute
+	 * normalized path (#73)
+	 */
+	private static boolean isSameFile(final File source, final File destination) throws IOException
+	{
+		if (source.exists() && destination.exists())
+		{
+			return Files.isSameFile(source.toPath(), destination.toPath());
+		}
+		return source.toPath().toAbsolutePath().normalize()
+			.equals(destination.toPath().toAbsolutePath().normalize());
 	}
 
 	private static void copyBytes(final File source, final File destination) throws IOException

@@ -25,12 +25,14 @@
 package io.github.astrapi69.file.copy;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,6 +41,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
@@ -100,5 +103,28 @@ public class CopyFileExtensionsRegressionTest
 
 		assertTrue(exception.getMessage().contains("source-directory"), exception.getMessage());
 		assertFalse(exception.getMessage().contains("target-name.txt"), exception.getMessage());
+	}
+
+	/**
+	 * A copy onto the file itself is refused and leaves the file as it was (#73): it used to open
+	 * the destination for writing first, which emptied the only copy
+	 */
+	@ParameterizedTest(name = "{0}, charset {1}")
+	@CsvSource(nullValues = "none", value = { "the same File, none", "the same File, UTF-8",
+			"another path to the same file, none", "another path to the same file, UTF-8" })
+	void copyFile_refusesAndKeepsTheContent_whenSourceAndDestinationAreTheSameFile(
+		final String destinationKind, final String charsetName) throws IOException
+	{
+		final File source = newFile("dir/same.txt", "abc").toFile();
+		final File destination = destinationKind.startsWith("the same")
+			? source
+			: tempDir.resolve("dir").resolve(".").resolve("same.txt").toFile();
+		final Charset charset = charsetName == null ? null : Charset.forName(charsetName);
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> CopyFileExtensions.copyFile(source, destination, charset, charset, false));
+
+		assertTrue(exception.getMessage().contains("same.txt"), exception.getMessage());
+		assertEquals("abc", Files.readString(source.toPath(), StandardCharsets.US_ASCII));
 	}
 }
