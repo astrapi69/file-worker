@@ -109,7 +109,8 @@ public final class CopyDirectoryExtensions
 	 * @param destination
 	 *            The destination directory.
 	 *
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry that is not left out was
+	 *         copied, otherwise false
 	 *
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
@@ -141,7 +142,8 @@ public final class CopyDirectoryExtensions
 	 *            The Flag tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
 	 *
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry that is not left out was
+	 *         copied, otherwise false
 	 *
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
@@ -175,7 +177,8 @@ public final class CopyDirectoryExtensions
 	 * @param lastModified
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry that is not left out was
+	 *         copied, otherwise false
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsNotADirectoryException
@@ -213,7 +216,8 @@ public final class CopyDirectoryExtensions
 	 * @param lastModified
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry that is not left out was
+	 *         copied, otherwise false
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsNotADirectoryException
@@ -256,7 +260,8 @@ public final class CopyDirectoryExtensions
 	 * @param lastModified
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry that is not left out was
+	 *         copied, otherwise false
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsNotADirectoryException
@@ -283,7 +288,7 @@ public final class CopyDirectoryExtensions
 		{
 			DirectoryFactory.newDirectory(destination);
 		}
-		boolean copied = false;
+		boolean copied = destination.isDirectory();
 		File[] includeFilesArray;
 
 		if (null != includeFileFilter)
@@ -329,12 +334,12 @@ public final class CopyDirectoryExtensions
 						if (currentFile.isDirectory())
 						{
 							// copy directory recursive...
-							copied = copyDirectoryWithFileFilter(currentFile, copy,
+							copied &= copyDirectoryWithFileFilter(currentFile, copy,
 								includeFileFilter, excludeFileFilter, excludeFiles, lastModified);
 						}
 						else
 						{
-							copied = CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+							copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 						}
 					} // otherwise do not copy the current file...
 				}
@@ -347,12 +352,12 @@ public final class CopyDirectoryExtensions
 					if (currentFile.isDirectory())
 					{
 						// copy directory recursive...
-						copied = copyDirectoryWithFileFilter(currentFile, copy, includeFileFilter,
+						copied &= copyDirectoryWithFileFilter(currentFile, copy, includeFileFilter,
 							excludeFileFilter, excludeFiles, lastModified);
 					}
 					else
 					{
-						copied = CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+						copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 					}
 				}
 			}
@@ -379,7 +384,8 @@ public final class CopyDirectoryExtensions
 	 * @param lastModified
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry that is not left out was
+	 *         copied, otherwise false
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsNotADirectoryException
@@ -413,7 +419,8 @@ public final class CopyDirectoryExtensions
 	 * @param lastModified
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry that is not left out was
+	 *         copied, otherwise false
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 * @throws FileIsNotADirectoryException
@@ -435,7 +442,7 @@ public final class CopyDirectoryExtensions
 		{
 			DirectoryFactory.newDirectory(destination);
 		}
-		boolean copied = false;
+		boolean copied = destination.isDirectory();
 		File[] includeFilesArray;
 		if (null != includeFilenameFilter)
 		{
@@ -466,12 +473,12 @@ public final class CopyDirectoryExtensions
 						if (currentFile.isDirectory())
 						{
 							// copy directory recursive...
-							copied = copyDirectoryWithFilenameFilter(currentFile, copy,
+							copied &= copyDirectoryWithFilenameFilter(currentFile, copy,
 								includeFilenameFilter, excludeFilenameFilter, lastModified);
 						}
 						else
 						{
-							copied = CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+							copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 						}
 					} // otherwise do not copy the current file...
 				}
@@ -484,12 +491,12 @@ public final class CopyDirectoryExtensions
 					if (currentFile.isDirectory())
 					{
 						// copy directory recursive...
-						copied = copyDirectoryWithFilenameFilter(currentFile, copy,
+						copied &= copyDirectoryWithFilenameFilter(currentFile, copy,
 							includeFilenameFilter, excludeFilenameFilter, lastModified);
 					}
 					else
 					{
-						copied = CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+						copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 					}
 				}
 			}
