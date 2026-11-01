@@ -76,6 +76,9 @@ FIXED:
   `SOURCE_TO_TARGET` (#76)
 - a copy failure that stops a merge with a strategy carries the delete failures and the unread directories collected
   until then as suppressed exceptions, instead of dropping them (#80)
+- a copy failure that stops a merge without a strategy is thrown as the `IOException` the method declares, with the
+  unread directories collected until then as suppressed exceptions; it was wrapped in a `RuntimeException`, and
+  the unread directories were dropped (#90)
 
 CHANGED:
 
