@@ -88,15 +88,17 @@ public interface Copyable
 	}
 
 	/**
-	 * Copies the given source file to the destination directory
+	 * Copies the given source file to the given destination file
 	 *
 	 * @param source
 	 *            The source file
 	 * @param destination
-	 *            The destination directory
+	 *            The destination file
 	 * @return true if the file was successfully copied, otherwise false
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
+	 * @throws IllegalArgumentException
+	 *             if the source or the destination is a directory
 	 */
 	default boolean copyFile(File source, File destination) throws IOException
 	{
@@ -146,15 +148,17 @@ public interface Copyable
 	}
 
 	/**
-	 * Copies the given source file to the destination directory path.
+	 * Copies the given source file to the given destination file path.
 	 *
 	 * @param source
 	 *            The source path
 	 * @param destination
-	 *            The destination directory path
+	 *            The destination file path
 	 * @return true if the file was successfully copied, otherwise false
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
+	 * @throws IllegalArgumentException
+	 *             if the source is a directory
 	 */
 	default boolean copyFile(Path source, Path destination) throws IOException
 	{
