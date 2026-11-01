@@ -71,7 +71,8 @@ public final class RenameFileExtensions
 	}
 
 	/**
-	 * Returns the filename from the given file with the systemtime.
+	 * Returns the filename from the given file with the systemtime. The time goes before the last
+	 * extension, or at the end of a name without one.
 	 *
 	 * @param fileToRename
 	 *            The file.
@@ -96,11 +97,10 @@ public final class RenameFileExtensions
 		}
 
 		final String fileName = fileToRename.getName();
-		final int ext_index = fileName.lastIndexOf(".");
-		final String ext = fileName.substring(ext_index);
-		String newName = fileName.substring(0, ext_index);
-		newName += "_" + sysTime + ext;
-		return newName;
+		final String nameWithoutExtension = FilenameExtensions
+			.getFilenameWithoutExtension(fileName);
+		final String extension = fileName.substring(nameWithoutExtension.length());
+		return nameWithoutExtension + "_" + sysTime + extension;
 	}
 
 	/**

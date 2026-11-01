@@ -29,24 +29,30 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.FileTestCase;
@@ -628,6 +634,55 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		assertTrue(renamed);
 		assertEquals("content", Files.readString(newFile.toPath()));
+		assertFalse(file.exists());
+	}
+
+	static Stream<Arguments> fileNamesWithTheirNewNames()
+	{
+		return Stream.of(
+			argumentSet("a name with one extension", "report.txt", "report_063459000.txt"),
+			argumentSet("a name with two extensions", "archive.tar.gz", "archive.tar_063459000.gz"),
+			argumentSet("a name without an extension", "README", "README_063459000"));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#appendSystemtimeToFilename(File, Date)}
+	 *
+	 * @param fileName
+	 *            the name of the file
+	 * @param expectedName
+	 *            the name with the time appended
+	 */
+	@ParameterizedTest
+	@MethodSource("fileNamesWithTheirNewNames")
+	public void appendSystemtimeToFilename_putsTheGivenTimeBeforeTheLastExtension(String fileName,
+		String expectedName)
+	{
+		Date date = Date.from(
+			LocalDate.of(2007, 1, 17).atTime(6, 34, 59).atZone(ZoneId.systemDefault()).toInstant());
+
+		String actual = RenameFileExtensions
+			.appendSystemtimeToFilename(tempDir.resolve(fileName).toFile(), date);
+
+		assertEquals(expectedName, actual);
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFileWithSystemtime(File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void renameFileWithSystemtime_appendsTheTime_whenTheNameHasNoExtension() throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("README"), "read me").toFile();
+
+		File renamed = RenameFileExtensions.renameFileWithSystemtime(file);
+
+		assertEquals(tempDir.toFile(), renamed.getParentFile());
+		assertTrue(renamed.getName().matches("README_\\d{9}"), renamed.getName());
+		assertEquals("read me", Files.readString(renamed.toPath()));
 		assertFalse(file.exists());
 	}
 

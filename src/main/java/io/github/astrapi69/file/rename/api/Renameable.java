@@ -60,7 +60,8 @@ public interface Renameable
 	}
 
 	/**
-	 * Returns the filename from the given file with the specified date appended
+	 * Returns the filename from the given file with the specified date appended. The time goes
+	 * before the last extension, or at the end of a name without one.
 	 *
 	 * @param fileToRename
 	 *            the file
@@ -75,10 +76,9 @@ public interface Renameable
 		String sysTime = add2Name != null ? df.format(add2Name) : df.format(new Date());
 
 		String fileName = fileToRename.getName();
-		int extIndex = fileName.lastIndexOf(".");
-		String ext = fileName.substring(extIndex);
-		String newName = fileName.substring(0, extIndex) + "_" + sysTime + ext;
-		return newName;
+		String nameWithoutExtension = FilenameExtensions.getFilenameWithoutExtension(fileName);
+		String extension = fileName.substring(nameWithoutExtension.length());
+		return nameWithoutExtension + "_" + sysTime + extension;
 	}
 
 	/**

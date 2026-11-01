@@ -77,6 +77,8 @@ public class RenameableTest
 				LocalTime.of(6, 34, 59, 123_000_000), "report_063459123.txt"),
 			argumentSet("a name with two extensions", "archive.tar.gz",
 				LocalTime.of(6, 34, 59, 123_000_000), "archive.tar_063459123.gz"),
+			argumentSet("a name without an extension", "README", LocalTime.of(6, 34, 59),
+				"README_063459000"),
 			argumentSet("the first millisecond of the day", "report.txt", LocalTime.MIDNIGHT,
 				"report_000000000.txt"),
 			argumentSet("the last millisecond of the day", "report.txt",
@@ -145,6 +147,28 @@ public class RenameableTest
 		assertEquals(tempDir.toFile(), renamed.getParentFile());
 		assertTrue(renamed.getName().matches("report_\\d{9}\\.txt"), renamed.getName());
 		assertEquals("the report", Files.readString(renamed.toPath()));
+		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link Renameable#renameFileWithSystemtime(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws FileIsADirectoryException
+	 *             the file is a directory exception
+	 */
+	@Test
+	public void renameFileWithSystemtime_appendsTheTime_whenTheNameHasNoExtension()
+		throws IOException, FileIsADirectoryException
+	{
+		File file = newFile("README", "read me");
+
+		File renamed = renameable.renameFileWithSystemtime(file);
+
+		assertEquals(tempDir.toFile(), renamed.getParentFile());
+		assertTrue(renamed.getName().matches("README_\\d{9}"), renamed.getName());
+		assertEquals("read me", Files.readString(renamed.toPath()));
 		assertFalse(file.exists());
 	}
 
