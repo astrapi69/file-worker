@@ -1,3 +1,27 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.file.tools;
 
 import java.io.File;
@@ -29,9 +53,64 @@ public class MergeWithTemplate
 
 	private static final String CONFIG_PATH = "./config/merge_defaults.json";
 
+	/** The exit code of {@link #main(String[])} on a usage error. */
+	public static final int USAGE_ERROR_EXIT_CODE = 2;
+
+	/**
+	 * The command line: runs {@link #run(String[])} and ends the JVM with
+	 * {@value #USAGE_ERROR_EXIT_CODE} on a usage error. A caller in the same JVM calls {@code run}
+	 * instead, which throws (#34).
+	 *
+	 * @param args
+	 *            the arguments, see the class documentation
+	 * @throws Exception
+	 *             if copying or merging fails
+	 */
 	public static void main(String[] args) throws Exception
 	{
-		Map<String, Object> cfg = loadDefaults(CONFIG_PATH);
+		try
+		{
+			run(args);
+		}
+		catch (UsageException usageError)
+		{
+			System.err.println(usageError.getMessage());
+			System.exit(USAGE_ERROR_EXIT_CODE);
+		}
+	}
+
+	/**
+	 * Copies and merges as {@link #main(String[])} does, with the defaults of
+	 * {@code ./config/merge_defaults.json}, without ending the JVM.
+	 *
+	 * @param args
+	 *            the arguments, see the class documentation
+	 * @throws UsageException
+	 *             if neither the arguments nor the defaults name a directory
+	 * @throws IOException
+	 *             if copying or merging fails
+	 */
+	public static void run(String[] args) throws IOException
+	{
+		run(args, Path.of(CONFIG_PATH));
+	}
+
+	/**
+	 * Copies and merges as {@link #main(String[])} does, with the defaults of the given file,
+	 * without ending the JVM.
+	 *
+	 * @param args
+	 *            the arguments, see the class documentation
+	 * @param configFile
+	 *            the JSON file with the defaults; a missing file means no defaults
+	 * @throws UsageException
+	 *             if neither the arguments nor the defaults name a directory
+	 * @throws IOException
+	 *             if copying or merging fails
+	 */
+	public static void run(String[] args, Path configFile) throws IOException
+	{
+		Map<String, Object> cfg = loadDefaults(configFile.toString());
 
 		// Parse CLI
 		Map<String, List<String>> cli = parseArgs(args);
@@ -43,8 +122,9 @@ public class MergeWithTemplate
 
 		if (dirs == null || dirs.isEmpty())
 		{
-			die("No directories specified. Use --dirs <dir1> <dir2> ... or set default_dirs in "
-				+ CONFIG_PATH);
+			throw new UsageException(
+				"No directories specified. Use --dirs <dir1> <dir2> ... or set default_dirs in "
+					+ configFile);
 		}
 		if (isBlank(srcBase))
 			srcBase = cwd();
@@ -189,12 +269,6 @@ public class MergeWithTemplate
 		return Path.of(".").toAbsolutePath().normalize().toString();
 	}
 
-	private static void die(String msg)
-	{
-		System.err.println(msg);
-		System.exit(2);
-	}
-
 	private static void log(String s)
 	{
 		System.out.println(s);
@@ -290,5 +364,19 @@ public class MergeWithTemplate
 	private static String quote(String s)
 	{
 		return "\"" + s + "\"";
+	}
+
+	/**
+	 * A usage error of the command line: {@link #run(String[], Path)} throws it, and
+	 * {@link #main(String[])} reports it with the exit code {@value #USAGE_ERROR_EXIT_CODE}.
+	 */
+	public static class UsageException extends IllegalArgumentException
+	{
+		private static final long serialVersionUID = 1L;
+
+		UsageException(String message)
+		{
+			super(message);
+		}
 	}
 }

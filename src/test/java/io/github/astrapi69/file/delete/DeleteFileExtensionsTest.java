@@ -32,6 +32,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +41,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.list.ListFactory;
@@ -221,6 +224,31 @@ public class DeleteFileExtensionsTest extends FileTestCase
 		assertTrue(this.actual);
 		this.actual = testFile5.exists();
 		assertTrue(this.actual);
+	}
+
+	/**
+	 * Test method for {@link DeleteFileExtensions#deleteAllFilesWithSuffix(File, String)} with a
+	 * file whose name is shorter than the suffix (file-worker#50)
+	 *
+	 * @param tempDir
+	 *            the directory the test builds its files in
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void deleteAllFilesWithSuffix_deletesEveryMatch_whenANameIsShorterThanTheSuffix(
+		@TempDir Path tempDir) throws IOException
+	{
+		Path txt = Files.writeString(tempDir.resolve("x.txt"), "x");
+		Path shortName = Files.writeString(tempDir.resolve("ab"), "y");
+		Path deeperTxt = Files
+			.writeString(Files.createDirectory(tempDir.resolve("sub")).resolve("z.txt"), "z");
+
+		DeleteFileExtensions.deleteAllFilesWithSuffix(tempDir.toFile(), ".txt");
+
+		assertFalse(Files.exists(txt));
+		assertFalse(Files.exists(deeperTxt));
+		assertEquals("y", Files.readString(shortName));
 	}
 
 

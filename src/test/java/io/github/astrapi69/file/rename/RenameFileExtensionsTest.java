@@ -27,21 +27,35 @@ package io.github.astrapi69.file.rename;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.FileTestCase;
@@ -59,6 +73,15 @@ import io.github.astrapi69.file.write.StoreFileExtensions;
  */
 public class RenameFileExtensionsTest extends FileTestCase
 {
+
+	/**
+	 * The directory for the tests that build their files themselves. Every file whose suffix is
+	 * changed there has a dot in its own name: the target of a suffix change is built from the last
+	 * dot in the absolute path, which is wrong for a file without one below a directory with one
+	 * (file-worker#37)
+	 */
+	@TempDir
+	Path tempDir;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
@@ -164,8 +187,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix);
-		this.actual = null == notDeletedFiles;
-		assertTrue(this.actual);
+		assertEquals(List.of(), notDeletedFiles);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -174,8 +196,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		}
 		notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir, oldFileSuffix,
 			newFileSuffix);
-		this.actual = null == notDeletedFiles;
-		assertTrue(this.actual);
+		assertEquals(List.of(), notDeletedFiles);
 
 		for (final File file : filesWithNewSuffixes)
 		{
@@ -227,8 +248,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix, true);
-		this.actual = null == notDeletedFiles;
-		assertTrue(this.actual);
+		assertEquals(List.of(), notDeletedFiles);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -396,12 +416,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final String filePrefix1 = "testMoveFile";
 		final String oldFileSuffix = ".txt";
 		final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
-		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+		final File destFile = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
 		StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
-		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
+		this.actual = RenameFileExtensions.moveFile(srcFile, destFile);
 		assertTrue(this.actual, "File should be renamed.");
-		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destDir);
+		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destFile);
 		assertTrue(this.actual, "The renamed file should exist in this directory.");
 	}
 
@@ -423,9 +443,9 @@ public class RenameFileExtensionsTest extends FileTestCase
 			final String filePrefix1 = "testMoveFile";
 			final String oldFileSuffix = ".txt";
 			final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
-			final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+			final File destFile = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
-			RenameFileExtensions.moveFile(srcFile, destDir);
+			RenameFileExtensions.moveFile(srcFile, destFile);
 		});
 	}
 
@@ -567,5 +587,326 @@ public class RenameFileExtensionsTest extends FileTestCase
 		beanTester.testBean(RenameFileExtensions.class);
 	}
 
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}: a
+	 * rename onto an existing directory is refused, and with delete the copy onto it, too, so the
+	 * file is reported and the batch goes on (file-worker#69)
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsTheFilesWhoseRenameWasRefused(
+		ChangeAllFilenameSuffix call) throws Exception
+	{
+		File renamable = tempDir.resolve("one.txt").toFile();
+		File blockedFirst = tempDir.resolve("two.txt").toFile();
+		File blockedSecond = tempDir.resolve("three.txt").toFile();
+		Files.writeString(renamable.toPath(), "first");
+		Files.writeString(blockedFirst.toPath(), "second");
+		Files.writeString(blockedSecond.toPath(), "third");
+		Files.createDirectory(tempDir.resolve("two.rtf"));
+		Files.createDirectory(tempDir.resolve("three.rtf"));
+
+		List<File> notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
+
+		assertEquals(Set.of(blockedFirst, blockedSecond), Set.copyOf(notRenamed));
+		assertEquals(2, notRenamed.size());
+		assertEquals("first", Files.readString(tempDir.resolve("one.rtf")));
+		assertFalse(renamable.exists());
+		assertEquals("second", Files.readString(blockedFirst.toPath()));
+		assertEquals("third", Files.readString(blockedSecond.toPath()));
+	}
+
+	/**
+	 * A call of one of the {@code changeAllFilenameSuffix} methods of {@link RenameFileExtensions}
+	 */
+	@FunctionalInterface
+	interface ChangeAllFilenameSuffix
+	{
+		List<File> change(File directory, String oldSuffix, String newSuffix) throws Exception;
+	}
+
+	static Stream<Arguments> changeAllFilenameSuffixCalls()
+	{
+		return Stream.of(
+			argumentSet("changeAllFilenameSuffix(File, String, String)",
+				(ChangeAllFilenameSuffix)RenameFileExtensions::changeAllFilenameSuffix),
+			argumentSet("changeAllFilenameSuffix(File, String, String, false)",
+				(ChangeAllFilenameSuffix)(directory, oldSuffix, newSuffix) -> RenameFileExtensions
+					.changeAllFilenameSuffix(directory, oldSuffix, newSuffix, false)),
+			argumentSet("changeAllFilenameSuffix(File, String, String, true)",
+				(ChangeAllFilenameSuffix)(directory, oldSuffix, newSuffix) -> RenameFileExtensions
+					.changeAllFilenameSuffix(directory, oldSuffix, newSuffix, true)));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsAnEmptyList_whenEveryRenameWorks(
+		ChangeAllFilenameSuffix call) throws Exception
+	{
+		Files.writeString(tempDir.resolve("one.txt"), "first");
+		Path subDirectory = Files.createDirectory(tempDir.resolve("sub"));
+		Files.writeString(subDirectory.resolve("two.txt"), "second");
+
+		List<File> notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
+
+		assertEquals(List.of(), notRenamed);
+		assertEquals("first", Files.readString(tempDir.resolve("one.rtf")));
+		assertEquals("second", Files.readString(subDirectory.resolve("two.rtf")));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsAnEmptyList_whenNoFileHasTheOldSuffix(
+		ChangeAllFilenameSuffix call) throws Exception
+	{
+		Files.writeString(tempDir.resolve("one.md"), "first");
+
+		List<File> notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
+
+		assertEquals(List.of(), notRenamed);
+		assertEquals("first", Files.readString(tempDir.resolve("one.md")));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}: in a
+	 * directory that cannot be written the rename is refused, and with delete the copy fails, so
+	 * the file is reported instead of an exception in the middle of the batch (file-worker#69)
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsTheFile_whenItsDirectoryCannotBeWritten(
+		ChangeAllFilenameSuffix call) throws Exception
+	{
+		Path locked = Files.createDirectory(tempDir.resolve("locked"));
+		Path file = Files.writeString(locked.resolve("one.txt"), "first");
+		List<File> notRenamed;
+		try
+		{
+			assumeTrue(locked.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(locked), "the test runs without override rights");
+
+			notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
+		}
+		finally
+		{
+			locked.toFile().setWritable(true);
+		}
+
+		assertEquals(List.of(file.toFile()), notRenamed);
+		assertEquals("first", Files.readString(file));
+		assertFalse(Files.exists(locked.resolve("one.rtf")));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * with a file whose name is shorter than the suffix (file-worker#50)
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void changeAllFilenameSuffix_renamesEveryMatch_whenANameIsShorterThanTheSuffix()
+		throws Exception
+	{
+		Path shortName = Files.writeString(tempDir.resolve("a"), "short");
+		Path notes = Files.writeString(tempDir.resolve("notes.txt"), "notes");
+
+		RenameFileExtensions.changeAllFilenameSuffix(tempDir.toFile(), ".txt", ".rtf");
+
+		assertEquals("notes", Files.readString(tempDir.resolve("notes.rtf")));
+		assertFalse(Files.exists(notes));
+		assertEquals("short", Files.readString(shortName));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFile(File, File, boolean)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void renameFile_copiesAndDeletes_whenTheRenameIsRefusedAndDeleteIsSet() throws Exception
+	{
+		File file = tempDir.resolve("old.txt").toFile();
+		File newFile = tempDir.resolve("new.txt").toFile();
+		Files.writeString(file.toPath(), "content");
+
+		boolean renamed = RenameFileExtensions.renameFile(new RenameRefusingFile(file), newFile,
+			true);
+
+		assertTrue(renamed);
+		assertEquals("content", Files.readString(newFile.toPath()));
+		assertFalse(file.exists());
+	}
+
+	static Stream<Arguments> fileNamesWithTheirNewNames()
+	{
+		return Stream.of(
+			argumentSet("a name with one extension", "report.txt", "report_063459000.txt"),
+			argumentSet("a name with two extensions", "archive.tar.gz", "archive.tar_063459000.gz"),
+			argumentSet("a name without an extension", "README", "README_063459000"));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#appendSystemtimeToFilename(File, Date)}
+	 *
+	 * @param fileName
+	 *            the name of the file
+	 * @param expectedName
+	 *            the name with the time appended
+	 */
+	@ParameterizedTest
+	@MethodSource("fileNamesWithTheirNewNames")
+	public void appendSystemtimeToFilename_putsTheGivenTimeBeforeTheLastExtension(String fileName,
+		String expectedName)
+	{
+		Date date = Date.from(
+			LocalDate.of(2007, 1, 17).atTime(6, 34, 59).atZone(ZoneId.systemDefault()).toInstant());
+
+		String actual = RenameFileExtensions
+			.appendSystemtimeToFilename(tempDir.resolve(fileName).toFile(), date);
+
+		assertEquals(expectedName, actual);
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFileWithSystemtime(File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void renameFileWithSystemtime_appendsTheTime_whenTheNameHasNoExtension() throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("README"), "read me").toFile();
+
+		File renamed = RenameFileExtensions.renameFileWithSystemtime(file);
+
+		assertEquals(tempDir.toFile(), renamed.getParentFile());
+		assertTrue(renamed.getName().matches("README_\\d{9}"), renamed.getName());
+		assertEquals("read me", Files.readString(renamed.toPath()));
+		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void moveFile_movesTheFileToTheTargetFile() throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("note.txt"), "hello").toFile();
+		Path otherDirectory = Files.createDirectory(tempDir.resolve("other"));
+		File targetFile = otherDirectory.resolve("arrived.txt").toFile();
+
+		boolean moved = RenameFileExtensions.moveFile(file, targetFile);
+
+		assertTrue(moved);
+		assertEquals("hello", Files.readString(targetFile.toPath()));
+		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void moveFile_refusesAnExistingDirectoryAsTarget_andLeavesTheFileWhereItIs()
+		throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("note.txt"), "hello").toFile();
+		Path directory = Files.createDirectory(tempDir.resolve("target"));
+
+		assertThrows(IllegalArgumentException.class,
+			() -> RenameFileExtensions.moveFile(file, directory.toFile()));
+
+		assertEquals("hello", Files.readString(file.toPath()));
+		try (Stream<Path> entries = Files.list(directory))
+		{
+			assertEquals(0, entries.count());
+		}
+	}
+
+	/**
+	 * A call of a method of {@link RenameFileExtensions} that refuses a file that does not exist
+	 */
+	@FunctionalInterface
+	interface CallOnAMissingFile
+	{
+		void call(File missing) throws Exception;
+	}
+
+	static Stream<Arguments> callsOnAMissingFileWithTheirMessage()
+	{
+		return Stream.of(
+			argumentSet("renameFile(File, String)",
+				(CallOnAMissingFile)missing -> RenameFileExtensions.renameFile(missing, "new.txt"),
+				(Function<File, String>)missing -> "File gone.txt does not exist!"),
+			argumentSet("changeFilenameSuffix(File, String)",
+				(CallOnAMissingFile)missing -> RenameFileExtensions.changeFilenameSuffix(missing,
+					".rtf"),
+				(Function<File, String>)missing -> "The file " + missing + " does not exist."),
+			argumentSet("changeFilenameSuffix(File, String, boolean)",
+				(CallOnAMissingFile)missing -> RenameFileExtensions.changeFilenameSuffix(missing,
+					".rtf", true),
+				(Function<File, String>)missing -> "The file " + missing + " does not exist."));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFile(File, String)},
+	 * {@link RenameFileExtensions#changeFilenameSuffix(File, String)} and
+	 * {@link RenameFileExtensions#changeFilenameSuffix(File, String, boolean)}
+	 *
+	 * @param call
+	 *            the method under test
+	 * @param expectedMessage
+	 *            the message for the missing file
+	 */
+	@ParameterizedTest
+	@MethodSource("callsOnAMissingFileWithTheirMessage")
+	public void methodsOnAMissingFile_throwFileDoesNotExistException_withTheFileInTheMessage(
+		CallOnAMissingFile call, Function<File, String> expectedMessage)
+	{
+		File missing = tempDir.resolve("gone.txt").toFile();
+
+		FileDoesNotExistException exception = assertThrows(FileDoesNotExistException.class,
+			() -> call.call(missing));
+
+		assertEquals(expectedMessage.apply(missing), exception.getMessage());
+	}
 
 }

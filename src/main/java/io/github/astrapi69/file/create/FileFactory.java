@@ -27,6 +27,8 @@ package io.github.astrapi69.file.create;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Set;
 
 import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.create.model.FileInfo;
@@ -260,34 +262,46 @@ public final class FileFactory
 
 	/**
 	 * Creates all files in the collection as empty files if they do not exist, otherwise leaves
-	 * them as they are
+	 * them as they are. A file that cannot be created does not stop the others
 	 *
 	 * @param files
 	 *            the collection of {@link File} objects
 	 *
-	 * @return the {@link FileCreationState} object representing the overall creation result
+	 * @return the overall creation result: {@link FileCreationState#FAILED} if a file could not be
+	 *         created, otherwise {@link FileCreationState#CREATED} if a file was created, otherwise
+	 *         {@link FileCreationState#ALREADY_EXISTS}, which an empty collection also gets
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static FileCreationState newFiles(final Collection<File> files) throws IOException
 	{
-		FileCreationState created = FileCreationState.PENDING;
+		final Set<FileCreationState> states = EnumSet.noneOf(FileCreationState.class);
 		for (final File file : files)
 		{
-			created = FileFactory.newFile(file);
+			states.add(FileFactory.newFile(file));
 		}
-		return created;
+		if (states.contains(FileCreationState.FAILED))
+		{
+			return FileCreationState.FAILED;
+		}
+		if (states.contains(FileCreationState.CREATED))
+		{
+			return FileCreationState.CREATED;
+		}
+		return FileCreationState.ALREADY_EXISTS;
 	}
 
 	/**
 	 * Creates all files in the collection as empty files if they do not exist, otherwise leaves
-	 * them as they are
+	 * them as they are. A file that cannot be created does not stop the others
 	 *
 	 * @param files
 	 *            the collection of {@link File} objects
 	 *
-	 * @return the {@link FileCreationState} object representing the overall creation result
+	 * @return the overall creation result: {@link FileCreationState#FAILED} if a file could not be
+	 *         created, otherwise {@link FileCreationState#CREATED} if a file was created, otherwise
+	 *         {@link FileCreationState#ALREADY_EXISTS}, which an empty collection also gets
 	 */
 	public static FileCreationState newFilesQuietly(final Collection<File> files)
 	{

@@ -124,7 +124,7 @@ public final class CopyFileExtensions
 	}
 
 	/**
-	 * Copies the given source file to the given destination file.
+	 * Copies the given source file to the given destination file byte for byte.
 	 *
 	 * @param source
 	 *            The source file.
@@ -142,8 +142,8 @@ public final class CopyFileExtensions
 	}
 
 	/**
-	 * Copies the given source file to the given destination file with the option to set the
-	 * lastModified time from the given destination file.
+	 * Copies the given source file to the given destination file byte for byte with the option to
+	 * set the lastModified time from the given destination file.
 	 *
 	 * @param source
 	 *            The source file.
@@ -166,16 +166,18 @@ public final class CopyFileExtensions
 
 	/**
 	 * Copies the given source file to the given destination file with the given source encodings
-	 * and destination encodings.
+	 * and destination encodings. If both encodings are null, the bytes are copied unchanged;
+	 * otherwise the content is read as text in the source encoding and written in the destination
+	 * encoding, a null encoding standing for the default charset.
 	 *
 	 * @param source
 	 *            the source
 	 * @param destination
 	 *            the destination
 	 * @param sourceEncoding
-	 *            the source encoding
+	 *            the source encoding, or null
 	 * @param destinationEncoding
-	 *            the destination encoding
+	 *            the destination encoding, or null
 	 * @param lastModified
 	 *            if true the last modified flag is set.
 	 * @return true if the given file is copied otherwise false.
@@ -188,15 +190,61 @@ public final class CopyFileExtensions
 	{
 		if (source.isDirectory())
 		{
-			throw new IllegalArgumentException("The source File " + destination.getName()
-				+ " should be a File but is a Directory.");
+			throw new IllegalArgumentException(
+				"The source File " + source.getName() + " should be a File but is a Directory.");
 		}
 		if (destination.isDirectory())
 		{
 			throw new IllegalArgumentException("The destination File " + destination.getName()
 				+ " should be a File but is a Directory.");
 		}
-		boolean copied;
+		if (isSameFile(source, destination))
+		{
+			throw new IllegalArgumentException("The source File " + source.getName()
+				+ " and the destination are the same file, which a copy would empty.");
+		}
+		if (sourceEncoding == null && destinationEncoding == null)
+		{
+			copyBytes(source, destination);
+		}
+		else
+		{
+			copyText(source, destination, sourceEncoding, destinationEncoding);
+		}
+		if (lastModified)
+		{
+			destination.setLastModified(source.lastModified());
+		}
+		return true;
+	}
+
+	/**
+	 * Tells whether the two files are one: the same file where both exist, else the same absolute
+	 * normalized path (#73)
+	 */
+	private static boolean isSameFile(final File source, final File destination) throws IOException
+	{
+		if (source.exists() && destination.exists())
+		{
+			return Files.isSameFile(source.toPath(), destination.toPath());
+		}
+		return source.toPath().toAbsolutePath().normalize()
+			.equals(destination.toPath().toAbsolutePath().normalize());
+	}
+
+	private static void copyBytes(final File source, final File destination) throws IOException
+	{
+		try (InputStream inputStream = StreamExtensions.getInputStream(source);
+			OutputStream outputStream = StreamExtensions.getOutputStream(destination,
+				!destination.exists()))
+		{
+			inputStream.transferTo(outputStream);
+		}
+	}
+
+	private static void copyText(final File source, final File destination,
+		final Charset sourceEncoding, final Charset destinationEncoding) throws IOException
+	{
 		try (InputStream inputStream = StreamExtensions.getInputStream(source);
 			InputStreamReader reader = sourceEncoding != null
 				? new InputStreamReader(inputStream, sourceEncoding)
@@ -214,18 +262,12 @@ public final class CopyFileExtensions
 			{
 				writer.write(charArray, 0, tmp);
 			}
-			copied = true;
 		}
-		if (lastModified)
-		{
-			destination.setLastModified(source.lastModified());
-		}
-		return copied;
 	}
 
 	/**
 	 * Copies the given source file to the given destination file with the given source encodings
-	 * and destination encodings.
+	 * and destination encodings. If both encodings are null, the bytes are copied unchanged.
 	 *
 	 * @param sources
 	 *            the files the have to be copied
@@ -243,7 +285,7 @@ public final class CopyFileExtensions
 	{
 		if (!destination.exists())
 		{
-			DirectoryFactory.newDirectory(destination);
+			DirectoryFactory.newDirectoriesQuietly(destination.toPath());
 		}
 		sources.forEach(RuntimeExceptionDecorator.decorate(file -> {
 			File destinationFile = new File(destination, file.getName());
@@ -312,7 +354,7 @@ public final class CopyFileExtensions
 
 	/**
 	 * Creates a backup file in the same directory with the same name of the given file and with the
-	 * extension of '*.bak'.
+	 * extension of '*.bak'. If both encodings are null, the bytes are copied unchanged.
 	 *
 	 * @param file
 	 *            the file to backup.

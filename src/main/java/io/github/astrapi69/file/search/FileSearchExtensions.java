@@ -42,6 +42,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.Strings;
+
+import io.github.astrapi69.file.search.api.Searchable;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.regex.RegExExtensions;
 
@@ -53,6 +56,13 @@ import io.github.astrapi69.regex.RegExExtensions;
  */
 public final class FileSearchExtensions
 {
+
+	/**
+	 * The searches this class delegates to, so that both answer alike (file-worker#88)
+	 */
+	private static final Searchable SEARCHABLE = new Searchable()
+	{
+	};
 
 	/**
 	 * Private constructor to prevent instantiation
@@ -350,7 +360,7 @@ public final class FileSearchExtensions
 	 *            The directory to search.
 	 * @param filenameToSearch
 	 *            The search pattern. Allowed wildcards are "*" and "?".
-	 * @return A List with all files that matches the search pattern.
+	 * @return A List with all files of the given directory that matches the search pattern.
 	 */
 	public static List<File> findFiles(final File dir, final String filenameToSearch)
 	{
@@ -363,7 +373,7 @@ public final class FileSearchExtensions
 			{
 				if (filename.matches(regex))
 				{
-					final File foundedFile = new File(filename);
+					final File foundedFile = new File(dir, filename);
 					foundedFileList.add(foundedFile);
 				}
 			}
@@ -597,30 +607,31 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Gets the file length from the given file in Kilobytes.
+	 * Gets the file length from the given file in whole Kilobytes, as {@link File#length()} gives
+	 * it: 0 for a file that does not exist, and unspecified for a directory.
 	 *
-	 * @param dir
-	 *            the dir
+	 * @param file
+	 *            the file
 	 *
 	 * @return Returns the file length from the given file in Kilobytes.
 	 */
-	public static long getFileLengthInKilobytes(final File dir)
+	public static long getFileLengthInKilobytes(final File file)
 	{
-		final long fileLength = dir.getTotalSpace();
-		return fileLength / 1024;
+		return file.length() / 1024;
 	}
 
 	/**
-	 * Gets the file length from the given file in Megabytes.
+	 * Gets the file length from the given file in whole Megabytes, as {@link File#length()} gives
+	 * it: 0 for a file that does not exist, and unspecified for a directory.
 	 *
-	 * @param dir
-	 *            the directory
+	 * @param file
+	 *            the file
 	 *
 	 * @return Returns the file length from the given file in Megabytes.
 	 */
-	public static long getFileLengthInMegabytes(final File dir)
+	public static long getFileLengthInMegabytes(final File file)
 	{
-		return getFileLengthInKilobytes(dir) / 1024;
+		return getFileLengthInKilobytes(file) / 1024;
 	}
 
 	/**
@@ -680,7 +691,8 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Checks the given String matches the given suffixes.
+	 * Checks if the given String ends with one of the given suffixes, ignoring the case. A String
+	 * shorter than a suffix does not end with it.
 	 *
 	 * @param stringToMatch
 	 *            The string to compare.
@@ -690,101 +702,56 @@ public final class FileSearchExtensions
 	 */
 	public static boolean match(final String stringToMatch, final String[] suffixes)
 	{
-		for (final String suffix : suffixes)
-		{
-			final int suffixesLength = suffix.length();
-			final int stringToMatchLength = stringToMatch.length();
-			final int result = stringToMatchLength - suffixesLength;
-			final String extensionToMatch = stringToMatch.substring(result, stringToMatchLength);
-			final boolean equals = extensionToMatch.equalsIgnoreCase(suffix);
-			if (stringToMatchLength >= suffixesLength && equals)
-			{
-				return true;
-			}
-		}
-		return false;
+		return Arrays.stream(suffixes)
+			.anyMatch(suffix -> Strings.CI.endsWith(stringToMatch, suffix));
 	}
 
 	/**
-	 * Finds all files in the specified directory that match the given prefix and file extension.
+	 * Finds the files in the specified directory, not in its subdirectories, that match the given
+	 * prefix and file extension. A match is a file whose name starts with the prefix and ends with
+	 * a dot and the extension, both read as text and compared case-sensitively; the two may
+	 * overlap, so the prefix {@code report.} and the extension {@code txt} match
+	 * {@code report.txt}. Delegates to
+	 * {@link Searchable#findFilesWithPrefixAndExtension(File, String, String)}, so both answer
+	 * alike (file-worker#88).
 	 *
 	 * @param dir
 	 *            The directory in which to search for files.
 	 * @param prefix
 	 *            The prefix that the filenames should start with.
 	 * @param extension
-	 *            The file extension that the filenames should have.
-	 * @return A list of files that match the specified prefix and extension.
+	 *            The file extension that the filenames should have, without the dot.
+	 * @return A list of files that match the specified prefix and extension, with their absolute
+	 *         paths.
 	 */
 	public static List<File> findFilesWithPrefixAndExtension(final File dir, final String prefix,
 		final String extension)
 	{
-		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = "^" + prefix + ".*\\." + extension + "$";
-		// Get all files in the directory
-		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
-			return foundedFileList;
-		}
-		for (final File child : children)
-		{
-			// if the entry is a not directory, you can add the files that matches
-			if (!child.isDirectory())
-			{
-				// entry is a file
-				final String filename = child.getName();
-				if (filename.matches(regex))
-				{
-					foundedFileList.add(child.getAbsoluteFile());
-				}
-			}
-		}
-		return foundedFileList;
+		return SEARCHABLE.findFilesWithPrefixAndExtension(dir.getAbsoluteFile(), prefix, extension);
 	}
 
 	/**
 	 * Finds all files recursively in the specified directory that match the given prefix and file
-	 * extension.
+	 * extension. A match is a file whose name starts with the prefix and ends with a dot and the
+	 * extension, both read as text and compared case-sensitively; the two may overlap, so the
+	 * prefix {@code report.} and the extension {@code txt} match {@code report.txt}. Delegates to
+	 * {@link Searchable#findFilesWithPrefixAndExtensionRecursive(File, String, String)}, so both
+	 * answer alike (file-worker#88).
 	 *
 	 * @param dir
 	 *            The directory in which to search for files.
 	 * @param prefix
 	 *            The prefix that the filenames should start with.
 	 * @param extension
-	 *            The file extension that the filenames should have.
-	 * @return A list of files that match the specified prefix and extension.
+	 *            The file extension that the filenames should have, without the dot.
+	 * @return A list of files that match the specified prefix and extension, with their absolute
+	 *         paths.
 	 */
 	public static List<File> findFilesWithPrefixAndExtensionRecursive(final File dir,
 		final String prefix, final String extension)
 	{
-		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = "^" + prefix + ".*\\." + extension + "$";
-		// Get all files in the directory
-		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
-			return foundedFileList;
-		}
-		for (final File child : children)
-		{
-			// if the entry is a directory
-			if (child.isDirectory())
-			{
-				foundedFileList
-					.addAll(findFilesWithPrefixAndExtensionRecursive(child, prefix, extension));
-			}
-			else
-			{
-				// entry is a file
-				final String filename = child.getName();
-				if (filename.matches(regex))
-				{
-					foundedFileList.add(child.getAbsoluteFile());
-				}
-			}
-		}
-		return foundedFileList;
+		return SEARCHABLE.findFilesWithPrefixAndExtensionRecursive(dir.getAbsoluteFile(), prefix,
+			extension);
 	}
 
 }

@@ -278,15 +278,51 @@ public interface Searchable
 
 
 	/**
-	 * Finds all files in the specified directory and subdirectories that match the given prefix and
-	 * extension
+	 * Finds the files in the specified directory, not in its subdirectories, that match the given
+	 * prefix and extension. A match is a file whose name starts with the prefix and ends with a dot
+	 * and the extension, both read as text and compared case-sensitively; the two may overlap, so
+	 * the prefix {@code report.} and the extension {@code txt} match {@code report.txt}
+	 * (file-worker#88)
 	 *
 	 * @param dir
 	 *            the directory in which to search for files
 	 * @param prefix
 	 *            the prefix that filenames should start with
 	 * @param extension
-	 *            the file extension that filenames should have
+	 *            the file extension that filenames should have, without the dot
+	 * @return a list of files that match the specified prefix and extension
+	 */
+	default List<File> findFilesWithPrefixAndExtension(File dir, String prefix, String extension)
+	{
+		List<File> matchingFiles = new ArrayList<>();
+		File[] files = dir.listFiles();
+
+		if (files != null)
+		{
+			for (File file : files)
+			{
+				if (!file.isDirectory() && hasPrefixAndExtension(file, prefix, extension))
+				{
+					matchingFiles.add(file);
+				}
+			}
+		}
+		return matchingFiles;
+	}
+
+	/**
+	 * Finds all files in the specified directory and subdirectories that match the given prefix and
+	 * extension. A match is a file whose name starts with the prefix and ends with a dot and the
+	 * extension, both read as text and compared case-sensitively; the two may overlap, so the
+	 * prefix {@code report.} and the extension {@code txt} match {@code report.txt}
+	 * (file-worker#88)
+	 *
+	 * @param dir
+	 *            the directory in which to search for files
+	 * @param prefix
+	 *            the prefix that filenames should start with
+	 * @param extension
+	 *            the file extension that filenames should have, without the dot
 	 * @return a list of files that match the specified prefix and extension
 	 */
 	default List<File> findFilesWithPrefixAndExtensionRecursive(File dir, String prefix,
@@ -304,13 +340,21 @@ public interface Searchable
 					matchingFiles
 						.addAll(findFilesWithPrefixAndExtensionRecursive(file, prefix, extension));
 				}
-				else if (file.getName().startsWith(prefix)
-					&& file.getName().endsWith("." + extension))
+				else if (hasPrefixAndExtension(file, prefix, extension))
 				{
 					matchingFiles.add(file);
 				}
 			}
 		}
 		return matchingFiles;
+	}
+
+	/**
+	 * The one definition of a match of the prefix and extension searches: the name starts with the
+	 * prefix and ends with a dot and the extension
+	 */
+	private boolean hasPrefixAndExtension(File file, String prefix, String extension)
+	{
+		return file.getName().startsWith(prefix) && file.getName().endsWith("." + extension);
 	}
 }

@@ -1,6 +1,113 @@
 ## Change log
 ----------------------
 
+Version 20.0
+-------------
+
+BREAKING:
+
+- Java 25 is the minimum, up from 17: the family builds, tests and releases on JDK 25
+  (astrapi69/mystic-crypt#234), so this release is 20.0 instead of 19.2 (#41)
+- `FileCreationState` carries no file: `getFile()` and `setFile(File)` are gone, since a constant is shared by the
+  whole JVM and `newDirectory` wrote every caller's directory into it; `DirectoryFactory.newTempDir` (both
+  overloads) is gone with them, `newTempDirectory` returns the created directory (#68)
+- every comparison of `CompareFileExtensions` and `SimpleCompareFileExtensions` rejects a directory, as the source
+  and as the file to compare, with an `IllegalArgumentException` that names it: a directory as the file to compare
+  threw a NullPointerException in the name check, one as the source was compared, `compareFiles(File, File, boolean)`
+  reported two empty directories as equal, and `compareFilesByChecksum` compared two directories through a
+  checksum that can report two different trees as equal. The finders never pass a directory, so their results stay
+  (#78)
+
+FIXED:
+
+- `changeFilenameSuffix` keeps a file in its directory below a directory whose name holds a dot (`~/.cache`,
+  `~/.config`): with silly-io 3.6 the target of a file without an extension was built outside it, so a rename could
+  move the file away and replace another one; silly-io 4.0 looks for the extension in the file name only (#37,
+  astrapi69/silly-io#9)
+- a copy without charsets keeps every byte: `CopyFileExtensions.copyFile` copied through a Reader and a Writer
+  and corrupted binary files, backups made with `newBackupOf` and the File-based directory copies included (#45)
+- a copy onto the file itself is refused with an `IllegalArgumentException` instead of emptying the file (#73)
+- `copyDirectoryWithFileFilter` leaves out the listed files at every level, not only the top one (#53)
+- the File-based directory copies answer for the whole tree, not for the last entry they listed (#54)
+- the File-based copies into a directory create its missing parents (#55)
+- `copyFile` names the source, not the destination, when the source is a directory (#56); the Javadoc of
+  `Copyable#copyFile` says it copies to a destination file (#63)
+- `FileSearchExtensions.match` returns false for a name shorter than the suffix instead of throwing, so
+  `findFiles(String, String[])`, `deleteAllFilesWithSuffix` and `changeAllFilenameSuffix` no longer stop half way (#50)
+- `findFiles(File, String)` returns the files of the searched directory, not of the working directory (#49)
+- `getFileLengthInKilobytes` and `getFileLengthInMegabytes` return the length of the file, not the size of its
+  partition (#57)
+- `findFilesWithPrefixAndExtension` and its recursive variant read the prefix and the extension as text, not as a
+  regular expression (#58)
+- `findFilesWithPrefixAndExtension` and its recursive variant delegate to `Searchable`, which gains the top-level
+  variant, so both answer alike from one definition of a match: the name starts with the prefix and ends with a dot
+  and the extension, which may overlap. The prefix `report.` and the extension `txt` now find `report.txt` (#88)
+- `compareFileContentByBytes` and `compareFileContentByLines` compare the content; they reported equal content
+  for any two files (#46)
+- `findEqualFilesWithSameContent` compares the content it names (#47)
+- the content equality of `compareFileContentByBytes` and `compareFileContentByLines` says whether the content is
+  the same, whatever the name, the time or the extension: it was true for any two files whose other properties
+  differed, without a comparison. `compareFileContentByBytes` takes files of unequal length as unequal without
+  reading them; `compareFileContentByLines` compares the lines with the line ends ignored and takes no shortcut over
+  the length, so the same lines with `\r\n` and with `\n` line ends are equal content (#77)
+- `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
+  the finders work on a directory with such a file (#48)
+- `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
+  first (#52)
+- `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
+- `new FileInfo(File)` and `FileInfo.toFileInfo(File)` take the parent of the absolute file, so a relative file
+  without a parent works (#66)
+- `FileFactory.newFiles` reports the overall state: FAILED if any file failed, else CREATED if any was created, else
+  ALREADY_EXISTS (#67)
+- `changeAllFilenameSuffix` returns the files it could not rename, an empty list and never null when every rename
+  works; with `delete`, a file whose copy fails goes into that list too, instead of an exception in the middle of
+  the batch. `Renameable#changeAllFilenameSuffix` delegates to it, and the Javadoc of both says what `delete` and
+  the list mean (#69)
+- `write2FileWithBuffer` creates a destination that does not exist (#70)
+- the messages of `RenameFileExtensions` for a missing file read as `Renameable`'s (#71); the Javadoc of `moveFile`
+  says it moves to a target file (#65)
+- `MergeFileExtensions.mergeByKey` splits at the delimiter as it is, not as a regular expression, and keeps every
+  line (#51)
+- `DeleteFileExtensions.delete` reports true for a directory it deleted (#59)
+- a merge under `TARGET_AS_MASTER` reports every source file it cannot delete, in one `IOException` at the end,
+  after merging the rest (#60)
+- a merge without a strategy skips a missing source, as the strategy variant does, and empty files merge to an
+  empty file (#61)
+- `deleteAllFiles` writes nothing to stderr: not for a regular file (#62), not for a restricted directory (#79)
+- a merge over a directory it cannot read merges the rest and names that directory in its one `IOException`, next to
+  the source files it could not delete, under every strategy and without one; it threw a bare
+  NullPointerException without a strategy and under `TARGET_AS_MASTER`, and left the files out silently under
+  `SOURCE_TO_TARGET` (#76)
+- a copy failure that stops a merge with a strategy carries the delete failures and the unread directories collected
+  until then as suppressed exceptions, instead of dropping them (#80)
+- a copy failure that stops a merge without a strategy is thrown as the `IOException` the method declares, with the
+  unread directories collected until then as suppressed exceptions; it was wrapped in a `RuntimeException`, and
+  the unread directories were dropped (#90)
+
+CHANGED:
+
+- built with Gradle 9.8.2 and the nmcp settings plugin 1.6.2, without a deprecation warning (#83)
+
+- the tests resolve jackson 2.22.4 through a constraint to jobj-copy 4.3, no longer the release candidate
+  2.16.0-rc1 that jobj-contract-verifier 5.2 brought (#87); the 15 Dependabot alerts on that test-only jackson
+  are closed as false alarms for users (#86)
+
+- the tests cover 95.7% of the lines and 89.6% of the branches, up from 70.6% and 62.4%, and the build
+  fails below 90% of the lines or 85% of the branches (`jacocoTestCoverageVerification` in `check`). The defects
+  the new tests found are #45 to #71 (#38)
+
+- dependencies raised with versionCatalogUpdate, stable versions only: checksum-up 3.2, commons-lang3 3.21.0,
+  crypt-api 10.3, silly-collection 28.2, and for the tests meanbean-factories 3.1, mockito 5.24.0 and test-object 9.1.
+  crypt-api 10 names its module `io.github.astrapi69.crypt.api`, which `module-info.java` now requires (#43)
+
+- the grgit and hierynomus license plugins are gone: a release is tagged through git
+  (`gradle/tagging.gradle`), and Spotless writes the license header from `src/main/resources/license-header.txt` (#41)
+
+- a release is published from its `RELEASE-*` tag by the new `publish.yml`, as in the rest of the family,
+  and a snapshot by a manual run of it; `gradle.yml` only builds and no longer uploads on every push to
+  `develop`. The build refuses an upload to the Central Portal outside CI, and a release from anything but
+  a `RELEASE-*` tag (#24)
+
 Version 19.1
 -------------
 

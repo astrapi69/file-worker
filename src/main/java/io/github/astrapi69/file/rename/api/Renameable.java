@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +35,7 @@ import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.exception.FileDoesNotExistException;
 import io.github.astrapi69.file.exception.FileIsADirectoryException;
-import io.github.astrapi69.file.search.FileSearchExtensions;
+import io.github.astrapi69.file.rename.RenameFileExtensions;
 import io.github.astrapi69.io.file.FilenameExtensions;
 
 /**
@@ -60,7 +59,8 @@ public interface Renameable
 	}
 
 	/**
-	 * Returns the filename from the given file with the specified date appended
+	 * Returns the filename from the given file with the specified date appended. The time goes
+	 * before the last extension, or at the end of a name without one.
 	 *
 	 * @param fileToRename
 	 *            the file
@@ -75,14 +75,16 @@ public interface Renameable
 		String sysTime = add2Name != null ? df.format(add2Name) : df.format(new Date());
 
 		String fileName = fileToRename.getName();
-		int extIndex = fileName.lastIndexOf(".");
-		String ext = fileName.substring(extIndex);
-		String newName = fileName.substring(0, extIndex) + "_" + sysTime + ext;
-		return newName;
+		String nameWithoutExtension = FilenameExtensions.getFilenameWithoutExtension(fileName);
+		String extension = fileName.substring(nameWithoutExtension.length());
+		return nameWithoutExtension + "_" + sysTime + extension;
 	}
 
 	/**
-	 * Changes all filenames with the specified suffix
+	 * Changes all filenames with the specified suffix, in the given directory and below it. A file
+	 * whose suffix cannot be changed goes into the returned list, and the batch goes on with the
+	 * next file. Delegates to
+	 * {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}
 	 *
 	 * @param file
 	 *            the directory in which to change filenames
@@ -91,8 +93,12 @@ public interface Renameable
 	 * @param newSuffix
 	 *            the new suffix
 	 * @param delete
-	 *            if true, deletes files with the same name after renaming
-	 * @return a list of files that could not be deleted if delete is true
+	 *            if true, a file whose rename the operating system refuses, as it does for a move
+	 *            to another file system, is copied to its new name and then deleted; if false, it
+	 *            is left as it is
+	 * @return the files whose suffix could not be changed, because the rename was refused or, with
+	 *         delete, the copy failed; an empty list, never null, if every file with the old suffix
+	 *         was renamed
 	 * @throws IOException
 	 *             if an I/O exception occurs
 	 * @throws FileDoesNotExistException
@@ -104,22 +110,7 @@ public interface Renameable
 		final String newSuffix, final boolean delete)
 		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
-		List<File> notDeletedFiles = null;
-		List<File> files = FileSearchExtensions.findFiles(file.getAbsolutePath(),
-			new String[] { oldSuffix });
-
-		for (File currentFile : files)
-		{
-			if (!changeFilenameSuffix(currentFile, newSuffix, delete))
-			{
-				if (notDeletedFiles == null)
-				{
-					notDeletedFiles = new ArrayList<>();
-				}
-				notDeletedFiles.add(currentFile);
-			}
-		}
-		return notDeletedFiles;
+		return RenameFileExtensions.changeAllFilenameSuffix(file, oldSuffix, newSuffix, delete);
 	}
 
 	/**
@@ -241,22 +232,27 @@ public interface Renameable
 	}
 
 	/**
-	 * Moves the specified source file to the given destination directory
+	 * Moves the specified source file to the given destination file. The destination file is the
+	 * new path of the source file, as the target of {@code Files.move(source, target)} is, not a
+	 * directory to move it into: a move of a file onto an existing directory is refused with an
+	 * {@link IllegalArgumentException}, and the file stays where it is. To move a file into a
+	 * directory, use {@code FileUtils.moveFileToDirectory(File, File, boolean)} of commons-io
 	 *
 	 * @param srcFile
 	 *            the source file
-	 * @param destDir
-	 *            the destination directory
+	 * @param destFile
+	 *            the destination file, the new path of the source file
 	 * @return true if the file was moved successfully
 	 * @throws IOException
 	 *             if an I/O exception occurs
 	 * @throws FileIsADirectoryException
-	 *             if the source or destination is a directory
+	 *             not thrown by the default methods of this interface, a move of a file onto an
+	 *             existing directory is refused with an {@link IllegalArgumentException}
 	 */
-	default boolean moveFile(final File srcFile, final File destDir)
+	default boolean moveFile(final File srcFile, final File destFile)
 		throws IOException, FileIsADirectoryException
 	{
-		return renameFile(srcFile, destDir, true);
+		return renameFile(srcFile, destFile, true);
 	}
 
 	/**

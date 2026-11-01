@@ -203,7 +203,8 @@ public final class WriteFileExtensions
 
 	/**
 	 * The Method write2FileWithBuffer() copy the content from one file to another. It use a buffer
-	 * as the name says.
+	 * as the name says. A destination file that does not exist is created, one that exists is
+	 * overwritten.
 	 *
 	 * @param inputFile
 	 *            The Path to the File and name from the file from where we read.
@@ -221,7 +222,8 @@ public final class WriteFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		try (InputStream inputStream = StreamExtensions.getInputStream(new File(inputFile));
-			OutputStream outputStream = StreamExtensions.getOutputStream(new File(outputFile)))
+			OutputStream outputStream = StreamExtensions.getOutputStream(new File(outputFile),
+				true))
 		{
 			WriteFileExtensions.write(inputStream, outputStream);
 		}

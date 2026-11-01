@@ -1,3 +1,27 @@
+/**
+ * The MIT License
+ *
+ * Copyright (C) 2015 Asterios Raptis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package io.github.astrapi69.file.merge;
 
 import java.io.BufferedReader;
@@ -20,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import io.github.astrapi69.file.merge.strategy.MergeFileStrategy;
 
@@ -200,7 +225,8 @@ public final class MergeFileExtensions
 	 *            the zero-based index of the column to use as the key (e.g., 0 for the first
 	 *            column)
 	 * @param delimiter
-	 *            the string used to separate columns (e.g., "," or "\t")
+	 *            the string used to separate columns (e.g., "," or "\t"), taken as it is and not as
+	 *            a regular expression
 	 * @return the targetFile
 	 * @throws IOException
 	 *             if an I/O error occurs
@@ -312,15 +338,11 @@ public final class MergeFileExtensions
 		try (Writer writer = new BufferedWriter(
 			new OutputStreamWriter(new FileOutputStream(targetFile), charset)))
 		{
-			for (int i = 0; i < lines.size(); i++)
+			for (String line : lines)
 			{
-				writer.write(lines.get(i));
-				if (i < lines.size() - 1)
-				{
-					writer.write(System.lineSeparator());
-				}
+				writer.write(line);
+				writer.write(System.lineSeparator());
 			}
-			writer.write(System.lineSeparator());
 		}
 	}
 
@@ -398,7 +420,8 @@ public final class MergeFileExtensions
 	 * @param keyIndex
 	 *            the zero-based index of the column to use as the key
 	 * @param delimiter
-	 *            the string used to separate columns
+	 *            the string used to separate columns, taken as it is and not as a regular
+	 *            expression
 	 */
 	public static List<String> collectByKeyAdvanced(List<File> files, Charset charset, int keyIndex,
 		String delimiter) throws IOException
@@ -414,7 +437,7 @@ public final class MergeFileExtensions
 				if (line.trim().isEmpty())
 					continue;
 
-				String[] parts = line.split(delimiter, -1);
+				String[] parts = line.split(Pattern.quote(delimiter), -1);
 				// Wenn die Zeile weniger Spalten hat als der keyIndex, ist die ganze Zeile der
 				// Schlüssel
 				String key = (parts.length > keyIndex) ? parts[keyIndex].trim() : line.trim();

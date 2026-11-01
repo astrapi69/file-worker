@@ -28,17 +28,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
@@ -55,6 +64,9 @@ import io.github.astrapi69.file.write.LineAppender;
  */
 public class ModifyFileExtensionsTest
 {
+
+	@TempDir
+	Path tempDir;
 
 	// =========================================================================
 	// 1. TESTS FOR CONCATENATE (List based)
@@ -549,4 +561,155 @@ public class ModifyFileExtensionsTest
 		final BeanTester beanTester = new BeanTester();
 		beanTester.testBean(ModifyFileExtensions.class);
 	}
+
+	// =========================================================================
+	// 4. TESTS FOR THE GUARDS, WITH FILES BUILT IN A TEMPORARY DIRECTORY
+	// =========================================================================
+
+	/**
+	 * A concatenation of the files with an extension in a directory, as the four
+	 * concatenateFilesWithExtension methods offer it; the two without a result file ignore it
+	 */
+	@FunctionalInterface
+	interface ConcatenationByExtension
+	{
+		File concatenate(File directory, String extension, File resultTextFile) throws IOException;
+	}
+
+	static Stream<Named<ConcatenationByExtension>> concatenationsByExtension()
+	{
+		return Stream.of(
+			Named.<ConcatenationByExtension> of("concatenateFilesWithExtension(File, String, File)",
+				ModifyFileExtensions::concatenateFilesWithExtension),
+			Named.<ConcatenationByExtension> of("concatenateFilesWithExtension(File, String)",
+				(directory, extension, resultTextFile) -> ModifyFileExtensions
+					.concatenateFilesWithExtension(directory, extension)),
+			Named.<ConcatenationByExtension> of(
+				"concatenateFilesWithExtensionRecursive(File, String, File)",
+				ModifyFileExtensions::concatenateFilesWithExtensionRecursive),
+			Named.<ConcatenationByExtension> of(
+				"concatenateFilesWithExtensionRecursive(File, String)",
+				(directory, extension, resultTextFile) -> ModifyFileExtensions
+					.concatenateFilesWithExtensionRecursive(directory, extension)));
+	}
+
+	/**
+	 * Test method for {@link ModifyFileExtensions#concatenateAll(List)}
+	 */
+	@Test
+	public void concatenateAll_throwsIllegalArgumentException_whenTheListIsEmpty()
+	{
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> ModifyFileExtensions.concatenateAll(new ArrayList<>()));
+
+		assertEquals("textFiles must not be empty", exception.getMessage());
+	}
+
+	/**
+	 * Test method for
+	 * {@link ModifyFileExtensions#modifyFileAndGet(Path, Path, java.nio.charset.Charset, FileChangeable)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void modifyFileAndGet_leavesOutTheLinesForWhichTheModifierReturnsNull()
+		throws IOException
+	{
+		Path inFilePath = Files.writeString(tempDir.resolve("in.txt"), "zero\none\ntwo\nthree\n");
+		Path outFilePath = tempDir.resolve("out.txt");
+		FileChangeable keepEvenLines = (index, line) -> index % 2 == 0 ? line + "\n" : null;
+
+		Path result = ModifyFileExtensions.modifyFileAndGet(inFilePath, outFilePath,
+			StandardCharsets.UTF_8, keepEvenLines);
+
+		assertEquals(outFilePath, result);
+		assertEquals("zero\ntwo\n", Files.readString(outFilePath));
+		assertEquals("zero\none\ntwo\nthree\n", Files.readString(inFilePath));
+	}
+
+	/**
+	 * Test method for the four concatenateFilesWithExtension methods of
+	 * {@link ModifyFileExtensions}
+	 *
+	 * @param concatenation
+	 *            the method under test
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("concatenationsByExtension")
+	public void concatenationsByExtension_throwIllegalArgumentException_whenGivenARegularFile(
+		ConcatenationByExtension concatenation) throws IOException
+	{
+		File regularFile = Files.writeString(tempDir.resolve("chapter.md"), "# Chapter").toFile();
+		File resultTextFile = tempDir.resolve("result.md").toFile();
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> concatenation.concatenate(regularFile, ".md", resultTextFile));
+
+		assertEquals("The given file is not a directory: " + regularFile, exception.getMessage());
+	}
+
+	/**
+	 * Test method for the four concatenateFilesWithExtension methods of
+	 * {@link ModifyFileExtensions}
+	 *
+	 * @param concatenation
+	 *            the method under test
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("concatenationsByExtension")
+	public void concatenationsByExtension_throwIllegalArgumentException_whenNoFileHasTheExtension(
+		ConcatenationByExtension concatenation) throws IOException
+	{
+		Path directory = Files.createDirectory(tempDir.resolve("notes"));
+		Files.writeString(directory.resolve("notes.txt"), "not markdown");
+		Files.createDirectory(directory.resolve("empty"));
+		File resultTextFile = tempDir.resolve("result.md").toFile();
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> concatenation.concatenate(directory.toFile(), ".md", resultTextFile));
+
+		assertEquals("No files with extension '.md' found in directory: " + directory.toFile(),
+			exception.getMessage());
+	}
+
+	/**
+	 * Test method for the four concatenateFilesWithExtension methods of
+	 * {@link ModifyFileExtensions}. A directory that cannot be listed is reported like one without
+	 * a matching file. The directory is empty, so that the outcome is the same for a user who may
+	 * list it anyway, as root may.
+	 *
+	 * @param concatenation
+	 *            the method under test
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("concatenationsByExtension")
+	public void concatenationsByExtension_throwIllegalArgumentException_whenTheDirectoryCannotBeListed(
+		ConcatenationByExtension concatenation) throws IOException
+	{
+		assumeTrue(FileSystems.getDefault().supportedFileAttributeViews().contains("posix"),
+			"needs POSIX file permissions to make a directory unlistable");
+		Path directory = Files.createDirectory(tempDir.resolve("locked"));
+		File resultTextFile = tempDir.resolve("result.md").toFile();
+		Files.setPosixFilePermissions(directory, PosixFilePermissions.fromString("---------"));
+		try
+		{
+			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+				() -> concatenation.concatenate(directory.toFile(), ".md", resultTextFile));
+
+			assertEquals("No files with extension '.md' found in directory: " + directory.toFile(),
+				exception.getMessage());
+		}
+		finally
+		{
+			Files.setPosixFilePermissions(directory, PosixFilePermissions.fromString("rwx------"));
+		}
+	}
+
 }
