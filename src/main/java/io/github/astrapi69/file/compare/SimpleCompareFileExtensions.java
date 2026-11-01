@@ -32,7 +32,9 @@ import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.Algorithm;
 
 /**
- * The class {@link SimpleCompareFileExtensions}.
+ * The class {@link SimpleCompareFileExtensions}. Every comparison rejects a directory, as the
+ * source file and as the file to compare, with an {@link IllegalArgumentException} that names it
+ * (file-worker#78).
  */
 public final class SimpleCompareFileExtensions
 {
@@ -52,6 +54,8 @@ public final class SimpleCompareFileExtensions
 	 * @param fileToCompare
 	 *            the file to compare
 	 * @return true if the absolute path are equal, otherwise false.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByAbsolutePath(final File sourceFile,
 		final File fileToCompare)
@@ -75,10 +79,13 @@ public final class SimpleCompareFileExtensions
 	 *             Is thrown if the algorithm is not supported or does not exists.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByChecksum(final File sourceFile, final File fileToCompare,
 		final Algorithm algorithm) throws NoSuchAlgorithmException, IOException
 	{
+		CompareFileExtensions.rejectDirectories(sourceFile, fileToCompare);
 		final String checksumSourceFile = FileChecksumExtensions.getChecksum(sourceFile, algorithm);
 		final String checksumFileToCompare = FileChecksumExtensions.getChecksum(fileToCompare,
 			algorithm);
@@ -95,10 +102,13 @@ public final class SimpleCompareFileExtensions
 	 * @return true if the checksum with the algorithm Adler32 are equal, otherwise false.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByChecksumAdler32(final File sourceFile,
 		final File fileToCompare) throws IOException
 	{
+		CompareFileExtensions.rejectDirectories(sourceFile, fileToCompare);
 		final long checksumSourceFile = FileChecksumExtensions.getCheckSumAdler32(sourceFile);
 		final long checksumFileToCompare = FileChecksumExtensions.getCheckSumAdler32(fileToCompare);
 		return checksumSourceFile == checksumFileToCompare;
@@ -114,10 +124,13 @@ public final class SimpleCompareFileExtensions
 	 * @return true if the checksum with the algorithm CRC32 are equal, otherwise false.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByChecksumCRC32(final File sourceFile,
 		final File fileToCompare) throws IOException
 	{
+		CompareFileExtensions.rejectDirectories(sourceFile, fileToCompare);
 		final long checksumSourceFile = FileChecksumExtensions.getCheckSumCRC32(sourceFile);
 		final long checksumFileToCompare = FileChecksumExtensions.getCheckSumCRC32(fileToCompare);
 		return checksumSourceFile == checksumFileToCompare;
@@ -132,6 +145,8 @@ public final class SimpleCompareFileExtensions
 	 *            the file to compare
 	 *
 	 * @return true if the content are equal, otherwise false.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByContent(final File sourceFile, final File fileToCompare)
 	{
@@ -148,6 +163,8 @@ public final class SimpleCompareFileExtensions
 	 * @param fileToCompare
 	 *            the file to compare
 	 * @return true if the extension are equal, otherwise false.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByExtension(final File sourceFile, final File fileToCompare)
 	{
@@ -164,6 +181,8 @@ public final class SimpleCompareFileExtensions
 	 * @param fileToCompare
 	 *            the file to compare
 	 * @return true if the last modified are equal, otherwise false.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByLastModified(final File sourceFile,
 		final File fileToCompare)
@@ -181,6 +200,8 @@ public final class SimpleCompareFileExtensions
 	 * @param fileToCompare
 	 *            the file to compare
 	 * @return true if the length are equal, otherwise false.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByLength(final File sourceFile, final File fileToCompare)
 	{
@@ -197,6 +218,8 @@ public final class SimpleCompareFileExtensions
 	 * @param fileToCompare
 	 *            the file to compare
 	 * @return true if the name are equal, otherwise false.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFilesByName(final File sourceFile, final File fileToCompare)
 	{

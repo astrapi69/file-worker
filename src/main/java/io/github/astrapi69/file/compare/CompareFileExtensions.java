@@ -47,8 +47,9 @@ import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.io.file.FilenameExtensions;
 
 /**
- * The class {@link CompareFileExtensions} helps you to compare files. A comparison that fills a
- * result bean rejects a directory as the file to compare with an {@link IllegalArgumentException}
+ * The class {@link CompareFileExtensions} helps you to compare files. Every comparison rejects a
+ * directory, as the source file and as the file to compare, with an
+ * {@link IllegalArgumentException} that names it, whatever it ignores; the finders pass files only
  * (file-worker#78).
  *
  * @version 1.0
@@ -62,6 +63,33 @@ public final class CompareFileExtensions
 	 */
 	private CompareFileExtensions()
 	{
+	}
+
+	/**
+	 * Rejects a directory as the source file or as the file to compare: only files are compared
+	 * (file-worker#78)
+	 *
+	 * @param sourceFile
+	 *            the source file
+	 * @param fileToCompare
+	 *            the file to compare
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory, naming the first that
+	 *             is
+	 */
+	static void rejectDirectories(final File sourceFile, final File fileToCompare)
+	{
+		rejectDirectory(sourceFile, "source file");
+		rejectDirectory(fileToCompare, "file to compare");
+	}
+
+	private static void rejectDirectory(final File file, final String role)
+	{
+		if (file.isDirectory())
+		{
+			throw new IllegalArgumentException(
+				"The " + role + " " + file + " is a directory; only files can be compared.");
+		}
 	}
 
 	/**
@@ -81,7 +109,7 @@ public final class CompareFileExtensions
 	 * @param ignoreNameEquality
 	 *            If this is true then the name equality will be ignored.
 	 * @throws IllegalArgumentException
-	 *             if the file to compare is a directory
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static void compare(final IFileCompareResultBean fileCompareResultBean,
 		final boolean ignoreAbsolutePathEquality, final boolean ignoreExtensionEquality,
@@ -90,11 +118,7 @@ public final class CompareFileExtensions
 	{
 		final File source = fileCompareResultBean.getSourceFile();
 		final File compare = fileCompareResultBean.getFileToCompare();
-		if (compare.isDirectory())
-		{
-			throw new IllegalArgumentException(
-				"The file to compare " + compare + " is a directory; only files can be compared.");
-		}
+		rejectDirectories(source, compare);
 		if (!ignoreAbsolutePathEquality)
 		{
 			// check the absolute path from the files...
@@ -178,6 +202,8 @@ public final class CompareFileExtensions
 	 *            If this is true then the name equality will be ignored.
 	 * @param ignoreContentEquality
 	 *            If this is true then the content equality will be ignored.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static void compare(final IFileContentResultBean fileContentResultBean,
 		final boolean ignoreAbsolutePathEquality, final boolean ignoreExtensionEquality,
@@ -239,6 +265,8 @@ public final class CompareFileExtensions
 	 *            the file to compare
 	 *
 	 * @return the i file content result bean
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static IFileContentResultBean compareFileContentByBytes(final File sourceFile,
 		final File fileToCompare)
@@ -286,6 +314,8 @@ public final class CompareFileExtensions
 	 *            the file to compare
 	 *
 	 * @return the i file content result bean
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static IFileContentResultBean compareFileContentByLines(final File sourceFile,
 		final File fileToCompare)
@@ -317,6 +347,8 @@ public final class CompareFileExtensions
 	 *            the file to compare
 	 *
 	 * @return the i file content result bean
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static IFileContentResultBean compareFiles(final File sourceFile,
 		final File fileToCompare)
@@ -335,9 +367,12 @@ public final class CompareFileExtensions
 	 *            the content
 	 *
 	 * @return true, if successful
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static boolean compareFiles(final File source, final File compare, final boolean content)
 	{
+		rejectDirectories(source, compare);
 		boolean equal = true;
 		// boolean sameLastModified = false;
 		// boolean sameAbsolutePath = false;
@@ -416,6 +451,8 @@ public final class CompareFileExtensions
 	 *            the ignore name equality
 	 *
 	 * @return the i file compare result bean
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static IFileCompareResultBean compareFiles(final File sourceFile,
 		final File fileToCompare, final boolean ignoreAbsolutePathEquality,
@@ -450,6 +487,8 @@ public final class CompareFileExtensions
 	 *            the ignore content equality
 	 *
 	 * @return the i file content result bean
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static IFileContentResultBean compareFiles(final File sourceFile,
 		final File fileToCompare, final boolean ignoreAbsolutePathEquality,
@@ -469,6 +508,8 @@ public final class CompareFileExtensions
 	 *
 	 * @param fileCompareResultBean
 	 *            the FileCompareResultBean.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static void completeCompare(final IFileCompareResultBean fileCompareResultBean)
 	{
@@ -852,6 +893,8 @@ public final class CompareFileExtensions
 	 *            the file to compare
 	 *
 	 * @return Returns a FileCompareResultBean Object with the results.
+	 * @throws IllegalArgumentException
+	 *             if the source file or the file to compare is a directory
 	 */
 	public static IFileCompareResultBean simpleCompareFiles(final File sourceFile,
 		final File fileToCompare)

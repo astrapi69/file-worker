@@ -42,8 +42,12 @@ FIXED:
   the length, so the same lines with `\r\n` and with `\n` line ends are equal content (#77)
 - `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
   the finders work on a directory with such a file (#48)
-- `CompareFileExtensions` rejects a directory as the file to compare with an `IllegalArgumentException` that names
-  it, instead of a NullPointerException in the name check; the finders never pass one (#78)
+- every comparison of `CompareFileExtensions` and `SimpleCompareFileExtensions` rejects a directory, as the source
+  and as the file to compare, with an `IllegalArgumentException` that names it: a directory as the file to compare
+  threw a NullPointerException in the name check, one as the source was compared, `compareFiles(File, File, boolean)`
+  reported two empty directories as equal, and `compareFilesByChecksum` compared two directories through a
+  checksum that can report two different trees as equal. The finders never pass a directory, so their results stay
+  (#78)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
 - `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
