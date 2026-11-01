@@ -352,7 +352,7 @@ public final class FileSearchExtensions
 	 *            The directory to search.
 	 * @param filenameToSearch
 	 *            The search pattern. Allowed wildcards are "*" and "?".
-	 * @return A List with all files that matches the search pattern.
+	 * @return A List with all files of the given directory that matches the search pattern.
 	 */
 	public static List<File> findFiles(final File dir, final String filenameToSearch)
 	{
@@ -365,7 +365,7 @@ public final class FileSearchExtensions
 			{
 				if (filename.matches(regex))
 				{
-					final File foundedFile = new File(filename);
+					final File foundedFile = new File(dir, filename);
 					foundedFileList.add(foundedFile);
 				}
 			}

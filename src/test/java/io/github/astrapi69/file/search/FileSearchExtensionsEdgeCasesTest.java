@@ -339,12 +339,22 @@ public class FileSearchExtensionsEdgeCasesTest
 
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("wildcardCases")
-	void findFilesWithWildcards_returnsTheNamesMatchingThePattern(String displayName,
+	void findFilesWithWildcards_returnsTheFilesMatchingThePattern(String displayName,
 		String directory, String pattern, Set<String> expectedNames)
 	{
 		List<File> found = FileSearchExtensions.findFiles(inTempDir(directory), pattern);
 
-		assertEquals(expectedNames, namesOf(found));
+		assertFoundExactly(expectedNames, found);
+	}
+
+	@Test
+	void findFilesWithWildcards_returnsTheFilesOfTheSearchedDirectory() throws IOException
+	{
+		Files.writeString(tempDir.resolve("sub").resolve("found.txt"), "x");
+
+		List<File> found = FileSearchExtensions.findFiles(inTempDir("sub"), "found.*");
+
+		assertEquals(List.of(tempDir.resolve("sub").resolve("found.txt").toFile()), found);
 	}
 
 	@ParameterizedTest(name = "{0}")
