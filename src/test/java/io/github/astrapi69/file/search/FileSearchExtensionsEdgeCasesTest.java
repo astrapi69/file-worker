@@ -229,6 +229,19 @@ public class FileSearchExtensionsEdgeCasesTest
 			Arguments.of("a regular file has nothing", "notes.txt", "notes", "txt", Set.of()));
 	}
 
+	static Stream<Arguments> fileLengthCases()
+	{
+		int kilobyte = 1024;
+		int megabyte = 1024 * kilobyte;
+		return Stream.of(Arguments.of("an empty file", 0, 0L, 0L),
+			Arguments.of("one byte less than a kilobyte", kilobyte - 1, 0L, 0L),
+			Arguments.of("one kilobyte", kilobyte, 1L, 0L),
+			Arguments.of("two kilobytes, the file measured in #57", 2 * kilobyte, 2L, 0L),
+			Arguments.of("one byte less than a megabyte", megabyte - 1, 1023L, 0L),
+			Arguments.of("one megabyte", megabyte, 1024L, 1L),
+			Arguments.of("one byte more than a megabyte", megabyte + 1, 1024L, 1L));
+	}
+
 	private static Set<String> namesOf(Collection<File> files)
 	{
 		return files.stream().map(File::getName).collect(Collectors.toSet());
@@ -420,6 +433,26 @@ public class FileSearchExtensionsEdgeCasesTest
 		List<File> found = FileSearchExtensions.getAllFilesFromDir(inTempDir(directory));
 
 		assertFoundExactly(expectedNames, found);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("fileLengthCases")
+	void getFileLength_returnsTheLengthOfTheFileInWholeKilobytesAndMegabytes(String displayName,
+		int bytes, long expectedKilobytes, long expectedMegabytes) throws IOException
+	{
+		File file = Files.write(tempDir.resolve("sized.bin"), new byte[bytes]).toFile();
+
+		assertEquals(expectedKilobytes, FileSearchExtensions.getFileLengthInKilobytes(file));
+		assertEquals(expectedMegabytes, FileSearchExtensions.getFileLengthInMegabytes(file));
+	}
+
+	@Test
+	void getFileLength_returnsZero_whenTheFileDoesNotExist()
+	{
+		File missing = inTempDir("missing.bin");
+
+		assertEquals(0L, FileSearchExtensions.getFileLengthInKilobytes(missing));
+		assertEquals(0L, FileSearchExtensions.getFileLengthInMegabytes(missing));
 	}
 
 	@Test

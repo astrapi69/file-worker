@@ -599,30 +599,31 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Gets the file length from the given file in Kilobytes.
+	 * Gets the file length from the given file in whole Kilobytes, as {@link File#length()} gives
+	 * it: 0 for a file that does not exist, and unspecified for a directory.
 	 *
-	 * @param dir
-	 *            the dir
+	 * @param file
+	 *            the file
 	 *
 	 * @return Returns the file length from the given file in Kilobytes.
 	 */
-	public static long getFileLengthInKilobytes(final File dir)
+	public static long getFileLengthInKilobytes(final File file)
 	{
-		final long fileLength = dir.getTotalSpace();
-		return fileLength / 1024;
+		return file.length() / 1024;
 	}
 
 	/**
-	 * Gets the file length from the given file in Megabytes.
+	 * Gets the file length from the given file in whole Megabytes, as {@link File#length()} gives
+	 * it: 0 for a file that does not exist, and unspecified for a directory.
 	 *
-	 * @param dir
-	 *            the directory
+	 * @param file
+	 *            the file
 	 *
 	 * @return Returns the file length from the given file in Megabytes.
 	 */
-	public static long getFileLengthInMegabytes(final File dir)
+	public static long getFileLengthInMegabytes(final File file)
 	{
-		return getFileLengthInKilobytes(dir) / 1024;
+		return getFileLengthInKilobytes(file) / 1024;
 	}
 
 	/**
