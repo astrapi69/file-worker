@@ -11,6 +11,10 @@ BREAKING:
 
 CHANGED:
 
+- the tests cover 95.7% of the lines and 89.6% of the branches, up from 70.6% and 62.4%, and the build
+  fails below 90% of the lines or 85% of the branches (`jacocoTestCoverageVerification` in `check`). The defects
+  the new tests found are #45 to #71 (#38)
+
 - dependencies raised with versionCatalogUpdate, stable versions only: checksum-up 3.2, commons-lang3 3.21.0,
   crypt-api 10.3, silly-collection 28.2, and for the tests meanbean-factories 3.1, mockito 5.24.0 and test-object 9.1.
   crypt-api 10 names its module `io.github.astrapi69.crypt.api`, which `module-info.java` now requires (#43)

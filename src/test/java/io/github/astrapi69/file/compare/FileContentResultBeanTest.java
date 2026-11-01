@@ -25,7 +25,11 @@
 package io.github.astrapi69.file.compare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
@@ -80,4 +84,95 @@ public class FileContentResultBeanTest
 		expected = true;
 		assertEquals(expected, actual);
 	}
+
+	/** A file that the bean only holds, the file system is never touched */
+	private static final File SOURCE = new File("source.txt");
+
+	/** A second file that the bean only holds, the file system is never touched */
+	private static final File COMPARE = new File("compare.txt");
+
+	private static FileContentResultBean newBeanWithEqualContent()
+	{
+		final FileContentResultBean bean = new FileContentResultBean(SOURCE, COMPARE);
+		bean.setNameEquality(true);
+		bean.setContentEquality(true);
+		return bean;
+	}
+
+	/**
+	 * Test method for {@link FileContentResultBean#equals(Object)} and
+	 * {@link FileContentResultBean#hashCode()}
+	 */
+	@Test
+	public void equalsAndHashCode_agree_whenBothBeansReportEqualContent()
+	{
+		final FileContentResultBean first = newBeanWithEqualContent();
+		final FileContentResultBean second = newBeanWithEqualContent();
+
+		assertEquals(first, second);
+		assertEquals(first.hashCode(), second.hashCode());
+		assertTrue(first.getContentEquality());
+	}
+
+	/**
+	 * Test method for {@link FileContentResultBean#equals(Object)}
+	 */
+	@Test
+	public void equals_returnsFalse_whenOnlyTheContentEqualityDiffers()
+	{
+		final FileContentResultBean first = newBeanWithEqualContent();
+		final FileContentResultBean second = newBeanWithEqualContent();
+
+		second.setContentEquality(false);
+
+		assertNotEquals(first, second);
+	}
+
+	/**
+	 * Test method for {@link FileContentResultBean#equals(Object)}
+	 */
+	@Test
+	public void equals_returnsFalse_whenOnlyAnInheritedFlagDiffers()
+	{
+		final FileContentResultBean first = newBeanWithEqualContent();
+		final FileContentResultBean second = newBeanWithEqualContent();
+
+		second.setNameEquality(false);
+
+		assertNotEquals(first, second);
+	}
+
+	/**
+	 * Test method for {@link FileContentResultBean#equals(Object)}
+	 */
+	@Test
+	public void equals_returnsFalse_whenTheOtherBeanCannotEqualThisOne()
+	{
+		final FileContentResultBean bean = newBeanWithEqualContent();
+		final FileContentResultBean restrictive = new FileContentResultBean(SOURCE, COMPARE)
+		{
+			@Override
+			protected boolean canEqual(final Object other)
+			{
+				return false;
+			}
+		};
+		restrictive.setNameEquality(true);
+		restrictive.setContentEquality(true);
+
+		assertNotEquals(bean, restrictive);
+	}
+
+	/**
+	 * Test method for {@link FileContentResultBean#equals(Object)}
+	 */
+	@Test
+	public void equals_returnsFalse_whenTheOtherObjectIsOnlyAFileCompareResultBean()
+	{
+		final FileContentResultBean bean = new FileContentResultBean(SOURCE, COMPARE);
+		final FileCompareResultBean compareOnly = new FileCompareResultBean(SOURCE, COMPARE);
+
+		assertNotEquals(bean, compareOnly);
+	}
+
 }
