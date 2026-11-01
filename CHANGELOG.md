@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 20.0-SNAPSHOT
+Version 20.0
 -------------
 
 BREAKING:
@@ -11,6 +11,12 @@ BREAKING:
 - `FileCreationState` carries no file: `getFile()` and `setFile(File)` are gone, since a constant is shared by the
   whole JVM and `newDirectory` wrote every caller's directory into it; `DirectoryFactory.newTempDir` (both
   overloads) is gone with them, `newTempDirectory` returns the created directory (#68)
+- every comparison of `CompareFileExtensions` and `SimpleCompareFileExtensions` rejects a directory, as the source
+  and as the file to compare, with an `IllegalArgumentException` that names it: a directory as the file to compare
+  threw a NullPointerException in the name check, one as the source was compared, `compareFiles(File, File, boolean)`
+  reported two empty directories as equal, and `compareFilesByChecksum` compared two directories through a
+  checksum that can report two different trees as equal. The finders never pass a directory, so their results stay
+  (#78)
 
 FIXED:
 
@@ -46,12 +52,6 @@ FIXED:
   the length, so the same lines with `\r\n` and with `\n` line ends are equal content (#77)
 - `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
   the finders work on a directory with such a file (#48)
-- every comparison of `CompareFileExtensions` and `SimpleCompareFileExtensions` rejects a directory, as the source
-  and as the file to compare, with an `IllegalArgumentException` that names it: a directory as the file to compare
-  threw a NullPointerException in the name check, one as the source was compared, `compareFiles(File, File, boolean)`
-  reported two empty directories as equal, and `compareFilesByChecksum` compared two directories through a
-  checksum that can report two different trees as equal. The finders never pass a directory, so their results stay
-  (#78)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
 - `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
@@ -86,7 +86,11 @@ FIXED:
 
 CHANGED:
 
-- built with Gradle 9.8.2 and the nmcp settings plugin 1.6.2, without a deprecation warning
+- built with Gradle 9.8.2 and the nmcp settings plugin 1.6.2, without a deprecation warning (#83)
+
+- the tests resolve jackson 2.22.4 through a constraint to jobj-copy 4.3, no longer the release candidate
+  2.16.0-rc1 that jobj-contract-verifier 5.2 brought (#87); the 15 Dependabot alerts on that test-only jackson
+  are closed as false alarms for users (#86)
 
 - the tests cover 95.7% of the lines and 89.6% of the branches, up from 70.6% and 62.4%, and the build
   fails below 90% of the lines or 85% of the branches (`jacocoTestCoverageVerification` in `check`). The defects
