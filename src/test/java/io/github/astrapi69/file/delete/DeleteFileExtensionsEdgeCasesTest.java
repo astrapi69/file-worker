@@ -33,10 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -286,12 +289,22 @@ public class DeleteFileExtensionsEdgeCasesTest
 	}
 
 	@Test
-	void deleteAllFiles_deletesARegularFile() throws IOException
+	void deleteAllFiles_deletesARegularFile_withoutWritingToStandardError() throws IOException
 	{
 		Path regularFile = source.resolve("a.txt");
+		PrintStream standardError = System.err;
+		ByteArrayOutputStream writtenToStandardError = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(writtenToStandardError, true, StandardCharsets.UTF_8));
+		try
+		{
+			DeleteFileExtensions.deleteAllFiles(regularFile.toFile());
+		}
+		finally
+		{
+			System.setErr(standardError);
+		}
 
-		DeleteFileExtensions.deleteAllFiles(regularFile.toFile());
-
+		assertEquals("", writtenToStandardError.toString(StandardCharsets.UTF_8));
 		assertDeleted(regularFile);
 		assertContent("b", source.resolve("b.log"));
 		assertOutsideUntouched();
