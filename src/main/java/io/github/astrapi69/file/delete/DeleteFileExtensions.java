@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -132,12 +133,9 @@ public final class DeleteFileExtensions
 		if (Files.isDirectory(path))
 		{
 			deleteAllFiles(path);
-			return Files.deleteIfExists(path);
+			return Files.notExists(path, LinkOption.NOFOLLOW_LINKS);
 		}
-		else
-		{
-			return Files.deleteIfExists(path);
-		}
+		return Files.deleteIfExists(path);
 	}
 
 	/**
@@ -152,15 +150,7 @@ public final class DeleteFileExtensions
 	public static boolean delete(final File file) throws IOException
 	{
 		Objects.requireNonNull(file);
-		if (file.isDirectory())
-		{
-			deleteAllFiles(file.toPath());
-			return Files.deleteIfExists(file.toPath());
-		}
-		else
-		{
-			return Files.deleteIfExists(file.toPath());
-		}
+		return delete(file.toPath());
 	}
 
 	/**

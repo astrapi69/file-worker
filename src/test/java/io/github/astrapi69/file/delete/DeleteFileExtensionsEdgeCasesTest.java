@@ -88,6 +88,25 @@ public class DeleteFileExtensionsEdgeCasesTest
 		void deleteIn(File directory) throws Exception;
 	}
 
+	/**
+	 * A deletion of the given file or directory that reports whether it deleted it
+	 */
+	@FunctionalInterface
+	interface ReportedDeletion
+	{
+		boolean delete(Path path) throws IOException;
+	}
+
+	static Stream<Arguments> directoryDeletions()
+	{
+		return Stream.of("source", "source/nested", "source/empty")
+			.flatMap(directory -> Stream.of(
+				Arguments.of("delete(Path) of " + directory, directory,
+					(ReportedDeletion)DeleteFileExtensions::delete),
+				Arguments.of("delete(File) of " + directory, directory,
+					(ReportedDeletion)path -> DeleteFileExtensions.delete(path.toFile()))));
+	}
+
 	static Stream<Arguments> deletionsWithoutIncludeFilter()
 	{
 		return Stream.of(
@@ -233,16 +252,18 @@ public class DeleteFileExtensionsEdgeCasesTest
 		assertOutsideUntouched();
 	}
 
-	@ParameterizedTest
-	@ValueSource(strings = { "source", "source/nested" })
-	void deletePath_deletesTheDirectoryWithItsWholeContent(String directory) throws IOException
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("directoryDeletions")
+	void delete_deletesTheDirectoryWithItsWholeContent_andReturnsTrue(String displayName,
+		String directory, ReportedDeletion deletion) throws IOException
 	{
-		Path toDelete = tempDir.resolve(directory);
+		Path toDelete = Files.createDirectories(tempDir.resolve(directory));
 
-		DeleteFileExtensions.delete(toDelete);
+		boolean reported = deletion.delete(toDelete);
 
 		assertDeleted(toDelete);
 		assertOutsideUntouched();
+		assertTrue(reported, "the deleted directory is reported as deleted");
 	}
 
 	@Test
