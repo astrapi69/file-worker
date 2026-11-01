@@ -33,6 +33,14 @@ FIXED:
   the finders work on a directory with such a file (#48)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
+- `MergeFileExtensions.mergeByKey` splits at the delimiter as it is, not as a regular expression, and keeps every
+  line (#51)
+- `DeleteFileExtensions.delete` reports true for a directory it deleted (#59)
+- a merge under `TARGET_AS_MASTER` reports every source file it cannot delete, in one `IOException` at the end,
+  after merging the rest (#60)
+- a merge without a strategy skips a missing source, as the strategy variant does, and empty files merge to an
+  empty file (#61)
+- `deleteAllFiles` deletes a regular file without printing a stack trace (#62)
 
 CHANGED:
 
