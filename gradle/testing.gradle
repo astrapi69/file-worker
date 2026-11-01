@@ -15,3 +15,24 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
+
+// The coverage floor (#38): the tests reached 95.7% of the lines and 89.6% of the branches when it was
+// set, and the build fails when the whole library falls below 90% of the lines or 85% of the branches
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.90
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.85
+            }
+        }
+    }
+}
+jacocoTestCoverageVerification.dependsOn test
+check.dependsOn jacocoTestCoverageVerification
