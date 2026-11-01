@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.util.List;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,10 +79,12 @@ public class PathFinderTest extends FileTestCase
 		String actual;
 		String expected;
 		actual = PathFinder.getAbsolutePath(testDir, false);
-		expected = SystemUtils.IS_OS_WINDOWS
-			? "file-worker\\src\\test\\resources\\resources\\testDir"
-			: "file-worker/src/test/resources/resources/testDir";
-		assertTrue(actual.endsWith(expected));
+		// the part of the path the test controls; the checkout's own directory may have any name
+		// (#11)
+		expected = String.join(File.separator, "", "src", "test", "resources", "resources",
+			"testDir");
+		assertTrue(new File(actual).isAbsolute(), actual);
+		assertTrue(actual.endsWith(expected), actual);
 	}
 
 	/**
