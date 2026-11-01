@@ -25,9 +25,17 @@
 package io.github.astrapi69.file.compare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.File;
+import java.util.function.BiConsumer;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import io.github.astrapi69.evaluate.object.evaluator.EqualsHashCodeAndToStringEvaluator;
 import io.github.astrapi69.file.search.PathFinder;
@@ -79,6 +87,137 @@ public class FileCompareResultBeanTest
 			third, fourth);
 		expected = true;
 		assertEquals(expected, actual);
+	}
+
+	/** A file that the bean only holds, the file system is never touched */
+	private static final File SOURCE = new File("source.txt");
+
+	/** A second file that the bean only holds, the file system is never touched */
+	private static final File COMPARE = new File("compare.txt");
+
+	static Stream<Arguments> flagSetters()
+	{
+		return Stream.of(Arguments.of("absolute path equality",
+			(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setAbsolutePathEquality),
+			Arguments.of("file extension equality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setFileExtensionEquality),
+			Arguments.of("last modified equality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setLastModifiedEquality),
+			Arguments.of("length equality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setLengthEquality),
+			Arguments.of("name equality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setNameEquality));
+	}
+
+	static Stream<Arguments> beansWithDifferentFiles()
+	{
+		final File other = new File("other.txt");
+		return Stream.of(
+			Arguments.of("this bean has no source file", new FileCompareResultBean(null, COMPARE),
+				new FileCompareResultBean(SOURCE, COMPARE)),
+			Arguments.of("the other bean has no source file",
+				new FileCompareResultBean(SOURCE, COMPARE),
+				new FileCompareResultBean(null, COMPARE)),
+			Arguments.of("the source files differ", new FileCompareResultBean(SOURCE, COMPARE),
+				new FileCompareResultBean(other, COMPARE)),
+			Arguments.of("this bean has no file to compare",
+				new FileCompareResultBean(SOURCE, null),
+				new FileCompareResultBean(SOURCE, COMPARE)),
+			Arguments.of("the other bean has no file to compare",
+				new FileCompareResultBean(SOURCE, COMPARE),
+				new FileCompareResultBean(SOURCE, null)),
+			Arguments.of("the files to compare differ", new FileCompareResultBean(SOURCE, COMPARE),
+				new FileCompareResultBean(SOURCE, other)));
+	}
+
+	private static FileCompareResultBean newBeanWithEveryFlagSet()
+	{
+		final FileCompareResultBean bean = new FileCompareResultBean(SOURCE, COMPARE);
+		bean.setAbsolutePathEquality(true);
+		bean.setFileExtensionEquality(true);
+		bean.setLastModifiedEquality(true);
+		bean.setLengthEquality(true);
+		bean.setNameEquality(true);
+		return bean;
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#equals(Object)}
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("flagSetters")
+	public void equals_returnsFalse_whenOnlyOneFlagDiffers(final String flagName,
+		final BiConsumer<FileCompareResultBean, Boolean> setter)
+	{
+		final FileCompareResultBean first = newBeanWithEveryFlagSet();
+		final FileCompareResultBean second = newBeanWithEveryFlagSet();
+		assertEquals(first, second);
+
+		setter.accept(second, Boolean.FALSE);
+
+		assertNotEquals(first, second);
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#equals(Object)}
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("beansWithDifferentFiles")
+	public void equals_returnsFalse_whenTheFilesDiffer(final String description,
+		final FileCompareResultBean thisBean, final FileCompareResultBean otherBean)
+	{
+		assertNotEquals(thisBean, otherBean);
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#equals(Object)} and
+	 * {@link FileCompareResultBean#hashCode()}
+	 */
+	@Test
+	public void equalsAndHashCode_treatTwoBeansWithoutFilesAsEqual()
+	{
+		final FileCompareResultBean first = new FileCompareResultBean(null, null);
+		final FileCompareResultBean second = new FileCompareResultBean(null, null);
+
+		assertEquals(first, second);
+		assertEquals(first.hashCode(), second.hashCode());
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#equals(Object)}
+	 */
+	@Test
+	public void equals_returnsFalse_whenTheOtherBeanCannotEqualThisOne()
+	{
+		final FileCompareResultBean bean = new FileCompareResultBean(SOURCE, COMPARE);
+		final FileCompareResultBean restrictive = new FileCompareResultBean(SOURCE, COMPARE)
+		{
+			@Override
+			protected boolean canEqual(final Object other)
+			{
+				return false;
+			}
+		};
+
+		assertNotEquals(bean, restrictive);
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#setSource(File)} and
+	 * {@link FileCompareResultBean#setCompare(File)}
+	 */
+	@Test
+	public void setSourceAndSetCompare_replaceTheFilesTheBeanHolds()
+	{
+		final FileCompareResultBean bean = new FileCompareResultBean(SOURCE, COMPARE);
+		final File newSource = new File("new-source.txt");
+		final File newCompare = new File("new-compare.txt");
+
+		bean.setSource(newSource);
+		bean.setCompare(newCompare);
+
+		assertEquals(newSource, bean.getSourceFile());
+		assertEquals(newCompare, bean.getFileToCompare());
 	}
 
 }
