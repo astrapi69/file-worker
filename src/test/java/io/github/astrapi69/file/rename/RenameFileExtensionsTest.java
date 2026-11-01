@@ -184,8 +184,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix);
-		this.actual = null == notDeletedFiles;
-		assertTrue(this.actual);
+		assertEquals(List.of(), notDeletedFiles);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -194,8 +193,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		}
 		notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir, oldFileSuffix,
 			newFileSuffix);
-		this.actual = null == notDeletedFiles;
-		assertTrue(this.actual);
+		assertEquals(List.of(), notDeletedFiles);
 
 		for (final File file : filesWithNewSuffixes)
 		{
@@ -247,8 +245,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 
 		List<File> notDeletedFiles = RenameFileExtensions.changeAllFilenameSuffix(this.deepDir,
 			oldFileSuffix, newFileSuffix, true);
-		this.actual = null == notDeletedFiles;
-		assertTrue(this.actual);
+		assertEquals(List.of(), notDeletedFiles);
 		// ----------------------------------------------------------------
 		for (final File file : filesWithOldSuffixes)
 		{
@@ -614,6 +611,75 @@ public class RenameFileExtensionsTest extends FileTestCase
 		assertFalse(renamable.exists());
 		assertEquals("second", Files.readString(blockedFirst.toPath()));
 		assertEquals("third", Files.readString(blockedSecond.toPath()));
+	}
+
+	/**
+	 * A call of one of the {@code changeAllFilenameSuffix} methods of {@link RenameFileExtensions}
+	 */
+	@FunctionalInterface
+	interface ChangeAllFilenameSuffix
+	{
+		List<File> change(File directory, String oldSuffix, String newSuffix) throws Exception;
+	}
+
+	static Stream<Arguments> changeAllFilenameSuffixCalls()
+	{
+		return Stream.of(
+			argumentSet("changeAllFilenameSuffix(File, String, String)",
+				(ChangeAllFilenameSuffix)RenameFileExtensions::changeAllFilenameSuffix),
+			argumentSet("changeAllFilenameSuffix(File, String, String, false)",
+				(ChangeAllFilenameSuffix)(directory, oldSuffix, newSuffix) -> RenameFileExtensions
+					.changeAllFilenameSuffix(directory, oldSuffix, newSuffix, false)),
+			argumentSet("changeAllFilenameSuffix(File, String, String, true)",
+				(ChangeAllFilenameSuffix)(directory, oldSuffix, newSuffix) -> RenameFileExtensions
+					.changeAllFilenameSuffix(directory, oldSuffix, newSuffix, true)));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsAnEmptyList_whenEveryRenameWorks(
+		ChangeAllFilenameSuffix call) throws Exception
+	{
+		Files.writeString(tempDir.resolve("one.txt"), "first");
+		Path subDirectory = Files.createDirectory(tempDir.resolve("sub"));
+		Files.writeString(subDirectory.resolve("two.txt"), "second");
+
+		List<File> notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
+
+		assertEquals(List.of(), notRenamed);
+		assertEquals("first", Files.readString(tempDir.resolve("one.rtf")));
+		assertEquals("second", Files.readString(subDirectory.resolve("two.rtf")));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * and {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String, boolean)}
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("changeAllFilenameSuffixCalls")
+	public void changeAllFilenameSuffix_returnsAnEmptyList_whenNoFileHasTheOldSuffix(
+		ChangeAllFilenameSuffix call) throws Exception
+	{
+		Files.writeString(tempDir.resolve("one.md"), "first");
+
+		List<File> notRenamed = call.change(tempDir.toFile(), ".txt", ".rtf");
+
+		assertEquals(List.of(), notRenamed);
+		assertEquals("first", Files.readString(tempDir.resolve("one.md")));
 	}
 
 	/**

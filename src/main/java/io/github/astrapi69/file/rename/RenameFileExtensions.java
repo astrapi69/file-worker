@@ -112,7 +112,8 @@ public final class RenameFileExtensions
 	 *            All files that have the old suffix will be renamed with the new Suffix.
 	 * @param newSuffix
 	 *            The new suffix.
-	 * @return the list of files
+	 * @return the files whose suffix could not be changed, an empty list if every file with the old
+	 *         suffix was renamed
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
@@ -140,7 +141,8 @@ public final class RenameFileExtensions
 	 * @param delete
 	 *            If its true than its deletes the existing file with the same name. But before it
 	 *            copys the contents into the new File.
-	 * @return the list of files
+	 * @return the files whose suffix could not be changed, an empty list if every file with the old
+	 *         suffix was renamed
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
@@ -152,30 +154,18 @@ public final class RenameFileExtensions
 		final String newSuffix, final boolean delete)
 		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
-		boolean success;
-		List<File> notDeletedFiles = null;
+		final List<File> notRenamedFiles = new ArrayList<>();
 		final String filePath = file.getAbsolutePath();
 		final String[] suffix = { oldSuffix };
 		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
-		final int fileCount = files.size();
-		for (int i = 0; i < fileCount; i++)
+		for (final File currentFile : files)
 		{
-			final File currentFile = files.get(i);
-			success = RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete);
-			if (!success)
+			if (!RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete))
 			{
-				if (null != notDeletedFiles)
-				{
-					notDeletedFiles.add(currentFile);
-				}
-				else
-				{
-					notDeletedFiles = new ArrayList<>();
-					notDeletedFiles.add(currentFile);
-				}
+				notRenamedFiles.add(currentFile);
 			}
 		}
-		return notDeletedFiles;
+		return notRenamedFiles;
 	}
 
 	/**
