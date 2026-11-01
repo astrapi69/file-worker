@@ -9,6 +9,7 @@ gradle-plugin-version-catalog-update-version = "1.1.2"
 gradle-plugin-versions-version = "0.67.0"
 jobj-compare-version = "12"
 jobj-contract-verifier-version = "5.2"
+jobj-copy-version = "4.3"
 jsoup-version = "1.23.2"
 junit-jupiter-params-version = "6.1.3"
 junit-jupiter-version = "6.1.3"
@@ -32,6 +33,7 @@ comparator-extensions = { module = "io.github.astrapi69:comparator-extensions", 
 crypt-api = { module = "io.github.astrapi69:crypt-api", version.ref = "crypt-api-version" }
 jobj-compare = { module = "io.github.astrapi69:jobj-compare", version.ref = "jobj-compare-version" }
 jobj-contract-verifier = { module = "io.github.astrapi69:jobj-contract-verifier", version.ref = "jobj-contract-verifier-version" }
+jobj-copy = { module = "io.github.astrapi69:jobj-copy", version.ref = "jobj-copy-version" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup-version" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter-version" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter-params-version" }
