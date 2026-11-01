@@ -36,6 +36,8 @@ FIXED:
 
 CHANGED:
 
+- built with Gradle 9.8.2 and the nmcp settings plugin 1.6.2, without a deprecation warning
+
 - the tests cover 95.7% of the lines and 89.6% of the branches, up from 70.6% and 62.4%, and the build
   fails below 90% of the lines or 85% of the branches (`jacocoTestCoverageVerification` in `check`). The defects
   the new tests found are #45 to #71 (#38)
