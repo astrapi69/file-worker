@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -245,6 +246,33 @@ public class FileInfoTest
 		assertEquals(tempDir.toFile().getAbsolutePath(), fileInfo.getPath());
 		assertTrue(fileInfo.isDirectory());
 		assertEquals(FileInfo.toFileInfo(directory), fileInfo);
+	}
+
+	static Stream<Arguments> waysToMakeAFileInfoFromAFile()
+	{
+		return Stream.of(argumentSet("new FileInfo(File)", (Function<File, FileInfo>)FileInfo::new),
+			argumentSet("FileInfo.toFileInfo(File)",
+				(Function<File, FileInfo>)FileInfo::toFileInfo));
+	}
+
+	/**
+	 * Test method for {@link FileInfo#FileInfo(File)} and {@link FileInfo#toFileInfo(File)}
+	 *
+	 * @param toFileInfo
+	 *            the way the {@link FileInfo} is made from the file
+	 */
+	@ParameterizedTest
+	@MethodSource("waysToMakeAFileInfoFromAFile")
+	public void fileInfoOfARelativeFileWithoutParent_takesTheParentOfTheAbsoluteFile(
+		Function<File, FileInfo> toFileInfo)
+	{
+		File relativeFile = new File("foo.txt");
+
+		FileInfo fileInfo = toFileInfo.apply(relativeFile);
+
+		assertEquals(relativeFile.getAbsoluteFile().getParent(), fileInfo.getPath());
+		assertEquals("foo.txt", fileInfo.getName());
+		assertEquals(relativeFile.getAbsoluteFile(), fileInfo.toFile());
 	}
 
 	/**

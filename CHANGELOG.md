@@ -33,6 +33,15 @@ FIXED:
   the finders work on a directory with such a file (#48)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
+- `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
+- `new FileInfo(File)` and `FileInfo.toFileInfo(File)` take the parent of the absolute file, so a relative file
+  without a parent works (#66)
+- `FileFactory.newFiles` reports the overall state: FAILED if any file failed, else CREATED if any was created, else
+  ALREADY_EXISTS (#67)
+- `changeAllFilenameSuffix` returns an empty list instead of null when every rename works (#69, in part)
+- `write2FileWithBuffer` creates a destination that does not exist (#70)
+- the messages of `RenameFileExtensions` for a missing file read as `Renameable`'s (#71); the Javadoc of `moveFile`
+  says it moves to a target file (#65)
 
 CHANGED:
 

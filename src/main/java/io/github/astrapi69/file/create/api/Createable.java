@@ -202,12 +202,14 @@ public interface Createable
 
 	/**
 	 * Creates all files in the collection as empty files if they do not exist, otherwise leaves
-	 * them as they are
+	 * them as they are. A file that cannot be created does not stop the others
 	 *
 	 * @param files
 	 *            the collection of {@link File} objects
 	 *
-	 * @return the {@link FileCreationState} object representing the overall creation result
+	 * @return the overall creation result: {@link FileCreationState#FAILED} if a file could not be
+	 *         created, otherwise {@link FileCreationState#CREATED} if a file was created, otherwise
+	 *         {@link FileCreationState#ALREADY_EXISTS}, which an empty collection also gets
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.

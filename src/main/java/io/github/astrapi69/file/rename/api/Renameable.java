@@ -60,7 +60,8 @@ public interface Renameable
 	}
 
 	/**
-	 * Returns the filename from the given file with the specified date appended
+	 * Returns the filename from the given file with the specified date appended. The time goes
+	 * before the last extension, or at the end of a name without one.
 	 *
 	 * @param fileToRename
 	 *            the file
@@ -75,10 +76,9 @@ public interface Renameable
 		String sysTime = add2Name != null ? df.format(add2Name) : df.format(new Date());
 
 		String fileName = fileToRename.getName();
-		int extIndex = fileName.lastIndexOf(".");
-		String ext = fileName.substring(extIndex);
-		String newName = fileName.substring(0, extIndex) + "_" + sysTime + ext;
-		return newName;
+		String nameWithoutExtension = FilenameExtensions.getFilenameWithoutExtension(fileName);
+		String extension = fileName.substring(nameWithoutExtension.length());
+		return nameWithoutExtension + "_" + sysTime + extension;
 	}
 
 	/**
@@ -241,22 +241,27 @@ public interface Renameable
 	}
 
 	/**
-	 * Moves the specified source file to the given destination directory
+	 * Moves the specified source file to the given destination file. The destination file is the
+	 * new path of the source file, as the target of {@code Files.move(source, target)} is, not a
+	 * directory to move it into: a move of a file onto an existing directory is refused with an
+	 * {@link IllegalArgumentException}, and the file stays where it is. To move a file into a
+	 * directory, use {@code FileUtils.moveFileToDirectory(File, File, boolean)} of commons-io
 	 *
 	 * @param srcFile
 	 *            the source file
-	 * @param destDir
-	 *            the destination directory
+	 * @param destFile
+	 *            the destination file, the new path of the source file
 	 * @return true if the file was moved successfully
 	 * @throws IOException
 	 *             if an I/O exception occurs
 	 * @throws FileIsADirectoryException
-	 *             if the source or destination is a directory
+	 *             not thrown by the default methods of this interface, a move of a file onto an
+	 *             existing directory is refused with an {@link IllegalArgumentException}
 	 */
-	default boolean moveFile(final File srcFile, final File destDir)
+	default boolean moveFile(final File srcFile, final File destFile)
 		throws IOException, FileIsADirectoryException
 	{
-		return renameFile(srcFile, destDir, true);
+		return renameFile(srcFile, destFile, true);
 	}
 
 	/**
