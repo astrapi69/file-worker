@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.Strings;
@@ -229,7 +230,8 @@ public final class CompareFileExtensions
 		final IFileContentResultBean fileContentResultBean = new FileContentResultBean(sourceFile,
 			fileToCompare);
 		completeCompare(fileContentResultBean);
-		final boolean simpleEquality = validateEquality(fileContentResultBean);
+		final boolean simpleEquality = validateEquality(
+			(IFileCompareResultBean)fileContentResultBean);
 		boolean contentEquality = true;
 		// Compare the content...
 		if (simpleEquality)
@@ -240,15 +242,7 @@ public final class CompareFileExtensions
 
 				final byte[] source = StreamExtensions.getByteArray(sourceReader);
 				final byte[] compare = StreamExtensions.getByteArray(compareReader);
-
-				for (int i = 0; 0 < source.length; i++)
-				{
-					if (source[i] != compare[i])
-					{
-						contentEquality = false;
-						break;
-					}
-				}
+				contentEquality = Arrays.equals(source, compare);
 			}
 			catch (final FileNotFoundException e)
 			{
@@ -279,7 +273,8 @@ public final class CompareFileExtensions
 		final IFileContentResultBean fileContentResultBean = new FileContentResultBean(sourceFile,
 			fileToCompare);
 		completeCompare(fileContentResultBean);
-		final boolean simpleEquality = validateEquality(fileContentResultBean);
+		final boolean simpleEquality = validateEquality(
+			(IFileCompareResultBean)fileContentResultBean);
 		boolean contentEquality = true;
 		// Compare the content...
 		if (simpleEquality)

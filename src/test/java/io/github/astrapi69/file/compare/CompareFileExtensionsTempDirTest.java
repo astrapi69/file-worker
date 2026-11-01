@@ -116,6 +116,32 @@ public class CompareFileExtensionsTempDirTest
 				(BiFunction<File, File, IFileContentResultBean>)CompareFileExtensions::compareFileContentByLines));
 	}
 
+	/**
+	 * Two contents of the same length and the content equality that a comparison has to report for
+	 * them
+	 */
+	record ContentCase(String description, String sourceContent, String compareContent,
+		boolean contentEquality) {
+		@Override
+		public String toString()
+		{
+			return description;
+		}
+	}
+
+	static Stream<Arguments> contentComparersWithContentCases()
+	{
+		final List<ContentCase> contentCases = List.of(
+			new ContentCase("every byte differs", "abc", "xyz", false),
+			new ContentCase("only the first byte differs", "abc", "xbc", false),
+			new ContentCase("only the last byte differs", "abc", "abd", false),
+			new ContentCase("only the second line differs", "a\nb\n", "a\nc\n", false),
+			new ContentCase("the content is the same", "abc", "abc", true),
+			new ContentCase("both files are empty", "", "", true));
+		return contentComparers().flatMap(comparer -> contentCases.stream()
+			.map(contentCase -> Arguments.of(comparer.get()[0], comparer.get()[1], contentCase)));
+	}
+
 	static Stream<Arguments> finders()
 	{
 		return Stream.of(Arguments.of("findEqualFiles(File)",
@@ -339,6 +365,43 @@ public class CompareFileExtensionsTempDirTest
 		assertTrue(result.getLastModifiedEquality(), "modification time");
 		assertFalse(result.getNameEquality(), "name");
 		assertFalse(CompareFileExtensions.validateEquality(result));
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
+	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}
+	 */
+	@ParameterizedTest(name = "{0}: {2}")
+	@MethodSource("contentComparersWithContentCases")
+	public void compareFileContent_reportsTheContentEquality_whenEveryOtherPropertyIsEqual(
+		final String comparerName, final BiFunction<File, File, IFileContentResultBean> comparer,
+		final ContentCase contentCase) throws IOException
+	{
+		final File source = newFile("a/same.txt", contentCase.sourceContent());
+		final File compare = newFile("b/same.txt", contentCase.compareContent());
+
+		final IFileContentResultBean result = comparer.apply(source, compare);
+
+		assertTrue(CompareFileExtensions.validateEquality((IFileCompareResultBean)result),
+			"extension, length, modification time and name");
+		assertEquals(contentCase.contentEquality(), result.getContentEquality(), "content");
+		assertEquals(contentCase.contentEquality(), CompareFileExtensions.validateEquality(result),
+			"total equality");
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
+	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("contentComparers")
+	public void compareFileContent_reportsTheContentAsNotEqual_whenBothFilesAreMissing(
+		final String comparerName, final BiFunction<File, File, IFileContentResultBean> comparer)
+	{
+		final IFileContentResultBean result = comparer.apply(notCreated("a/same.txt"),
+			notCreated("b/same.txt"));
+
+		assertFalse(result.getContentEquality());
 	}
 
 	/**
