@@ -19,6 +19,13 @@ FIXED:
 - the File-based copies into a directory create its missing parents (#55)
 - `copyFile` names the source, not the destination, when the source is a directory (#56); the Javadoc of
   `Copyable#copyFile` says it copies to a destination file (#63)
+- `FileSearchExtensions.match` returns false for a name shorter than the suffix instead of throwing, so
+  `findFiles(String, String[])`, `deleteAllFilesWithSuffix` and `changeAllFilenameSuffix` no longer stop half way (#50)
+- `findFiles(File, String)` returns the files of the searched directory, not of the working directory (#49)
+- `getFileLengthInKilobytes` and `getFileLengthInMegabytes` return the length of the file, not the size of its
+  partition (#57)
+- `findFilesWithPrefixAndExtension` and its recursive variant read the prefix and the extension as text, not as a
+  regular expression (#58)
 
 CHANGED:
 
