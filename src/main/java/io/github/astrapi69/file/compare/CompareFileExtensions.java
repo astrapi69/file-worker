@@ -217,7 +217,10 @@ public final class CompareFileExtensions
 	}
 
 	/**
-	 * Compare file content for every single byte.
+	 * Compare file content for every single byte. The content equality of the result is true
+	 * exactly when both files have the same length and the same bytes, whatever their names,
+	 * modification times or extensions; files of unequal length are unequal without being read
+	 * (file-worker#77).
 	 *
 	 * @param sourceFile
 	 *            the source file
@@ -232,11 +235,8 @@ public final class CompareFileExtensions
 		final IFileContentResultBean fileContentResultBean = new FileContentResultBean(sourceFile,
 			fileToCompare);
 		completeCompare(fileContentResultBean);
-		final boolean simpleEquality = validateEquality(
-			(IFileCompareResultBean)fileContentResultBean);
-		boolean contentEquality = true;
-		// Compare the content...
-		if (simpleEquality)
+		boolean contentEquality = false;
+		if (fileContentResultBean.getLengthEquality())
 		{
 			try (InputStream sourceReader = StreamExtensions.getInputStream(sourceFile);
 				InputStream compareReader = StreamExtensions.getInputStream(fileToCompare))
@@ -260,7 +260,10 @@ public final class CompareFileExtensions
 	}
 
 	/**
-	 * Compare file content by lines.
+	 * Compare file content by lines. The content equality of the result is true exactly when both
+	 * files have the same length and the same lines, a line end of {@code \n}, {@code \r\n} or
+	 * {@code \r} counting as the same, whatever their names, modification times or extensions;
+	 * files of unequal length are unequal without being read (file-worker#77).
 	 *
 	 * @param sourceFile
 	 *            the source file
@@ -275,11 +278,8 @@ public final class CompareFileExtensions
 		final IFileContentResultBean fileContentResultBean = new FileContentResultBean(sourceFile,
 			fileToCompare);
 		completeCompare(fileContentResultBean);
-		final boolean simpleEquality = validateEquality(
-			(IFileCompareResultBean)fileContentResultBean);
-		boolean contentEquality = true;
-		// Compare the content...
-		if (simpleEquality)
+		boolean contentEquality = false;
+		if (fileContentResultBean.getLengthEquality())
 		{
 			try (
 

@@ -143,6 +143,45 @@ public class CompareFileExtensionsTempDirTest
 			.map(contentCase -> Arguments.of(comparer.get()[0], comparer.get()[1], contentCase)));
 	}
 
+	/**
+	 * Two files that differ in a property other than the content, and the content equality that a
+	 * comparison has to report for them
+	 */
+	record ContentPairCase(String description, String sourcePath, String sourceContent,
+		long sourceLastModified, String comparePath, String compareContent,
+		long compareLastModified, boolean contentEquality) {
+		@Override
+		public String toString()
+		{
+			return description;
+		}
+	}
+
+	static Stream<Arguments> contentComparersWithContentPairCases()
+	{
+		final List<ContentPairCase> pairCases = List.of(
+			new ContentPairCase("the names differ, every byte differs", "a/one.txt", "abc",
+				LAST_MODIFIED, "b/two.txt", "xyz", LAST_MODIFIED, false),
+			new ContentPairCase("the names differ, the bytes are the same", "a/one.txt", "abc",
+				LAST_MODIFIED, "b/two.txt", "abc", LAST_MODIFIED, true),
+			new ContentPairCase("the extensions differ, every byte differs", "a/same.txt", "abc",
+				LAST_MODIFIED, "b/same.csv", "xyz", LAST_MODIFIED, false),
+			new ContentPairCase("the modification times differ, every byte differs", "a/same.txt",
+				"abc", LAST_MODIFIED, "b/same.txt", "xyz", LATER, false),
+			new ContentPairCase("the modification times differ, the bytes are the same",
+				"a/same.txt", "abc", LAST_MODIFIED, "b/same.txt", "abc", LATER, true),
+			new ContentPairCase("the file to compare has a byte more", "a/same.txt", "abc",
+				LAST_MODIFIED, "b/same.txt", "abcd", LAST_MODIFIED, false),
+			new ContentPairCase("the source has a byte more", "a/same.txt", "abcd", LAST_MODIFIED,
+				"b/same.txt", "abc", LAST_MODIFIED, false),
+			new ContentPairCase("an empty file and a file of one byte", "a/same.txt", "",
+				LAST_MODIFIED, "b/same.txt", "a", LAST_MODIFIED, false),
+			new ContentPairCase("the same lines with line ends of other lengths", "a/same.txt",
+				"a\r\nb", LAST_MODIFIED, "b/same.txt", "a\nb", LAST_MODIFIED, false));
+		return contentComparers().flatMap(comparer -> pairCases.stream()
+			.map(pairCase -> Arguments.of(comparer.get()[0], comparer.get()[1], pairCase)));
+	}
+
 	static Stream<Arguments> lineComparersWithLineCases()
 	{
 		final List<ContentCase> lineCases = List.of(
@@ -406,6 +445,29 @@ public class CompareFileExtensionsTempDirTest
 		assertEquals(contentCase.contentEquality(), result.getContentEquality(), "content");
 		assertEquals(contentCase.contentEquality(), CompareFileExtensions.validateEquality(result),
 			"total equality");
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
+	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}: the content equality
+	 * says whether the content is the same, whatever the name, the time or the extension, and files
+	 * of unequal length are unequal (file-worker#77)
+	 */
+	@ParameterizedTest(name = "{0}: {2}")
+	@MethodSource("contentComparersWithContentPairCases")
+	public void compareFileContent_comparesTheContent_whateverTheNameTheTimeOrTheExtension(
+		final String comparerName, final BiFunction<File, File, IFileContentResultBean> comparer,
+		final ContentPairCase pairCase) throws IOException
+	{
+		final File source = newFile(pairCase.sourcePath(), pairCase.sourceContent(),
+			pairCase.sourceLastModified());
+		final File compare = newFile(pairCase.comparePath(), pairCase.compareContent(),
+			pairCase.compareLastModified());
+
+		final IFileContentResultBean result = comparer.apply(source, compare);
+
+		assertEquals(pairCase.contentEquality(), result.getContentEquality(), "content");
+		assertFalse(CompareFileExtensions.validateEquality(result), "total equality");
 	}
 
 	/**

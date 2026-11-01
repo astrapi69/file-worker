@@ -32,6 +32,9 @@ FIXED:
 - `compareFileContentByBytes` and `compareFileContentByLines` compare the content; they reported equal content
   for any two files (#46)
 - `findEqualFilesWithSameContent` compares the content it names (#47)
+- the content equality of `compareFileContentByBytes` and `compareFileContentByLines` says whether the content is
+  the same, whatever the name, the time or the extension: it was true for any two files whose other properties
+  differed, without a comparison. Files of unequal length are unequal without being read (#77)
 - `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
   the finders work on a directory with such a file (#48)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
