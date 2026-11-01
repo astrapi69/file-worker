@@ -27,21 +27,26 @@ package io.github.astrapi69.file.rename;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.FileTestCase;
@@ -59,6 +64,15 @@ import io.github.astrapi69.file.write.StoreFileExtensions;
  */
 public class RenameFileExtensionsTest extends FileTestCase
 {
+
+	/**
+	 * The directory for the tests that build their files themselves. Every file whose suffix is
+	 * changed there has a dot in its own name: the target of a suffix change is built from the last
+	 * dot in the absolute path, which is wrong for a file without one below a directory with one
+	 * (file-worker#37)
+	 */
+	@TempDir
+	Path tempDir;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
@@ -567,5 +581,68 @@ public class RenameFileExtensionsTest extends FileTestCase
 		beanTester.testBean(RenameFileExtensions.class);
 	}
 
+	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void changeAllFilenameSuffix_returnsTheFilesWhoseRenameWasRefused() throws Exception
+	{
+		File renamable = tempDir.resolve("one.txt").toFile();
+		File blockedFirst = tempDir.resolve("two.txt").toFile();
+		File blockedSecond = tempDir.resolve("three.txt").toFile();
+		Files.writeString(renamable.toPath(), "first");
+		Files.writeString(blockedFirst.toPath(), "second");
+		Files.writeString(blockedSecond.toPath(), "third");
+		Files.createDirectory(tempDir.resolve("two.rtf"));
+		Files.createDirectory(tempDir.resolve("three.rtf"));
+
+		List<File> notRenamed = RenameFileExtensions.changeAllFilenameSuffix(tempDir.toFile(),
+			".txt", ".rtf");
+
+		assertEquals(Set.of(blockedFirst, blockedSecond), Set.copyOf(notRenamed));
+		assertEquals(2, notRenamed.size());
+		assertEquals("first", Files.readString(tempDir.resolve("one.rtf")));
+		assertFalse(renamable.exists());
+		assertEquals("second", Files.readString(blockedFirst.toPath()));
+		assertEquals("third", Files.readString(blockedSecond.toPath()));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFile(File, File, boolean)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void renameFile_copiesAndDeletes_whenTheRenameIsRefusedAndDeleteIsSet() throws Exception
+	{
+		File file = tempDir.resolve("old.txt").toFile();
+		File newFile = tempDir.resolve("new.txt").toFile();
+		Files.writeString(file.toPath(), "content");
+
+		boolean renamed = RenameFileExtensions.renameFile(new RenameRefusingFile(file), newFile,
+			true);
+
+		assertTrue(renamed);
+		assertEquals("content", Files.readString(newFile.toPath()));
+		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFile(File, String)}
+	 */
+	@Test
+	public void renameFile_throwsFileDoesNotExistException_whenTheFileToRenameIsMissing()
+	{
+		File missing = tempDir.resolve("missing.txt").toFile();
+
+		FileDoesNotExistException exception = assertThrows(FileDoesNotExistException.class,
+			() -> RenameFileExtensions.renameFile(missing, "new.txt"));
+
+		assertTrue(exception.getMessage().contains("missing.txt"), exception.getMessage());
+	}
 
 }
