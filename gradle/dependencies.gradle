@@ -4,4 +4,10 @@ dependencies {
 
     testImplementation libs.bundles.unit.testing
     testRuntimeOnly libs.bundles.test.runtime.only
+    constraints {
+        // jobj-contract-verifier 5.2, its last release, brings randomizer 10.2 and with it jobj-copy 4.2, whose
+        // jackson-databind is 2.16.0-rc1: a release candidate, and the 15 Dependabot alerts of this repository.
+        // jobj-copy 4.3 takes jackson 2.22.4
+        testImplementation(libs.jobj.copy)
+    }
 }
