@@ -40,7 +40,6 @@ import java.util.stream.Stream;
 import org.apache.commons.io.FileUtils;
 
 import io.github.astrapi69.file.merge.strategy.MergeStrategy;
-import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
 /**
  * The class {@link MergeDirectoryExtensions} provides methods for simple merge of directories
@@ -124,7 +123,9 @@ public final class MergeDirectoryExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred. A directory that cannot be read does
 	 *             not stop the merge: after every other file is merged, one exception names each of
-	 *             them, with the single failures attached as suppressed exceptions.
+	 *             them, with the single failures attached as suppressed exceptions. A copy that
+	 *             fails stops the merge with its own exception, which carries the directories that
+	 *             could not be read as suppressed exceptions (file-worker#90).
 	 */
 	public static File mergeAndGet(File targetDir, File... directoriesToMerge) throws IOException
 	{
@@ -132,12 +133,20 @@ public final class MergeDirectoryExtensions
 		Objects.requireNonNull(directoriesToMerge, "directoriesToMerge must not be null");
 
 		final Map<File, IOException> directoriesNotRead = new LinkedHashMap<>();
-		newFileMergeStore(directoriesNotRead, directoriesToMerge).entrySet().forEach(fileEntry -> {
-			final String relativeName = fileEntry.getKey();
-			final File srcFile = fileEntry.getValue();
-			RuntimeExceptionDecorator
-				.decorate(() -> FileUtils.copyFile(srcFile, new File(targetDir, relativeName)));
-		});
+		final Map<String, File> fileMergeStore = newFileMergeStore(directoriesNotRead,
+			directoriesToMerge);
+		for (Map.Entry<String, File> fileEntry : fileMergeStore.entrySet())
+		{
+			try
+			{
+				FileUtils.copyFile(fileEntry.getValue(), new File(targetDir, fileEntry.getKey()));
+			}
+			catch (IOException mergeStopped)
+			{
+				addSuppressed(mergeStopped, directoriesNotRead, Map.of());
+				throw mergeStopped;
+			}
+		}
 		if (!directoriesNotRead.isEmpty())
 		{
 			throw newIncompleteMergeException(targetDir, directoriesNotRead, Map.of());
@@ -156,7 +165,9 @@ public final class MergeDirectoryExtensions
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred. A directory that cannot be read does
 	 *             not stop the merge: after every other file is merged, one exception names each of
-	 *             them, with the single failures attached as suppressed exceptions.
+	 *             them, with the single failures attached as suppressed exceptions. A copy that
+	 *             fails stops the merge with its own exception, which carries the directories that
+	 *             could not be read as suppressed exceptions (file-worker#90).
 	 */
 	public static void merge(File targetDir, File... directoriesToMerge) throws IOException
 	{
@@ -345,7 +356,7 @@ public final class MergeDirectoryExtensions
 
 	/**
 	 * Attaches the single failures of the merge to the given exception, so that an exception that
-	 * stops the merge does not drop the ones collected until then (file-worker#80)
+	 * stops the merge does not drop the ones collected until then (file-worker#80, file-worker#90)
 	 */
 	private static void addSuppressed(IOException exception,
 		Map<File, IOException> directoriesNotRead, Map<File, IOException> sourceFilesLeft)

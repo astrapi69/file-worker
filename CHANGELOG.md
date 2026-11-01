@@ -37,11 +37,17 @@ FIXED:
 - `findEqualFilesWithSameContent` compares the content it names (#47)
 - the content equality of `compareFileContentByBytes` and `compareFileContentByLines` says whether the content is
   the same, whatever the name, the time or the extension: it was true for any two files whose other properties
-  differed, without a comparison. Files of unequal length are unequal without being read (#77)
+  differed, without a comparison. `compareFileContentByBytes` takes files of unequal length as unequal without
+  reading them; `compareFileContentByLines` compares the lines with the line ends ignored and takes no shortcut over
+  the length, so the same lines with `\r\n` and with `\n` line ends are equal content (#77)
 - `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
   the finders work on a directory with such a file (#48)
-- `CompareFileExtensions` rejects a directory as the file to compare with an `IllegalArgumentException` that names
-  it, instead of a NullPointerException in the name check; the finders never pass one (#78)
+- every comparison of `CompareFileExtensions` and `SimpleCompareFileExtensions` rejects a directory, as the source
+  and as the file to compare, with an `IllegalArgumentException` that names it: a directory as the file to compare
+  threw a NullPointerException in the name check, one as the source was compared, `compareFiles(File, File, boolean)`
+  reported two empty directories as equal, and `compareFilesByChecksum` compared two directories through a
+  checksum that can report two different trees as equal. The finders never pass a directory, so their results stay
+  (#78)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
 - `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
@@ -70,6 +76,9 @@ FIXED:
   `SOURCE_TO_TARGET` (#76)
 - a copy failure that stops a merge with a strategy carries the delete failures and the unread directories collected
   until then as suppressed exceptions, instead of dropping them (#80)
+- a copy failure that stops a merge without a strategy is thrown as the `IOException` the method declares, with the
+  unread directories collected until then as suppressed exceptions; it was wrapped in a `RuntimeException`, and
+  the unread directories were dropped (#90)
 
 CHANGED:
 

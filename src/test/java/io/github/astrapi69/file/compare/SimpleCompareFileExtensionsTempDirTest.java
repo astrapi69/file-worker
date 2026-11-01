@@ -26,6 +26,7 @@ package io.github.astrapi69.file.compare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -122,6 +123,30 @@ public class SimpleCompareFileExtensionsTempDirTest
 					LAST_MODIFIED)));
 	}
 
+	static Stream<Arguments> comparisons()
+	{
+		return Stream.of(
+			Arguments.of("compareFilesByAbsolutePath",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByAbsolutePath),
+			Arguments.of("compareFilesByChecksum",
+				(FileComparer)(source, compare) -> SimpleCompareFileExtensions
+					.compareFilesByChecksum(source, compare, HashAlgorithm.SHA_256)),
+			Arguments.of("compareFilesByChecksumAdler32",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByChecksumAdler32),
+			Arguments.of("compareFilesByChecksumCRC32",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByChecksumCRC32),
+			Arguments.of("compareFilesByContent",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByContent),
+			Arguments.of("compareFilesByExtension",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByExtension),
+			Arguments.of("compareFilesByLastModified",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByLastModified),
+			Arguments.of("compareFilesByLength",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByLength),
+			Arguments.of("compareFilesByName",
+				(FileComparer)SimpleCompareFileExtensions::compareFilesByName));
+	}
+
 	private File newFile(final String relativePath, final String content, final long lastModified)
 		throws IOException
 	{
@@ -132,6 +157,47 @@ public class SimpleCompareFileExtensionsTempDirTest
 		assertTrue(file.setLastModified(lastModified),
 			"the modification time of " + file + " could not be set");
 		return file;
+	}
+
+	private File newDirectory(final String relativePath) throws IOException
+	{
+		return Files.createDirectories(tempDir.resolve(relativePath).toAbsolutePath()).toFile();
+	}
+
+	/**
+	 * Test method for every comparison of {@link SimpleCompareFileExtensions}: a directory as the
+	 * source file is rejected (file-worker#78)
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("comparisons")
+	public void compareFiles_rejectsADirectoryAsTheSourceFile_andNamesIt(
+		final String comparisonName, final FileComparer comparer) throws IOException
+	{
+		final File directory = newDirectory("a/same");
+		final File compare = newFile("b/same.txt", "abc", LAST_MODIFIED);
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> comparer.compare(directory, compare));
+
+		assertTrue(exception.getMessage().contains(directory.toString()), exception.getMessage());
+	}
+
+	/**
+	 * Test method for every comparison of {@link SimpleCompareFileExtensions}: a directory as the
+	 * file to compare is rejected (file-worker#78)
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("comparisons")
+	public void compareFiles_rejectsADirectoryAsTheFileToCompare_andNamesIt(
+		final String comparisonName, final FileComparer comparer) throws IOException
+	{
+		final File source = newFile("a/same.txt", "abc", LAST_MODIFIED);
+		final File directory = newDirectory("b/same");
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> comparer.compare(source, directory));
+
+		assertTrue(exception.getMessage().contains(directory.toString()), exception.getMessage());
 	}
 
 	/**

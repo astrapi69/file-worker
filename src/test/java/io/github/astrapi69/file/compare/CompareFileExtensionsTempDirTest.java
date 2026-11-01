@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
@@ -176,15 +177,43 @@ public class CompareFileExtensionsTempDirTest
 			new ContentPairCase("the source has a byte more", "a/same.txt", "abcd", LAST_MODIFIED,
 				"b/same.txt", "abc", LAST_MODIFIED, false),
 			new ContentPairCase("an empty file and a file of one byte", "a/same.txt", "",
-				LAST_MODIFIED, "b/same.txt", "a", LAST_MODIFIED, false),
-			new ContentPairCase("the same lines with line ends of other lengths", "a/same.txt",
-				"a\r\nb", LAST_MODIFIED, "b/same.txt", "a\nb", LAST_MODIFIED, false));
+				LAST_MODIFIED, "b/same.txt", "a", LAST_MODIFIED, false));
 		return contentComparers().flatMap(comparer -> pairCases.stream()
 			.map(pairCase -> Arguments.of(comparer.get()[0], comparer.get()[1], pairCase)));
 	}
 
 	/**
-	 * One of the comparisons of {@link CompareFileExtensions} that fill a result bean
+	 * Two contents with the same lines and line ends of other lengths
+	 */
+	record LineEndCase(String description, String sourceContent, String compareContent) {
+		@Override
+		public String toString()
+		{
+			return description;
+		}
+	}
+
+	static Stream<Arguments> contentComparersWithLineEndCases()
+	{
+		final List<LineEndCase> lineEndCases = List.of(
+			new LineEndCase("one line end \\r\\n against \\n", "a\r\nb", "a\nb"),
+			new LineEndCase("every line end \\r\\n against \\n", "a\r\nb\r\n", "a\nb\n"),
+			new LineEndCase("one line end \\r\\n against \\r", "a\r\nb", "a\rb"),
+			new LineEndCase("a last line end in the file to compare only", "a\nb", "a\nb\n"));
+		final Stream<Arguments> comparersWithTheirAnswer = Stream.of(Arguments.of(
+			"compareFileContentByBytes",
+			(BiFunction<File, File, IFileContentResultBean>)CompareFileExtensions::compareFileContentByBytes,
+			false),
+			Arguments.of("compareFileContentByLines",
+				(BiFunction<File, File, IFileContentResultBean>)CompareFileExtensions::compareFileContentByLines,
+				true));
+		return comparersWithTheirAnswer
+			.flatMap(comparer -> lineEndCases.stream().map(lineEndCase -> Arguments
+				.of(comparer.get()[0], comparer.get()[1], lineEndCase, comparer.get()[2])));
+	}
+
+	/**
+	 * One of the comparisons of {@link CompareFileExtensions}
 	 */
 	@FunctionalInterface
 	interface Comparison
@@ -209,8 +238,14 @@ public class CompareFileExtensionsTempDirTest
 					true, true, true, true, true, true)),
 			Arguments.of("simpleCompareFiles",
 				(Comparison)CompareFileExtensions::simpleCompareFiles),
-			Arguments.of("completeCompare", (Comparison)(source, compare) -> CompareFileExtensions
-				.completeCompare(new FileCompareResultBean(source, compare))));
+			Arguments.of("completeCompare",
+				(Comparison)(source, compare) -> CompareFileExtensions
+					.completeCompare(new FileCompareResultBean(source, compare))),
+			Arguments.of("compareFiles(File, File, false)",
+				(Comparison)(source, compare) -> CompareFileExtensions.compareFiles(source, compare,
+					false)),
+			Arguments.of("compareFiles(File, File, true)", (Comparison)(source,
+				compare) -> CompareFileExtensions.compareFiles(source, compare, true)));
 	}
 
 	static Stream<Arguments> lineComparersWithLineCases()
@@ -481,8 +516,8 @@ public class CompareFileExtensionsTempDirTest
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
 	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}: the content equality
-	 * says whether the content is the same, whatever the name, the time or the extension, and files
-	 * of unequal length are unequal (file-worker#77)
+	 * says whether the content is the same, whatever the name, the time or the extension
+	 * (file-worker#77)
 	 */
 	@ParameterizedTest(name = "{0}: {2}")
 	@MethodSource("contentComparersWithContentPairCases")
@@ -498,6 +533,28 @@ public class CompareFileExtensionsTempDirTest
 		final IFileContentResultBean result = comparer.apply(source, compare);
 
 		assertEquals(pairCase.contentEquality(), result.getContentEquality(), "content");
+		assertFalse(CompareFileExtensions.validateEquality(result), "total equality");
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
+	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}: files of unequal length
+	 * have unequal bytes, while their lines, the line ends ignored, can be the same, so the
+	 * comparison by lines takes no shortcut over the length (file-worker#77)
+	 */
+	@ParameterizedTest(name = "{0}: {2}, equal content: {3}")
+	@MethodSource("contentComparersWithLineEndCases")
+	public void compareFileContent_reportsEqualContentOnlyByLines_whenTheSameLinesDifferInLength(
+		final String comparerName, final BiFunction<File, File, IFileContentResultBean> comparer,
+		final LineEndCase lineEndCase, final boolean contentEquality) throws IOException
+	{
+		final File source = newFile("a/same.txt", lineEndCase.sourceContent());
+		final File compare = newFile("b/same.txt", lineEndCase.compareContent());
+
+		final IFileContentResultBean result = comparer.apply(source, compare);
+
+		assertFalse(result.getLengthEquality(), "length");
+		assertEquals(contentEquality, result.getContentEquality(), "content");
 		assertFalse(CompareFileExtensions.validateEquality(result), "total equality");
 	}
 
@@ -543,6 +600,32 @@ public class CompareFileExtensionsTempDirTest
 	}
 
 	/**
+	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)}: a file of
+	 * the same length and content that cannot be read is not reported as equal
+	 */
+	@Test
+	public void compareFilesWithContentFlag_returnsFalse_whenTheFileToCompareCannotBeRead()
+		throws IOException
+	{
+		final File source = newFile("a/same.txt", "abc");
+		final File locked = newFile("b/same.txt", "abc");
+		boolean equal;
+		try
+		{
+			assumeTrue(locked.setReadable(false), "the file system takes the permission");
+			assumeFalse(Files.isReadable(locked.toPath()), "the test runs without override rights");
+
+			equal = CompareFileExtensions.compareFiles(source, locked, true);
+		}
+		finally
+		{
+			locked.setReadable(true);
+		}
+
+		assertFalse(equal);
+	}
+
+	/**
 	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)}
 	 */
 	@Test
@@ -574,8 +657,8 @@ public class CompareFileExtensionsTempDirTest
 	}
 
 	/**
-	 * Test method for the comparisons of {@link CompareFileExtensions} that fill a result bean: a
-	 * directory as the file to compare is rejected, whatever is ignored (file-worker#78)
+	 * Test method for the comparisons of {@link CompareFileExtensions}: a directory as the file to
+	 * compare is rejected, whatever is ignored (file-worker#78)
 	 */
 	@ParameterizedTest(name = "{0}")
 	@MethodSource("comparisons")
@@ -592,18 +675,41 @@ public class CompareFileExtensionsTempDirTest
 	}
 
 	/**
-	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)}
+	 * Test method for the comparisons of {@link CompareFileExtensions}: a directory as the source
+	 * file is rejected, whatever is ignored (file-worker#78)
 	 */
-	@Test
-	public void compareFilesWithContentFlag_returnsFalse_whenTheContentOfTwoDirectoriesIsCompared()
-		throws IOException
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("comparisons")
+	public void compare_rejectsADirectoryAsTheSourceFile_andNamesIt(final String comparisonName,
+		final Comparison comparison) throws IOException
+	{
+		final File directory = newDirectory("a/same");
+		final File compare = newFile("b/same.txt", "abc");
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> comparison.compare(directory, compare));
+
+		assertTrue(exception.getMessage().contains(directory.toString()), exception.getMessage());
+	}
+
+	/**
+	 * Test method for the comparisons of {@link CompareFileExtensions}: two directories are
+	 * rejected, the source named first;
+	 * {@link CompareFileExtensions#compareFiles(File, File, boolean)} reported two empty
+	 * directories as equal (file-worker#78)
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("comparisons")
+	public void compare_rejectsTwoDirectories_andNamesTheSourceFile(final String comparisonName,
+		final Comparison comparison) throws IOException
 	{
 		final File source = newDirectory("a/same");
 		final File compare = newDirectory("b/same");
-		assumeTrue(source.length() == compare.length(),
-			"the file system gives two empty directories different lengths");
 
-		assertFalse(CompareFileExtensions.compareFiles(source, compare, true));
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> comparison.compare(source, compare));
+
+		assertTrue(exception.getMessage().contains(source.toString()), exception.getMessage());
 	}
 
 	/**
@@ -668,6 +774,57 @@ public class CompareFileExtensionsTempDirTest
 		final File source = newFile("source/README", "abc");
 		newFile("source/README.txt", "abc");
 		final File copy = newFile("compare/README", "abc");
+
+		final List<? extends IFileCompareResultBean> found = finder
+			.apply(tempDir.resolve("source").toFile(), tempDir.resolve("compare").toFile());
+
+		assertEquals(Set.of(List.of(source, copy)), pairsOf(found));
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File)},
+	 * {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)},
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File)} and
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}:
+	 * the finders never pass a directory to a comparison, which rejects one, so a tree with
+	 * directories keeps its result (file-worker#78)
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("finders")
+	public void findEqualFiles_leavesOutTheDirectories_evenEmptyOnesNamedLikeTheEqualFiles(
+		final String finderName,
+		final Function<File, List<? extends IFileCompareResultBean>> finder) throws IOException
+	{
+		final File first = newFile("root/a/same.txt", "abc");
+		final File second = newFile("root/b/same.txt", "abc");
+		newDirectory("root/c/same.txt");
+		newDirectory("root/d/same.txt");
+
+		final List<? extends IFileCompareResultBean> found = finder
+			.apply(tempDir.resolve("root").toFile());
+
+		assertEquals(Set.of(List.of(first, second), List.of(second, first)), pairsOf(found));
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, File)},
+	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)},
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)} and
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}:
+	 * the finders never pass a directory to a comparison, which rejects one, so trees with
+	 * directories keep their result (file-worker#78)
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("twoDirectoryFinders")
+	public void findEqualFilesInTwoDirectories_leavesOutTheDirectories_evenEmptyOnesNamedLikeTheEqualFiles(
+		final String finderName,
+		final BiFunction<File, File, List<? extends IFileCompareResultBean>> finder)
+		throws IOException
+	{
+		final File source = newFile("source/a/same.txt", "abc");
+		newDirectory("source/b/same.txt");
+		final File copy = newFile("compare/a/same.txt", "abc");
+		newDirectory("compare/b/same.txt");
 
 		final List<? extends IFileCompareResultBean> found = finder
 			.apply(tempDir.resolve("source").toFile(), tempDir.resolve("compare").toFile());

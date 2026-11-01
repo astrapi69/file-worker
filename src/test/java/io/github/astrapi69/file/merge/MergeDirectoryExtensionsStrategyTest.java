@@ -399,6 +399,44 @@ public class MergeDirectoryExtensionsStrategyTest
 			"the failures collected before the copy failed");
 	}
 
+	/**
+	 * The merge without a strategy declares the IOException of a failed copy and throws it, not
+	 * wrapped in an unchecked exception, with the failures collected until then (file-worker#90)
+	 */
+	@Test
+	void mergeWithoutStrategy_throwsTheIOExceptionOfTheCopyThatStopsIt_withTheFailuresCollectedSoFar()
+		throws IOException
+	{
+		Path unread = source.resolve("unread");
+		write(unread.resolve("hidden.txt"), "hidden", OLDER);
+		Path other = Files.createDirectory(tempDir.resolve("other"));
+		write(other.resolve("closed").resolve("new.txt"), "new", OLDER);
+		Path closed = Files.createDirectory(target.resolve("closed"));
+		IOException exception;
+		try
+		{
+			assumeTrue(unread.toFile().setReadable(false), "the file system takes the permission");
+			assumeTrue(closed.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isReadable(unread), "the test runs without override rights");
+			assumeFalse(Files.isWritable(closed), "the test runs without override rights");
+
+			exception = assertThrows(IOException.class, () -> MergeDirectoryExtensions
+				.mergeAndGet(target.toFile(), source.toFile(), other.toFile()));
+		}
+		finally
+		{
+			unread.toFile().setReadable(true);
+			closed.toFile().setWritable(true);
+		}
+
+		assertTrue(exception.getMessage().contains(closed.resolve("new.txt").toString()),
+			"the copy failure is the exception: " + exception.getMessage());
+		Set<String> suppressed = Stream.of(exception.getSuppressed()).map(Throwable::getMessage)
+			.collect(Collectors.toSet());
+		assertEquals(Set.of(unread.toString()), suppressed,
+			"the failures collected before the copy failed");
+	}
+
 	@ParameterizedTest
 	@CsvSource({ "SOURCE_TO_TARGET, true", "TARGET_AS_MASTER, false" })
 	void mergeWithStrategy_copiesTheFilesTheTargetLacks_inEveryLevel(MergeStrategy strategy,
