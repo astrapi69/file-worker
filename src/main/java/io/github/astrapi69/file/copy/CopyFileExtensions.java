@@ -190,8 +190,8 @@ public final class CopyFileExtensions
 	{
 		if (source.isDirectory())
 		{
-			throw new IllegalArgumentException("The source File " + destination.getName()
-				+ " should be a File but is a Directory.");
+			throw new IllegalArgumentException(
+				"The source File " + source.getName() + " should be a File but is a Directory.");
 		}
 		if (destination.isDirectory())
 		{

@@ -25,6 +25,9 @@
 package io.github.astrapi69.file.copy;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -75,5 +79,26 @@ public class CopyFileExtensionsRegressionTest
 
 		assertArrayEquals("alpha".getBytes(StandardCharsets.US_ASCII),
 			Files.readAllBytes(destination.resolve("source.txt")));
+	}
+
+	/**
+	 * Test method for
+	 * {@link CopyFileExtensions#copyFile(File, File, java.nio.charset.Charset, java.nio.charset.Charset, boolean)}
+	 * (#56)
+	 *
+	 * @throws IOException
+	 *             if an I/O error occurs
+	 */
+	@Test
+	public void copyFile_namesTheSourceInTheMessage_whenTheSourceIsADirectory() throws IOException
+	{
+		final File source = Files.createDirectories(tempDir.resolve("source-directory")).toFile();
+		final File destination = tempDir.resolve("target-name.txt").toFile();
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> CopyFileExtensions.copyFile(source, destination));
+
+		assertTrue(exception.getMessage().contains("source-directory"), exception.getMessage());
+		assertFalse(exception.getMessage().contains("target-name.txt"), exception.getMessage());
 	}
 }
