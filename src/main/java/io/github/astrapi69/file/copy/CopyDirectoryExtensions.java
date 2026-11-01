@@ -286,7 +286,7 @@ public final class CopyDirectoryExtensions
 		}
 		if (!destination.exists())
 		{
-			DirectoryFactory.newDirectory(destination);
+			DirectoryFactory.newDirectories(destination.toPath());
 		}
 		boolean copied = destination.isDirectory();
 		File[] includeFilesArray;
@@ -440,7 +440,7 @@ public final class CopyDirectoryExtensions
 		}
 		if (!destination.exists())
 		{
-			DirectoryFactory.newDirectory(destination);
+			DirectoryFactory.newDirectories(destination.toPath());
 		}
 		boolean copied = destination.isDirectory();
 		File[] includeFilesArray;

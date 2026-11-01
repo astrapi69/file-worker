@@ -266,7 +266,7 @@ public final class CopyFileExtensions
 	{
 		if (!destination.exists())
 		{
-			DirectoryFactory.newDirectory(destination);
+			DirectoryFactory.newDirectoriesQuietly(destination.toPath());
 		}
 		sources.forEach(RuntimeExceptionDecorator.decorate(file -> {
 			File destinationFile = new File(destination, file.getName());

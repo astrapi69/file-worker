@@ -227,4 +227,28 @@ public class CopyDirectoryExtensionsRegressionTest
 
 		assertFalse(directoryCopy.copy(source.toFile(), destination.toFile()));
 	}
+
+	/**
+	 * The File-based directory copies create the missing parents of the destination, as
+	 * {@link CopyDirectoryExtensions#copyDirectory(Path, Path)} does (#55)
+	 *
+	 * @param description
+	 *            the method under test
+	 * @param directoryCopy
+	 *            the call of the method under test
+	 * @throws Exception
+	 *             if the copy fails
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("directoryCopies")
+	public void copy_createsTheMissingParentsOfTheDestination(final String description,
+		final DirectoryCopy directoryCopy) throws Exception
+	{
+		final Path source = newTree("src", List.of("a.txt", "sub/b.txt", "empty/"));
+		final Path destination = tempDir.resolve("out/nested");
+
+		assertTrue(directoryCopy.copy(source.toFile(), destination.toFile()));
+
+		assertEquals(entriesUnder(source), entriesUnder(destination));
+	}
 }
