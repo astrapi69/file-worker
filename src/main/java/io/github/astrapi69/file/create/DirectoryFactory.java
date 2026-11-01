@@ -208,7 +208,6 @@ public final class DirectoryFactory
 				fileCreationState = FileCreationState.CREATED;
 			}
 		}
-		fileCreationState.setFile(directory);
 		return fileCreationState;
 	}
 
@@ -315,7 +314,7 @@ public final class DirectoryFactory
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 *
-	 * @return the {@link FileCreationState} with the result
+	 * @return the new temporary directory
 	 */
 	public static File newTempDirectory(String prefix, FileAttribute<?>... attrs) throws IOException
 	{
@@ -337,57 +336,12 @@ public final class DirectoryFactory
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 *
-	 * @return the {@link FileCreationState} with the result
+	 * @return the new temporary directory
 	 */
 	public static File newTempDirectory(Path dir, String prefix, FileAttribute<?>... attrs)
 		throws IOException
 	{
 		return Files.createTempDirectory(dir, prefix, attrs).toFile();
-	}
-
-	/**
-	 * Creates a new temporary directory from the given {@link String} object and the optional file
-	 * attributes
-	 *
-	 * @param prefix
-	 *            the prefix string to be used in generating the directory's name; may be
-	 *            {@code null}
-	 * @param attrs
-	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 *
-	 * @return the {@link FileCreationState} with the result
-	 */
-	public static FileCreationState newTempDir(String prefix, FileAttribute<?>... attrs)
-		throws IOException
-	{
-		File tempDirectory = newTempDirectory(prefix, attrs);
-		return newDirectory(tempDirectory);
-	}
-
-	/**
-	 * Creates a new temporary directory from the given {@link Path} object, the given
-	 * {@link String} object and the optional file attributes
-	 *
-	 *
-	 * @param dir
-	 *            the path to directory in which to create the directory
-	 * @param prefix
-	 *            the prefix string to be used in generating the directory's name; may be
-	 *            {@code null}
-	 * @param attrs
-	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
-	 *
-	 * @return the {@link FileCreationState} with the result
-	 */
-	public static FileCreationState newTempDir(Path dir, String prefix, FileAttribute<?>... attrs)
-		throws IOException
-	{
-		File tempDirectory = newTempDirectory(dir, prefix, attrs);
-		return newDirectory(tempDirectory);
 	}
 
 }

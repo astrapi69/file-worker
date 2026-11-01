@@ -229,13 +229,19 @@ public class RenameableTest
 	}
 
 	/**
-	 * Test method for {@link Renameable#changeAllFilenameSuffix(File, String, String, boolean)}
+	 * Test method for {@link Renameable#changeAllFilenameSuffix(File, String, String, boolean)}: a
+	 * rename onto an existing directory is refused, and with delete the copy onto it, too, so the
+	 * file is reported and the batch goes on (file-worker#69)
 	 *
+	 * @param delete
+	 *            the flag whether a refused rename falls back to copy and delete
 	 * @throws Exception
 	 *             is thrown if an exception occurs
 	 */
-	@Test
-	public void changeAllFilenameSuffix_returnsTheFilesWhoseRenameWasRefused() throws Exception
+	@ParameterizedTest(name = "delete = {0}")
+	@ValueSource(booleans = { false, true })
+	public void changeAllFilenameSuffix_returnsTheFilesWhoseRenameWasRefused(boolean delete)
+		throws Exception
 	{
 		File renamable = newFile("one.txt", "first");
 		File blockedFirst = newFile("two.txt", "second");
@@ -244,7 +250,7 @@ public class RenameableTest
 		Files.createDirectory(tempDir.resolve("three.rtf"));
 
 		List<File> notRenamed = renameable.changeAllFilenameSuffix(tempDir.toFile(), ".txt", ".rtf",
-			false);
+			delete);
 
 		assertEquals(Set.of(blockedFirst, blockedSecond), Set.copyOf(notRenamed));
 		assertEquals(2, notRenamed.size());
@@ -252,6 +258,32 @@ public class RenameableTest
 		assertFalse(renamable.exists());
 		assertEquals("second", Files.readString(blockedFirst.toPath()));
 		assertEquals("third", Files.readString(blockedSecond.toPath()));
+	}
+
+	/**
+	 * Test method for {@link Renameable#changeAllFilenameSuffix(File, String, String, boolean)}:
+	 * the list is empty, never null, when every rename works (file-worker#69)
+	 *
+	 * @param delete
+	 *            the flag whether a refused rename falls back to copy and delete
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest(name = "delete = {0}")
+	@ValueSource(booleans = { false, true })
+	public void changeAllFilenameSuffix_returnsAnEmptyList_whenEveryRenameWorks(boolean delete)
+		throws Exception
+	{
+		newFile("one.txt", "first");
+		Path subDirectory = Files.createDirectory(tempDir.resolve("sub"));
+		Files.writeString(subDirectory.resolve("two.txt"), "second");
+
+		List<File> notRenamed = renameable.changeAllFilenameSuffix(tempDir.toFile(), ".txt", ".rtf",
+			delete);
+
+		assertEquals(List.of(), notRenamed);
+		assertEquals("first", Files.readString(tempDir.resolve("one.rtf")));
+		assertEquals("second", Files.readString(subDirectory.resolve("two.rtf")));
 	}
 
 	/**

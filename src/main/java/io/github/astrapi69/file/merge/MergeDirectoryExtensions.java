@@ -27,11 +27,15 @@ package io.github.astrapi69.file.merge;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 
@@ -63,11 +67,13 @@ public final class MergeDirectoryExtensions
 	 *            the directories to merge into the target directory
 	 * @return the targetDir
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred. Under
-	 *             {@link MergeStrategy#TARGET_AS_MASTER} a file or an emptied directory that cannot
-	 *             be deleted from the source does not stop the merge: after every source is merged,
-	 *             one exception names each of them, with the single failures attached as suppressed
-	 *             exceptions. The target holds the copies.
+	 *             Signals that an I/O exception has occurred. A directory that cannot be read, and
+	 *             under {@link MergeStrategy#TARGET_AS_MASTER} a file or an emptied directory that
+	 *             cannot be deleted from the source, does not stop the merge: after every source is
+	 *             merged, one exception names each of them, with the single failures attached as
+	 *             suppressed exceptions. The target holds the copies. A failure that stops the
+	 *             merge, such as a copy that fails, carries the failures collected until then as
+	 *             suppressed exceptions.
 	 */
 	public static File mergeAndGet(File targetDir, MergeStrategy strategy,
 		File... directoriesToMerge) throws IOException
@@ -81,17 +87,27 @@ public final class MergeDirectoryExtensions
 			targetDir.mkdirs();
 		}
 
+		final Map<File, IOException> directoriesNotRead = new LinkedHashMap<>();
 		final Map<File, IOException> sourceFilesLeft = new LinkedHashMap<>();
-		for (File sourceDir : directoriesToMerge)
+		try
 		{
-			if (sourceDir != null && sourceDir.exists())
+			for (File sourceDir : directoriesToMerge)
 			{
-				processDirectory(sourceDir, targetDir, "", strategy, sourceFilesLeft);
+				if (sourceDir != null && sourceDir.isDirectory())
+				{
+					processDirectory(sourceDir, targetDir, "", strategy, directoriesNotRead,
+						sourceFilesLeft);
+				}
 			}
 		}
-		if (!sourceFilesLeft.isEmpty())
+		catch (IOException mergeStopped)
 		{
-			throw newSourceFilesLeftException(targetDir, sourceFilesLeft);
+			addSuppressed(mergeStopped, directoriesNotRead, sourceFilesLeft);
+			throw mergeStopped;
+		}
+		if (!directoriesNotRead.isEmpty() || !sourceFilesLeft.isEmpty())
+		{
+			throw newIncompleteMergeException(targetDir, directoriesNotRead, sourceFilesLeft);
 		}
 		return targetDir;
 	}
@@ -106,19 +122,26 @@ public final class MergeDirectoryExtensions
 	 *            the directories to merge in the target directory
 	 * @return the targetDir
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred. A directory that cannot be read does
+	 *             not stop the merge: after every other file is merged, one exception names each of
+	 *             them, with the single failures attached as suppressed exceptions.
 	 */
 	public static File mergeAndGet(File targetDir, File... directoriesToMerge) throws IOException
 	{
 		Objects.requireNonNull(targetDir, "targetDir must not be null");
 		Objects.requireNonNull(directoriesToMerge, "directoriesToMerge must not be null");
 
-		newFileMergeStore(directoriesToMerge).entrySet().forEach(fileEntry -> {
+		final Map<File, IOException> directoriesNotRead = new LinkedHashMap<>();
+		newFileMergeStore(directoriesNotRead, directoriesToMerge).entrySet().forEach(fileEntry -> {
 			final String relativeName = fileEntry.getKey();
 			final File srcFile = fileEntry.getValue();
 			RuntimeExceptionDecorator
 				.decorate(() -> FileUtils.copyFile(srcFile, new File(targetDir, relativeName)));
 		});
+		if (!directoriesNotRead.isEmpty())
+		{
+			throw newIncompleteMergeException(targetDir, directoriesNotRead, Map.of());
+		}
 		return targetDir;
 	}
 
@@ -131,30 +154,34 @@ public final class MergeDirectoryExtensions
 	 * @param directoriesToMerge
 	 *            the directories to merge in the target directory
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred. A directory that cannot be read does
+	 *             not stop the merge: after every other file is merged, one exception names each of
+	 *             them, with the single failures attached as suppressed exceptions.
 	 */
 	public static void merge(File targetDir, File... directoriesToMerge) throws IOException
 	{
 		mergeAndGet(targetDir, directoriesToMerge);
 	}
 
-	private static Map<String, File> newFileMergeStore(File... directoriesToMerge)
+	private static Map<String, File> newFileMergeStore(
+		final Map<File, IOException> directoriesNotRead, File... directoriesToMerge)
 	{
 		final Map<String, File> fileMergeStore = new HashMap<>();
 		for (File directoryToMerge : directoriesToMerge)
 		{
 			if (directoryToMerge != null && directoryToMerge.isDirectory())
 			{
-				refreshFileStore(directoryToMerge, fileMergeStore, null);
+				refreshFileStore(directoryToMerge, fileMergeStore, null, directoriesNotRead);
 			}
 		}
 		return fileMergeStore;
 	}
 
 	private static void refreshFileStore(final File baseDirectory,
-		final Map<String, File> fileStore, final String relativeName)
+		final Map<String, File> fileStore, final String relativeName,
+		final Map<File, IOException> directoriesNotRead)
 	{
-		File[] files = Objects.requireNonNull(baseDirectory.listFiles());
+		File[] files = listFiles(baseDirectory, directoriesNotRead);
 		for (File file : files)
 		{
 			final String relativeFileName = getRelativeFileName(relativeName, file.getName());
@@ -168,7 +195,7 @@ public final class MergeDirectoryExtensions
 			}
 			else
 			{
-				refreshFileStore(file, fileStore, relativeFileName);
+				refreshFileStore(file, fileStore, relativeFileName, directoriesNotRead);
 			}
 		}
 	}
@@ -178,15 +205,38 @@ public final class MergeDirectoryExtensions
 		return baseName == null ? fileName : baseName + "/" + fileName;
 	}
 
-	private static void processDirectory(File sourceDir, File targetDir, String relativePath,
-		MergeStrategy strategy, Map<File, IOException> sourceFilesLeft) throws IOException
+	/**
+	 * Lists the given directory, and records it with the reason when it cannot be read, so that the
+	 * merge goes on and names it at the end (file-worker#76)
+	 */
+	private static File[] listFiles(File directory, Map<File, IOException> directoriesNotRead)
 	{
-		File[] files = sourceDir.listFiles();
-		if (files == null)
+		try (Stream<Path> entries = Files.list(directory.toPath()))
 		{
-			return;
+			return entries.map(Path::toFile).toArray(File[]::new);
 		}
+		catch (IOException exception)
+		{
+			directoriesNotRead.put(directory, exception);
+			return new File[0];
+		}
+	}
 
+	/**
+	 * Tells whether the given directory can be read and is empty: one that cannot be read is not
+	 * known to be empty, so it stays in the source (file-worker#76)
+	 */
+	private static boolean isEmptyDirectory(File directory)
+	{
+		String[] entries = directory.list();
+		return entries != null && entries.length == 0;
+	}
+
+	private static void processDirectory(File sourceDir, File targetDir, String relativePath,
+		MergeStrategy strategy, Map<File, IOException> directoriesNotRead,
+		Map<File, IOException> sourceFilesLeft) throws IOException
+	{
+		File[] files = listFiles(sourceDir, directoriesNotRead);
 		for (File file : files)
 		{
 			String currentRelPath = relativePath.isEmpty()
@@ -200,10 +250,11 @@ public final class MergeDirectoryExtensions
 				{
 					targetFile.mkdirs();
 				}
-				processDirectory(file, targetDir, currentRelPath, strategy, sourceFilesLeft);
+				processDirectory(file, targetDir, currentRelPath, strategy, directoriesNotRead,
+					sourceFilesLeft);
 
 				// Optional: Leere Verzeichnisse in der Quelle löschen bei TARGET_AS_MASTER
-				if (strategy == MergeStrategy.TARGET_AS_MASTER && file.listFiles().length == 0)
+				if (strategy == MergeStrategy.TARGET_AS_MASTER && isEmptyDirectory(file))
 				{
 					deleteFromSource(file, sourceFilesLeft);
 				}
@@ -267,16 +318,46 @@ public final class MergeDirectoryExtensions
 		}
 	}
 
-	private static IOException newSourceFilesLeftException(File targetDir,
-		Map<File, IOException> sourceFilesLeft)
+	/**
+	 * Builds the one exception of a merge that did not do everything: it names the directories that
+	 * could not be read and the source files that could not be deleted, and carries their single
+	 * failures as suppressed exceptions
+	 */
+	private static IOException newIncompleteMergeException(File targetDir,
+		Map<File, IOException> directoriesNotRead, Map<File, IOException> sourceFilesLeft)
 	{
-		String filesLeft = sourceFilesLeft.keySet().stream().map(File::getAbsolutePath)
-			.collect(Collectors.joining(", "));
+		final List<String> failures = new ArrayList<>();
+		if (!directoriesNotRead.isEmpty())
+		{
+			failures.add("the directories that could not be read are left out ("
+				+ directoriesNotRead.size() + "): " + joinAbsolutePaths(directoriesNotRead));
+		}
+		if (!sourceFilesLeft.isEmpty())
+		{
+			failures.add("the source keeps what could not be deleted (" + sourceFilesLeft.size()
+				+ "): " + joinAbsolutePaths(sourceFilesLeft));
+		}
 		IOException exception = new IOException("Merged into " + targetDir.getAbsolutePath()
-			+ ", but the source keeps what could not be deleted (" + sourceFilesLeft.size() + "): "
-			+ filesLeft);
-		sourceFilesLeft.values().forEach(exception::addSuppressed);
+			+ ", but " + String.join("; and ", failures));
+		addSuppressed(exception, directoriesNotRead, sourceFilesLeft);
 		return exception;
+	}
+
+	/**
+	 * Attaches the single failures of the merge to the given exception, so that an exception that
+	 * stops the merge does not drop the ones collected until then (file-worker#80)
+	 */
+	private static void addSuppressed(IOException exception,
+		Map<File, IOException> directoriesNotRead, Map<File, IOException> sourceFilesLeft)
+	{
+		directoriesNotRead.values().forEach(exception::addSuppressed);
+		sourceFilesLeft.values().forEach(exception::addSuppressed);
+	}
+
+	private static String joinAbsolutePaths(Map<File, IOException> failures)
+	{
+		return failures.keySet().stream().map(File::getAbsolutePath)
+			.collect(Collectors.joining(", "));
 	}
 
 }

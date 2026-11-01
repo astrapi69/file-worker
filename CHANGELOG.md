@@ -8,6 +8,9 @@ BREAKING:
 
 - Java 25 is the minimum, up from 17: the family builds, tests and releases on JDK 25
   (astrapi69/mystic-crypt#234), so this release is 20.0 instead of 19.2 (#41)
+- `FileCreationState` carries no file: `getFile()` and `setFile(File)` are gone, since a constant is shared by the
+  whole JVM and `newDirectory` wrote every caller's directory into it; `DirectoryFactory.newTempDir` (both
+  overloads) is gone with them, `newTempDirectory` returns the created directory (#68)
 
 FIXED:
 
@@ -26,11 +29,19 @@ FIXED:
   partition (#57)
 - `findFilesWithPrefixAndExtension` and its recursive variant read the prefix and the extension as text, not as a
   regular expression (#58)
+- `findFilesWithPrefixAndExtension` and its recursive variant delegate to `Searchable`, which gains the top-level
+  variant, so both answer alike from one definition of a match: the name starts with the prefix and ends with a dot
+  and the extension, which may overlap. The prefix `report.` and the extension `txt` now find `report.txt` (#88)
 - `compareFileContentByBytes` and `compareFileContentByLines` compare the content; they reported equal content
   for any two files (#46)
 - `findEqualFilesWithSameContent` compares the content it names (#47)
+- the content equality of `compareFileContentByBytes` and `compareFileContentByLines` says whether the content is
+  the same, whatever the name, the time or the extension: it was true for any two files whose other properties
+  differed, without a comparison. Files of unequal length are unequal without being read (#77)
 - `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
   the finders work on a directory with such a file (#48)
+- `CompareFileExtensions` rejects a directory as the file to compare with an `IllegalArgumentException` that names
+  it, instead of a NullPointerException in the name check; the finders never pass one (#78)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
 - `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
@@ -38,7 +49,10 @@ FIXED:
   without a parent works (#66)
 - `FileFactory.newFiles` reports the overall state: FAILED if any file failed, else CREATED if any was created, else
   ALREADY_EXISTS (#67)
-- `changeAllFilenameSuffix` returns an empty list instead of null when every rename works (#69, in part)
+- `changeAllFilenameSuffix` returns the files it could not rename, an empty list and never null when every rename
+  works; with `delete`, a file whose copy fails goes into that list too, instead of an exception in the middle of
+  the batch. `Renameable#changeAllFilenameSuffix` delegates to it, and the Javadoc of both says what `delete` and
+  the list mean (#69)
 - `write2FileWithBuffer` creates a destination that does not exist (#70)
 - the messages of `RenameFileExtensions` for a missing file read as `Renameable`'s (#71); the Javadoc of `moveFile`
   says it moves to a target file (#65)
@@ -50,6 +64,12 @@ FIXED:
 - a merge without a strategy skips a missing source, as the strategy variant does, and empty files merge to an
   empty file (#61)
 - `deleteAllFiles` writes nothing to stderr: not for a regular file (#62), not for a restricted directory (#79)
+- a merge over a directory it cannot read merges the rest and names that directory in its one `IOException`, next to
+  the source files it could not delete, under every strategy and without one; it threw a bare
+  NullPointerException without a strategy and under `TARGET_AS_MASTER`, and left the files out silently under
+  `SOURCE_TO_TARGET` (#76)
+- a copy failure that stops a merge with a strategy carries the delete failures and the unread directories collected
+  until then as suppressed exceptions, instead of dropping them (#80)
 
 CHANGED:
 

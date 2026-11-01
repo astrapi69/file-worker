@@ -24,10 +24,10 @@
  */
 package io.github.astrapi69.file.create.model;
 
-import java.io.File;
-
 /**
- * The enum {@link FileCreationState} provides constants for the file creation state
+ * The enum {@link FileCreationState} provides constants for the file creation state. A constant is
+ * one instance for the whole JVM, so it carries no state: the file a state belongs to is the one
+ * the caller passed in (file-worker#68)
  */
 public enum FileCreationState
 {
@@ -42,31 +42,6 @@ public enum FileCreationState
 	FAILED,
 
 	/** This state signals that the file creation is pending */
-	PENDING;
-
-	File file;
-
-	/**
-	 * Gets file
-	 *
-	 * @return the file
-	 */
-	public File getFile()
-	{
-		return file;
-	}
-
-	/**
-	 * Sets file
-	 *
-	 * @param file
-	 *            the file
-	 * @return the file
-	 */
-	public FileCreationState setFile(File file)
-	{
-		this.file = file;
-		return this;
-	}
+	PENDING
 
 }

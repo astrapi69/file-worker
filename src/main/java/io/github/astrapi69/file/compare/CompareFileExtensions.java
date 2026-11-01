@@ -47,7 +47,9 @@ import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.io.file.FilenameExtensions;
 
 /**
- * The class {@link CompareFileExtensions} helps you to compare files.
+ * The class {@link CompareFileExtensions} helps you to compare files. A comparison that fills a
+ * result bean rejects a directory as the file to compare with an {@link IllegalArgumentException}
+ * (file-worker#78).
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -78,6 +80,8 @@ public final class CompareFileExtensions
 	 *            If this is true then the last modified equality will be ignored.
 	 * @param ignoreNameEquality
 	 *            If this is true then the name equality will be ignored.
+	 * @throws IllegalArgumentException
+	 *             if the file to compare is a directory
 	 */
 	public static void compare(final IFileCompareResultBean fileCompareResultBean,
 		final boolean ignoreAbsolutePathEquality, final boolean ignoreExtensionEquality,
@@ -86,6 +90,11 @@ public final class CompareFileExtensions
 	{
 		final File source = fileCompareResultBean.getSourceFile();
 		final File compare = fileCompareResultBean.getFileToCompare();
+		if (compare.isDirectory())
+		{
+			throw new IllegalArgumentException(
+				"The file to compare " + compare + " is a directory; only files can be compared.");
+		}
 		if (!ignoreAbsolutePathEquality)
 		{
 			// check the absolute path from the files...
@@ -217,7 +226,10 @@ public final class CompareFileExtensions
 	}
 
 	/**
-	 * Compare file content for every single byte.
+	 * Compare file content for every single byte. The content equality of the result is true
+	 * exactly when both files have the same length and the same bytes, whatever their names,
+	 * modification times or extensions; files of unequal length are unequal without being read
+	 * (file-worker#77).
 	 *
 	 * @param sourceFile
 	 *            the source file
@@ -232,11 +244,8 @@ public final class CompareFileExtensions
 		final IFileContentResultBean fileContentResultBean = new FileContentResultBean(sourceFile,
 			fileToCompare);
 		completeCompare(fileContentResultBean);
-		final boolean simpleEquality = validateEquality(
-			(IFileCompareResultBean)fileContentResultBean);
-		boolean contentEquality = true;
-		// Compare the content...
-		if (simpleEquality)
+		boolean contentEquality = false;
+		if (fileContentResultBean.getLengthEquality())
 		{
 			try (InputStream sourceReader = StreamExtensions.getInputStream(sourceFile);
 				InputStream compareReader = StreamExtensions.getInputStream(fileToCompare))
@@ -260,7 +269,10 @@ public final class CompareFileExtensions
 	}
 
 	/**
-	 * Compare file content by lines.
+	 * Compare file content by lines. The content equality of the result is true exactly when both
+	 * files have the same length and the same lines, a line end of {@code \n}, {@code \r\n} or
+	 * {@code \r} counting as the same, whatever their names, modification times or extensions;
+	 * files of unequal length are unequal without being read (file-worker#77).
 	 *
 	 * @param sourceFile
 	 *            the source file
@@ -275,11 +287,8 @@ public final class CompareFileExtensions
 		final IFileContentResultBean fileContentResultBean = new FileContentResultBean(sourceFile,
 			fileToCompare);
 		completeCompare(fileContentResultBean);
-		final boolean simpleEquality = validateEquality(
-			(IFileCompareResultBean)fileContentResultBean);
-		boolean contentEquality = true;
-		// Compare the content...
-		if (simpleEquality)
+		boolean contentEquality = false;
+		if (fileContentResultBean.getLengthEquality())
 		{
 			try (
 

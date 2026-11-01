@@ -39,12 +39,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.Strings;
 
+import io.github.astrapi69.file.search.api.Searchable;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.regex.RegExExtensions;
 
@@ -56,6 +56,13 @@ import io.github.astrapi69.regex.RegExExtensions;
  */
 public final class FileSearchExtensions
 {
+
+	/**
+	 * The searches this class delegates to, so that both answer alike (file-worker#88)
+	 */
+	private static final Searchable SEARCHABLE = new Searchable()
+	{
+	};
 
 	/**
 	 * Private constructor to prevent instantiation
@@ -700,100 +707,51 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Finds all files in the specified directory that match the given prefix and file extension.
+	 * Finds the files in the specified directory, not in its subdirectories, that match the given
+	 * prefix and file extension. A match is a file whose name starts with the prefix and ends with
+	 * a dot and the extension, both read as text and compared case-sensitively; the two may
+	 * overlap, so the prefix {@code report.} and the extension {@code txt} match
+	 * {@code report.txt}. Delegates to
+	 * {@link Searchable#findFilesWithPrefixAndExtension(File, String, String)}, so both answer
+	 * alike (file-worker#88).
 	 *
 	 * @param dir
 	 *            The directory in which to search for files.
 	 * @param prefix
 	 *            The prefix that the filenames should start with.
 	 * @param extension
-	 *            The file extension that the filenames should have.
-	 * @return A list of files that match the specified prefix and extension.
+	 *            The file extension that the filenames should have, without the dot.
+	 * @return A list of files that match the specified prefix and extension, with their absolute
+	 *         paths.
 	 */
 	public static List<File> findFilesWithPrefixAndExtension(final File dir, final String prefix,
 		final String extension)
 	{
-		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = prefixAndExtensionRegex(prefix, extension);
-		// Get all files in the directory
-		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
-			return foundedFileList;
-		}
-		for (final File child : children)
-		{
-			// if the entry is a not directory, you can add the files that matches
-			if (!child.isDirectory())
-			{
-				// entry is a file
-				final String filename = child.getName();
-				if (filename.matches(regex))
-				{
-					foundedFileList.add(child.getAbsoluteFile());
-				}
-			}
-		}
-		return foundedFileList;
+		return SEARCHABLE.findFilesWithPrefixAndExtension(dir.getAbsoluteFile(), prefix, extension);
 	}
 
 	/**
 	 * Finds all files recursively in the specified directory that match the given prefix and file
-	 * extension.
+	 * extension. A match is a file whose name starts with the prefix and ends with a dot and the
+	 * extension, both read as text and compared case-sensitively; the two may overlap, so the
+	 * prefix {@code report.} and the extension {@code txt} match {@code report.txt}. Delegates to
+	 * {@link Searchable#findFilesWithPrefixAndExtensionRecursive(File, String, String)}, so both
+	 * answer alike (file-worker#88).
 	 *
 	 * @param dir
 	 *            The directory in which to search for files.
 	 * @param prefix
 	 *            The prefix that the filenames should start with.
 	 * @param extension
-	 *            The file extension that the filenames should have.
-	 * @return A list of files that match the specified prefix and extension.
+	 *            The file extension that the filenames should have, without the dot.
+	 * @return A list of files that match the specified prefix and extension, with their absolute
+	 *         paths.
 	 */
 	public static List<File> findFilesWithPrefixAndExtensionRecursive(final File dir,
 		final String prefix, final String extension)
 	{
-		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = prefixAndExtensionRegex(prefix, extension);
-		// Get all files in the directory
-		final File[] children = dir.getAbsoluteFile().listFiles();
-		if (children == null || children.length < 1)
-		{
-			return foundedFileList;
-		}
-		for (final File child : children)
-		{
-			// if the entry is a directory
-			if (child.isDirectory())
-			{
-				foundedFileList
-					.addAll(findFilesWithPrefixAndExtensionRecursive(child, prefix, extension));
-			}
-			else
-			{
-				// entry is a file
-				final String filename = child.getName();
-				if (filename.matches(regex))
-				{
-					foundedFileList.add(child.getAbsoluteFile());
-				}
-			}
-		}
-		return foundedFileList;
-	}
-
-	/**
-	 * Gets the regular expression for a name that starts with the given prefix and ends with a dot
-	 * and the given extension. Both are quoted, so every character in them stands for itself.
-	 *
-	 * @param prefix
-	 *            The prefix that the filenames should start with.
-	 * @param extension
-	 *            The file extension that the filenames should have.
-	 * @return the regular expression for the names with the prefix and the extension
-	 */
-	private static String prefixAndExtensionRegex(final String prefix, final String extension)
-	{
-		return "^" + Pattern.quote(prefix) + ".*\\." + Pattern.quote(extension) + "$";
+		return SEARCHABLE.findFilesWithPrefixAndExtensionRecursive(dir.getAbsoluteFile(), prefix,
+			extension);
 	}
 
 }

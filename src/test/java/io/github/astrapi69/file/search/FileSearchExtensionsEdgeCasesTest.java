@@ -49,6 +49,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import io.github.astrapi69.file.search.api.Searchable;
+
 /**
  * Tests {@link FileSearchExtensions} against a directory tree built in a temporary directory, with
  * the edge cases of each search: an empty directory, a regular file and a missing file in place of
@@ -74,11 +76,12 @@ public class FileSearchExtensionsEdgeCasesTest
 
 	/**
 	 * Names with characters a regular expression reads as syntax, each beside a name the syntax
-	 * would match instead (file-worker#58)
+	 * would match instead (file-worker#58), and a name whose prefix reaches into its extension
+	 * beside one where it does not (file-worker#88)
 	 */
 	private static final List<String> NAMES_WITH_REGEX_CHARACTERS = List.of("file(1)-a.txt",
 		"file1-a.txt", "data.1.txt", "dataX1.txt", "[draft] plan.txt", "d plan.txt", "notes.t.t",
-		"notes.txt", "main.c++");
+		"notes.txt", "main.c++", "report.txt", "report..txt");
 
 	@TempDir
 	Path tempDir;
@@ -249,7 +252,9 @@ public class FileSearchExtensionsEdgeCasesTest
 				Set.of("[draft] plan.txt")),
 			Arguments.of("a dot in the extension is a dot", "notes", "t.t", Set.of("notes.t.t")),
 			Arguments.of("plus signs in the extension are characters", "main", "c++",
-				Set.of("main.c++")));
+				Set.of("main.c++")),
+			Arguments.of("the prefix may end with the dot before the extension", "report.", "txt",
+				Set.of("report.txt", "report..txt")));
 	}
 
 	static Stream<Arguments> fileLengthCases()
@@ -568,6 +573,35 @@ public class FileSearchExtensionsEdgeCasesTest
 			.findFilesWithPrefixAndExtensionRecursive(inTempDir("literal"), prefix, extension);
 
 		assertFoundExactly(expectedNames, found);
+	}
+
+	/**
+	 * {@link FileSearchExtensions} and {@link Searchable} answer alike, from one definition of a
+	 * match (file-worker#88)
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("literalPrefixAndExtensionCases")
+	void findFilesWithPrefixAndExtension_answersAsSearchable(String displayName, String prefix,
+		String extension, Set<String> expectedNames) throws IOException
+	{
+		createNamesWithRegexCharacters(tempDir.resolve("literal"));
+		createNamesWithRegexCharacters(tempDir.resolve("literal").resolve("deeper"));
+		File directory = inTempDir("literal");
+		Searchable searchable = new Searchable()
+		{
+		};
+
+		assertEquals(
+			Set.copyOf(searchable.findFilesWithPrefixAndExtension(directory, prefix, extension)),
+			Set.copyOf(
+				FileSearchExtensions.findFilesWithPrefixAndExtension(directory, prefix, extension)),
+			"the top level");
+		assertEquals(
+			Set.copyOf(
+				searchable.findFilesWithPrefixAndExtensionRecursive(directory, prefix, extension)),
+			Set.copyOf(FileSearchExtensions.findFilesWithPrefixAndExtensionRecursive(directory,
+				prefix, extension)),
+			"every level");
 	}
 
 	@Test
