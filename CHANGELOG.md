@@ -29,6 +29,9 @@ FIXED:
   partition (#57)
 - `findFilesWithPrefixAndExtension` and its recursive variant read the prefix and the extension as text, not as a
   regular expression (#58)
+- `findFilesWithPrefixAndExtension` and its recursive variant delegate to `Searchable`, which gains the top-level
+  variant, so both answer alike from one definition of a match: the name starts with the prefix and ends with a dot
+  and the extension, which may overlap. The prefix `report.` and the extension `txt` now find `report.txt` (#88)
 - `compareFileContentByBytes` and `compareFileContentByLines` compare the content; they reported equal content
   for any two files (#46)
 - `findEqualFilesWithSameContent` compares the content it names (#47)
