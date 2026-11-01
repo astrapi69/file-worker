@@ -33,6 +33,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.Strings;
+
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.HashAlgorithm;
 import io.github.astrapi69.file.compare.api.IFileCompareResultBean;
@@ -99,8 +101,8 @@ public final class CompareFileExtensions
 			final String sourceFileExtension = FilenameExtensions.getFilenameSuffix(source);
 			final String compareFileExtension = FilenameExtensions.getFilenameSuffix(compare);
 
-			final boolean extensionEquality = compareFileExtension
-				.equalsIgnoreCase(sourceFileExtension);
+			final boolean extensionEquality = Strings.CI.equals(compareFileExtension,
+				sourceFileExtension);
 			fileCompareResultBean.setFileExtensionEquality(extensionEquality);
 		}
 		else

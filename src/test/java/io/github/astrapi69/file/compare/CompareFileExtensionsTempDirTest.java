@@ -99,7 +99,13 @@ public class CompareFileExtensionsTempDirTest
 			new PropertyCase("only the name differs", "a/one.txt", "abc", LAST_MODIFIED,
 				"b/two.txt", "abc", LAST_MODIFIED, true, true, true, false),
 			new PropertyCase("name and extension differ only in case", "a/Same.TXT", "abc",
-				LAST_MODIFIED, "b/same.txt", "abc", LAST_MODIFIED, true, true, true, true));
+				LAST_MODIFIED, "b/same.txt", "abc", LAST_MODIFIED, true, true, true, true),
+			new PropertyCase("neither file has an extension", "a/README", "abc", LAST_MODIFIED,
+				"b/README", "abc", LAST_MODIFIED, true, true, true, true),
+			new PropertyCase("only the file to compare has no extension", "a/README.txt", "abc",
+				LAST_MODIFIED, "b/README", "abc", LAST_MODIFIED, false, true, true, true),
+			new PropertyCase("only the source has no extension", "a/README", "abc", LAST_MODIFIED,
+				"b/README.txt", "abc", LAST_MODIFIED, false, true, true, true));
 	}
 
 	static Stream<Arguments> contentComparers()
@@ -412,6 +418,51 @@ public class CompareFileExtensionsTempDirTest
 
 		assertEquals(2, found.size());
 		assertEquals(Set.of(List.of(first, second), List.of(second, first)), pairsOf(found));
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File)},
+	 * {@link CompareFileExtensions#findEqualFiles(File, boolean, boolean, boolean, boolean, boolean)},
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File)} and
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("finders")
+	public void findEqualFiles_pairsTheFilesWithoutAnExtension_besideAFileWithOne(
+		final String finderName,
+		final Function<File, List<? extends IFileCompareResultBean>> finder) throws IOException
+	{
+		final File first = newFile("root/a/README", "abc");
+		final File second = newFile("root/b/README", "abc");
+		newFile("root/c/README.txt", "abc");
+
+		final List<? extends IFileCompareResultBean> found = finder
+			.apply(tempDir.resolve("root").toFile());
+
+		assertEquals(Set.of(List.of(first, second), List.of(second, first)), pairsOf(found));
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFiles(File, File)},
+	 * {@link CompareFileExtensions#findEqualFiles(File, File, boolean, boolean, boolean, boolean, boolean)},
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)} and
+	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File, boolean, boolean, boolean, boolean, boolean, boolean)}
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("twoDirectoryFinders")
+	public void findEqualFilesInTwoDirectories_pairsTheFilesWithoutAnExtension_besideAFileWithOne(
+		final String finderName,
+		final BiFunction<File, File, List<? extends IFileCompareResultBean>> finder)
+		throws IOException
+	{
+		final File source = newFile("source/README", "abc");
+		newFile("source/README.txt", "abc");
+		final File copy = newFile("compare/README", "abc");
+
+		final List<? extends IFileCompareResultBean> found = finder
+			.apply(tempDir.resolve("source").toFile(), tempDir.resolve("compare").toFile());
+
+		assertEquals(Set.of(List.of(source, copy)), pairsOf(found));
 	}
 
 	/**
