@@ -26,6 +26,7 @@ package io.github.astrapi69.file.compare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -180,6 +181,36 @@ public class CompareFileExtensionsTempDirTest
 				"a\r\nb", LAST_MODIFIED, "b/same.txt", "a\nb", LAST_MODIFIED, false));
 		return contentComparers().flatMap(comparer -> pairCases.stream()
 			.map(pairCase -> Arguments.of(comparer.get()[0], comparer.get()[1], pairCase)));
+	}
+
+	/**
+	 * One of the comparisons of {@link CompareFileExtensions} that fill a result bean
+	 */
+	@FunctionalInterface
+	interface Comparison
+	{
+		void compare(File sourceFile, File fileToCompare);
+	}
+
+	static Stream<Arguments> comparisons()
+	{
+		return Stream.of(
+			Arguments.of("compareFileContentByBytes",
+				(Comparison)CompareFileExtensions::compareFileContentByBytes),
+			Arguments.of("compareFileContentByLines",
+				(Comparison)CompareFileExtensions::compareFileContentByLines),
+			Arguments.of("compareFiles(File, File)",
+				(Comparison)CompareFileExtensions::compareFiles),
+			Arguments.of("compareFiles(File, File, nothing ignored)",
+				(Comparison)(source, compare) -> CompareFileExtensions.compareFiles(source, compare,
+					false, false, false, false, false)),
+			Arguments.of("compareFiles(File, File, everything ignored)",
+				(Comparison)(source, compare) -> CompareFileExtensions.compareFiles(source, compare,
+					true, true, true, true, true, true)),
+			Arguments.of("simpleCompareFiles",
+				(Comparison)CompareFileExtensions::simpleCompareFiles),
+			Arguments.of("completeCompare", (Comparison)(source, compare) -> CompareFileExtensions
+				.completeCompare(new FileCompareResultBean(source, compare))));
 	}
 
 	static Stream<Arguments> lineComparersWithLineCases()
@@ -540,6 +571,24 @@ public class CompareFileExtensionsTempDirTest
 		assertEquals(source.length(), compare.length(), "the lengths");
 
 		assertEquals(lineCase.contentEquality(), comparer.test(source, compare));
+	}
+
+	/**
+	 * Test method for the comparisons of {@link CompareFileExtensions} that fill a result bean: a
+	 * directory as the file to compare is rejected, whatever is ignored (file-worker#78)
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("comparisons")
+	public void compare_rejectsADirectoryAsTheFileToCompare_andNamesIt(final String comparisonName,
+		final Comparison comparison) throws IOException
+	{
+		final File source = newFile("a/same.txt", "abc");
+		final File directory = newDirectory("b/same");
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> comparison.compare(source, directory));
+
+		assertTrue(exception.getMessage().contains(directory.toString()), exception.getMessage());
 	}
 
 	/**

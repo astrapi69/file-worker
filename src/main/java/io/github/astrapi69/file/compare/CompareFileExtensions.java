@@ -47,7 +47,9 @@ import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.io.file.FilenameExtensions;
 
 /**
- * The class {@link CompareFileExtensions} helps you to compare files.
+ * The class {@link CompareFileExtensions} helps you to compare files. A comparison that fills a
+ * result bean rejects a directory as the file to compare with an {@link IllegalArgumentException}
+ * (file-worker#78).
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -78,6 +80,8 @@ public final class CompareFileExtensions
 	 *            If this is true then the last modified equality will be ignored.
 	 * @param ignoreNameEquality
 	 *            If this is true then the name equality will be ignored.
+	 * @throws IllegalArgumentException
+	 *             if the file to compare is a directory
 	 */
 	public static void compare(final IFileCompareResultBean fileCompareResultBean,
 		final boolean ignoreAbsolutePathEquality, final boolean ignoreExtensionEquality,
@@ -86,6 +90,11 @@ public final class CompareFileExtensions
 	{
 		final File source = fileCompareResultBean.getSourceFile();
 		final File compare = fileCompareResultBean.getFileToCompare();
+		if (compare.isDirectory())
+		{
+			throw new IllegalArgumentException(
+				"The file to compare " + compare + " is a directory; only files can be compared.");
+		}
 		if (!ignoreAbsolutePathEquality)
 		{
 			// check the absolute path from the files...

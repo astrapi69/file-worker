@@ -37,6 +37,8 @@ FIXED:
   differed, without a comparison. Files of unequal length are unequal without being read (#77)
 - `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
   the finders work on a directory with such a file (#48)
+- `CompareFileExtensions` rejects a directory as the file to compare with an `IllegalArgumentException` that names
+  it, instead of a NullPointerException in the name check; the finders never pass one (#78)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
 - `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
