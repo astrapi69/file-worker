@@ -360,6 +360,45 @@ public class MergeDirectoryExtensionsStrategyTest
 		assertEquals(Set.of("stuck/left.txt"), relativeFilesOf(target));
 	}
 
+	@Test
+	void mergeWithTargetAsMaster_attachesTheFailuresCollectedSoFar_toTheCopyFailureThatStopsIt()
+		throws IOException
+	{
+		Path stuck = source.resolve("stuck");
+		Path left = write(stuck.resolve("left.txt"), "left", OLDER);
+		Path unread = source.resolve("unread");
+		write(unread.resolve("hidden.txt"), "hidden", OLDER);
+		Path other = Files.createDirectory(tempDir.resolve("other"));
+		write(other.resolve("closed").resolve("new.txt"), "new", OLDER);
+		Path closed = Files.createDirectory(target.resolve("closed"));
+		IOException exception;
+		try
+		{
+			assumeTrue(stuck.toFile().setWritable(false), "the file system takes the permission");
+			assumeTrue(unread.toFile().setReadable(false), "the file system takes the permission");
+			assumeTrue(closed.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(stuck), "the test runs without override rights");
+			assumeFalse(Files.isReadable(unread), "the test runs without override rights");
+
+			exception = assertThrows(IOException.class,
+				() -> MergeDirectoryExtensions.mergeAndGet(target.toFile(),
+					MergeStrategy.TARGET_AS_MASTER, source.toFile(), other.toFile()));
+		}
+		finally
+		{
+			stuck.toFile().setWritable(true);
+			unread.toFile().setReadable(true);
+			closed.toFile().setWritable(true);
+		}
+
+		assertTrue(exception.getMessage().contains(closed.resolve("new.txt").toString()),
+			"the copy failure is the exception: " + exception.getMessage());
+		Set<String> suppressed = Stream.of(exception.getSuppressed()).map(Throwable::getMessage)
+			.collect(Collectors.toSet());
+		assertEquals(Set.of(left.toString(), unread.toString()), suppressed,
+			"the failures collected before the copy failed");
+	}
+
 	@ParameterizedTest
 	@CsvSource({ "SOURCE_TO_TARGET, true", "TARGET_AS_MASTER, false" })
 	void mergeWithStrategy_copiesTheFilesTheTargetLacks_inEveryLevel(MergeStrategy strategy,

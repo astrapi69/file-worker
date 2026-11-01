@@ -65,6 +65,8 @@ FIXED:
   the source files it could not delete, under every strategy and without one; it threw a bare
   NullPointerException without a strategy and under `TARGET_AS_MASTER`, and left the files out silently under
   `SOURCE_TO_TARGET` (#76)
+- a copy failure that stops a merge with a strategy carries the delete failures and the unread directories collected
+  until then as suppressed exceptions, instead of dropping them (#80)
 
 CHANGED:
 

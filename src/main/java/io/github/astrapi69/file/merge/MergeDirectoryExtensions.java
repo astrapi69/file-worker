@@ -71,7 +71,9 @@ public final class MergeDirectoryExtensions
 	 *             under {@link MergeStrategy#TARGET_AS_MASTER} a file or an emptied directory that
 	 *             cannot be deleted from the source, does not stop the merge: after every source is
 	 *             merged, one exception names each of them, with the single failures attached as
-	 *             suppressed exceptions. The target holds the copies.
+	 *             suppressed exceptions. The target holds the copies. A failure that stops the
+	 *             merge, such as a copy that fails, carries the failures collected until then as
+	 *             suppressed exceptions.
 	 */
 	public static File mergeAndGet(File targetDir, MergeStrategy strategy,
 		File... directoriesToMerge) throws IOException
@@ -87,13 +89,21 @@ public final class MergeDirectoryExtensions
 
 		final Map<File, IOException> directoriesNotRead = new LinkedHashMap<>();
 		final Map<File, IOException> sourceFilesLeft = new LinkedHashMap<>();
-		for (File sourceDir : directoriesToMerge)
+		try
 		{
-			if (sourceDir != null && sourceDir.isDirectory())
+			for (File sourceDir : directoriesToMerge)
 			{
-				processDirectory(sourceDir, targetDir, "", strategy, directoriesNotRead,
-					sourceFilesLeft);
+				if (sourceDir != null && sourceDir.isDirectory())
+				{
+					processDirectory(sourceDir, targetDir, "", strategy, directoriesNotRead,
+						sourceFilesLeft);
+				}
 			}
+		}
+		catch (IOException mergeStopped)
+		{
+			addSuppressed(mergeStopped, directoriesNotRead, sourceFilesLeft);
+			throw mergeStopped;
 		}
 		if (!directoriesNotRead.isEmpty() || !sourceFilesLeft.isEmpty())
 		{
@@ -329,9 +339,19 @@ public final class MergeDirectoryExtensions
 		}
 		IOException exception = new IOException("Merged into " + targetDir.getAbsolutePath()
 			+ ", but " + String.join("; and ", failures));
+		addSuppressed(exception, directoriesNotRead, sourceFilesLeft);
+		return exception;
+	}
+
+	/**
+	 * Attaches the single failures of the merge to the given exception, so that an exception that
+	 * stops the merge does not drop the ones collected until then (file-worker#80)
+	 */
+	private static void addSuppressed(IOException exception,
+		Map<File, IOException> directoriesNotRead, Map<File, IOException> sourceFilesLeft)
+	{
 		directoriesNotRead.values().forEach(exception::addSuppressed);
 		sourceFilesLeft.values().forEach(exception::addSuppressed);
-		return exception;
 	}
 
 	private static String joinAbsolutePaths(Map<File, IOException> failures)
