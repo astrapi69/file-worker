@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +48,7 @@ import org.junit.jupiter.api.Named;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
 
@@ -477,6 +479,111 @@ public class FileFactoryTest extends FileTestCase
 	private File newRegularFile(String name) throws IOException
 	{
 		return Files.writeString(tempDir.resolve(name), "a regular file").toFile();
+	}
+
+	/**
+	 * The kind of a file given to {@link FileFactory#newFiles(java.util.Collection)}
+	 */
+	enum FileKind
+	{
+		/** a file that exists already */
+		EXISTING {
+			@Override
+			File in(Path directory, String name) throws IOException
+			{
+				return Files.writeString(directory.resolve(name), "existing").toFile();
+			}
+		},
+		/** a file that does not exist and can be created */
+		MISSING {
+			@Override
+			File in(Path directory, String name)
+			{
+				return directory.resolve(name).toFile();
+			}
+		},
+		/** a file that cannot be created, because a regular file stands where its parent belongs */
+		IMPOSSIBLE {
+			@Override
+			File in(Path directory, String name) throws IOException
+			{
+				File regularFile = Files.writeString(directory.resolve(name), "regular").toFile();
+				return new File(new File(regularFile, "sub"), "child.txt");
+			}
+		};
+
+		abstract File in(Path directory, String name) throws IOException;
+	}
+
+	private List<File> filesOfKinds(List<FileKind> kinds) throws IOException
+	{
+		List<File> files = new ArrayList<>();
+		for (int index = 0; index < kinds.size(); index++)
+		{
+			files.add(kinds.get(index).in(tempDir, "file" + index + ".txt"));
+		}
+		return files;
+	}
+
+	static Stream<Arguments> fileKindsWithTheOverallState()
+	{
+		return Stream.of(
+			argumentSet("one fails, the next is created",
+				List.of(FileKind.IMPOSSIBLE, FileKind.MISSING), FileCreationState.FAILED),
+			argumentSet("one exists, one fails, one exists",
+				List.of(FileKind.EXISTING, FileKind.IMPOSSIBLE, FileKind.EXISTING),
+				FileCreationState.FAILED),
+			argumentSet("one is created, the next exists",
+				List.of(FileKind.MISSING, FileKind.EXISTING), FileCreationState.CREATED),
+			argumentSet("every file is created", List.of(FileKind.MISSING, FileKind.MISSING),
+				FileCreationState.CREATED),
+			argumentSet("every file exists", List.of(FileKind.EXISTING, FileKind.EXISTING),
+				FileCreationState.ALREADY_EXISTS),
+			argumentSet("an empty collection", List.of(), FileCreationState.ALREADY_EXISTS));
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newFiles(java.util.Collection)}
+	 *
+	 * @param kinds
+	 *            the kinds of the files in the collection, in their order
+	 * @param expected
+	 *            the overall state
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@ParameterizedTest
+	@MethodSource("fileKindsWithTheOverallState")
+	public void newFiles_reportsTheOverallState_failedBeforeCreatedBeforeAlreadyExists(
+		List<FileKind> kinds, FileCreationState expected) throws IOException
+	{
+		List<File> files = filesOfKinds(kinds);
+
+		FileCreationState state = FileFactory.newFiles(files);
+
+		assertEquals(expected, state);
+		for (int index = 0; index < kinds.size(); index++)
+		{
+			assertEquals(kinds.get(index) != FileKind.IMPOSSIBLE, files.get(index).isFile(),
+				files.get(index).toString());
+		}
+	}
+
+	/**
+	 * Test method for {@link FileFactory#newFilesQuietly(java.util.Collection)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void newFilesQuietly_reportsFailed_whenAFileBeforeTheLastFails() throws IOException
+	{
+		List<File> files = filesOfKinds(List.of(FileKind.IMPOSSIBLE, FileKind.MISSING));
+
+		FileCreationState state = FileFactory.newFilesQuietly(files);
+
+		assertEquals(FileCreationState.FAILED, state);
+		assertTrue(files.get(1).isFile());
 	}
 
 	/**

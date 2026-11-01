@@ -214,19 +214,14 @@ public class WriteFileExtensionsTest extends FileTestCase
 		void write(File file, byte[] byteArray) throws IOException;
 	}
 
-	static Stream<Named<FileCopy>> copyMethodsThatCreateTheDestination()
+	static Stream<Named<FileCopy>> copyMethods()
 	{
 		return Stream.of(
 			Named.<FileCopy> of("readSourceFileAndWriteDestFile(String, String)",
 				WriteFileExtensions::readSourceFileAndWriteDestFile),
-			Named.<FileCopy> of("write2File(String, String)", WriteFileExtensions::write2File));
-	}
-
-	static Stream<Named<FileCopy>> allCopyMethods()
-	{
-		return Stream.concat(copyMethodsThatCreateTheDestination(),
-			Stream.of(Named.<FileCopy> of("write2FileWithBuffer(String, String)",
-				WriteFileExtensions::write2FileWithBuffer)));
+			Named.<FileCopy> of("write2File(String, String)", WriteFileExtensions::write2File),
+			Named.<FileCopy> of("write2FileWithBuffer(String, String)",
+				WriteFileExtensions::write2FileWithBuffer));
 	}
 
 	private static byte[] everyByteValue()
@@ -329,7 +324,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@ParameterizedTest(name = "{0}")
-	@MethodSource("allCopyMethods")
+	@MethodSource("copyMethods")
 	public void copyMethods_replaceTheContentOfAnExistingDestination(FileCopy fileCopy)
 		throws IOException
 	{
@@ -344,8 +339,9 @@ public class WriteFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link WriteFileExtensions#readSourceFileAndWriteDestFile(String, String)}
-	 * and {@link WriteFileExtensions#write2File(String, String)}
+	 * Test method for {@link WriteFileExtensions#readSourceFileAndWriteDestFile(String, String)},
+	 * {@link WriteFileExtensions#write2File(String, String)} and
+	 * {@link WriteFileExtensions#write2FileWithBuffer(String, String)}
 	 *
 	 * @param fileCopy
 	 *            the copy method under test
@@ -353,7 +349,7 @@ public class WriteFileExtensionsTest extends FileTestCase
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@ParameterizedTest(name = "{0}")
-	@MethodSource("copyMethodsThatCreateTheDestination")
+	@MethodSource("copyMethods")
 	public void copyMethods_createTheDestinationWhenItDoesNotExist(FileCopy fileCopy)
 		throws IOException
 	{

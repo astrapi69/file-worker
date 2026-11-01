@@ -71,7 +71,8 @@ public final class RenameFileExtensions
 	}
 
 	/**
-	 * Returns the filename from the given file with the systemtime.
+	 * Returns the filename from the given file with the systemtime. The time goes before the last
+	 * extension, or at the end of a name without one.
 	 *
 	 * @param fileToRename
 	 *            The file.
@@ -96,11 +97,10 @@ public final class RenameFileExtensions
 		}
 
 		final String fileName = fileToRename.getName();
-		final int ext_index = fileName.lastIndexOf(".");
-		final String ext = fileName.substring(ext_index);
-		String newName = fileName.substring(0, ext_index);
-		newName += "_" + sysTime + ext;
-		return newName;
+		final String nameWithoutExtension = FilenameExtensions
+			.getFilenameWithoutExtension(fileName);
+		final String extension = fileName.substring(nameWithoutExtension.length());
+		return nameWithoutExtension + "_" + sysTime + extension;
 	}
 
 	/**
@@ -112,7 +112,8 @@ public final class RenameFileExtensions
 	 *            All files that have the old suffix will be renamed with the new Suffix.
 	 * @param newSuffix
 	 *            The new suffix.
-	 * @return the list of files
+	 * @return the files whose suffix could not be changed, an empty list if every file with the old
+	 *         suffix was renamed
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
@@ -140,7 +141,8 @@ public final class RenameFileExtensions
 	 * @param delete
 	 *            If its true than its deletes the existing file with the same name. But before it
 	 *            copys the contents into the new File.
-	 * @return the list of files
+	 * @return the files whose suffix could not be changed, an empty list if every file with the old
+	 *         suffix was renamed
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileDoesNotExistException
@@ -152,30 +154,18 @@ public final class RenameFileExtensions
 		final String newSuffix, final boolean delete)
 		throws IOException, FileDoesNotExistException, FileIsADirectoryException
 	{
-		boolean success;
-		List<File> notDeletedFiles = null;
+		final List<File> notRenamedFiles = new ArrayList<>();
 		final String filePath = file.getAbsolutePath();
 		final String[] suffix = { oldSuffix };
 		final List<File> files = FileSearchExtensions.findFiles(filePath, suffix);
-		final int fileCount = files.size();
-		for (int i = 0; i < fileCount; i++)
+		for (final File currentFile : files)
 		{
-			final File currentFile = files.get(i);
-			success = RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete);
-			if (!success)
+			if (!RenameFileExtensions.changeFilenameSuffix(currentFile, newSuffix, delete))
 			{
-				if (null != notDeletedFiles)
-				{
-					notDeletedFiles.add(currentFile);
-				}
-				else
-				{
-					notDeletedFiles = new ArrayList<>();
-					notDeletedFiles.add(currentFile);
-				}
+				notRenamedFiles.add(currentFile);
 			}
 		}
-		return notDeletedFiles;
+		return notRenamedFiles;
 	}
 
 	/**
@@ -226,7 +216,7 @@ public final class RenameFileExtensions
 	{
 		if (!file.exists())
 		{
-			final String error = "The " + file + " does not exists.";
+			final String error = "The file " + file + " does not exist.";
 			throw new FileDoesNotExistException(error);
 		}
 		final String fileNamePrefix = FilenameExtensions.getFilenamePrefix(file);
@@ -257,22 +247,26 @@ public final class RenameFileExtensions
 	}
 
 	/**
-	 * Moves the given source file to the destination Directory.
+	 * Moves the given source file to the given destination file. The destination file is the new
+	 * path of the source file, as the target of {@code Files.move(source, target)} is, not a
+	 * directory to move it into: a move of a file onto an existing directory is refused with an
+	 * {@link IllegalArgumentException}, and the file stays where it is. To move a file into a
+	 * directory, use {@code FileUtils.moveFileToDirectory(File, File, boolean)} of commons-io.
 	 *
 	 * @param srcFile
 	 *            The source file.
-	 * @param destDir
-	 *            The destination directory.
+	 * @param destFile
+	 *            The destination file, the new path of the source file.
 	 * @return true if the file was moved otherwise false.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
-	public static boolean moveFile(final File srcFile, final File destDir)
+	public static boolean moveFile(final File srcFile, final File destFile)
 		throws IOException, FileIsADirectoryException
 	{
-		return RenameFileExtensions.renameFile(srcFile, destDir, true);
+		return RenameFileExtensions.renameFile(srcFile, destFile, true);
 	}
 
 	/**
@@ -354,7 +348,7 @@ public final class RenameFileExtensions
 		if (!fileToRename.exists())
 		{
 			throw new FileDoesNotExistException(
-				"File" + fileToRename.getName() + " does not exists!");
+				"File " + fileToRename.getName() + " does not exist!");
 		}
 		final String fileNameAbsolutPathPrefix = FileExtensions
 			.getAbsolutPathWithoutFilename(fileToRename);

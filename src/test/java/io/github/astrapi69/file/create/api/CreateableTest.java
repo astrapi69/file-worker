@@ -275,4 +275,23 @@ public class CreateableTest
 		files.forEach(file -> assertTrue(file.isFile(), file.toString()));
 	}
 
+	/**
+	 * Test method for {@link Createable#newFiles(Collection)}
+	 *
+	 * @throws IOException
+	 *             Signals an I/O exception occurred
+	 */
+	@Test
+	public void newFiles_reportsFailed_whenAFileBeforeTheLastFails() throws IOException
+	{
+		File regularFile = Files.writeString(tempDir.resolve("regular.txt"), "regular").toFile();
+		File impossible = new File(new File(regularFile, "sub"), "child.txt");
+		File fresh = tempDir.resolve("fresh.txt").toFile();
+
+		FileCreationState state = createable.newFiles(List.of(impossible, fresh));
+
+		assertEquals(FileCreationState.FAILED, state);
+		assertTrue(fresh.isFile());
+	}
+
 }

@@ -70,7 +70,8 @@ public class FileInfo
 	}
 
 	/**
-	 * Constructs a new `FileInfo` from the given {@link File} object.
+	 * Constructs a new `FileInfo` from the given {@link File} object. The path is the parent of the
+	 * absolute file, so a relative file without a parent gets the working directory.
 	 *
 	 * @param file
 	 *            the file from which to construct the `FileInfo`
@@ -80,7 +81,7 @@ public class FileInfo
 	public FileInfo(final File file)
 	{
 		Objects.requireNonNull(file);
-		this.path = file.getParentFile().getAbsolutePath();
+		this.path = file.getAbsoluteFile().getParent();
 		this.name = file.getName();
 		this.directory = file.isDirectory();
 	}
@@ -109,7 +110,8 @@ public class FileInfo
 	}
 
 	/**
-	 * Converts the given {@link File} object to a `FileInfo` object.
+	 * Converts the given {@link File} object to a `FileInfo` object. The path is the parent of the
+	 * absolute file, so a relative file without a parent gets the working directory.
 	 *
 	 * @param file
 	 *            the file to convert to `FileInfo`
@@ -120,7 +122,7 @@ public class FileInfo
 	public static FileInfo toFileInfo(final File file)
 	{
 		Objects.requireNonNull(file);
-		return FileInfo.builder().path(file.getParentFile().getAbsolutePath()).name(file.getName())
+		return FileInfo.builder().path(file.getAbsoluteFile().getParent()).name(file.getName())
 			.directory(file.isDirectory()).build();
 	}
 

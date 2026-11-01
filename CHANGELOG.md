@@ -33,6 +33,15 @@ FIXED:
   the finders work on a directory with such a file (#48)
 - `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
   first (#52)
+- `appendSystemtimeToFilename` (and `renameFileWithSystemtime`) takes a name without a dot (#64)
+- `new FileInfo(File)` and `FileInfo.toFileInfo(File)` take the parent of the absolute file, so a relative file
+  without a parent works (#66)
+- `FileFactory.newFiles` reports the overall state: FAILED if any file failed, else CREATED if any was created, else
+  ALREADY_EXISTS (#67)
+- `changeAllFilenameSuffix` returns an empty list instead of null when every rename works (#69, in part)
+- `write2FileWithBuffer` creates a destination that does not exist (#70)
+- the messages of `RenameFileExtensions` for a missing file read as `Renameable`'s (#71); the Javadoc of `moveFile`
+  says it moves to a target file (#65)
 - `MergeFileExtensions.mergeByKey` splits at the delimiter as it is, not as a regular expression, and keeps every
   line (#51)
 - `DeleteFileExtensions.delete` reports true for a directory it deleted (#59)
@@ -40,9 +49,11 @@ FIXED:
   after merging the rest (#60)
 - a merge without a strategy skips a missing source, as the strategy variant does, and empty files merge to an
   empty file (#61)
-- `deleteAllFiles` deletes a regular file without printing a stack trace (#62)
+- `deleteAllFiles` writes nothing to stderr: not for a regular file (#62), not for a restricted directory (#79)
 
 CHANGED:
+
+- built with Gradle 9.8.2 and the nmcp settings plugin 1.6.2, without a deprecation warning
 
 - the tests cover 95.7% of the lines and 89.6% of the branches, up from 70.6% and 62.4%, and the build
   fails below 90% of the lines or 85% of the branches (`jacocoTestCoverageVerification` in `check`). The defects
