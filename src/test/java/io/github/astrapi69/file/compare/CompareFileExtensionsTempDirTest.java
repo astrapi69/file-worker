@@ -176,11 +176,39 @@ public class CompareFileExtensionsTempDirTest
 			new ContentPairCase("the source has a byte more", "a/same.txt", "abcd", LAST_MODIFIED,
 				"b/same.txt", "abc", LAST_MODIFIED, false),
 			new ContentPairCase("an empty file and a file of one byte", "a/same.txt", "",
-				LAST_MODIFIED, "b/same.txt", "a", LAST_MODIFIED, false),
-			new ContentPairCase("the same lines with line ends of other lengths", "a/same.txt",
-				"a\r\nb", LAST_MODIFIED, "b/same.txt", "a\nb", LAST_MODIFIED, false));
+				LAST_MODIFIED, "b/same.txt", "a", LAST_MODIFIED, false));
 		return contentComparers().flatMap(comparer -> pairCases.stream()
 			.map(pairCase -> Arguments.of(comparer.get()[0], comparer.get()[1], pairCase)));
+	}
+
+	/**
+	 * Two contents with the same lines and line ends of other lengths
+	 */
+	record LineEndCase(String description, String sourceContent, String compareContent) {
+		@Override
+		public String toString()
+		{
+			return description;
+		}
+	}
+
+	static Stream<Arguments> contentComparersWithLineEndCases()
+	{
+		final List<LineEndCase> lineEndCases = List.of(
+			new LineEndCase("one line end \\r\\n against \\n", "a\r\nb", "a\nb"),
+			new LineEndCase("every line end \\r\\n against \\n", "a\r\nb\r\n", "a\nb\n"),
+			new LineEndCase("one line end \\r\\n against \\r", "a\r\nb", "a\rb"),
+			new LineEndCase("a last line end in the file to compare only", "a\nb", "a\nb\n"));
+		final Stream<Arguments> comparersWithTheirAnswer = Stream.of(Arguments.of(
+			"compareFileContentByBytes",
+			(BiFunction<File, File, IFileContentResultBean>)CompareFileExtensions::compareFileContentByBytes,
+			false),
+			Arguments.of("compareFileContentByLines",
+				(BiFunction<File, File, IFileContentResultBean>)CompareFileExtensions::compareFileContentByLines,
+				true));
+		return comparersWithTheirAnswer
+			.flatMap(comparer -> lineEndCases.stream().map(lineEndCase -> Arguments
+				.of(comparer.get()[0], comparer.get()[1], lineEndCase, comparer.get()[2])));
 	}
 
 	/**
@@ -481,8 +509,8 @@ public class CompareFileExtensionsTempDirTest
 	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
 	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}: the content equality
-	 * says whether the content is the same, whatever the name, the time or the extension, and files
-	 * of unequal length are unequal (file-worker#77)
+	 * says whether the content is the same, whatever the name, the time or the extension
+	 * (file-worker#77)
 	 */
 	@ParameterizedTest(name = "{0}: {2}")
 	@MethodSource("contentComparersWithContentPairCases")
@@ -498,6 +526,28 @@ public class CompareFileExtensionsTempDirTest
 		final IFileContentResultBean result = comparer.apply(source, compare);
 
 		assertEquals(pairCase.contentEquality(), result.getContentEquality(), "content");
+		assertFalse(CompareFileExtensions.validateEquality(result), "total equality");
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
+	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}: files of unequal length
+	 * have unequal bytes, while their lines, the line ends ignored, can be the same, so the
+	 * comparison by lines takes no shortcut over the length (file-worker#77)
+	 */
+	@ParameterizedTest(name = "{0}: {2}, equal content: {3}")
+	@MethodSource("contentComparersWithLineEndCases")
+	public void compareFileContent_reportsEqualContentOnlyByLines_whenTheSameLinesDifferInLength(
+		final String comparerName, final BiFunction<File, File, IFileContentResultBean> comparer,
+		final LineEndCase lineEndCase, final boolean contentEquality) throws IOException
+	{
+		final File source = newFile("a/same.txt", lineEndCase.sourceContent());
+		final File compare = newFile("b/same.txt", lineEndCase.compareContent());
+
+		final IFileContentResultBean result = comparer.apply(source, compare);
+
+		assertFalse(result.getLengthEquality(), "length");
+		assertEquals(contentEquality, result.getContentEquality(), "content");
 		assertFalse(CompareFileExtensions.validateEquality(result), "total equality");
 	}
 

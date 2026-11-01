@@ -228,8 +228,10 @@ public final class CompareFileExtensions
 	/**
 	 * Compare file content for every single byte. The content equality of the result is true
 	 * exactly when both files have the same length and the same bytes, whatever their names,
-	 * modification times or extensions; files of unequal length are unequal without being read
-	 * (file-worker#77).
+	 * modification times or extensions; files of unequal length are unequal without being read, as
+	 * with {@link org.apache.commons.io.FileUtils#contentEquals(File, File)}. Unlike
+	 * {@link #compareFileContentByLines(File, File)}, which ignores the line ends, a line end of
+	 * {@code \r\n} and one of {@code \n} are different bytes (file-worker#77).
 	 *
 	 * @param sourceFile
 	 *            the source file
@@ -270,9 +272,13 @@ public final class CompareFileExtensions
 
 	/**
 	 * Compare file content by lines. The content equality of the result is true exactly when both
-	 * files have the same length and the same lines, a line end of {@code \n}, {@code \r\n} or
-	 * {@code \r} counting as the same, whatever their names, modification times or extensions;
-	 * files of unequal length are unequal without being read (file-worker#77).
+	 * files have the same lines, a line end of {@code \n}, {@code \r\n} or {@code \r} counting as
+	 * the same, whatever their names, modification times or extensions. Unlike
+	 * {@link #compareFileContentByBytes(File, File)} it takes no shortcut over the length: two
+	 * files with the same lines can differ in length, such as one with {@code \r\n} and one with
+	 * {@code \n} line ends, so both are read, as with
+	 * {@link org.apache.commons.io.FileUtils#contentEqualsIgnoreEOL(File, File, String)}
+	 * (file-worker#77).
 	 *
 	 * @param sourceFile
 	 *            the source file
@@ -287,26 +293,16 @@ public final class CompareFileExtensions
 		final IFileContentResultBean fileContentResultBean = new FileContentResultBean(sourceFile,
 			fileToCompare);
 		completeCompare(fileContentResultBean);
-		boolean contentEquality = false;
-		if (fileContentResultBean.getLengthEquality())
+		boolean contentEquality;
+		try (BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(sourceFile);
+			BufferedReader compareReader = (BufferedReader)StreamExtensions
+				.getReader(fileToCompare))
 		{
-			try (
-
-				BufferedReader sourceReader = (BufferedReader)StreamExtensions
-					.getReader(sourceFile);
-				BufferedReader compareReader = (BufferedReader)StreamExtensions
-					.getReader(fileToCompare))
-			{
-				contentEquality = IOUtils.contentEqualsIgnoreEOL(sourceReader, compareReader);
-			}
-			catch (final FileNotFoundException e)
-			{
-				contentEquality = false;
-			}
-			catch (final IOException | UncheckedIOException e)
-			{
-				contentEquality = false;
-			}
+			contentEquality = IOUtils.contentEqualsIgnoreEOL(sourceReader, compareReader);
+		}
+		catch (final IOException | UncheckedIOException e)
+		{
+			contentEquality = false;
 		}
 		fileContentResultBean.setContentEquality(contentEquality);
 		return fileContentResultBean;

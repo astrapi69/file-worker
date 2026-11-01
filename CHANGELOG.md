@@ -37,7 +37,9 @@ FIXED:
 - `findEqualFilesWithSameContent` compares the content it names (#47)
 - the content equality of `compareFileContentByBytes` and `compareFileContentByLines` says whether the content is
   the same, whatever the name, the time or the extension: it was true for any two files whose other properties
-  differed, without a comparison. Files of unequal length are unequal without being read (#77)
+  differed, without a comparison. `compareFileContentByBytes` takes files of unequal length as unequal without
+  reading them; `compareFileContentByLines` compares the lines with the line ends ignored and takes no shortcut over
+  the length, so the same lines with `\r\n` and with `\n` line ends are equal content (#77)
 - `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
   the finders work on a directory with such a file (#48)
 - `CompareFileExtensions` rejects a directory as the file to compare with an `IllegalArgumentException` that names
