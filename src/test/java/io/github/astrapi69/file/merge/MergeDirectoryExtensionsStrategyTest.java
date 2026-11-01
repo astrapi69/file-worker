@@ -93,6 +93,40 @@ public class MergeDirectoryExtensionsStrategyTest
 						"regular", OLDER).toFile()));
 	}
 
+	/**
+	 * One of the merges of {@link MergeDirectoryExtensions}: without a strategy or with one
+	 */
+	@FunctionalInterface
+	interface MergeCall
+	{
+		void merge(File targetDirectory, File... directoriesToMerge) throws IOException;
+	}
+
+	/**
+	 * A merge call with its name and whether it deletes a merged file from the source
+	 */
+	record MergeVariant(String name, MergeCall call, boolean deletesFromTheSource) {
+		@Override
+		public String toString()
+		{
+			return name;
+		}
+	}
+
+	static Stream<MergeVariant> mergeVariants()
+	{
+		return Stream
+			.of(new MergeVariant("without a strategy", MergeDirectoryExtensions::merge, false),
+				new MergeVariant("SOURCE_TO_TARGET",
+					(targetDirectory, directoriesToMerge) -> MergeDirectoryExtensions.mergeAndGet(
+						targetDirectory, MergeStrategy.SOURCE_TO_TARGET, directoriesToMerge),
+					false),
+				new MergeVariant("TARGET_AS_MASTER",
+					(targetDirectory, directoriesToMerge) -> MergeDirectoryExtensions.mergeAndGet(
+						targetDirectory, MergeStrategy.TARGET_AS_MASTER, directoriesToMerge),
+					true));
+	}
+
 	static Stream<Arguments> directoryOrders()
 	{
 		return Stream.of(Arguments.of("the newer directory first", List.of("newer", "older")),
@@ -230,6 +264,100 @@ public class MergeDirectoryExtensionsStrategyTest
 			Files.readString(target.resolve("outer").resolve("inner").resolve("z.txt")));
 		assertFalse(Files.exists(moved), "the merged file is deleted from the source");
 		assertTrue(Files.isDirectory(inner), "the emptied directory is left in the source");
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("mergeVariants")
+	void merge_namesASubdirectoryItCannotRead_afterMergingTheRest(MergeVariant variant)
+		throws IOException
+	{
+		Path readable = write(source.resolve("readable.txt"), "readable", OLDER);
+		Path locked = source.resolve("locked");
+		Path hidden = write(locked.resolve("hidden.txt"), "hidden", OLDER);
+		Path other = Files.createDirectory(tempDir.resolve("other"));
+		write(other.resolve("free.txt"), "free", OLDER);
+		IOException exception;
+		try
+		{
+			assumeTrue(locked.toFile().setReadable(false), "the file system takes the permission");
+			assumeFalse(Files.isReadable(locked), "the test runs without override rights");
+
+			exception = assertThrows(IOException.class,
+				() -> variant.call().merge(target.toFile(), source.toFile(), other.toFile()));
+		}
+		finally
+		{
+			locked.toFile().setReadable(true);
+		}
+
+		assertTrue(exception.getMessage().contains(locked.toString()), exception.getMessage());
+		assertEquals(1, exception.getSuppressed().length, "one suppressed exception per directory");
+		assertInstanceOf(IOException.class, exception.getSuppressed()[0]);
+		assertEquals(Set.of("readable.txt", "free.txt"), relativeFilesOf(target));
+		assertEquals("readable", Files.readString(target.resolve("readable.txt")));
+		assertEquals("hidden", Files.readString(hidden),
+			"the unread directory stays in the source");
+		assertEquals(variant.deletesFromTheSource(), Files.notExists(readable),
+			"the merged file is deleted from the source only under TARGET_AS_MASTER");
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("mergeVariants")
+	void merge_namesASourceDirectoryItCannotRead_afterMergingTheOthers(MergeVariant variant)
+		throws IOException
+	{
+		Path hidden = write(source.resolve("hidden.txt"), "hidden", OLDER);
+		Path other = Files.createDirectory(tempDir.resolve("other"));
+		write(other.resolve("free.txt"), "free", OLDER);
+		IOException exception;
+		try
+		{
+			assumeTrue(source.toFile().setReadable(false), "the file system takes the permission");
+			assumeFalse(Files.isReadable(source), "the test runs without override rights");
+
+			exception = assertThrows(IOException.class,
+				() -> variant.call().merge(target.toFile(), source.toFile(), other.toFile()));
+		}
+		finally
+		{
+			source.toFile().setReadable(true);
+		}
+
+		assertTrue(exception.getMessage().contains(source.toString()), exception.getMessage());
+		assertEquals(1, exception.getSuppressed().length, "one suppressed exception per directory");
+		assertEquals(Set.of("free.txt"), relativeFilesOf(target));
+		assertEquals("hidden", Files.readString(hidden), "the unread directory stays as it is");
+	}
+
+	@Test
+	void mergeWithTargetAsMaster_namesTheDirectoriesItCannotRead_nextToTheFilesItCannotDelete()
+		throws IOException
+	{
+		Path unread = source.resolve("unread");
+		write(unread.resolve("hidden.txt"), "hidden", OLDER);
+		Path stuck = source.resolve("stuck");
+		Path left = write(stuck.resolve("left.txt"), "left", OLDER);
+		IOException exception;
+		try
+		{
+			assumeTrue(unread.toFile().setReadable(false), "the file system takes the permission");
+			assumeTrue(stuck.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isReadable(unread), "the test runs without override rights");
+			assumeFalse(Files.isWritable(stuck), "the test runs without override rights");
+
+			exception = assertThrows(IOException.class, () -> MergeDirectoryExtensions
+				.mergeAndGet(target.toFile(), MergeStrategy.TARGET_AS_MASTER, source.toFile()));
+		}
+		finally
+		{
+			unread.toFile().setReadable(true);
+			stuck.toFile().setWritable(true);
+		}
+
+		assertTrue(exception.getMessage().contains(unread.toString()), exception.getMessage());
+		assertTrue(exception.getMessage().contains(left.toString()), exception.getMessage());
+		assertEquals(2, exception.getSuppressed().length, "one suppressed exception per failure");
+		assertEquals(Set.of("stuck/left.txt"), relativeFilesOf(target));
 	}
 
 	@ParameterizedTest

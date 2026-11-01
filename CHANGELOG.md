@@ -56,6 +56,10 @@ FIXED:
 - a merge without a strategy skips a missing source, as the strategy variant does, and empty files merge to an
   empty file (#61)
 - `deleteAllFiles` writes nothing to stderr: not for a regular file (#62), not for a restricted directory (#79)
+- a merge over a directory it cannot read merges the rest and names that directory in its one `IOException`, next to
+  the source files it could not delete, under every strategy and without one; it threw a bare
+  NullPointerException without a strategy and under `TARGET_AS_MASTER`, and left the files out silently under
+  `SOURCE_TO_TARGET` (#76)
 
 CHANGED:
 
