@@ -26,9 +26,12 @@ package io.github.astrapi69.file.merge;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 
@@ -60,7 +63,11 @@ public final class MergeDirectoryExtensions
 	 *            the directories to merge into the target directory
 	 * @return the targetDir
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred. Under
+	 *             {@link MergeStrategy#TARGET_AS_MASTER} a file or an emptied directory that cannot
+	 *             be deleted from the source does not stop the merge: after every source is merged,
+	 *             one exception names each of them, with the single failures attached as suppressed
+	 *             exceptions. The target holds the copies.
 	 */
 	public static File mergeAndGet(File targetDir, MergeStrategy strategy,
 		File... directoriesToMerge) throws IOException
@@ -74,18 +81,24 @@ public final class MergeDirectoryExtensions
 			targetDir.mkdirs();
 		}
 
+		final Map<File, IOException> sourceFilesLeft = new LinkedHashMap<>();
 		for (File sourceDir : directoriesToMerge)
 		{
 			if (sourceDir != null && sourceDir.exists())
 			{
-				processDirectory(sourceDir, targetDir, "", strategy);
+				processDirectory(sourceDir, targetDir, "", strategy, sourceFilesLeft);
 			}
+		}
+		if (!sourceFilesLeft.isEmpty())
+		{
+			throw newSourceFilesLeftException(targetDir, sourceFilesLeft);
 		}
 		return targetDir;
 	}
 
 	/**
-	 * Merge the given directories to the given target directory and returns the target directory.
+	 * Merge the given directories to the given target directory and returns the target directory. A
+	 * directory to merge that is null, does not exist or is no directory is skipped.
 	 *
 	 * @param targetDir
 	 *            the target directory
@@ -110,7 +123,8 @@ public final class MergeDirectoryExtensions
 	}
 
 	/**
-	 * Merge the given directories to merge to the given target directory
+	 * Merge the given directories to merge to the given target directory. A directory to merge that
+	 * is null, does not exist or is no directory is skipped.
 	 *
 	 * @param targetDir
 	 *            the target directory
@@ -129,7 +143,10 @@ public final class MergeDirectoryExtensions
 		final Map<String, File> fileMergeStore = new HashMap<>();
 		for (File directoryToMerge : directoriesToMerge)
 		{
-			refreshFileStore(directoryToMerge, fileMergeStore, null);
+			if (directoryToMerge != null && directoryToMerge.isDirectory())
+			{
+				refreshFileStore(directoryToMerge, fileMergeStore, null);
+			}
 		}
 		return fileMergeStore;
 	}
@@ -162,7 +179,7 @@ public final class MergeDirectoryExtensions
 	}
 
 	private static void processDirectory(File sourceDir, File targetDir, String relativePath,
-		MergeStrategy strategy) throws IOException
+		MergeStrategy strategy, Map<File, IOException> sourceFilesLeft) throws IOException
 	{
 		File[] files = sourceDir.listFiles();
 		if (files == null)
@@ -183,23 +200,23 @@ public final class MergeDirectoryExtensions
 				{
 					targetFile.mkdirs();
 				}
-				processDirectory(file, targetDir, currentRelPath, strategy);
+				processDirectory(file, targetDir, currentRelPath, strategy, sourceFilesLeft);
 
 				// Optional: Leere Verzeichnisse in der Quelle löschen bei TARGET_AS_MASTER
 				if (strategy == MergeStrategy.TARGET_AS_MASTER && file.listFiles().length == 0)
 				{
-					file.delete();
+					deleteFromSource(file, sourceFilesLeft);
 				}
 			}
 			else
 			{
-				applyStrategyToFile(file, targetFile, strategy);
+				applyStrategyToFile(file, targetFile, strategy, sourceFilesLeft);
 			}
 		}
 	}
 
 	private static void applyStrategyToFile(File sourceFile, File targetFile,
-		MergeStrategy strategy) throws IOException
+		MergeStrategy strategy, Map<File, IOException> sourceFilesLeft) throws IOException
 	{
 		boolean targetExists = targetFile.exists();
 		boolean contentEqual = targetExists && FileUtils.contentEquals(sourceFile, targetFile);
@@ -210,7 +227,7 @@ public final class MergeDirectoryExtensions
 			FileUtils.copyFile(sourceFile, targetFile);
 			if (strategy == MergeStrategy.TARGET_AS_MASTER)
 			{
-				sourceFile.delete(); // and delete from source
+				deleteFromSource(sourceFile, sourceFilesLeft);
 			}
 		}
 		else if (contentEqual)
@@ -218,7 +235,7 @@ public final class MergeDirectoryExtensions
 			// exists in both, and content is equal -> leave target unchanged
 			if (strategy == MergeStrategy.TARGET_AS_MASTER)
 			{
-				sourceFile.delete(); // and delete from source
+				deleteFromSource(sourceFile, sourceFilesLeft);
 			}
 		}
 		else
@@ -229,9 +246,37 @@ public final class MergeDirectoryExtensions
 			FileUtils.copyFile(sourceFile, targetFile);
 			if (strategy == MergeStrategy.TARGET_AS_MASTER)
 			{
-				sourceFile.delete(); // and delete from source
+				deleteFromSource(sourceFile, sourceFilesLeft);
 			}
 		}
+	}
+
+	/**
+	 * Deletes the given file or empty directory from the source, and records it with the reason
+	 * when that fails, so the merge goes on and reports every file left at the end
+	 */
+	private static void deleteFromSource(File sourceFile, Map<File, IOException> sourceFilesLeft)
+	{
+		try
+		{
+			Files.delete(sourceFile.toPath());
+		}
+		catch (IOException exception)
+		{
+			sourceFilesLeft.put(sourceFile, exception);
+		}
+	}
+
+	private static IOException newSourceFilesLeftException(File targetDir,
+		Map<File, IOException> sourceFilesLeft)
+	{
+		String filesLeft = sourceFilesLeft.keySet().stream().map(File::getAbsolutePath)
+			.collect(Collectors.joining(", "));
+		IOException exception = new IOException("Merged into " + targetDir.getAbsolutePath()
+			+ ", but the source keeps what could not be deleted (" + sourceFilesLeft.size() + "): "
+			+ filesLeft);
+		sourceFilesLeft.values().forEach(exception::addSuppressed);
+		return exception;
 	}
 
 }

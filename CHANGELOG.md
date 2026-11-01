@@ -42,6 +42,14 @@ FIXED:
 - `write2FileWithBuffer` creates a destination that does not exist (#70)
 - the messages of `RenameFileExtensions` for a missing file read as `Renameable`'s (#71); the Javadoc of `moveFile`
   says it moves to a target file (#65)
+- `MergeFileExtensions.mergeByKey` splits at the delimiter as it is, not as a regular expression, and keeps every
+  line (#51)
+- `DeleteFileExtensions.delete` reports true for a directory it deleted (#59)
+- a merge under `TARGET_AS_MASTER` reports every source file it cannot delete, in one `IOException` at the end,
+  after merging the rest (#60)
+- a merge without a strategy skips a missing source, as the strategy variant does, and empty files merge to an
+  empty file (#61)
+- `deleteAllFiles` writes nothing to stderr: not for a regular file (#62), not for a restricted directory (#79)
 
 CHANGED:
 

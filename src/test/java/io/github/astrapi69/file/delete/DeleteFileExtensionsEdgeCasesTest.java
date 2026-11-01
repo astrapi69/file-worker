@@ -33,10 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -86,6 +89,25 @@ public class DeleteFileExtensionsEdgeCasesTest
 	interface Deletion
 	{
 		void deleteIn(File directory) throws Exception;
+	}
+
+	/**
+	 * A deletion of the given file or directory that reports whether it deleted it
+	 */
+	@FunctionalInterface
+	interface ReportedDeletion
+	{
+		boolean delete(Path path) throws IOException;
+	}
+
+	static Stream<Arguments> directoryDeletions()
+	{
+		return Stream.of("source", "source/nested", "source/empty")
+			.flatMap(directory -> Stream.of(
+				Arguments.of("delete(Path) of " + directory, directory,
+					(ReportedDeletion)DeleteFileExtensions::delete),
+				Arguments.of("delete(File) of " + directory, directory,
+					(ReportedDeletion)path -> DeleteFileExtensions.delete(path.toFile()))));
 	}
 
 	static Stream<Arguments> deletionsWithoutIncludeFilter()
@@ -233,16 +255,18 @@ public class DeleteFileExtensionsEdgeCasesTest
 		assertOutsideUntouched();
 	}
 
-	@ParameterizedTest
-	@ValueSource(strings = { "source", "source/nested" })
-	void deletePath_deletesTheDirectoryWithItsWholeContent(String directory) throws IOException
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("directoryDeletions")
+	void delete_deletesTheDirectoryWithItsWholeContent_andReturnsTrue(String displayName,
+		String directory, ReportedDeletion deletion) throws IOException
 	{
-		Path toDelete = tempDir.resolve(directory);
+		Path toDelete = Files.createDirectories(tempDir.resolve(directory));
 
-		DeleteFileExtensions.delete(toDelete);
+		boolean reported = deletion.delete(toDelete);
 
 		assertDeleted(toDelete);
 		assertOutsideUntouched();
+		assertTrue(reported, "the deleted directory is reported as deleted");
 	}
 
 	@Test
@@ -265,15 +289,55 @@ public class DeleteFileExtensionsEdgeCasesTest
 	}
 
 	@Test
-	void deleteAllFiles_deletesARegularFile() throws IOException
+	void deleteAllFiles_deletesARegularFile_withoutWritingToStandardError() throws IOException
 	{
 		Path regularFile = source.resolve("a.txt");
+		PrintStream standardError = System.err;
+		ByteArrayOutputStream writtenToStandardError = new ByteArrayOutputStream();
+		System.setErr(new PrintStream(writtenToStandardError, true, StandardCharsets.UTF_8));
+		try
+		{
+			DeleteFileExtensions.deleteAllFiles(regularFile.toFile());
+		}
+		finally
+		{
+			System.setErr(standardError);
+		}
 
-		DeleteFileExtensions.deleteAllFiles(regularFile.toFile());
-
+		assertEquals("", writtenToStandardError.toString(StandardCharsets.UTF_8));
 		assertDeleted(regularFile);
 		assertContent("b", source.resolve("b.log"));
 		assertOutsideUntouched();
+	}
+
+	/**
+	 * A directory whose content cannot be deleted ends in an IOException that names what is left,
+	 * and nothing is written to standard error (#79): before, a restricted directory printed the
+	 * stack trace of a DirectoryHasNoContentException first
+	 */
+	@Test
+	void deleteAllFiles_throwsIOException_withoutWritingToStandardError_whenTheDirectoryIsRestricted()
+		throws IOException
+	{
+		Path nested = source.resolve("nested");
+		PrintStream standardError = System.err;
+		ByteArrayOutputStream writtenToStandardError = new ByteArrayOutputStream();
+		try
+		{
+			assumeTrue(nested.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(nested), "the test runs without override rights");
+			System.setErr(new PrintStream(writtenToStandardError, true, StandardCharsets.UTF_8));
+
+			assertThrows(IOException.class,
+				() -> DeleteFileExtensions.deleteAllFiles(nested.toFile()));
+		}
+		finally
+		{
+			System.setErr(standardError);
+			restorePermissions(nested);
+		}
+		assertEquals("", writtenToStandardError.toString(StandardCharsets.UTF_8));
+		assertContent("d", nested.resolve("d.txt"));
 	}
 
 	@Test

@@ -25,8 +25,13 @@
 package io.github.astrapi69.file.merge;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +70,28 @@ public class MergeDirectoryExtensionsStrategyTest
 	private Path source;
 
 	private Path target;
+
+	/**
+	 * Gives a source to merge that is no directory, created in the given directory if it exists
+	 */
+	@FunctionalInterface
+	interface SourceThatIsNoDirectory
+	{
+		File createIn(Path directory) throws IOException;
+	}
+
+	static Stream<Arguments> sourcesThatAreNoDirectory()
+	{
+		return Stream
+			.of(Arguments.of("null", (SourceThatIsNoDirectory)directory -> null),
+				Arguments
+					.of("a missing directory",
+						(SourceThatIsNoDirectory)directory -> directory.resolve("missing")
+							.toFile()),
+				Arguments.of("a regular file",
+					(SourceThatIsNoDirectory)directory -> write(directory.resolve("regular.txt"),
+						"regular", OLDER).toFile()));
+	}
 
 	static Stream<Arguments> directoryOrders()
 	{
@@ -123,6 +150,86 @@ public class MergeDirectoryExtensionsStrategyTest
 		assertEquals(Set.of("a.txt"), relativeFilesOf(target));
 		assertEquals("a", Files.readString(target.resolve("a.txt")));
 		assertEquals("regular", Files.readString(regularFile));
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("sourcesThatAreNoDirectory")
+	void mergeWithoutStrategy_skipsASourceThatIsNoDirectory(String displayName,
+		SourceThatIsNoDirectory sourceThatIsNoDirectory) throws IOException
+	{
+		write(source.resolve("a.txt"), "a", OLDER);
+		File noDirectory = sourceThatIsNoDirectory.createIn(tempDir);
+
+		MergeDirectoryExtensions.merge(target.toFile(), noDirectory, source.toFile());
+
+		assertEquals(Set.of("a.txt"), relativeFilesOf(target));
+		assertEquals("a", Files.readString(target.resolve("a.txt")));
+	}
+
+	@Test
+	void mergeWithTargetAsMaster_namesEverySourceFileItCannotDelete_afterMergingTheRest()
+		throws IOException
+	{
+		Path locked = source.resolve("locked");
+		Path first = write(locked.resolve("x.txt"), "x", OLDER);
+		Path second = write(locked.resolve("y.txt"), "y", OLDER);
+		Path other = Files.createDirectory(tempDir.resolve("other"));
+		Path free = write(other.resolve("free.txt"), "free", OLDER);
+		IOException exception;
+		try
+		{
+			assumeTrue(locked.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(locked), "the test runs without override rights");
+
+			exception = assertThrows(IOException.class,
+				() -> MergeDirectoryExtensions.mergeAndGet(target.toFile(),
+					MergeStrategy.TARGET_AS_MASTER, source.toFile(), other.toFile()));
+		}
+		finally
+		{
+			locked.toFile().setWritable(true);
+		}
+
+		assertTrue(exception.getMessage().contains(first.toString()), exception.getMessage());
+		assertTrue(exception.getMessage().contains(second.toString()), exception.getMessage());
+		assertEquals(2, exception.getSuppressed().length, "one suppressed exception per file");
+		for (Throwable single : exception.getSuppressed())
+		{
+			assertInstanceOf(IOException.class, single);
+		}
+		assertEquals("x", Files.readString(first), "the file is left in the source");
+		assertEquals("y", Files.readString(second), "the file is left in the source");
+		assertEquals(Set.of("locked/x.txt", "locked/y.txt", "free.txt"), relativeFilesOf(target));
+		assertFalse(Files.exists(free), "the next source is merged and emptied after a failure");
+	}
+
+	@Test
+	void mergeWithTargetAsMaster_namesAnEmptiedSourceDirectoryItCannotDelete() throws IOException
+	{
+		Path outer = source.resolve("outer");
+		Path inner = outer.resolve("inner");
+		Path moved = write(inner.resolve("z.txt"), "z", OLDER);
+		IOException exception;
+		try
+		{
+			assumeTrue(outer.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(outer), "the test runs without override rights");
+
+			exception = assertThrows(IOException.class, () -> MergeDirectoryExtensions
+				.mergeAndGet(target.toFile(), MergeStrategy.TARGET_AS_MASTER, source.toFile()));
+		}
+		finally
+		{
+			outer.toFile().setWritable(true);
+		}
+
+		assertTrue(exception.getMessage().contains(inner.toString()), exception.getMessage());
+		assertFalse(exception.getMessage().contains(moved.toString()), exception.getMessage());
+		assertEquals(1, exception.getSuppressed().length, "one suppressed exception per file");
+		assertEquals("z",
+			Files.readString(target.resolve("outer").resolve("inner").resolve("z.txt")));
+		assertFalse(Files.exists(moved), "the merged file is deleted from the source");
+		assertTrue(Files.isDirectory(inner), "the emptied directory is left in the source");
 	}
 
 	@ParameterizedTest

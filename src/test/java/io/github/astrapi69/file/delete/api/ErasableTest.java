@@ -137,13 +137,14 @@ public class ErasableTest
 	}
 
 	@Test
-	void deleteFile_deletesTheDirectoryWithItsContent() throws IOException
+	void deleteFile_deletesTheDirectoryWithItsContent_andReturnsTrue() throws IOException
 	{
-		erasable.delete(nested.toFile());
+		boolean reported = erasable.delete(nested.toFile());
 
 		assertDeleted(nested);
 		assertContent("keep", source.resolve("keep.txt"));
 		assertOutsideUntouched();
+		assertTrue(reported, "the deleted directory is reported as deleted");
 	}
 
 	@Test
