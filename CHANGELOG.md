@@ -14,6 +14,10 @@ BREAKING:
 
 FIXED:
 
+- `changeFilenameSuffix` keeps a file in its directory below a directory whose name holds a dot (`~/.cache`,
+  `~/.config`): with silly-io 3.6 the target of a file without an extension was built outside it, so a rename could
+  move the file away and replace another one; silly-io 4.0 looks for the extension in the file name only (#37,
+  astrapi69/silly-io#9)
 - a copy without charsets keeps every byte: `CopyFileExtensions.copyFile` copied through a Reader and a Writer
   and corrupted binary files, backups made with `newBackupOf` and the File-based directory copies included (#45)
 - a copy onto the file itself is refused with an `IllegalArgumentException` instead of emptying the file (#73)
