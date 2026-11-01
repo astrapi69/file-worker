@@ -574,6 +574,24 @@ public class CompareFileExtensionsTempDirTest
 	}
 
 	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File)}
+	 */
+	@Test
+	public void findEqualFilesWithSameContent_leavesOutAPairWithDifferentContent_andIgnoresTheModificationTime()
+		throws IOException
+	{
+		final File first = newFile("root/a/same.txt", "abc");
+		newFile("root/b/same.txt", "xyz");
+		final File later = newFile("root/c/same.txt", "abc", LATER);
+
+		final List<IFileContentResultBean> found = CompareFileExtensions
+			.findEqualFilesWithSameContent(tempDir.resolve("root").toFile());
+
+		assertEquals(Set.of(List.of(first, later), List.of(later, first)), pairsOf(found));
+		assertTrue(found.stream().allMatch(IFileContentResultBean::getContentEquality));
+	}
+
+	/**
 	 * Test method for
 	 * {@link CompareFileExtensions#findEqualFilesWithSameContent(File, boolean, boolean, boolean, boolean, boolean, boolean)}
 	 */
@@ -657,6 +675,26 @@ public class CompareFileExtensionsTempDirTest
 				tempDir.resolve("compare").toFile());
 
 		assertEquals(Set.of(List.of(same, sameCopy), List.of(other, otherCopy)), pairsOf(found));
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#findEqualFilesWithSameContent(File, File)}
+	 */
+	@Test
+	public void findEqualFilesWithSameContentInTwoDirectories_leavesOutAPairWithDifferentContent_andIgnoresTheModificationTime()
+		throws IOException
+	{
+		final File same = newFile("source/same.txt", "abc");
+		newFile("source/changed.txt", "abc");
+		final File laterCopy = newFile("compare/same.txt", "abc", LATER);
+		newFile("compare/changed.txt", "xyz");
+
+		final List<IFileContentResultBean> found = CompareFileExtensions
+			.findEqualFilesWithSameContent(tempDir.resolve("source").toFile(),
+				tempDir.resolve("compare").toFile());
+
+		assertEquals(Set.of(List.of(same, laterCopy)), pairsOf(found));
+		assertTrue(found.get(0).getContentEquality());
 	}
 
 	/**

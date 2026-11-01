@@ -692,7 +692,7 @@ public final class CompareFileExtensions
 					continue;
 				}
 				final IFileContentResultBean contentResultBean = CompareFileExtensions
-					.compareFiles(toCompare, file);
+					.compareFiles(toCompare, file, true, false, false, true, false, false);
 				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
@@ -788,7 +788,7 @@ public final class CompareFileExtensions
 					continue;
 				}
 				final IFileContentResultBean contentResultBean = CompareFileExtensions
-					.compareFiles(toCompare, file);
+					.compareFiles(toCompare, file, true, false, false, true, false, false);
 				final boolean equal = CompareFileExtensions.validateEquality(contentResultBean);
 				// if equal is true and the list does not contain the same
 				// compareResultBean then add it.
