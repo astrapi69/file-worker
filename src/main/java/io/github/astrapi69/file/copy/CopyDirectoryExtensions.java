@@ -330,7 +330,7 @@ public final class CopyDirectoryExtensions
 						{
 							// copy directory recursive...
 							copied = copyDirectoryWithFileFilter(currentFile, copy,
-								includeFileFilter, excludeFileFilter, lastModified);
+								includeFileFilter, excludeFileFilter, excludeFiles, lastModified);
 						}
 						else
 						{
@@ -348,7 +348,7 @@ public final class CopyDirectoryExtensions
 					{
 						// copy directory recursive...
 						copied = copyDirectoryWithFileFilter(currentFile, copy, includeFileFilter,
-							excludeFileFilter, lastModified);
+							excludeFileFilter, excludeFiles, lastModified);
 					}
 					else
 					{
