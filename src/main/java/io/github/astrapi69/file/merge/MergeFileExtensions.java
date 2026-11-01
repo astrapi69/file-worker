@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import io.github.astrapi69.file.merge.strategy.MergeFileStrategy;
 
@@ -224,7 +225,8 @@ public final class MergeFileExtensions
 	 *            the zero-based index of the column to use as the key (e.g., 0 for the first
 	 *            column)
 	 * @param delimiter
-	 *            the string used to separate columns (e.g., "," or "\t")
+	 *            the string used to separate columns (e.g., "," or "\t"), taken as it is and not as
+	 *            a regular expression
 	 * @return the targetFile
 	 * @throws IOException
 	 *             if an I/O error occurs
@@ -422,7 +424,8 @@ public final class MergeFileExtensions
 	 * @param keyIndex
 	 *            the zero-based index of the column to use as the key
 	 * @param delimiter
-	 *            the string used to separate columns
+	 *            the string used to separate columns, taken as it is and not as a regular
+	 *            expression
 	 */
 	public static List<String> collectByKeyAdvanced(List<File> files, Charset charset, int keyIndex,
 		String delimiter) throws IOException
@@ -438,7 +441,7 @@ public final class MergeFileExtensions
 				if (line.trim().isEmpty())
 					continue;
 
-				String[] parts = line.split(delimiter, -1);
+				String[] parts = line.split(Pattern.quote(delimiter), -1);
 				// Wenn die Zeile weniger Spalten hat als der keyIndex, ist die ganze Zeile der
 				// Schlüssel
 				String key = (parts.length > keyIndex) ? parts[keyIndex].trim() : line.trim();

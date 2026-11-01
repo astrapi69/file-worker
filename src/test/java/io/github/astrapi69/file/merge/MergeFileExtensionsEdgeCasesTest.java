@@ -93,7 +93,13 @@ public class MergeFileExtensionsEdgeCasesTest
 				List.of("x,y,K1\nsolo", "z,w,K1\nsolo\nother"), 2, ",",
 				List.of("z,w,K1", "solo", "other")),
 			Arguments.of("the key is compared without surrounding blanks",
-				List.of("k1 ,a", " k1,b"), 0, ",", List.of(" k1,b")));
+				List.of("k1 ,a", " k1,b"), 0, ",", List.of(" k1,b")),
+			Arguments.of("a pipe delimiter is a plain string, not a regular expression",
+				List.of("1|Alice\n2|Bob"), 1, "|", List.of("1|Alice", "2|Bob")),
+			Arguments.of("a dot delimiter is a plain string, not a regular expression",
+				List.of("1.Alice\n2.Bob"), 0, ".", List.of("1.Alice", "2.Bob")),
+			Arguments.of("a delimiter that is no valid regular expression splits as well",
+				List.of("1[Alice\n1[Root\n2[Bob"), 0, "[", List.of("1[Root", "2[Bob")));
 	}
 
 	private List<File> writeFiles(List<String> contents) throws IOException
