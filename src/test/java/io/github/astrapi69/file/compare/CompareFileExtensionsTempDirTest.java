@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -140,6 +141,24 @@ public class CompareFileExtensionsTempDirTest
 			new ContentCase("both files are empty", "", "", true));
 		return contentComparers().flatMap(comparer -> contentCases.stream()
 			.map(contentCase -> Arguments.of(comparer.get()[0], comparer.get()[1], contentCase)));
+	}
+
+	static Stream<Arguments> lineComparersWithLineCases()
+	{
+		final List<ContentCase> lineCases = List.of(
+			new ContentCase("the file to compare has a line more", "x\r\n", "x\n\n", false),
+			new ContentCase("the source has a line more", "x\n\n", "x\r\n", false),
+			new ContentCase("the same lines with other line ends", "a\r\nb", "a\nb\n", true),
+			new ContentCase("the same lines", "a\nb\n", "a\nb\n", true));
+		final Stream<Arguments> lineComparers = Stream.of(
+			Arguments.of("compareFiles(File, File, true)",
+				(BiPredicate<File, File>)(source, compare) -> CompareFileExtensions
+					.compareFiles(source, compare, true)),
+			Arguments.of("compareFileContentByLines",
+				(BiPredicate<File, File>)(source, compare) -> CompareFileExtensions
+					.compareFileContentByLines(source, compare).getContentEquality()));
+		return lineComparers.flatMap(comparer -> lineCases.stream()
+			.map(lineCase -> Arguments.of(comparer.get()[0], comparer.get()[1], lineCase)));
 	}
 
 	static Stream<Arguments> finders()
@@ -442,6 +461,23 @@ public class CompareFileExtensionsTempDirTest
 		assertEquals(source.length(), compare.length());
 
 		assertFalse(CompareFileExtensions.compareFiles(source, compare, true));
+	}
+
+	/**
+	 * Test method for {@link CompareFileExtensions#compareFiles(File, File, boolean)} and
+	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}
+	 */
+	@ParameterizedTest(name = "{0}: {2}")
+	@MethodSource("lineComparersWithLineCases")
+	public void compareTheLines_reportsEqualContent_onlyWhenBothFilesHaveTheSameLines(
+		final String comparerName, final BiPredicate<File, File> comparer,
+		final ContentCase lineCase) throws IOException
+	{
+		final File source = newFile("a/same.txt", lineCase.sourceContent());
+		final File compare = newFile("b/same.txt", lineCase.compareContent());
+		assertEquals(source.length(), compare.length(), "the lengths");
+
+		assertEquals(lineCase.contentEquality(), comparer.test(source, compare));
 	}
 
 	/**

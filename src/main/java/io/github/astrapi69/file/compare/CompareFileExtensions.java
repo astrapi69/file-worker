@@ -29,11 +29,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Strings;
 
 import io.github.astrapi69.checksum.FileChecksumExtensions;
@@ -286,24 +288,13 @@ public final class CompareFileExtensions
 				BufferedReader compareReader = (BufferedReader)StreamExtensions
 					.getReader(fileToCompare))
 			{
-				String sourceLine;
-				String compareLine;
-
-				while ((sourceLine = sourceReader.readLine()) != null)
-				{
-					compareLine = compareReader.readLine();
-					if (compareLine == null || !sourceLine.equals(compareLine))
-					{
-						contentEquality = false;
-						break;
-					}
-				}
+				contentEquality = IOUtils.contentEqualsIgnoreEOL(sourceReader, compareReader);
 			}
 			catch (final FileNotFoundException e)
 			{
 				contentEquality = false;
 			}
-			catch (final IOException e)
+			catch (final IOException | UncheckedIOException e)
 			{
 				contentEquality = false;
 			}
@@ -387,24 +378,13 @@ public final class CompareFileExtensions
 			try (BufferedReader sourceReader = (BufferedReader)StreamExtensions.getReader(source);
 				BufferedReader compareReader = (BufferedReader)StreamExtensions.getReader(compare))
 			{
-				String sourceLine;
-				String compareLine;
-
-				while ((sourceLine = sourceReader.readLine()) != null)
-				{
-					compareLine = compareReader.readLine();
-					if (compareLine == null || !sourceLine.equals(compareLine))
-					{
-						equal = false;
-						break;
-					}
-				}
+				equal = IOUtils.contentEqualsIgnoreEOL(sourceReader, compareReader);
 			}
 			catch (final FileNotFoundException e)
 			{
 				equal = false;
 			}
-			catch (final IOException e)
+			catch (final IOException | UncheckedIOException e)
 			{
 				equal = false;
 			}
