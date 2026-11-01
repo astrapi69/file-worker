@@ -1,10 +1,18 @@
 ## Change log
 ----------------------
 
-Version 19.2-SNAPSHOT
+Version 20.0-SNAPSHOT
 -------------
 
+BREAKING:
+
+- Java 25 is the minimum, up from 17: the family builds, tests and releases on JDK 25
+  (astrapi69/mystic-crypt#234), so this release is 20.0 instead of 19.2 (#41)
+
 CHANGED:
+
+- the grgit and hierynomus license plugins are gone: a release is tagged through git
+  (`gradle/tagging.gradle`), and Spotless writes the license header from `src/main/resources/license-header.txt` (#41)
 
 - a release is published from its `RELEASE-*` tag by the new `publish.yml`, as in the rest of the family,
   and a snapshot by a manual run of it; `gradle.yml` only builds and no longer uploads on every push to

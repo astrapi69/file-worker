@@ -17,6 +17,12 @@ spotless {
         removeUnusedImports()
         // import order file as exported from eclipse
         eclipse("4.21").configFile("src/test/resources/spotless/alpharo-formatter.xml")
+        // Enforces the MIT header, in place of the com.github.hierynomus.license plugin: its last
+        // release, 0.16.1, reads Task.project at execution time, which Gradle 9 refuses under the
+        // configuration cache and Gradle 10 removes. The header is the one 85 of the 98 Java files
+        // besides package-info already carried; spotlessApply wrote it into the other 13, and leaves
+        // the 25 package-info files without it, as the license plugin's excludes did.
+        licenseHeaderFile(rootProject.file("src/main/resources/license-header.txt"))
     }
     groovyGradle {
         target '*.gradle'
