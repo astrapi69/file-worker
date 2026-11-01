@@ -8,6 +8,9 @@ BREAKING:
 
 - Java 25 is the minimum, up from 17: the family builds, tests and releases on JDK 25
   (astrapi69/mystic-crypt#234), so this release is 20.0 instead of 19.2 (#41)
+- `FileCreationState` carries no file: `getFile()` and `setFile(File)` are gone, since a constant is shared by the
+  whole JVM and `newDirectory` wrote every caller's directory into it; `DirectoryFactory.newTempDir` (both
+  overloads) is gone with them, `newTempDirectory` returns the created directory (#68)
 
 FIXED:
 

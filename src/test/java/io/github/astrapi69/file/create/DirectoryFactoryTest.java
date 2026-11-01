@@ -90,43 +90,6 @@ public class DirectoryFactoryTest extends FileTestCase
 		tempFile.delete();
 	}
 
-	@Test
-	public void testNewTempDirWithStringPrefix() throws IOException
-	{
-		String prefix = "test";
-		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
-
-		FileCreationState result = DirectoryFactory.newTempDir(prefix, attrs);
-		assertNotNull(result, "The result should not be null");
-		assertEquals(FileCreationState.ALREADY_EXISTS, result,
-			"The result should indicate success");
-		assertNotNull(result.getFile(), "The file in the result should not be null");
-		assertTrue(result.getFile().isDirectory(), "The file should be a directory");
-
-		// Clean up
-		result.getFile().delete();
-	}
-
-	@Test
-	public void testNewTempDirWithPathAndStringPrefix() throws IOException
-	{
-		Path dir = Paths.get(System.getProperty("java.io.tmpdir"));
-		String prefix = "test";
-		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
-
-		FileCreationState result = DirectoryFactory.newTempDir(dir, prefix, attrs);
-		assertNotNull(result, "The result should not be null");
-		assertEquals(FileCreationState.ALREADY_EXISTS, result,
-			"The result should indicate success");
-		assertNotNull(result.getFile(), "The file in the result should not be null");
-		assertTrue(result.getFile().isDirectory(), "The file should be a directory");
-		assertTrue(result.getFile().getParent().equals(dir.toString()),
-			"Directory should be created in the specified parent directory");
-
-		// Clean up
-		result.getFile().delete();
-	}
-
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
 	 *
@@ -187,10 +150,9 @@ public class DirectoryFactoryTest extends FileTestCase
 		}
 		actual = DirectoryFactory.newDirectories(dirs);
 		expected = new ArrayList<>();
-		final FileCreationState fileCreationState = FileCreationState.CREATED.setFile(dir3);
-		expected.add(fileCreationState);
-		expected.add(fileCreationState);
-		expected.add(fileCreationState);
+		expected.add(FileCreationState.CREATED);
+		expected.add(FileCreationState.CREATED);
+		expected.add(FileCreationState.CREATED);
 		assertEquals(expected, actual);
 
 		for (final File dir : dirs)
