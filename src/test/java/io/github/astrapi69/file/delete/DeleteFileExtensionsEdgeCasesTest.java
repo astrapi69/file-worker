@@ -310,6 +310,36 @@ public class DeleteFileExtensionsEdgeCasesTest
 		assertOutsideUntouched();
 	}
 
+	/**
+	 * A directory whose content cannot be deleted ends in an IOException that names what is left,
+	 * and nothing is written to standard error (#79): before, a restricted directory printed the
+	 * stack trace of a DirectoryHasNoContentException first
+	 */
+	@Test
+	void deleteAllFiles_throwsIOException_withoutWritingToStandardError_whenTheDirectoryIsRestricted()
+		throws IOException
+	{
+		Path nested = source.resolve("nested");
+		PrintStream standardError = System.err;
+		ByteArrayOutputStream writtenToStandardError = new ByteArrayOutputStream();
+		try
+		{
+			assumeTrue(nested.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(nested), "the test runs without override rights");
+			System.setErr(new PrintStream(writtenToStandardError, true, StandardCharsets.UTF_8));
+
+			assertThrows(IOException.class,
+				() -> DeleteFileExtensions.deleteAllFiles(nested.toFile()));
+		}
+		finally
+		{
+			System.setErr(standardError);
+			restorePermissions(nested);
+		}
+		assertEquals("", writtenToStandardError.toString(StandardCharsets.UTF_8));
+		assertContent("d", nested.resolve("d.txt"));
+	}
+
 	@Test
 	void deleteAllFiles_throwsIOException_whenTheDirectoryCannotBeDeleted() throws IOException
 	{

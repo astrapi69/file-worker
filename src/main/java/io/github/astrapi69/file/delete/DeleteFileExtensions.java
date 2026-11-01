@@ -199,21 +199,6 @@ public final class DeleteFileExtensions
 		{
 			return;
 		}
-		if (file.isDirectory())
-		{
-			final Exception ex = checkFile(file);
-			if (ex != null)
-			{
-				try
-				{
-					throw ex;
-				}
-				catch (final Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
 		DeleteFileExtensions.deleteFiles(file);
 		if (!file.delete())
 		{
