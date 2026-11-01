@@ -39,8 +39,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.commons.lang3.Strings;
 
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.regex.RegExExtensions;
@@ -350,7 +353,7 @@ public final class FileSearchExtensions
 	 *            The directory to search.
 	 * @param filenameToSearch
 	 *            The search pattern. Allowed wildcards are "*" and "?".
-	 * @return A List with all files that matches the search pattern.
+	 * @return A List with all files of the given directory that matches the search pattern.
 	 */
 	public static List<File> findFiles(final File dir, final String filenameToSearch)
 	{
@@ -363,7 +366,7 @@ public final class FileSearchExtensions
 			{
 				if (filename.matches(regex))
 				{
-					final File foundedFile = new File(filename);
+					final File foundedFile = new File(dir, filename);
 					foundedFileList.add(foundedFile);
 				}
 			}
@@ -597,30 +600,31 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Gets the file length from the given file in Kilobytes.
+	 * Gets the file length from the given file in whole Kilobytes, as {@link File#length()} gives
+	 * it: 0 for a file that does not exist, and unspecified for a directory.
 	 *
-	 * @param dir
-	 *            the dir
+	 * @param file
+	 *            the file
 	 *
 	 * @return Returns the file length from the given file in Kilobytes.
 	 */
-	public static long getFileLengthInKilobytes(final File dir)
+	public static long getFileLengthInKilobytes(final File file)
 	{
-		final long fileLength = dir.getTotalSpace();
-		return fileLength / 1024;
+		return file.length() / 1024;
 	}
 
 	/**
-	 * Gets the file length from the given file in Megabytes.
+	 * Gets the file length from the given file in whole Megabytes, as {@link File#length()} gives
+	 * it: 0 for a file that does not exist, and unspecified for a directory.
 	 *
-	 * @param dir
-	 *            the directory
+	 * @param file
+	 *            the file
 	 *
 	 * @return Returns the file length from the given file in Megabytes.
 	 */
-	public static long getFileLengthInMegabytes(final File dir)
+	public static long getFileLengthInMegabytes(final File file)
 	{
-		return getFileLengthInKilobytes(dir) / 1024;
+		return getFileLengthInKilobytes(file) / 1024;
 	}
 
 	/**
@@ -680,7 +684,8 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Checks the given String matches the given suffixes.
+	 * Checks if the given String ends with one of the given suffixes, ignoring the case. A String
+	 * shorter than a suffix does not end with it.
 	 *
 	 * @param stringToMatch
 	 *            The string to compare.
@@ -690,19 +695,8 @@ public final class FileSearchExtensions
 	 */
 	public static boolean match(final String stringToMatch, final String[] suffixes)
 	{
-		for (final String suffix : suffixes)
-		{
-			final int suffixesLength = suffix.length();
-			final int stringToMatchLength = stringToMatch.length();
-			final int result = stringToMatchLength - suffixesLength;
-			final String extensionToMatch = stringToMatch.substring(result, stringToMatchLength);
-			final boolean equals = extensionToMatch.equalsIgnoreCase(suffix);
-			if (stringToMatchLength >= suffixesLength && equals)
-			{
-				return true;
-			}
-		}
-		return false;
+		return Arrays.stream(suffixes)
+			.anyMatch(suffix -> Strings.CI.endsWith(stringToMatch, suffix));
 	}
 
 	/**
@@ -720,7 +714,7 @@ public final class FileSearchExtensions
 		final String extension)
 	{
 		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = "^" + prefix + ".*\\." + extension + "$";
+		final String regex = prefixAndExtensionRegex(prefix, extension);
 		// Get all files in the directory
 		final File[] children = dir.getAbsoluteFile().listFiles();
 		if (children == null || children.length < 1)
@@ -759,7 +753,7 @@ public final class FileSearchExtensions
 		final String prefix, final String extension)
 	{
 		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = "^" + prefix + ".*\\." + extension + "$";
+		final String regex = prefixAndExtensionRegex(prefix, extension);
 		// Get all files in the directory
 		final File[] children = dir.getAbsoluteFile().listFiles();
 		if (children == null || children.length < 1)
@@ -785,6 +779,21 @@ public final class FileSearchExtensions
 			}
 		}
 		return foundedFileList;
+	}
+
+	/**
+	 * Gets the regular expression for a name that starts with the given prefix and ends with a dot
+	 * and the given extension. Both are quoted, so every character in them stands for itself.
+	 *
+	 * @param prefix
+	 *            The prefix that the filenames should start with.
+	 * @param extension
+	 *            The file extension that the filenames should have.
+	 * @return the regular expression for the names with the prefix and the extension
+	 */
+	private static String prefixAndExtensionRegex(final String prefix, final String extension)
+	{
+		return "^" + Pattern.quote(prefix) + ".*\\." + Pattern.quote(extension) + "$";
 	}
 
 }

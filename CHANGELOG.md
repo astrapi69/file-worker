@@ -9,6 +9,31 @@ BREAKING:
 - Java 25 is the minimum, up from 17: the family builds, tests and releases on JDK 25
   (astrapi69/mystic-crypt#234), so this release is 20.0 instead of 19.2 (#41)
 
+FIXED:
+
+- a copy without charsets keeps every byte: `CopyFileExtensions.copyFile` copied through a Reader and a Writer
+  and corrupted binary files, backups made with `newBackupOf` and the File-based directory copies included (#45)
+- a copy onto the file itself is refused with an `IllegalArgumentException` instead of emptying the file (#73)
+- `copyDirectoryWithFileFilter` leaves out the listed files at every level, not only the top one (#53)
+- the File-based directory copies answer for the whole tree, not for the last entry they listed (#54)
+- the File-based copies into a directory create its missing parents (#55)
+- `copyFile` names the source, not the destination, when the source is a directory (#56); the Javadoc of
+  `Copyable#copyFile` says it copies to a destination file (#63)
+- `FileSearchExtensions.match` returns false for a name shorter than the suffix instead of throwing, so
+  `findFiles(String, String[])`, `deleteAllFilesWithSuffix` and `changeAllFilenameSuffix` no longer stop half way (#50)
+- `findFiles(File, String)` returns the files of the searched directory, not of the working directory (#49)
+- `getFileLengthInKilobytes` and `getFileLengthInMegabytes` return the length of the file, not the size of its
+  partition (#57)
+- `findFilesWithPrefixAndExtension` and its recursive variant read the prefix and the extension as text, not as a
+  regular expression (#58)
+- `compareFileContentByBytes` and `compareFileContentByLines` compare the content; they reported equal content
+  for any two files (#46)
+- `findEqualFilesWithSameContent` compares the content it names (#47)
+- `CompareFileExtensions` compares a file without an extension instead of throwing a NullPointerException, so
+  the finders work on a directory with such a file (#48)
+- `compareFiles(File, File, true)` and `compareFileContentByLines` count a line the second file has beyond the
+  first (#52)
+
 CHANGED:
 
 - the tests cover 95.7% of the lines and 89.6% of the branches, up from 70.6% and 62.4%, and the build

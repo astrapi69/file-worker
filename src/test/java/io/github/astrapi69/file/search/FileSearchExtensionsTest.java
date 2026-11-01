@@ -823,24 +823,31 @@ public class FileSearchExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link FileSearchExtensions#getFileLengthInKilobytes(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetFileLengthInKilobytes()
+	public void testGetFileLengthInKilobytes() throws IOException
 	{
-		long actual;
-		actual = FileSearchExtensions.getFileLengthInKilobytes(testDir);
-		assertTrue(0 < actual);
+		File file = Files.write(testDirectory.resolve("three-kb.bin"), new byte[3 * 1024]).toFile();
+
+		assertEquals(3L, FileSearchExtensions.getFileLengthInKilobytes(file));
 	}
 
 	/**
 	 * Test method for {@link FileSearchExtensions#getFileLengthInMegabytes(File)}.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testGetFileLengthInMegabytes()
+	public void testGetFileLengthInMegabytes() throws IOException
 	{
-		long actual;
-		actual = FileSearchExtensions.getFileLengthInMegabytes(testDir);
-		assertTrue(0 < actual);
+		File file = Files.write(testDirectory.resolve("two-mb.bin"), new byte[2 * 1024 * 1024])
+			.toFile();
+
+		assertEquals(2L, FileSearchExtensions.getFileLengthInMegabytes(file));
 	}
 
 	/**
