@@ -42,6 +42,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.Strings;
+
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.regex.RegExExtensions;
 
@@ -680,7 +682,8 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Checks the given String matches the given suffixes.
+	 * Checks if the given String ends with one of the given suffixes, ignoring the case. A String
+	 * shorter than a suffix does not end with it.
 	 *
 	 * @param stringToMatch
 	 *            The string to compare.
@@ -690,19 +693,8 @@ public final class FileSearchExtensions
 	 */
 	public static boolean match(final String stringToMatch, final String[] suffixes)
 	{
-		for (final String suffix : suffixes)
-		{
-			final int suffixesLength = suffix.length();
-			final int stringToMatchLength = stringToMatch.length();
-			final int result = stringToMatchLength - suffixesLength;
-			final String extensionToMatch = stringToMatch.substring(result, stringToMatchLength);
-			final boolean equals = extensionToMatch.equalsIgnoreCase(suffix);
-			if (stringToMatchLength >= suffixesLength && equals)
-			{
-				return true;
-			}
-		}
-		return false;
+		return Arrays.stream(suffixes)
+			.anyMatch(suffix -> Strings.CI.endsWith(stringToMatch, suffix));
 	}
 
 	/**

@@ -204,7 +204,11 @@ public class FileSearchExtensionsEdgeCasesTest
 				new String[] { ".log", ".txt" }, true),
 			Arguments.of("no suffix ends the name", "report.txt", new String[] { ".log", ".csv" },
 				false),
-			Arguments.of("no suffixes at all", "report.txt", new String[] { }, false));
+			Arguments.of("no suffixes at all", "report.txt", new String[] { }, false),
+			Arguments.of("a name shorter than the suffix", "a", new String[] { ".txt" }, false),
+			Arguments.of("an empty name", "", new String[] { ".txt" }, false),
+			Arguments.of("a name shorter than the first suffix ends with the second", "a.c",
+				new String[] { ".txt", ".c" }, true));
 	}
 
 	static Stream<Arguments> prefixAndExtensionCases()
@@ -351,6 +355,19 @@ public class FileSearchExtensionsEdgeCasesTest
 		List<File> found = FileSearchExtensions.findFiles(inTempDir(start).getPath(), extensions);
 
 		assertFoundExactly(expectedNames, found);
+	}
+
+	@Test
+	void findFilesWithExtensions_findsEveryMatch_whenANameIsShorterThanTheSuffix()
+		throws IOException
+	{
+		Files.writeString(tempDir.resolve("ab"), "a name shorter than the suffix");
+		Files.writeString(tempDir.resolve("sub").resolve("c"), "another one, one level down");
+
+		List<File> found = FileSearchExtensions.findFiles(tempDir.toString(),
+			new String[] { ".txt" });
+
+		assertFoundExactly(TXT_FILES, found);
 	}
 
 	@ParameterizedTest(name = "{0}")
