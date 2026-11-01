@@ -357,16 +357,27 @@ public final class CompareFileExtensions
 	}
 
 	/**
-	 * Compare files.
+	 * Compares two files by their existence, their length and, if asked, their lines.
+	 * <p>
+	 * Two missing files are equal when they have the same name. Of two present files, the lengths
+	 * are compared first: files of unequal length are unequal, without being read. With
+	 * {@code content} true, files of equal length are then compared line by line, with line ends
+	 * ignored ({@code IOUtils.contentEqualsIgnoreEOL}).
+	 * <p>
+	 * This differs from {@link #compareFileContentByLines(File, File)}, which compares the lines
+	 * without the length check, so {@code "a\r\nb"} against {@code "a\nb"} is unequal here and of
+	 * equal content there; the length is one of the properties this method compares, as
+	 * {@code FileUtils.contentEquals} of commons-io checks it first and
+	 * {@code FileUtils.contentEqualsIgnoreEOL} does not (#92).
 	 *
 	 * @param source
-	 *            the source
+	 *            the source file
 	 * @param compare
-	 *            the compare
+	 *            the file to compare
 	 * @param content
-	 *            the content
+	 *            true to compare the lines too, false to compare existence and length only
 	 *
-	 * @return true, if successful
+	 * @return true if the two files are equal in the sense above
 	 * @throws IllegalArgumentException
 	 *             if the source file or the file to compare is a directory
 	 */
