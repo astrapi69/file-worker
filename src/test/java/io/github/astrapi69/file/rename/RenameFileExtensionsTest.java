@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
@@ -796,17 +797,51 @@ public class RenameFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link RenameFileExtensions#renameFile(File, String)}
+	 * A call of a method of {@link RenameFileExtensions} that refuses a file that does not exist
 	 */
-	@Test
-	public void renameFile_throwsFileDoesNotExistException_whenTheFileToRenameIsMissing()
+	@FunctionalInterface
+	interface CallOnAMissingFile
 	{
-		File missing = tempDir.resolve("missing.txt").toFile();
+		void call(File missing) throws Exception;
+	}
+
+	static Stream<Arguments> callsOnAMissingFileWithTheirMessage()
+	{
+		return Stream.of(
+			argumentSet("renameFile(File, String)",
+				(CallOnAMissingFile)missing -> RenameFileExtensions.renameFile(missing, "new.txt"),
+				(Function<File, String>)missing -> "File gone.txt does not exist!"),
+			argumentSet("changeFilenameSuffix(File, String)",
+				(CallOnAMissingFile)missing -> RenameFileExtensions.changeFilenameSuffix(missing,
+					".rtf"),
+				(Function<File, String>)missing -> "The file " + missing + " does not exist."),
+			argumentSet("changeFilenameSuffix(File, String, boolean)",
+				(CallOnAMissingFile)missing -> RenameFileExtensions.changeFilenameSuffix(missing,
+					".rtf", true),
+				(Function<File, String>)missing -> "The file " + missing + " does not exist."));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFile(File, String)},
+	 * {@link RenameFileExtensions#changeFilenameSuffix(File, String)} and
+	 * {@link RenameFileExtensions#changeFilenameSuffix(File, String, boolean)}
+	 *
+	 * @param call
+	 *            the method under test
+	 * @param expectedMessage
+	 *            the message for the missing file
+	 */
+	@ParameterizedTest
+	@MethodSource("callsOnAMissingFileWithTheirMessage")
+	public void methodsOnAMissingFile_throwFileDoesNotExistException_withTheFileInTheMessage(
+		CallOnAMissingFile call, Function<File, String> expectedMessage)
+	{
+		File missing = tempDir.resolve("gone.txt").toFile();
 
 		FileDoesNotExistException exception = assertThrows(FileDoesNotExistException.class,
-			() -> RenameFileExtensions.renameFile(missing, "new.txt"));
+			() -> call.call(missing));
 
-		assertTrue(exception.getMessage().contains("missing.txt"), exception.getMessage());
+		assertEquals(expectedMessage.apply(missing), exception.getMessage());
 	}
 
 }

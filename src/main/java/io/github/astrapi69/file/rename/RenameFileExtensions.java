@@ -216,7 +216,7 @@ public final class RenameFileExtensions
 	{
 		if (!file.exists())
 		{
-			final String error = "The " + file + " does not exists.";
+			final String error = "The file " + file + " does not exist.";
 			throw new FileDoesNotExistException(error);
 		}
 		final String fileNamePrefix = FilenameExtensions.getFilenamePrefix(file);
@@ -348,7 +348,7 @@ public final class RenameFileExtensions
 		if (!fileToRename.exists())
 		{
 			throw new FileDoesNotExistException(
-				"File" + fileToRename.getName() + " does not exists!");
+				"File " + fileToRename.getName() + " does not exist!");
 		}
 		final String fileNameAbsolutPathPrefix = FileExtensions
 			.getAbsolutPathWithoutFilename(fileToRename);
