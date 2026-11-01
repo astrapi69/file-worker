@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -713,7 +714,7 @@ public final class FileSearchExtensions
 		final String extension)
 	{
 		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = "^" + prefix + ".*\\." + extension + "$";
+		final String regex = prefixAndExtensionRegex(prefix, extension);
 		// Get all files in the directory
 		final File[] children = dir.getAbsoluteFile().listFiles();
 		if (children == null || children.length < 1)
@@ -752,7 +753,7 @@ public final class FileSearchExtensions
 		final String prefix, final String extension)
 	{
 		final List<File> foundedFileList = new ArrayList<>();
-		final String regex = "^" + prefix + ".*\\." + extension + "$";
+		final String regex = prefixAndExtensionRegex(prefix, extension);
 		// Get all files in the directory
 		final File[] children = dir.getAbsoluteFile().listFiles();
 		if (children == null || children.length < 1)
@@ -778,6 +779,21 @@ public final class FileSearchExtensions
 			}
 		}
 		return foundedFileList;
+	}
+
+	/**
+	 * Gets the regular expression for a name that starts with the given prefix and ends with a dot
+	 * and the given extension. Both are quoted, so every character in them stands for itself.
+	 *
+	 * @param prefix
+	 *            The prefix that the filenames should start with.
+	 * @param extension
+	 *            The file extension that the filenames should have.
+	 * @return the regular expression for the names with the prefix and the extension
+	 */
+	private static String prefixAndExtensionRegex(final String prefix, final String extension)
+	{
+		return "^" + Pattern.quote(prefix) + ".*\\." + Pattern.quote(extension) + "$";
 	}
 
 }

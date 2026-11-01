@@ -72,6 +72,14 @@ public class FileSearchExtensionsEdgeCasesTest
 	private static final Set<String> TXT_FILES = Set.of("report-1.txt", "notes.txt", "report-3.txt",
 		"report-4.txt");
 
+	/**
+	 * Names with characters a regular expression reads as syntax, each beside a name the syntax
+	 * would match instead (file-worker#58)
+	 */
+	private static final List<String> NAMES_WITH_REGEX_CHARACTERS = List.of("file(1)-a.txt",
+		"file1-a.txt", "data.1.txt", "dataX1.txt", "[draft] plan.txt", "d plan.txt", "notes.t.t",
+		"notes.txt", "main.c++");
+
 	@TempDir
 	Path tempDir;
 
@@ -229,6 +237,21 @@ public class FileSearchExtensionsEdgeCasesTest
 			Arguments.of("a regular file has nothing", "notes.txt", "notes", "txt", Set.of()));
 	}
 
+	static Stream<Arguments> literalPrefixAndExtensionCases()
+	{
+		return Stream.of(
+			Arguments.of("parentheses in the prefix are characters", "file(1)", "txt",
+				Set.of("file(1)-a.txt")),
+			Arguments.of("a dot in the prefix is a dot", "data.", "txt", Set.of("data.1.txt")),
+			Arguments.of("brackets in the prefix are characters", "[draft]", "txt",
+				Set.of("[draft] plan.txt")),
+			Arguments.of("an unclosed bracket in the prefix is a character", "[", "txt",
+				Set.of("[draft] plan.txt")),
+			Arguments.of("a dot in the extension is a dot", "notes", "t.t", Set.of("notes.t.t")),
+			Arguments.of("plus signs in the extension are characters", "main", "c++",
+				Set.of("main.c++")));
+	}
+
 	static Stream<Arguments> fileLengthCases()
 	{
 		int kilobyte = 1024;
@@ -257,6 +280,15 @@ public class FileSearchExtensionsEdgeCasesTest
 	private File inTempDir(String relativePath)
 	{
 		return tempDir.resolve(relativePath).toFile();
+	}
+
+	private static void createNamesWithRegexCharacters(Path directory) throws IOException
+	{
+		Files.createDirectories(directory);
+		for (String name : NAMES_WITH_REGEX_CHARACTERS)
+		{
+			Files.writeString(directory.resolve(name), name);
+		}
 	}
 
 	@BeforeEach
@@ -508,6 +540,32 @@ public class FileSearchExtensionsEdgeCasesTest
 	{
 		List<File> found = FileSearchExtensions
 			.findFilesWithPrefixAndExtensionRecursive(inTempDir(directory), prefix, extension);
+
+		assertFoundExactly(expectedNames, found);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("literalPrefixAndExtensionCases")
+	void findFilesWithPrefixAndExtension_readsPrefixAndExtensionAsText(String displayName,
+		String prefix, String extension, Set<String> expectedNames) throws IOException
+	{
+		createNamesWithRegexCharacters(tempDir.resolve("literal"));
+
+		List<File> found = FileSearchExtensions
+			.findFilesWithPrefixAndExtension(inTempDir("literal"), prefix, extension);
+
+		assertFoundExactly(expectedNames, found);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("literalPrefixAndExtensionCases")
+	void findFilesWithPrefixAndExtensionRecursive_readsPrefixAndExtensionAsText(String displayName,
+		String prefix, String extension, Set<String> expectedNames) throws IOException
+	{
+		createNamesWithRegexCharacters(tempDir.resolve("literal").resolve("deeper"));
+
+		List<File> found = FileSearchExtensions
+			.findFilesWithPrefixAndExtensionRecursive(inTempDir("literal"), prefix, extension);
 
 		assertFoundExactly(expectedNames, found);
 	}
