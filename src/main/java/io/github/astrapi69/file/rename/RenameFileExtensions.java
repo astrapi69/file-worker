@@ -257,22 +257,26 @@ public final class RenameFileExtensions
 	}
 
 	/**
-	 * Moves the given source file to the destination Directory.
+	 * Moves the given source file to the given destination file. The destination file is the new
+	 * path of the source file, as the target of {@code Files.move(source, target)} is, not a
+	 * directory to move it into: a move of a file onto an existing directory is refused with an
+	 * {@link IllegalArgumentException}, and the file stays where it is. To move a file into a
+	 * directory, use {@code FileUtils.moveFileToDirectory(File, File, boolean)} of commons-io.
 	 *
 	 * @param srcFile
 	 *            The source file.
-	 * @param destDir
-	 *            The destination directory.
+	 * @param destFile
+	 *            The destination file, the new path of the source file.
 	 * @return true if the file was moved otherwise false.
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
-	public static boolean moveFile(final File srcFile, final File destDir)
+	public static boolean moveFile(final File srcFile, final File destFile)
 		throws IOException, FileIsADirectoryException
 	{
-		return RenameFileExtensions.renameFile(srcFile, destDir, true);
+		return RenameFileExtensions.renameFile(srcFile, destFile, true);
 	}
 
 	/**

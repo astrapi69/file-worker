@@ -416,12 +416,12 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final String filePrefix1 = "testMoveFile";
 		final String oldFileSuffix = ".txt";
 		final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
-		final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+		final File destFile = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
 		StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
-		this.actual = RenameFileExtensions.moveFile(srcFile, destDir);
+		this.actual = RenameFileExtensions.moveFile(srcFile, destFile);
 		assertTrue(this.actual, "File should be renamed.");
-		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destDir);
+		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destFile);
 		assertTrue(this.actual, "The renamed file should exist in this directory.");
 	}
 
@@ -443,9 +443,9 @@ public class RenameFileExtensionsTest extends FileTestCase
 			final String filePrefix1 = "testMoveFile";
 			final String oldFileSuffix = ".txt";
 			final File srcFile = new File(this.deepDir, filePrefix1 + oldFileSuffix);
-			final File destDir = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
+			final File destFile = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
-			RenameFileExtensions.moveFile(srcFile, destDir);
+			RenameFileExtensions.moveFile(srcFile, destFile);
 		});
 	}
 
@@ -684,6 +684,49 @@ public class RenameFileExtensionsTest extends FileTestCase
 		assertTrue(renamed.getName().matches("README_\\d{9}"), renamed.getName());
 		assertEquals("read me", Files.readString(renamed.toPath()));
 		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void moveFile_movesTheFileToTheTargetFile() throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("note.txt"), "hello").toFile();
+		Path otherDirectory = Files.createDirectory(tempDir.resolve("other"));
+		File targetFile = otherDirectory.resolve("arrived.txt").toFile();
+
+		boolean moved = RenameFileExtensions.moveFile(file, targetFile);
+
+		assertTrue(moved);
+		assertEquals("hello", Files.readString(targetFile.toPath()));
+		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#moveFile(File, File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void moveFile_refusesAnExistingDirectoryAsTarget_andLeavesTheFileWhereItIs()
+		throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("note.txt"), "hello").toFile();
+		Path directory = Files.createDirectory(tempDir.resolve("target"));
+
+		assertThrows(IllegalArgumentException.class,
+			() -> RenameFileExtensions.moveFile(file, directory.toFile()));
+
+		assertEquals("hello", Files.readString(file.toPath()));
+		try (Stream<Path> entries = Files.list(directory))
+		{
+			assertEquals(0, entries.count());
+		}
 	}
 
 	/**

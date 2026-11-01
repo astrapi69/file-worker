@@ -405,4 +405,47 @@ public class RenameableTest
 		assertFalse(Files.exists(sourceDirectory));
 	}
 
+	/**
+	 * Test method for {@link Renameable#moveFile(File, File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void moveFile_movesTheFileToTheTargetFile() throws Exception
+	{
+		File file = newFile("note.txt", "hello");
+		Path otherDirectory = Files.createDirectory(tempDir.resolve("other"));
+		File targetFile = otherDirectory.resolve("arrived.txt").toFile();
+
+		boolean moved = renameable.moveFile(file, targetFile);
+
+		assertTrue(moved);
+		assertEquals("hello", Files.readString(targetFile.toPath()));
+		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link Renameable#moveFile(File, File)}
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void moveFile_refusesAnExistingDirectoryAsTarget_andLeavesTheFileWhereItIs()
+		throws Exception
+	{
+		File file = newFile("note.txt", "hello");
+		Path directory = Files.createDirectory(tempDir.resolve("target"));
+
+		assertThrows(IllegalArgumentException.class,
+			() -> renameable.moveFile(file, directory.toFile()));
+
+		assertEquals("hello", Files.readString(file.toPath()));
+		try (Stream<Path> entries = Files.list(directory))
+		{
+			assertEquals(0, entries.count());
+		}
+	}
+
 }
