@@ -11,6 +11,10 @@ BREAKING:
 
 CHANGED:
 
+- dependencies raised with versionCatalogUpdate, stable versions only: checksum-up 3.2, commons-lang3 3.21.0,
+  crypt-api 10.3, silly-collection 28.2, and for the tests meanbean-factories 3.1, mockito 5.24.0 and test-object 9.1.
+  crypt-api 10 names its module `io.github.astrapi69.crypt.api`, which `module-info.java` now requires (#43)
+
 - the grgit and hierynomus license plugins are gone: a release is tagged through git
   (`gradle/tagging.gradle`), and Spotless writes the license header from `src/main/resources/license-header.txt` (#41)
 

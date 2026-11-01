@@ -27,7 +27,7 @@ module io.github.astrapisixtynine.file.worker
 	requires io.github.astrapisixtynine.silly.strings;
 	requires io.github.astrapisixtynine.silly.collection;
 	requires io.github.astrapisixtynine.checksum.up;
-	requires io.github.astrapisixtynine.crypt.api;
+	requires io.github.astrapi69.crypt.api;
 	requires io.github.astrapisixtynine.throwable;
 
 	exports io.github.astrapi69.file;
