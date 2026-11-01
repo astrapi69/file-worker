@@ -611,6 +611,27 @@ public class RenameFileExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link RenameFileExtensions#changeAllFilenameSuffix(File, String, String)}
+	 * with a file whose name is shorter than the suffix (file-worker#50)
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void changeAllFilenameSuffix_renamesEveryMatch_whenANameIsShorterThanTheSuffix()
+		throws Exception
+	{
+		Path shortName = Files.writeString(tempDir.resolve("a"), "short");
+		Path notes = Files.writeString(tempDir.resolve("notes.txt"), "notes");
+
+		RenameFileExtensions.changeAllFilenameSuffix(tempDir.toFile(), ".txt", ".rtf");
+
+		assertEquals("notes", Files.readString(tempDir.resolve("notes.rtf")));
+		assertFalse(Files.exists(notes));
+		assertEquals("short", Files.readString(shortName));
+	}
+
+	/**
 	 * Test method for {@link RenameFileExtensions#renameFile(File, File, boolean)}
 	 *
 	 * @throws Exception
