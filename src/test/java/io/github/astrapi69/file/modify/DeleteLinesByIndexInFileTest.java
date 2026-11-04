@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.create.FileFactory;
@@ -49,6 +50,12 @@ public class DeleteLinesByIndexInFileTest
 {
 
 	/**
+	 * The temporary directory for the file this test modifies
+	 */
+	@TempDir
+	Path tempDir;
+
+	/**
 	 * Test method for {@link DeleteLinesByIndexInFile#apply(Integer, String)}
 	 *
 	 * @throws IOException
@@ -62,7 +69,7 @@ public class DeleteLinesByIndexInFileTest
 		File parent = PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources");
 
 		inputFile = FileFactory.newFile(parent, "test-csv-data.csv");
-		testFile = FileFactory.newFile(parent, "test-delete-lines-data.csv");
+		testFile = FileFactory.newFile(tempDir.toFile(), "test-delete-lines-data.csv");
 		CopyFileExtensions.copyFile(inputFile, testFile);
 
 		Path inputFilePath = testFile.toPath();

@@ -71,8 +71,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		// Create a temporary directory for testing
-		testDirectory = Files.createTempDirectory("fileSearchTestDir");
+		// Create a directory for testing in the temporary directory of FileTestCase
+		testDirectory = Files.createDirectory(tempRoot.resolve("fileSearchTestDir"));
 
 		// Create some files and directories in the tempDir for testing
 
@@ -340,7 +340,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 		String searchString;
 		int actual;
 		int expected;
-		File parent = PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources");
+		// the copy of src/test/resources/resources in the temporary directory of FileTestCase
+		File parent = this.testResources;
 
 		inputFile = FileFactory.newFile(parent, "test-csv-data.csv");
 		testFile = FileFactory.newFile(parent, "test-find-line-data.csv");

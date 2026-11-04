@@ -80,8 +80,8 @@ public class ModifyFileExtensionsTest
 	void concatenateEmptyFiles() throws IOException
 	{
 		List<File> textFiles = new ArrayList<>();
-		File first = new File(PathFinder.getSrcTestResourcesDir(), "test1.txt");
-		File second = new File(PathFinder.getSrcTestResourcesDir(), "test2.txt");
+		File first = tempDir.resolve("test1.txt").toFile();
+		File second = tempDir.resolve("test2.txt").toFile();
 		textFiles.add(first);
 		textFiles.add(second);
 
@@ -91,7 +91,7 @@ public class ModifyFileExtensionsTest
 		linesToAppend = ArrayFactory.newArray("Line 4", "Line 5", "Line 6");
 		LineAppender.appendLines(second, linesToAppend);
 
-		File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(), "result.txt");
+		File resultTextFile = tempDir.resolve("result.txt").toFile();
 
 		ModifyFileExtensions.concatenateAll(textFiles, resultTextFile);
 
@@ -112,11 +112,11 @@ public class ModifyFileExtensionsTest
 	void testConcatenateAllAndGet() throws IOException
 	{
 		List<File> textFiles = new ArrayList<>();
-		File first = new File(PathFinder.getSrcTestResourcesDir(), "test-get1.txt");
+		File first = tempDir.resolve("test-get1.txt").toFile();
 		LineAppender.appendLines(first, ArrayFactory.newArray("Content A"));
 		textFiles.add(first);
 
-		File resultTextFile = new File(PathFinder.getSrcTestResourcesDir(), "result-get.txt");
+		File resultTextFile = tempDir.resolve("result-get.txt").toFile();
 
 		File returnedFile = ModifyFileExtensions.concatenateAllAndGet(textFiles, resultTextFile);
 
@@ -135,7 +135,7 @@ public class ModifyFileExtensionsTest
 	void testConcatenateAllConvenienceMethod() throws IOException
 	{
 		List<File> textFiles = new ArrayList<>();
-		File first = new File(PathFinder.getSrcTestResourcesDir(), "test-temp1.txt");
+		File first = tempDir.resolve("test-temp1.txt").toFile();
 		LineAppender.appendLines(first, ArrayFactory.newArray("Temp Content"));
 		textFiles.add(first);
 
@@ -242,7 +242,7 @@ public class ModifyFileExtensionsTest
 	@DisplayName("Test concatenateFilesWithExtension with multiple files")
 	void testConcatenateFilesWithExtension() throws IOException
 	{
-		File testDir = new File(PathFinder.getSrcTestResourcesDir(), "test-extension-dir");
+		File testDir = tempDir.resolve("test-extension-dir").toFile();
 		testDir.mkdirs();
 
 		File file1 = new File(testDir, "file1.txt");
@@ -253,7 +253,7 @@ public class ModifyFileExtensionsTest
 		LineAppender.appendLines(file2, ArrayFactory.newArray("Line 3", "Line 4"));
 		LineAppender.appendLines(file3, ArrayFactory.newArray("Should not be included"));
 
-		File resultFile = new File(PathFinder.getSrcTestResourcesDir(), "result-extension.txt");
+		File resultFile = tempDir.resolve("result-extension.txt").toFile();
 
 		File returnedFile = ModifyFileExtensions.concatenateFilesWithExtension(testDir, ".txt",
 			resultFile);
@@ -274,7 +274,7 @@ public class ModifyFileExtensionsTest
 	@DisplayName("Test concatenateFilesWithExtension with temporary result file")
 	void testConcatenateFilesWithExtensionTempFile() throws IOException
 	{
-		File testDir = new File(PathFinder.getSrcTestResourcesDir(), "test-extension-temp-dir");
+		File testDir = tempDir.resolve("test-extension-temp-dir").toFile();
 		testDir.mkdirs();
 
 		File file1 = new File(testDir, "data1.csv");
@@ -306,9 +306,9 @@ public class ModifyFileExtensionsTest
 	@DisplayName("Test concatenateFilesWithExtension throws exception when no files found")
 	void testConcatenateFilesWithExtensionNoFilesFound() throws IOException
 	{
-		File testDir = new File(PathFinder.getSrcTestResourcesDir(), "test-empty-dir");
+		File testDir = tempDir.resolve("test-empty-dir").toFile();
 		testDir.mkdirs();
-		File resultFile = new File(PathFinder.getSrcTestResourcesDir(), "result.txt");
+		File resultFile = tempDir.resolve("result.txt").toFile();
 
 		assertThrows(IllegalArgumentException.class, () -> {
 			ModifyFileExtensions.concatenateFilesWithExtension(testDir, ".xyz", resultFile);
@@ -326,9 +326,9 @@ public class ModifyFileExtensionsTest
 	@DisplayName("Test concatenateFilesWithExtension throws exception when not a directory")
 	void testConcatenateFilesWithExtensionNotADirectory() throws IOException
 	{
-		File notADirectory = new File(PathFinder.getSrcTestResourcesDir(), "not-a-dir.txt");
+		File notADirectory = tempDir.resolve("not-a-dir.txt").toFile();
 		LineAppender.appendLines(notADirectory, ArrayFactory.newArray("test"));
-		File resultFile = new File(PathFinder.getSrcTestResourcesDir(), "result.txt");
+		File resultFile = tempDir.resolve("result.txt").toFile();
 
 		assertThrows(IllegalArgumentException.class, () -> {
 			ModifyFileExtensions.concatenateFilesWithExtension(notADirectory, ".txt", resultFile);
@@ -345,7 +345,7 @@ public class ModifyFileExtensionsTest
 	@DisplayName("Test concatenateFilesWithExtensionRecursive with subdirectories")
 	void testConcatenateFilesWithExtensionRecursive() throws IOException
 	{
-		File testDir = new File(PathFinder.getSrcTestResourcesDir(), "test-recursive-dir");
+		File testDir = tempDir.resolve("test-recursive-dir").toFile();
 		testDir.mkdirs();
 
 		File subDir1 = new File(testDir, "subdir1");
@@ -363,7 +363,7 @@ public class ModifyFileExtensionsTest
 		LineAppender.appendLines(file3, ArrayFactory.newArray("Sub2"));
 		LineAppender.appendLines(file4, ArrayFactory.newArray("Ignore"));
 
-		File resultFile = new File(PathFinder.getSrcTestResourcesDir(), "result-recursive.txt");
+		File resultFile = tempDir.resolve("result-recursive.txt").toFile();
 
 		File returnedFile = ModifyFileExtensions.concatenateFilesWithExtensionRecursive(testDir,
 			".txt", resultFile);
@@ -386,7 +386,7 @@ public class ModifyFileExtensionsTest
 	@DisplayName("Test concatenateFilesWithExtensionRecursive with temporary result file")
 	void testConcatenateFilesWithExtensionRecursiveTempFile() throws IOException
 	{
-		File testDir = new File(PathFinder.getSrcTestResourcesDir(), "test-recursive-temp-dir");
+		File testDir = tempDir.resolve("test-recursive-temp-dir").toFile();
 		testDir.mkdirs();
 
 		File subDir = new File(testDir, "nested");
@@ -416,17 +416,43 @@ public class ModifyFileExtensionsTest
 	// =========================================================================
 
 	/**
+	 * Returns the committed fixture with the given name in the directory
+	 * src/test/resources/resources, which the tests only read or copy
+	 *
+	 * @param name
+	 *            the name of the fixture
+	 * @return the fixture
+	 */
+	private static File fixture(String name)
+	{
+		return new File(
+			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"), name);
+	}
+
+	/**
+	 * Copies the committed fixture with the given name into the temporary directory, so that a test
+	 * may change the copy. The bytes are written into a new file, as Files.copy would carry over
+	 * the permissions of a write-protected fixture
+	 *
+	 * @param name
+	 *            the name of the fixture
+	 * @return the path of the copy
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	private Path copyOfFixture(String name) throws IOException
+	{
+		return Files.write(tempDir.resolve(name), Files.readAllBytes(fixture(name).toPath()));
+	}
+
+	/**
 	 * Test method for {@link ModifyFileExtensions#modifyFile(Path, Path, FileChangeable)}.
 	 */
 	@Test
 	public void testModifyFile() throws IOException
 	{
-		File inputFile = new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"test-csv-data.csv");
-		File outputFile = new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"modified-test-csv-data.csv");
+		File inputFile = fixture("test-csv-data.csv");
+		File outputFile = tempDir.resolve("modified-test-csv-data.csv").toFile();
 		Path inFilePath = inputFile.toPath();
 		Path outFilePath = outputFile.toPath();
 
@@ -453,18 +479,12 @@ public class ModifyFileExtensionsTest
 	@Test
 	public void testModifyFileAndGet() throws IOException
 	{
-		File inputFile = new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"test-csv-data-get.csv");
-		File outputFile = new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"modified-test-csv-data-get.csv");
+		File inputFile = tempDir.resolve("test-csv-data-get.csv").toFile();
+		File outputFile = tempDir.resolve("modified-test-csv-data-get.csv").toFile();
 
 		// Ensure input file exists for the test
-		CopyFileExtensions.copyFile(
-			new File(PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-				"test-csv-data.csv"),
-			inputFile, StandardCharsets.UTF_8, StandardCharsets.UTF_8, true);
+		CopyFileExtensions.copyFile(fixture("test-csv-data.csv"), inputFile, StandardCharsets.UTF_8,
+			StandardCharsets.UTF_8, true);
 
 		Path inFilePath = inputFile.toPath();
 		Path outFilePath = outputFile.toPath();
@@ -485,10 +505,8 @@ public class ModifyFileExtensionsTest
 	@Test
 	public void testModifyFileSameFile() throws IOException, FileIsADirectoryException
 	{
-		File inputFile = new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"test-csv-data-samefile.csv");
-		Path inFilePath = inputFile.toPath();
+		Path inFilePath = copyOfFixture("test-csv-data-samefile.csv");
+		File inputFile = inFilePath.toFile();
 
 		String add = "|#foo-bar#|";
 		ModifyFileExtensions.modifyFile(inFilePath,
@@ -506,12 +524,6 @@ public class ModifyFileExtensionsTest
 
 		assertFalse(originalContent.contains(find));
 		assertTrue(originalContent.contains(replaceWith));
-
-		// Restore original state
-		CopyFileExtensions.copyFile(
-			new File(PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-				"test-csv-data.csv"),
-			inputFile, StandardCharsets.UTF_8, StandardCharsets.UTF_8, true);
 	}
 
 	/**
@@ -521,16 +533,8 @@ public class ModifyFileExtensionsTest
 	@Test
 	public void testModifyFileSameFileAndGet() throws IOException, FileIsADirectoryException
 	{
-		File inputFile = new File(
-			PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-			"test-csv-data-samefile-get.csv");
-
-		CopyFileExtensions.copyFile(
-			new File(PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-				"test-csv-data.csv"),
-			inputFile, StandardCharsets.UTF_8, StandardCharsets.UTF_8, true);
-
-		Path inFilePath = inputFile.toPath();
+		Path inFilePath = copyOfFixture("test-csv-data-samefile-get.csv");
+		File inputFile = inFilePath.toFile();
 
 		Path returnedPath = ModifyFileExtensions.modifyFileAndGet(inFilePath,
 			StandardCharsets.UTF_8, (count, input) -> input + "IN_PLACE");
@@ -539,12 +543,6 @@ public class ModifyFileExtensionsTest
 
 		List<String> linesInList = ReadFileExtensions.readLinesInList(inputFile);
 		linesInList.forEach(line -> assertTrue(line.endsWith("IN_PLACE")));
-
-		// Restore original state
-		CopyFileExtensions.copyFile(
-			new File(PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources"),
-				"test-csv-data.csv"),
-			inputFile, StandardCharsets.UTF_8, StandardCharsets.UTF_8, true);
 	}
 
 

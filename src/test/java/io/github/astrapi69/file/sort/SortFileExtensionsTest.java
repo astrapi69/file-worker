@@ -30,10 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.comparator.object.StringComparator;
@@ -41,7 +43,6 @@ import io.github.astrapi69.file.FileExtensions;
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
  * The unit test class for the class {@link SortFileExtensions}.
@@ -59,6 +60,9 @@ public class SortFileExtensionsTest
 	File resources;
 	/** The directory /src/test/resources for test resources. */
 	File testResources;
+	/** The temporary directory for files the tests change. */
+	@TempDir
+	File tempDir;
 
 	/**
 	 * Sets up method will be invoked before every unit test method in this class.
@@ -104,7 +108,10 @@ public class SortFileExtensionsTest
 		List<String> expectedSortedLines;
 
 		testFile = new File(testResources, "resources");
-		epfFile = new File(testFile, "testEpf.epf");
+		epfFile = new File(tempDir, "testEpf.epf");
+		// copy the content only, so the copy is writable even if the fixture is not
+		Files.write(epfFile.toPath(),
+			Files.readAllBytes(new File(testFile, "testEpf.epf").toPath()));
 
 		originalLines = ReadFileExtensions.readLinesInList(epfFile, false);
 
@@ -117,6 +124,7 @@ public class SortFileExtensionsTest
 		expectedSortedLines = ReadFileExtensions.readLinesInList(sortedEpfFile, false);
 
 		assertEquals(expectedSortedLines.size(), actualSortedLines.size());
+		assertEquals(originalLines.size(), actualSortedLines.size());
 
 		for (int i = 0; i < expectedSortedLines.size(); i++)
 		{
@@ -124,8 +132,6 @@ public class SortFileExtensionsTest
 			actual = actualSortedLines.get(i);
 			assertEquals(expected, actual);
 		}
-		// create initial state...
-		StoreFileExtensions.toFile(epfFile, originalLines, "UTF-8");
 	}
 
 	/**
