@@ -26,17 +26,25 @@ package io.github.astrapi69.file;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -194,20 +202,132 @@ public class FileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link FileExtensions#isOpen(File)}.
+	 * The missing files for {@link #testIsOpenOnAMissingFile}, as paths below the temporary
+	 * directory. Nothing is created.
+	 *
+	 * @return the paths of the missing files, relative to the temporary directory
+	 */
+	static Stream<Arguments> missingFiles()
+	{
+		return Stream.of(argumentSet("a missing file in an existing directory", "missing.txt"),
+			argumentSet("a missing file in a missing directory",
+				"missingDir" + File.separator + "missing.txt"));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#isOpen(File)}: a missing file is not open, and the
+	 * check leaves it missing.
+	 *
+	 * @param relativePath
+	 *            the path of the missing file, relative to the temporary directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest
+	@MethodSource("missingFiles")
+	public void testIsOpenOnAMissingFile(final String relativePath) throws IOException
+	{
+		final File missing = tempRoot.resolve(relativePath).toFile();
+		final Set<String> entriesBefore = Set.of(tempRoot.toFile().list());
+		assertFalse(missing.exists());
+
+		assertFalse(FileExtensions.isOpen(missing));
+		assertFalse(missing.exists(), "isOpen created " + missing);
+		assertEquals(entriesBefore, Set.of(tempRoot.toFile().list()));
+	}
+
+	/**
+	 * The existing files without a lock for {@link #testIsOpenOnAnExistingFileWithoutALock}, each
+	 * with its content and whether this JVM has it open for reading during the check.
+	 *
+	 * @return the contents and whether the file is open for reading
+	 */
+	static Stream<Arguments> filesWithoutALock()
+	{
+		return Stream.of(argumentSet("an empty file", "", false),
+			argumentSet("a file with content", "content", false),
+			argumentSet("a file this JVM has open for reading", "content", true));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#isOpen(File)}: an existing file on which no lock is
+	 * held is not open, also when it is open for reading, and the check leaves its content as it
+	 * was.
+	 *
+	 * @param content
+	 *            the content of the file
+	 * @param openForReading
+	 *            whether this JVM has the file open for reading during the check
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest
+	@MethodSource("filesWithoutALock")
+	public void testIsOpenOnAnExistingFileWithoutALock(final String content,
+		final boolean openForReading) throws IOException
+	{
+		final File file = tempRoot.resolve("unlocked.txt").toFile();
+		Files.writeString(file.toPath(), content);
+		if (openForReading)
+		{
+			try (FileInputStream input = new FileInputStream(file))
+			{
+				assertFalse(FileExtensions.isOpen(file));
+			}
+		}
+		else
+		{
+			assertFalse(FileExtensions.isOpen(file));
+		}
+		assertEquals(content, Files.readString(file.toPath()));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#isOpen(File)}: a file whose lock this JVM holds through
+	 * another channel is open, and is no longer open once the lock is released.
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void testIsOpen() throws IOException
+	public void testIsOpenWhileThisJvmHoldsTheLock() throws IOException
 	{
-		boolean actual;
-		boolean expected;
-		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
-		actual = FileExtensions.isOpen(srcFile);
-		expected = false;
-		assertEquals(actual, expected);
+		final File lockedFile = tempRoot.resolve("locked.txt").toFile();
+		Files.writeString(lockedFile.toPath(), "locked by this JVM");
+		try (RandomAccessFile access = new RandomAccessFile(lockedFile, "rw");
+			FileLock lock = access.getChannel().lock())
+		{
+			assertTrue(FileExtensions.isOpen(lockedFile));
+			assertTrue(lock.isValid());
+		}
+		assertFalse(FileExtensions.isOpen(lockedFile));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#isOpen(File)}: an existing file that this process
+	 * cannot open for writing is not answered with {@code false}; the check throws the
+	 * {@link FileNotFoundException} of the opening, and leaves the file as it was.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testIsOpenOnAFileThatCannotBeOpenedForWriting() throws IOException
+	{
+		final Path readOnly = tempRoot.resolve("readOnly.txt");
+		Files.writeString(readOnly, "read only");
+		assumeTrue(readOnly.toFile().setWritable(false), "the file system takes the permission");
+		try
+		{
+			assumeFalse(Files.isWritable(readOnly), "the test runs without override rights");
+			assertThrows(FileNotFoundException.class,
+				() -> FileExtensions.isOpen(readOnly.toFile()));
+			assertEquals("read only", Files.readString(readOnly));
+		}
+		finally
+		{
+			readOnly.toFile().setWritable(true);
+		}
 	}
 
 	/**

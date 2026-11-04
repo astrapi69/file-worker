@@ -70,6 +70,9 @@ FIXED:
   `newDirectoryStructure(dir, "src/main/java")` creates `src/main/java` instead of nothing; a path that cannot be
   created throws a `RuntimeException` instead of coming back as a `File` for a directory that does not exist
   (#110)
+- `FileExtensions.isOpen(File)` no longer creates a missing file: it gives `false` and leaves it missing. A lock
+  this JVM holds on the file through another channel gives `true` instead of an `OverlappingFileLockException`,
+  and the Javadoc says what the method checks instead of "Not yet implemented" (#109)
 
 
 Version 20.0
