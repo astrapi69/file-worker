@@ -70,7 +70,8 @@ public interface Storable
 	}
 
 	/**
-	 * Writes lines from a collection to the specified file
+	 * Writes lines from a collection to the specified file, every line ended with the line
+	 * separator, the last one too
 	 *
 	 * @param file
 	 *            the file to write
@@ -82,12 +83,13 @@ public interface Storable
 	 */
 	default boolean toFile(final File file, final Collection<String> lines) throws IOException
 	{
-		final String content = String.join(SystemPropertiesExtensions.getLineSeparator(), lines);
+		final String content = linesOf(lines);
 		return toFile(file, content);
 	}
 
 	/**
-	 * Writes lines to the specified file with the given encoding
+	 * Writes lines to the specified file with the given encoding, every line ended with the line
+	 * separator, the last one too
 	 *
 	 * @param file
 	 *            the file to write
@@ -102,8 +104,28 @@ public interface Storable
 	default boolean toFile(final File file, final Collection<String> lines, final Charset charset)
 		throws IOException
 	{
-		final String content = String.join(SystemPropertiesExtensions.getLineSeparator(), lines);
+		final String content = linesOf(lines);
 		return toFile(file, content, charset);
+	}
+
+	/**
+	 * Ends every line with the line separator, the last one too, as
+	 * {@link java.nio.file.Files#write(java.nio.file.Path, Iterable, java.nio.file.OpenOption...)}
+	 * does
+	 *
+	 * @param lines
+	 *            the lines
+	 * @return the lines, each followed by the line separator
+	 */
+	private static String linesOf(final Collection<String> lines)
+	{
+		final String lineSeparator = SystemPropertiesExtensions.getLineSeparator();
+		final StringBuilder content = new StringBuilder();
+		for (final String line : lines)
+		{
+			content.append(line).append(lineSeparator);
+		}
+		return content.toString();
 	}
 
 	/**

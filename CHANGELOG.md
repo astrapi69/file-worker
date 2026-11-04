@@ -58,6 +58,14 @@ CHANGED:
   that copy held: jackson 2.16.0-rc1 and an old file-worker with commons-io 2.11.0, commons-lang3 3.12.0 and
   commons-beanutils 1.9.4, 18 Dependabot alerts for versions no class path of the build uses (#103)
 
+FIXED:
+
+- a write of `StoreFileExtensions.toFile` that fails throws the declared `IOException` instead of returning `true`:
+  the methods no longer write through a `PrintWriter`, which swallowed it. `Storable.toFile(File, Collection)` and
+  `toFile(File, Collection, Charset)` end the last line with the line separator too, as `StoreFileExtensions` and
+  `Files.write` do (#107)
+
+
 Version 20.0
 -------------
 

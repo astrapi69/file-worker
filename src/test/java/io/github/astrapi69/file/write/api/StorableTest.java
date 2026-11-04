@@ -132,7 +132,8 @@ public class StorableTest
 
 		storable.toFile(destination, lines, StandardCharsets.UTF_8);
 		String actualContent = ReadFileExtensions.fromFile(destination);
-		String expectedContent = String.join(System.lineSeparator(), lines);
+		String expectedContent = String.join(System.lineSeparator(), lines)
+			+ System.lineSeparator();
 
 		assertEquals(expectedContent, actualContent);
 	}
@@ -151,7 +152,8 @@ public class StorableTest
 
 		storable.toFile(destination, lines);
 		String actualContent = ReadFileExtensions.fromFile(destination);
-		String expectedContent = String.join(System.lineSeparator(), lines);
+		String expectedContent = String.join(System.lineSeparator(), lines)
+			+ System.lineSeparator();
 
 		assertEquals(expectedContent, actualContent);
 	}
@@ -178,7 +180,7 @@ public class StorableTest
 
 	/**
 	 * Test method for {@link Storable#toFile(File, Collection)}: returns {@code true} and writes
-	 * the lines joined by the platform line separator, without a trailing one, encoded with the
+	 * every line ended with the platform line separator, the last one too, encoded with the
 	 * platform default charset
 	 *
 	 * @throws IOException
@@ -189,7 +191,7 @@ public class StorableTest
 	{
 		List<String> lines = List.of("foo bar", "äöü");
 		File destination = new File(tempDir.toFile(), "testStoreCollectionDefaultCharset.txt");
-		String expected = "foo bar" + System.lineSeparator() + "äöü";
+		String expected = "foo bar" + System.lineSeparator() + "äöü" + System.lineSeparator();
 
 		boolean written = storable.toFile(destination, lines);
 
@@ -224,7 +226,8 @@ public class StorableTest
 
 	/**
 	 * Test method for {@link Storable#toFile(File, Collection, Charset)}: returns {@code true} and
-	 * writes the lines joined by the platform line separator, encoded with the given charset
+	 * writes every line ended with the platform line separator, the last one too, encoded with the
+	 * given charset
 	 *
 	 * @param charsetName
 	 *            the name of the charset to write with
@@ -240,7 +243,7 @@ public class StorableTest
 		List<String> lines = List.of("foo bar", "äöü");
 		File destination = new File(tempDir.toFile(),
 			"testStoreCollection-" + charsetName + ".txt");
-		String expected = "foo bar" + System.lineSeparator() + "äöü";
+		String expected = "foo bar" + System.lineSeparator() + "äöü" + System.lineSeparator();
 
 		boolean written = storable.toFile(destination, lines, charset);
 
