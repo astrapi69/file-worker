@@ -11,3 +11,12 @@ dependencies {
         testImplementation(libs.jobj.copy)
     }
 }
+
+// zip4j-extension, a test dependency, depends on an older file-worker. Gradle resolves those
+// coordinates to this project itself, which put the project's own jar on the test runtime class path:
+// a copy of build/classes/java/main, which comes first, and without a task dependency on :jar, so
+// test needed mustRunAfter(jar) to pass Gradle's validation, and pitest, which takes that class path
+// too, needs it as well (#99; the same as astrapi69/silly-io#54)
+configurations.named("testRuntimeClasspath") {
+    exclude group: project.group as String, module: project.name
+}
