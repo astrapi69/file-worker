@@ -98,6 +98,26 @@ public class SearchableDefaultMethodsTest
 			Arguments.of("a regular file has no matches", "notes.txt", ".*", Set.of()));
 	}
 
+	/**
+	 * The searches of the tree {@code top.txt}, {@code sub/middle.txt} and
+	 * {@code sub/deeper/bottom.txt}, with the paths, relative to the searched directory, of the
+	 * files each one finds (file-worker#111)
+	 */
+	static Stream<Arguments> recursionCases()
+	{
+		return Stream.of(
+			Arguments.of("every level is searched", ".*\\.txt",
+				Set.of("top.txt", "sub/middle.txt", "sub/deeper/bottom.txt")),
+			Arguments.of("a match two levels down is found", "bottom\\.txt",
+				Set.of("sub/deeper/bottom.txt")),
+			Arguments.of("directories are searched, not returned", ".*",
+				Set.of("top.txt", "sub/middle.txt", "sub/deeper/bottom.txt")),
+			Arguments.of("a pattern that matches only directory names finds nothing", "sub|deeper",
+				Set.of()),
+			Arguments.of("the pattern is matched against the name, not the path",
+				"sub/middle\\.txt", Set.of()));
+	}
+
 	static Stream<Arguments> extensionCases()
 	{
 		return Stream.of(
@@ -129,6 +149,21 @@ public class SearchableDefaultMethodsTest
 			Arguments.of("the prefix is a prefix, not a part", "", "eport", "txt", Set.of()),
 			Arguments.of("the extension follows a dot", "", "report", "og", Set.of()),
 			Arguments.of("a regular file finds nothing", "notes.txt", "notes", "txt", Set.of()));
+	}
+
+	private static Path createLevels(Path directory) throws IOException
+	{
+		Path deeper = Files.createDirectories(directory.resolve("sub").resolve("deeper"));
+		Files.writeString(directory.resolve("top.txt"), "top");
+		Files.writeString(directory.resolve("sub").resolve("middle.txt"), "middle");
+		Files.writeString(deeper.resolve("bottom.txt"), "bottom");
+		return directory;
+	}
+
+	private static Set<File> filesIn(Path directory, Set<String> relativePaths)
+	{
+		return relativePaths.stream().map(directory::resolve).map(Path::toFile)
+			.collect(Collectors.toSet());
 	}
 
 	private static Set<String> namesOf(Collection<File> files)
@@ -232,6 +267,19 @@ public class SearchableDefaultMethodsTest
 		List<File> found = searchable.findAllFiles(tempDir.resolve(directory).toFile(), regex);
 
 		assertFoundExactly(expectedNames, found);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("recursionCases")
+	void findAllFiles_searchesEverySubdirectory(String displayName, String regex,
+		Set<String> expectedPaths) throws IOException
+	{
+		Path levels = createLevels(tempDir.resolve("levels"));
+
+		List<File> found = searchable.findAllFiles(levels.toFile(), regex);
+
+		assertEquals(filesIn(levels, expectedPaths), Set.copyOf(found));
+		assertEquals(expectedPaths.size(), found.size(), "nothing is found twice");
 	}
 
 	@ParameterizedTest(name = "{0}")
