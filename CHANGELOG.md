@@ -66,6 +66,10 @@ FIXED:
   `Files.write` do (#107)
 - `ReadFileExtensions.readLinesInList` with `trim = true` trims the lines, in all four overloads with the flag; it
   called `line.trim()` and dropped the result (#106)
+- `DirectoryStructureFactory.newDirectoryStructure` creates each path with its missing parents, so
+  `newDirectoryStructure(dir, "src/main/java")` creates `src/main/java` instead of nothing; a path that cannot be
+  created throws a `RuntimeException` instead of coming back as a `File` for a directory that does not exist
+  (#110)
 
 
 Version 20.0
