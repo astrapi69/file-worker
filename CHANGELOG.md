@@ -20,6 +20,13 @@ CHANGED:
 - `MergeWithTemplateTest` and `NewMergeWithTemplateTest` call `run` instead of `main`, which ended the test JVM
   with `System.exit` on a usage error, so a mutant could kill the test process (#99)
 - dependencies: silly-io 5.0 (#98), jsoup 1.24.1, Spotless 8.11.0
+- mutation testing with PIT 1.30.1 (`./gradlew pitest`, `gradle/mutation-testing.gradle`): the tests detect 985 of
+  the 1202 mutants, 82%, and the CI build fails below 80% (`mutationThreshold` in `build.gradle`; PIT rounds the
+  score half up to a whole percent before it compares). The README's mutation score badge shows the score of
+  `develop`, which CI publishes on the `gh-pages` branch from each push to it (#99)
+- the test runtime class path no longer holds this project's own jar: zip4j-extension depends on an older
+  file-worker, which Gradle resolved to this project, so `test` needed `mustRunAfter(jar)`, and so would `pitest`.
+  The workaround is gone with its cause (#99)
 
 Version 20.0
 -------------

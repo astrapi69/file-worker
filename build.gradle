@@ -13,6 +13,7 @@ plugins {
     id 'maven-publish'
     id 'signing'
     alias(libs.plugins.gradle.versions.plugin)
+    alias(libs.plugins.pitest.gradle.plugin)
     alias(libs.plugins.spotless.plugin.gradle)
     alias(libs.plugins.version.catalog.update)
 }
@@ -23,5 +24,15 @@ description = "$rootProject.name"
 
 // import gradle files
 apply from: "gradle/apply-gradle-files.gradle"
+
+// Mutation-score floor the CI build fails below: .github/workflows/gradle.yml runs `./gradlew pitest`
+// after the build; PIT rounds the score half up to a whole percent before it compares. Measured 82 %
+// (985 of 1202 mutants detected) on 2026-11-04, once the tests no longer wrote into the source tree
+// (#99). The floor keeps two points below it, as silly-io does; the survivors are the work of the next
+// steps of #99, and the floor rises with them. Kept here, not in gradle/mutation-testing.gradle, so
+// that the floor sits in the file a reader looks at.
+pitest {
+    mutationThreshold = 80
+}
 
 apply from: "gradle/test-results-complete.gradle"
