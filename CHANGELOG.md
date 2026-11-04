@@ -32,6 +32,8 @@ CHANGED:
   `hashCode` arithmetic. Line coverage 98.8%, branch coverage 93.5% (#99)
 - `SearchableTest`, `FileContentInfoTest` and `FileInfoTest` write into a `@TempDir`, no longer into
   `java.io.tmpdir` or `/tmp/foo/bar` (#99, #119)
+- the coverage floor rises to what the tests reach: the build fails below 98% of the lines or 93% of the
+  branches, up from 90% and 85% (#99)
 - dependencies: silly-io 5.0 (#98), jsoup 1.24.1, Spotless 8.11.0
 - mutation testing with PIT 1.30.1 (`./gradlew pitest`, `gradle/mutation-testing.gradle`): the tests detect 985 of
   the 1202 mutants, 82%, and the CI build fails below 80% (`mutationThreshold` in `build.gradle`; PIT rounds the
