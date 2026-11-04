@@ -7,3 +7,4 @@ gradle/repositories.gradle
 gradle/testing.gradle
 gradle/version-catalog-update.gradle
 gradle/tagging.gradle
+gradle/mutation-testing.gradle
