@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
@@ -39,9 +40,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -385,31 +391,206 @@ public class FileContentInfoTest
 		assertNotEquals(fileContentInfo.hashCode(), other.hashCode());
 	}
 
+	static Stream<Arguments> contentsAndHowToStringNamesThem()
+	{
+		return Stream.of(argumentSet("two bytes", new byte[] { 1, 2 }, "byte[2]"),
+			argumentSet("no bytes", new byte[0], "byte[0]"),
+			argumentSet("no content", null, "null"));
+	}
+
 	/**
 	 * Test method for {@link FileContentInfo#toString()}
+	 *
+	 * @param content
+	 *            the content of the entry
+	 * @param expectedContent
+	 *            how the string representation names the content
 	 */
-	@Test
-	public void toString_namesChecksumAndContent()
+	@ParameterizedTest
+	@MethodSource("contentsAndHowToStringNamesThem")
+	public void toString_namesNamePathDirectoryChecksumAndTheLengthOfTheContent(byte[] content,
+		String expectedContent)
 	{
-		FileContentInfo fileContentInfo = new FileContentInfo(MD5_OF_CONTENT, new byte[] { 1, 2 });
+		FileContentInfo fileContentInfo = FileContentInfo.builder().name("data.txt")
+			.path("/some/path").directory(true).checksum(MD5_OF_CONTENT).content(content).build();
 
-		assertEquals("FileContentInfo{checksum='" + MD5_OF_CONTENT + "', content=[1, 2]}",
+		assertEquals(
+			"FileContentInfo{name='data.txt', path='/some/path', directory=true, checksum='"
+				+ MD5_OF_CONTENT + "', content=" + expectedContent + "}",
 			fileContentInfo.toString());
 	}
 
 	/**
 	 * Test method for {@link FileContentInfo.FileContentInfoBuilder#toString()}
+	 *
+	 * @param content
+	 *            the content set on the builder
+	 * @param expectedContent
+	 *            how the string representation names the content
 	 */
-	@Test
-	public void builderToString_namesTheValuesSetSoFar()
+	@ParameterizedTest
+	@MethodSource("contentsAndHowToStringNamesThem")
+	public void builderToString_namesTheValuesSetSoFarAndTheLengthOfTheContent(byte[] content,
+		String expectedContent)
 	{
 		FileContentInfo.FileContentInfoBuilder<?, ?> builder = FileContentInfo.builder()
-			.name("data.txt").path("/some/path").checksum(MD5_OF_CONTENT)
-			.content(new byte[] { 1, 2 });
+			.name("data.txt").path("/some/path").checksum(MD5_OF_CONTENT).content(content);
 
 		assertEquals("FileContentInfo.FileContentInfoBuilder(super=FileInfoBuilder{"
 			+ "name='data.txt', path='/some/path', directory=false}, checksum='" + MD5_OF_CONTENT
-			+ "', content=[1, 2])", builder.toString());
+			+ "', content=" + expectedContent + ")", builder.toString());
+	}
+
+	/** A content whose bytes no string representation may carry */
+	private static final byte[] SENTINEL = "SENTINEL-CONTENT-4711".getBytes(StandardCharsets.UTF_8);
+
+	static Stream<Arguments> stringRepresentationsOfAnEntryWithTheSentinelAsContent()
+	{
+		Supplier<FileContentInfo.FileContentInfoBuilder<?, ?>> builder = () -> FileContentInfo
+			.builder().name("data.txt").path("/some/path").checksum(MD5_OF_CONTENT)
+			.content(SENTINEL);
+		return Stream.of(
+			argumentSet("the object", (Supplier<String>)() -> builder.get().build().toString()),
+			argumentSet("the builder", (Supplier<String>)() -> builder.get().toString()));
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#toString()} and
+	 * {@link FileContentInfo.FileContentInfoBuilder#toString()}: they name name, path, directory
+	 * and checksum and the length of the content, not its bytes (#114)
+	 *
+	 * @param stringRepresentation
+	 *            gives the string representation to check
+	 */
+	@ParameterizedTest
+	@MethodSource("stringRepresentationsOfAnEntryWithTheSentinelAsContent")
+	public void toString_namesTheLengthOfTheContentButNotItsBytes(
+		Supplier<String> stringRepresentation)
+	{
+		String toString = stringRepresentation.get();
+
+		assertFalse(toString.contains(Arrays.toString(SENTINEL)), toString);
+		assertFalse(toString.contains(new String(SENTINEL, StandardCharsets.UTF_8)), toString);
+		assertTrue(toString.contains("name='data.txt'"), toString);
+		assertTrue(toString.contains("path='/some/path'"), toString);
+		assertTrue(toString.contains("directory=false"), toString);
+		assertTrue(toString.contains("checksum='" + MD5_OF_CONTENT + "'"), toString);
+		assertTrue(toString.contains("content=byte[" + SENTINEL.length + "]"), toString);
+	}
+
+	/**
+	 * Asserts that the given entry describes the given file as a file that is not a directory and
+	 * has neither checksum nor content
+	 */
+	private void assertNotADirectoryWithoutChecksumAndContent(File file,
+		FileContentInfo fileContentInfo)
+	{
+		assertEquals(file.getName(), fileContentInfo.getName());
+		assertFalse(fileContentInfo.isDirectory());
+		assertNull(fileContentInfo.getChecksum());
+		assertNull(fileContentInfo.getContent());
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#toFileContentInfo(File)}: a path that does not exist
+	 * is not described as a directory (#114)
+	 */
+	@Test
+	public void toFileContentInfo_ofAMissingPath_isNotADirectory()
+	{
+		File missing = tempDir.resolve("missing.txt").toFile();
+
+		FileContentInfo fileContentInfo = FileContentInfo.toFileContentInfo(missing);
+
+		assertNotADirectoryWithoutChecksumAndContent(missing, fileContentInfo);
+		assertEquals(pathOfTempDir(), fileContentInfo.getPath());
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#toFileContentInfo(File)}: a symbolic link to a path
+	 * that does not exist is not described as a directory (#114)
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	@DisabledOnOs(OS.WINDOWS)
+	public void toFileContentInfo_ofADanglingSymbolicLink_isNotADirectory() throws IOException
+	{
+		File link = Files
+			.createSymbolicLink(tempDir.resolve("link"), tempDir.resolve("missing-target"))
+			.toFile();
+
+		FileContentInfo fileContentInfo = FileContentInfo.toFileContentInfo(link);
+
+		assertNotADirectoryWithoutChecksumAndContent(link, fileContentInfo);
+		assertEquals(pathOfTempDir(), fileContentInfo.getPath());
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#toFileContentInfo(File)}: a device that exists but is
+	 * neither a regular file nor a directory is not described as a directory (#114)
+	 */
+	@Test
+	@EnabledOnOs({ OS.LINUX, OS.MAC })
+	public void toFileContentInfo_ofADevice_isNotADirectory()
+	{
+		File device = new File("/dev/null");
+
+		FileContentInfo fileContentInfo = FileContentInfo.toFileContentInfo(device);
+
+		assertNotADirectoryWithoutChecksumAndContent(device, fileContentInfo);
+	}
+
+	static Stream<Arguments> namesOfAFileWithoutContent()
+	{
+		return Stream.of(argumentSet("in an existing directory", "data.txt"),
+			argumentSet("in a missing directory", "missing" + File.separator + "data.txt"));
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#toFile(FileContentInfo)}: an entry that is not a
+	 * directory and has no content is refused before anything is created (#114)
+	 *
+	 * @param relativeName
+	 *            the name of the file, relative to the temporary directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest
+	@MethodSource("namesOfAFileWithoutContent")
+	public void toFile_ofAFileWithoutContent_throwsAndCreatesNothing(String relativeName)
+		throws IOException
+	{
+		File file = tempDir.resolve(relativeName).toFile();
+		FileContentInfo fileContentInfo = FileContentInfo.builder()
+			.path(file.getParentFile().getAbsolutePath()).name(file.getName()).build();
+
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> FileContentInfo.toFile(fileContentInfo));
+
+		assertTrue(exception.getMessage().contains(file.getPath()), exception.getMessage());
+		assertFalse(file.exists());
+		try (Stream<Path> entries = Files.list(tempDir))
+		{
+			assertEquals(0, entries.count());
+		}
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#toFile(FileContentInfo)}: a directory entry needs no
+	 * content
+	 */
+	@Test
+	public void toFile_ofADirectoryWithoutContent_createsNothingAndDoesNotThrow()
+	{
+		FileContentInfo fileContentInfo = FileContentInfo.builder()
+			.path(tempDir.toFile().getAbsolutePath()).name("folder").directory(true).build();
+
+		File file = FileContentInfo.toFile(fileContentInfo);
+
+		assertEquals(tempDir.resolve("folder").toFile(), file);
+		assertFalse(file.exists());
 	}
 
 }
