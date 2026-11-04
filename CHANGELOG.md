@@ -27,6 +27,11 @@ CHANGED:
 - the test runtime class path no longer holds this project's own jar: zip4j-extension depends on an older
   file-worker, which Gradle resolved to this project, so `test` needed `mustRunAfter(jar)`, and so would `pitest`.
   The workaround is gone with its cause (#99)
+- the PIT plugin no longer adds `junit-platform-launcher` itself (`addJUnitPlatformLauncher = false`; it is
+  declared in `testRuntimeOnly`). To find its version the plugin resolved a copy of `testImplementation` without
+  the constraints and the exclusion of `gradle/dependencies.gradle`, and the dependency submission reported what
+  that copy held: jackson 2.16.0-rc1 and an old file-worker with commons-io 2.11.0, commons-lang3 3.12.0 and
+  commons-beanutils 1.9.4, 18 Dependabot alerts for versions no class path of the build uses (#103)
 
 Version 20.0
 -------------
