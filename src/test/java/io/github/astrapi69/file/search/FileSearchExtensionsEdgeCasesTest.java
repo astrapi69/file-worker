@@ -126,6 +126,26 @@ public class FileSearchExtensionsEdgeCasesTest
 			Arguments.of("a regular file has no matches", "notes.txt", ".*", Set.of()));
 	}
 
+	/**
+	 * The searches of the tree {@code top.txt}, {@code sub/middle.txt} and
+	 * {@code sub/deeper/bottom.txt}, with the paths, relative to the searched directory, of the
+	 * files each one finds (file-worker#111)
+	 */
+	static Stream<Arguments> recursionCases()
+	{
+		return Stream.of(
+			Arguments.of("every level is searched", ".*\\.txt",
+				Set.of("top.txt", "sub/middle.txt", "sub/deeper/bottom.txt")),
+			Arguments.of("a match two levels down is found", "bottom\\.txt",
+				Set.of("sub/deeper/bottom.txt")),
+			Arguments.of("directories are searched, not returned", ".*",
+				Set.of("top.txt", "sub/middle.txt", "sub/deeper/bottom.txt")),
+			Arguments.of("a pattern that matches only directory names finds nothing", "sub|deeper",
+				Set.of()),
+			Arguments.of("the pattern is matched against the name, not the path",
+				"sub/middle\\.txt", Set.of()));
+	}
+
 	static Stream<Arguments> wildcardCases()
 	{
 		return Stream.of(
@@ -280,6 +300,21 @@ public class FileSearchExtensionsEdgeCasesTest
 			Arguments.of("one byte more than a megabyte", megabyte + 1, 1024L, 1L));
 	}
 
+	private static Path createLevels(Path directory) throws IOException
+	{
+		Path deeper = Files.createDirectories(directory.resolve("sub").resolve("deeper"));
+		Files.writeString(directory.resolve("top.txt"), "top");
+		Files.writeString(directory.resolve("sub").resolve("middle.txt"), "middle");
+		Files.writeString(deeper.resolve("bottom.txt"), "bottom");
+		return directory;
+	}
+
+	private static Set<File> filesIn(Path directory, Set<String> relativePaths)
+	{
+		return relativePaths.stream().map(directory::resolve).map(Path::toFile)
+			.collect(Collectors.toSet());
+	}
+
 	private static Set<String> namesOf(Collection<File> files)
 	{
 		return files.stream().map(File::getName).collect(Collectors.toSet());
@@ -395,6 +430,19 @@ public class FileSearchExtensionsEdgeCasesTest
 
 		assertFoundExactly(expectedNames, found);
 		assertTrue(found.stream().allMatch(File::isAbsolute), "absolute files: " + found);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("recursionCases")
+	void findAllFiles_searchesEverySubdirectory(String displayName, String regex,
+		Set<String> expectedPaths) throws IOException
+	{
+		Path levels = createLevels(tempDir.resolve("levels"));
+
+		List<File> found = FileSearchExtensions.findAllFiles(levels.toFile(), regex);
+
+		assertEquals(filesIn(levels, expectedPaths), Set.copyOf(found));
+		assertEquals(expectedPaths.size(), found.size(), "nothing is found twice");
 	}
 
 	@ParameterizedTest(name = "{0}")
