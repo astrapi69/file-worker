@@ -64,6 +64,8 @@ FIXED:
   the methods no longer write through a `PrintWriter`, which swallowed it. `Storable.toFile(File, Collection)` and
   `toFile(File, Collection, Charset)` end the last line with the line separator too, as `StoreFileExtensions` and
   `Files.write` do (#107)
+- `ReadFileExtensions.readLinesInList` with `trim = true` trims the lines, in all four overloads with the flag; it
+  called `line.trim()` and dropped the result (#106)
 
 
 Version 20.0
