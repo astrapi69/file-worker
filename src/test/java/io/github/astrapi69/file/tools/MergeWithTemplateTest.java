@@ -26,13 +26,19 @@ package io.github.astrapi69.file.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.FileTime;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Uses JUnit 5 (`@Test`, `@TempDir`). Invokes `MergeWithTemplate.run(args, configFile)` with
@@ -71,6 +77,37 @@ class MergeWithTemplateTest
 			+ tmp.resolve("configDstBase").toString().replace("\\", "/") + "\" }";
 		write(configFile, json);
 		return configFile;
+	}
+
+	/**
+	 * Writes a config file into the given temporary directory that names the given default files
+	 * and, like {@link #config(Path)}, no default directories.
+	 */
+	private static Path configWithFiles(Path tmp, String... files) throws IOException
+	{
+		Path configFile = tmp.resolve("config/merge_defaults.json");
+		write(configFile, "{ \"default_files\": [\"" + String.join("\", \"", files) + "\"] }");
+		return configFile;
+	}
+
+	/**
+	 * Runs the given action and returns what it printed to the standard output, which is the report
+	 * of the command line.
+	 */
+	private static String stdoutOf(Executable action) throws Throwable
+	{
+		PrintStream original = System.out;
+		ByteArrayOutputStream captured = new ByteArrayOutputStream();
+		try (PrintStream stdout = new PrintStream(captured, true, StandardCharsets.UTF_8))
+		{
+			System.setOut(stdout);
+			action.execute();
+		}
+		finally
+		{
+			System.setOut(original);
+		}
+		return captured.toString(StandardCharsets.UTF_8);
 	}
 
 	@Test
@@ -187,5 +224,216 @@ class MergeWithTemplateTest
 			tmp.resolve("no-config.json"), work);
 
 		assertEquals("A", read(dstBase.resolve("scripts/a.txt")));
+	}
+
+	@Test
+	void copiesTheDefaultFiles_overwritingAndKeepingTheirModificationTime(@TempDir Path tmp)
+		throws Throwable
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		write(srcBase.resolve("scripts/tool.sh"), "S");
+		write(srcBase.resolve("a.txt"), "A");
+		Files.setLastModifiedTime(srcBase.resolve("a.txt"), FileTime.fromMillis(2_000L));
+		write(srcBase.resolve("sub/b.txt"), "B");
+		write(dstBase.resolve("a.txt"), "OLD");
+
+		String report = stdoutOf(() -> MergeWithTemplate.run(
+			new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts" },
+			configWithFiles(tmp, "a.txt", "sub/b.txt", "missing.txt"), tmp.resolve("work")));
+
+		assertEquals("A", read(dstBase.resolve("a.txt")));
+		assertEquals(2_000L, Files.getLastModifiedTime(dstBase.resolve("a.txt")).toMillis());
+		assertEquals("B", read(dstBase.resolve("sub/b.txt")));
+		assertFalse(Files.exists(dstBase.resolve("missing.txt")));
+		assertTrue(
+			report.contains(
+				"Files to process: [a.txt, sub/b.txt, missing.txt]" + System.lineSeparator()),
+			report);
+		assertTrue(report.contains("Copied file " + srcBase.resolve("a.txt").toAbsolutePath()
+			+ " -> " + dstBase.resolve("a.txt").toAbsolutePath()), report);
+		assertTrue(report.contains("File not found in template (skip): "
+			+ srcBase.resolve("missing.txt").toAbsolutePath()), report);
+		assertFalse(
+			report.contains("Copied file " + srcBase.resolve("missing.txt").toAbsolutePath()),
+			report);
+	}
+
+	@Test
+	void dryRunDoesNotCopyTheDefaultFiles_butReportsThem(@TempDir Path tmp) throws Throwable
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		write(srcBase.resolve("scripts/tool.sh"), "S");
+		write(srcBase.resolve("a.txt"), "A");
+
+		String report = stdoutOf(() -> MergeWithTemplate.run(
+			new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts", "--dry-run" },
+			configWithFiles(tmp, "a.txt"), tmp.resolve("work")));
+
+		assertFalse(Files.exists(dstBase.resolve("a.txt")));
+		assertTrue(report.contains("Files to process: [a.txt] (dry-run)"), report);
+		assertTrue(report.contains("DRY-RUN copy file " + srcBase.resolve("a.txt").toAbsolutePath()
+			+ " -> " + dstBase.resolve("a.txt").toAbsolutePath()), report);
+		assertFalse(report.contains("Copied file"), report);
+	}
+
+	@Test
+	void reportsNoFilesToProcess_whenTheConfigNamesNone(@TempDir Path tmp) throws Throwable
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		write(srcBase.resolve("scripts/tool.sh"), "S");
+
+		String report = stdoutOf(
+			() -> MergeWithTemplate
+				.run(
+					new String[] { "--src_base", srcBase.toString(), "--dst_base",
+							dstBase.toString(), "--dirs", "scripts" },
+					config(tmp), tmp.resolve("work")));
+
+		assertFalse(report.contains("Files to process"), report);
+	}
+
+	@ParameterizedTest(name = "dry-run: {0}, destination exists: {1}")
+	@CsvSource({ "false, false, Copying, (create), Merging",
+			"false, true, Merging, (latest-modified wins), Copying",
+			"true, false, DRY-RUN copy, (create), DRY-RUN merge",
+			"true, true, DRY-RUN merge, (latest-modified wins), DRY-RUN copy" })
+	void reportsTheBasesTheDirectoriesAndWhatItDoesWithEach(boolean dryRun,
+		boolean destinationExists, String action, String suffix, String otherAction,
+		@TempDir Path tmp) throws Throwable
+	{
+		Path base = tmp.toRealPath();
+		Path srcBase = base.resolve("srcBase");
+		Path dstBase = base.resolve("dstBase");
+		write(srcBase.resolve("scripts/sub/a.txt"), "A");
+		if (destinationExists)
+		{
+			write(dstBase.resolve("scripts/keep.txt"), "K");
+		}
+		String[] args = dryRun
+			? new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts", "--dry-run" }
+			: new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts" };
+
+		String report = stdoutOf(
+			() -> MergeWithTemplate.run(args, config(base), base.resolve("work")));
+
+		Path srcDir = srcBase.resolve("scripts");
+		Path dstDir = dstBase.resolve("scripts");
+		assertTrue(report.contains("Source base: " + srcBase + System.lineSeparator()), report);
+		assertTrue(report.contains("Destination base: " + dstBase + System.lineSeparator()),
+			report);
+		assertTrue(report.contains(
+			"Dirs to process: [scripts]" + (dryRun ? " (dry-run)" : "") + System.lineSeparator()),
+			report);
+		assertTrue(report.contains(action + " " + srcDir + " -> " + dstDir + " " + suffix), report);
+		assertFalse(report.contains(otherAction + " "), report);
+		String previewLine = srcDir.resolve("sub/a.txt") + "  ->  " + dstDir.resolve("sub/a.txt");
+		assertEquals(dryRun, report.contains(previewLine), report);
+		assertTrue(report.endsWith("Done." + System.lineSeparator()), report);
+		assertEquals(!dryRun, Files.exists(dstDir.resolve("sub/a.txt")));
+	}
+
+	@ParameterizedTest(name = "the source entry is a file: {0}")
+	@ValueSource(booleans = { false, true })
+	void skipsASourceThatIsNotADirectory_andReportsIt_andProcessesTheNext(
+		boolean sourceEntryIsAFile, @TempDir Path tmp) throws Throwable
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		write(srcBase.resolve("scripts/a.txt"), "A");
+		if (sourceEntryIsAFile)
+		{
+			write(srcBase.resolve("docs"), "not a directory");
+		}
+
+		String report = stdoutOf(
+			() -> MergeWithTemplate
+				.run(
+					new String[] { "--src_base", srcBase.toString(), "--dst_base",
+							dstBase.toString(), "--dirs", "docs", "scripts" },
+					config(tmp), tmp.resolve("work")));
+
+		assertFalse(Files.exists(dstBase.resolve("docs")));
+		assertEquals("A", read(dstBase.resolve("scripts/a.txt")));
+		assertTrue(
+			report.contains(
+				"Not a directory (skip): " + srcBase.resolve("docs").toFile().getAbsolutePath()),
+			report);
+		assertFalse(
+			report.contains(
+				"Not a directory (skip): " + srcBase.resolve("scripts").toFile().getAbsolutePath()),
+			report);
+	}
+
+	@Test
+	void ignoresAConfigThatCannotBeRead_andReportsIt(@TempDir Path tmp) throws Throwable
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		write(srcBase.resolve("scripts/a.txt"), "A");
+		write(srcBase.resolve("a.txt"), "A");
+		Path configFile = tmp.resolve("config/merge_defaults.json");
+		// the default_files entry in front of bytes that are no UTF-8
+		Files.createDirectories(configFile.getParent());
+		byte[] json = "{ \"default_files\": [\"a.txt\"] }".getBytes(StandardCharsets.UTF_8);
+		byte[] content = new byte[json.length + 2];
+		System.arraycopy(json, 0, content, 0, json.length);
+		content[json.length] = (byte)0xFF;
+		content[json.length + 1] = (byte)0xFE;
+		Files.write(configFile, content);
+
+		String report = stdoutOf(
+			() -> MergeWithTemplate
+				.run(
+					new String[] { "--src_base", srcBase.toString(), "--dst_base",
+							dstBase.toString(), "--dirs", "scripts" },
+					configFile, tmp.resolve("work")));
+
+		assertEquals("A", read(dstBase.resolve("scripts/a.txt")));
+		assertFalse(Files.exists(dstBase.resolve("a.txt")), "no default from the unread config");
+		assertTrue(report.contains("Could not load defaults from " + configFile + ": "), report);
+	}
+
+	@Test
+	void reportsNothingAboutTheDefaults_whenTheConfigIsRead(@TempDir Path tmp) throws Throwable
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		write(srcBase.resolve("scripts/a.txt"), "A");
+
+		String report = stdoutOf(
+			() -> MergeWithTemplate
+				.run(
+					new String[] { "--src_base", srcBase.toString(), "--dst_base",
+							dstBase.toString(), "--dirs", "scripts" },
+					config(tmp), tmp.resolve("work")));
+
+		assertFalse(report.contains("Could not load defaults"), report);
+	}
+
+	@Test
+	void mergeKeepsTheModificationTimeOfTheSourceFile(@TempDir Path tmp) throws Exception
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		write(dstBase.resolve("scripts/keep.txt"), "K");
+		Path srcFile = srcBase.resolve("scripts/x.txt");
+		write(srcFile, "NEW");
+		Files.setLastModifiedTime(srcFile, FileTime.fromMillis(2_000L));
+
+		MergeWithTemplate.run(new String[] { "--src_base", srcBase.toString(), "--dst_base",
+				dstBase.toString(), "--dirs", "scripts" },
+			config(tmp), tmp.resolve("work"));
+
+		assertEquals("NEW", read(dstBase.resolve("scripts/x.txt")));
+		assertEquals(2_000L,
+			Files.getLastModifiedTime(dstBase.resolve("scripts/x.txt")).toMillis());
+		assertEquals("K", read(dstBase.resolve("scripts/keep.txt")));
 	}
 }
