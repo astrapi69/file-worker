@@ -54,15 +54,19 @@ public interface Createable
 	}
 
 	/**
-	 * Creates new directories from the given path and optional file attributes
+	 * Creates new directories from the given path and optional file attributes, with every missing
+	 * parent directory. Delegates to
+	 * {@link DirectoryFactory#newDirectories(Path, FileAttribute...)}
 	 *
 	 * @param dir
 	 *            the directory to create
 	 * @param attrs
 	 *            optional file attributes to set atomically when creating the directory
-	 * @return true if the directories were created; false otherwise
+	 * @return true if the directory was created; false if it already existed as a directory before
+	 *         the call
 	 * @throws IOException
-	 *             Signals an I/O exception occurred
+	 *             Signals an I/O exception occurred; a directory that cannot be created throws, it
+	 *             does not return false
 	 */
 	default boolean newDirectories(Path dir, FileAttribute<?>... attrs) throws IOException
 	{
@@ -70,13 +74,18 @@ public interface Createable
 	}
 
 	/**
-	 * Creates a new directory from the given path and optional file attributes
+	 * Creates a new directory from the given path and optional file attributes; the parent
+	 * directory must exist. Delegates to
+	 * {@link DirectoryFactory#newDirectory(Path, FileAttribute...)}
 	 *
 	 * @param dir
 	 *            the directory to create
 	 * @param attrs
 	 *            optional file attributes to set atomically when creating the directory
-	 * @return true if the directory was created; false otherwise
+	 * @return true, the directory was created; a directory that cannot be created throws, it does
+	 *         not return false
+	 * @throws java.nio.file.FileAlreadyExistsException
+	 *             if the path already exists, as a directory or as a file
 	 * @throws IOException
 	 *             Signals an I/O exception occurred
 	 */

@@ -769,6 +769,86 @@ public class RenameFileExtensionsTest extends FileTestCase
 		assertFalse(file.exists());
 	}
 
+	/**
+	 * A move with copy and delete of {@link RenameFileExtensions}, as the tests call it
+	 */
+	@FunctionalInterface
+	interface MoveWithDelete
+	{
+		boolean move(File source, File destination) throws Exception;
+	}
+
+	static Stream<Arguments> movesWithDelete()
+	{
+		return Stream.of(
+			argumentSet("renameFile with delete",
+				(MoveWithDelete)(source, destination) -> RenameFileExtensions.renameFile(source,
+					destination, true)),
+			argumentSet("moveFile", (MoveWithDelete)RenameFileExtensions::moveFile),
+			argumentSet("forceToMoveFile", (MoveWithDelete)RenameFileExtensions::forceToMoveFile));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFile(File, File, boolean)},
+	 * {@link RenameFileExtensions#moveFile(File, File)} and
+	 * {@link RenameFileExtensions#forceToMoveFile(File, File)}: from a directory that cannot be
+	 * written the rename is refused and the copy is made, the delete then throws instead of a false
+	 * result, and the file is in both places (file-worker#117)
+	 *
+	 * @param move
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("movesWithDelete")
+	public void moveWithDelete_throwsIOException_andLeavesTheFileInBothPlaces_whenTheSourceDirectoryCannotBeWritten(
+		MoveWithDelete move) throws Exception
+	{
+		Path locked = Files.createDirectory(tempDir.resolve("locked"));
+		Path source = Files.writeString(locked.resolve("one.txt"), "first");
+		Path destination = Files.createDirectory(tempDir.resolve("target")).resolve("one.txt");
+		try
+		{
+			assumeTrue(locked.toFile().setWritable(false), "the file system takes the permission");
+			assumeFalse(Files.isWritable(locked), "the test runs without override rights");
+
+			assertThrows(IOException.class, () -> move.move(source.toFile(), destination.toFile()));
+		}
+		finally
+		{
+			locked.toFile().setWritable(true);
+		}
+
+		assertEquals("first", Files.readString(source));
+		assertEquals("first", Files.readString(destination));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#renameFile(File, File, boolean)},
+	 * {@link RenameFileExtensions#moveFile(File, File)} and
+	 * {@link RenameFileExtensions#forceToMoveFile(File, File)}: a move that works returns true and
+	 * leaves the file only at its new place
+	 *
+	 * @param move
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("movesWithDelete")
+	public void moveWithDelete_returnsTrue_andLeavesTheFileOnlyAtItsNewPlace(MoveWithDelete move)
+		throws Exception
+	{
+		Path source = Files.writeString(tempDir.resolve("one.txt"), "first");
+		Path destination = Files.createDirectory(tempDir.resolve("target")).resolve("one.txt");
+
+		assertTrue(move.move(source.toFile(), destination.toFile()));
+
+		assertFalse(Files.exists(source));
+		assertEquals("first", Files.readString(destination));
+	}
+
 	static Stream<Arguments> fileNamesWithTheirNewNames()
 	{
 		return Stream.of(

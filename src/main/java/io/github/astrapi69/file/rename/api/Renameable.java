@@ -121,10 +121,13 @@ public interface Renameable
 	 * @param newSuffix
 	 *            the new suffix
 	 * @param delete
-	 *            if true, deletes the original file after renaming
-	 * @return true if the file was renamed successfully
+	 *            if true, a file whose rename the operating system refuses is copied to its new
+	 *            name and then deleted; if false, it is left as it is
+	 * @return true if the file was renamed; false only if delete is false and the rename was
+	 *         refused. With delete the result is always true: see
+	 *         {@link #renameFile(File, File, boolean)}
 	 * @throws IOException
-	 *             if an I/O exception occurs
+	 *             if an I/O exception occurs, with delete for a copy or a delete that fails
 	 * @throws FileDoesNotExistException
 	 *             if the file does not exist
 	 * @throws FileIsADirectoryException
@@ -151,10 +154,18 @@ public interface Renameable
 	 * @param newFileName
 	 *            the new filename
 	 * @param delete
-	 *            if true, deletes the original file after renaming
-	 * @return true if the file was renamed successfully
+	 *            if true and the operating system refuses the rename, the file is copied to the new
+	 *            filename and the original is then deleted; if false, a refused rename leaves the
+	 *            file as it is
+	 * @return true if the file was renamed; false only if delete is false and the rename was
+	 *         refused. With delete the result is always true: a copy or a delete that fails throws,
+	 *         it does not return false. If the copy is made and the delete then throws, as it does
+	 *         in a directory that cannot be written, the file is in both places
 	 * @throws IOException
-	 *             if an I/O exception occurs
+	 *             if an I/O exception occurs, with delete for a copy or a delete that fails
+	 * @throws IllegalArgumentException
+	 *             with delete, if the copy is refused because the new filename is a directory, see
+	 *             {@link CopyFileExtensions#copyFile(File, File)}
 	 * @throws FileIsADirectoryException
 	 *             if the file is a directory
 	 */
@@ -219,9 +230,10 @@ public interface Renameable
 	 *            the source file
 	 * @param destinationFile
 	 *            the destination file
-	 * @return true if the file was moved successfully
+	 * @return true, the file was moved; a move that fails throws, it does not return false. See
+	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
-	 *             if an I/O exception occurs
+	 *             if an I/O exception occurs, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             if the source or destination is a directory
 	 */
@@ -242,9 +254,10 @@ public interface Renameable
 	 *            the source file
 	 * @param destFile
 	 *            the destination file, the new path of the source file
-	 * @return true if the file was moved successfully
+	 * @return true, the file was moved; a move that fails throws, it does not return false. See
+	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
-	 *             if an I/O exception occurs
+	 *             if an I/O exception occurs, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             not thrown by the default methods of this interface, a move of a file onto an
 	 *             existing directory is refused with an {@link IllegalArgumentException}
