@@ -68,6 +68,9 @@ CHANGED:
   `DirectoryFactory.newDirectoryQuietly(String)`, `FileFactory.newFile(String)` and `newFileQuietly(String)`
   describes the methods as they are (#118)
 
+- the mutation-score floor follows the fixes to 92%: PIT detects 1119 of 1185 mutants, 94%; the comment above the
+  floor in `build.gradle` says what decides the 66 left (#99)
+
 FIXED:
 
 - a write of `StoreFileExtensions.toFile` that fails throws the declared `IOException` instead of returning `true`:

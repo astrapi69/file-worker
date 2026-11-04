@@ -26,34 +26,27 @@ description = "$rootProject.name"
 apply from: "gradle/apply-gradle-files.gradle"
 
 // Mutation-score floor the CI build fails below: .github/workflows/gradle.yml runs `./gradlew pitest`
-// after the build; PIT rounds the score half up to a whole percent before it compares. Measured 93 %
-// (1117 of 1204 mutants detected) on 2026-11-04, after the tests the survivors of 82 % (985 of 1202)
-// showed to be missing (#99, step 3). The floor keeps two points below it, as silly-io does.
-// The 87 left, by what decides them:
-// - 29 boolean results that cannot be false: copy, write, move, create and delete return true or
-//   throw, so "replaced boolean return with true" changes nothing (#117, #107)
-// - 30 in the hashCode arithmetic and null checks of FileCompareResultBean, SearchFileAttributesBean,
+// after the build; PIT rounds the score half up to a whole percent before it compares. Measured 94 %
+// (1119 of 1185 mutants detected) on 2026-11-04, after the tests the survivors of 82 % showed to be
+// missing (#99, step 3: 1117 of 1204) and the fixes of the defects those tests found (#105 to #118),
+// which removed dead code and branches nothing could reach. The floor keeps two points below it, as
+// silly-io does. The 66 left, by what decides them:
+// - 24 boolean results that cannot be false: copy, write, move, create and delete return true or
+//   throw, so "replaced boolean return with true" changes nothing; they become void in 21.0 (#124)
+// - 30 in the hashCode arithmetic and null checks of SearchFileAttributesBean, FileCompareResultBean,
 //   FileInfo, FileContentResultBean and FileContentInfo, and 2 canEqual: equal objects keep equal
 //   hash codes whatever the arithmetic, and only a test that pins hash values would see them
-// - 5 negated conditionals in FileCompareResultBean.equals that nothing reaches: its getters unbox
-//   the Boolean fields, so a null field throws first (#115)
-// - 7 in code no test reaches: the CRC32 fallback of CompareFileExtensions.compare (3), which runs
-//   only without a SHA-512 provider; MergeWithTemplate.quote and the non-List branch of its castList;
-//   the sort branch of MergeFileExtensions.collectUnique; the always-false end of
-//   FileSearchExtensions.containsFileRecursive (#116, #118)
-// - 8 equivalent: empty instead of fresh lists and maps where only MergeWithTemplate itself reads
-//   them (castList, loadDefaults, jsonStringArray); "> 0" for "!= -1" in read loops whose buffer is
-//   never empty (CopyFileExtensions.copyText, ReadFileExtensions.fromFile); the leading-slash check
-//   of MergeWithTemplate.preview; the release of a lock whose channel closes (FileExtensions.isOpen);
-//   null for the ignored result of a lambda in FileContentInfo.toFile
-// - 1 in readLinesInList, whose trim flag does nothing (#106)
+// - 5 equivalent: empty instead of fresh results where only MergeWithTemplate itself reads them
+//   (loadDefaults, jsonStringArray); "> 0" for "!= -1" in read loops whose buffer is never empty
+//   (CopyFileExtensions.copyText, ReadFileExtensions.fromFile); null for the ignored result of a
+//   lambda in FileContentInfo.toFile
 // - 5 a test in the same JVM cannot reach: System.exit in MergeWithTemplate.main (2), run(String[])
 //   (only MergeWithTemplateMainTest calls it, and PIT leaves that class out), and the Windows root
 //   of SystemFileExtensions (2) on Linux
 // Kept here, not in gradle/mutation-testing.gradle, so that the floor sits in the file a reader
 // looks at.
 pitest {
-    mutationThreshold = 91
+    mutationThreshold = 92
 }
 
 apply from: "gradle/test-results-complete.gradle"
