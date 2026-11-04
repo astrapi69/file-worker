@@ -4,6 +4,23 @@
 Version 20.1-SNAPSHOT
 -------------
 
+ADDED:
+
+- `MergeWithTemplate.run(String[], Path, Path)`: the third argument is the source and destination base that neither
+  the arguments nor the defaults name, which `run(String[], Path)` takes from the current working directory, as
+  before (#99)
+
+CHANGED:
+
+- the tests write into temporary directories, no longer into `src/test/resources` or the project directory, and
+  change copies of the fixtures instead of the fixtures: `FileTestCase` keeps its directories in a JUnit `@TempDir`
+  with a copy of `src/test/resources`, and the classes that wrote there themselves do the same. A PIT run left
+  result files behind and shortened committed fixtures whenever a mutant made a test fail before its own cleanup
+  (#99)
+- `MergeWithTemplateTest` and `NewMergeWithTemplateTest` call `run` instead of `main`, which ended the test JVM
+  with `System.exit` on a usage error, so a mutant could kill the test process (#99)
+- dependencies: silly-io 5.0 (#98), jsoup 1.24.1, Spotless 8.11.0
+
 Version 20.0
 -------------
 
