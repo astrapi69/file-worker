@@ -127,6 +127,12 @@ public class MergeDirectoryExtensionsStrategyTest
 					true));
 	}
 
+	static Stream<Arguments> equallyNewDirectoryOrders()
+	{
+		return Stream.of(Arguments.of("first before second", List.of("first", "second"), "first"),
+			Arguments.of("second before first", List.of("second", "first"), "second"));
+	}
+
 	static Stream<Arguments> directoryOrders()
 	{
 		return Stream.of(Arguments.of("the newer directory first", List.of("newer", "older")),
@@ -169,6 +175,36 @@ public class MergeDirectoryExtensionsStrategyTest
 
 		assertSame(missingTarget, merged);
 		assertEquals("a", Files.readString(missingTarget.toPath().resolve("a.txt")));
+	}
+
+	@ParameterizedTest
+	@CsvSource({ "SOURCE_TO_TARGET", "TARGET_AS_MASTER" })
+	void mergeWithStrategy_createsTheTargetDirectory_whenThereIsNothingToCopy(
+		MergeStrategy strategy) throws IOException
+	{
+		File missingTarget = tempDir.resolve("not").resolve("yet").toFile();
+
+		File merged = MergeDirectoryExtensions.mergeAndGet(missingTarget, strategy,
+			source.toFile());
+
+		assertSame(missingTarget, merged);
+		assertTrue(missingTarget.isDirectory(), "the target directory is created");
+		assertEquals(Set.of(), relativeFilesOf(missingTarget.toPath()));
+	}
+
+	@ParameterizedTest
+	@CsvSource({ "SOURCE_TO_TARGET, true", "TARGET_AS_MASTER, false" })
+	void mergeWithStrategy_createsAnEmptySourceDirectoryInTheTarget(MergeStrategy strategy,
+		boolean sourceIsKept) throws IOException
+	{
+		Path emptyDirectory = Files.createDirectories(source.resolve("empty").resolve("deeper"));
+
+		MergeDirectoryExtensions.mergeAndGet(target.toFile(), strategy, source.toFile());
+
+		assertTrue(Files.isDirectory(target.resolve("empty").resolve("deeper")),
+			"the empty directory is created in the target");
+		assertEquals(sourceIsKept, Files.exists(emptyDirectory));
+		assertEquals(sourceIsKept, Files.exists(source.resolve("empty")));
 	}
 
 	@Test
@@ -516,5 +552,21 @@ public class MergeDirectoryExtensionsStrategyTest
 		assertEquals("new", Files.readString(target.resolve("config.txt")));
 		assertEquals("old data", Files.readString(target.resolve("sub").resolve("data.txt")),
 			"the newest file wins, not the newest directory");
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("equallyNewDirectoryOrders")
+	void mergeWithoutStrategy_takesTheFileOfTheDirectoryGivenFirst_whenBothAreEquallyNew(
+		String displayName, List<String> order, String expectedContent) throws IOException
+	{
+		write(tempDir.resolve("first").resolve("sub").resolve("config.txt"), "first", OLDER);
+		write(tempDir.resolve("second").resolve("sub").resolve("config.txt"), "second", OLDER);
+		File[] directories = order.stream().map(tempDir::resolve).map(Path::toFile)
+			.toArray(File[]::new);
+
+		MergeDirectoryExtensions.merge(target.toFile(), directories);
+
+		assertEquals(expectedContent, Files.readString(target.resolve("sub").resolve("config.txt")),
+			"an equally new file does not replace the one found first");
 	}
 }
