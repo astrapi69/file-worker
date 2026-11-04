@@ -24,7 +24,9 @@
  */
 package io.github.astrapi69.file.modify;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -34,6 +36,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.create.FileFactory;
@@ -49,6 +54,12 @@ public class DeleteLinesByIndexInFileTest
 {
 
 	/**
+	 * The temporary directory for the file this test modifies
+	 */
+	@TempDir
+	Path tempDir;
+
+	/**
 	 * Test method for {@link DeleteLinesByIndexInFile#apply(Integer, String)}
 	 *
 	 * @throws IOException
@@ -62,7 +73,7 @@ public class DeleteLinesByIndexInFileTest
 		File parent = PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources");
 
 		inputFile = FileFactory.newFile(parent, "test-csv-data.csv");
-		testFile = FileFactory.newFile(parent, "test-delete-lines-data.csv");
+		testFile = FileFactory.newFile(tempDir.toFile(), "test-delete-lines-data.csv");
 		CopyFileExtensions.copyFile(inputFile, testFile);
 
 		Path inputFilePath = testFile.toPath();
@@ -84,5 +95,37 @@ public class DeleteLinesByIndexInFileTest
 		assertTrue(content.contains(linesInList.get(3)));
 
 		DeleteFileExtensions.deleteFile(testFile);
+	}
+
+	/**
+	 * Test method for {@link DeleteLinesByIndexInFile#apply(Integer, String)} with an index to
+	 * delete: the line is left out, which the modifier signals by returning null
+	 *
+	 * @param lineIndex
+	 *            the index of the line
+	 */
+	@ParameterizedTest
+	@ValueSource(ints = { 1, 4 })
+	public void apply_returnsNull_forALineIndexToDelete(int lineIndex)
+	{
+		DeleteLinesByIndexInFile deleter = new DeleteLinesByIndexInFile(Arrays.asList(1, 4));
+
+		assertNull(deleter.apply(lineIndex, "line"));
+	}
+
+	/**
+	 * Test method for {@link DeleteLinesByIndexInFile#apply(Integer, String)} with an index that is
+	 * not to delete: the line is kept and ended with the line separator of the system
+	 *
+	 * @param lineIndex
+	 *            the index of the line
+	 */
+	@ParameterizedTest
+	@ValueSource(ints = { 0, 2, 3, 5 })
+	public void apply_returnsTheLineWithTheLineSeparator_forAnyOtherLineIndex(int lineIndex)
+	{
+		DeleteLinesByIndexInFile deleter = new DeleteLinesByIndexInFile(Arrays.asList(1, 4));
+
+		assertEquals("line" + System.lineSeparator(), deleter.apply(lineIndex, "line"));
 	}
 }

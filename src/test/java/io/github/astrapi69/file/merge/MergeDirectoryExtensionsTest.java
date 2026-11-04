@@ -31,11 +31,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.create.DirectoryStructureFactory;
@@ -44,7 +46,6 @@ import io.github.astrapi69.file.create.model.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.merge.strategy.MergeStrategy;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.file.write.StoreFileExtensions;
 
 /**
@@ -52,13 +53,24 @@ import io.github.astrapi69.file.write.StoreFileExtensions;
  */
 public class MergeDirectoryExtensionsTest
 {
+	/**
+	 * The temporary directory in which every test creates its files
+	 */
+	@TempDir
+	Path tempDir;
+
+	private File newTempDirectory(String name) throws IOException
+	{
+		return Files.createDirectory(tempDir.resolve(name)).toFile();
+	}
+
 	@Test
 	public void testMergeAndGet_WithTargetAsMasterStrategy()
 		throws IOException, InterruptedException
 	{
 		// Arrange
-		File targetDir = Files.createTempDirectory("target").toFile();
-		File sourceDir = Files.createTempDirectory("source").toFile();
+		File targetDir = newTempDirectory("target");
+		File sourceDir = newTempDirectory("source");
 
 		File sourceFile = new File(sourceDir, "config.txt");
 		StoreFileExtensions.toFile(sourceFile, "new config data");
@@ -86,9 +98,9 @@ public class MergeDirectoryExtensionsTest
 		throws IOException, InterruptedException
 	{
 		// Arrange
-		File targetDir = Files.createTempDirectory("target").toFile();
-		File dir1 = Files.createTempDirectory("dir1").toFile();
-		File dir2 = Files.createTempDirectory("dir2").toFile();
+		File targetDir = newTempDirectory("target");
+		File dir1 = newTempDirectory("dir1");
+		File dir2 = newTempDirectory("dir2");
 
 		File file1 = new File(dir1, "config.txt");
 		File file2 = new File(dir2, "config.txt");
@@ -116,9 +128,9 @@ public class MergeDirectoryExtensionsTest
 	public void testMerge_TwoDirectories_NoConflicts() throws IOException
 	{
 		// Setup
-		File targetDir = Files.createTempDirectory("target").toFile();
-		File dir1 = Files.createTempDirectory("dir1").toFile();
-		File dir2 = Files.createTempDirectory("dir2").toFile();
+		File targetDir = newTempDirectory("target");
+		File dir1 = newTempDirectory("dir1");
+		File dir2 = newTempDirectory("dir2");
 
 		File file1Dir1 = new File(dir1, "file1.txt");
 		FileUtils.writeStringToFile(file1Dir1, "content1", "UTF-8");
@@ -143,9 +155,9 @@ public class MergeDirectoryExtensionsTest
 	public void testMerge_TwoDirectories_WithConflicts() throws IOException, InterruptedException
 	{
 		// Setup
-		File targetDir = Files.createTempDirectory("target").toFile();
-		File dir1 = Files.createTempDirectory("dir1").toFile();
-		File dir2 = Files.createTempDirectory("dir2").toFile();
+		File targetDir = newTempDirectory("target");
+		File dir1 = newTempDirectory("dir1");
+		File dir2 = newTempDirectory("dir2");
 
 		File file1Dir1 = new File(dir1, "file.txt");
 		FileUtils.writeStringToFile(file1Dir1, "content1", "UTF-8");
@@ -168,7 +180,7 @@ public class MergeDirectoryExtensionsTest
 	public void testMerge_EmptyDirectoryArray() throws IOException
 	{
 		// Setup
-		File targetDir = Files.createTempDirectory("target").toFile();
+		File targetDir = newTempDirectory("target");
 
 		// Action
 		MergeDirectoryExtensions.merge(targetDir);
@@ -181,8 +193,8 @@ public class MergeDirectoryExtensionsTest
 	public void testMerge_Directories_RecursiveFiles() throws IOException
 	{
 		// Setup
-		File targetDir = Files.createTempDirectory("target").toFile();
-		File dir1 = Files.createTempDirectory("dir1").toFile();
+		File targetDir = newTempDirectory("target");
+		File dir1 = newTempDirectory("dir1");
 
 		File subDir1 = new File(dir1, "subdir");
 		subDir1.mkdir();
@@ -220,15 +232,13 @@ public class MergeDirectoryExtensionsTest
 		Collection<FileContentInfo> fileInfos;
 		String parentAbsolutePath;
 		// new scenario...
-		File parentLeftFile = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(),
-			"app");
+		File parentLeftFile = DirectoryFactory.newDirectory(tempDir.toFile(), "app");
 		parentAbsolutePath = parentLeftFile.getAbsolutePath();
 		fileInfos = DirectoryStructureTestData.newTestData(parentAbsolutePath);
 
 		leftSide = DirectoryStructureFactory.newDirectoryStructure(fileInfos);
 
-		File parentRightFile = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(),
-			"other");
+		File parentRightFile = DirectoryFactory.newDirectory(tempDir.toFile(), "other");
 		parentAbsolutePath = parentRightFile.getAbsolutePath();
 		fileInfos = DirectoryStructureTestData.newOtherTestData(parentAbsolutePath);
 		rightSide = DirectoryStructureFactory.newDirectoryStructure(fileInfos);

@@ -56,8 +56,6 @@ import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.create.model.FileInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.search.PathFinder;
-import io.github.astrapi69.file.system.SystemFileExtensions;
 
 /**
  * The unit test class for the class {@link FileFactory}
@@ -110,7 +108,7 @@ public class FileFactoryTest extends FileTestCase
 			File file;
 			// ...
 			// new scenario...
-			parentDirectory = SystemFileExtensions.getTempDir();
+			parentDirectory = tempDir.toFile();
 			filename = "foobar";
 			file = FileFactory.newFile(parentDirectory, filename);
 			FileFactory.newFile(file, "newFooBarDir");
@@ -131,7 +129,8 @@ public class FileFactoryTest extends FileTestCase
 		File newFile;
 		// new scenario...
 		newDirectoryName = "foobar";
-		newDirectory = new File(PathFinder.getSrcTestResourcesDir(), newDirectoryName);
+		// the copy of src/test/resources in the temporary directory of FileTestCase (#99)
+		newDirectory = new File(this.test, newDirectoryName);
 		assertFalse(newDirectory.exists());
 		newFile = FileFactory.newFile(newDirectory, "newFooBarFile");
 		assertTrue(newFile.exists());
@@ -155,7 +154,7 @@ public class FileFactoryTest extends FileTestCase
 		String filename;
 		File file;
 
-		parentDirectory = SystemFileExtensions.getTempDir();
+		parentDirectory = tempDir.toFile();
 		filename = "foo.txt";
 		file = FileFactory.newFile(parentDirectory, filename);
 
@@ -312,7 +311,7 @@ public class FileFactoryTest extends FileTestCase
 		String filename;
 		File file;
 
-		parentDirectory = SystemFileExtensions.getTempDir();
+		parentDirectory = tempDir.toFile();
 		parentDirectoryPath = parentDirectory.getAbsolutePath();
 		filename = "foo.txt";
 		file = FileFactory.newFile(parentDirectoryPath, filename);
@@ -393,9 +392,10 @@ public class FileFactoryTest extends FileTestCase
 		File file3;
 
 		files = new ArrayList<>();
-		file1 = new File("test1.file");
-		file2 = new File("test2.file");
-		file3 = new File("test3.file");
+		// in the temporary directory, not in the project directory (#99)
+		file1 = tempDir.resolve("test1.file").toFile();
+		file2 = tempDir.resolve("test2.file").toFile();
+		file3 = tempDir.resolve("test3.file").toFile();
 		files.add(file1);
 		files.add(file2);
 		files.add(file3);

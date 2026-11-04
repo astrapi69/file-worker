@@ -93,6 +93,32 @@ public class CreateableTest
 
 	/**
 	 * Test method for
+	 * {@link Createable#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
+	 *
+	 * @param existsBefore
+	 *            whether the directory exists before the call
+	 * @throws IOException
+	 *             Signals an I/O exception occurred
+	 */
+	@ParameterizedTest(name = "existsBefore = {0}")
+	@ValueSource(booleans = { true, false })
+	public void newDirectories_returnsTrueOnlyWhenTheDirectoryWasCreated(boolean existsBefore)
+		throws IOException
+	{
+		Path nested = tempDir.resolve("a").resolve("b");
+		if (existsBefore)
+		{
+			Files.createDirectories(nested);
+		}
+
+		boolean created = createable.newDirectories(nested);
+
+		assertEquals(!existsBefore, created);
+		assertTrue(Files.isDirectory(nested));
+	}
+
+	/**
+	 * Test method for
 	 * {@link Createable#newDirectory(Path, java.nio.file.attribute.FileAttribute...)}
 	 *
 	 * @throws IOException
@@ -185,6 +211,25 @@ public class CreateableTest
 		assertTrue(created);
 		assertTrue(file.getParentFile().isDirectory());
 		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link Createable#mkParentDirs(File)}
+	 *
+	 * @throws IOException
+	 *             Signals an I/O exception occurred
+	 */
+	@Test
+	public void mkParentDirs_returnsFalse_whenTheParentCannotBeCreated() throws IOException
+	{
+		File regularFile = Files.writeString(tempDir.resolve("regular.txt"), "regular").toFile();
+		File file = new File(new File(regularFile, "sub"), "file.txt");
+
+		boolean created = createable.mkParentDirs(file);
+
+		assertFalse(created);
+		assertFalse(file.getParentFile().exists());
+		assertTrue(regularFile.isFile());
 	}
 
 	/**

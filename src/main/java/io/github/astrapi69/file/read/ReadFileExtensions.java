@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -124,11 +125,13 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * Reads the first line from the specified file
+	 * Reads the first line from the specified file with UTF-8 encoding, as {@link #fromFile(File)}
+	 * and {@link #readLinesInList(File)} do, whatever the default charset of the platform is. Bytes
+	 * that are not valid UTF-8 are replaced with the replacement character U+FFFD.
 	 *
 	 * @param inputFile
 	 *            the file path
-	 * @return first line from the file
+	 * @return first line from the file, or null if the file is empty
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -137,18 +140,24 @@ public final class ReadFileExtensions
 	public static String readHeadLine(final String inputFile)
 		throws FileNotFoundException, IOException
 	{
-		try (BufferedReader reader = new BufferedReader(new FileReader(inputFile)))
+		try (BufferedReader reader = new BufferedReader(
+			new FileReader(inputFile, StandardCharsets.UTF_8)))
 		{
 			return reader.readLine();
 		}
 	}
 
 	/**
-	 * Reads all lines from the specified file into a list
+	 * Reads all lines from the specified file into a list. The file is decoded strictly as UTF-8:
+	 * bytes that are not valid UTF-8 give a {@link java.nio.charset.MalformedInputException}, where
+	 * {@link #readLinesInList(File, boolean)}, the overloads with a charset and the overloads with
+	 * an {@link InputStream} replace such bytes with the replacement character U+FFFD.
 	 *
 	 * @param input
 	 *            the file to read
 	 * @return list of lines from the file
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid UTF-8
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -164,7 +173,8 @@ public final class ReadFileExtensions
 	 *            the file to read
 	 * @param index
 	 *            The index of the line
-	 * @return The line or null if it does not exist
+	 * @return The line or null if it does not exist, that is if the index is negative or not less
+	 *         than the number of lines
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -174,7 +184,7 @@ public final class ReadFileExtensions
 		throws FileNotFoundException, IOException
 	{
 		List<String> linesRead = readLinesInList(input, false);
-		if (index < linesRead.size())
+		if (0 <= index && index < linesRead.size())
 		{
 			return linesRead.get(index);
 		}
@@ -187,7 +197,9 @@ public final class ReadFileExtensions
 	 * @param input
 	 *            The File from where the input comes.
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
@@ -227,7 +239,9 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the charset for read
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
@@ -260,7 +274,9 @@ public final class ReadFileExtensions
 	 * @param input
 	 *            The InputStream from where the input comes.
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws IOException
 	 *             When a io-problem occurs.
@@ -280,7 +296,9 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the charset for read
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws IOException
 	 *             When a io-problem occurs.
@@ -309,7 +327,7 @@ public final class ReadFileExtensions
 				}
 				if (trim)
 				{
-					line.trim();
+					line = line.trim();
 				}
 				// add the line to the list
 				output.add(line);
@@ -384,17 +402,29 @@ public final class ReadFileExtensions
 	}
 
 	/**
-	 * Counts all lines in the specified file
+	 * Counts all lines in the specified file, which is read as UTF-8 and closed again before this
+	 * method returns
 	 *
 	 * @param fileToCountTheLines
 	 *            the file to count lines from
 	 * @return line count
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid UTF-8
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public static long countAllLines(File fileToCountTheLines) throws IOException
 	{
-		return Files.lines(fileToCountTheLines.toPath()).count();
+		try (Stream<String> lines = Files.lines(fileToCountTheLines.toPath()))
+		{
+			return lines.count();
+		}
+		catch (final UncheckedIOException e)
+		{
+			// Files.lines reports an error that occurs while it reads, such as a malformed byte,
+			// as an UncheckedIOException around the IOException this method declares
+			throw e.getCause();
+		}
 	}
 
 }

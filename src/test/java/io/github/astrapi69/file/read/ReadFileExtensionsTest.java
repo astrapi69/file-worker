@@ -27,8 +27,12 @@ package io.github.astrapi69.file.read;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,17 +40,32 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
@@ -75,8 +94,8 @@ public class ReadFileExtensionsTest extends FileTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		// Create a temporary file and write some lines to it
-		testFile = File.createTempFile("testFile", ".txt");
+		// Create a file in the temporary directory of the test and write some lines to it
+		testFile = tempRoot.resolve("testFile.txt").toFile();
 		try (FileWriter writer = new FileWriter(testFile))
 		{
 			writer.write("First line\n");
@@ -113,6 +132,98 @@ public class ReadFileExtensionsTest extends FileTestCase
 		// Test reading a line that does not exist
 		String line = ReadFileExtensions.readLine(testFile, 10);
 		assertNull(line);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readLine(File, int)}: every index below the number
+	 * of lines gives its line, the index equal to the number of lines and every index above it give
+	 * null.
+	 *
+	 * @param index
+	 *            the index of the line to read
+	 * @param expected
+	 *            the expected line, null if the file has no line at that index
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "index {0} gives {1}")
+	@CsvSource({ "0, First line", "1, Second line", "2, Third line", "3,", "4," })
+	public void testReadLineAtEveryIndexAndPastTheLastLine(final int index, final String expected)
+		throws IOException
+	{
+		assertEquals(expected, ReadFileExtensions.readLine(testFile, index));
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readLine(File, int)}: a negative index has no line
+	 * either, so it gives null as an index past the last line does.
+	 *
+	 * @param index
+	 *            the negative index of the line to read
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "index {0} gives null")
+	@ValueSource(ints = { -1, -2, -3, Integer.MIN_VALUE })
+	public void testReadLineNegativeIndexGivesNull(final int index) throws IOException
+	{
+		assertNull(ReadFileExtensions.readLine(testFile, index));
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#countAllLines(File)}: the file it counts is closed
+	 * again, so that the number of open file descriptors of this process is the same before and
+	 * after 50 calls; without the close it grows by one per call until the garbage collector runs.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	@EnabledOnOs(OS.LINUX)
+	public void testCountAllLinesClosesTheFile() throws IOException
+	{
+		final Path openFileDescriptors = Path.of("/proc/self/fd");
+		// the first call loads the classes it needs, which may open files of their own
+		assertEquals(3, ReadFileExtensions.countAllLines(testFile));
+		final long before;
+		try (Stream<Path> entries = Files.list(openFileDescriptors))
+		{
+			before = entries.count();
+		}
+		for (int i = 0; i < 50; i++)
+		{
+			assertEquals(3, ReadFileExtensions.countAllLines(testFile));
+		}
+		final long after;
+		try (Stream<Path> entries = Files.list(openFileDescriptors))
+		{
+			after = entries.count();
+		}
+		assertTrue(after <= before,
+			"open file descriptors before the 50 calls: " + before + ", after them: " + after);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#countAllLines(File)}: a file with characters
+	 * outside of ASCII in UTF-8 is counted, and a file that is not valid UTF-8 gives the declared
+	 * {@link IOException}, a {@link MalformedInputException}, not an unchecked exception.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testCountAllLinesOfInvalidUtf8ThrowsIOException() throws IOException
+	{
+		final Path validUtf8 = tempRoot.resolve("valid-utf8.txt");
+		Files.write(validUtf8, List.of("Grüße", "Ärger über Öl"), StandardCharsets.UTF_8);
+		assertEquals(2, ReadFileExtensions.countAllLines(validUtf8.toFile()));
+
+		final Path invalidUtf8 = tempRoot.resolve("invalid-utf8.txt");
+		Files.write(invalidUtf8, new byte[] { 'x', (byte)0xFC, 'y' });
+		final IOException exception = assertThrows(IOException.class,
+			() -> ReadFileExtensions.countAllLines(invalidUtf8.toFile()));
+		assertTrue(exception instanceof MalformedInputException,
+			"expected a MalformedInputException, but was " + exception);
 	}
 
 	/**
@@ -234,6 +345,51 @@ public class ReadFileExtensionsTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link ReadFileExtensions#readHeadLine(String)}: the file is read as UTF-8
+	 * whatever the default charset of the JVM is. A second JVM, started with
+	 * {@code -Dfile.encoding=ISO-8859-1}, runs {@link ReadHeadLinePrinter} on a file with
+	 * {@code Grüße} in UTF-8 and prints the code points of what it read; a control run with
+	 * {@code -Dfile.encoding=UTF-8} reads the same.
+	 *
+	 * @param fileEncoding
+	 *            the value of {@code file.encoding} of the second JVM
+	 * @throws Exception
+	 *             is thrown if the second JVM cannot be started or awaited
+	 */
+	@ParameterizedTest(name = "file.encoding={0}")
+	@ValueSource(strings = { "UTF-8", "ISO-8859-1" })
+	public void testReadHeadLineReadsUtf8WhateverTheDefaultCharset(final String fileEncoding)
+		throws Exception
+	{
+		final String expected = "Grüße";
+		final Path utf8File = tempRoot.resolve("head-line-utf8.txt");
+		Files.write(utf8File, List.of(expected, "second line"), StandardCharsets.UTF_8);
+		final String java = ProcessHandle.current().info().command()
+			.orElseGet(() -> Path.of(System.getProperty("java.home"), "bin", "java").toString());
+		final Process process = new ProcessBuilder(java, "-Dfile.encoding=" + fileEncoding, "-cp",
+			System.getProperty("java.class.path"), ReadHeadLinePrinter.class.getName(),
+			utf8File.toString()).redirectError(ProcessBuilder.Redirect.INHERIT).start();
+		try
+		{
+			final String output;
+			try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(process.getInputStream(), StandardCharsets.US_ASCII)))
+			{
+				output = reader.readLine();
+			}
+			assertTrue(process.waitFor(60, TimeUnit.SECONDS));
+			assertEquals(0, process.exitValue());
+			final String expectedCodePoints = expected.codePoints().mapToObj(Integer::toString)
+				.collect(Collectors.joining(" "));
+			assertEquals(expectedCodePoints, output);
+		}
+		finally
+		{
+			process.destroyForcibly();
+		}
+	}
+
+	/**
 	 * Test method for {@link ReadFileExtensions#readLinesInList(File)}.
 	 *
 	 * @throws IOException
@@ -317,11 +473,79 @@ public class ReadFileExtensionsTest extends FileTestCase
 	public void testReadLinesInListInputStream() throws FileNotFoundException, IOException
 	{
 		final File testFile = new File(this.test, "languages_iso639_1.csv");
-		final List<String> list = ReadFileExtensions.readLinesInList(new FileInputStream(testFile));
+		final List<String> list;
+		// closed here, so that JUnit can delete the temporary directory, also on Windows
+		try (InputStream inputStream = new FileInputStream(testFile))
+		{
+			list = ReadFileExtensions.readLinesInList(inputStream);
+		}
 		assertNotNull(list);
 		actual = list.size() == 185;
 		expected = true;
 		assertEquals(actual, expected);
+	}
+
+	/**
+	 * The charsets for {@link #testReadLinesInListInputStreamCharsetDecodesWithTheGivenCharset},
+	 * each with the charset that encodes the input; null stands for the default charset of the
+	 * platform.
+	 *
+	 * @return the charsets to read with and the charsets to write with
+	 */
+	static Stream<Arguments> charsetsToReadWith()
+	{
+		return Stream.of(
+			argumentSet("ISO-8859-1", StandardCharsets.ISO_8859_1, StandardCharsets.ISO_8859_1),
+			argumentSet("UTF-16", StandardCharsets.UTF_16, StandardCharsets.UTF_16),
+			argumentSet("UTF-8", StandardCharsets.UTF_8, StandardCharsets.UTF_8),
+			argumentSet("null reads with the default charset", null, Charset.defaultCharset()));
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readLinesInList(InputStream, Charset, boolean)}:
+	 * the lines are decoded with the given charset, so that characters outside of ASCII come back
+	 * as they were written, and a null charset decodes with the default charset of the platform.
+	 *
+	 * @param readCharset
+	 *            the charset to read with, or null
+	 * @param writeCharset
+	 *            the charset that encodes the input
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest
+	@MethodSource("charsetsToReadWith")
+	public void testReadLinesInListInputStreamCharsetDecodesWithTheGivenCharset(
+		final Charset readCharset, final Charset writeCharset) throws IOException
+	{
+		final List<String> expected = List.of("Größe", "Ärger über Öl", "naïve café");
+		final byte[] input = String.join("\n", expected).getBytes(writeCharset);
+		final List<String> lines = ReadFileExtensions
+			.readLinesInList(new ByteArrayInputStream(input), readCharset, false);
+		assertEquals(expected, lines);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readLinesInList(File, Charset)}: a file written in
+	 * ISO-8859-1 is read back with its umlauts when read with ISO-8859-1, and is not when read with
+	 * UTF-8, in which the same bytes are no valid characters.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testReadLinesInListFileCharsetDecodesWithTheGivenCharset() throws IOException
+	{
+		final List<String> expected = List.of("Größe", "Ärger über Öl");
+		final File latin1File = tempRoot.resolve("latin1.txt").toFile();
+		Files.write(latin1File.toPath(), expected, StandardCharsets.ISO_8859_1);
+		assertEquals(expected,
+			ReadFileExtensions.readLinesInList(latin1File, StandardCharsets.ISO_8859_1));
+		final List<String> readAsUtf8 = ReadFileExtensions.readLinesInList(latin1File,
+			StandardCharsets.UTF_8);
+		assertEquals(expected.size(), readAsUtf8.size());
+		assertTrue(readAsUtf8.get(0).contains("\uFFFD"),
+			"ISO-8859-1 umlauts are no valid UTF-8 and must be replaced, but was " + readAsUtf8);
 	}
 
 	/**
@@ -340,7 +564,10 @@ public class ReadFileExtensionsTest extends FileTestCase
 		properties.setProperty("testkey1", "testvalue1");
 		properties.setProperty("testkey2", "testvalue2");
 		properties.setProperty("testkey3", "testvalue3");
-		PropertiesExtensions.export(properties, new FileOutputStream(ap));
+		try (OutputStream outputStream = new FileOutputStream(ap))
+		{
+			PropertiesExtensions.export(properties, outputStream);
+		}
 		compare = ReadFileExtensions.readPropertiesFromFile(ap);
 		this.actual = properties.equals(compare);
 		assertTrue(this.actual);
@@ -362,7 +589,10 @@ public class ReadFileExtensionsTest extends FileTestCase
 		byte[] actual;
 		byte[] expected;
 		final File tmpFile = new File(this.test, "testReadSmallFileInput.txt");
-		actual = ReadFileExtensions.toByteArray(new FileInputStream(tmpFile));
+		try (InputStream inputStream = new FileInputStream(tmpFile))
+		{
+			actual = ReadFileExtensions.toByteArray(inputStream);
+		}
 		final String lineSeparator = System.lineSeparator();
 		final byte[] bytes = lineSeparator.getBytes();
 		expected = ArrayFactory.newByteArray(Byte.valueOf("f".getBytes()[0]).byteValue(),

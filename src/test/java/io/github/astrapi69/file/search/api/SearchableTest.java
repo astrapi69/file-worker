@@ -34,9 +34,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * Unit tests for {@link Searchable} methods.
@@ -45,7 +45,9 @@ public class SearchableTest
 {
 
 	private Searchable searchable;
-	private Path testDirectory;
+
+	@TempDir
+	Path testDirectory;
 
 	@BeforeEach
 	public void setUp() throws Exception
@@ -54,7 +56,6 @@ public class SearchableTest
 		searchable = new Searchable()
 		{
 		}; // Assuming FileSearchExtensions implements Searchable
-		testDirectory = Files.createTempDirectory("fileSearchTestDir");
 
 		// Create test files and directories
 		Files.createFile(testDirectory.resolve("logfile1.txt"));
@@ -65,13 +66,6 @@ public class SearchableTest
 		Path subDir = Files.createDirectory(testDirectory.resolve("subDir"));
 		Files.createFile(subDir.resolve("logfile3.txt"));
 		Files.createFile(subDir.resolve("logfile4.log"));
-	}
-
-	@AfterEach
-	public void tearDown() throws Exception
-	{
-		// Cleanup
-		Files.walk(testDirectory).map(Path::toFile).forEach(File::delete);
 	}
 
 	@Test
@@ -135,5 +129,37 @@ public class SearchableTest
 	{
 		long fileCount = searchable.countAllFilesInDirectory(testDirectory.toFile(), 0, true);
 		assertTrue(fileCount > 0, "Should count files and directories");
+	}
+
+	/**
+	 * A search of a directory without files gives the same kind of list as a search that finds
+	 * some: an empty one the caller can add to, not an unmodifiable one
+	 */
+	@Test
+	public void findAllFiles_ofAnEmptyDirectory_isAnEmptyListTheCallerCanAddTo() throws IOException
+	{
+		File empty = Files.createDirectory(testDirectory.resolve("empty")).toFile();
+
+		List<File> found = searchable.findAllFiles(empty, "*");
+
+		assertEquals(List.of(), found);
+		found.add(empty);
+		assertEquals(List.of(empty), found);
+	}
+
+	/**
+	 * A search that starts at something that is not a directory gives an empty list the caller can
+	 * add to, as a search that finds files does
+	 */
+	@Test
+	public void findFiles_ofAStartThatIsNoDirectory_isAnEmptyListTheCallerCanAddTo()
+	{
+		File missing = testDirectory.resolve("missing").toFile();
+
+		List<File> found = searchable.findFiles(missing.getAbsolutePath(), new String[] { "txt" });
+
+		assertEquals(List.of(), found);
+		found.add(missing);
+		assertEquals(List.of(missing), found);
 	}
 }

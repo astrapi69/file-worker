@@ -1,6 +1,121 @@
 ## Change log
 ----------------------
 
+Version 20.1
+-------------
+
+ADDED:
+
+- `MergeWithTemplate.run(String[], Path, Path)`: the third argument is the source and destination base that neither
+  the arguments nor the defaults name, which `run(String[], Path)` takes from the current working directory, as
+  before (#99)
+
+CHANGED:
+
+- the tests write into temporary directories, no longer into `src/test/resources` or the project directory, and
+  change copies of the fixtures instead of the fixtures: `FileTestCase` keeps its directories in a JUnit `@TempDir`
+  with a copy of `src/test/resources`, and the classes that wrote there themselves do the same. A PIT run left
+  result files behind and shortened committed fixtures whenever a mutant made a test fail before its own cleanup
+  (#99)
+- `MergeWithTemplateTest` and `NewMergeWithTemplateTest` call `run` instead of `main`, which ended the test JVM
+  with `System.exit` on a usage error, so a mutant could kill the test process (#99)
+- `MergeWithTemplate.main` ends the JVM with what the package-private `commandLine` returns: 0, or 2 after it has
+  printed the usage error. The tests check both through `commandLine`, and the success path of `main` and
+  `run(String[])` in `MergeWithTemplateMainTest` (#99)
+- the tests PIT found missing: PIT detects 1117 of the 1204 mutants, 93%, up from 985 of 1202, and the CI build
+  fails below 91%. The tests check, among others, the default files, the report and the modification times of
+  `MergeWithTemplate`; `equals`, `hashCode` and `toString` of the compare, search and model beans; every getter
+  of `SystemPropertiesExtensions` and `SystemFileExtensions` against its system property; a directory copy that
+  meets a directory it cannot read; the charsets of the write and read overloads; a rename without the copy
+  fallback; the merge strategies; and that an empty search result is a list the caller can add to. Of the 87
+  mutants left, `build.gradle` says what decides each group; most are booleans that cannot be `false` (#117) and
+  `hashCode` arithmetic. Line coverage 98.8%, branch coverage 93.5% (#99)
+- `SearchableTest`, `FileContentInfoTest` and `FileInfoTest` write into a `@TempDir`, no longer into
+  `java.io.tmpdir` or `/tmp/foo/bar` (#99, #119)
+- the coverage floor rises to what the tests reach: the build fails below 98% of the lines or 93% of the
+  branches, up from 90% and 85% (#99)
+- the tests no longer write into the system's temporary directory: `MergeFileExtensionsTest`,
+  `FileTimeExtensionsTest`, `LineAppenderTest`, `FileFactoryTest` and `DirectoryFactoryTest` work in a JUnit
+  `@TempDir`, and `java.io.tmpdir` of the test JVM and of PIT's minions is a directory below `build/`, for the
+  methods that use the temporary directory by design. A test run left 12 entries in the system's temporary
+  directory and a PIT run 156; both leave none now (#119)
+- `FileSearchExtensionsTest.testGetAllFilesFromDir` and `testGetAllFilesFromDirRecursive` check what the methods
+  return; they compared their expectation with their own list (#119)
+- the Javadoc of `ModifyFileExtensions.concatenateAll(List)`, `concatenateFilesWithExtension(File, String)` and
+  `concatenateFilesWithExtensionRecursive(File, String)` says that the result file is created in the system's
+  temporary directory and that the caller deletes it (#119)
+- dependencies: silly-io 5.0 (#98), jsoup 1.24.1, Spotless 8.11.0
+- mutation testing with PIT 1.30.1 (`./gradlew pitest`, `gradle/mutation-testing.gradle`): the tests detect 985 of
+  the 1202 mutants, 82%, and the CI build fails below 80% (`mutationThreshold` in `build.gradle`; PIT rounds the
+  score half up to a whole percent before it compares). The README's mutation score badge shows the score of
+  `develop`, which CI publishes on the `gh-pages` branch from each push to it (#99)
+- the test runtime class path no longer holds this project's own jar: zip4j-extension depends on an older
+  file-worker, which Gradle resolved to this project, so `test` needed `mustRunAfter(jar)`, and so would `pitest`.
+  The workaround is gone with its cause (#99)
+- the PIT plugin no longer adds `junit-platform-launcher` itself (`addJUnitPlatformLauncher = false`; it is
+  declared in `testRuntimeOnly`). To find its version the plugin resolved a copy of `testImplementation` without
+  the constraints and the exclusion of `gradle/dependencies.gradle`, and the dependency submission reported what
+  that copy held: jackson 2.16.0-rc1 and an old file-worker with commons-io 2.11.0, commons-lang3 3.12.0 and
+  commons-beanutils 1.9.4, 18 Dependabot alerts for versions no class path of the build uses (#103)
+- jobj-compare and silly-bean are no longer runtime dependencies: no main class references a class of either.
+  jobj-compare 12, commons-beanutils 1.11.0, commons-logging 1.3.5 and commons-collections 3.2.2 no longer come
+  with file-worker; silly-bean 3.0 still comes through silly-collection and silly-strings. silly-collection 28.3,
+  which brings commons-collections4 4.6.0 instead of the milestone 4.5.0-M2 (#105)
+- dead and unreachable code is gone, without a change a caller sees: `CompareFileExtensions.compare` compares by
+  SHA-256, which every Java platform provides, instead of SHA-512 with a CRC32 fallback;
+  `FileSearchExtensions.containsFileRecursive` ends in `return false` and checks the list once;
+  `MergeFileExtensions.collectUnique` loses its sort parameter, which was always `false`; and the Javadoc of
+  `DirectoryFactory.newDirectoryQuietly(String)`, `FileFactory.newFile(String)` and `newFileQuietly(String)`
+  describes the methods as they are (#118)
+
+- the mutation-score floor follows the fixes to 92%: PIT detects 1119 of 1185 mutants, 94%; the comment above the
+  floor in `build.gradle` says what decides the 66 left (#99)
+
+FIXED:
+
+- a write of `StoreFileExtensions.toFile` that fails throws the declared `IOException` instead of returning `true`:
+  the methods no longer write through a `PrintWriter`, which swallowed it. For callers: the `boolean` is always
+  `true` now, and a failure is reported by the `IOException`, never by `false`; the result becomes `void` in 21.0
+  (#124). `Storable.toFile(File, Collection)` and `toFile(File, Collection, Charset)` end the last line with the
+  line separator too, as `StoreFileExtensions` and `Files.write` do (#107)
+- `ReadFileExtensions.readLinesInList` with `trim = true` trims the lines, in all four overloads with the flag; it
+  called `line.trim()` and dropped the result (#106)
+- `DirectoryStructureFactory.newDirectoryStructure` creates each path with its missing parents, so
+  `newDirectoryStructure(dir, "src/main/java")` creates `src/main/java` instead of nothing. For callers: missing
+  parent directories are created now, and a path that cannot be created throws a `RuntimeException` (the class
+  itself) with the `IOException` of `Files.createDirectories` as its cause, a `FileAlreadyExistsException` for a
+  regular file at the path or a `FileSystemException` for one at a parent path, where the method returned a `File`
+  for a directory that does not exist. A parent directory that does not exist still gives an empty collection
+  (#110)
+- `FileExtensions.isOpen(File)` no longer creates a missing file: it gives `false` and leaves it missing. A lock
+  this JVM holds on the file through another channel gives `true` instead of an `OverlappingFileLockException`,
+  and the Javadoc says what the method checks instead of "Not yet implemented" (#109)
+- `ReadFileExtensions.readLine(File, int)` gives `null` for a negative index, as its Javadoc says;
+  `countAllLines(File)` closes the file it counts and throws the declared `IOException` for a file that is not
+  valid UTF-8 instead of an `UncheckedIOException`; `readHeadLine(String)` reads UTF-8 whatever the default
+  charset is; the Javadoc of `readLinesInList(File)` says that it decodes strictly (#113)
+- `FileContentInfo.toString` and the builder's `toString` name the length of the content, no longer its bytes;
+  `toFileContentInfo` describes a path as a directory only if it is one, so a missing path is no longer a
+  directory; `toFile` for an entry without content throws before it creates anything, instead of leaving an empty
+  file behind. For callers: `DirectoryStructureExtensions.getFileContentInfos` lists regular files and directories
+  only; dangling symbolic links, named pipes and sockets, which came back as directory entries, are left out, so
+  that `newDirectoryStructure` can create the tree again from the list (#114)
+- `FileExtensions.download(URI)` reads every URI the JDK can open (`file:`, `jar:`, `http:`, `https:`), and a URI
+  that cannot be read fails with the declared `IOException` instead of an `IllegalArgumentException` (#108)
+- `DirectoryFactory.newDirectories(Path, FileAttribute...)` returns `false` for a directory that already existed, as
+  its Javadoc says. The Javadoc of the copy, move, rename and delete methods that never return `false` says that
+  they return `true` and that a failure throws, and the Quietly methods of `DirectoryFactory` say that they throw
+  an unchecked exception in place of a checked one (#117)
+- `MergeWithTemplate` reports a merge as "(source overwrites existing files)" instead of "(latest-modified wins)";
+  its dry run previews a symbolic link to a target outside the source under the link's own path, where it showed a
+  wrong one or failed with a `StringIndexOutOfBoundsException`; a directory copied into a new destination keeps
+  the files' modification times, as a merge does (#116)
+- the Javadoc of `FileSearchExtensions.findAllFiles(File, String)` and `Searchable.findAllFiles(File, String)` says
+  that the search is recursive, which it is; it said "not recursively" (#111)
+- `FileCompareResultBean` rejects a `null` flag where it is set: the setters throw a `NullPointerException` that
+  names the flag, where the `null` used to make the next getter, `equals`, `hashCode` or `toString` throw (#115)
+
+
 Version 20.0
 -------------
 

@@ -49,7 +49,11 @@ public final class DirectoryStructureExtensions
 	}
 
 	/**
-	 * Creates a list of {@link FileContentInfo} objects from the given directory
+	 * Creates a list of {@link FileContentInfo} objects from the given directory. The list holds an
+	 * entry for every regular file and every directory below the given directory. Anything that is
+	 * neither, such as a dangling symbolic link, a named pipe or a socket, gets no entry, so that
+	 * {@link DirectoryStructureFactory#newDirectoryStructure(java.util.Collection)} can create the
+	 * tree again from the list
 	 *
 	 * @param directory
 	 *            the directory
@@ -64,7 +68,7 @@ public final class DirectoryStructureExtensions
 		}
 		final List<File> allFilesFromDir = FileSearchExtensions
 			.getAllFilesFromDirRecursive(directory, true);
-		allFilesFromDir
+		allFilesFromDir.stream().filter(file -> file.isFile() || file.isDirectory())
 			.forEach(file -> fileContentInfos.add(FileContentInfo.toFileContentInfo(file)));
 		return fileContentInfos;
 	}

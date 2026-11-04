@@ -50,7 +50,10 @@ public interface Copyable
 	 *            The source directory
 	 * @param destination
 	 *            The destination directory
-	 * @return true if the directory was successfully copied, otherwise false
+	 * @return true, the directory was copied; a copy that fails throws, it does not return false.
+	 *         See {@link CopyDirectoryExtensions#copyDirectory(Path, Path)}
+	 * @throws IllegalArgumentException
+	 *             if the source is not a directory
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
 	 */
@@ -67,7 +70,8 @@ public interface Copyable
 	 * @param destination
 	 *            The destination directory.
 	 *
-	 * @return 's true if the directory is copied, otherwise false.
+	 * @return true if the destination is a directory and every entry was copied, otherwise false.
+	 *         See {@link CopyDirectoryExtensions#copyDirectory(File, File)}
 	 *
 	 * @throws FileIsSecurityRestrictedException
 	 *             Is thrown if the source file is security restricted.
@@ -94,11 +98,12 @@ public interface Copyable
 	 *            The source file
 	 * @param destination
 	 *            The destination file
-	 * @return true if the file was successfully copied, otherwise false
+	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
+	 *         {@link CopyFileExtensions#copyFile(File, File)}
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
 	 * @throws IllegalArgumentException
-	 *             if the source or the destination is a directory
+	 *             if the source or the destination is a directory, or both are the same file
 	 */
 	default boolean copyFile(File source, File destination) throws IOException
 	{
@@ -154,7 +159,8 @@ public interface Copyable
 	 *            The source path
 	 * @param destination
 	 *            The destination file path
-	 * @return true if the file was successfully copied, otherwise false
+	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
+	 *         {@link CopyFileExtensions#copyFile(Path, Path)}
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
 	 * @throws IllegalArgumentException

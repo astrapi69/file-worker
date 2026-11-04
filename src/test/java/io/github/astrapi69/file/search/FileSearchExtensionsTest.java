@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -71,8 +72,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		// Create a temporary directory for testing
-		testDirectory = Files.createTempDirectory("fileSearchTestDir");
+		// Create a directory for testing in the temporary directory of FileTestCase
+		testDirectory = Files.createDirectory(tempRoot.resolve("fileSearchTestDir"));
 
 		// Create some files and directories in the tempDir for testing
 
@@ -340,7 +341,8 @@ public class FileSearchExtensionsTest extends FileTestCase
 		String searchString;
 		int actual;
 		int expected;
-		File parent = PathFinder.getRelativePath(PathFinder.getSrcTestResourcesDir(), "resources");
+		// the copy of src/test/resources/resources in the temporary directory of FileTestCase
+		File parent = this.testResources;
 
 		inputFile = FileFactory.newFile(parent, "test-csv-data.csv");
 		testFile = FileFactory.newFile(parent, "test-find-line-data.csv");
@@ -762,18 +764,10 @@ public class FileSearchExtensionsTest extends FileTestCase
 		fileList.add(testFile3);
 		fileList.add(testFile4);
 		List<File> allFilesFromDir = FileSearchExtensions.getAllFilesFromDir(testDir);
-		assertNotNull(allFilesFromDir);
-		// this list is expected as result...
-		final List<File> expected = new ArrayList<>();
-		expected.add(testFile1);
-		expected.add(testFile2);
-		expected.add(testFile3);
-		expected.add(testFile4);
-		assertEquals(expected.size(), fileList.size());
-		for (final File file : expected)
-		{
-			assertTrue(fileList.contains(file));
-		}
+		// the files of the directory itself, not those of deepDir below it, and no directory
+		assertEquals(Set.of(testFile1.getAbsoluteFile(), testFile2.getAbsoluteFile()),
+			new HashSet<>(allFilesFromDir));
+		assertEquals(2, allFilesFromDir.size());
 		// clean up...
 		DeleteFileExtensions.delete(fileList);
 	}
@@ -805,18 +799,12 @@ public class FileSearchExtensionsTest extends FileTestCase
 		fileList.add(testFile3);
 		fileList.add(testFile4);
 		List<File> allFilesFromDir = FileSearchExtensions.getAllFilesFromDirRecursive(testDir);
-		assertNotNull(allFilesFromDir);
-		// this list is expected as result...
-		final List<File> expected = new ArrayList<>();
-		expected.add(testFile1);
-		expected.add(testFile2);
-		expected.add(testFile3);
-		expected.add(testFile4);
-		assertEquals(expected.size(), fileList.size());
-		for (final File file : expected)
-		{
-			assertTrue(fileList.contains(file));
-		}
+		// the files of every level, and no directory
+		assertEquals(
+			Set.of(testFile1.getAbsoluteFile(), testFile2.getAbsoluteFile(),
+				testFile3.getAbsoluteFile(), testFile4.getAbsoluteFile()),
+			new HashSet<>(allFilesFromDir));
+		assertEquals(4, allFilesFromDir.size());
 		// clean up...
 		DeleteFileExtensions.delete(fileList);
 	}

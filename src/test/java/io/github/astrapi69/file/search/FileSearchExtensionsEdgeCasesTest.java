@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,7 +101,17 @@ public class FileSearchExtensionsEdgeCasesTest
 	{
 		return Stream.of(
 			Arguments.of("a file two levels down", "", "sub/deeper/report-4.txt", true),
+			Arguments.of("a file one level down", "", "sub/report-3.txt", true),
 			Arguments.of("a direct child", "", "notes.txt", true),
+			Arguments.of("a direct child of a subdirectory", "sub", "sub/report-3.txt", true),
+			Arguments.of("a file two levels down of a subdirectory", "sub",
+				"sub/deeper/report-4.txt", true),
+			Arguments.of("a directory one level down", "", "sub/deeper", true),
+			Arguments.of("a name that is in no level", "", "missing.txt", false),
+			Arguments.of("the name of a deeper file, at the top level", "", "report-4.txt", false),
+			Arguments.of("the name of a deeper file, one level down", "", "sub/report-4.txt",
+				false),
+			Arguments.of("a directory does not contain itself", "sub", "sub", false),
 			Arguments.of("a file outside the directory", "sub", "notes.txt", false),
 			Arguments.of("an empty directory contains nothing", "empty", "notes.txt", false),
 			Arguments.of("a regular file contains nothing", "notes.txt", "notes.txt", false));
@@ -123,6 +134,26 @@ public class FileSearchExtensionsEdgeCasesTest
 			Arguments.of("the whole name has to match", "", "report", Set.of()),
 			Arguments.of("an empty directory has no matches", "empty", ".*", Set.of()),
 			Arguments.of("a regular file has no matches", "notes.txt", ".*", Set.of()));
+	}
+
+	/**
+	 * The searches of the tree {@code top.txt}, {@code sub/middle.txt} and
+	 * {@code sub/deeper/bottom.txt}, with the paths, relative to the searched directory, of the
+	 * files each one finds (file-worker#111)
+	 */
+	static Stream<Arguments> recursionCases()
+	{
+		return Stream.of(
+			Arguments.of("every level is searched", ".*\\.txt",
+				Set.of("top.txt", "sub/middle.txt", "sub/deeper/bottom.txt")),
+			Arguments.of("a match two levels down is found", "bottom\\.txt",
+				Set.of("sub/deeper/bottom.txt")),
+			Arguments.of("directories are searched, not returned", ".*",
+				Set.of("top.txt", "sub/middle.txt", "sub/deeper/bottom.txt")),
+			Arguments.of("a pattern that matches only directory names finds nothing", "sub|deeper",
+				Set.of()),
+			Arguments.of("the pattern is matched against the name, not the path",
+				"sub/middle\\.txt", Set.of()));
 	}
 
 	static Stream<Arguments> wildcardCases()
@@ -182,8 +213,17 @@ public class FileSearchExtensionsEdgeCasesTest
 		return Stream.of(
 			Arguments.of("the files of the top level, no directories", "",
 				Set.of("report-1.txt", "report-2.log", "notes.txt")),
+			Arguments.of("a directory with one file", "sub/deeper", Set.of("report-4.txt")),
 			Arguments.of("an empty directory has no files", "empty", Set.of()),
 			Arguments.of("a regular file has no files", "notes.txt", Set.of()));
+	}
+
+	static Stream<Arguments> recursiveFileListingCases()
+	{
+		return Stream.of(Arguments.of("the files of every level, no directories", "", ALL_FILES),
+			Arguments.of("one level down", "sub", Set.of("report-3.txt", "report-4.txt")),
+			Arguments.of("an empty directory has nothing", "empty", Set.of()),
+			Arguments.of("a regular file has nothing", "notes.txt", Set.of()));
 	}
 
 	static Stream<Arguments> searchPatternCases()
@@ -268,6 +308,21 @@ public class FileSearchExtensionsEdgeCasesTest
 			Arguments.of("one byte less than a megabyte", megabyte - 1, 1023L, 0L),
 			Arguments.of("one megabyte", megabyte, 1024L, 1L),
 			Arguments.of("one byte more than a megabyte", megabyte + 1, 1024L, 1L));
+	}
+
+	private static Path createLevels(Path directory) throws IOException
+	{
+		Path deeper = Files.createDirectories(directory.resolve("sub").resolve("deeper"));
+		Files.writeString(directory.resolve("top.txt"), "top");
+		Files.writeString(directory.resolve("sub").resolve("middle.txt"), "middle");
+		Files.writeString(deeper.resolve("bottom.txt"), "bottom");
+		return directory;
+	}
+
+	private static Set<File> filesIn(Path directory, Set<String> relativePaths)
+	{
+		return relativePaths.stream().map(directory::resolve).map(Path::toFile)
+			.collect(Collectors.toSet());
 	}
 
 	private static Set<String> namesOf(Collection<File> files)
@@ -388,6 +443,19 @@ public class FileSearchExtensionsEdgeCasesTest
 	}
 
 	@ParameterizedTest(name = "{0}")
+	@MethodSource("recursionCases")
+	void findAllFiles_searchesEverySubdirectory(String displayName, String regex,
+		Set<String> expectedPaths) throws IOException
+	{
+		Path levels = createLevels(tempDir.resolve("levels"));
+
+		List<File> found = FileSearchExtensions.findAllFiles(levels.toFile(), regex);
+
+		assertEquals(filesIn(levels, expectedPaths), Set.copyOf(found));
+		assertEquals(expectedPaths.size(), found.size(), "nothing is found twice");
+	}
+
+	@ParameterizedTest(name = "{0}")
 	@MethodSource("wildcardCases")
 	void findFilesWithWildcards_returnsTheFilesMatchingThePattern(String displayName,
 		String directory, String pattern, Set<String> expectedNames)
@@ -439,6 +507,17 @@ public class FileSearchExtensionsEdgeCasesTest
 			includeDirectories);
 
 		assertFoundExactly(expectedNames, found);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("recursiveFileListingCases")
+	void getAllFilesFromDirRecursive_withoutTheFlag_listsTheFilesOfEveryLevel(String displayName,
+		String directory, Set<String> expectedNames)
+	{
+		List<File> found = FileSearchExtensions.getAllFilesFromDirRecursive(inTempDir(directory));
+
+		assertFoundExactly(expectedNames, found);
+		assertTrue(found.stream().allMatch(File::isFile), "files only: " + found);
 	}
 
 	@ParameterizedTest(name = "{0}")
@@ -622,5 +701,38 @@ public class FileSearchExtensionsEdgeCasesTest
 		{
 			sub.setReadable(true);
 		}
+	}
+
+	static Stream<Arguments> searchesOfADirectoryWithoutFiles()
+	{
+		Function<File, List<File>> findAllFiles = dir -> FileSearchExtensions.findAllFiles(dir,
+			"*");
+		Function<File, List<File>> findFilesRecursive = dir -> FileSearchExtensions
+			.findFilesRecursive(dir, true, "*");
+		Function<File, List<File>> getAllFilesFromDir = FileSearchExtensions::getAllFilesFromDir;
+		return Stream.of(Arguments.of("findAllFiles", "empty", findAllFiles),
+			Arguments.of("findAllFiles", "missing", findAllFiles),
+			Arguments.of("findFilesRecursive", "empty", findFilesRecursive),
+			Arguments.of("findFilesRecursive", "missing", findFilesRecursive),
+			Arguments.of("getAllFilesFromDir", "empty", getAllFilesFromDir),
+			Arguments.of("getAllFilesFromDir", "missing", getAllFilesFromDir));
+	}
+
+	/**
+	 * A search of a directory without files gives the same kind of list as a search that finds
+	 * some: an empty one the caller can add to, not an unmodifiable one
+	 */
+	@ParameterizedTest(name = "{0} of the {1} directory")
+	@MethodSource("searchesOfADirectoryWithoutFiles")
+	void search_ofADirectoryWithoutFiles_isAnEmptyListTheCallerCanAddTo(final String search,
+		final String directory, final Function<File, List<File>> searchOf)
+	{
+		File withoutFiles = tempDir.resolve(directory).toFile();
+
+		List<File> found = searchOf.apply(withoutFiles);
+
+		assertEquals(List.of(), found);
+		found.add(withoutFiles);
+		assertEquals(List.of(withoutFiles), found);
 	}
 }

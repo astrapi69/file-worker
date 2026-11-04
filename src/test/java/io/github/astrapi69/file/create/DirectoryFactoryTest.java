@@ -25,11 +25,14 @@
 package io.github.astrapi69.file.create;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,12 +45,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.system.SystemFileExtensions;
 
 /**
  * The unit test class for the class {@link DirectoryFactory}
@@ -74,7 +78,7 @@ public class DirectoryFactoryTest extends FileTestCase
 	@Test
 	public void testNewTempDirectoryWithPathAndStringPrefix() throws IOException
 	{
-		Path dir = Paths.get(System.getProperty("java.io.tmpdir"));
+		Path dir = tempRoot;
 		String prefix = "test";
 		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
 
@@ -134,20 +138,13 @@ public class DirectoryFactoryTest extends FileTestCase
 		File dir3;
 		// new scenario...
 		dirs = new ArrayList<>();
-		dir1 = new File("test1.dir");
-		dir2 = new File("test2.dir");
-		dir3 = new File("test3.dir");
+		// in the temporary directory of FileTestCase, not in the working directory (#99)
+		dir1 = new File(this.test, "test1.dir");
+		dir2 = new File(this.test, "test2.dir");
+		dir3 = new File(this.test, "test3.dir");
 		dirs.add(dir1);
 		dirs.add(dir2);
 		dirs.add(dir3);
-		// if the directories exist delete them to prevent a DirectoryAlreadyExistsException
-		for (final File dir : dirs)
-		{
-			if (dir.exists())
-			{
-				DeleteFileExtensions.delete(dir);
-			}
-		}
 		actual = DirectoryFactory.newDirectories(dirs);
 		expected = new ArrayList<>();
 		expected.add(FileCreationState.CREATED);
@@ -159,14 +156,6 @@ public class DirectoryFactoryTest extends FileTestCase
 		{
 			assertTrue(dir.exists(), "directory should exist.");
 			assertTrue(dir.isDirectory(), "File object should be a directory.");
-		}
-		// Finally delete the test directories...
-		for (final File dir : dirs)
-		{
-			if (dir.exists())
-			{
-				DeleteFileExtensions.delete(dir);
-			}
 		}
 	}
 
@@ -243,6 +232,100 @@ public class DirectoryFactoryTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for
+	 * {@link DirectoryFactory#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
+	 *
+	 * @param existsBefore
+	 *            whether the directory exists before the call
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@ParameterizedTest(name = "existsBefore = {0}")
+	@ValueSource(booleans = { true, false })
+	public void newDirectories_returnsTrueOnlyWhenTheDirectoryWasCreated(boolean existsBefore)
+		throws IOException
+	{
+		Path directory = tempRoot.resolve("parent").resolve("child");
+		Path marker = directory.resolve("marker.txt");
+		if (existsBefore)
+		{
+			Files.createDirectories(directory);
+			Files.writeString(marker, "kept");
+		}
+
+		boolean created = DirectoryFactory.newDirectories(directory);
+
+		assertEquals(!existsBefore, created);
+		assertTrue(Files.isDirectory(directory));
+		assertEquals(existsBefore, Files.exists(marker));
+	}
+
+	/**
+	 * Test method for
+	 * {@link DirectoryFactory#newDirectoriesQuietly(Path, java.nio.file.attribute.FileAttribute...)}
+	 *
+	 * @param existsBefore
+	 *            whether the directory exists before the call
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@ParameterizedTest(name = "existsBefore = {0}")
+	@ValueSource(booleans = { true, false })
+	public void newDirectoriesQuietly_returnsTrueOnlyWhenTheDirectoryWasCreated(
+		boolean existsBefore) throws IOException
+	{
+		Path directory = tempRoot.resolve("parent").resolve("child");
+		if (existsBefore)
+		{
+			Files.createDirectories(directory);
+		}
+
+		boolean created = DirectoryFactory.newDirectoriesQuietly(directory);
+
+		assertEquals(!existsBefore, created);
+		assertTrue(Files.isDirectory(directory));
+	}
+
+	/**
+	 * Test method for
+	 * {@link DirectoryFactory#newDirectories(Path, java.nio.file.attribute.FileAttribute...)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void newDirectories_throwsFileAlreadyExistsException_whenThePathIsARegularFile()
+		throws IOException
+	{
+		Path regularFile = Files.writeString(tempRoot.resolve("regular.txt"), "regular");
+
+		assertThrows(FileAlreadyExistsException.class,
+			() -> DirectoryFactory.newDirectories(regularFile));
+
+		assertTrue(Files.isRegularFile(regularFile));
+	}
+
+	/**
+	 * Test method for
+	 * {@link DirectoryFactory#newDirectoriesQuietly(Path, java.nio.file.attribute.FileAttribute...)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void newDirectoriesQuietly_throwsRuntimeException_whenThePathIsARegularFile()
+		throws IOException
+	{
+		Path regularFile = Files.writeString(tempRoot.resolve("regular.txt"), "regular");
+
+		RuntimeException exception = assertThrows(RuntimeException.class,
+			() -> DirectoryFactory.newDirectoriesQuietly(regularFile));
+
+		assertInstanceOf(FileAlreadyExistsException.class, exception.getCause());
+		assertTrue(Files.isRegularFile(regularFile));
+	}
+
+	/**
 	 * Test method for {@link DirectoryFactory#newDirectory(File, String)}
 	 *
 	 * @throws IOException
@@ -312,7 +395,7 @@ public class DirectoryFactoryTest extends FileTestCase
 
 			File dir;
 			// new scenario...
-			parentDirectory = SystemFileExtensions.getTempDir();
+			parentDirectory = tempRoot.toFile();
 			filename = "foobar";
 			file = FileFactory.newFile(parentDirectory, filename);
 			DirectoryFactory.newDirectory(file, "newFooBarDir");
@@ -485,6 +568,53 @@ public class DirectoryFactoryTest extends FileTestCase
 
 		// Finally delete the test directory...
 		DeleteFileExtensions.delete(dirPath.toFile());
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryQuietly(String, String)}
+	 *
+	 * @param existsBefore
+	 *            whether the directory exists before the call
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@ParameterizedTest(name = "existsBefore = {0}")
+	@ValueSource(booleans = { true, false })
+	public void newDirectoryQuietly_returnsTheNamedDirectoryAndCreatesItOnlyWhenMissing(
+		boolean existsBefore) throws IOException
+	{
+		Path expected = tempRoot.resolve("quiet");
+		Path marker = expected.resolve("marker.txt");
+		if (existsBefore)
+		{
+			Files.createDirectory(expected);
+			Files.writeString(marker, "kept");
+		}
+
+		File directory = DirectoryFactory.newDirectoryQuietly(tempRoot.toString(), "quiet");
+
+		assertEquals(expected.toFile(), directory);
+		assertTrue(directory.isDirectory());
+		assertEquals(existsBefore, Files.exists(marker));
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryQuietly(String, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void newDirectoryQuietly_throwsRuntimeException_whenTheParentIsARegularFile()
+		throws IOException
+	{
+		Path regularFile = Files.writeString(tempRoot.resolve("regular.txt"), "regular");
+
+		RuntimeException exception = assertThrows(RuntimeException.class,
+			() -> DirectoryFactory.newDirectoryQuietly(regularFile.toString(), "quiet"));
+
+		assertInstanceOf(IOException.class, exception.getCause());
+		assertTrue(Files.isRegularFile(regularFile));
 	}
 
 	/**

@@ -253,25 +253,17 @@ public final class MergeFileExtensions
 	private static List<String> collectAndMerge(List<File> files, Charset charset,
 		MergeFileStrategy strategy) throws IOException
 	{
-		switch (strategy)
+		// a switch expression over every constant, so the compiler proves it exhaustive
+		return switch (strategy)
 		{
-			case APPEND :
-				return collectAppend(files, charset);
-			case UNIQUE_LINES :
-				return collectUnique(files, charset, false);
-			case SORTED :
-				return collectSorted(files, charset, false);
-			case SORTED_UNIQUE :
-				return collectSorted(files, charset, true);
-			case CSV_HEADER_MERGE :
-				return collectCsvWithHeader(files, charset);
-			case MARKDOWN_SECTIONS :
-				return collectMarkdownSections(files, charset);
-			case BY_KEY :
-				return collectByKeyDefault(files, charset); // Nutzt Standardwerte
-			default :
-				throw new IllegalArgumentException("Unknown strategy: " + strategy);
-		}
+			case APPEND -> collectAppend(files, charset);
+			case UNIQUE_LINES -> collectUnique(files, charset);
+			case SORTED -> collectSorted(files, charset, false);
+			case SORTED_UNIQUE -> collectSorted(files, charset, true);
+			case CSV_HEADER_MERGE -> collectCsvWithHeader(files, charset);
+			case MARKDOWN_SECTIONS -> collectMarkdownSections(files, charset);
+			case BY_KEY -> collectByKeyDefault(files, charset); // Nutzt Standardwerte
+		};
 	}
 
 	private static List<String> collectAppend(List<File> files, Charset charset) throws IOException
@@ -284,8 +276,7 @@ public final class MergeFileExtensions
 		return result;
 	}
 
-	private static List<String> collectUnique(List<File> files, Charset charset, boolean sort)
-		throws IOException
+	private static List<String> collectUnique(List<File> files, Charset charset) throws IOException
 	{
 		// LinkedHashSet preserves insertion order while removing duplicates
 		Set<String> unique = new LinkedHashSet<>();
@@ -293,12 +284,7 @@ public final class MergeFileExtensions
 		{
 			unique.addAll(readLines(file, charset));
 		}
-		List<String> result = new ArrayList<>(unique);
-		if (sort)
-		{
-			Collections.sort(result);
-		}
-		return result;
+		return new ArrayList<>(unique);
 	}
 
 	private static List<String> collectSorted(List<File> files, Charset charset, boolean unique)

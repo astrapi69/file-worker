@@ -201,9 +201,13 @@ public final class CompareFileExtensions
 	 * @param ignoreNameEquality
 	 *            If this is true then the name equality will be ignored.
 	 * @param ignoreContentEquality
-	 *            If this is true then the content equality will be ignored.
+	 *            If this is true then the content equality will be ignored; otherwise the content
+	 *            is equal exactly when the SHA-256 checksums of both files are, and not equal if
+	 *            either file cannot be read.
 	 * @throws IllegalArgumentException
 	 *             if the source file or the file to compare is a directory
+	 * @throws IllegalStateException
+	 *             if the platform provides no SHA-256, which every Java platform is required to
 	 */
 	public static void compare(final IFileContentResultBean fileContentResultBean,
 		final boolean ignoreAbsolutePathEquality, final boolean ignoreExtensionEquality,
@@ -216,29 +220,19 @@ public final class CompareFileExtensions
 		final File compare = fileContentResultBean.getFileToCompare();
 		if (!ignoreContentEquality)
 		{
-			boolean contentEquality;
 			try
 			{
 				final String sourceChecksum = FileChecksumExtensions.getChecksum(source,
-					HashAlgorithm.SHA_512.getAlgorithm());
+					HashAlgorithm.SHA_256.getAlgorithm());
 				final String compareChecksum = FileChecksumExtensions.getChecksum(compare,
-					HashAlgorithm.SHA_512.getAlgorithm());
-				contentEquality = sourceChecksum.equals(compareChecksum);
-				fileContentResultBean.setContentEquality(contentEquality);
+					HashAlgorithm.SHA_256.getAlgorithm());
+				fileContentResultBean.setContentEquality(sourceChecksum.equals(compareChecksum));
 			}
 			catch (final NoSuchAlgorithmException e)
 			{
-				// if the algorithm is not supported check it with CRC32.
-				try
-				{
-					contentEquality = FileChecksumExtensions.getCheckSumCRC32(
-						source) == FileChecksumExtensions.getCheckSumCRC32(compare);
-					fileContentResultBean.setContentEquality(contentEquality);
-				}
-				catch (IOException e1)
-				{
-					fileContentResultBean.setContentEquality(false);
-				}
+				// every Java platform has to provide SHA-256, so this is not reached
+				throw new IllegalStateException(
+					"SHA-256 is required of every Java platform but is not available", e);
 			}
 			catch (IOException e)
 			{

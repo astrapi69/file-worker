@@ -29,17 +29,22 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  * The unit test class for the class {@link LineAppender}
  */
 class LineAppenderTest
 {
+
+	@TempDir
+	Path tempDir;
 
 	private File tempFile;
 
@@ -53,7 +58,7 @@ class LineAppenderTest
 	protected void setUp() throws Exception
 	{
 		// Create a temporary file for testing
-		tempFile = File.createTempFile("test-file", ".txt");
+		tempFile = Files.createTempFile(tempDir, "test-file", ".txt").toFile();
 	}
 
 	/**

@@ -26,9 +26,12 @@ package io.github.astrapi69.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.URI;
+import java.net.URLConnection;
 import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 
 import io.github.astrapi69.file.read.ReadFileExtensions;
@@ -51,17 +54,36 @@ public final class FileExtensions
 
 	/**
 	 * Downloads Data from the given URI.
+	 * <p>
+	 * A {@code file:} URI is read as the local file {@link File#File(URI)} makes of it. Any other
+	 * URI is read through {@link URI#toURL()} and its {@link URLConnection}, without caches, so
+	 * that {@code jar:}, {@code http:} and {@code https:} work, and a {@code jar:} URI reads the
+	 * jar as it is now and keeps no handle on it.
 	 *
 	 * @param uri
 	 *            The URI from where to download.
-	 * @return Returns a byte array or null.
+	 * @return Returns the bytes the URI names, or null if it is a {@code file:} URI of a file that
+	 *         does not exist or of a directory.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, for example if the URI names nothing
+	 *             that can be read, the server cannot be reached or the scheme has no protocol
+	 *             handler ({@link java.net.MalformedURLException}).
+	 * @throws IllegalArgumentException
+	 *             if the URI is not absolute, or if it is a {@code file:} URI that
+	 *             {@link File#File(URI)} rejects
 	 */
 	public static byte[] download(final URI uri) throws IOException
 	{
-		final File tmpFile = new File(uri);
-		return ReadFileExtensions.toByteArray(tmpFile);
+		if ("file".equalsIgnoreCase(uri.getScheme()))
+		{
+			return ReadFileExtensions.toByteArray(new File(uri));
+		}
+		final URLConnection connection = uri.toURL().openConnection();
+		connection.setUseCaches(false);
+		try (InputStream inputStream = connection.getInputStream())
+		{
+			return ReadFileExtensions.toByteArray(inputStream);
+		}
 	}
 
 	/**
@@ -109,30 +131,44 @@ public final class FileExtensions
 	}
 
 	/**
-	 * Not yet implemented. Checks if the given file is open.
+	 * Checks whether a lock on the given file is held, by this JVM through another channel or,
+	 * where the platform enforces it, by another process. The check opens the existing file for
+	 * writing, tries an exclusive lock on it and releases that lock again at once; it neither
+	 * creates the file nor changes its content. A file that is open without a lock, for example for
+	 * reading, is not open in the sense of this check.
+	 * <p>
+	 * A missing file gives {@code false} and is left missing, also when its directory is missing.
+	 * The check looks for the file before it opens it: a file that another thread or process
+	 * deletes in between is created again, empty, by the opening.
+	 * <p>
+	 * Note: on platforms where closing a channel releases all the locks the JVM holds on the file
+	 * (see {@link FileLock}), checking a file that this JVM has locked releases that lock as far as
+	 * other processes are concerned, although it stays valid in this JVM.
 	 *
 	 * @param file
 	 *            The file to check.
-	 * @return Return true if the file is open otherwise false.
+	 * @return true if a lock on the file is held, false if the file is missing or no lock on it is
+	 *         held
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             if the file exists but cannot be opened for writing, for example a
+	 *             {@link java.io.FileNotFoundException} for a read-only file or a directory, or if
+	 *             trying the lock fails
 	 */
 	public static boolean isOpen(final File file) throws IOException
 	{
-		boolean open = false;
-		try (RandomAccessFile fileAccess = new RandomAccessFile(file.getAbsolutePath(), "rw"))
+		if (!file.exists())
 		{
-			FileLock lock = fileAccess.getChannel().tryLock();
-			if (lock == null)
-			{
-				open = true;
-			}
-			else
-			{
-				lock.release();
-			}
+			return false;
 		}
-		return open;
+		try (RandomAccessFile fileAccess = new RandomAccessFile(file.getAbsolutePath(), "rw");
+			FileLock lock = fileAccess.getChannel().tryLock())
+		{
+			return lock == null;
+		}
+		catch (final OverlappingFileLockException exception)
+		{
+			return true;
+		}
 	}
 
 }

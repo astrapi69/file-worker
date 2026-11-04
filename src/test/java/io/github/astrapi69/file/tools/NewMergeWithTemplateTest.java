@@ -42,10 +42,12 @@ import org.junit.jupiter.api.io.TempDir;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
 
 /**
- * Uses JUnit 5 (`@Test`, `@TempDir`). Invokes `MergeWithTemplate.main(...)` with explicit
- * `--src_base`, `--dst_base`, `--dirs` (so it does **not** depend on your JSON defaults). Verifies:
- * copy when destination subdir is missing, merge into existing directory (overwrites), dry-run
- * doesn’t change filesystem, multiple directories are handled.
+ * Uses JUnit 5 (`@Test`, `@TempDir`). The enabled tests invoke `MergeWithTemplate.run(...)` with
+ * explicit `--src_base`, `--dst_base`, `--dirs`, a config file that does not exist (so they do
+ * **not** depend on your JSON defaults) and a working directory inside the temporary directory; not
+ * `main(...)`, which ends the JVM on a usage error (#99). Verifies: copy when destination subdir is
+ * missing, merge into existing directory (overwrites), dry-run doesn’t change filesystem, multiple
+ * directories are handled.
  */
 class NewMergeWithTemplateTest
 {
@@ -336,8 +338,10 @@ class NewMergeWithTemplateTest
 		// no scripts/ at destination yet
 		assertFalse(Files.exists(dstBase.resolve("scripts")));
 
-		MergeWithTemplate.main(new String[] { "--src_base", srcBase.toString(), "--dst_base",
-				dstBase.toString(), "--dirs", "scripts", "--dry-run" });
+		MergeWithTemplate.run(
+			new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts", "--dry-run" },
+			tmp.resolve("no-config.json"), tmp.resolve("work"));
 
 		// still no scripts/ created
 		assertFalse(Files.exists(dstBase.resolve("scripts")),
@@ -353,8 +357,10 @@ class NewMergeWithTemplateTest
 		write(srcBase.resolve("scripts/tool.sh"), "#!/bin/sh\necho hi\n");
 		write(srcBase.resolve("tests/test.txt"), "T");
 
-		MergeWithTemplate.main(new String[] { "--src_base", srcBase.toString(), "--dst_base",
-				dstBase.toString(), "--dirs", "scripts", "tests" });
+		MergeWithTemplate.run(
+			new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts", "tests" },
+			tmp.resolve("no-config.json"), tmp.resolve("work"));
 
 		assertTrue(Files.exists(dstBase.resolve("scripts/tool.sh")));
 		assertTrue(Files.exists(dstBase.resolve("tests/test.txt")));

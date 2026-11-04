@@ -30,7 +30,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Collection;
@@ -76,13 +75,14 @@ public final class StoreFileExtensions
 	 *            The {@link File} object to write the given {@link String} object
 	 * @param stringToWrite
 	 *            The {@link String} object to write into the given {@link File} object
-	 * @return true if given {@link String} object was written successfully to the given
-	 *         {@link File} object otherwise false
+	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
+	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
+	 *             Signals that an I/O exception has occurred, also if a write to the file or its
+	 *             close fails
 	 */
 	public static boolean toFile(final File file, final String stringToWrite)
 		throws FileNotFoundException, IOException
@@ -97,10 +97,11 @@ public final class StoreFileExtensions
 	 *            The {@link File} object to write
 	 * @param lines
 	 *            The lines to write to file
-	 * @return true if given {@link Collection} of {@link String} objects was written successfully
-	 *         to the given {@link File} object otherwise false
+	 * @return {@code true} if the given lines were written to the given {@link File} object; a
+	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, also if a write to the file or its
+	 *             close fails
 	 */
 	public static boolean toFile(final File file, final Collection<String> lines) throws IOException
 	{
@@ -129,10 +130,11 @@ public final class StoreFileExtensions
 	 *            The lines to write to file
 	 * @param encoding
 	 *            The encoding from the file as {@link String} object
-	 * @return true if given {@link Collection} of {@link String} objects was written successfully
-	 *         to the given {@link File} object otherwise false
+	 * @return {@code true} if the given lines were written to the given {@link File} object; a
+	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, also if a write to the file or its
+	 *             close fails
 	 */
 	public static boolean toFile(final File file, final Collection<String> lines,
 		final String encoding) throws IOException
@@ -150,10 +152,11 @@ public final class StoreFileExtensions
 	 *            The lines to write to file
 	 * @param charset
 	 *            The charset from the file.
-	 * @return true if given {@link Collection} of {@link String} objects was written successfully
-	 *         to the given {@link File} object otherwise false
+	 * @return {@code true} if the given lines were written to the given {@link File} object; a
+	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, also if a write to the file or its
+	 *             close fails
 	 */
 	public static boolean toFile(final File file, final Collection<String> lines,
 		final Charset charset) throws IOException
@@ -172,13 +175,14 @@ public final class StoreFileExtensions
 	 *            The {@link String} object to write into the given {@link File} object
 	 * @param encoding
 	 *            The encoding from the file as {@link String} object
-	 * @return true if given {@link String} object was written successfully to the given
-	 *         {@link File} object otherwise false
+	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
+	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
+	 *             Signals that an I/O exception has occurred, also if a write to the file or its
+	 *             close fails
 	 */
 	public static boolean toFile(final File file, final String stringToWrite, final String encoding)
 		throws FileNotFoundException, IOException
@@ -200,29 +204,27 @@ public final class StoreFileExtensions
 	 *            The {@link String} object to write into the given {@link File} object
 	 * @param charset
 	 *            The charset from the file.
-	 * @return true if given {@link String} object was written successfully to the given
-	 *         {@link File} object otherwise false
+	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
+	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
+	 *             Signals that an I/O exception has occurred, also if a write to the file or its
+	 *             close fails
 	 */
 	public static boolean toFile(final File file, final String stringToWrite, final Charset charset)
 		throws FileNotFoundException, IOException
 	{
-		boolean written = false;
 		try (FileOutputStream fos = new FileOutputStream(file);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			OutputStreamWriter osw = (null == charset)
 				? new OutputStreamWriter(bos)
-				: new OutputStreamWriter(bos, charset);
-			PrintWriter printWriter = new PrintWriter(osw))
+				: new OutputStreamWriter(bos, charset))
 		{
-			printWriter.write(stringToWrite);
-			written = true;
+			osw.write(stringToWrite);
 		}
-		return written;
+		return true;
 	}
 
 }

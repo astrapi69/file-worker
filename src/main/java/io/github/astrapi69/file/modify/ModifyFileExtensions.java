@@ -106,7 +106,8 @@ public final class ModifyFileExtensions
 
 	/**
 	 * New convenience method: Concatenates files and generates a default result file in the
-	 * system's temporary directory.
+	 * system's temporary directory ({@code java.io.tmpdir}), named {@code concatenated_…txt}; the
+	 * caller deletes it when it is no longer needed.
 	 *
 	 * @param textFiles
 	 *            the list of text files to concatenate
@@ -293,8 +294,8 @@ public final class ModifyFileExtensions
 	}
 
 	/**
-	 * Concatenates all files with the given extension in the specified directory into a single
-	 * result file.
+	 * Concatenates all files with the given extension in the specified directory, in the order of
+	 * their paths, into a single result file.
 	 *
 	 * @param directory
 	 *            the directory to search for files
@@ -325,14 +326,16 @@ public final class ModifyFileExtensions
 				"No files with extension '" + extension + "' found in directory: " + directory);
 		}
 
-		List<File> fileList = Arrays.asList(matchingFiles);
 		Arrays.sort(matchingFiles); // Sortiere für konsistente Reihenfolge
+		List<File> fileList = Arrays.asList(matchingFiles);
 		return concatenateAllAndGet(fileList, resultTextFile);
 	}
 
 	/**
-	 * Concatenates all files with the given extension in the specified directory into a temporary
-	 * result file.
+	 * Concatenates all files with the given extension in the specified directory, in the order of
+	 * their paths, into a new result file in the system's temporary directory
+	 * ({@code java.io.tmpdir}), named {@code concatenated_…} with the given extension; the caller
+	 * deletes it when it is no longer needed.
 	 *
 	 * @param directory
 	 *            the directory to search for files
@@ -360,8 +363,8 @@ public final class ModifyFileExtensions
 				"No files with extension '" + extension + "' found in directory: " + directory);
 		}
 
-		List<File> fileList = Arrays.asList(matchingFiles);
 		Arrays.sort(matchingFiles); // Sortiere für konsistente Reihenfolge
+		List<File> fileList = Arrays.asList(matchingFiles);
 		File resultTextFile = File.createTempFile("concatenated_", extension);
 		return concatenateAllAndGet(fileList, resultTextFile);
 	}
@@ -407,7 +410,9 @@ public final class ModifyFileExtensions
 
 	/**
 	 * Concatenates all files with the given extension in the specified directory (recursively) into
-	 * a temporary result file.
+	 * a new result file in the system's temporary directory ({@code java.io.tmpdir}), named
+	 * {@code concatenated_…} with the given extension; the caller deletes it when it is no longer
+	 * needed.
 	 *
 	 * @param directory
 	 *            the root directory to search for files

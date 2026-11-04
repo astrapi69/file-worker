@@ -137,40 +137,39 @@ public final class FileSearchExtensions
 
 
 	/**
-	 * Checks if the given file contains only in the parent file recursively.
+	 * Checks if the given file is in the parent directory or in one of its subdirectories, at any
+	 * depth. The parent itself does not count, and a parent that is not a directory or cannot be
+	 * listed contains nothing.
 	 *
 	 * @param parent
 	 *            The parent directory to search.
 	 * @param search
-	 *            The file to search.
-	 * @return 's true if the file exists in the parent directory otherwise false.
+	 *            The file to search, a file or a directory.
+	 * @return true if the file is in the parent directory or in one of its subdirectories,
+	 *         otherwise false
 	 */
 	public static boolean containsFileRecursive(final File parent, final File search)
 	{
 		final File toSearch = search.getAbsoluteFile();
-		boolean exists = false;
 		final File[] children = parent.getAbsoluteFile().listFiles();
 		if (children == null)
 		{
 			return false;
 		}
 		final List<File> fileList = Arrays.asList(children);
+		if (fileList.contains(toSearch))
+		{
+			return true;
+		}
 		for (final File currentFile : fileList)
 		{
-			if (currentFile.isDirectory())
-			{
-				exists = FileSearchExtensions.containsFileRecursive(currentFile, toSearch);
-				if (exists)
-				{
-					return true;
-				}
-			}
-			if (fileList.contains(toSearch))
+			if (currentFile.isDirectory()
+				&& FileSearchExtensions.containsFileRecursive(currentFile, toSearch))
 			{
 				return true;
 			}
 		}
-		return exists;
+		return false;
 	}
 
 	/**
@@ -313,13 +312,18 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Finds all files that match the search pattern. The search is not recursively.
+	 * Finds all files that match the search pattern. The search is recursive: it descends into
+	 * every subdirectory of the given directory. The pattern is a regular expression that has to
+	 * match the whole name of a file, not its path; directories are searched but never returned
+	 * (file-worker#111)
 	 *
 	 * @param dir
 	 *            The directory to search.
 	 * @param fileSearchPattern
-	 *            The regex file search pattern.
-	 * @return A List with all files that matches the search pattern.
+	 *            The regular expression matched against the name of each file.
+	 * @return A List with the absolute files in the directory and in all its subdirectories whose
+	 *         name matches the search pattern, an empty List if there are none or if the given file
+	 *         is no directory.
 	 */
 	public static List<File> findAllFiles(final File dir, final String fileSearchPattern)
 	{

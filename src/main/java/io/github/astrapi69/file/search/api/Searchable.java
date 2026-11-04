@@ -175,13 +175,17 @@ public interface Searchable
 	}
 
 	/**
-	 * Finds files within a directory matching a specified search pattern (regex)
+	 * Finds files within a directory matching a specified search pattern (regex). The search is
+	 * recursive: it descends into every subdirectory of the given directory. The pattern is a
+	 * regular expression that has to match the whole name of a file, not its path; directories are
+	 * searched but never returned (file-worker#111)
 	 *
 	 * @param dir
 	 *            the directory to search
 	 * @param fileSearchPattern
-	 *            the regex pattern to match filenames against
-	 * @return a list of matching files
+	 *            the regex pattern to match the name of each file against
+	 * @return a list of the matching files in the directory and in all its subdirectories, an empty
+	 *         list if there are none or if the given file is no directory
 	 */
 	default List<File> findAllFiles(File dir, String fileSearchPattern)
 	{

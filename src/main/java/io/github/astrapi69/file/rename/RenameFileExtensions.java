@@ -220,11 +220,14 @@ public final class RenameFileExtensions
 	 * @param newSuffix
 	 *            The new suffix. You must start with a dot. For instance: .xxx
 	 * @param delete
-	 *            If its true than its deletes the existing file with the same name. But before it
-	 *            copys the contents into the new File.
-	 * @return true, if change filename suffix
+	 *            If true, a file whose rename the operating system refuses is copied to its new
+	 *            name and then deleted; if false, it is left as it is
+	 * @return true if the file was renamed; false only if delete is false and the rename was
+	 *         refused. With delete the result is always true: see
+	 *         {@link #renameFile(File, File, boolean)}
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, with delete for a copy or a delete
+	 *             that fails
 	 * @throws FileDoesNotExistException
 	 *             If the file does not exist.
 	 * @throws FileIsADirectoryException
@@ -253,9 +256,10 @@ public final class RenameFileExtensions
 	 *            The source file.
 	 * @param destinationFile
 	 *            The destination file.
-	 * @return true if the file was moved otherwise false.
+	 * @return true, the file was moved; a move that fails throws, it does not return false. See
+	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
@@ -277,9 +281,10 @@ public final class RenameFileExtensions
 	 *            The source file.
 	 * @param destFile
 	 *            The destination file, the new path of the source file.
-	 * @return true if the file was moved otherwise false.
+	 * @return true, the file was moved; a move that fails throws, it does not return false. See
+	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
@@ -320,11 +325,19 @@ public final class RenameFileExtensions
 	 * @param newFileName
 	 *            The new name from the file.
 	 * @param delete
-	 *            If true an attempt to copy the content from the file to rename to the new file and
-	 *            then delete the file to rename otherwise not.
-	 * @return 's true if the file was renamed otherwise false.
+	 *            If true and the operating system refuses the rename, the content of the file to
+	 *            rename is copied to the new file and the file to rename is then deleted; if false,
+	 *            a refused rename leaves the file as it is.
+	 * @return true if the file was renamed; false only if delete is false and the rename was
+	 *         refused. With delete the result is always true: a copy or a delete that fails throws,
+	 *         it does not return false. If the copy is made and the delete then throws, as it does
+	 *         in a directory that cannot be written, the file is in both places.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, with delete for a copy or a delete
+	 *             that fails
+	 * @throws IllegalArgumentException
+	 *             with delete, if the copy is refused because the new file is a directory, see
+	 *             {@link CopyFileExtensions#copyFile(File, File)}
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
