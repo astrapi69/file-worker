@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
@@ -234,6 +237,81 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String actual = io.github.astrapi69.file.read.ReadFileExtensions.fromFile(destination,
 			StandardCharsets.UTF_8);
 		assertEquals("only-one" + System.lineSeparator(), actual);
+	}
+
+	/**
+	 * Verifies that {@link StoreFileExtensions#toFile(File, java.util.Collection, String)} returns
+	 * {@code true} and writes every line followed by the platform line separator, encoded with the
+	 * charset the given encoding name denotes.
+	 *
+	 * @param encoding
+	 *            the name of the encoding to write with
+	 * @param tmp
+	 *            a per-test temporary directory injected by JUnit
+	 * @throws IOException
+	 *             if the write or read operation fails
+	 */
+	@ParameterizedTest(name = "encoding: {0}")
+	@ValueSource(strings = { "UTF-8", "UTF-16", "ISO-8859-1" })
+	void toFile_collection_with_encoding_writes_lines_in_that_encoding(String encoding,
+		@TempDir Path tmp) throws IOException
+	{
+		File destination = tmp.resolve("lines-" + encoding + ".txt").toFile();
+		List<String> lines = List.of("foo bar", "äöü", "fasel");
+		String lineSeparator = System.lineSeparator();
+		String expected = "foo bar" + lineSeparator + "äöü" + lineSeparator + "fasel"
+			+ lineSeparator;
+
+		boolean written = StoreFileExtensions.toFile(destination, lines, encoding);
+
+		assertTrue(written);
+		assertArrayEquals(expected.getBytes(Charset.forName(encoding)),
+			Files.readAllBytes(destination.toPath()));
+	}
+
+	/**
+	 * Verifies that {@link StoreFileExtensions#toFile(File, java.util.Collection, String)} with an
+	 * encoding name that denotes no charset still writes the lines, encoded with the platform
+	 * default charset, and returns {@code true}.
+	 *
+	 * @param tmp
+	 *            a per-test temporary directory injected by JUnit
+	 * @throws IOException
+	 *             if the write or read operation fails
+	 */
+	@Test
+	void toFile_collection_with_invalid_encoding_writes_lines_in_default_charset(@TempDir Path tmp)
+		throws IOException
+	{
+		File destination = tmp.resolve("lines-fallback.txt").toFile();
+		List<String> lines = List.of("foo bar", "äöü");
+		String lineSeparator = System.lineSeparator();
+		String expected = "foo bar" + lineSeparator + "äöü" + lineSeparator;
+
+		boolean written = StoreFileExtensions.toFile(destination, lines,
+			"definitely-not-a-charset");
+
+		assertTrue(written);
+		assertArrayEquals(expected.getBytes(Charset.defaultCharset()),
+			Files.readAllBytes(destination.toPath()));
+	}
+
+	/**
+	 * Verifies that {@link StoreFileExtensions#toFile(File, java.util.Collection, String)} signals
+	 * a file that cannot be created with an {@link IOException} instead of returning {@code false},
+	 * and creates no file.
+	 *
+	 * @param tmp
+	 *            a per-test temporary directory injected by JUnit
+	 */
+	@Test
+	void toFile_collection_with_encoding_fails_when_parent_missing(@TempDir Path tmp)
+	{
+		File destination = tmp.resolve("missing-parent").resolve("lines.txt").toFile();
+
+		assertThrows(FileNotFoundException.class,
+			() -> StoreFileExtensions.toFile(destination, List.of("foo bar"), "UTF-8"));
+		assertFalse(destination.exists());
 	}
 
 	/**
