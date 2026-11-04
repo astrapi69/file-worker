@@ -75,7 +75,8 @@ public final class StoreFileExtensions
 	 *            The {@link File} object to write the given {@link String} object
 	 * @param stringToWrite
 	 *            The {@link String} object to write into the given {@link File} object
-	 * @return {@code true}; a write that fails throws an {@link IOException} instead
+	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
+	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
@@ -96,7 +97,8 @@ public final class StoreFileExtensions
 	 *            The {@link File} object to write
 	 * @param lines
 	 *            The lines to write to file
-	 * @return {@code true}; a write that fails throws an {@link IOException} instead
+	 * @return {@code true} if the given lines were written to the given {@link File} object; a
+	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
@@ -128,7 +130,8 @@ public final class StoreFileExtensions
 	 *            The lines to write to file
 	 * @param encoding
 	 *            The encoding from the file as {@link String} object
-	 * @return {@code true}; a write that fails throws an {@link IOException} instead
+	 * @return {@code true} if the given lines were written to the given {@link File} object; a
+	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
@@ -149,7 +152,8 @@ public final class StoreFileExtensions
 	 *            The lines to write to file
 	 * @param charset
 	 *            The charset from the file.
-	 * @return {@code true}; a write that fails throws an {@link IOException} instead
+	 * @return {@code true} if the given lines were written to the given {@link File} object; a
+	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
@@ -171,7 +175,8 @@ public final class StoreFileExtensions
 	 *            The {@link String} object to write into the given {@link File} object
 	 * @param encoding
 	 *            The encoding from the file as {@link String} object
-	 * @return {@code true}; a write that fails throws an {@link IOException} instead
+	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
+	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
@@ -199,7 +204,8 @@ public final class StoreFileExtensions
 	 *            The {@link String} object to write into the given {@link File} object
 	 * @param charset
 	 *            The charset from the file.
-	 * @return {@code true}; a write that fails throws an {@link IOException} instead
+	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
+	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
