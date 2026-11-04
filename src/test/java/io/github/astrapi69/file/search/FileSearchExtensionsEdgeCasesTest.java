@@ -182,8 +182,17 @@ public class FileSearchExtensionsEdgeCasesTest
 		return Stream.of(
 			Arguments.of("the files of the top level, no directories", "",
 				Set.of("report-1.txt", "report-2.log", "notes.txt")),
+			Arguments.of("a directory with one file", "sub/deeper", Set.of("report-4.txt")),
 			Arguments.of("an empty directory has no files", "empty", Set.of()),
 			Arguments.of("a regular file has no files", "notes.txt", Set.of()));
+	}
+
+	static Stream<Arguments> recursiveFileListingCases()
+	{
+		return Stream.of(Arguments.of("the files of every level, no directories", "", ALL_FILES),
+			Arguments.of("one level down", "sub", Set.of("report-3.txt", "report-4.txt")),
+			Arguments.of("an empty directory has nothing", "empty", Set.of()),
+			Arguments.of("a regular file has nothing", "notes.txt", Set.of()));
 	}
 
 	static Stream<Arguments> searchPatternCases()
@@ -439,6 +448,17 @@ public class FileSearchExtensionsEdgeCasesTest
 			includeDirectories);
 
 		assertFoundExactly(expectedNames, found);
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("recursiveFileListingCases")
+	void getAllFilesFromDirRecursive_withoutTheFlag_listsTheFilesOfEveryLevel(String displayName,
+		String directory, Set<String> expectedNames)
+	{
+		List<File> found = FileSearchExtensions.getAllFilesFromDirRecursive(inTempDir(directory));
+
+		assertFoundExactly(expectedNames, found);
+		assertTrue(found.stream().allMatch(File::isFile), "files only: " + found);
 	}
 
 	@ParameterizedTest(name = "{0}")
