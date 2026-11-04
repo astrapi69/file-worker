@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -107,18 +108,25 @@ public class CopyFileExtensionsRegressionTest
 
 	/**
 	 * A copy onto the file itself is refused and leaves the file as it was (#73): it used to open
-	 * the destination for writing first, which emptied the only copy
+	 * the destination for writing first, which emptied the only copy. A hard link has a path of its
+	 * own and is still the same file.
 	 */
 	@ParameterizedTest(name = "{0}, charset {1}")
 	@CsvSource(nullValues = "none", value = { "the same File, none", "the same File, UTF-8",
-			"another path to the same file, none", "another path to the same file, UTF-8" })
+			"another path to the same file, none", "another path to the same file, UTF-8",
+			"a hard link to the file, none", "a hard link to the file, UTF-8" })
 	void copyFile_refusesAndKeepsTheContent_whenSourceAndDestinationAreTheSameFile(
 		final String destinationKind, final String charsetName) throws IOException
 	{
 		final File source = newFile("dir/same.txt", "abc").toFile();
-		final File destination = destinationKind.startsWith("the same")
-			? source
-			: tempDir.resolve("dir").resolve(".").resolve("same.txt").toFile();
+		final File destination = switch (destinationKind)
+		{
+			case "the same File" -> source;
+			case "another path to the same file" -> tempDir.resolve("dir").resolve(".")
+				.resolve("same.txt").toFile();
+			default -> Files.createLink(tempDir.resolve("dir").resolve("link.txt"), source.toPath())
+				.toFile();
+		};
 		final Charset charset = charsetName == null ? null : Charset.forName(charsetName);
 
 		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
@@ -126,5 +134,45 @@ public class CopyFileExtensionsRegressionTest
 
 		assertTrue(exception.getMessage().contains("same.txt"), exception.getMessage());
 		assertEquals("abc", Files.readString(source.toPath(), StandardCharsets.US_ASCII));
+	}
+
+	/**
+	 * A source that does not exist is the same file as a destination with the same absolute
+	 * normalized path (#73): the copy is refused before anything is opened, and no destination is
+	 * created
+	 */
+	@ParameterizedTest(name = "{0}")
+	@ValueSource(strings = { "the same File", "another path to the same file" })
+	void copyFile_refuses_whenAMissingSourceIsCopiedOntoItsOwnPath(final String destinationKind)
+	{
+		final File source = tempDir.resolve("dir").resolve("missing.txt").toFile();
+		final File destination = destinationKind.equals("the same File")
+			? source
+			: tempDir.resolve("dir").resolve("..").resolve("dir").resolve("missing.txt").toFile();
+
+		final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+			() -> CopyFileExtensions.copyFile(source, destination, false));
+
+		assertTrue(exception.getMessage().contains("same file"), exception.getMessage());
+		assertFalse(source.exists());
+	}
+
+	/**
+	 * A source that does not exist and a destination with another path are two files: the copy
+	 * fails on reading the source and creates no destination
+	 */
+	@ParameterizedTest(name = "charset {0}")
+	@CsvSource(nullValues = "none", value = { "none", "UTF-8" })
+	void copyFile_throwsFileNotFound_whenTheSourceIsMissingAndTheDestinationIsAnotherPath(
+		final String charsetName)
+	{
+		final File source = tempDir.resolve("dir").resolve("missing.txt").toFile();
+		final File destination = tempDir.resolve("other.txt").toFile();
+		final Charset charset = charsetName == null ? null : Charset.forName(charsetName);
+
+		assertThrows(FileNotFoundException.class,
+			() -> CopyFileExtensions.copyFile(source, destination, charset, charset, false));
+
+		assertFalse(destination.exists());
 	}
 }
