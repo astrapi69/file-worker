@@ -300,9 +300,9 @@ class MergeWithTemplateTest
 
 	@ParameterizedTest(name = "dry-run: {0}, destination exists: {1}")
 	@CsvSource({ "false, false, Copying, (create), Merging",
-			"false, true, Merging, (latest-modified wins), Copying",
+			"false, true, Merging, (source overwrites existing files), Copying",
 			"true, false, DRY-RUN copy, (create), DRY-RUN merge",
-			"true, true, DRY-RUN merge, (latest-modified wins), DRY-RUN copy" })
+			"true, true, DRY-RUN merge, (source overwrites existing files), DRY-RUN copy" })
 	void reportsTheBasesTheDirectoriesAndWhatItDoesWithEach(boolean dryRun,
 		boolean destinationExists, String action, String suffix, String otherAction,
 		@TempDir Path tmp) throws Throwable

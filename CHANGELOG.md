@@ -87,6 +87,10 @@ FIXED:
   its Javadoc says. The Javadoc of the copy, move, rename and delete methods that never return `false` says that
   they return `true` and that a failure throws, and the Quietly methods of `DirectoryFactory` say that they throw
   an unchecked exception in place of a checked one (#117)
+- `MergeWithTemplate` reports a merge as "(source overwrites existing files)" instead of "(latest-modified wins)";
+  its dry run previews a symbolic link to a target outside the source under the link's own path, where it showed a
+  wrong one or failed with a `StringIndexOutOfBoundsException`; a directory copied into a new destination keeps
+  the files' modification times, as a merge does (#116)
 
 
 Version 20.0

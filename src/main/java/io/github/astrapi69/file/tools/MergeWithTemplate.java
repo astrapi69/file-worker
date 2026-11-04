@@ -26,15 +26,18 @@ package io.github.astrapi69.file.tools;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
-import io.github.astrapi69.file.copy.CopyDirectoryExtensions;
 import io.github.astrapi69.file.merge.MergeDirectoryExtensions;
 
 /**
@@ -47,6 +50,15 @@ import io.github.astrapi69.file.merge.MergeDirectoryExtensions;
  * Usage examples: java io.github.astrapi69.tools.MergeWithTemplate --dirs scripts tests java
  * io.github.astrapi69.tools.MergeWithTemplate --src_base /tmp/src --dst_base /tmp/dst --dirs assets
  * docs java io.github.astrapi69.tools.MergeWithTemplate --dry-run --dirs scripts tests
+ *
+ * <p>
+ * A directory that does not exist at the destination yet is copied, one that exists is merged: the
+ * files of the source overwrite the files of the same name at the destination, whichever is newer,
+ * and the other files at the destination stay. Both keep the modification time of the source files,
+ * as the copy of the default files does. A dry run copies, merges and overwrites nothing (it only
+ * creates the destination base if it is missing) and lists each file of the source directory with
+ * its destination, the path of the file relative to the source directory, also for a symbolic link
+ * whose target lies outside the source directory.
  */
 public class MergeWithTemplate
 {
@@ -208,7 +220,8 @@ public class MergeWithTemplate
 			{
 				if (dstDir.exists())
 				{
-					log("🔀 DRY-RUN merge " + srcDir + " -> " + dstDir + " (latest-modified wins)");
+					log("🔀 DRY-RUN merge " + srcDir + " -> " + dstDir
+						+ " (source overwrites existing files)");
 					preview(srcDir, dstDir);
 				}
 				else
@@ -222,11 +235,12 @@ public class MergeWithTemplate
 			if (!dstDir.exists())
 			{
 				log("📂 Copying " + srcDir + " -> " + dstDir + " (create)");
-				CopyDirectoryExtensions.copyDirectory(srcDir.toPath(), dstDir.toPath());
+				copyDirectoryKeepingTimes(srcDir.toPath(), dstDir.toPath());
 			}
 			else
 			{
-				log("🔀 Merging " + srcDir + " -> " + dstDir + " (latest-modified wins)");
+				log("🔀 Merging " + srcDir + " -> " + dstDir
+					+ " (source overwrites existing files)");
 				// MergeDirectoryExtensions expects targetDir to exist and merges contents of given
 				// source dirs into it
 				Files.createDirectories(dstDir.toPath());
@@ -268,36 +282,59 @@ public class MergeWithTemplate
 		}
 	}
 
+	/**
+	 * Copies the given source directory into the given destination directory, which does not exist
+	 * yet, and keeps the modification time of the files, as the merge does
+	 * ({@code CopyDirectoryExtensions.copyDirectory(Path, Path)} gives the copies the current
+	 * time).
+	 */
+	private static void copyDirectoryKeepingTimes(Path source, Path destination) throws IOException
+	{
+		Files.walkFileTree(source, new SimpleFileVisitor<>()
+		{
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+				throws IOException
+			{
+				Files.createDirectories(destination.resolve(source.relativize(dir)));
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+				throws IOException
+			{
+				Files.copy(file, destination.resolve(source.relativize(file)),
+					StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+				return FileVisitResult.CONTINUE;
+			}
+		});
+	}
+
+	/**
+	 * Lists each file of the source directory with its destination: the path of the file relative
+	 * to the source directory, not its canonical path, so a symbolic link keeps its own name.
+	 */
 	private static void preview(File srcDir, File dstDir) throws IOException
 	{
 		final Collection<File> files = FileUtils.listFiles(srcDir, null, true);
-		String base = srcDir.getCanonicalPath();
+		Path source = srcDir.toPath();
 		String dstBase = dstDir.getCanonicalPath();
 		for (File f : files)
 		{
-			String rel = f.getCanonicalPath().substring(base.length()).replace(File.separatorChar,
-				'/');
-			if (rel.startsWith("/"))
-				rel = rel.substring(1);
-			File to = new File(dstBase, rel);
+			File to = new File(dstBase, source.relativize(f.toPath()).toString());
 			log("   📄 " + f.getPath() + "  ->  " + to.getPath());
 		}
 	}
 
+	/**
+	 * Casts a list of the defaults, which {@link #loadDefaults(String)} fills only with the results
+	 * of {@link #jsonStringArray(String, String)}: a list of strings or {@code null}.
+	 */
 	@SuppressWarnings("unchecked")
 	private static List<String> castList(Object o)
 	{
-		if (o == null)
-			return null;
-		if (o instanceof List<?>)
-		{
-			List<String> out = new ArrayList<>();
-			for (Object e : (List<?>)o)
-				if (e != null)
-					out.add(String.valueOf(e));
-			return out;
-		}
-		return null;
+		return (List<String>)o;
 	}
 
 	private static String firstOrDefault(List<String> values, String def)
@@ -377,7 +414,6 @@ public class MergeWithTemplate
 	}
 
 	// --------- ultra-light JSON extractors (sufficient for simple config) ---------
-	// ... keep the rest of your class
 
 	private static String jsonString(String json, String key)
 	{
@@ -405,11 +441,6 @@ public class MergeWithTemplate
 		while (q.find())
 			out.add(q.group(1));
 		return out;
-	}
-
-	private static String quote(String s)
-	{
-		return "\"" + s + "\"";
 	}
 
 	/**
