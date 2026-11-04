@@ -1,6 +1,13 @@
 pitest {
     junit5PluginVersion = libs.versions.pitest.junit5.plugin.version.get()
     pitestVersion = libs.versions.pitest.version.get()
+    // junit-platform-launcher is declared in testRuntimeOnly (gradle/libs.versions.toml, bundle
+    // test-runtime-only). Left on, the plugin resolves a detached copy of testImplementation to find
+    // the JUnit Platform version. That copy has neither the constraints of gradle/dependencies.gradle
+    // nor the exclusion on testRuntimeClasspath, and the dependency submission reports what it
+    // resolves: jobj-copy 4.2 with jackson-databind 2.16.0-rc1, and file-worker 11.3 with
+    // commons-io 2.11.0, commons-lang3 3.12.0 and commons-beanutils 1.9.4 (#103)
+    addJUnitPlatformLauncher = false
     targetClasses = ["io.github.astrapi69.file.*"]
     threads = 4
     outputFormats = ["HTML", "XML"]
