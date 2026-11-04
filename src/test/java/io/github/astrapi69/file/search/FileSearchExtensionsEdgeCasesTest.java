@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -642,5 +643,38 @@ public class FileSearchExtensionsEdgeCasesTest
 		{
 			sub.setReadable(true);
 		}
+	}
+
+	static Stream<Arguments> searchesOfADirectoryWithoutFiles()
+	{
+		Function<File, List<File>> findAllFiles = dir -> FileSearchExtensions.findAllFiles(dir,
+			"*");
+		Function<File, List<File>> findFilesRecursive = dir -> FileSearchExtensions
+			.findFilesRecursive(dir, true, "*");
+		Function<File, List<File>> getAllFilesFromDir = FileSearchExtensions::getAllFilesFromDir;
+		return Stream.of(Arguments.of("findAllFiles", "empty", findAllFiles),
+			Arguments.of("findAllFiles", "missing", findAllFiles),
+			Arguments.of("findFilesRecursive", "empty", findFilesRecursive),
+			Arguments.of("findFilesRecursive", "missing", findFilesRecursive),
+			Arguments.of("getAllFilesFromDir", "empty", getAllFilesFromDir),
+			Arguments.of("getAllFilesFromDir", "missing", getAllFilesFromDir));
+	}
+
+	/**
+	 * A search of a directory without files gives the same kind of list as a search that finds
+	 * some: an empty one the caller can add to, not an unmodifiable one
+	 */
+	@ParameterizedTest(name = "{0} of the {1} directory")
+	@MethodSource("searchesOfADirectoryWithoutFiles")
+	void search_ofADirectoryWithoutFiles_isAnEmptyListTheCallerCanAddTo(final String search,
+		final String directory, final Function<File, List<File>> searchOf)
+	{
+		File withoutFiles = tempDir.resolve(directory).toFile();
+
+		List<File> found = searchOf.apply(withoutFiles);
+
+		assertEquals(List.of(), found);
+		found.add(withoutFiles);
+		assertEquals(List.of(withoutFiles), found);
 	}
 }

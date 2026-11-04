@@ -84,14 +84,18 @@ public class DirectoryStructureExtensionsTest
 	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
-	public void getFileContentInfos_returnsAnEmptyList_whenGivenARegularFile() throws IOException
+	public void getFileContentInfos_returnsAnEmptyListTheCallerCanAddTo_whenGivenARegularFile()
+		throws IOException
 	{
 		File regularFile = Files.writeString(tempDir.toPath().resolve("regular.txt"), "regular")
 			.toFile();
+		FileContentInfo added = FileContentInfo.builder().name("added.txt").build();
 
 		List<FileContentInfo> fileContentInfos = DirectoryStructureExtensions
 			.getFileContentInfos(regularFile);
 
 		assertEquals(List.of(), fileContentInfos);
+		fileContentInfos.add(added);
+		assertEquals(List.of(added), fileContentInfos);
 	}
 }
