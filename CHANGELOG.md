@@ -97,6 +97,8 @@ FIXED:
   the files' modification times, as a merge does (#116)
 - the Javadoc of `FileSearchExtensions.findAllFiles(File, String)` and `Searchable.findAllFiles(File, String)` says
   that the search is recursive, which it is; it said "not recursively" (#111)
+- `FileCompareResultBean` rejects a `null` flag where it is set: the setters throw a `NullPointerException` that
+  names the flag, where the `null` used to make the next getter, `equals`, `hashCode` or `toString` throw (#115)
 
 
 Version 20.0

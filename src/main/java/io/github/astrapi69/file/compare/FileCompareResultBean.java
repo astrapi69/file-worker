@@ -25,11 +25,17 @@
 package io.github.astrapi69.file.compare;
 
 import java.io.File;
+import java.util.Objects;
 
 import io.github.astrapi69.file.compare.api.IFileCompareResultBean;
 
 /**
  * The class FileCompareResultBean is pojo for comparing two files.
+ * <p>
+ * The five equality flags are primitive values that start as {@code false}. Their setters take a
+ * {@link Boolean}, as {@link IFileCompareResultBean} declares them, and reject {@code null} with a
+ * {@link NullPointerException} that names the flag, so a flag always has a value to read, compare,
+ * hash and print.
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -42,15 +48,15 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	/** The source file. */
 	protected File source;
 	/** The absolute path equality. */
-	private Boolean absolutePathEquality = Boolean.FALSE;
+	private boolean absolutePathEquality;
 	/** The file extension equality. */
-	private Boolean fileExtensionEquality = Boolean.FALSE;
+	private boolean fileExtensionEquality;
 	/** The same last modified. */
-	private Boolean lastModifiedEquality = Boolean.FALSE;
+	private boolean lastModifiedEquality;
 	/** The same length. */
-	private Boolean lengthEquality = Boolean.FALSE;
+	private boolean lengthEquality;
 	/** The same name. */
-	private Boolean nameEquality = Boolean.FALSE;
+	private boolean nameEquality;
 
 	/**
 	 * Instantiates a new file compare result bean.
@@ -91,39 +97,19 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		final FileCompareResultBean other = (FileCompareResultBean)o;
 		if (!other.canEqual(this))
 			return false;
-		final Object this$absolutePathEquality = this.getAbsolutePathEquality();
-		final Object other$absolutePathEquality = other.getAbsolutePathEquality();
-		if (this$absolutePathEquality == null
-			? other$absolutePathEquality != null
-			: !this$absolutePathEquality.equals(other$absolutePathEquality))
+		if (this.getAbsolutePathEquality() != other.getAbsolutePathEquality())
 			return false;
 		final Object this$compare = this.compare;
 		final Object other$compare = other.compare;
 		if (this$compare == null ? other$compare != null : !this$compare.equals(other$compare))
 			return false;
-		final Object this$fileExtensionEquality = this.getFileExtensionEquality();
-		final Object other$fileExtensionEquality = other.getFileExtensionEquality();
-		if (this$fileExtensionEquality == null
-			? other$fileExtensionEquality != null
-			: !this$fileExtensionEquality.equals(other$fileExtensionEquality))
+		if (this.getFileExtensionEquality() != other.getFileExtensionEquality())
 			return false;
-		final Object this$lastModifiedEquality = this.getLastModifiedEquality();
-		final Object other$lastModifiedEquality = other.getLastModifiedEquality();
-		if (this$lastModifiedEquality == null
-			? other$lastModifiedEquality != null
-			: !this$lastModifiedEquality.equals(other$lastModifiedEquality))
+		if (this.getLastModifiedEquality() != other.getLastModifiedEquality())
 			return false;
-		final Object this$lengthEquality = this.getLengthEquality();
-		final Object other$lengthEquality = other.getLengthEquality();
-		if (this$lengthEquality == null
-			? other$lengthEquality != null
-			: !this$lengthEquality.equals(other$lengthEquality))
+		if (this.getLengthEquality() != other.getLengthEquality())
 			return false;
-		final Object this$nameEquality = this.getNameEquality();
-		final Object other$nameEquality = other.getNameEquality();
-		if (this$nameEquality == null
-			? other$nameEquality != null
-			: !this$nameEquality.equals(other$nameEquality))
+		if (this.getNameEquality() != other.getNameEquality())
 			return false;
 		final Object this$source = this.source;
 		final Object other$source = other.source;
@@ -142,16 +128,20 @@ public class FileCompareResultBean implements IFileCompareResultBean
 		return this.absolutePathEquality;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Sets the absolute path equality.
 	 *
-	 * @see io.github.astrapi69.compare.interfaces.IFileCompareResultBean#setAbsolutePathEquality
-	 * (java.lang.Boolean)
+	 * @param absolutePathEquality
+	 *            the new absolute path equality {@inheritDoc}
+	 * @throws NullPointerException
+	 *             if the given value is {@code null}, with the message {@code absolutePathEquality}
+	 * @see IFileCompareResultBean#setAbsolutePathEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setAbsolutePathEquality(final Boolean absolutePathEquality)
 	{
-		this.absolutePathEquality = absolutePathEquality;
+		this.absolutePathEquality = Objects.requireNonNull(absolutePathEquality,
+			"absolutePathEquality");
 	}
 
 	/**
@@ -171,12 +161,16 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param fileExtensionEquality
 	 *            the new file extension equality {@inheritDoc}
+	 * @throws NullPointerException
+	 *             if the given value is {@code null}, with the message
+	 *             {@code fileExtensionEquality}
 	 * @see IFileCompareResultBean#setFileExtensionEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setFileExtensionEquality(final Boolean fileExtensionEquality)
 	{
-		this.fileExtensionEquality = fileExtensionEquality;
+		this.fileExtensionEquality = Objects.requireNonNull(fileExtensionEquality,
+			"fileExtensionEquality");
 	}
 
 	/**
@@ -208,12 +202,15 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param lastModifiedEquality
 	 *            the new last modified equality {@inheritDoc}
+	 * @throws NullPointerException
+	 *             if the given value is {@code null}, with the message {@code lastModifiedEquality}
 	 * @see IFileCompareResultBean#setLastModifiedEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setLastModifiedEquality(final Boolean lastModifiedEquality)
 	{
-		this.lastModifiedEquality = lastModifiedEquality;
+		this.lastModifiedEquality = Objects.requireNonNull(lastModifiedEquality,
+			"lastModifiedEquality");
 	}
 
 	/**
@@ -233,12 +230,14 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param lengthEquality
 	 *            the new length equality {@inheritDoc}
+	 * @throws NullPointerException
+	 *             if the given value is {@code null}, with the message {@code lengthEquality}
 	 * @see IFileCompareResultBean#setLengthEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setLengthEquality(final Boolean lengthEquality)
 	{
-		this.lengthEquality = lengthEquality;
+		this.lengthEquality = Objects.requireNonNull(lengthEquality, "lengthEquality");
 	}
 
 	/**
@@ -258,12 +257,14 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	 *
 	 * @param nameEquality
 	 *            the new name equality {@inheritDoc}
+	 * @throws NullPointerException
+	 *             if the given value is {@code null}, with the message {@code nameEquality}
 	 * @see IFileCompareResultBean#setNameEquality(java.lang.Boolean)
 	 */
 	@Override
 	public void setNameEquality(final Boolean nameEquality)
 	{
-		this.nameEquality = nameEquality;
+		this.nameEquality = Objects.requireNonNull(nameEquality, "nameEquality");
 	}
 
 	/**
@@ -286,21 +287,13 @@ public class FileCompareResultBean implements IFileCompareResultBean
 	{
 		final int PRIME = 59;
 		int result = 1;
-		final Object $absolutePathEquality = this.getAbsolutePathEquality();
-		result = result * PRIME
-			+ ($absolutePathEquality == null ? 43 : $absolutePathEquality.hashCode());
+		result = result * PRIME + Boolean.hashCode(this.getAbsolutePathEquality());
 		final Object $compare = this.compare;
 		result = result * PRIME + ($compare == null ? 43 : $compare.hashCode());
-		final Object $fileExtensionEquality = this.getFileExtensionEquality();
-		result = result * PRIME
-			+ ($fileExtensionEquality == null ? 43 : $fileExtensionEquality.hashCode());
-		final Object $lastModifiedEquality = this.getLastModifiedEquality();
-		result = result * PRIME
-			+ ($lastModifiedEquality == null ? 43 : $lastModifiedEquality.hashCode());
-		final Object $lengthEquality = this.getLengthEquality();
-		result = result * PRIME + ($lengthEquality == null ? 43 : $lengthEquality.hashCode());
-		final Object $nameEquality = this.getNameEquality();
-		result = result * PRIME + ($nameEquality == null ? 43 : $nameEquality.hashCode());
+		result = result * PRIME + Boolean.hashCode(this.getFileExtensionEquality());
+		result = result * PRIME + Boolean.hashCode(this.getLastModifiedEquality());
+		result = result * PRIME + Boolean.hashCode(this.getLengthEquality());
+		result = result * PRIME + Boolean.hashCode(this.getNameEquality());
 		final Object $source = this.source;
 		result = result * PRIME + ($source == null ? 43 : $source.hashCode());
 		return result;

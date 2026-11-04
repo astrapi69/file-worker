@@ -25,12 +25,15 @@
 package io.github.astrapi69.file.compare;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -108,6 +111,25 @@ public class FileCompareResultBeanTest
 				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setLengthEquality),
 			Arguments.of("name equality",
 				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setNameEquality));
+	}
+
+	static Stream<Arguments> flagsByFieldName()
+	{
+		return Stream.of(Arguments.of("absolutePathEquality",
+			(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setAbsolutePathEquality,
+			(Predicate<FileCompareResultBean>)FileCompareResultBean::getAbsolutePathEquality),
+			Arguments.of("fileExtensionEquality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setFileExtensionEquality,
+				(Predicate<FileCompareResultBean>)FileCompareResultBean::getFileExtensionEquality),
+			Arguments.of("lastModifiedEquality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setLastModifiedEquality,
+				(Predicate<FileCompareResultBean>)FileCompareResultBean::getLastModifiedEquality),
+			Arguments.of("lengthEquality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setLengthEquality,
+				(Predicate<FileCompareResultBean>)FileCompareResultBean::getLengthEquality),
+			Arguments.of("nameEquality",
+				(BiConsumer<FileCompareResultBean, Boolean>)FileCompareResultBean::setNameEquality,
+				(Predicate<FileCompareResultBean>)FileCompareResultBean::getNameEquality));
 	}
 
 	static Stream<Arguments> beansWithDifferentFiles()
@@ -258,6 +280,77 @@ public class FileCompareResultBeanTest
 		assertTrue(text.contains("nameEquality=false"), text);
 		assertTrue(text.contains("source=" + SOURCE), text);
 		assertTrue(text.contains("compare=" + COMPARE), text);
+	}
+
+	/**
+	 * Test method for the five flag setters of {@link FileCompareResultBean}: the value set is the
+	 * value the getter reads back, for true and for false
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("flagsByFieldName")
+	public void flagSetter_storesTheValue_thatTheGetterReadsBack(final String fieldName,
+		final BiConsumer<FileCompareResultBean, Boolean> setter,
+		final Predicate<FileCompareResultBean> getter)
+	{
+		final FileCompareResultBean bean = new FileCompareResultBean(SOURCE, COMPARE);
+
+		setter.accept(bean, Boolean.TRUE);
+		assertTrue(getter.test(bean));
+
+		setter.accept(bean, Boolean.FALSE);
+		assertFalse(getter.test(bean));
+	}
+
+	/**
+	 * Test method for the five flag setters of {@link FileCompareResultBean}: null is rejected with
+	 * the name of the flag, and the flag keeps the value it had
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("flagsByFieldName")
+	public void flagSetter_throwsNullPointerException_whenTheValueIsNull(final String fieldName,
+		final BiConsumer<FileCompareResultBean, Boolean> setter,
+		final Predicate<FileCompareResultBean> getter)
+	{
+		final FileCompareResultBean bean = new FileCompareResultBean(SOURCE, COMPARE);
+		setter.accept(bean, Boolean.TRUE);
+
+		final NullPointerException exception = assertThrows(NullPointerException.class,
+			() -> setter.accept(bean, null));
+
+		assertEquals(fieldName, exception.getMessage());
+		assertTrue(getter.test(bean));
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#equals(Object)},
+	 * {@link FileCompareResultBean#hashCode()} and {@link FileCompareResultBean#toString()}: a bean
+	 * that was handed a null flag still reads, compares, hashes and prints as the bean it was
+	 * before
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("flagsByFieldName")
+	public void equalsHashCodeAndToString_work_afterAFlagSetterWasHandedNull(final String fieldName,
+		final BiConsumer<FileCompareResultBean, Boolean> setter,
+		final Predicate<FileCompareResultBean> getter)
+	{
+		final FileCompareResultBean bean = newBeanWithEveryFlagSet();
+		final FileCompareResultBean equalBean = newBeanWithEveryFlagSet();
+		try
+		{
+			setter.accept(bean, null);
+		}
+		catch (final NullPointerException rejected)
+		{
+			// the rejection is what flagSetter_throwsNullPointerException_whenTheValueIsNull
+			// checks, this test checks the state of the bean after it
+		}
+
+		assertTrue(getter.test(bean));
+		assertEquals(bean, equalBean);
+		assertEquals(equalBean, bean);
+		assertEquals(equalBean.hashCode(), bean.hashCode());
+		assertTrue(bean.toString().contains(fieldName + "=true"), bean.toString());
+		assertEquals(equalBean.toString(), bean.toString());
 	}
 
 }
