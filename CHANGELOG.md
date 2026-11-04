@@ -19,6 +19,9 @@ CHANGED:
   (#99)
 - `MergeWithTemplateTest` and `NewMergeWithTemplateTest` call `run` instead of `main`, which ended the test JVM
   with `System.exit` on a usage error, so a mutant could kill the test process (#99)
+- `MergeWithTemplate.main` ends the JVM with what the package-private `commandLine` returns: 0, or 2 after it has
+  printed the usage error. The tests check both through `commandLine`, and the success path of `main` and
+  `run(String[])` in `MergeWithTemplateMainTest` (#99)
 - dependencies: silly-io 5.0 (#98), jsoup 1.24.1, Spotless 8.11.0
 - mutation testing with PIT 1.30.1 (`./gradlew pitest`, `gradle/mutation-testing.gradle`): the tests detect 985 of
   the 1202 mutants, 82%, and the CI build fails below 80% (`mutationThreshold` in `build.gradle`; PIT rounds the
