@@ -41,7 +41,6 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,7 +51,6 @@ import io.github.astrapi69.checksum.ByteArrayChecksumExtensions;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.crypt.api.algorithm.ChecksumAlgorithm;
 import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.throwable.RuntimeExceptionDecorator;
 
@@ -77,39 +75,26 @@ public class FileContentInfoTest
 	@Test
 	public void testToFileContentInfo() throws IOException
 	{
-		String absolutePath;
-		File file;
-		FileContentInfo fileContentInfo;
-		String actual;
-		String expected;
-		String rootPath;
-		String absoluteFilePath;
-		String filename;
+		String absoluteFilePath = tempDir.resolve("foo").resolve("bar").toString();
+		String filename = "foo.txt";
+		FileContentInfo fileContentInfo = FileContentInfo.builder().path(absoluteFilePath)
+			.name(filename).build();
 
-		rootPath = SystemUtils.IS_OS_WINDOWS ? "C:\\" : "/";
+		File file = FileFactory.newFile(fileContentInfo);
 
-		absoluteFilePath = SystemUtils.IS_OS_WINDOWS
-			? rootPath + "tmp\\foo\\bar"
-			: rootPath + "tmp/foo/bar";
-		filename = "foo.txt";
-		actual = SystemUtils.IS_OS_WINDOWS ? "C:\\tmp\\foo\\bar\\foo.txt" : "/tmp/foo/bar/foo.txt";
-		fileContentInfo = FileContentInfo.builder().path(absoluteFilePath).name(filename).build();
-		file = FileFactory.newFile(fileContentInfo);
 		assertTrue(file.exists());
+		assertEquals(new File(absoluteFilePath, filename).getAbsolutePath(),
+			file.getAbsolutePath());
 		fileContentInfo.setChecksum(RuntimeExceptionDecorator
 			.decorate(() -> FileChecksumExtensions.getChecksum(file, ChecksumAlgorithm.MD5)));
 		fileContentInfo.setContent(
 			RuntimeExceptionDecorator.decorate(() -> ReadFileExtensions.readFileToBytearray(file)));
-		assertNotNull(file);
-		expected = file.getAbsolutePath();
-		assertEquals(expected, actual);
 
 		FileContentInfo anotherFileInfo = FileContentInfo.toFileContentInfo(file);
 		assertEquals(anotherFileInfo, fileContentInfo);
 
 		File anotherFile = FileContentInfo.toFile(anotherFileInfo);
 		assertEquals(anotherFile, file);
-		DeleteFileExtensions.delete(file);
 	}
 
 	/**
@@ -301,7 +286,9 @@ public class FileContentInfoTest
 	}
 
 	/**
-	 * Test method for {@link FileContentInfo#equals(Object)}
+	 * Test method for {@link FileContentInfo#equals(Object)}: the checksum, the content or the type
+	 * differs. The name, the path and the directory flag take no part, as equals and hashCode do
+	 * not call those of {@link FileInfo} (#114), so no case varies them.
 	 *
 	 * @param fileContentInfo
 	 *            the object to compare
@@ -310,8 +297,8 @@ public class FileContentInfoTest
 	 */
 	@ParameterizedTest
 	@MethodSource("fileContentInfoAndAnotherThatDiffers")
-	public void equals_isFalse_whenTheOtherDiffersInOneRespect(FileContentInfo fileContentInfo,
-		Object other)
+	public void equals_isFalse_whenTheChecksumTheContentOrTheTypeDiffers(
+		FileContentInfo fileContentInfo, Object other)
 	{
 		assertFalse(fileContentInfo.equals(other));
 	}

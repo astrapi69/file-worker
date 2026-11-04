@@ -39,7 +39,6 @@ import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -48,7 +47,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 
 /**
  * The unit test class for the class {@link FileInfo}
@@ -84,31 +82,17 @@ public class FileInfoTest
 	@Test
 	public void testToFileInfo() throws IOException
 	{
-		String absolutePath;
-		File file;
-		FileInfo fileInfo;
-		String actual;
-		String expected;
-		String rootPath;
-		String absoluteFilePath;
-		String filename;
+		String absoluteFilePath = tempDir.resolve("foo").resolve("bar").toString();
+		String filename = "foo.txt";
+		FileInfo fileInfo = FileInfo.builder().path(absoluteFilePath).name(filename).build();
 
-		rootPath = SystemUtils.IS_OS_WINDOWS ? "C:\\" : "/";
+		File file = FileFactory.newFile(fileInfo);
 
-		absoluteFilePath = SystemUtils.IS_OS_WINDOWS
-			? rootPath + "tmp\\foo\\bar"
-			: rootPath + "tmp/foo/bar";
-		filename = "foo.txt";
-		actual = SystemUtils.IS_OS_WINDOWS ? "C:\\tmp\\foo\\bar\\foo.txt" : "/tmp/foo/bar/foo.txt";
-		fileInfo = FileInfo.builder().path(absoluteFilePath).name(filename).build();
-		file = FileFactory.newFile(fileInfo);
 		assertTrue(file.exists());
-		assertNotNull(file);
-		expected = file.getAbsolutePath();
-		assertEquals(expected, actual);
+		assertEquals(new File(absoluteFilePath, filename).getAbsolutePath(),
+			file.getAbsolutePath());
 		FileInfo anotherFileInfo = FileInfo.toFileInfo(file);
 		assertEquals(anotherFileInfo, fileInfo);
-		DeleteFileExtensions.delete(file);
 	}
 
 	/**
