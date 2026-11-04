@@ -25,6 +25,7 @@
 package io.github.astrapi69.file.copy.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -102,6 +103,21 @@ public class CopyableTest
 
 		assertEquals("alpha", read(destination.resolve("a.txt")));
 		assertEquals("beta", read(destination.resolve("sub/b.txt")));
+	}
+
+	/**
+	 * Test method for {@link Copyable#copyDirectory(File, File)}: a regular file as the destination
+	 * is no copy of a directory, so the copy reports false
+	 */
+	@Test
+	public void copyDirectory_returnsFalse_whenTheDestinationIsARegularFile() throws Exception
+	{
+		final File source = Files.createDirectories(tempDir.resolve("source")).toFile();
+		final Path destination = newFile("destination.txt", "alpha");
+
+		assertFalse(copyable.copyDirectory(source, destination.toFile()));
+
+		assertEquals("alpha", read(destination));
 	}
 
 	/**

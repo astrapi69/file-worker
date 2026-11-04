@@ -137,6 +137,17 @@ public class ErasableTest
 	}
 
 	@Test
+	void deleteFile_returnsFalse_andDeletesNothing_whenTheFileDoesNotExist() throws IOException
+	{
+		assertFalse(erasable.delete(source.resolve("missing.txt").toFile()));
+
+		assertContent("keep", source.resolve("keep.txt"));
+		assertContent("a", source.resolve("tmp-a.txt"));
+		assertContent("c", nested.resolve("tmp-c.txt"));
+		assertOutsideUntouched();
+	}
+
+	@Test
 	void deleteFile_deletesTheDirectoryWithItsContent_andReturnsTrue() throws IOException
 	{
 		boolean reported = erasable.delete(nested.toFile());

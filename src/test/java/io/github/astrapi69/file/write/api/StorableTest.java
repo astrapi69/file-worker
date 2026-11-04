@@ -26,17 +26,24 @@ package io.github.astrapi69.file.write.api;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
 import io.github.astrapi69.collection.list.ListFactory;
@@ -147,5 +154,117 @@ public class StorableTest
 		String expectedContent = String.join(System.lineSeparator(), lines);
 
 		assertEquals(expectedContent, actualContent);
+	}
+
+	/**
+	 * Test method for {@link Storable#toFile(File, String)}: returns {@code true} and writes the
+	 * string encoded with the platform default charset
+	 *
+	 * @throws IOException
+	 *             if an I/O exception occurs
+	 */
+	@Test
+	public void testToFileWithStringReturnsTrueAndUsesDefaultCharset() throws IOException
+	{
+		String content = "foo bar äöü";
+		File destination = new File(tempDir.toFile(), "testStoreStringDefaultCharset.txt");
+
+		boolean written = storable.toFile(destination, content);
+
+		assertTrue(written);
+		assertArrayEquals(content.getBytes(Charset.defaultCharset()),
+			Files.readAllBytes(destination.toPath()));
+	}
+
+	/**
+	 * Test method for {@link Storable#toFile(File, Collection)}: returns {@code true} and writes
+	 * the lines joined by the platform line separator, without a trailing one, encoded with the
+	 * platform default charset
+	 *
+	 * @throws IOException
+	 *             if an I/O exception occurs
+	 */
+	@Test
+	public void testToFileWithCollectionReturnsTrueAndUsesDefaultCharset() throws IOException
+	{
+		List<String> lines = List.of("foo bar", "äöü");
+		File destination = new File(tempDir.toFile(), "testStoreCollectionDefaultCharset.txt");
+		String expected = "foo bar" + System.lineSeparator() + "äöü";
+
+		boolean written = storable.toFile(destination, lines);
+
+		assertTrue(written);
+		assertArrayEquals(expected.getBytes(Charset.defaultCharset()),
+			Files.readAllBytes(destination.toPath()));
+	}
+
+	/**
+	 * Test method for {@link Storable#toFile(File, String, Charset)}: returns {@code true} and
+	 * writes the string encoded with the given charset
+	 *
+	 * @param charsetName
+	 *            the name of the charset to write with
+	 * @throws IOException
+	 *             if an I/O exception occurs
+	 */
+	@ParameterizedTest(name = "charset: {0}")
+	@ValueSource(strings = { "UTF-8", "UTF-16", "ISO-8859-1" })
+	public void testToFileWithStringAndCharsetReturnsTrueAndEncodes(String charsetName)
+		throws IOException
+	{
+		Charset charset = Charset.forName(charsetName);
+		String content = "foo bar äöü";
+		File destination = new File(tempDir.toFile(), "testStoreString-" + charsetName + ".txt");
+
+		boolean written = storable.toFile(destination, content, charset);
+
+		assertTrue(written);
+		assertArrayEquals(content.getBytes(charset), Files.readAllBytes(destination.toPath()));
+	}
+
+	/**
+	 * Test method for {@link Storable#toFile(File, Collection, Charset)}: returns {@code true} and
+	 * writes the lines joined by the platform line separator, encoded with the given charset
+	 *
+	 * @param charsetName
+	 *            the name of the charset to write with
+	 * @throws IOException
+	 *             if an I/O exception occurs
+	 */
+	@ParameterizedTest(name = "charset: {0}")
+	@ValueSource(strings = { "UTF-8", "UTF-16", "ISO-8859-1" })
+	public void testToFileWithCollectionAndCharsetReturnsTrueAndEncodes(String charsetName)
+		throws IOException
+	{
+		Charset charset = Charset.forName(charsetName);
+		List<String> lines = List.of("foo bar", "äöü");
+		File destination = new File(tempDir.toFile(),
+			"testStoreCollection-" + charsetName + ".txt");
+		String expected = "foo bar" + System.lineSeparator() + "äöü";
+
+		boolean written = storable.toFile(destination, lines, charset);
+
+		assertTrue(written);
+		assertArrayEquals(expected.getBytes(charset), Files.readAllBytes(destination.toPath()));
+	}
+
+	/**
+	 * Test method for the string and collection overloads of {@link Storable}: a file whose parent
+	 * directory does not exist is signalled with a {@link NoSuchFileException} instead of a
+	 * {@code false} return value, and no file is created
+	 */
+	@Test
+	public void testToFileFailsWhenParentMissing()
+	{
+		File destination = tempDir.resolve("missing-parent").resolve("file.txt").toFile();
+		List<String> lines = List.of("foo bar");
+
+		assertThrows(NoSuchFileException.class, () -> storable.toFile(destination, "foo bar"));
+		assertThrows(NoSuchFileException.class,
+			() -> storable.toFile(destination, "foo bar", StandardCharsets.UTF_8));
+		assertThrows(NoSuchFileException.class, () -> storable.toFile(destination, lines));
+		assertThrows(NoSuchFileException.class,
+			() -> storable.toFile(destination, lines, StandardCharsets.UTF_8));
+		assertFalse(destination.exists());
 	}
 }

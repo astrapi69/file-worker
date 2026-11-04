@@ -467,6 +467,36 @@ public class CompareFileExtensionsTempDirTest
 	}
 
 	/**
+	 * Test method for
+	 * {@link CompareFileExtensions#compare(IFileContentResultBean, boolean, boolean, boolean, boolean, boolean, boolean)}
+	 * with a result bean that an earlier comparison has already filled in
+	 */
+	@ParameterizedTest(name = "{0} is missing")
+	@CsvSource({ "the source file, true", "the file to compare, false" })
+	public void compare_resetsTheContentEqualityOfAReusedBean_whenAFileHasGoneMissing(
+		final String missingRole, final boolean sourceIsMissing) throws IOException
+	{
+		final File source = newFile("a/same.txt", "abc");
+		final File compare = newFile("b/same.txt", "abc");
+		final FileContentResultBean bean = new FileContentResultBean(source, compare);
+		CompareFileExtensions.compare(bean, true, true, true, true, true, false);
+		assertTrue(bean.getContentEquality());
+
+		final File missing = notCreated("c/same.txt");
+		if (sourceIsMissing)
+		{
+			bean.setSource(missing);
+		}
+		else
+		{
+			bean.setCompare(missing);
+		}
+		CompareFileExtensions.compare(bean, true, true, true, true, true, false);
+
+		assertFalse(bean.getContentEquality());
+	}
+
+	/**
 	 * Test method for {@link CompareFileExtensions#compareFileContentByBytes(File, File)} and
 	 * {@link CompareFileExtensions#compareFileContentByLines(File, File)}
 	 */

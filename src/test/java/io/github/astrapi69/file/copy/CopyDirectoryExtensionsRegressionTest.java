@@ -57,6 +57,9 @@ public class CopyDirectoryExtensionsRegressionTest
 	private static final List<String> SOURCE_FILES = List.of("top.txt", "sub/kept.txt", "sub/x.txt",
 		"sub/deeper/kept.txt", "sub/deeper/x.txt", "sub/skipped/inner.txt");
 
+	/** The file of a source tree that a copy with an exclusion leaves out */
+	private static final String LEFT_OUT = "left-out.txt";
+
 	@TempDir
 	Path tempDir;
 
@@ -250,5 +253,100 @@ public class CopyDirectoryExtensionsRegressionTest
 		assertTrue(directoryCopy.copy(source.toFile(), destination.toFile()));
 
 		assertEquals(entriesUnder(source), entriesUnder(destination));
+	}
+
+	static Stream<Arguments> directoryCopiesWithAndWithoutExclusion()
+	{
+		return Stream.of(
+			Arguments.of("copyDirectory(File, File)",
+				(DirectoryCopy)CopyDirectoryExtensions::copyDirectory, false),
+			Arguments.of(
+				"copyDirectoryWithFileFilter(File, File, null, null, excludeFiles, boolean)",
+				(DirectoryCopy)(source, destination) -> CopyDirectoryExtensions
+					.copyDirectoryWithFileFilter(source, destination, null, null,
+						List.of(new File(source, LEFT_OUT)), false),
+				true),
+			Arguments.of("copyDirectoryWithFilenameFilter(File, File, null, boolean)",
+				(DirectoryCopy)(source, destination) -> CopyDirectoryExtensions
+					.copyDirectoryWithFilenameFilter(source, destination, null, false),
+				false),
+			Arguments.of("copyDirectoryWithFilenameFilter(File, File, null, exclude, boolean)",
+				(DirectoryCopy)(source, destination) -> CopyDirectoryExtensions
+					.copyDirectoryWithFilenameFilter(source, destination, null,
+						(directory, name) -> name.equals(LEFT_OUT), false),
+				true));
+	}
+
+	/**
+	 * The File-based directory copies return false when a subdirectory could not be copied, because
+	 * its place in the destination is taken by a regular file, whatever entries are listed before
+	 * or after it; the other entries are still copied (#54)
+	 *
+	 * @param description
+	 *            the method under test
+	 * @param directoryCopy
+	 *            the call of the method under test
+	 * @param leavesOut
+	 *            whether the call leaves out the file {@value #LEFT_OUT}
+	 * @throws Exception
+	 *             if the copy fails
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("directoryCopiesWithAndWithoutExclusion")
+	public void copy_returnsFalse_whenASubdirectoryIsBlockedByARegularFile(final String description,
+		final DirectoryCopy directoryCopy, final boolean leavesOut) throws Exception
+	{
+		final List<String> before = List.of("a1.txt", "a2.txt", "a3.txt", "a4.txt", "a5.txt",
+			LEFT_OUT);
+		final List<String> after = List.of("z1.txt", "z2.txt", "z3.txt", "z4.txt", "z5.txt");
+		final Path source = newTree("src", before);
+		Files.createDirectories(source.resolve("blocked"));
+		newTree("src", after);
+		final Path destination = Files.createDirectories(tempDir.resolve("dst"));
+		final Path blocker = Files.write(destination.resolve("blocked"), new byte[] { 1 });
+
+		assertFalse(directoryCopy.copy(source.toFile(), destination.toFile()));
+
+		assertTrue(Files.isRegularFile(blocker));
+		final Set<String> expected = new TreeSet<>(before);
+		expected.addAll(after);
+		expected.add("blocked");
+		if (leavesOut)
+		{
+			expected.remove(LEFT_OUT);
+		}
+		assertEquals(expected, regularFilesUnder(destination));
+	}
+
+	/**
+	 * The same kind of tree as in
+	 * {@link #copy_returnsFalse_whenASubdirectoryIsBlockedByARegularFile} is copied with true when
+	 * nothing blocks the subdirectory
+	 *
+	 * @param description
+	 *            the method under test
+	 * @param directoryCopy
+	 *            the call of the method under test
+	 * @param leavesOut
+	 *            whether the call leaves out the file {@value #LEFT_OUT}
+	 * @throws Exception
+	 *             if the copy fails
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("directoryCopiesWithAndWithoutExclusion")
+	public void copy_returnsTrue_whenTheSubdirectoryIsNotBlocked(final String description,
+		final DirectoryCopy directoryCopy, final boolean leavesOut) throws Exception
+	{
+		final Path source = newTree("src", List.of("a1.txt", LEFT_OUT, "blocked/", "z1.txt"));
+		final Path destination = Files.createDirectories(tempDir.resolve("dst"));
+
+		assertTrue(directoryCopy.copy(source.toFile(), destination.toFile()));
+
+		final Set<String> expected = new TreeSet<>(entriesUnder(source));
+		if (leavesOut)
+		{
+			expected.remove(LEFT_OUT);
+		}
+		assertEquals(expected, entriesUnder(destination));
 	}
 }

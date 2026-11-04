@@ -710,4 +710,91 @@ public class ModifyFileExtensionsTest
 		}
 	}
 
+	/**
+	 * A modification of the lines of an input file, as the modifyFileAndGet methods offer it; the
+	 * one that changes the input file in place ignores the output file
+	 */
+	@FunctionalInterface
+	interface LineModification
+	{
+		Path modify(Path inFilePath, Path outFilePath, FileChangeable modifier) throws IOException;
+	}
+
+	static Stream<Named<LineModification>> lineModifications()
+	{
+		return Stream.of(
+			Named.<LineModification> of("modifyFileAndGet(Path, Path, Charset, FileChangeable)",
+				(inFilePath, outFilePath, modifier) -> ModifyFileExtensions
+					.modifyFileAndGet(inFilePath, outFilePath, StandardCharsets.UTF_8, modifier)),
+			Named.<LineModification> of("modifyFileAndGet(Path, Charset, FileChangeable)",
+				(inFilePath, outFilePath, modifier) -> ModifyFileExtensions
+					.modifyFileAndGet(inFilePath, StandardCharsets.UTF_8, modifier)));
+	}
+
+	/**
+	 * Test method for the two modifyFileAndGet methods of {@link ModifyFileExtensions}: the
+	 * modifier gets the zero-based index of each line, counted upwards
+	 *
+	 * @param modification
+	 *            the method under test
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("lineModifications")
+	public void modifyFileAndGet_passesTheZeroBasedIndexOfEachLineToTheModifier(
+		LineModification modification) throws IOException
+	{
+		Path inFilePath = Files.writeString(tempDir.resolve("in.txt"), "zero\none\ntwo\nthree\n");
+		Path outFilePath = tempDir.resolve("out.txt");
+
+		Path result = modification.modify(inFilePath, outFilePath,
+			(index, line) -> index + ":" + line + "\n");
+
+		assertEquals("0:zero\n1:one\n2:two\n3:three\n", Files.readString(result));
+	}
+
+	/**
+	 * Test method for the four concatenateFilesWithExtension methods of
+	 * {@link ModifyFileExtensions}: the matching files are concatenated in the order of their
+	 * paths, whatever order the file system lists them in. The files are created out of that order,
+	 * so that a listing in creation order, in reverse creation order or in hash order does not give
+	 * the sorted order by chance.
+	 *
+	 * @param concatenation
+	 *            the method under test
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("concatenationsByExtension")
+	public void concatenationsByExtension_concatenateTheFilesInTheOrderOfTheirPaths(
+		ConcatenationByExtension concatenation) throws IOException
+	{
+		Path directory = Files.createDirectory(tempDir.resolve("chapters"));
+		String[] names = { "07", "02", "10", "00", "05", "11", "03", "08", "01", "09", "04", "06" };
+		for (String name : names)
+		{
+			Files.writeString(directory.resolve(name + ".md"), name + "\n");
+		}
+		Files.writeString(directory.resolve("12.txt"), "not markdown\n");
+		File resultTextFile = tempDir.resolve("result.md").toFile();
+
+		File result = concatenation.concatenate(directory.toFile(), ".md", resultTextFile);
+		try
+		{
+			assertEquals("00\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n",
+				Files.readString(result.toPath()));
+		}
+		finally
+		{
+			// the two methods without a result file create it in the temporary directory of the
+			// system
+			if (!result.equals(resultTextFile))
+			{
+				Files.delete(result.toPath());
+			}
+		}
+	}
+
 }

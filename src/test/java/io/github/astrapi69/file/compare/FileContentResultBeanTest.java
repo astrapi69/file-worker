@@ -175,4 +175,40 @@ public class FileContentResultBeanTest
 		assertNotEquals(bean, compareOnly);
 	}
 
+	/**
+	 * Test method for {@link FileCompareResultBean#equals(Object)} with a
+	 * {@link FileContentResultBean} as the other object
+	 */
+	@Test
+	public void equals_returnsFalse_whenAFileCompareResultBeanIsComparedWithIt()
+	{
+		final FileCompareResultBean compareOnly = new FileCompareResultBean(SOURCE, COMPARE);
+		final FileCompareResultBean sameKind = new FileCompareResultBean(SOURCE, COMPARE);
+		final FileContentResultBean bean = new FileContentResultBean(SOURCE, COMPARE);
+
+		assertEquals(compareOnly, sameKind);
+		assertNotEquals(compareOnly, bean);
+	}
+
+	/**
+	 * Test method for {@link FileContentResultBean#toString()}
+	 */
+	@Test
+	public void toString_namesTheInheritedFlags_andTheContentEquality()
+	{
+		final FileContentResultBean bean = newBeanWithEqualContent();
+
+		final String text = bean.toString();
+
+		assertTrue(text.startsWith("FileContentResultBean(super=FileCompareResultBean("), text);
+		assertTrue(text.contains("nameEquality=true"), text);
+		assertTrue(text.contains("lengthEquality=false"), text);
+		assertTrue(text.contains("source=" + SOURCE), text);
+		assertTrue(text.contains("contentEquality=true"), text);
+
+		bean.setContentEquality(false);
+
+		assertTrue(bean.toString().contains("contentEquality=false"), bean.toString());
+	}
+
 }

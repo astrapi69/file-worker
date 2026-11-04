@@ -93,6 +93,8 @@ public class MergeFileExtensionsEdgeCasesTest
 			Arguments.of("a line with fewer columns is its own key",
 				List.of("x,y,K1\nsolo", "z,w,K1\nsolo\nother"), 2, ",",
 				List.of("z,w,K1", "solo", "other")),
+			Arguments.of("a line with as many columns as the key index is its own key",
+				List.of("a,1\nsolo", "solo\nb,2"), 1, ",", List.of("a,1", "solo", "b,2")),
 			Arguments.of("the key is compared without surrounding blanks",
 				List.of("k1 ,a", " k1,b"), 0, ",", List.of(" k1,b")),
 			Arguments.of("a pipe delimiter is a plain string, not a regular expression",
@@ -103,6 +105,17 @@ public class MergeFileExtensionsEdgeCasesTest
 				List.of("1[Alice\n1[Root\n2[Bob"), 0, "[", List.of("1[Root", "2[Bob")),
 			Arguments.of("files of blank lines only give an empty file", List.of("\n   \n", ""), 0,
 				",", List.of()));
+	}
+
+	static Stream<Arguments> lineOrderCases()
+	{
+		return Stream.of(
+			Arguments.of(MergeFileStrategy.UNIQUE_LINES, List.of("pear", "apple", "fig")),
+			Arguments.of(MergeFileStrategy.SORTED_UNIQUE, List.of("apple", "fig", "pear")),
+			Arguments.of(MergeFileStrategy.SORTED,
+				List.of("apple", "apple", "fig", "pear", "pear")),
+			Arguments.of(MergeFileStrategy.APPEND,
+				List.of("pear", "apple", "pear", "fig", "apple")));
 	}
 
 	private List<File> writeFiles(List<String> contents) throws IOException
@@ -163,6 +176,19 @@ public class MergeFileExtensionsEdgeCasesTest
 
 		assertEquals("keyIndex must be >= 0", exception.getMessage());
 		assertFalse(targetFile.exists(), "nothing is written");
+	}
+
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("lineOrderCases")
+	void mergeAndGet_sortsOnlyWithASortingStrategy(MergeFileStrategy strategy,
+		List<String> expectedLines) throws IOException
+	{
+		File targetFile = tempDir.resolve("merged.txt").toFile();
+
+		MergeFileExtensions.mergeAndGet(writeFiles(List.of("pear\napple\npear", "fig\napple")),
+			targetFile, strategy);
+
+		assertEquals(expectedLines, Files.readAllLines(targetFile.toPath()));
 	}
 
 	@ParameterizedTest(name = "{0}")

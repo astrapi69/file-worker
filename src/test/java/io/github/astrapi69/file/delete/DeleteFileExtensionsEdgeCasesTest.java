@@ -110,6 +110,14 @@ public class DeleteFileExtensionsEdgeCasesTest
 					(ReportedDeletion)path -> DeleteFileExtensions.delete(path.toFile()))));
 	}
 
+	static Stream<Arguments> reportedDeletions()
+	{
+		return Stream.of(
+			Arguments.of("delete(Path)", (ReportedDeletion)DeleteFileExtensions::delete),
+			Arguments.of("delete(File)",
+				(ReportedDeletion)path -> DeleteFileExtensions.delete(path.toFile())));
+	}
+
 	static Stream<Arguments> deletionsWithoutIncludeFilter()
 	{
 		return Stream.of(
@@ -243,12 +251,14 @@ public class DeleteFileExtensionsEdgeCasesTest
 		assertOutsideUntouched();
 	}
 
-	@Test
-	void deletePath_deletesARegularFile_andReturnsTrue() throws IOException
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("reportedDeletions")
+	void delete_deletesARegularFile_andReturnsTrue(String displayName, ReportedDeletion deletion)
+		throws IOException
 	{
 		Path regularFile = source.resolve("a.txt");
 
-		assertTrue(DeleteFileExtensions.delete(regularFile));
+		assertTrue(deletion.delete(regularFile));
 
 		assertDeleted(regularFile);
 		assertContent("b", source.resolve("b.log"));
@@ -269,10 +279,12 @@ public class DeleteFileExtensionsEdgeCasesTest
 		assertTrue(reported, "the deleted directory is reported as deleted");
 	}
 
-	@Test
-	void deletePath_returnsFalse_whenThePathDoesNotExist() throws IOException
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("reportedDeletions")
+	void delete_returnsFalse_whenThePathDoesNotExist(String displayName, ReportedDeletion deletion)
+		throws IOException
 	{
-		assertFalse(DeleteFileExtensions.delete(source.resolve("missing.txt")));
+		assertFalse(deletion.delete(source.resolve("missing.txt")));
 
 		assertSourceUntouched();
 	}

@@ -26,6 +26,7 @@ package io.github.astrapi69.file.create.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,7 +39,6 @@ import java.nio.file.Path;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,7 +47,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.create.FileFactory;
-import io.github.astrapi69.file.delete.DeleteFileExtensions;
 
 /**
  * The unit test class for the class {@link FileInfo}
@@ -83,31 +82,17 @@ public class FileInfoTest
 	@Test
 	public void testToFileInfo() throws IOException
 	{
-		String absolutePath;
-		File file;
-		FileInfo fileInfo;
-		String actual;
-		String expected;
-		String rootPath;
-		String absoluteFilePath;
-		String filename;
+		String absoluteFilePath = tempDir.resolve("foo").resolve("bar").toString();
+		String filename = "foo.txt";
+		FileInfo fileInfo = FileInfo.builder().path(absoluteFilePath).name(filename).build();
 
-		rootPath = SystemUtils.IS_OS_WINDOWS ? "C:\\" : "/";
+		File file = FileFactory.newFile(fileInfo);
 
-		absoluteFilePath = SystemUtils.IS_OS_WINDOWS
-			? rootPath + "tmp\\foo\\bar"
-			: rootPath + "tmp/foo/bar";
-		filename = "foo.txt";
-		actual = SystemUtils.IS_OS_WINDOWS ? "C:\\tmp\\foo\\bar\\foo.txt" : "/tmp/foo/bar/foo.txt";
-		fileInfo = FileInfo.builder().path(absoluteFilePath).name(filename).build();
-		file = FileFactory.newFile(fileInfo);
 		assertTrue(file.exists());
-		assertNotNull(file);
-		expected = file.getAbsolutePath();
-		assertEquals(expected, actual);
+		assertEquals(new File(absoluteFilePath, filename).getAbsolutePath(),
+			file.getAbsolutePath());
 		FileInfo anotherFileInfo = FileInfo.toFileInfo(file);
 		assertEquals(anotherFileInfo, fileInfo);
-		DeleteFileExtensions.delete(file);
 	}
 
 	/**
@@ -197,6 +182,36 @@ public class FileInfoTest
 		assertTrue(constructed.equals(built));
 		assertTrue(built.equals(constructed));
 		assertEquals(constructed.hashCode(), built.hashCode());
+	}
+
+	static Stream<Arguments> fileInfosThatDifferInOneField()
+	{
+		return Stream.of(argumentSet("names that differ in the last character",
+			new FileInfo("part1", "/some/path", false), new FileInfo("part2", "/some/path", false)),
+			argumentSet("a name and none", new FileInfo("part1", "/some/path", false),
+				new FileInfo(null, "/some/path", false)),
+			argumentSet("paths that differ in the last character",
+				new FileInfo("part1", "/some/path1", false),
+				new FileInfo("part1", "/some/path2", false)),
+			argumentSet("a path and none", new FileInfo("part1", "/some/path1", false),
+				new FileInfo("part1", null, false)),
+			argumentSet("a file and a directory", new FileInfo("part1", "/some/path", false),
+				new FileInfo("part1", "/some/path", true)));
+	}
+
+	/**
+	 * Test method for {@link FileInfo#hashCode()}
+	 *
+	 * @param fileInfo
+	 *            the one object
+	 * @param other
+	 *            the other object, differing in one field
+	 */
+	@ParameterizedTest
+	@MethodSource("fileInfosThatDifferInOneField")
+	public void hashCode_differs_whenOneFieldDiffers(FileInfo fileInfo, FileInfo other)
+	{
+		assertNotEquals(fileInfo.hashCode(), other.hashCode());
 	}
 
 	/**

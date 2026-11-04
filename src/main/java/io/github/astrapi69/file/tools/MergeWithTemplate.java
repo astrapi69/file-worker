@@ -68,14 +68,43 @@ public class MergeWithTemplate
 	 */
 	public static void main(String[] args) throws Exception
 	{
+		int exitCode = commandLine(args, Path.of(CONFIG_PATH),
+			Path.of(".").toAbsolutePath().normalize());
+		if (exitCode != 0)
+		{
+			System.exit(exitCode);
+		}
+	}
+
+	/**
+	 * What {@link #main(String[])} does, short of ending the JVM: copies and merges as
+	 * {@link #run(String[], Path, Path)} does and returns 0, or prints the usage error on standard
+	 * error and returns {@value #USAGE_ERROR_EXIT_CODE}, the exit code {@code main} ends the JVM
+	 * with. The tests call it in place of {@code main}, whose {@code System.exit} would end the
+	 * test JVM.
+	 *
+	 * @param args
+	 *            the arguments, see the class documentation
+	 * @param configFile
+	 *            the JSON file with the defaults; a missing file means no defaults
+	 * @param workingDirectory
+	 *            the base for a source or destination that neither the arguments nor the defaults
+	 *            name
+	 * @return 0, or {@value #USAGE_ERROR_EXIT_CODE} on a usage error
+	 * @throws IOException
+	 *             if copying or merging fails
+	 */
+	static int commandLine(String[] args, Path configFile, Path workingDirectory) throws IOException
+	{
 		try
 		{
-			run(args);
+			run(args, configFile, workingDirectory);
+			return 0;
 		}
 		catch (UsageException usageError)
 		{
 			System.err.println(usageError.getMessage());
-			System.exit(USAGE_ERROR_EXIT_CODE);
+			return USAGE_ERROR_EXIT_CODE;
 		}
 	}
 

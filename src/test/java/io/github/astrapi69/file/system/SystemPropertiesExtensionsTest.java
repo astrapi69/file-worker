@@ -25,13 +25,19 @@
 package io.github.astrapi69.file.system;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Properties;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * The unit test class for the class {@link SystemPropertiesExtensions}
@@ -87,152 +93,89 @@ public class SystemPropertiesExtensionsTest
 	}
 
 	/**
-	 * Test method for {@link SystemPropertiesExtensions#getFileSeparator()}
+	 * Provides each getter of {@link SystemPropertiesExtensions} together with the key of the
+	 * system property it reads
+	 *
+	 * @return the key and the getter for every system property
 	 */
-	@Test
-	public void testGetFileSeparator()
+	static Stream<Arguments> propertyGetters()
 	{
-		String fileSeparator = SystemPropertiesExtensions.getFileSeparator();
-		assertNotNull(fileSeparator);
+		return Stream.of(
+			Arguments.of(SystemPropertiesExtensions.FILE_SEPARATOR_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getFileSeparator),
+			Arguments.of(SystemPropertiesExtensions.JAVA_IO_TMPDIR_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getJavaIoTmpdir),
+			Arguments.of(SystemPropertiesExtensions.JAVA_HOME_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getJavaHome),
+			Arguments.of(SystemPropertiesExtensions.JAVA_CLASS_PATH_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getJavaClassPath),
+			Arguments.of(SystemPropertiesExtensions.JAVA_VENDOR_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getJavaVendor),
+			Arguments.of(SystemPropertiesExtensions.JAVA_VENDOR_URL_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getJavaVendorUrl),
+			Arguments.of(SystemPropertiesExtensions.JAVA_VERSION_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getJavaVersion),
+			Arguments.of(SystemPropertiesExtensions.LINE_SEPARATOR_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getLineSeparator),
+			Arguments.of(SystemPropertiesExtensions.OS_ARCH_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getOsArchitecture),
+			Arguments.of(SystemPropertiesExtensions.OS_NAME_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getOsName),
+			Arguments.of(SystemPropertiesExtensions.OS_VERSION_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getOsVersion),
+			Arguments.of(SystemPropertiesExtensions.PATH_SEPARATOR_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getPathSeparator),
+			Arguments.of(SystemPropertiesExtensions.USER_HOME_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getUserHome),
+			Arguments.of(SystemPropertiesExtensions.USER_NAME_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getUserName),
+			Arguments.of(SystemPropertiesExtensions.USER_DIR_PROPERTY_KEY,
+				(Supplier<String>)SystemPropertiesExtensions::getUserWorkingDirectory));
 	}
 
 	/**
-	 * Test method for {@link SystemPropertiesExtensions#getJavaClassPath()}
+	 * Test that every getter returns the current, non empty value of the system property its key
+	 * names
+	 *
+	 * @param key
+	 *            the key of the system property
+	 * @param getter
+	 *            the getter that reads it
 	 */
-	@Test
-	public void testGetJavaClassPath()
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("propertyGetters")
+	void testGetterReturnsValueOfItsSystemProperty(final String key, final Supplier<String> getter)
 	{
-		String javaClassPath = SystemPropertiesExtensions.getJavaClassPath();
-		assertNotNull(javaClassPath);
+		String actual = getter.get();
+		assertNotNull(actual);
+		assertFalse(actual.isEmpty());
+		assertEquals(System.getProperty(key), actual);
 	}
 
 	/**
-	 * Test method for {@link SystemPropertiesExtensions#getJavaIoTmpdir()}
+	 * Test that every getter follows a change of its system property, so it reads the property
+	 * named by its key and nothing cached or fixed
+	 *
+	 * @param key
+	 *            the key of the system property
+	 * @param getter
+	 *            the getter that reads it
 	 */
-	@Test
-	public void testGetJavaIoTmpdir()
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("propertyGetters")
+	void testGetterFollowsAChangedSystemProperty(final String key, final Supplier<String> getter)
 	{
-		String javaIoTmpdir = SystemPropertiesExtensions.getJavaIoTmpdir();
-		assertNotNull(javaIoTmpdir);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getJavaHome()}
-	 */
-	@Test
-	public void testGetJavaHome()
-	{
-		String javaHome = SystemPropertiesExtensions.getJavaHome();
-		assertNotNull(javaHome);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getJavaVendor()}
-	 */
-	@Test
-	public void testGetJavaVendor()
-	{
-		String javaVendor = SystemPropertiesExtensions.getJavaVendor();
-		assertNotNull(javaVendor);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getJavaVendorUrl()}
-	 */
-	@Test
-	public void testGetJavaVendorUrl()
-	{
-		String javaVendorUrl = SystemPropertiesExtensions.getJavaVendorUrl();
-		assertNotNull(javaVendorUrl);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getJavaVersion()}
-	 */
-	@Test
-	public void testGetJavaVersion()
-	{
-		String javaVersion = SystemPropertiesExtensions.getJavaVersion();
-		assertNotNull(javaVersion);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getLineSeparator()}
-	 */
-	@Test
-	public void testGetLineSeparator()
-	{
-		String lineSeparator = SystemPropertiesExtensions.getLineSeparator();
-		assertNotNull(lineSeparator);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getOsArchitecture()}
-	 */
-	@Test
-	public void testGetOsArchitecture()
-	{
-		String osArchitecture = SystemPropertiesExtensions.getOsArchitecture();
-		assertNotNull(osArchitecture);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getOsName()}
-	 */
-	@Test
-	public void testGetOsName()
-	{
-		String osName = SystemPropertiesExtensions.getOsName();
-		assertNotNull(osName);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getOsVersion()}
-	 */
-	@Test
-	public void testGetOsVersion()
-	{
-		String osVersion = SystemPropertiesExtensions.getOsVersion();
-		assertNotNull(osVersion);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getPathSeparator()}
-	 */
-	@Test
-	public void testGetPathSeparator()
-	{
-		String pathSeparator = SystemPropertiesExtensions.getPathSeparator();
-		assertNotNull(pathSeparator);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getUserHome()}
-	 */
-	@Test
-	public void testGetUserHome()
-	{
-		String userHome = SystemPropertiesExtensions.getUserHome();
-		assertNotNull(userHome);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getUserName()}
-	 */
-	@Test
-	public void testGetUserName()
-	{
-		String userName = SystemPropertiesExtensions.getUserName();
-		assertNotNull(userName);
-	}
-
-	/**
-	 * Test method for {@link SystemPropertiesExtensions#getUserWorkingDirectory()}
-	 */
-	@Test
-	public void testGetUserWorkingDirectory()
-	{
-		String userWorkingDirectory = SystemPropertiesExtensions.getUserWorkingDirectory();
-		assertNotNull(userWorkingDirectory);
+		String original = System.getProperty(key);
+		String marker = "changed-" + key;
+		try
+		{
+			System.setProperty(key, marker);
+			assertEquals(marker, getter.get());
+		}
+		finally
+		{
+			System.setProperty(key, original);
+		}
+		assertEquals(original, getter.get());
 	}
 }

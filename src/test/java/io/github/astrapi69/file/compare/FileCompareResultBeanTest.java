@@ -27,6 +27,7 @@ package io.github.astrapi69.file.compare;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.function.BiConsumer;
@@ -218,6 +219,45 @@ public class FileCompareResultBeanTest
 
 		assertEquals(newSource, bean.getSourceFile());
 		assertEquals(newCompare, bean.getFileToCompare());
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#hashCode()}
+	 */
+	@ParameterizedTest(name = "{0}")
+	@MethodSource("flagSetters")
+	public void hashCode_differs_whenOnlyOneFlagDiffers(final String flagName,
+		final BiConsumer<FileCompareResultBean, Boolean> setter)
+	{
+		final FileCompareResultBean first = newBeanWithEveryFlagSet();
+		final FileCompareResultBean second = newBeanWithEveryFlagSet();
+		assertEquals(first.hashCode(), second.hashCode());
+
+		setter.accept(second, Boolean.FALSE);
+
+		assertNotEquals(first.hashCode(), second.hashCode());
+	}
+
+	/**
+	 * Test method for {@link FileCompareResultBean#toString()}
+	 */
+	@Test
+	public void toString_namesEveryFlagWithItsValue_andBothFiles()
+	{
+		final FileCompareResultBean bean = new FileCompareResultBean(SOURCE, COMPARE);
+		bean.setAbsolutePathEquality(true);
+		bean.setLengthEquality(true);
+
+		final String text = bean.toString();
+
+		assertTrue(text.startsWith("FileCompareResultBean("), text);
+		assertTrue(text.contains("absolutePathEquality=true"), text);
+		assertTrue(text.contains("fileExtensionEquality=false"), text);
+		assertTrue(text.contains("lastModifiedEquality=false"), text);
+		assertTrue(text.contains("lengthEquality=true"), text);
+		assertTrue(text.contains("nameEquality=false"), text);
+		assertTrue(text.contains("source=" + SOURCE), text);
+		assertTrue(text.contains("compare=" + COMPARE), text);
 	}
 
 }

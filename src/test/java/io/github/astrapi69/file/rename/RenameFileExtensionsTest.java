@@ -909,4 +909,93 @@ public class RenameFileExtensionsTest extends FileTestCase
 		assertEquals(expectedMessage.apply(missing), exception.getMessage());
 	}
 
+	/**
+	 * A call of a method of {@link RenameFileExtensions} that renames without the copy and delete
+	 * fallback
+	 */
+	@FunctionalInterface
+	interface RenameWithoutFallback
+	{
+		boolean rename(File file) throws Exception;
+	}
+
+	static Stream<Arguments> renamesWithoutFallbackOntoNotesRtf()
+	{
+		return Stream.of(
+			argumentSet("changeFilenameSuffix(File, String)",
+				(RenameWithoutFallback)file -> RenameFileExtensions.changeFilenameSuffix(file,
+					".rtf")),
+			argumentSet("changeFilenameSuffix(File, String, false)",
+				(RenameWithoutFallback)file -> RenameFileExtensions.changeFilenameSuffix(file,
+					".rtf", false)),
+			argumentSet("renameFile(File, String)",
+				(RenameWithoutFallback)file -> RenameFileExtensions.renameFile(file, "notes.rtf")),
+			argumentSet("renameFile(File, File)",
+				(RenameWithoutFallback)file -> RenameFileExtensions.renameFile(file,
+					new File(file.getParentFile(), "notes.rtf"))),
+			argumentSet("renameFile(File, File, false)",
+				(RenameWithoutFallback)file -> RenameFileExtensions.renameFile(file,
+					new File(file.getParentFile(), "notes.rtf"), false)));
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeFilenameSuffix(File, String)},
+	 * {@link RenameFileExtensions#changeFilenameSuffix(File, String, boolean)},
+	 * {@link RenameFileExtensions#renameFile(File, String)},
+	 * {@link RenameFileExtensions#renameFile(File, File)} and
+	 * {@link RenameFileExtensions#renameFile(File, File, boolean)}: the rename of notes.txt to
+	 * notes.rtf works when the name is free
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("renamesWithoutFallbackOntoNotesRtf")
+	public void renameWithoutFallback_returnsTrueAndMovesTheFile_whenTheNewNameIsFree(
+		RenameWithoutFallback call) throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("notes.txt"), "my notes").toFile();
+
+		boolean renamed = call.rename(file);
+
+		assertTrue(renamed);
+		assertEquals("my notes", Files.readString(tempDir.resolve("notes.rtf")));
+		assertFalse(file.exists());
+	}
+
+	/**
+	 * Test method for {@link RenameFileExtensions#changeFilenameSuffix(File, String)},
+	 * {@link RenameFileExtensions#changeFilenameSuffix(File, String, boolean)},
+	 * {@link RenameFileExtensions#renameFile(File, String)},
+	 * {@link RenameFileExtensions#renameFile(File, File)} and
+	 * {@link RenameFileExtensions#renameFile(File, File, boolean)}: a rename onto an existing
+	 * directory is refused, and without the copy fallback the call says so and leaves both as they
+	 * are
+	 *
+	 * @param call
+	 *            the method under test
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@ParameterizedTest
+	@MethodSource("renamesWithoutFallbackOntoNotesRtf")
+	public void renameWithoutFallback_returnsFalseAndKeepsTheFile_whenTheRenameIsRefused(
+		RenameWithoutFallback call) throws Exception
+	{
+		File file = Files.writeString(tempDir.resolve("notes.txt"), "my notes").toFile();
+		Path existingDirectory = Files.createDirectory(tempDir.resolve("notes.rtf"));
+
+		boolean renamed = call.rename(file);
+
+		assertFalse(renamed);
+		assertEquals("my notes", Files.readString(file.toPath()));
+		assertTrue(Files.isDirectory(existingDirectory));
+		try (Stream<Path> entries = Files.list(existingDirectory))
+		{
+			assertEquals(0, entries.count());
+		}
+	}
+
 }

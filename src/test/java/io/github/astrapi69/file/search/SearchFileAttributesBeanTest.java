@@ -25,9 +25,14 @@
 package io.github.astrapi69.file.search;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -182,6 +187,55 @@ public class SearchFileAttributesBeanTest
 				+ "ignoreContentEquality=false, ignoreExtensionEquality=true, "
 				+ "ignoreLastModified=false, ignoreLengthEquality=true, ignoreNameEquality=false}",
 			builder.toString());
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+			"true, false, true, false, true, 'SearchFileAttributesBean{ignoreContentEquality=true, "
+				+ "ignoreExtensionEquality=false, ignoreLastModified=true, "
+				+ "ignoreLengthEquality=false, ignoreNameEquality=true}'",
+			"false, true, false, true, false, 'SearchFileAttributesBean{ignoreContentEquality=false, "
+				+ "ignoreExtensionEquality=true, ignoreLastModified=false, "
+				+ "ignoreLengthEquality=true, ignoreNameEquality=false}'" })
+	void toString_listsEveryFlagWithItsValue(boolean content, boolean extension,
+		boolean lastModified, boolean length, boolean name, String expected)
+	{
+		SearchFileAttributesBean bean = new SearchFileAttributesBean(content, extension,
+			lastModified, length, name);
+
+		assertEquals(expected, bean.toString());
+	}
+
+	@Test
+	void hashCode_differsForEveryCombinationOfFlags()
+	{
+		Map<Integer, SearchFileAttributesBean> beansByHashCode = new HashMap<>();
+		for (int bits = 0; bits < 32; bits++)
+		{
+			SearchFileAttributesBean bean = new SearchFileAttributesBean((bits & 1) != 0,
+				(bits & 2) != 0, (bits & 4) != 0, (bits & 8) != 0, (bits & 16) != 0);
+
+			SearchFileAttributesBean sameHashCode = beansByHashCode.put(bean.hashCode(), bean);
+
+			assertNull(sameHashCode, bean + " has the hash code of " + sameHashCode);
+			assertEquals(bean.hashCode(), bean.toBuilder().build().hashCode(),
+				"an equal bean has the same hash code");
+		}
+		assertEquals(32, beansByHashCode.size());
+	}
+
+	@Test
+	void canEqual_acceptsOnlySearchFileAttributesBeans()
+	{
+		SearchFileAttributesBean bean = SearchFileAttributesBean.builder().build();
+
+		assertTrue(bean.canEqual(new SearchFileAttributesBean(true, true, true, true, true)));
+		assertTrue(bean.canEqual(new SearchFileAttributesBean(false, false, false, false, false)
+		{
+		}), "a subclass is a SearchFileAttributesBean");
+		assertFalse(bean.canEqual(SearchFileAttributesBean.builder()), "a builder is not a bean");
+		assertFalse(bean.canEqual("SearchFileAttributesBean"), "a string is not a bean");
+		assertFalse(bean.canEqual(null), "null is not a bean");
 	}
 
 }
