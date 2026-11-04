@@ -9,6 +9,10 @@ pitest {
     // commons-io 2.11.0, commons-lang3 3.12.0 and commons-beanutils 1.9.4 (#103)
     addJUnitPlatformLauncher = false
     targetClasses = ["io.github.astrapi69.file.*"]
+    // MergeWithTemplateMainTest calls main, and a mutant that turns its arguments into a usage error
+    // makes main call System.exit, which ends the minion. The usage error itself is tested through
+    // commandLine in MergeWithTemplateUsageTest, which PIT runs (#99).
+    excludedTestClasses = ["io.github.astrapi69.file.tools.MergeWithTemplateMainTest"]
     threads = 4
     outputFormats = ["HTML", "XML"]
     timestampedReports = false
