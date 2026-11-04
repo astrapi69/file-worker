@@ -49,7 +49,6 @@ import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.FileFactory;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * Unit tests for {@link StoreFileExtensions}.
@@ -62,9 +61,10 @@ import io.github.astrapi69.file.search.PathFinder;
  * </p>
  *
  * <p>
- * Temporary filesystem state is managed via JUnit 5's {@link TempDir} where appropriate, and the
- * legacy tests keep using {@link PathFinder#getSrcTestResourcesDir()} to maintain compatibility
- * with existing project conventions.
+ * Temporary filesystem state is managed via JUnit 5's {@link TempDir}: the newer tests get their
+ * own temporary directory as a parameter, and the legacy tests write into
+ * {@link FileTestCase#test}, the copy of {@code src/test/resources} in the temporary directory of
+ * {@link FileTestCase}, so that no test writes into the source tree (#99).
  * </p>
  */
 public class StoreFileExtensionsTest extends FileTestCase
@@ -291,8 +291,7 @@ public class StoreFileExtensionsTest extends FileTestCase
 		expected = ArrayFactory.newByteArray(-84, -19, 0, 5, 116, 0, 7, 70, 111, 111, 32, 98, 97,
 			114);
 
-		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
-			"testStoreByteArrayToFile.txt");
+		destination = FileFactory.newFileQuietly(test, "testStoreByteArrayToFile.txt");
 
 		StoreFileExtensions.toFile(destination, expected);
 
@@ -302,7 +301,6 @@ public class StoreFileExtensionsTest extends FileTestCase
 		{
 			assertEquals(compare[i], expected[i]);
 		}
-		destination.deleteOnExit();
 	}
 
 	/**
@@ -319,15 +317,13 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String expected;
 		File destination;
 
-		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
-			"testStoreStringToFile.txt");
+		destination = FileFactory.newFileQuietly(test, "testStoreStringToFile.txt");
 		expected = "foo bar";
 		StoreFileExtensions.toFile(destination, expected);
 
 		actual = ReadFileExtensions.fromFile(destination);
 
 		assertEquals(actual, expected);
-		destination.deleteOnExit();
 	}
 
 	/**
@@ -344,15 +340,13 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String expected;
 		File destination;
 
-		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
-			"testStoreStringToFile.txt");
+		destination = FileFactory.newFileQuietly(test, "testStoreStringToFile.txt");
 		expected = "foo bar";
 		StoreFileExtensions.toFile(destination, expected, "UTF-8");
 
 		actual = ReadFileExtensions.fromFile(destination);
 
 		assertEquals(actual, expected);
-		destination.deleteOnExit();
 	}
 
 	/**
@@ -369,13 +363,11 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String expected;
 		File destination;
 
-		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
-			"testStoreStringToFile.txt");
+		destination = FileFactory.newFileQuietly(test, "testStoreStringToFile.txt");
 		expected = "foo bar";
 		StoreFileExtensions.toFile(destination, expected, StandardCharsets.UTF_8);
 		actual = ReadFileExtensions.fromFile(destination);
 		assertEquals(actual, expected);
-		destination.deleteOnExit();
 	}
 
 	/**
@@ -392,8 +384,7 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String expected;
 		File destination;
 
-		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
-			"testStoreStringToFile.txt");
+		destination = FileFactory.newFileQuietly(test, "testStoreStringToFile.txt");
 		String line = "foo bar";
 		List<String> lines = ListFactory.newSortedUniqueList(line, "bla", "fasel");
 		StoreFileExtensions.toFile(destination, lines, StandardCharsets.UTF_8);
@@ -401,7 +392,6 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String lineSeperator = System.lineSeparator();
 		expected = line + lineSeperator + "bla" + lineSeperator + "fasel" + lineSeperator;
 		assertEquals(actual, expected);
-		destination.deleteOnExit();
 	}
 
 	/**
@@ -418,8 +408,7 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String expected;
 		File destination;
 
-		destination = FileFactory.newFileQuietly(PathFinder.getSrcTestResourcesDir(),
-			"testStoreStringToFile.txt");
+		destination = FileFactory.newFileQuietly(test, "testStoreStringToFile.txt");
 		String line = "foo bar";
 		List<String> lines = ListFactory.newSortedUniqueList(line, "bla", "fasel");
 		StoreFileExtensions.toFile(destination, lines);
@@ -427,6 +416,5 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String lineSeperator = System.lineSeparator();
 		expected = line + lineSeperator + "bla" + lineSeperator + "fasel" + lineSeperator;
 		assertEquals(actual, expected);
-		destination.deleteOnExit();
 	}
 }

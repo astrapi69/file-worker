@@ -134,20 +134,13 @@ public class DirectoryFactoryTest extends FileTestCase
 		File dir3;
 		// new scenario...
 		dirs = new ArrayList<>();
-		dir1 = new File("test1.dir");
-		dir2 = new File("test2.dir");
-		dir3 = new File("test3.dir");
+		// in the temporary directory of FileTestCase, not in the working directory (#99)
+		dir1 = new File(this.test, "test1.dir");
+		dir2 = new File(this.test, "test2.dir");
+		dir3 = new File(this.test, "test3.dir");
 		dirs.add(dir1);
 		dirs.add(dir2);
 		dirs.add(dir3);
-		// if the directories exist delete them to prevent a DirectoryAlreadyExistsException
-		for (final File dir : dirs)
-		{
-			if (dir.exists())
-			{
-				DeleteFileExtensions.delete(dir);
-			}
-		}
 		actual = DirectoryFactory.newDirectories(dirs);
 		expected = new ArrayList<>();
 		expected.add(FileCreationState.CREATED);
@@ -159,14 +152,6 @@ public class DirectoryFactoryTest extends FileTestCase
 		{
 			assertTrue(dir.exists(), "directory should exist.");
 			assertTrue(dir.isDirectory(), "File object should be a directory.");
-		}
-		// Finally delete the test directories...
-		for (final File dir : dirs)
-		{
-			if (dir.exists())
-			{
-				DeleteFileExtensions.delete(dir);
-			}
 		}
 	}
 

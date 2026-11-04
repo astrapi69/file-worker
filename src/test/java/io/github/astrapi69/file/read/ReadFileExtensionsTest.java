@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -317,7 +318,12 @@ public class ReadFileExtensionsTest extends FileTestCase
 	public void testReadLinesInListInputStream() throws FileNotFoundException, IOException
 	{
 		final File testFile = new File(this.test, "languages_iso639_1.csv");
-		final List<String> list = ReadFileExtensions.readLinesInList(new FileInputStream(testFile));
+		final List<String> list;
+		// closed here, so that JUnit can delete the temporary directory, also on Windows
+		try (InputStream inputStream = new FileInputStream(testFile))
+		{
+			list = ReadFileExtensions.readLinesInList(inputStream);
+		}
 		assertNotNull(list);
 		actual = list.size() == 185;
 		expected = true;
@@ -340,7 +346,10 @@ public class ReadFileExtensionsTest extends FileTestCase
 		properties.setProperty("testkey1", "testvalue1");
 		properties.setProperty("testkey2", "testvalue2");
 		properties.setProperty("testkey3", "testvalue3");
-		PropertiesExtensions.export(properties, new FileOutputStream(ap));
+		try (OutputStream outputStream = new FileOutputStream(ap))
+		{
+			PropertiesExtensions.export(properties, outputStream);
+		}
 		compare = ReadFileExtensions.readPropertiesFromFile(ap);
 		this.actual = properties.equals(compare);
 		assertTrue(this.actual);
@@ -362,7 +371,10 @@ public class ReadFileExtensionsTest extends FileTestCase
 		byte[] actual;
 		byte[] expected;
 		final File tmpFile = new File(this.test, "testReadSmallFileInput.txt");
-		actual = ReadFileExtensions.toByteArray(new FileInputStream(tmpFile));
+		try (InputStream inputStream = new FileInputStream(tmpFile))
+		{
+			actual = ReadFileExtensions.toByteArray(inputStream);
+		}
 		final String lineSeparator = System.lineSeparator();
 		final byte[] bytes = lineSeparator.getBytes();
 		expected = ArrayFactory.newByteArray(Byte.valueOf("f".getBytes()[0]).byteValue(),

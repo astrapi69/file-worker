@@ -33,18 +33,24 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import io.github.astrapi69.collection.CollectionExtensions;
 import io.github.astrapi69.file.create.model.DirectoryStructureTestData;
 import io.github.astrapi69.file.create.model.FileContentInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.search.PathFinder;
 
 /**
  * The unit test class for the class {@link DirectoryStructureExtensions}
  */
 public class DirectoryStructureExtensionsTest
 {
+
+	/**
+	 * The temporary directory in which the directory structure is created
+	 */
+	@TempDir
+	File tempDir;
 
 	/**
 	 * Test method for {@link DirectoryStructureExtensions#getFileContentInfos(File)}
@@ -60,7 +66,7 @@ public class DirectoryStructureExtensionsTest
 		String parentAbsolutePath;
 		// new scenario...
 
-		File parentFile = DirectoryFactory.newDirectory(PathFinder.getSrcTestResourcesDir(), "app");
+		File parentFile = DirectoryFactory.newDirectory(tempDir, "app");
 		parentAbsolutePath = parentFile.getAbsolutePath();
 		actual = DirectoryStructureTestData.newTestData(parentAbsolutePath);
 		Collection<File> files = DirectoryStructureFactory.newDirectoryStructure(actual);

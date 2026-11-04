@@ -63,7 +63,6 @@ import org.meanbean.test.BeanTester;
 import io.github.astrapi69.checksum.FileChecksumExtensions;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.read.ReadFileExtensions;
-import io.github.astrapi69.file.search.PathFinder;
 import io.github.astrapi69.io.StreamExtensions;
 
 /**
@@ -88,8 +87,8 @@ public class WriteFileExtensionsTest extends FileTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		// Create a temporary file for testing
-		tempFile = File.createTempFile("test-file", ".txt");
+		// Create a temporary file for testing in the temporary directory of this test
+		tempFile = Files.createTempFile(tempDir, "test-file", ".txt").toFile();
 	}
 
 	/**
@@ -127,10 +126,8 @@ public class WriteFileExtensionsTest extends FileTestCase
 		long actual;
 		long expected;
 
-		final File testFile = new File(PathFinder.getSrcTestResourcesDir(),
-			"testReadFileInput.txt");
-		File fileout = new File(PathFinder.getSrcTestResourcesDir(),
-			"testWriteFileExtensionsWrite.out");
+		final File testFile = new File(this.test, "testReadFileInput.txt");
+		File fileout = tempDir.resolve("testWriteFileExtensionsWrite.out").toFile();
 		try (InputStream inputStream = StreamExtensions.getInputStream(testFile, true);
 			OutputStream outputStream = StreamExtensions.getOutputStream(fileout, true))
 		{
@@ -140,7 +137,6 @@ public class WriteFileExtensionsTest extends FileTestCase
 		actual = FileChecksumExtensions.getCheckSumAdler32(testFile);
 		expected = FileChecksumExtensions.getCheckSumAdler32(fileout);
 		assertEquals(expected, actual);
-		fileout.deleteOnExit();
 	}
 
 	/**
