@@ -87,6 +87,9 @@ public class FileContentInfo extends FileInfo
 
 	/**
 	 * Converts a `File` into a `FileContentInfo`, extracting its name, path, checksum, and content.
+	 * Only an existing regular file gets a checksum and its content. Anything else gets neither,
+	 * and is described as a directory only if it is one: a path that does not exist, a dangling
+	 * symbolic link or a device such as {@code /dev/null} gives an entry that is not a directory.
 	 *
 	 * @param file
 	 *            the file to convert
@@ -94,7 +97,7 @@ public class FileContentInfo extends FileInfo
 	 */
 	public static FileContentInfo toFileContentInfo(File file)
 	{
-		if (file.exists() && file.isFile())
+		if (file.isFile())
 		{
 			return FileContentInfo.builder().name(file.getName())
 				.path(FileExtensions.getAbsolutPathWithoutFilename(file))
@@ -104,22 +107,32 @@ public class FileContentInfo extends FileInfo
 					.decorate(() -> ReadFileExtensions.readFileToBytearray(file)))
 				.build();
 		}
-		return FileContentInfo.builder().name(file.getName()).directory(true)
+		return FileContentInfo.builder().name(file.getName()).directory(file.isDirectory())
 			.path(FileExtensions.getAbsolutPathWithoutFilename(file)).build();
 	}
 
 	/**
-	 * Converts a `FileContentInfo` into a `File`.
+	 * Converts a `FileContentInfo` into a `File`. For an entry that is not a directory, the file
+	 * and its missing parent directories are created and the content is written into it. A
+	 * directory entry creates nothing.
 	 *
 	 * @param fileContentInfo
 	 *            the `FileContentInfo` to convert
 	 * @return the `File` representation of the `FileContentInfo`
+	 * @throws IllegalArgumentException
+	 *             if the entry is not a directory and has no content; the message names the file,
+	 *             and nothing is created
 	 */
 	public static File toFile(FileContentInfo fileContentInfo)
 	{
 		File file = new File(fileContentInfo.getPath(), fileContentInfo.getName());
 		if (!fileContentInfo.isDirectory())
 		{
+			if (fileContentInfo.getContent() == null)
+			{
+				throw new IllegalArgumentException(
+					"The entry of the file " + file.getAbsolutePath() + " has no content");
+			}
 			if (!file.exists())
 			{
 				RuntimeExceptionDecorator.decorate(() -> FileFactory.newFile(file));
@@ -235,14 +248,29 @@ public class FileContentInfo extends FileInfo
 	}
 
 	/**
-	 * Returns a string representation of the object.
+	 * Returns a string representation of the object. It names name, path, directory flag and
+	 * checksum, and of the content only its length, as in {@code content=byte[42]}, or
+	 * {@code content=null}; the bytes of the content are not part of it.
 	 *
 	 * @return a string representation of the object
 	 */
 	public String toString()
 	{
-		return "FileContentInfo{" + "checksum='" + this.getChecksum() + '\'' + ", content="
-			+ Arrays.toString(this.getContent()) + '}';
+		return "FileContentInfo{" + "name='" + this.getName() + '\'' + ", path='" + this.getPath()
+			+ '\'' + ", directory=" + this.isDirectory() + ", checksum='" + this.getChecksum()
+			+ '\'' + ", content=" + describeLength(this.getContent()) + '}';
+	}
+
+	/**
+	 * Describes a content by its length only.
+	 *
+	 * @param content
+	 *            the content, or null
+	 * @return {@code byte[<length>]}, or {@code null} if there is no content
+	 */
+	private static String describeLength(byte[] content)
+	{
+		return content == null ? "null" : "byte[" + content.length + "]";
 	}
 
 	/**
@@ -301,7 +329,9 @@ public class FileContentInfo extends FileInfo
 		public abstract C build();
 
 		/**
-		 * Returns a string representation of the builder.
+		 * Returns a string representation of the builder. It names the values set so far, and of
+		 * the content only its length, as in {@code content=byte[42]}, or {@code content=null}; the
+		 * bytes of the content are not part of it.
 		 *
 		 * @return a string representation of the builder
 		 */
@@ -309,7 +339,7 @@ public class FileContentInfo extends FileInfo
 		{
 			return "FileContentInfo.FileContentInfoBuilder(super=" + super.toString()
 				+ ", checksum='" + this.checksum + '\'' + ", content="
-				+ Arrays.toString(this.content) + ")";
+				+ describeLength(this.content) + ")";
 		}
 	}
 

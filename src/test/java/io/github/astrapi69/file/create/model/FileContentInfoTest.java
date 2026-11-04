@@ -391,31 +391,54 @@ public class FileContentInfoTest
 		assertNotEquals(fileContentInfo.hashCode(), other.hashCode());
 	}
 
+	static Stream<Arguments> contentsAndHowToStringNamesThem()
+	{
+		return Stream.of(argumentSet("two bytes", new byte[] { 1, 2 }, "byte[2]"),
+			argumentSet("no bytes", new byte[0], "byte[0]"),
+			argumentSet("no content", null, "null"));
+	}
+
 	/**
 	 * Test method for {@link FileContentInfo#toString()}
+	 *
+	 * @param content
+	 *            the content of the entry
+	 * @param expectedContent
+	 *            how the string representation names the content
 	 */
-	@Test
-	public void toString_namesChecksumAndContent()
+	@ParameterizedTest
+	@MethodSource("contentsAndHowToStringNamesThem")
+	public void toString_namesNamePathDirectoryChecksumAndTheLengthOfTheContent(byte[] content,
+		String expectedContent)
 	{
-		FileContentInfo fileContentInfo = new FileContentInfo(MD5_OF_CONTENT, new byte[] { 1, 2 });
+		FileContentInfo fileContentInfo = FileContentInfo.builder().name("data.txt")
+			.path("/some/path").directory(true).checksum(MD5_OF_CONTENT).content(content).build();
 
-		assertEquals("FileContentInfo{checksum='" + MD5_OF_CONTENT + "', content=[1, 2]}",
+		assertEquals(
+			"FileContentInfo{name='data.txt', path='/some/path', directory=true, checksum='"
+				+ MD5_OF_CONTENT + "', content=" + expectedContent + "}",
 			fileContentInfo.toString());
 	}
 
 	/**
 	 * Test method for {@link FileContentInfo.FileContentInfoBuilder#toString()}
+	 *
+	 * @param content
+	 *            the content set on the builder
+	 * @param expectedContent
+	 *            how the string representation names the content
 	 */
-	@Test
-	public void builderToString_namesTheValuesSetSoFar()
+	@ParameterizedTest
+	@MethodSource("contentsAndHowToStringNamesThem")
+	public void builderToString_namesTheValuesSetSoFarAndTheLengthOfTheContent(byte[] content,
+		String expectedContent)
 	{
 		FileContentInfo.FileContentInfoBuilder<?, ?> builder = FileContentInfo.builder()
-			.name("data.txt").path("/some/path").checksum(MD5_OF_CONTENT)
-			.content(new byte[] { 1, 2 });
+			.name("data.txt").path("/some/path").checksum(MD5_OF_CONTENT).content(content);
 
 		assertEquals("FileContentInfo.FileContentInfoBuilder(super=FileInfoBuilder{"
 			+ "name='data.txt', path='/some/path', directory=false}, checksum='" + MD5_OF_CONTENT
-			+ "', content=[1, 2])", builder.toString());
+			+ "', content=" + expectedContent + ")", builder.toString());
 	}
 
 	/** A content whose bytes no string representation may carry */

@@ -77,6 +77,10 @@ FIXED:
   `countAllLines(File)` closes the file it counts and throws the declared `IOException` for a file that is not
   valid UTF-8 instead of an `UncheckedIOException`; `readHeadLine(String)` reads UTF-8 whatever the default
   charset is; the Javadoc of `readLinesInList(File)` says that it decodes strictly (#113)
+- `FileContentInfo.toString` and the builder's `toString` name the length of the content, no longer its bytes;
+  `toFileContentInfo` describes a path as a directory only if it is one, so a missing path is no longer a
+  directory; `toFile` for an entry without content throws before it creates anything, instead of leaving an empty
+  file behind (#114)
 
 
 Version 20.0
