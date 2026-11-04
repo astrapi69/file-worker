@@ -187,7 +187,9 @@ public final class ReadFileExtensions
 	 * @param input
 	 *            The File from where the input comes.
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
@@ -227,7 +229,9 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the charset for read
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
@@ -260,7 +264,9 @@ public final class ReadFileExtensions
 	 * @param input
 	 *            The InputStream from where the input comes.
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws IOException
 	 *             When a io-problem occurs.
@@ -280,7 +286,9 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the charset for read
 	 * @param trim
-	 *            the flag trim if the lines shell be trimed.
+	 *            if true, every line is returned without its leading and trailing whitespace, as by
+	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
+	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
 	 * @throws IOException
 	 *             When a io-problem occurs.
@@ -309,7 +317,7 @@ public final class ReadFileExtensions
 				}
 				if (trim)
 				{
-					line.trim();
+					line = line.trim();
 				}
 				// add the line to the list
 				output.add(line);
