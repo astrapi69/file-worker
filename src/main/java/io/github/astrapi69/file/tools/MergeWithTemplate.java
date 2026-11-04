@@ -110,6 +110,28 @@ public class MergeWithTemplate
 	 */
 	public static void run(String[] args, Path configFile) throws IOException
 	{
+		run(args, configFile, Path.of(".").toAbsolutePath().normalize());
+	}
+
+	/**
+	 * Copies and merges as {@link #run(String[], Path)} does, with the given directory in place of
+	 * the current working directory: it is the source base and the destination base that neither
+	 * the arguments nor the defaults name.
+	 *
+	 * @param args
+	 *            the arguments, see the class documentation
+	 * @param configFile
+	 *            the JSON file with the defaults; a missing file means no defaults
+	 * @param workingDirectory
+	 *            the base for a source or destination that neither the arguments nor the defaults
+	 *            name
+	 * @throws UsageException
+	 *             if neither the arguments nor the defaults name a directory
+	 * @throws IOException
+	 *             if copying or merging fails
+	 */
+	public static void run(String[] args, Path configFile, Path workingDirectory) throws IOException
+	{
 		Map<String, Object> cfg = loadDefaults(configFile.toString());
 
 		// Parse CLI
@@ -127,9 +149,9 @@ public class MergeWithTemplate
 					+ configFile);
 		}
 		if (isBlank(srcBase))
-			srcBase = cwd();
+			srcBase = workingDirectory.toString();
 		if (isBlank(dstBase))
-			dstBase = cwd();
+			dstBase = workingDirectory.toString();
 
 		log("🔎 Source base: " + srcBase);
 		log("📦 Destination base: " + dstBase);
@@ -262,11 +284,6 @@ public class MergeWithTemplate
 	private static boolean isBlank(String s)
 	{
 		return s == null || s.trim().isEmpty();
-	}
-
-	private static String cwd()
-	{
-		return Path.of(".").toAbsolutePath().normalize().toString();
 	}
 
 	private static void log(String s)

@@ -35,10 +35,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Uses JUnit 5 (`@Test`, `@TempDir`). Invokes `MergeWithTemplate.main(...)` with explicit
- * `--src_base`, `--dst_base`, `--dirs` (so it does **not** depend on your JSON defaults). Verifies:
- * copy when destination subdir is missing, merge into existing directory (overwrites), dry-run
- * doesn’t change filesystem, multiple directories are handled.
+ * Uses JUnit 5 (`@Test`, `@TempDir`). Invokes `MergeWithTemplate.run(args, configFile)` with
+ * explicit `--src_base`, `--dst_base`, `--dirs` and a config file inside the temporary directory
+ * (so it does **not** depend on `./config/merge_defaults.json` and never ends the JVM). The config
+ * file names default bases inside the temporary directory too, so that nothing falls back to the
+ * working directory. Verifies: copy when destination subdir is missing, merge into existing
+ * directory (overwrites), dry-run doesn’t change filesystem, multiple directories are handled.
  */
 class MergeWithTemplateTest
 {
@@ -55,6 +57,22 @@ class MergeWithTemplateTest
 		return Files.readString(file, StandardCharsets.UTF_8);
 	}
 
+	/**
+	 * Writes a config file into the given temporary directory. Its default bases point into the
+	 * temporary directory as well and it names no default directories, so the defaults neither
+	 * replace the explicit arguments nor lead anywhere outside the temporary directory.
+	 */
+	private static Path config(Path tmp) throws IOException
+	{
+		Path configFile = tmp.resolve("config/merge_defaults.json");
+		String json = "{ \"default_src_base\": \""
+			+ tmp.resolve("configSrcBase").toString().replace("\\", "/")
+			+ "\", \"default_dst_base\": \""
+			+ tmp.resolve("configDstBase").toString().replace("\\", "/") + "\" }";
+		write(configFile, json);
+		return configFile;
+	}
+
 	@Test
 	void copiesWhenDestinationSubdirDoesNotExist(@TempDir Path tmp) throws Exception
 	{
@@ -66,8 +84,9 @@ class MergeWithTemplateTest
 		write(srcFile, "A");
 		assertFalse(Files.exists(dstBase.resolve("scripts")));
 
-		MergeWithTemplate.main(new String[] { "--src_base", srcBase.toString(), "--dst_base",
-				dstBase.toString(), "--dirs", "scripts" });
+		MergeWithTemplate.run(new String[] { "--src_base", srcBase.toString(), "--dst_base",
+				dstBase.toString(), "--dirs", "scripts" },
+			config(tmp), tmp.resolve("work"));
 
 		Path dstFile = dstBase.resolve("scripts/a.txt");
 		assertTrue(Files.exists(dstFile), "Destination file should exist after copy");
@@ -91,8 +110,9 @@ class MergeWithTemplateTest
 		Files.setLastModifiedTime(srcFile, FileTime.fromMillis(2_000L));
 
 		// Destination subdir exists -> CLI uses MergeDirectoryExtensions.merge()
-		MergeWithTemplate.main(new String[] { "--src_base", srcBase.toString(), "--dst_base",
-				dstBase.toString(), "--dirs", "scripts" });
+		MergeWithTemplate.run(new String[] { "--src_base", srcBase.toString(), "--dst_base",
+				dstBase.toString(), "--dirs", "scripts" },
+			config(tmp), tmp.resolve("work"));
 
 		assertTrue(Files.exists(dstFile));
 		assertEquals("NEW", read(dstFile),
@@ -112,8 +132,9 @@ class MergeWithTemplateTest
 		// no scripts/ at destination yet
 		assertFalse(Files.exists(dstBase.resolve("scripts")));
 
-		MergeWithTemplate.main(new String[] { "--src_base", srcBase.toString(), "--dst_base",
-				dstBase.toString(), "--dirs", "scripts", "--dry-run" });
+		MergeWithTemplate.run(new String[] { "--src_base", srcBase.toString(), "--dst_base",
+				dstBase.toString(), "--dirs", "scripts", "--dry-run" },
+			config(tmp), tmp.resolve("work"));
 
 		// still no scripts/ created
 		assertFalse(Files.exists(dstBase.resolve("scripts")),
@@ -129,10 +150,42 @@ class MergeWithTemplateTest
 		write(srcBase.resolve("scripts/tool.sh"), "#!/bin/sh\necho hi\n");
 		write(srcBase.resolve("tests/test.txt"), "T");
 
-		MergeWithTemplate.main(new String[] { "--src_base", srcBase.toString(), "--dst_base",
-				dstBase.toString(), "--dirs", "scripts", "tests" });
+		MergeWithTemplate.run(new String[] { "--src_base", srcBase.toString(), "--dst_base",
+				dstBase.toString(), "--dirs", "scripts", "tests" },
+			config(tmp), tmp.resolve("work"));
 
 		assertTrue(Files.exists(dstBase.resolve("scripts/tool.sh")));
 		assertTrue(Files.exists(dstBase.resolve("tests/test.txt")));
+	}
+
+	@Test
+	void theDestinationBaseIsTheWorkingDirectory_whenNeitherArgumentsNorDefaultsNameIt(
+		@TempDir Path tmp) throws Exception
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path work = tmp.resolve("work");
+		write(srcBase.resolve("scripts/a.txt"), "A");
+
+		// a missing config file means no defaults
+		MergeWithTemplate.run(
+			new String[] { "--src_base", srcBase.toString(), "--dirs", "scripts" },
+			tmp.resolve("no-config.json"), work);
+
+		assertEquals("A", read(work.resolve("scripts/a.txt")));
+	}
+
+	@Test
+	void theSourceBaseIsTheWorkingDirectory_whenNeitherArgumentsNorDefaultsNameIt(@TempDir Path tmp)
+		throws Exception
+	{
+		Path dstBase = tmp.resolve("dstBase");
+		Path work = tmp.resolve("work");
+		write(work.resolve("scripts/a.txt"), "A");
+
+		MergeWithTemplate.run(
+			new String[] { "--dst_base", dstBase.toString(), "--dirs", "scripts" },
+			tmp.resolve("no-config.json"), work);
+
+		assertEquals("A", read(dstBase.resolve("scripts/a.txt")));
 	}
 }
