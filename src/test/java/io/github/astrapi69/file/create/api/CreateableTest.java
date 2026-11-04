@@ -188,6 +188,25 @@ public class CreateableTest
 	}
 
 	/**
+	 * Test method for {@link Createable#mkParentDirs(File)}
+	 *
+	 * @throws IOException
+	 *             Signals an I/O exception occurred
+	 */
+	@Test
+	public void mkParentDirs_returnsFalse_whenTheParentCannotBeCreated() throws IOException
+	{
+		File regularFile = Files.writeString(tempDir.resolve("regular.txt"), "regular").toFile();
+		File file = new File(new File(regularFile, "sub"), "file.txt");
+
+		boolean created = createable.mkParentDirs(file);
+
+		assertFalse(created);
+		assertFalse(file.getParentFile().exists());
+		assertTrue(regularFile.isFile());
+	}
+
+	/**
 	 * Test method for {@link Createable#newFile(File)}
 	 *
 	 * @throws IOException

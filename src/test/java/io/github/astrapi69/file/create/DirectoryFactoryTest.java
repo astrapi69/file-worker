@@ -25,7 +25,9 @@
 package io.github.astrapi69.file.create;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -42,6 +44,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.file.FileTestCase;
@@ -470,6 +474,53 @@ public class DirectoryFactoryTest extends FileTestCase
 
 		// Finally delete the test directory...
 		DeleteFileExtensions.delete(dirPath.toFile());
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryQuietly(String, String)}
+	 *
+	 * @param existsBefore
+	 *            whether the directory exists before the call
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@ParameterizedTest(name = "existsBefore = {0}")
+	@ValueSource(booleans = { true, false })
+	public void newDirectoryQuietly_returnsTheNamedDirectoryAndCreatesItOnlyWhenMissing(
+		boolean existsBefore) throws IOException
+	{
+		Path expected = tempRoot.resolve("quiet");
+		Path marker = expected.resolve("marker.txt");
+		if (existsBefore)
+		{
+			Files.createDirectory(expected);
+			Files.writeString(marker, "kept");
+		}
+
+		File directory = DirectoryFactory.newDirectoryQuietly(tempRoot.toString(), "quiet");
+
+		assertEquals(expected.toFile(), directory);
+		assertTrue(directory.isDirectory());
+		assertEquals(existsBefore, Files.exists(marker));
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryQuietly(String, String)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@Test
+	public void newDirectoryQuietly_throwsRuntimeException_whenTheParentIsARegularFile()
+		throws IOException
+	{
+		Path regularFile = Files.writeString(tempRoot.resolve("regular.txt"), "regular");
+
+		RuntimeException exception = assertThrows(RuntimeException.class,
+			() -> DirectoryFactory.newDirectoryQuietly(regularFile.toString(), "quiet"));
+
+		assertInstanceOf(IOException.class, exception.getCause());
+		assertTrue(Files.isRegularFile(regularFile));
 	}
 
 	/**

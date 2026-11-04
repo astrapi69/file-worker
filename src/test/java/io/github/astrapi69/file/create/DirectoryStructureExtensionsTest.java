@@ -24,10 +24,12 @@
  */
 package io.github.astrapi69.file.create;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
@@ -73,5 +75,23 @@ public class DirectoryStructureExtensionsTest
 		expected = DirectoryStructureExtensions.getFileContentInfos(parentFile);
 		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
 		DeleteFileExtensions.delete(files);
+	}
+
+	/**
+	 * Test method for {@link DirectoryStructureExtensions#getFileContentInfos(File)}
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void getFileContentInfos_returnsAnEmptyList_whenGivenARegularFile() throws IOException
+	{
+		File regularFile = Files.writeString(tempDir.toPath().resolve("regular.txt"), "regular")
+			.toFile();
+
+		List<FileContentInfo> fileContentInfos = DirectoryStructureExtensions
+			.getFileContentInfos(regularFile);
+
+		assertEquals(List.of(), fileContentInfos);
 	}
 }
