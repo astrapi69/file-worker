@@ -25,6 +25,7 @@
 package io.github.astrapi69.file.tools;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -435,5 +436,112 @@ class MergeWithTemplateTest
 		assertEquals(2_000L,
 			Files.getLastModifiedTime(dstBase.resolve("scripts/x.txt")).toMillis());
 		assertEquals("K", read(dstBase.resolve("scripts/keep.txt")));
+	}
+
+	@ParameterizedTest(name = "dry-run: {0}")
+	@ValueSource(booleans = { false, true })
+	void reportsThatTheSourceOverwritesExistingFiles_whenItMerges(boolean dryRun, @TempDir Path tmp)
+		throws Throwable
+	{
+		Path base = tmp.toRealPath();
+		Path srcBase = base.resolve("srcBase");
+		Path dstBase = base.resolve("dstBase");
+		Path srcFile = srcBase.resolve("scripts/a.txt");
+		write(srcFile, "OLD SOURCE");
+		Files.setLastModifiedTime(srcFile, FileTime.fromMillis(1_000L));
+		Path dstFile = dstBase.resolve("scripts/a.txt");
+		write(dstFile, "NEW DEST");
+		Files.setLastModifiedTime(dstFile, FileTime.fromMillis(2_000_000L));
+		String[] args = dryRun
+			? new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts", "--dry-run" }
+			: new String[] { "--src_base", srcBase.toString(), "--dst_base", dstBase.toString(),
+					"--dirs", "scripts" };
+
+		String report = stdoutOf(
+			() -> MergeWithTemplate.run(args, config(base), base.resolve("work")));
+
+		String action = dryRun ? "DRY-RUN merge " : "Merging ";
+		assertTrue(report.contains(action + srcBase.resolve("scripts") + " -> "
+			+ dstBase.resolve("scripts") + " (source overwrites existing files)"), report);
+		assertFalse(report.contains("latest-modified"), report);
+		// the older source overwrites the newer destination file, unless it is a dry run
+		assertEquals(dryRun ? "NEW DEST" : "OLD SOURCE", read(dstFile));
+	}
+
+	@ParameterizedTest(name = "link target: {0}, destination exists: {1}")
+	@CsvSource({ "r.txt, false", "r.txt, true", "outside/deep/real.txt, false",
+			"outside/deep/real.txt, true" })
+	void dryRunPreviewsALinkToATargetOutsideTheSource_underTheNameOfTheLink(String target,
+		boolean destinationExists, @TempDir Path tmp) throws Throwable
+	{
+		Path base = tmp.toRealPath();
+		Path srcBase = base.resolve("srcBase");
+		Path dstBase = base.resolve("dstBase");
+		Path srcDir = srcBase.resolve("scripts");
+		Path dstDir = dstBase.resolve("scripts");
+		write(srcDir.resolve("plain.txt"), "P");
+		Path targetFile = base.resolve(target);
+		write(targetFile, "T");
+		Path link = srcDir.resolve("link.txt");
+		try
+		{
+			Files.createSymbolicLink(link, targetFile);
+		}
+		catch (IOException | UnsupportedOperationException exception)
+		{
+			assumeTrue(false, "symbolic links cannot be created here: " + exception);
+		}
+		if (destinationExists)
+		{
+			write(dstDir.resolve("keep.txt"), "K");
+		}
+
+		String report = stdoutOf(
+			() -> MergeWithTemplate
+				.run(
+					new String[] { "--src_base", srcBase.toString(), "--dst_base",
+							dstBase.toString(), "--dirs", "scripts", "--dry-run" },
+					config(base), base.resolve("work")));
+
+		assertTrue(
+			report.contains(link + "  ->  " + dstDir.resolve("link.txt") + System.lineSeparator()),
+			report);
+		assertTrue(report.contains(srcDir.resolve("plain.txt") + "  ->  "
+			+ dstDir.resolve("plain.txt") + System.lineSeparator()), report);
+		assertEquals(2, report.split("  ->  ", -1).length - 1, report);
+		assertFalse(Files.exists(dstDir.resolve("link.txt")));
+		assertTrue(report.endsWith("Done." + System.lineSeparator()), report);
+	}
+
+	@ParameterizedTest(name = "destination exists: {0}")
+	@ValueSource(booleans = { false, true })
+	void keepsTheModificationTimeOfTheSourceFiles_whetherTheDestinationExistsOrNot(
+		boolean destinationExists, @TempDir Path tmp) throws Exception
+	{
+		Path srcBase = tmp.resolve("srcBase");
+		Path dstBase = tmp.resolve("dstBase");
+		Path srcFile = srcBase.resolve("scripts/x.txt");
+		write(srcFile, "X");
+		Files.setLastModifiedTime(srcFile, FileTime.fromMillis(2_000L));
+		Path srcNested = srcBase.resolve("scripts/sub/y.txt");
+		write(srcNested, "Y");
+		Files.setLastModifiedTime(srcNested, FileTime.fromMillis(3_000L));
+		if (destinationExists)
+		{
+			write(dstBase.resolve("scripts/keep.txt"), "K");
+		}
+
+		MergeWithTemplate.run(new String[] { "--src_base", srcBase.toString(), "--dst_base",
+				dstBase.toString(), "--dirs", "scripts" },
+			config(tmp), tmp.resolve("work"));
+
+		assertEquals("X", read(dstBase.resolve("scripts/x.txt")));
+		assertEquals(2_000L,
+			Files.getLastModifiedTime(dstBase.resolve("scripts/x.txt")).toMillis());
+		assertEquals("Y", read(dstBase.resolve("scripts/sub/y.txt")));
+		assertEquals(3_000L,
+			Files.getLastModifiedTime(dstBase.resolve("scripts/sub/y.txt")).toMillis());
+		assertEquals(destinationExists, Files.exists(dstBase.resolve("scripts/keep.txt")));
 	}
 }
