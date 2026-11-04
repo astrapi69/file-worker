@@ -73,6 +73,10 @@ FIXED:
 - `FileExtensions.isOpen(File)` no longer creates a missing file: it gives `false` and leaves it missing. A lock
   this JVM holds on the file through another channel gives `true` instead of an `OverlappingFileLockException`,
   and the Javadoc says what the method checks instead of "Not yet implemented" (#109)
+- `ReadFileExtensions.readLine(File, int)` gives `null` for a negative index, as its Javadoc says;
+  `countAllLines(File)` closes the file it counts and throws the declared `IOException` for a file that is not
+  valid UTF-8 instead of an `UncheckedIOException`; `readHeadLine(String)` reads UTF-8 whatever the default
+  charset is; the Javadoc of `readLinesInList(File)` says that it decodes strictly (#113)
 
 
 Version 20.0

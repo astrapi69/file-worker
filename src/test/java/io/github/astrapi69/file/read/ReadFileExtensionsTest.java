@@ -27,9 +27,11 @@ package io.github.astrapi69.file.read;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,24 +40,32 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.meanbean.test.BeanTester;
 
 import io.github.astrapi69.collection.array.ArrayFactory;
@@ -142,6 +152,78 @@ public class ReadFileExtensionsTest extends FileTestCase
 		throws IOException
 	{
 		assertEquals(expected, ReadFileExtensions.readLine(testFile, index));
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readLine(File, int)}: a negative index has no line
+	 * either, so it gives null as an index past the last line does.
+	 *
+	 * @param index
+	 *            the negative index of the line to read
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest(name = "index {0} gives null")
+	@ValueSource(ints = { -1, -2, -3, Integer.MIN_VALUE })
+	public void testReadLineNegativeIndexGivesNull(final int index) throws IOException
+	{
+		assertNull(ReadFileExtensions.readLine(testFile, index));
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#countAllLines(File)}: the file it counts is closed
+	 * again, so that the number of open file descriptors of this process is the same before and
+	 * after 50 calls; without the close it grows by one per call until the garbage collector runs.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	@EnabledOnOs(OS.LINUX)
+	public void testCountAllLinesClosesTheFile() throws IOException
+	{
+		final Path openFileDescriptors = Path.of("/proc/self/fd");
+		// the first call loads the classes it needs, which may open files of their own
+		assertEquals(3, ReadFileExtensions.countAllLines(testFile));
+		final long before;
+		try (Stream<Path> entries = Files.list(openFileDescriptors))
+		{
+			before = entries.count();
+		}
+		for (int i = 0; i < 50; i++)
+		{
+			assertEquals(3, ReadFileExtensions.countAllLines(testFile));
+		}
+		final long after;
+		try (Stream<Path> entries = Files.list(openFileDescriptors))
+		{
+			after = entries.count();
+		}
+		assertTrue(after <= before,
+			"open file descriptors before the 50 calls: " + before + ", after them: " + after);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#countAllLines(File)}: a file with characters
+	 * outside of ASCII in UTF-8 is counted, and a file that is not valid UTF-8 gives the declared
+	 * {@link IOException}, a {@link MalformedInputException}, not an unchecked exception.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testCountAllLinesOfInvalidUtf8ThrowsIOException() throws IOException
+	{
+		final Path validUtf8 = tempRoot.resolve("valid-utf8.txt");
+		Files.write(validUtf8, List.of("Grüße", "Ärger über Öl"), StandardCharsets.UTF_8);
+		assertEquals(2, ReadFileExtensions.countAllLines(validUtf8.toFile()));
+
+		final Path invalidUtf8 = tempRoot.resolve("invalid-utf8.txt");
+		Files.write(invalidUtf8, new byte[] { 'x', (byte)0xFC, 'y' });
+		final IOException exception = assertThrows(IOException.class,
+			() -> ReadFileExtensions.countAllLines(invalidUtf8.toFile()));
+		assertTrue(exception instanceof MalformedInputException,
+			"expected a MalformedInputException, but was " + exception);
 	}
 
 	/**
@@ -260,6 +342,51 @@ public class ReadFileExtensionsTest extends FileTestCase
 
 		this.actual = expected.equals(compare);
 		assertTrue(this.actual);
+	}
+
+	/**
+	 * Test method for {@link ReadFileExtensions#readHeadLine(String)}: the file is read as UTF-8
+	 * whatever the default charset of the JVM is. A second JVM, started with
+	 * {@code -Dfile.encoding=ISO-8859-1}, runs {@link ReadHeadLinePrinter} on a file with
+	 * {@code Grüße} in UTF-8 and prints the code points of what it read; a control run with
+	 * {@code -Dfile.encoding=UTF-8} reads the same.
+	 *
+	 * @param fileEncoding
+	 *            the value of {@code file.encoding} of the second JVM
+	 * @throws Exception
+	 *             is thrown if the second JVM cannot be started or awaited
+	 */
+	@ParameterizedTest(name = "file.encoding={0}")
+	@ValueSource(strings = { "UTF-8", "ISO-8859-1" })
+	public void testReadHeadLineReadsUtf8WhateverTheDefaultCharset(final String fileEncoding)
+		throws Exception
+	{
+		final String expected = "Grüße";
+		final Path utf8File = tempRoot.resolve("head-line-utf8.txt");
+		Files.write(utf8File, List.of(expected, "second line"), StandardCharsets.UTF_8);
+		final String java = ProcessHandle.current().info().command()
+			.orElseGet(() -> Path.of(System.getProperty("java.home"), "bin", "java").toString());
+		final Process process = new ProcessBuilder(java, "-Dfile.encoding=" + fileEncoding, "-cp",
+			System.getProperty("java.class.path"), ReadHeadLinePrinter.class.getName(),
+			utf8File.toString()).redirectError(ProcessBuilder.Redirect.INHERIT).start();
+		try
+		{
+			final String output;
+			try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(process.getInputStream(), StandardCharsets.US_ASCII)))
+			{
+				output = reader.readLine();
+			}
+			assertTrue(process.waitFor(60, TimeUnit.SECONDS));
+			assertEquals(0, process.exitValue());
+			final String expectedCodePoints = expected.codePoints().mapToObj(Integer::toString)
+				.collect(Collectors.joining(" "));
+			assertEquals(expectedCodePoints, output);
+		}
+		finally
+		{
+			process.destroyForcibly();
+		}
 	}
 
 	/**
