@@ -74,14 +74,18 @@ CHANGED:
 FIXED:
 
 - a write of `StoreFileExtensions.toFile` that fails throws the declared `IOException` instead of returning `true`:
-  the methods no longer write through a `PrintWriter`, which swallowed it. `Storable.toFile(File, Collection)` and
-  `toFile(File, Collection, Charset)` end the last line with the line separator too, as `StoreFileExtensions` and
-  `Files.write` do (#107)
+  the methods no longer write through a `PrintWriter`, which swallowed it. For callers: the `boolean` is always
+  `true` now, and a failure is reported by the `IOException`, never by `false`; the result becomes `void` in 21.0
+  (#124). `Storable.toFile(File, Collection)` and `toFile(File, Collection, Charset)` end the last line with the
+  line separator too, as `StoreFileExtensions` and `Files.write` do (#107)
 - `ReadFileExtensions.readLinesInList` with `trim = true` trims the lines, in all four overloads with the flag; it
   called `line.trim()` and dropped the result (#106)
 - `DirectoryStructureFactory.newDirectoryStructure` creates each path with its missing parents, so
-  `newDirectoryStructure(dir, "src/main/java")` creates `src/main/java` instead of nothing; a path that cannot be
-  created throws a `RuntimeException` instead of coming back as a `File` for a directory that does not exist
+  `newDirectoryStructure(dir, "src/main/java")` creates `src/main/java` instead of nothing. For callers: missing
+  parent directories are created now, and a path that cannot be created throws a `RuntimeException` (the class
+  itself) with the `IOException` of `Files.createDirectories` as its cause, a `FileAlreadyExistsException` for a
+  regular file at the path or a `FileSystemException` for one at a parent path, where the method returned a `File`
+  for a directory that does not exist. A parent directory that does not exist still gives an empty collection
   (#110)
 - `FileExtensions.isOpen(File)` no longer creates a missing file: it gives `false` and leaves it missing. A lock
   this JVM holds on the file through another channel gives `true` instead of an `OverlappingFileLockException`,
@@ -93,7 +97,9 @@ FIXED:
 - `FileContentInfo.toString` and the builder's `toString` name the length of the content, no longer its bytes;
   `toFileContentInfo` describes a path as a directory only if it is one, so a missing path is no longer a
   directory; `toFile` for an entry without content throws before it creates anything, instead of leaving an empty
-  file behind (#114)
+  file behind. For callers: `DirectoryStructureExtensions.getFileContentInfos` lists regular files and directories
+  only; dangling symbolic links, named pipes and sockets, which came back as directory entries, are left out, so
+  that `newDirectoryStructure` can create the tree again from the list (#114)
 - `FileExtensions.download(URI)` reads every URI the JDK can open (`file:`, `jar:`, `http:`, `https:`), and a URI
   that cannot be read fails with the declared `IOException` instead of an `IllegalArgumentException` (#108)
 - `DirectoryFactory.newDirectories(Path, FileAttribute...)` returns `false` for a directory that already existed, as
