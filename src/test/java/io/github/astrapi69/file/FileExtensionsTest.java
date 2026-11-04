@@ -24,8 +24,10 @@
  */
 package io.github.astrapi69.file;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -40,12 +42,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.io.UncheckedIOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URI;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
@@ -116,6 +125,237 @@ public class FileExtensionsTest extends FileTestCase
 			this.actual = compare[i] == expected[i];
 			assertTrue(this.actual);
 		}
+	}
+
+	/**
+	 * The data the tests of {@link FileExtensions#download(URI)} read
+	 */
+	private static final byte[] DOWNLOAD_DATA = "hello".getBytes(StandardCharsets.UTF_8);
+
+	/**
+	 * Creates a URI in the given directory, for the parameterized tests of
+	 * {@link FileExtensions#download(URI)}
+	 */
+	@FunctionalInterface
+	interface UriInDirectory
+	{
+		URI create(File directory) throws IOException;
+	}
+
+	/**
+	 * Writes a jar with one entry
+	 *
+	 * @param jar
+	 *            the jar file to write
+	 * @param entryName
+	 *            the name of the entry
+	 * @param content
+	 *            the content of the entry
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	private static void writeJar(final Path jar, final String entryName, final byte[] content)
+		throws IOException
+	{
+		try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar)))
+		{
+			out.putNextEntry(new JarEntry(entryName));
+			out.write(content);
+			out.closeEntry();
+		}
+	}
+
+	/**
+	 * Gets the jar: URI of an entry of the given jar
+	 *
+	 * @param jar
+	 *            the jar file
+	 * @param entryName
+	 *            the name of the entry
+	 * @return the jar: URI of the entry
+	 */
+	private static URI jarEntryUri(final Path jar, final String entryName)
+	{
+		return URI.create("jar:" + jar.toUri() + "!/" + entryName);
+	}
+
+	/**
+	 * Gets a port on the loopback interface that was free a moment before
+	 *
+	 * @return the port
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	private static int unusedLoopbackPort() throws IOException
+	{
+		try (ServerSocket socket = new ServerSocket(0, 1, InetAddress.getLoopbackAddress()))
+		{
+			return socket.getLocalPort();
+		}
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#download(URI)} with the jar: URI of an entry of a jar
+	 * in a local directory: the result is the content of the entry.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testDownloadAnEntryOfALocalJar() throws IOException
+	{
+		final Path jar = this.testDir.toPath().resolve("data.jar");
+		writeJar(jar, "data.txt", DOWNLOAD_DATA);
+
+		assertArrayEquals(DOWNLOAD_DATA, FileExtensions.download(jarEntryUri(jar, "data.txt")));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#download(URI)} with the jar: URI of an entry of a jar
+	 * that was replaced after a first download: the second download reads the new jar, not a copy
+	 * of the old one kept open from the first.
+	 *
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@Test
+	public void testDownloadAnEntryOfALocalJarThatWasReplaced() throws IOException
+	{
+		final byte[] replaced = "world".getBytes(StandardCharsets.UTF_8);
+		final Path jar = this.testDir.toPath().resolve("replaced.jar");
+		final URI uri = jarEntryUri(jar, "data.txt");
+		writeJar(jar, "data.txt", DOWNLOAD_DATA);
+		assertArrayEquals(DOWNLOAD_DATA, FileExtensions.download(uri));
+
+		Files.delete(jar);
+		writeJar(jar, "data.txt", replaced);
+
+		assertArrayEquals(replaced, FileExtensions.download(uri));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#download(URI)} with an http: URI of a server on the
+	 * loopback interface: the result is the body the server sends.
+	 *
+	 * @throws Exception
+	 *             is thrown if an exception occurs
+	 */
+	@Test
+	public void testDownloadWhatAnHttpServerOnTheLoopbackInterfaceSends() throws Exception
+	{
+		try (ServerSocket server = new ServerSocket(0, 1, InetAddress.getLoopbackAddress()))
+		{
+			final Thread serving = new Thread(() -> {
+				try (Socket client = server.accept())
+				{
+					final BufferedReader request = new BufferedReader(
+						new InputStreamReader(client.getInputStream(), StandardCharsets.US_ASCII));
+					String line = request.readLine();
+					while (line != null && !line.isEmpty())
+					{
+						line = request.readLine();
+					}
+					final OutputStream response = client.getOutputStream();
+					response.write(("HTTP/1.1 200 OK\r\nContent-Length: " + DOWNLOAD_DATA.length
+						+ "\r\nConnection: close\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
+					response.write(DOWNLOAD_DATA);
+					response.flush();
+				}
+				catch (final IOException exception)
+				{
+					throw new UncheckedIOException(exception);
+				}
+			});
+			serving.start();
+			final URI uri = URI.create("http://127.0.0.1:" + server.getLocalPort() + "/data.txt");
+
+			assertArrayEquals(DOWNLOAD_DATA, FileExtensions.download(uri));
+			serving.join(TimeUnit.SECONDS.toMillis(10));
+		}
+	}
+
+	/**
+	 * The URIs that name nothing {@link FileExtensions#download(URI)} can read, each created in the
+	 * test directory
+	 *
+	 * @return the URIs
+	 */
+	static Stream<Arguments> unreadableUris()
+	{
+		return Stream.of(
+			argumentSet("an http: URI to a loopback port that was free a moment before",
+				(UriInDirectory)directory -> URI
+					.create("http://127.0.0.1:" + unusedLoopbackPort() + "/data.txt")),
+			argumentSet("the jar: URI of an entry a local jar does not hold",
+				(UriInDirectory)directory -> {
+					final Path jar = directory.toPath().resolve("data.jar");
+					writeJar(jar, "data.txt", DOWNLOAD_DATA);
+					return jarEntryUri(jar, "missing.txt");
+				}),
+			argumentSet("the jar: URI of an entry of a jar that does not exist",
+				(UriInDirectory)directory -> jarEntryUri(directory.toPath().resolve("missing.jar"),
+					"data.txt")));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#download(URI)} with a URI that cannot be read: the
+	 * failure is the declared {@link IOException}.
+	 *
+	 * @param uriInDirectory
+	 *            creates the URI in the test directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest
+	@MethodSource("unreadableUris")
+	public void testDownloadAUriThatCannotBeReadThrowsIOException(
+		final UriInDirectory uriInDirectory) throws IOException
+	{
+		final URI uri = uriInDirectory.create(this.testDir);
+
+		assertThrows(IOException.class, () -> FileExtensions.download(uri));
+	}
+
+	/**
+	 * The file: URIs that name no regular file, each created in the test directory
+	 *
+	 * @return the URIs
+	 */
+	static Stream<Arguments> fileUrisOfNoRegularFile()
+	{
+		return Stream.of(
+			argumentSet("a file that does not exist",
+				(UriInDirectory)directory -> new File(directory, "missing.txt").toURI()),
+			argumentSet("a directory", (UriInDirectory)File::toURI));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#download(URI)} with a file: URI that names no regular
+	 * file: the result is null.
+	 *
+	 * @param uriInDirectory
+	 *            creates the URI in the test directory
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	@ParameterizedTest
+	@MethodSource("fileUrisOfNoRegularFile")
+	public void testDownloadAFileUriThatNamesNoRegularFileReturnsNull(
+		final UriInDirectory uriInDirectory) throws IOException
+	{
+		assertNull(FileExtensions.download(uriInDirectory.create(this.testDir)));
+	}
+
+	/**
+	 * Test method for {@link FileExtensions#download(URI)} with a URI that is not absolute: the
+	 * failure is an {@link IllegalArgumentException}.
+	 */
+	@Test
+	public void testDownloadAUriThatIsNotAbsoluteThrowsIllegalArgumentException()
+	{
+		final URI uri = URI.create("data.txt");
+
+		assertThrows(IllegalArgumentException.class, () -> FileExtensions.download(uri));
 	}
 
 	/**
