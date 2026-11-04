@@ -313,13 +313,18 @@ public final class FileSearchExtensions
 	}
 
 	/**
-	 * Finds all files that match the search pattern. The search is not recursively.
+	 * Finds all files that match the search pattern. The search is recursive: it descends into
+	 * every subdirectory of the given directory. The pattern is a regular expression that has to
+	 * match the whole name of a file, not its path; directories are searched but never returned
+	 * (file-worker#111)
 	 *
 	 * @param dir
 	 *            The directory to search.
 	 * @param fileSearchPattern
-	 *            The regex file search pattern.
-	 * @return A List with all files that matches the search pattern.
+	 *            The regular expression matched against the name of each file.
+	 * @return A List with the absolute files in the directory and in all its subdirectories whose
+	 *         name matches the search pattern, an empty List if there are none or if the given file
+	 *         is no directory.
 	 */
 	public static List<File> findAllFiles(final File dir, final String fileSearchPattern)
 	{

@@ -95,6 +95,8 @@ FIXED:
   its dry run previews a symbolic link to a target outside the source under the link's own path, where it showed a
   wrong one or failed with a `StringIndexOutOfBoundsException`; a directory copied into a new destination keeps
   the files' modification times, as a merge does (#116)
+- the Javadoc of `FileSearchExtensions.findAllFiles(File, String)` and `Searchable.findAllFiles(File, String)` says
+  that the search is recursive, which it is; it said "not recursively" (#111)
 
 
 Version 20.0
