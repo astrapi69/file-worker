@@ -28,21 +28,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class FileTimeExtensionsTest
 {
+	@TempDir
+	Path tempDir;
+
 	private File testFile;
 
 	@BeforeEach
 	void setUp() throws Exception
 	{
 		// Create a temporary file and write something to it
-		testFile = File.createTempFile("test-", ".txt");
+		testFile = Files.createTempFile(tempDir, "test-", ".txt").toFile();
 		try (FileWriter writer = new FileWriter(testFile))
 		{
 			writer.write("Hello, world!");

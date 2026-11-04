@@ -51,7 +51,6 @@ import org.meanbean.test.BeanTester;
 import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.system.SystemFileExtensions;
 
 /**
  * The unit test class for the class {@link DirectoryFactory}
@@ -78,7 +77,7 @@ public class DirectoryFactoryTest extends FileTestCase
 	@Test
 	public void testNewTempDirectoryWithPathAndStringPrefix() throws IOException
 	{
-		Path dir = Paths.get(System.getProperty("java.io.tmpdir"));
+		Path dir = tempRoot;
 		String prefix = "test";
 		FileAttribute<?>[] attrs = new FileAttribute<?>[0];
 
@@ -301,7 +300,7 @@ public class DirectoryFactoryTest extends FileTestCase
 
 			File dir;
 			// new scenario...
-			parentDirectory = SystemFileExtensions.getTempDir();
+			parentDirectory = tempRoot.toFile();
 			filename = "foobar";
 			file = FileFactory.newFile(parentDirectory, filename);
 			DirectoryFactory.newDirectory(file, "newFooBarDir");
