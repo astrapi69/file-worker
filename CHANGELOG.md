@@ -83,6 +83,10 @@ FIXED:
   file behind (#114)
 - `FileExtensions.download(URI)` reads every URI the JDK can open (`file:`, `jar:`, `http:`, `https:`), and a URI
   that cannot be read fails with the declared `IOException` instead of an `IllegalArgumentException` (#108)
+- `DirectoryFactory.newDirectories(Path, FileAttribute...)` returns `false` for a directory that already existed, as
+  its Javadoc says. The Javadoc of the copy, move, rename and delete methods that never return `false` says that
+  they return `true` and that a failure throws, and the Quietly methods of `DirectoryFactory` say that they throw
+  an unchecked exception in place of a checked one (#117)
 
 
 Version 20.0

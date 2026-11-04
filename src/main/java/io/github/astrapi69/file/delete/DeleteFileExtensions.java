@@ -123,9 +123,13 @@ public final class DeleteFileExtensions
 	 *
 	 * @param path
 	 *            The path to a file or directory
-	 * @return <code>true</code> if deletion is successful; <code>false</code> otherwise
+	 * @return <code>true</code> if the path was deleted, a directory with its whole content;
+	 *         <code>false</code> if it did not exist, or if a directory was created again at the
+	 *         path by another process after its deletion. A deletion that fails throws, it does not
+	 *         return <code>false</code>
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, for instance a file or a directory
+	 *             that cannot be deleted; the entries deleted up to then stay deleted
 	 */
 	public static boolean delete(final Path path) throws IOException
 	{
@@ -143,7 +147,9 @@ public final class DeleteFileExtensions
 	 *
 	 * @param file
 	 *            The file or directory to delete
-	 * @return <code>true</code> if deletion is successful; <code>false</code> otherwise
+	 * @return <code>true</code> if the file was deleted, a directory with its whole content;
+	 *         <code>false</code> if it did not exist. A deletion that fails throws, it does not
+	 *         return <code>false</code>. See {@link #delete(Path)}
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */

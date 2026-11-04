@@ -72,32 +72,43 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Creates a new directory from the given {@link Path} object and optional {@link FileAttribute}
+	 * Creates a new directory from the given {@link Path} object and optional
+	 * {@link FileAttribute}, with every missing parent directory
 	 *
 	 * @param dir
 	 *            the directory to create
 	 * @param attrs
 	 *            optional file attributes to set atomically when creating the directory
-	 * @return true if the directory was created; false otherwise
+	 * @return true if the directory was created; false if it already existed as a directory before
+	 *         the call, in which case it is left as it is
+	 * @throws java.nio.file.FileAlreadyExistsException
+	 *             if the path exists, but is not a directory
 	 * @throws IOException
-	 *             Signals an I/O exception occurred
+	 *             Signals an I/O exception occurred, for instance a
+	 *             {@link java.nio.file.FileSystemException} if one of its parents is not a
+	 *             directory; a directory that cannot be created throws, it does not return false
 	 * @see Files#createDirectories(Path, FileAttribute...)
 	 */
 	public static boolean newDirectories(Path dir, FileAttribute<?>... attrs) throws IOException
 	{
-		Path directory = Files.createDirectories(dir, attrs);
-		return Files.exists(directory);
+		final boolean existed = Files.isDirectory(dir);
+		Files.createDirectories(dir, attrs);
+		return !existed;
 	}
 
 	/**
-	 * Creates a new directory from the given {@link Path} object quietly without throwing
-	 * exceptions
+	 * Creates a new directory from the given {@link Path} object, with every missing parent
+	 * directory, and throws an unchecked exception instead of the checked {@link IOException}
 	 *
 	 * @param dir
 	 *            the directory to create
 	 * @param attrs
 	 *            optional file attributes to set atomically when creating the directory
-	 * @return true if the directory was created; false otherwise
+	 * @return true if the directory was created; false if it already existed as a directory before
+	 *         the call
+	 * @throws RuntimeException
+	 *             with the {@link IOException} of {@link #newDirectories(Path, FileAttribute...)}
+	 *             as its cause, if the directory cannot be created
 	 */
 	public static boolean newDirectoriesQuietly(Path dir, FileAttribute<?>... attrs)
 	{
@@ -108,16 +119,20 @@ public final class DirectoryFactory
 	 * Creates a new directory from the given {@link Path} object and the optional
 	 * {@link FileAttribute}.<br>
 	 * <br>
-	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
-	 * returns if the directory is created or not.
+	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)}: the
+	 * parent directory must exist, and a path that already exists is not created again.
 	 *
 	 * @param dir
 	 *            the dir the directory to create
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return Returns true if the directory was created otherwise false.
+	 * @return true, the directory was created; a directory that cannot be created throws, it does
+	 *         not return false
+	 * @throws java.nio.file.FileAlreadyExistsException
+	 *             if the path already exists, as a directory or as a file
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred
+	 *             Signals that an I/O exception has occurred, for instance a missing parent
+	 *             directory
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
 	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
@@ -128,16 +143,22 @@ public final class DirectoryFactory
 
 	/**
 	 * Creates a new directory from the given {@link Path} object and the optional
-	 * {@link FileAttribute}.<br>
+	 * {@link FileAttribute}, and throws an unchecked exception instead of the checked
+	 * {@link IOException}.<br>
 	 * <br>
-	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)} and
-	 * returns if the directory is created or not.
+	 * Note: this method decorates the {@link Files#createDirectory(Path, FileAttribute...)}: the
+	 * parent directory must exist, and a path that already exists is not created again.
 	 *
 	 * @param dir
 	 *            the dir the directory to create
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return Returns true if the directory was created otherwise false.
+	 * @return true, the directory was created; a directory that cannot be created throws, it does
+	 *         not return false
+	 * @throws RuntimeException
+	 *             with the {@link IOException} of {@link #newDirectory(Path, FileAttribute...)} as
+	 *             its cause, for instance a {@link java.nio.file.FileAlreadyExistsException} if the
+	 *             path already exists
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
 	public static boolean newDirectoryQuietly(Path dir, FileAttribute<?>... attrs)
@@ -169,13 +190,18 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
-	 * new empty file will be created on the file system
+	 * Factory method that creates a new {@link File} object from the given absolute path as
+	 * {@link String} object, and creates the directory if the path does not exist; it throws an
+	 * unchecked exception instead of the checked {@link IOException}
 	 *
 	 * @param absolutePath
 	 *            the absolute path
 	 *
 	 * @return the file object
+	 * @throws RuntimeException
+	 *             with the {@link IOException} of {@link #newDirectory(Path, FileAttribute...)} as
+	 *             its cause, for instance a {@link java.nio.file.NoSuchFileException} if the parent
+	 *             directory does not exist
 	 */
 	public static File newDirectoryQuietly(final String absolutePath)
 	{
@@ -262,13 +288,18 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Factory method for creating the new directory as {@link File} objects if it is not exists.
+	 * Factory method for creating the new directory as {@link File} objects if it is not exists,
+	 * and throws an unchecked exception instead of the checked {@link IOException}
 	 *
 	 * @param parentDirectory
 	 *            the parent directory
 	 * @param directoryName
 	 *            the directory name
 	 * @return the new directory as {@link File} object
+	 * @throws RuntimeException
+	 *             with the {@link IOException} of {@link #newDirectory(Path, FileAttribute...)} as
+	 *             its cause, for instance a {@link java.nio.file.NoSuchFileException} if the parent
+	 *             directory does not exist
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
 	public static File newDirectoryQuietly(final String parentDirectory, final String directoryName)

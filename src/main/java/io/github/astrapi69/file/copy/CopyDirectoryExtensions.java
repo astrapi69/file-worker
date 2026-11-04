@@ -65,10 +65,14 @@ public final class CopyDirectoryExtensions
 	 * @param source
 	 *            The source directory
 	 * @param destination
-	 *            The destination directory
-	 * @return true if the directory was successfully copied, otherwise false
+	 *            The destination directory, created with its missing parents; files that exist in
+	 *            it are replaced
+	 * @return true, the directory was copied; a copy that fails throws, it does not return false
+	 * @throws IllegalArgumentException
+	 *             if the source is not a directory
 	 * @throws IOException
-	 *             if an I/O error occurs during the copy
+	 *             if an I/O error occurs during the copy; the entries copied up to then stay in the
+	 *             destination
 	 */
 	public static boolean copyDirectory(Path source, Path destination) throws IOException
 	{

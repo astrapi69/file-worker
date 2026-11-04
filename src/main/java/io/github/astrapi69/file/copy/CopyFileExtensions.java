@@ -65,10 +65,13 @@ public final class CopyFileExtensions
 	 * @param source
 	 *            The source file
 	 * @param destination
-	 *            The destination file
-	 * @return true if the file was successfully copied, otherwise false
+	 *            The destination file, replaced if it exists
+	 * @return true, the file was copied; a copy that fails throws, it does not return false
+	 * @throws IllegalArgumentException
+	 *             if the source is a directory
 	 * @throws IOException
-	 *             if an I/O error occurs during the copy
+	 *             if an I/O error occurs during the copy, for instance a missing source file
+	 * @see Files#copy(Path, Path, java.nio.file.CopyOption...)
 	 */
 	public static boolean copyFile(Path source, Path destination) throws IOException
 	{
@@ -131,8 +134,11 @@ public final class CopyFileExtensions
 	 * @param destination
 	 *            The destination file.
 	 *
-	 * @return 's true if the file is copied, otherwise false.
+	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
+	 *         {@link #copyFile(File, File, Charset, Charset, boolean)}
 	 *
+	 * @throws IllegalArgumentException
+	 *             if the source or the destination is a directory, or both are the same file
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
@@ -153,8 +159,11 @@ public final class CopyFileExtensions
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
 	 *
-	 * @return 's true if the file is copied, otherwise false.
+	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
+	 *         {@link #copyFile(File, File, Charset, Charset, boolean)}
 	 *
+	 * @throws IllegalArgumentException
+	 *             if the source or the destination is a directory, or both are the same file
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
@@ -179,10 +188,14 @@ public final class CopyFileExtensions
 	 * @param destinationEncoding
 	 *            the destination encoding, or null
 	 * @param lastModified
-	 *            if true the last modified flag is set.
-	 * @return true if the given file is copied otherwise false.
+	 *            if true the last modified time of the source is set on the destination; whether
+	 *            that worked is not checked
+	 * @return true, the file was copied; a copy that fails throws, it does not return false
+	 * @throws IllegalArgumentException
+	 *             if the source or the destination is a directory, or both are the same file
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, for instance a
+	 *             {@link java.io.FileNotFoundException} for a missing source file
 	 */
 	public static boolean copyFile(final File source, final File destination,
 		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
@@ -302,10 +315,11 @@ public final class CopyFileExtensions
 	 * @param destinationDir
 	 *            The destination directory.
 	 *
-	 * @return 's true if the file is copied to the destination directory, otherwise false.
+	 * @return true, the file was copied to the destination directory; a copy that fails throws, it
+	 *         does not return false. See {@link #copyFileToDirectory(File, File, boolean)}
 	 *
 	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
+	 *             Is thrown if the destination directory is not a directory.
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
@@ -327,10 +341,14 @@ public final class CopyFileExtensions
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination directory.
 	 *
-	 * @return 's true if the file is copied to the given directory, otherwise false.
+	 * @return true, the file was copied to the given directory; a copy that fails throws, it does
+	 *         not return false
 	 *
+	 * @throws IllegalArgumentException
+	 *             if the destination directory is null, or the source or the entry of its name in
+	 *             the destination directory is a directory
 	 * @throws FileIsNotADirectoryException
-	 *             Is thrown if the source file is not a directory.
+	 *             Is thrown if the destination directory is not a directory.
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
