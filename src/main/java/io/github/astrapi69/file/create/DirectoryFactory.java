@@ -64,9 +64,7 @@ public final class DirectoryFactory
 		Collection<FileCreationState> fileCreationStates = new ArrayList<>();
 		for (final File dir : directories)
 		{
-			FileCreationState created = FileCreationState.PENDING;
-			created = DirectoryFactory.newDirectory(dir);
-			fileCreationStates.add(created);
+			fileCreationStates.add(DirectoryFactory.newDirectory(dir));
 		}
 		return fileCreationStates;
 	}
@@ -190,14 +188,15 @@ public final class DirectoryFactory
 	}
 
 	/**
-	 * Factory method that creates a new {@link File} object from the given absolute path as
-	 * {@link String} object, and creates the directory if the path does not exist; it throws an
-	 * unchecked exception instead of the checked {@link IOException}
+	 * Factory method that creates a directory at the given absolute path if nothing exists there
+	 * yet, as {@link #newDirectory(String)} does, and returns the path as a {@link File} object;
+	 * the parent directory has to exist. Where an {@link IOException} occurs, it throws a
+	 * {@link RuntimeException} that wraps it.
 	 *
 	 * @param absolutePath
-	 *            the absolute path
+	 *            the absolute path of the directory
 	 *
-	 * @return the file object
+	 * @return the directory as {@link File} object
 	 * @throws RuntimeException
 	 *             with the {@link IOException} of {@link #newDirectory(Path, FileAttribute...)} as
 	 *             its cause, for instance a {@link java.nio.file.NoSuchFileException} if the parent

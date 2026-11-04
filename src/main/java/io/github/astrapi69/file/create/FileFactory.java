@@ -90,8 +90,9 @@ public final class FileFactory
 	}
 
 	/**
-	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
-	 * new empty file will be created on the file system
+	 * Factory method that creates a new {@link File} object for the given absolute path, as
+	 * {@link #newFile(String, boolean)} does with {@code false}; nothing is created on the file
+	 * system
 	 *
 	 * @param absolutePath
 	 *            the absolute path
@@ -99,7 +100,7 @@ public final class FileFactory
 	 * @return the file object
 	 *
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             is declared but not thrown, as this method does not touch the file system
 	 */
 	public static File newFile(final String absolutePath) throws IOException
 	{
@@ -107,8 +108,8 @@ public final class FileFactory
 	}
 
 	/**
-	 * Factory method that creates a new {@link File} object, if the given boolean flag is true a
-	 * new empty file will be created on the file system
+	 * Factory method that creates a new {@link File} object for the given absolute path, as
+	 * {@link #newFile(String)} does; nothing is created on the file system
 	 *
 	 * @param absolutePath
 	 *            the absolute path

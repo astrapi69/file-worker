@@ -61,6 +61,15 @@ CHANGED:
   jobj-compare 12, commons-beanutils 1.11.0, commons-logging 1.3.5 and commons-collections 3.2.2 no longer come
   with file-worker; silly-bean 3.0 still comes through silly-collection and silly-strings. silly-collection 28.3,
   which brings commons-collections4 4.6.0 instead of the milestone 4.5.0-M2 (#105)
+- dead and unreachable code is gone, without a change a caller sees: `CompareFileExtensions.compare` compares by
+  SHA-256, which every Java platform provides, instead of SHA-512 with a CRC32 fallback;
+  `FileSearchExtensions.containsFileRecursive` ends in `return false` and checks the list once;
+  `MergeFileExtensions.collectUnique` loses its sort parameter, which was always `false`; and the Javadoc of
+  `DirectoryFactory.newDirectoryQuietly(String)`, `FileFactory.newFile(String)` and `newFileQuietly(String)`
+  describes the methods as they are (#118)
+
+- the mutation-score floor follows the fixes to 92%: PIT detects 1119 of 1185 mutants, 94%; the comment above the
+  floor in `build.gradle` says what decides the 66 left (#99)
 
 FIXED:
 

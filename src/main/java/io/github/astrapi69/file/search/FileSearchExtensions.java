@@ -137,40 +137,39 @@ public final class FileSearchExtensions
 
 
 	/**
-	 * Checks if the given file contains only in the parent file recursively.
+	 * Checks if the given file is in the parent directory or in one of its subdirectories, at any
+	 * depth. The parent itself does not count, and a parent that is not a directory or cannot be
+	 * listed contains nothing.
 	 *
 	 * @param parent
 	 *            The parent directory to search.
 	 * @param search
-	 *            The file to search.
-	 * @return 's true if the file exists in the parent directory otherwise false.
+	 *            The file to search, a file or a directory.
+	 * @return true if the file is in the parent directory or in one of its subdirectories,
+	 *         otherwise false
 	 */
 	public static boolean containsFileRecursive(final File parent, final File search)
 	{
 		final File toSearch = search.getAbsoluteFile();
-		boolean exists = false;
 		final File[] children = parent.getAbsoluteFile().listFiles();
 		if (children == null)
 		{
 			return false;
 		}
 		final List<File> fileList = Arrays.asList(children);
+		if (fileList.contains(toSearch))
+		{
+			return true;
+		}
 		for (final File currentFile : fileList)
 		{
-			if (currentFile.isDirectory())
-			{
-				exists = FileSearchExtensions.containsFileRecursive(currentFile, toSearch);
-				if (exists)
-				{
-					return true;
-				}
-			}
-			if (fileList.contains(toSearch))
+			if (currentFile.isDirectory()
+				&& FileSearchExtensions.containsFileRecursive(currentFile, toSearch))
 			{
 				return true;
 			}
 		}
-		return exists;
+		return false;
 	}
 
 	/**

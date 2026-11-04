@@ -101,7 +101,17 @@ public class FileSearchExtensionsEdgeCasesTest
 	{
 		return Stream.of(
 			Arguments.of("a file two levels down", "", "sub/deeper/report-4.txt", true),
+			Arguments.of("a file one level down", "", "sub/report-3.txt", true),
 			Arguments.of("a direct child", "", "notes.txt", true),
+			Arguments.of("a direct child of a subdirectory", "sub", "sub/report-3.txt", true),
+			Arguments.of("a file two levels down of a subdirectory", "sub",
+				"sub/deeper/report-4.txt", true),
+			Arguments.of("a directory one level down", "", "sub/deeper", true),
+			Arguments.of("a name that is in no level", "", "missing.txt", false),
+			Arguments.of("the name of a deeper file, at the top level", "", "report-4.txt", false),
+			Arguments.of("the name of a deeper file, one level down", "", "sub/report-4.txt",
+				false),
+			Arguments.of("a directory does not contain itself", "sub", "sub", false),
 			Arguments.of("a file outside the directory", "sub", "notes.txt", false),
 			Arguments.of("an empty directory contains nothing", "empty", "notes.txt", false),
 			Arguments.of("a regular file contains nothing", "notes.txt", "notes.txt", false));
