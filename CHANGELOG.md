@@ -22,6 +22,16 @@ CHANGED:
 - `MergeWithTemplate.main` ends the JVM with what the package-private `commandLine` returns: 0, or 2 after it has
   printed the usage error. The tests check both through `commandLine`, and the success path of `main` and
   `run(String[])` in `MergeWithTemplateMainTest` (#99)
+- the tests PIT found missing: PIT detects 1117 of the 1204 mutants, 93%, up from 985 of 1202, and the CI build
+  fails below 91%. The tests check, among others, the default files, the report and the modification times of
+  `MergeWithTemplate`; `equals`, `hashCode` and `toString` of the compare, search and model beans; every getter
+  of `SystemPropertiesExtensions` and `SystemFileExtensions` against its system property; a directory copy that
+  meets a directory it cannot read; the charsets of the write and read overloads; a rename without the copy
+  fallback; the merge strategies; and that an empty search result is a list the caller can add to. Of the 87
+  mutants left, `build.gradle` says what decides each group; most are booleans that cannot be `false` (#117) and
+  `hashCode` arithmetic. Line coverage 98.8%, branch coverage 93.5% (#99)
+- `SearchableTest`, `FileContentInfoTest` and `FileInfoTest` write into a `@TempDir`, no longer into
+  `java.io.tmpdir` or `/tmp/foo/bar` (#99, #119)
 - dependencies: silly-io 5.0 (#98), jsoup 1.24.1, Spotless 8.11.0
 - mutation testing with PIT 1.30.1 (`./gradlew pitest`, `gradle/mutation-testing.gradle`): the tests detect 985 of
   the 1202 mutants, 82%, and the CI build fails below 80% (`mutationThreshold` in `build.gradle`; PIT rounds the

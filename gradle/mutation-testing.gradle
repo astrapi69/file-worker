@@ -8,6 +8,9 @@ pitest {
     // resolves: jobj-copy 4.2 with jackson-databind 2.16.0-rc1, and file-worker 11.3 with
     // commons-io 2.11.0, commons-lang3 3.12.0 and commons-beanutils 1.9.4 (#103)
     addJUnitPlatformLauncher = false
+    // To measure a few classes, name them in targetClasses and keep targetTests at
+    // ["io.github.astrapi69.file.*"] (or pass --targetTests): without targetTests the plugin takes
+    // targetClasses for the tests, runs none, and reports every mutant as NO_COVERAGE.
     targetClasses = ["io.github.astrapi69.file.*"]
     // MergeWithTemplateMainTest calls main, and a mutant that turns its arguments into a usage error
     // makes main call System.exit, which ends the minion. The usage error itself is tested through
