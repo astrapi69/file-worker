@@ -1,5 +1,11 @@
 test {
     useJUnitPlatform()
+    // java.io.tmpdir of the test JVM is this task's temporary directory below build/. What the
+    // methods that use the temporary directory by design create (DirectoryFactory.newTempDirectory,
+    // the concatenate overloads of ModifyFileExtensions without a result file), and what a test
+    // leaves there when it fails before its cleanup, goes with ./gradlew clean instead of piling up
+    // in the system's temporary directory (#119)
+    systemProperty "java.io.tmpdir", temporaryDir.absolutePath
 }
 
 

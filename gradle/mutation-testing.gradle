@@ -17,6 +17,15 @@ pitest {
     // commandLine in MergeWithTemplateUsageTest, which PIT runs (#99).
     excludedTestClasses = ["io.github.astrapi69.file.tools.MergeWithTemplateMainTest"]
     threads = 4
+    // The minions take java.io.tmpdir below build/ as the test task does: a mutant that makes a test
+    // fail before its cleanup leaves its files there, not in the system's temporary directory (#119)
+    jvmArgs = ["-Djava.io.tmpdir=" + layout.buildDirectory.dir("tmp/pitest-minions").get().asFile.absolutePath]
     outputFormats = ["HTML", "XML"]
     timestampedReports = false
+}
+
+tasks.named("pitest") {
+    doFirst {
+        layout.buildDirectory.dir("tmp/pitest-minions").get().asFile.mkdirs()
+    }
 }

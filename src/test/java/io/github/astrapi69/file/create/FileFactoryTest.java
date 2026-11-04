@@ -56,7 +56,6 @@ import io.github.astrapi69.file.FileTestCase;
 import io.github.astrapi69.file.create.model.FileCreationState;
 import io.github.astrapi69.file.create.model.FileInfo;
 import io.github.astrapi69.file.delete.DeleteFileExtensions;
-import io.github.astrapi69.file.system.SystemFileExtensions;
 
 /**
  * The unit test class for the class {@link FileFactory}
@@ -109,7 +108,7 @@ public class FileFactoryTest extends FileTestCase
 			File file;
 			// ...
 			// new scenario...
-			parentDirectory = SystemFileExtensions.getTempDir();
+			parentDirectory = tempDir.toFile();
 			filename = "foobar";
 			file = FileFactory.newFile(parentDirectory, filename);
 			FileFactory.newFile(file, "newFooBarDir");
@@ -155,7 +154,7 @@ public class FileFactoryTest extends FileTestCase
 		String filename;
 		File file;
 
-		parentDirectory = SystemFileExtensions.getTempDir();
+		parentDirectory = tempDir.toFile();
 		filename = "foo.txt";
 		file = FileFactory.newFile(parentDirectory, filename);
 
@@ -312,7 +311,7 @@ public class FileFactoryTest extends FileTestCase
 		String filename;
 		File file;
 
-		parentDirectory = SystemFileExtensions.getTempDir();
+		parentDirectory = tempDir.toFile();
 		parentDirectoryPath = parentDirectory.getAbsolutePath();
 		filename = "foo.txt";
 		file = FileFactory.newFile(parentDirectoryPath, filename);
