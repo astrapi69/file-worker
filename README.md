@@ -19,15 +19,34 @@ file-worker collects the operations on files and directories that otherwise get 
 every project. It builds on [silly-io](https://github.com/astrapi69/silly-io), which holds the
 smaller helpers it uses: streams, file names, and file and filename filters.
 
+## Why file-worker
+
+With the JDK alone each of these is code of your own: copying a directory tree without some of its
+files, changing the suffix of every file in a tree, merging text files by a strategy or directory
+trees by the time their files were modified, comparing two files property by property, changing a
+file line by line. file-worker has a method for each, and its tests cover 96.9% of the lines and
+90.7% of the branches of 20.0; the build fails below 90% and 85% ([Quality](#quality)).
+
+It is not small: it needs Java 25 and brings 17 jars at runtime, Apache Commons IO among them. If
+`java.nio.file.Files` covers what you need, such as reading and writing a file, copying, moving or
+deleting one, walking a tree or comparing two files with `Files.mismatch`, the JDK does it without a
+dependency. If you need a JDK older than 25, one jar instead of 17, or what file-worker does not
+have, such as watching or tailing files, [Apache Commons IO](https://commons.apache.org/proper/commons-io/)
+is the better choice: it runs on Java 8, has no runtime dependency of its own, and its `FileUtils`
+copies, moves and deletes directory trees too.
+
 ## Table of contents
 
+- [Why file-worker](#why-file-worker)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Quick start](#quick-start)
 - [Features](#features)
+- [Quality](#quality)
 - [Verifying the release signatures](#verifying-the-release-signatures)
 - [Releasing](#releasing)
 - [Contributing](#contributing)
+- [How this project is made](#how-this-project-is-made)
 - [License](#license)
 - [Support this project](#support-this-project)
 - [Credits](#credits)
@@ -88,7 +107,9 @@ comparison refuses a directory.
 
 ## Quick start
 
-The examples work in `directory`, a directory that exists.
+The examples are checked: each block runs in
+[`ReadmeExamplesTest`](src/test/java/io/github/astrapi69/file/ReadmeExamplesTest.java), in a
+temporary directory, `directory`, with the values its comments name as assertions.
 
 **Creating files and directories.** `FileFactory.newFile` creates a missing file, with the
 directories above it, and leaves an existing one as it is; the state it returns says which.
@@ -255,6 +276,21 @@ that wants them as its own: `Copyable`, `Createable`, `Erasable`, `Readable`, `R
 the `FileChangeable`. The [Javadoc](https://www.javadoc.io/doc/io.github.astrapi69/file-worker) has
 the details.
 
+## Quality
+
+As of 20.0, measured on the tree of `RELEASE-20.0` with JDK 25, by
+`./gradlew clean build --rerun-tasks`:
+
+| | |
+|---|---|
+| tests | 1068 in 57 test classes, none failing; 34 are disabled with `@Disabled` and skipped |
+| line and branch coverage (JaCoCo) | 2115 of 2183 lines (96.9%), 907 of 1000 branches (90.7%); the build fails below 90% of the lines or 85% of the branches |
+| mutation score | not measured for 20.0, which had no mutation testing |
+
+The CI build runs the tests and the coverage check on every push to `develop` and `master` and on
+every pull request into them, and uploads the coverage to codecov.io, whose badge above shows
+`develop`.
+
 ## Verifying the release signatures
 
 The releases on Maven Central are signed with the OpenPGP key
@@ -306,8 +342,8 @@ Pull requests are welcome: fork [astrapi69/file-worker](https://github.com/astra
 and [open a pull request](https://github.com/astrapi69/file-worker/pull/new/develop) against
 `develop`.
 
-Please add tests for your change; the build fails when the tests cover less than 90% of the lines or
-85% of the branches. The Gradle wrapper runs the usual tasks:
+Please add tests for your change; the coverage floor above holds for it too. The Gradle wrapper
+runs the usual tasks:
 
 ```shell
 ./gradlew build          # tests, coverage check, formatting check
@@ -318,6 +354,12 @@ The versions follow the
 [Semantic Versioning](https://github.com/lightblueseas/mvn-parent-projects/wiki/Semantic-Versioning)
 guidelines, `<major>.<minor>.<patch>`. Questions, bug reports and feature requests belong on the
 [issues page](https://github.com/astrapi69/file-worker/issues).
+
+## How this project is made
+
+file-worker was written by its maintainer over many years; since 2026 he uses AI agents as a tool
+to maintain it. What the history shows of that, and what the maintainer decides:
+[AI_USAGE.md](AI_USAGE.md).
 
 ## License
 
