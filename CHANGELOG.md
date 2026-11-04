@@ -34,6 +34,16 @@ CHANGED:
   `java.io.tmpdir` or `/tmp/foo/bar` (#99, #119)
 - the coverage floor rises to what the tests reach: the build fails below 98% of the lines or 93% of the
   branches, up from 90% and 85% (#99)
+- the tests no longer write into the system's temporary directory: `MergeFileExtensionsTest`,
+  `FileTimeExtensionsTest`, `LineAppenderTest`, `FileFactoryTest` and `DirectoryFactoryTest` work in a JUnit
+  `@TempDir`, and `java.io.tmpdir` of the test JVM and of PIT's minions is a directory below `build/`, for the
+  methods that use the temporary directory by design. A test run left 12 entries in the system's temporary
+  directory and a PIT run 156; both leave none now (#119)
+- `FileSearchExtensionsTest.testGetAllFilesFromDir` and `testGetAllFilesFromDirRecursive` check what the methods
+  return; they compared their expectation with their own list (#119)
+- the Javadoc of `ModifyFileExtensions.concatenateAll(List)`, `concatenateFilesWithExtension(File, String)` and
+  `concatenateFilesWithExtensionRecursive(File, String)` says that the result file is created in the system's
+  temporary directory and that the caller deletes it (#119)
 - dependencies: silly-io 5.0 (#98), jsoup 1.24.1, Spotless 8.11.0
 - mutation testing with PIT 1.30.1 (`./gradlew pitest`, `gradle/mutation-testing.gradle`): the tests detect 985 of
   the 1202 mutants, 82%, and the CI build fails below 80% (`mutationThreshold` in `build.gradle`; PIT rounds the
