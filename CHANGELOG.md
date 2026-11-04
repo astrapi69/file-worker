@@ -57,6 +57,10 @@ CHANGED:
   the constraints and the exclusion of `gradle/dependencies.gradle`, and the dependency submission reported what
   that copy held: jackson 2.16.0-rc1 and an old file-worker with commons-io 2.11.0, commons-lang3 3.12.0 and
   commons-beanutils 1.9.4, 18 Dependabot alerts for versions no class path of the build uses (#103)
+- jobj-compare and silly-bean are no longer runtime dependencies: no main class references a class of either.
+  jobj-compare 12, commons-beanutils 1.11.0, commons-logging 1.3.5 and commons-collections 3.2.2 no longer come
+  with file-worker; silly-bean 3.0 still comes through silly-collection and silly-strings. silly-collection 28.3,
+  which brings commons-collections4 4.6.0 instead of the milestone 4.5.0-M2 (#105)
 
 FIXED:
 
