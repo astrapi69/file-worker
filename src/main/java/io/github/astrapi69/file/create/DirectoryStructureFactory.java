@@ -67,13 +67,19 @@ public final class DirectoryStructureFactory
 	}
 
 	/**
-	 * Factory method for create an initial directory structure
+	 * Factory method for create an initial directory structure. Each directory path is resolved
+	 * against the parent directory and created with its missing parent directories, so the path
+	 * {@code "src/main/java"} creates {@code src}, {@code src/main} and {@code src/main/java}.
+	 * Directories that already exist are left as they are
 	 *
 	 * @param parentDirectory
 	 *            the parent directory
 	 * @param filePaths
-	 *            the collection with the directory names
+	 *            the collection with the directory paths, relative to the parent directory
 	 * @return the collection with the created directory {@link File} objects
+	 * @throws RuntimeException
+	 *             if a directory path cannot be created, for instance because a regular file exists
+	 *             at it or at one of its parent paths
 	 */
 	public static Collection<File> newDirectoryStructure(final File parentDirectory,
 		final Collection<String> filePaths)
@@ -83,20 +89,28 @@ public final class DirectoryStructureFactory
 		{
 			for (String filePath : filePaths)
 			{
-				directories.add(DirectoryFactory.newDirectory(parentDirectory, filePath));
+				File directory = new File(parentDirectory, filePath);
+				DirectoryFactory.newDirectoriesQuietly(directory.toPath());
+				directories.add(directory);
 			}
 		}
 		return directories;
 	}
 
 	/**
-	 * Factory method for create an initial directory structure
+	 * Factory method for create an initial directory structure. Each directory path is resolved
+	 * against the parent directory and created with its missing parent directories, so the path
+	 * {@code "src/main/java"} creates {@code src}, {@code src/main} and {@code src/main/java}.
+	 * Directories that already exist are left as they are
 	 *
 	 * @param parentAbsolutePath
 	 *            the absolute path from the parent
 	 * @param filePaths
-	 *            the collection with the directory names
+	 *            the collection with the directory paths, relative to the parent directory
 	 * @return the collection with the created directory {@link File} objects
+	 * @throws RuntimeException
+	 *             if a directory path cannot be created, for instance because a regular file exists
+	 *             at it or at one of its parent paths
 	 */
 	public static Collection<File> newDirectoryStructure(final String parentAbsolutePath,
 		final Collection<String> filePaths)
@@ -106,13 +120,19 @@ public final class DirectoryStructureFactory
 	}
 
 	/**
-	 * Factory method for create an initial directory structure
+	 * Factory method for create an initial directory structure. Each directory path is resolved
+	 * against the parent directory and created with its missing parent directories, so the path
+	 * {@code "src/main/java"} creates {@code src}, {@code src/main} and {@code src/main/java}.
+	 * Directories that already exist are left as they are
 	 *
 	 * @param parentDirectory
 	 *            the parent directory
 	 * @param filePaths
-	 *            the vararg with the directory names
+	 *            the vararg with the directory paths, relative to the parent directory
 	 * @return the collection with the created directory {@link File} objects
+	 * @throws RuntimeException
+	 *             if a directory path cannot be created, for instance because a regular file exists
+	 *             at it or at one of its parent paths
 	 */
 	public static Collection<File> newDirectoryStructure(final File parentDirectory,
 		String... filePaths)
@@ -121,13 +141,19 @@ public final class DirectoryStructureFactory
 	}
 
 	/**
-	 * Factory method for create an initial directory structure
+	 * Factory method for create an initial directory structure. Each directory path is resolved
+	 * against the parent directory and created with its missing parent directories, so the path
+	 * {@code "src/main/java"} creates {@code src}, {@code src/main} and {@code src/main/java}.
+	 * Directories that already exist are left as they are
 	 *
 	 * @param parentAbsolutePath
 	 *            the absolute path from the parent
 	 * @param filePaths
-	 *            the vararg with the directory names
+	 *            the vararg with the directory paths, relative to the parent directory
 	 * @return the collection with the created directory {@link File} objects
+	 * @throws RuntimeException
+	 *             if a directory path cannot be created, for instance because a regular file exists
+	 *             at it or at one of its parent paths
 	 */
 	public static Collection<File> newDirectoryStructure(final String parentAbsolutePath,
 		final String... filePaths)
