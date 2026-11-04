@@ -81,6 +81,8 @@ FIXED:
   `toFileContentInfo` describes a path as a directory only if it is one, so a missing path is no longer a
   directory; `toFile` for an entry without content throws before it creates anything, instead of leaving an empty
   file behind (#114)
+- `FileExtensions.download(URI)` reads every URI the JDK can open (`file:`, `jar:`, `http:`, `https:`), and a URI
+  that cannot be read fails with the declared `IOException` instead of an `IllegalArgumentException` (#108)
 
 
 Version 20.0

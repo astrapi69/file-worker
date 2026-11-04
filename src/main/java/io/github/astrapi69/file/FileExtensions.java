@@ -26,8 +26,10 @@ package io.github.astrapi69.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.URI;
+import java.net.URLConnection;
 import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
@@ -52,17 +54,36 @@ public final class FileExtensions
 
 	/**
 	 * Downloads Data from the given URI.
+	 * <p>
+	 * A {@code file:} URI is read as the local file {@link File#File(URI)} makes of it. Any other
+	 * URI is read through {@link URI#toURL()} and its {@link URLConnection}, without caches, so
+	 * that {@code jar:}, {@code http:} and {@code https:} work, and a {@code jar:} URI reads the
+	 * jar as it is now and keeps no handle on it.
 	 *
 	 * @param uri
 	 *            The URI from where to download.
-	 * @return Returns a byte array or null.
+	 * @return Returns the bytes the URI names, or null if it is a {@code file:} URI of a file that
+	 *         does not exist or of a directory.
 	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 *             Signals that an I/O exception has occurred, for example if the URI names nothing
+	 *             that can be read, the server cannot be reached or the scheme has no protocol
+	 *             handler ({@link java.net.MalformedURLException}).
+	 * @throws IllegalArgumentException
+	 *             if the URI is not absolute, or if it is a {@code file:} URI that
+	 *             {@link File#File(URI)} rejects
 	 */
 	public static byte[] download(final URI uri) throws IOException
 	{
-		final File tmpFile = new File(uri);
-		return ReadFileExtensions.toByteArray(tmpFile);
+		if ("file".equalsIgnoreCase(uri.getScheme()))
+		{
+			return ReadFileExtensions.toByteArray(new File(uri));
+		}
+		final URLConnection connection = uri.toURL().openConnection();
+		connection.setUseCaches(false);
+		try (InputStream inputStream = connection.getInputStream())
+		{
+			return ReadFileExtensions.toByteArray(inputStream);
+		}
 	}
 
 	/**
