@@ -26,8 +26,8 @@ With the JDK alone each of these is code of your own: copying a directory tree w
 files, changing the suffix of every file in a tree, merging text files by a strategy or directory
 trees by the time their files were modified, comparing two files property by property, changing a
 file line by line. file-worker has a method for each, and its tests cover 99.3% of the lines and
-96.4% of the branches of 20.1, and detect 94% of the mutants PIT makes; the build fails below 98%,
-93% and 92% ([Quality](#quality)).
+96.7% of the branches of 21.0, and detect 96% of the mutants PIT makes; the build fails below 98%,
+93% and 94% ([Quality](#quality)).
 
 It is not small: it needs Java 25 and brings 13 jars at runtime, Apache Commons IO among them. If
 `java.nio.file.Files` covers what you need, such as reading and writing a file, copying, moving or
@@ -65,7 +65,7 @@ on the runtime class path.
 
 ## Installation
 
-Latest release on Maven Central: 20.1
+Latest release on Maven Central: 21.0
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/file-worker.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.astrapi69/file-worker)
 
@@ -73,7 +73,7 @@ Latest release on Maven Central: 20.1
 
 ```toml
 [versions]
-file-worker-version = "20.1"
+file-worker-version = "21.0"
 
 [libraries]
 file-worker = { module = "io.github.astrapi69:file-worker", version.ref = "file-worker-version" }
@@ -89,7 +89,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation "io.github.astrapi69:file-worker:20.1"
+    implementation "io.github.astrapi69:file-worker:21.0"
 }
 ```
 
@@ -99,16 +99,17 @@ dependencies {
 <dependency>
     <groupId>io.github.astrapi69</groupId>
     <artifactId>file-worker</artifactId>
-    <version>20.1</version>
+    <version>21.0</version>
 </dependency>
 ```
 
-20.1 has no breaking change against 20.0. Some of its fixes change what a caller sees where the code
-did not do what its Javadoc said, for example an `IOException` from `StoreFileExtensions.toFile`
-where a failed write returned `true`; the [CHANGELOG](CHANGELOG.md#version-201) names them under
-FIXED, each with "For callers" where it matters. From 19.1, the three breaking changes of 20.0 apply
-as well: Java 25 instead of 17, `FileCreationState` without its file, and every comparison refusing
-a directory.
+21.0 has three breaking changes against 20.1, which the [CHANGELOG](CHANGELOG.md#version-210)
+lists under BREAKING, each with its migration: `FileContentInfo` entries of different files are no
+longer equal when their content is; the copy, write, move and create methods whose result could only
+be `true` return nothing, which needs a recompile; and every method that decodes a file throws a
+`MalformedInputException` for bytes that are not valid in its charset, where most of them replaced
+the bytes. A build of the same commit now gives the same bytes. From 20.0, the fixes of 20.1 apply
+as well, which the CHANGELOG names under FIXED.
 
 ## Quick start
 
@@ -285,14 +286,14 @@ the details.
 
 ## Quality
 
-As of 20.1, measured on the tree of `RELEASE-20.1` with JDK 25, by `./gradlew test --rerun`,
+As of 21.0, measured on the tree of `RELEASE-21.0` with JDK 25, by `./gradlew test --rerun`,
 `./gradlew build` and `./gradlew pitest --rerun-tasks`:
 
 | | |
 |---|---|
-| tests | 1407 in 61 test classes, none failing; 36 are skipped: 34 disabled with `@Disabled`, 2 that run on Windows only |
-| line and branch coverage (JaCoCo) | 2143 of 2159 lines (99.3%), 938 of 973 branches (96.4%); the build fails below 98% of the lines or 93% of the branches |
-| mutation score (PIT 1.30.1) | 1119 of 1185 mutants detected (94%); the build fails below 92%, and `build.gradle` says what decides the 66 left |
+| tests | 1487 in 64 test classes, none failing; 36 are skipped: 34 disabled with `@Disabled`, 2 that run on Windows only |
+| line and branch coverage (JaCoCo) | 2168 of 2183 lines (99.3%), 945 of 977 branches (96.7%); the build fails below 98% of the lines or 93% of the branches |
+| mutation score (PIT 1.30.1) | 1131 of 1175 mutants detected (96%); the build fails below 94%, and `build.gradle` says what decides the 44 left |
 
 The CI build runs the tests, the coverage check and the mutation testing on every push to
 `develop` and `master` and on every pull request into them. It uploads the coverage to codecov.io
@@ -317,7 +318,7 @@ subkey, is on keys.openpgp.org. Fetch it once, then verify the signature next to
 
 ```sh
 gpg --keyserver hkps://keys.openpgp.org --recv-keys 5B2FA6B11E298BC09287F423D8C403518C49CA75
-gpg --verify file-worker-20.1.jar.asc file-worker-20.1.jar
+gpg --verify file-worker-21.0.jar.asc file-worker-21.0.jar
 ```
 
 gpg answers `Good signature` and prints the `Primary key fingerprint`, and for a release signed by

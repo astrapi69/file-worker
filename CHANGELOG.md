@@ -1,7 +1,7 @@
 ## Change log
 ----------------------
 
-Version 21.0-SNAPSHOT
+Version 21.0
 -------------
 
 BREAKING:
@@ -65,6 +65,9 @@ CHANGED:
   exactly the JDK `.sdkmanrc` names, Temurin 25.0.4+7, and check that they do, as the javadoc tool still writes
   other HTML on another patch level. `scripts/check-reproducible.sh` builds the five published artifacts twice and
   compares them (#97)
+- the CI build fails below 94% of the mutants detected, up from 92%: PIT detects 1131 of the 1175 mutants of 21.0,
+  96%, since the results that could only be `true` are gone, and the floor keeps two points below that; the comment
+  on the floor in `build.gradle` names what decides the 44 left (#124)
 
 Version 20.1
 -------------
