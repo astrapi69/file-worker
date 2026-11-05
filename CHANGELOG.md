@@ -26,6 +26,18 @@ BREAKING:
   drops it, since a failure throws an `IOException` or an `IllegalArgumentException` as before. A lambda or method
   reference of one of these methods for a functional interface that returns a `boolean` needs a body that returns
   `true` itself (#124)
+- every method of `ReadFileExtensions` that decodes bytes into characters decodes strictly: a byte sequence that is
+  not valid in the charset gives a `MalformedInputException`, an `IOException`, as `readLinesInList(File)` and
+  `countAllLines` did, where `fromFile` (both overloads), `readHeadLine`, `readLine` and the other six
+  `readLinesInList` overloads replaced it with U+FFFD and returned text that was not in the file. `readHeadLine`
+  decodes the first line only and no longer reads the bytes after it; `readLinesInList(InputStream, null, boolean)`
+  decodes in the default charset as before. Migration: a file in another charset is read with that charset, for
+  example ISO-8859-1 or Windows-1252, in which every byte is a character; a file whose charset is not known is read
+  as bytes with `readFileToBytearray`. Valid input reads as before. In the family: astrapi69/mystic-crypt
+  `CryptObjectDecoratorExtensions` reads the file it encrypts and decrypts with `fromFile(File)`, so a file that is
+  not UTF-8 throws there instead of being encrypted with U+FFFD in place of its bytes; astrapi69/mystic-crypt-ui
+  reads JSON, PEM and checksum files; astrapi69/resourcebundle-core calls `readLinesInList(File)`, which threw
+  already (#125)
 
 CHANGED:
 
