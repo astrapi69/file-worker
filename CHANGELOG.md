@@ -1,6 +1,74 @@
 ## Change log
 ----------------------
 
+Version 21.0
+-------------
+
+BREAKING:
+
+- `FileContentInfo.equals` and `hashCode` compare the name, the path and the directory flag, as `FileInfo` does,
+  besides the checksum and the content: two entries of different files with the same content were equal, so a
+  `Set` or the keys of a `Map` kept only one of them. The paths are compared as strings, and
+  `toFileContentInfo` writes the parent directory with a separator at its end, so an entry built with the same
+  directory written without it is not equal to one that `toFileContentInfo` or
+  `DirectoryStructureExtensions.getFileContentInfos` gives. Migration: code that looks for an entry by its content
+  compares `getChecksum()` and `getContent()` itself; code that compares an entry it built with one these methods
+  read writes the path in their form, `FileExtensions.getAbsolutPathWithoutFilename(File)` (#123)
+- the methods whose result could only be `true` return nothing, since each one does what it names or throws, as
+  astrapi69/silly-io 5.0 did for `writeSerializedObjectToFile`: `CopyFileExtensions.copyFile` (all four overloads)
+  and `copyFileToDirectory` (both), `CopyDirectoryExtensions.copyDirectory(Path, Path)`, the `Copyable` defaults
+  `copyFile(File, File)`, `copyFile(Path, Path)` and `copyDirectory(Path, Path)`, every `StoreFileExtensions.toFile`
+  and `Storable.toFile` that returned a `boolean`, `forceToMoveFile` and `moveFile` of `RenameFileExtensions` and
+  `Renameable`, and `newDirectory(Path, FileAttribute...)` of `DirectoryFactory` and `Createable` with
+  `DirectoryFactory.newDirectoryQuietly(Path, FileAttribute...)`. The methods that can answer `false` keep their `boolean`: `renameFile(File, File, boolean)` without
+  delete, `changeFilenameSuffix`, the `File` overloads of `copyDirectory` and its filtered variants,
+  `DeleteFileExtensions.delete` and `DirectoryFactory.newDirectories`. Migration: binary incompatible, so code
+  compiled against 20.x fails with a `NoSuchMethodError` until it is compiled again; source that used the result
+  drops it, since a failure throws an `IOException` or an `IllegalArgumentException` as before. A lambda or method
+  reference of one of these methods for a functional interface that returns a `boolean` needs a body that returns
+  `true` itself (#124)
+- every method of `ReadFileExtensions` that decodes bytes into characters decodes strictly: a byte sequence that is
+  not valid in the charset gives a `MalformedInputException`, an `IOException`, as `readLinesInList(File)` and
+  `countAllLines` did, where `fromFile` (both overloads), `readHeadLine`, `readLine` and the other six
+  `readLinesInList` overloads replaced it with U+FFFD and returned text that was not in the file. `readHeadLine`
+  decodes the first line only and no longer reads the bytes after it; `readLinesInList(InputStream, null, boolean)`
+  decodes in the default charset as before. Migration: a file in another charset is read with that charset, for
+  example ISO-8859-1 or Windows-1252, in which every byte is a character; a file whose charset is not known is read
+  as bytes with `readFileToBytearray`. Valid input reads as before. In the family: astrapi69/mystic-crypt
+  `CryptObjectDecoratorExtensions` reads the file it encrypts and decrypts with `fromFile(File)`, so a file that is
+  not UTF-8 throws there instead of being encrypted with U+FFFD in place of its bytes; astrapi69/mystic-crypt-ui
+  reads JSON, PEM and checksum files; astrapi69/resourcebundle-core calls `readLinesInList(File)`, which threw
+  already (#125)
+- the same rule holds for every other method of file-worker that decodes a file: `CopyFileExtensions.copyFile` with
+  charsets, every merge of `MergeFileExtensions`, both `ModifyFileExtensions.modifyFileAndGet`,
+  `FileSearchExtensions.findLineIndex` and `WriteFileExtensions.write2File(String, Writer)` throw a
+  `MalformedInputException` for bytes that are not valid in the charset, where they replaced them with U+FFFD.
+  `findLineIndex` and `write2File(String, Writer)` read UTF-8, where they read the platform charset, which is UTF-8
+  unless the JVM is configured otherwise. `modifyFileAndGet(Path, Charset, FileChangeable)` leaves such a file as it
+  is, where it wrote it back with U+FFFD in place of the bytes; a copy, `modifyFileAndGet` with an output file and
+  `write2File` may have written part of their output before the exception. Migration: as for `ReadFileExtensions`,
+  read a file in the charset it is in. Encoding is not part of this: a character the destination charset cannot
+  map is still written as `?` by the writers that use an `OutputStreamWriter` (#147)
+
+ADDED:
+
+- `ReadFileExtensions.newStrictReader(InputStream, Charset)`: a reader that throws a `MalformedInputException` for
+  bytes that are not valid in the charset instead of replacing them, the one every method of file-worker that
+  decodes a stream reads through (#147)
+
+CHANGED:
+
+- a build of the same commit gives the same bytes: the manifest no longer carries the build time, the operating
+  system and the JDK's patch level (`Build-Jdk-Spec: 25` in their place); `javac --release 25` keeps the patch
+  level out of `module-info.class`; every archive has fixed entry times and a fixed entry order; and the local
+  Maven repository is used only with `-PuseMavenLocal`, since it came before Maven Central. The workflows build on
+  exactly the JDK `.sdkmanrc` names, Temurin 25.0.4+7, and check that they do, as the javadoc tool still writes
+  other HTML on another patch level. `scripts/check-reproducible.sh` builds the five published artifacts twice and
+  compares them (#97)
+- the CI build fails below 94% of the mutants detected, up from 92%: PIT detects 1131 of the 1175 mutants of 21.0,
+  96%, since the results that could only be `true` are gone, and the floor keeps two points below that; the comment
+  on the floor in `build.gradle` names what decides the 44 left (#124)
+
 Version 20.1
 -------------
 

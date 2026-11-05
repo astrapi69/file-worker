@@ -521,9 +521,8 @@ public class DirectoryFactoryTest extends FileTestCase
 		{
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
-		actual = DirectoryFactory.newDirectory(dirPath);
+		DirectoryFactory.newDirectory(dirPath);
 		expected = true;
-		assertEquals(expected, actual);
 
 		actual = Files.exists(dirPath);
 		assertEquals(expected, actual);
@@ -556,9 +555,8 @@ public class DirectoryFactoryTest extends FileTestCase
 		{
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
-		actual = DirectoryFactory.newDirectoryQuietly(dirPath);
+		DirectoryFactory.newDirectoryQuietly(dirPath);
 		expected = true;
-		assertEquals(expected, actual);
 
 		actual = Files.exists(dirPath);
 		assertEquals(expected, actual);
@@ -568,6 +566,34 @@ public class DirectoryFactoryTest extends FileTestCase
 
 		// Finally delete the test directory...
 		DeleteFileExtensions.delete(dirPath.toFile());
+	}
+
+	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryQuietly(String)}
+	 *
+	 * @param existsBefore
+	 *            whether the directory exists before the call
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@ParameterizedTest(name = "existsBefore = {0}")
+	@ValueSource(booleans = { true, false })
+	public void newDirectoryQuietly_returnsTheDirectoryOfThePathAndCreatesItOnlyWhenMissing(
+		boolean existsBefore) throws IOException
+	{
+		Path expected = tempRoot.resolve("quiet-path");
+		Path marker = expected.resolve("marker.txt");
+		if (existsBefore)
+		{
+			Files.createDirectory(expected);
+			Files.writeString(marker, "kept");
+		}
+
+		File directory = DirectoryFactory.newDirectoryQuietly(expected.toString());
+
+		assertEquals(expected.toFile(), directory);
+		assertTrue(directory.isDirectory());
+		assertEquals(existsBefore, Files.exists(marker));
 	}
 
 	/**

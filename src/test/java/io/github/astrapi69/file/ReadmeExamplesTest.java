@@ -175,11 +175,10 @@ class ReadmeExamplesTest
 
 		// README: begin
 		File a = new File(notes, "a.md");
-		boolean moved = RenameFileExtensions.moveFile(a, new File(notes, "old/a.md")); // true
+		RenameFileExtensions.moveFile(a, new File(notes, "old/a.md")); // old/a.md
 		boolean deleted = DeleteFileExtensions.delete(new File(notes, "old")); // true
 		// README: end
 
-		assertTrue(moved);
 		assertTrue(deleted);
 		assertFalse(new File(notes, "old").exists());
 		assertEquals(List.of(), List.of(notes.list()));

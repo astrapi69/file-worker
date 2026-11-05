@@ -41,11 +41,20 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v7
+      # The JDK .sdkmanrc names (#97), as the full semver of Adoptium: with '25' or '25.0.4' setup-java takes
+      # whatever matches first, which for 20.0 was 25.0.4.1 from the runner image and for 20.1 was 25.0.5
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
-          java-version: '25'
+          java-version: '25.0.4+7.0.LTS'
           distribution: 'temurin'
+      - name: Check the JDK is the one .sdkmanrc names
+        run: |
+          want=$(sed -n 's/^java=\([0-9.]*\)-tem$/\1/p' .sdkmanrc)
+          have=$(sed -n 's/^JAVA_VERSION="\(.*\)"$/\1/p' "$JAVA_HOME/release")
+          vendor=$(sed -n 's/^IMPLEMENTOR="\(.*\)"$/\1/p' "$JAVA_HOME/release")
+          echo ".sdkmanrc names Temurin $want; set up: $vendor $have"
+          [ -n "$want" ] && [ "$have" = "$want" ] && [ "$vendor" = "Eclipse Adoptium" ]
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
       - name: Build

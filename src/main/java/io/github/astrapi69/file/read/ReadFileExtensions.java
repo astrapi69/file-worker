@@ -25,11 +25,15 @@
 package io.github.astrapi69.file.read;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Stream;
 
@@ -41,6 +45,13 @@ import io.github.astrapi69.io.file.FileSize;
 
 /**
  * The class {@link ReadFileExtensions} helps in reading files.
+ * <p>
+ * Every method that decodes bytes into characters decodes strictly: a byte sequence that is not
+ * valid in the charset gives a {@link java.nio.charset.MalformedInputException}, as
+ * {@link Files#readAllLines(java.nio.file.Path)} does, and no method replaces it with the
+ * replacement character U+FFFD. Read a file whose charset is not known with
+ * {@link #readFileToBytearray(File)}, or with a charset in which every byte is valid, such as
+ * ISO-8859-1.
  *
  * @version 1.0
  * @author Asterios Raptis
@@ -89,6 +100,8 @@ public final class ReadFileExtensions
 	 * @param file
 	 *            the file to read
 	 * @return String content from the file
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid UTF-8
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
@@ -105,13 +118,15 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the encoding to use
 	 * @return String content from the file
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid in the given encoding
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred
 	 */
 	public static String fromFile(final File file, final Charset encoding) throws IOException
 	{
 		try (InputStream inputStream = StreamExtensions.getInputStream(file);
-			InputStreamReader reader = new InputStreamReader(inputStream, encoding))
+			Reader reader = newStrictReader(inputStream, encoding))
 		{
 			final StringBuilder stringBuilder = new StringBuilder();
 			final char[] charArray = new char[FileSize.DEFAULT_BLOCK_SIZE.getSize()];
@@ -126,12 +141,16 @@ public final class ReadFileExtensions
 
 	/**
 	 * Reads the first line from the specified file with UTF-8 encoding, as {@link #fromFile(File)}
-	 * and {@link #readLinesInList(File)} do, whatever the default charset of the platform is. Bytes
-	 * that are not valid UTF-8 are replaced with the replacement character U+FFFD.
+	 * and {@link #readLinesInList(File)} do, whatever the default charset of the platform is. The
+	 * first line ends at the first line feed or carriage return. Only that line is decoded: bytes
+	 * in it that are not valid UTF-8 give a {@link java.nio.charset.MalformedInputException}, the
+	 * bytes after it are not read.
 	 *
 	 * @param inputFile
 	 *            the file path
 	 * @return first line from the file, or null if the file is empty
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the first line is not valid UTF-8
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -140,18 +159,29 @@ public final class ReadFileExtensions
 	public static String readHeadLine(final String inputFile)
 		throws FileNotFoundException, IOException
 	{
-		try (BufferedReader reader = new BufferedReader(
-			new FileReader(inputFile, StandardCharsets.UTF_8)))
+		try (InputStream input = new BufferedInputStream(new FileInputStream(inputFile)))
 		{
-			return reader.readLine();
+			int read = input.read();
+			if (read == -1)
+			{
+				return null;
+			}
+			// a line feed or a carriage return is never part of a multi-byte sequence in UTF-8
+			final ByteArrayOutputStream firstLine = new ByteArrayOutputStream();
+			while (read != -1 && read != '\n' && read != '\r')
+			{
+				firstLine.write(read);
+				read = input.read();
+			}
+			return newStrictDecoder(StandardCharsets.UTF_8)
+				.decode(ByteBuffer.wrap(firstLine.toByteArray())).toString();
 		}
 	}
 
 	/**
 	 * Reads all lines from the specified file into a list. The file is decoded strictly as UTF-8:
-	 * bytes that are not valid UTF-8 give a {@link java.nio.charset.MalformedInputException}, where
-	 * {@link #readLinesInList(File, boolean)}, the overloads with a charset and the overloads with
-	 * an {@link InputStream} replace such bytes with the replacement character U+FFFD.
+	 * bytes that are not valid UTF-8 give a {@link java.nio.charset.MalformedInputException}, as in
+	 * every other method of this class that decodes.
 	 *
 	 * @param input
 	 *            the file to read
@@ -175,6 +205,8 @@ public final class ReadFileExtensions
 	 *            The index of the line
 	 * @return The line or null if it does not exist, that is if the index is negative or not less
 	 *         than the number of lines
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid UTF-8
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -201,6 +233,8 @@ public final class ReadFileExtensions
 	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
 	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid UTF-8
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -220,6 +254,8 @@ public final class ReadFileExtensions
 	 * @param encoding
 	 *            the encoding
 	 * @return The List with all lines from the file.
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid in the given encoding
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -243,6 +279,8 @@ public final class ReadFileExtensions
 	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
 	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid in the given encoding
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found.
 	 * @throws IOException
@@ -260,6 +298,8 @@ public final class ReadFileExtensions
 	 * @param input
 	 *            The InputStream from where the input comes.
 	 * @return The List with all lines from the file.
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the stream is not valid UTF-8
 	 * @throws IOException
 	 *             When a io-problem occurs.
 	 */
@@ -278,6 +318,8 @@ public final class ReadFileExtensions
 	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
 	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the stream is not valid UTF-8
 	 * @throws IOException
 	 *             When a io-problem occurs.
 	 */
@@ -300,6 +342,9 @@ public final class ReadFileExtensions
 	 *            {@link String#trim()}, so that a line of whitespace only is returned as an empty
 	 *            line; if false, every line is returned as it is.
 	 * @return The List with all lines from the file.
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the stream is not valid in the given encoding, or in the default charset of
+	 *             the platform if it is null
 	 * @throws IOException
 	 *             When a io-problem occurs.
 	 */
@@ -309,9 +354,8 @@ public final class ReadFileExtensions
 		// The List where the lines from the File to save.
 		final List<String> output = new ArrayList<>();
 		try (
-			InputStreamReader isr = encoding == null
-				? new InputStreamReader(input)
-				: new InputStreamReader(input, encoding);
+			Reader isr = newStrictReader(input,
+				encoding == null ? Charset.defaultCharset() : encoding);
 			BufferedReader reader = new BufferedReader(isr))
 		{
 			// the line.
@@ -336,6 +380,43 @@ public final class ReadFileExtensions
 		}
 		// return the list with all lines from the file.
 		return output;
+	}
+
+	/**
+	 * Returns a reader that decodes the given stream strictly in the given charset: a byte sequence
+	 * that is not valid in it gives a {@link java.nio.charset.MalformedInputException}, a character
+	 * it cannot map an {@link java.nio.charset.UnmappableCharacterException}, instead of the
+	 * replacement character U+FFFD that an {@link InputStreamReader} of a {@link Charset} writes.
+	 * Every method of file-worker that decodes a stream reads through such a reader; closing it
+	 * closes the stream.
+	 *
+	 * @param input
+	 *            the stream to decode
+	 * @param charset
+	 *            the charset to decode with
+	 * @return the reader
+	 * @throws NullPointerException
+	 *             if the stream or the charset is null
+	 */
+	public static Reader newStrictReader(final InputStream input, final Charset charset)
+	{
+		Objects.requireNonNull(input, "input must not be null");
+		Objects.requireNonNull(charset, "charset must not be null");
+		return new InputStreamReader(input, newStrictDecoder(charset));
+	}
+
+	/**
+	 * Returns a decoder of the given charset that reports a malformed input and an unmappable
+	 * character instead of replacing them
+	 *
+	 * @param charset
+	 *            the charset to decode with
+	 * @return the decoder
+	 */
+	private static CharsetDecoder newStrictDecoder(final Charset charset)
+	{
+		return charset.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
+			.onUnmappableCharacter(CodingErrorAction.REPORT);
 	}
 
 	/**

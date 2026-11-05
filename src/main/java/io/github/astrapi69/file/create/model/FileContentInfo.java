@@ -90,6 +90,10 @@ public class FileContentInfo extends FileInfo
 	 * Only an existing regular file gets a checksum and its content. Anything else gets neither,
 	 * and is described as a directory only if it is one: a path that does not exist, a dangling
 	 * symbolic link or a device such as {@code /dev/null} gives an entry that is not a directory.
+	 * The path is the absolute path of the parent directory with a separator at its end, as
+	 * {@link FileExtensions#getAbsolutPathWithoutFilename(File)} gives it; {@link #equals(Object)}
+	 * compares paths as strings, so an entry built with the same directory written without that
+	 * separator is not equal to it.
 	 *
 	 * @param file
 	 *            the file to convert
@@ -196,7 +200,10 @@ public class FileContentInfo extends FileInfo
 	}
 
 	/**
-	 * Indicates whether some other object is "equal to" this one.
+	 * Indicates whether some other object is "equal to" this one: a {@link FileContentInfo} of the
+	 * same file, name, path and directory flag as {@link FileInfo#equals(Object)} compares them,
+	 * with the same checksum and the same content. Two entries of different files with the same
+	 * content are not equal (#123).
 	 *
 	 * @param o
 	 *            the object to compare
@@ -210,6 +217,8 @@ public class FileContentInfo extends FileInfo
 			return false;
 		final FileContentInfo other = (FileContentInfo)o;
 		if (!other.canEqual((Object)this))
+			return false;
+		if (!super.equals(o))
 			return false;
 		final Object this$checksum = this.getChecksum();
 		final Object other$checksum = other.getChecksum();
@@ -233,14 +242,15 @@ public class FileContentInfo extends FileInfo
 	}
 
 	/**
-	 * Returns a hash code value for the object.
+	 * Returns a hash code value for the object, from the fields {@link #equals(Object)} compares:
+	 * those of {@link FileInfo}, the checksum and the content.
 	 *
 	 * @return a hash code value for this object
 	 */
 	public int hashCode()
 	{
 		final int PRIME = 59;
-		int result = 1;
+		int result = super.hashCode();
 		final Object $checksum = this.getChecksum();
 		result = result * PRIME + ($checksum == null ? 43 : $checksum.hashCode());
 		result = result * PRIME + Arrays.hashCode(this.getContent());

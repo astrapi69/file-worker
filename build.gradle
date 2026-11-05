@@ -26,16 +26,14 @@ description = "$rootProject.name"
 apply from: "gradle/apply-gradle-files.gradle"
 
 // Mutation-score floor the CI build fails below: .github/workflows/gradle.yml runs `./gradlew pitest`
-// after the build; PIT rounds the score half up to a whole percent before it compares. Measured 94 %
-// (1119 of 1185 mutants detected) on 2026-11-04, after the tests the survivors of 82 % showed to be
-// missing (#99, step 3: 1117 of 1204) and the fixes of the defects those tests found (#105 to #118),
-// which removed dead code and branches nothing could reach. The floor keeps two points below it, as
-// silly-io does. The 66 left, by what decides them:
-// - 24 boolean results that cannot be false: copy, write, move, create and delete return true or
-//   throw, so "replaced boolean return with true" changes nothing; they become void in 21.0 (#124)
-// - 30 in the hashCode arithmetic and null checks of SearchFileAttributesBean, FileCompareResultBean,
-//   FileInfo, FileContentResultBean and FileContentInfo, and 2 canEqual: equal objects keep equal
-//   hash codes whatever the arithmetic, and only a test that pins hash values would see them
+// after the build; PIT rounds the score half up to a whole percent before it compares. Measured 96 %
+// (1131 of 1175 mutants detected) on 2026-11-05 for 21.0, up from 94 % (1119 of 1185) for 20.1, since
+// the copy, write, move and create methods whose result could only be true return nothing (#124).
+// The floor keeps two points below it, as silly-io does. The 44 left, by what decides them:
+// - 31 in the hashCode arithmetic and null checks of SearchFileAttributesBean (11),
+//   FileCompareResultBean (9), FileInfo (5), FileContentInfo (3) and FileContentResultBean (3), and 2
+//   canEqual: equal objects keep equal hash codes whatever the arithmetic, and only a test that pins
+//   hash values would see them
 // - 5 equivalent: empty instead of fresh results where only MergeWithTemplate itself reads them
 //   (loadDefaults, jsonStringArray); "> 0" for "!= -1" in read loops whose buffer is never empty
 //   (CopyFileExtensions.copyText, ReadFileExtensions.fromFile); null for the ignored result of a
@@ -43,10 +41,12 @@ apply from: "gradle/apply-gradle-files.gradle"
 // - 5 a test in the same JVM cannot reach: System.exit in MergeWithTemplate.main (2), run(String[])
 //   (only MergeWithTemplateMainTest calls it, and PIT leaves that class out), and the Windows root
 //   of SystemFileExtensions (2) on Linux
+// - 1 race: DeleteFileExtensions.delete(Path) answers false for a directory only when another process
+//   creates it again after the deletion
 // Kept here, not in gradle/mutation-testing.gradle, so that the floor sits in the file a reader
 // looks at.
 pitest {
-    mutationThreshold = 92
+    mutationThreshold = 94
 }
 
 apply from: "gradle/test-results-complete.gradle"

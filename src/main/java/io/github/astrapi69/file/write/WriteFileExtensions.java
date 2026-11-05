@@ -26,9 +26,9 @@ package io.github.astrapi69.file.write;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,6 +36,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
@@ -46,6 +47,7 @@ import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.collection.properties.PropertiesExtensions;
 import io.github.astrapi69.file.copy.CopyFileExtensions;
 import io.github.astrapi69.file.create.FileFactory;
+import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.system.SystemPropertiesExtensions;
 import io.github.astrapi69.io.StreamExtensions;
 
@@ -184,6 +186,9 @@ public final class WriteFileExtensions
 	 *            The Name from the File to read and copy.
 	 * @param writer
 	 *            The PrintWriter to write into.
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid UTF-8, in which it is read whatever the default charset
+	 *             of the platform is; the writer may then hold the lines written before
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed.
@@ -195,7 +200,8 @@ public final class WriteFileExtensions
 	public static void write2File(final String inputFile, final Writer writer)
 		throws FileNotFoundException, IOException
 	{
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile)))
+		try (BufferedReader bufferedReader = new BufferedReader(ReadFileExtensions
+			.newStrictReader(new FileInputStream(inputFile), StandardCharsets.UTF_8)))
 		{
 			write2File(bufferedReader, writer);
 		}

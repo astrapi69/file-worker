@@ -60,13 +60,12 @@ public interface Storable
 	 *            the {@link File} to write the string
 	 * @param stringToWrite
 	 *            the string to write
-	 * @return true if the string was successfully written, otherwise false
 	 * @throws IOException
 	 *             if an I/O exception occurs
 	 */
-	default boolean toFile(final File file, final String stringToWrite) throws IOException
+	default void toFile(final File file, final String stringToWrite) throws IOException
 	{
-		return toFile(file, stringToWrite, (Charset)null);
+		toFile(file, stringToWrite, (Charset)null);
 	}
 
 	/**
@@ -77,14 +76,13 @@ public interface Storable
 	 *            the file to write
 	 * @param lines
 	 *            the lines to write
-	 * @return true if lines were written successfully, otherwise false
 	 * @throws IOException
 	 *             if an I/O exception occurs
 	 */
-	default boolean toFile(final File file, final Collection<String> lines) throws IOException
+	default void toFile(final File file, final Collection<String> lines) throws IOException
 	{
 		final String content = linesOf(lines);
-		return toFile(file, content);
+		toFile(file, content);
 	}
 
 	/**
@@ -97,15 +95,14 @@ public interface Storable
 	 *            the lines to write
 	 * @param charset
 	 *            the charset to use
-	 * @return true if lines were written successfully, otherwise false
 	 * @throws IOException
 	 *             if an I/O exception occurs
 	 */
-	default boolean toFile(final File file, final Collection<String> lines, final Charset charset)
+	default void toFile(final File file, final Collection<String> lines, final Charset charset)
 		throws IOException
 	{
 		final String content = linesOf(lines);
-		return toFile(file, content, charset);
+		toFile(file, content, charset);
 	}
 
 	/**
@@ -137,16 +134,14 @@ public interface Storable
 	 *            the string to write
 	 * @param charset
 	 *            the charset to use
-	 * @return true if the string was successfully written, otherwise false
 	 * @throws IOException
 	 *             if an I/O exception occurs
 	 */
-	default boolean toFile(final File file, final String stringToWrite, final Charset charset)
+	default void toFile(final File file, final String stringToWrite, final Charset charset)
 		throws IOException
 	{
 		Files.writeString(file.toPath(), stringToWrite,
 			charset != null ? charset : Charset.defaultCharset());
-		return true;
 	}
 
 }

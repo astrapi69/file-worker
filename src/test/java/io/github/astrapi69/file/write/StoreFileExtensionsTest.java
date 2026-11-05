@@ -157,9 +157,8 @@ public class StoreFileExtensionsTest extends FileTestCase
 		File destination = tmp.resolve("empty.txt").toFile();
 
 		List<String> lines = List.of();
-		boolean ok = StoreFileExtensions.toFile(destination, lines);
+		StoreFileExtensions.toFile(destination, lines);
 
-		assertTrue(ok);
 		String actual = io.github.astrapi69.file.read.ReadFileExtensions.fromFile(destination,
 			StandardCharsets.UTF_8);
 		assertEquals("", actual);
@@ -185,8 +184,7 @@ public class StoreFileExtensionsTest extends FileTestCase
 			sb.append(unit); // ~280 KB
 
 		String expected = sb.toString();
-		boolean ok = StoreFileExtensions.toFile(destination, expected, StandardCharsets.UTF_8);
-		assertTrue(ok);
+		StoreFileExtensions.toFile(destination, expected, StandardCharsets.UTF_8);
 
 		String actual = io.github.astrapi69.file.read.ReadFileExtensions.fromFile(destination,
 			StandardCharsets.UTF_8);
@@ -231,9 +229,8 @@ public class StoreFileExtensionsTest extends FileTestCase
 
 		List<String> lines = new ArrayList<>();
 		lines.add("only-one");
-		boolean ok = StoreFileExtensions.toFile(destination, lines, StandardCharsets.UTF_8);
+		StoreFileExtensions.toFile(destination, lines, StandardCharsets.UTF_8);
 
-		assertTrue(ok);
 		String actual = io.github.astrapi69.file.read.ReadFileExtensions.fromFile(destination,
 			StandardCharsets.UTF_8);
 		assertEquals("only-one" + System.lineSeparator(), actual);
@@ -262,9 +259,8 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String expected = "foo bar" + lineSeparator + "äöü" + lineSeparator + "fasel"
 			+ lineSeparator;
 
-		boolean written = StoreFileExtensions.toFile(destination, lines, encoding);
+		StoreFileExtensions.toFile(destination, lines, encoding);
 
-		assertTrue(written);
 		assertArrayEquals(expected.getBytes(Charset.forName(encoding)),
 			Files.readAllBytes(destination.toPath()));
 	}
@@ -288,10 +284,8 @@ public class StoreFileExtensionsTest extends FileTestCase
 		String lineSeparator = System.lineSeparator();
 		String expected = "foo bar" + lineSeparator + "äöü" + lineSeparator;
 
-		boolean written = StoreFileExtensions.toFile(destination, lines,
-			"definitely-not-a-charset");
+		StoreFileExtensions.toFile(destination, lines, "definitely-not-a-charset");
 
-		assertTrue(written);
 		assertArrayEquals(expected.getBytes(Charset.defaultCharset()),
 			Files.readAllBytes(destination.toPath()));
 	}

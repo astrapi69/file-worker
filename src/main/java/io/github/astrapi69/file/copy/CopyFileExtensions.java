@@ -28,9 +28,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,6 +41,7 @@ import java.util.Objects;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
+import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.io.file.FileExtension;
 import io.github.astrapi69.io.file.FileSize;
@@ -66,14 +67,13 @@ public final class CopyFileExtensions
 	 *            The source file
 	 * @param destination
 	 *            The destination file, replaced if it exists
-	 * @return true, the file was copied; a copy that fails throws, it does not return false
 	 * @throws IllegalArgumentException
 	 *             if the source is a directory
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy, for instance a missing source file
 	 * @see Files#copy(Path, Path, java.nio.file.CopyOption...)
 	 */
-	public static boolean copyFile(Path source, Path destination) throws IOException
+	public static void copyFile(Path source, Path destination) throws IOException
 	{
 		Objects.requireNonNull(source, "source must not be null");
 		Objects.requireNonNull(destination, "destination must not be null");
@@ -82,7 +82,6 @@ public final class CopyFileExtensions
 			throw new IllegalArgumentException("Source must be a file: " + source);
 		}
 		Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-		return true;
 	}
 
 	/**
@@ -134,17 +133,14 @@ public final class CopyFileExtensions
 	 * @param destination
 	 *            The destination file.
 	 *
-	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
-	 *         {@link #copyFile(File, File, Charset, Charset, boolean)}
-	 *
 	 * @throws IllegalArgumentException
 	 *             if the source or the destination is a directory, or both are the same file
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
-	public static boolean copyFile(final File source, final File destination) throws IOException
+	public static void copyFile(final File source, final File destination) throws IOException
 	{
-		return copyFile(source, destination, true);
+		copyFile(source, destination, true);
 	}
 
 	/**
@@ -159,18 +155,15 @@ public final class CopyFileExtensions
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination file.
 	 *
-	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
-	 *         {@link #copyFile(File, File, Charset, Charset, boolean)}
-	 *
 	 * @throws IllegalArgumentException
 	 *             if the source or the destination is a directory, or both are the same file
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
-	public static boolean copyFile(final File source, final File destination,
+	public static void copyFile(final File source, final File destination,
 		final boolean lastModified) throws IOException
 	{
-		return copyFile(source, destination, null, null, lastModified);
+		copyFile(source, destination, null, null, lastModified);
 	}
 
 	/**
@@ -190,14 +183,17 @@ public final class CopyFileExtensions
 	 * @param lastModified
 	 *            if true the last modified time of the source is set on the destination; whether
 	 *            that worked is not checked
-	 * @return true, the file was copied; a copy that fails throws, it does not return false
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if a source encoding is given and the source is not valid in it, or not valid in
+	 *             the default charset if only the destination encoding is given; the destination
+	 *             may then hold what was copied before
 	 * @throws IllegalArgumentException
 	 *             if the source or the destination is a directory, or both are the same file
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, for instance a
 	 *             {@link java.io.FileNotFoundException} for a missing source file
 	 */
-	public static boolean copyFile(final File source, final File destination,
+	public static void copyFile(final File source, final File destination,
 		final Charset sourceEncoding, final Charset destinationEncoding, final boolean lastModified)
 		throws IOException
 	{
@@ -228,7 +224,6 @@ public final class CopyFileExtensions
 		{
 			destination.setLastModified(source.lastModified());
 		}
-		return true;
 	}
 
 	/**
@@ -259,9 +254,8 @@ public final class CopyFileExtensions
 		final Charset sourceEncoding, final Charset destinationEncoding) throws IOException
 	{
 		try (InputStream inputStream = StreamExtensions.getInputStream(source);
-			InputStreamReader reader = sourceEncoding != null
-				? new InputStreamReader(inputStream, sourceEncoding)
-				: new InputStreamReader(inputStream);
+			Reader reader = ReadFileExtensions.newStrictReader(inputStream,
+				sourceEncoding != null ? sourceEncoding : Charset.defaultCharset());
 			OutputStream outputStream = StreamExtensions.getOutputStream(destination,
 				!destination.exists());
 			BufferedOutputStream bos = new BufferedOutputStream(outputStream);
@@ -315,18 +309,15 @@ public final class CopyFileExtensions
 	 * @param destinationDir
 	 *            The destination directory.
 	 *
-	 * @return true, the file was copied to the destination directory; a copy that fails throws, it
-	 *         does not return false. See {@link #copyFileToDirectory(File, File, boolean)}
-	 *
 	 * @throws FileIsNotADirectoryException
 	 *             Is thrown if the destination directory is not a directory.
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
-	public static boolean copyFileToDirectory(final File source, final File destinationDir)
+	public static void copyFileToDirectory(final File source, final File destinationDir)
 		throws FileIsNotADirectoryException, IOException
 	{
-		return copyFileToDirectory(source, destinationDir, true);
+		copyFileToDirectory(source, destinationDir, true);
 	}
 
 	/**
@@ -341,9 +332,6 @@ public final class CopyFileExtensions
 	 *            Flag the tells if the attribute lastModified has to be set with the attribute from
 	 *            the destination directory.
 	 *
-	 * @return true, the file was copied to the given directory; a copy that fails throws, it does
-	 *         not return false
-	 *
 	 * @throws IllegalArgumentException
 	 *             if the destination directory is null, or the source or the entry of its name in
 	 *             the destination directory is a directory
@@ -352,7 +340,7 @@ public final class CopyFileExtensions
 	 * @throws IOException
 	 *             Is thrown if an error occurs by reading or writing.
 	 */
-	public static boolean copyFileToDirectory(final File source, final File destinationDir,
+	public static void copyFileToDirectory(final File source, final File destinationDir,
 		final boolean lastModified) throws FileIsNotADirectoryException, IOException
 	{
 		if (null == destinationDir)
@@ -367,7 +355,7 @@ public final class CopyFileExtensions
 		}
 		final File destinationFile = new File(destinationDir, source.getName());
 
-		return copyFile(source, destinationFile, lastModified);
+		copyFile(source, destinationFile, lastModified);
 	}
 
 	/**

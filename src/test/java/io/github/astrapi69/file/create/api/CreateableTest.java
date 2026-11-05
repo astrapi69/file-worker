@@ -129,9 +129,8 @@ public class CreateableTest
 	{
 		Path directory = tempDir.resolve("single");
 
-		boolean created = createable.newDirectory(directory);
+		createable.newDirectory(directory);
 
-		assertTrue(created);
 		assertTrue(Files.isDirectory(directory));
 	}
 
