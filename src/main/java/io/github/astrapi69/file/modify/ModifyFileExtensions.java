@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -43,7 +42,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-import io.github.astrapi69.collection.list.ListFactory;
 import io.github.astrapi69.file.modify.api.FileChangeable;
 import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.write.StoreFileExtensions;
@@ -155,6 +153,8 @@ public final class ModifyFileExtensions
 	 * @param modifier
 	 *            the modifier {@linkplain java.util.function.BiFunction}
 	 * @return the modified inFilePath
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid in the charset; the file is then left as it is
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -166,17 +166,9 @@ public final class ModifyFileExtensions
 		Objects.requireNonNull(modifier, "modifier must not be null");
 
 		File file = inFilePath.toFile();
-		List<String> linesRead = ListFactory.newArrayList();
-
-		try (BufferedReader bufferedReader = new BufferedReader(
-			new InputStreamReader(new FileInputStream(file), charsetOfOutputFile)))
-		{
-			String currentLine;
-			while ((currentLine = bufferedReader.readLine()) != null)
-			{
-				linesRead.add(currentLine);
-			}
-		}
+		// the whole file is decoded strictly before it is written again, so a malformed byte
+		// throws and leaves the file as it is (#147)
+		List<String> linesRead = ReadFileExtensions.readLinesInList(file, charsetOfOutputFile);
 
 		try (Writer writer = new BufferedWriter(
 			new OutputStreamWriter(new FileOutputStream(file), charsetOfOutputFile)))
@@ -243,6 +235,9 @@ public final class ModifyFileExtensions
 	 * @param modifier
 	 *            the modifier {@linkplain java.util.function.BiFunction}
 	 * @return the outFilePath
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the input file is not valid in the charset; the output file may then hold the
+	 *             lines written before
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
@@ -255,8 +250,8 @@ public final class ModifyFileExtensions
 		Objects.requireNonNull(modifier, "modifier must not be null");
 
 		try (
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
-				new FileInputStream(inFilePath.toFile()), charsetOfOutputFile));
+			BufferedReader bufferedReader = new BufferedReader(ReadFileExtensions
+				.newStrictReader(new FileInputStream(inFilePath.toFile()), charsetOfOutputFile));
 			Writer writer = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(outFilePath.toFile()), charsetOfOutputFile)))
 		{

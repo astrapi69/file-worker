@@ -156,4 +156,30 @@ public class ReadFileExtensionsMalformedInputTest
 
 		assertEquals("ok", ReadFileExtensions.readHeadLine(file.toString()));
 	}
+
+	@Test
+	public void newStrictReader_decodesValidBytes_andThrowsForMalformedOnes() throws IOException
+	{
+		final byte[] valid = "Grüße".getBytes(StandardCharsets.UTF_8);
+		try (java.io.Reader reader = ReadFileExtensions
+			.newStrictReader(new java.io.ByteArrayInputStream(valid), StandardCharsets.UTF_8))
+		{
+			assertEquals("Grüße", new java.io.BufferedReader(reader).readLine());
+		}
+		try (java.io.Reader reader = ReadFileExtensions
+			.newStrictReader(new java.io.ByteArrayInputStream(NOT_UTF_8), StandardCharsets.UTF_8))
+		{
+			assertThrows(MalformedInputException.class, () -> reader.read(new char[16]));
+		}
+	}
+
+	@Test
+	public void newStrictReader_rejectsANullStreamOrCharset()
+	{
+		final java.io.InputStream input = new java.io.ByteArrayInputStream(new byte[0]);
+		assertThrows(NullPointerException.class,
+			() -> ReadFileExtensions.newStrictReader(null, StandardCharsets.UTF_8));
+		assertThrows(NullPointerException.class,
+			() -> ReadFileExtensions.newStrictReader(input, null));
+	}
 }

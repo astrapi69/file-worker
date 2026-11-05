@@ -24,10 +24,8 @@
  */
 package io.github.astrapi69.file.search;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,6 +42,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.Strings;
 
+import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.file.search.api.Searchable;
 import io.github.astrapi69.io.file.filter.MultiplyExtensionsFileFilter;
 import io.github.astrapi69.regex.RegExExtensions;
@@ -533,22 +532,20 @@ public final class FileSearchExtensions
 	 * @param searchString
 	 *            the string to search for
 	 * @return the index of the line that contains the string, or -1 if not found
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if the file is not valid UTF-8, in which it is read as a whole, whatever the
+	 *             default charset of the platform is
 	 * @throws IOException
 	 *             if an I/O error occurs
 	 */
 	public static int findLineIndex(File file, String searchString) throws IOException
 	{
-		try (BufferedReader reader = new BufferedReader(new FileReader(file)))
+		final List<String> lines = ReadFileExtensions.readLinesInList(file);
+		for (int index = 0; index < lines.size(); index++)
 		{
-			String line;
-			int index = 0;
-			while ((line = reader.readLine()) != null)
+			if (lines.get(index).startsWith(searchString))
 			{
-				if (line.startsWith(searchString))
-				{
-					return index;
-				}
-				index++;
+				return index;
 			}
 		}
 		return -1;

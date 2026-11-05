@@ -24,13 +24,10 @@
  */
 package io.github.astrapi69.file.merge;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -47,6 +44,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import io.github.astrapi69.file.merge.strategy.MergeFileStrategy;
+import io.github.astrapi69.file.read.ReadFileExtensions;
 
 /**
  * The class {@link MergeFileExtensions} provides methods for intelligently merging file contents.
@@ -305,17 +303,9 @@ public final class MergeFileExtensions
 
 	private static List<String> readLines(File file, Charset charset) throws IOException
 	{
-		List<String> lines = new ArrayList<>();
-		try (BufferedReader reader = new BufferedReader(
-			new InputStreamReader(new FileInputStream(file), charset)))
-		{
-			String line;
-			while ((line = reader.readLine()) != null)
-			{
-				lines.add(line);
-			}
-		}
-		return lines;
+		// strict, as every reader of ReadFileExtensions: a malformed byte throws (#147)
+		Objects.requireNonNull(charset, "charset must not be null");
+		return ReadFileExtensions.readLinesInList(file, charset);
 	}
 
 	private static void writeLines(File targetFile, List<String> lines, Charset charset)

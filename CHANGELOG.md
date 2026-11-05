@@ -39,6 +39,22 @@ BREAKING:
   not UTF-8 throws there instead of being encrypted with U+FFFD in place of its bytes; astrapi69/mystic-crypt-ui
   reads JSON, PEM and checksum files; astrapi69/resourcebundle-core calls `readLinesInList(File)`, which threw
   already (#125)
+- the same rule holds for every other method of file-worker that decodes a file: `CopyFileExtensions.copyFile` with
+  charsets, every merge of `MergeFileExtensions`, both `ModifyFileExtensions.modifyFileAndGet`,
+  `FileSearchExtensions.findLineIndex` and `WriteFileExtensions.write2File(String, Writer)` throw a
+  `MalformedInputException` for bytes that are not valid in the charset, where they replaced them with U+FFFD.
+  `findLineIndex` and `write2File(String, Writer)` read UTF-8, where they read the platform charset, which is UTF-8
+  unless the JVM is configured otherwise. `modifyFileAndGet(Path, Charset, FileChangeable)` leaves such a file as it
+  is, where it wrote it back with U+FFFD in place of the bytes; a copy, `modifyFileAndGet` with an output file and
+  `write2File` may have written part of their output before the exception. Migration: as for `ReadFileExtensions`,
+  read a file in the charset it is in. Encoding is not part of this: a character the destination charset cannot
+  map is still written as `?` by the writers that use an `OutputStreamWriter` (#147)
+
+ADDED:
+
+- `ReadFileExtensions.newStrictReader(InputStream, Charset)`: a reader that throws a `MalformedInputException` for
+  bytes that are not valid in the charset instead of replacing them, the one every method of file-worker that
+  decodes a stream reads through (#147)
 
 CHANGED:
 
