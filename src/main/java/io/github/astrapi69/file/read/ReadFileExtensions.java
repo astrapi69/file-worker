@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Stream;
 
@@ -385,16 +386,22 @@ public final class ReadFileExtensions
 	 * Returns a reader that decodes the given stream strictly in the given charset: a byte sequence
 	 * that is not valid in it gives a {@link java.nio.charset.MalformedInputException}, a character
 	 * it cannot map an {@link java.nio.charset.UnmappableCharacterException}, instead of the
-	 * replacement character U+FFFD that an {@link InputStreamReader} of a {@link Charset} writes
+	 * replacement character U+FFFD that an {@link InputStreamReader} of a {@link Charset} writes.
+	 * Every method of file-worker that decodes a stream reads through such a reader; closing it
+	 * closes the stream.
 	 *
 	 * @param input
 	 *            the stream to decode
 	 * @param charset
 	 *            the charset to decode with
 	 * @return the reader
+	 * @throws NullPointerException
+	 *             if the stream or the charset is null
 	 */
-	private static Reader newStrictReader(final InputStream input, final Charset charset)
+	public static Reader newStrictReader(final InputStream input, final Charset charset)
 	{
+		Objects.requireNonNull(input, "input must not be null");
+		Objects.requireNonNull(charset, "charset must not be null");
 		return new InputStreamReader(input, newStrictDecoder(charset));
 	}
 

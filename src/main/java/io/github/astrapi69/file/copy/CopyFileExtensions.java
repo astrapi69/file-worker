@@ -28,9 +28,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,6 +41,7 @@ import java.util.Objects;
 
 import io.github.astrapi69.file.create.DirectoryFactory;
 import io.github.astrapi69.file.exception.FileIsNotADirectoryException;
+import io.github.astrapi69.file.read.ReadFileExtensions;
 import io.github.astrapi69.io.StreamExtensions;
 import io.github.astrapi69.io.file.FileExtension;
 import io.github.astrapi69.io.file.FileSize;
@@ -182,6 +183,10 @@ public final class CopyFileExtensions
 	 * @param lastModified
 	 *            if true the last modified time of the source is set on the destination; whether
 	 *            that worked is not checked
+	 * @throws java.nio.charset.MalformedInputException
+	 *             if a source encoding is given and the source is not valid in it, or not valid in
+	 *             the default charset if only the destination encoding is given; the destination
+	 *             may then hold what was copied before
 	 * @throws IllegalArgumentException
 	 *             if the source or the destination is a directory, or both are the same file
 	 * @throws IOException
@@ -249,9 +254,8 @@ public final class CopyFileExtensions
 		final Charset sourceEncoding, final Charset destinationEncoding) throws IOException
 	{
 		try (InputStream inputStream = StreamExtensions.getInputStream(source);
-			InputStreamReader reader = sourceEncoding != null
-				? new InputStreamReader(inputStream, sourceEncoding)
-				: new InputStreamReader(inputStream);
+			Reader reader = ReadFileExtensions.newStrictReader(inputStream,
+				sourceEncoding != null ? sourceEncoding : Charset.defaultCharset());
 			OutputStream outputStream = StreamExtensions.getOutputStream(destination,
 				!destination.exists());
 			BufferedOutputStream bos = new BufferedOutputStream(outputStream);
