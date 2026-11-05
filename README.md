@@ -328,7 +328,9 @@ keyring.
 What a release consists of, in the order it is run:
 
 1. **One pull request** with the CHANGELOG entry and `projectVersion` without `-SNAPSHOT`
-   (`docs: changelog for X.Y, and the version that carries it`), the full build green on it.
+   (`docs: changelog for X.Y, and the version that carries it`), the full build green on it, and
+   `scripts/check-reproducible.sh` on the JDK `.sdkmanrc` names reporting the five artifacts
+   identical.
 2. **Tag the merge commit** with `./gradlew tagRelease`, which names it `RELEASE-X.Y`, and push the
    tag. `publish.yml` uploads to the Central Portal, where the maintainer releases it. A pushed tag is
    never moved or deleted; a failed run is fixed on the branch and re-run.
