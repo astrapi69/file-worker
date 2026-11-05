@@ -122,7 +122,7 @@ public class CopyDirectoryExtensionsTempDirTest
 		newFile("source/sub/b.txt", "beta");
 		final Path destination = notCreated("destination");
 
-		assertTrue(CopyDirectoryExtensions.copyDirectory(tempDir.resolve("source"), destination));
+		CopyDirectoryExtensions.copyDirectory(tempDir.resolve("source"), destination);
 
 		assertEquals("alpha", read(destination.resolve("a.txt")));
 		assertEquals("beta", read(destination.resolve("sub/b.txt")));

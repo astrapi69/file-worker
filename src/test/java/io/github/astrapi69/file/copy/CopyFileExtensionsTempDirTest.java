@@ -91,7 +91,7 @@ public class CopyFileExtensionsTempDirTest
 		final Path source = newFile("source.txt", "alpha");
 		final Path destination = notCreated("destination.txt");
 
-		assertTrue(CopyFileExtensions.copyFile(source, destination));
+		CopyFileExtensions.copyFile(source, destination);
 
 		assertEquals("alpha", read(destination));
 	}
@@ -105,7 +105,7 @@ public class CopyFileExtensionsTempDirTest
 		final Path source = newFile("source.txt", "alpha");
 		final Path destination = newFile("destination.txt", "a much longer existing content");
 
-		assertTrue(CopyFileExtensions.copyFile(source, destination));
+		CopyFileExtensions.copyFile(source, destination);
 
 		assertEquals("alpha", read(destination));
 	}
@@ -204,7 +204,7 @@ public class CopyFileExtensionsTempDirTest
 		final Path source = newFile("source.txt", text);
 		final File destination = notCreated("destination.txt").toFile();
 
-		assertTrue(CopyFileExtensions.copyFile(source.toFile(), destination));
+		CopyFileExtensions.copyFile(source.toFile(), destination);
 
 		assertEquals(text, read(destination.toPath()));
 	}
@@ -218,7 +218,7 @@ public class CopyFileExtensionsTempDirTest
 		final Path source = newFile("source.txt", "alpha");
 		final Path destination = newFile("destination.txt", "a much longer existing content");
 
-		assertTrue(CopyFileExtensions.copyFile(source.toFile(), destination.toFile(), false));
+		CopyFileExtensions.copyFile(source.toFile(), destination.toFile(), false);
 
 		assertEquals("alpha", read(destination));
 	}
@@ -401,7 +401,7 @@ public class CopyFileExtensionsTempDirTest
 		final File source = newFile("in/source.txt", "alpha").toFile();
 		final Path directory = Files.createDirectories(tempDir.resolve("out"));
 
-		assertTrue(CopyFileExtensions.copyFileToDirectory(source, directory.toFile()));
+		CopyFileExtensions.copyFileToDirectory(source, directory.toFile());
 
 		assertEquals("alpha", read(directory.resolve("source.txt")));
 	}

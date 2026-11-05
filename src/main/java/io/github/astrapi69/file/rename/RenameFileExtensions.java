@@ -256,18 +256,15 @@ public final class RenameFileExtensions
 	 *            The source file.
 	 * @param destinationFile
 	 *            The destination file.
-	 * @return true, the file was moved; a move that fails throws, it does not return false. See
-	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
-	public static boolean forceToMoveFile(final File srcFile, final File destinationFile)
+	public static void forceToMoveFile(final File srcFile, final File destinationFile)
 		throws IOException, FileIsADirectoryException
 	{
-		boolean moved = RenameFileExtensions.renameFile(srcFile, destinationFile, true);
-		return moved;
+		RenameFileExtensions.renameFile(srcFile, destinationFile, true);
 	}
 
 	/**
@@ -281,17 +278,15 @@ public final class RenameFileExtensions
 	 *            The source file.
 	 * @param destFile
 	 *            The destination file, the new path of the source file.
-	 * @return true, the file was moved; a move that fails throws, it does not return false. See
-	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             the file is A directory exception
 	 */
-	public static boolean moveFile(final File srcFile, final File destFile)
+	public static void moveFile(final File srcFile, final File destFile)
 		throws IOException, FileIsADirectoryException
 	{
-		return RenameFileExtensions.renameFile(srcFile, destFile, true);
+		RenameFileExtensions.renameFile(srcFile, destFile, true);
 	}
 
 	/**

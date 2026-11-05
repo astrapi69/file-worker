@@ -14,6 +14,18 @@ BREAKING:
   `DirectoryStructureExtensions.getFileContentInfos` gives. Migration: code that looks for an entry by its content
   compares `getChecksum()` and `getContent()` itself; code that compares an entry it built with one these methods
   read writes the path in their form, `FileExtensions.getAbsolutPathWithoutFilename(File)` (#123)
+- the methods whose result could only be `true` return nothing, since each one does what it names or throws, as
+  astrapi69/silly-io 5.0 did for `writeSerializedObjectToFile`: `CopyFileExtensions.copyFile` (all four overloads)
+  and `copyFileToDirectory` (both), `CopyDirectoryExtensions.copyDirectory(Path, Path)`, the `Copyable` defaults
+  `copyFile(File, File)`, `copyFile(Path, Path)` and `copyDirectory(Path, Path)`, every `StoreFileExtensions.toFile`
+  and `Storable.toFile` that returned a `boolean`, and `forceToMoveFile` and `moveFile` of `RenameFileExtensions` and
+  `Renameable`. The methods that can answer `false` keep their `boolean`: `renameFile(File, File, boolean)` without
+  delete, `changeFilenameSuffix`, the `File` overloads of `copyDirectory` and its filtered variants,
+  `DeleteFileExtensions.delete` and `DirectoryFactory.newDirectories`. Migration: binary incompatible, so code
+  compiled against 20.x fails with a `NoSuchMethodError` until it is compiled again; source that used the result
+  drops it, since a failure throws an `IOException` or an `IllegalArgumentException` as before. A lambda or method
+  reference of one of these methods for a functional interface that returns a `boolean` needs a body that returns
+  `true` itself (#124)
 
 CHANGED:
 

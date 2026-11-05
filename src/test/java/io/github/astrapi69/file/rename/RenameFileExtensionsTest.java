@@ -356,9 +356,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final File srcFile = new File(this.testDir.getAbsoluteFile(), "testMoveFile.txt");
 		final File expectedMovedFile = new File(this.deepDir, "testMovedFile.moved");
 		StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
-		actual = RenameFileExtensions.forceToMoveFile(srcFile, expectedMovedFile);
-		expected = true;
-		assertEquals(actual, expected);
+		RenameFileExtensions.forceToMoveFile(srcFile, expectedMovedFile);
 		assertTrue(expectedMovedFile.exists());
 		assertFalse(srcFile.exists());
 		expectedMovedFile.deleteOnExit();
@@ -396,8 +394,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 			StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
 		}
 		// Test to move the dir.
-		this.actual = RenameFileExtensions.moveFile(srcDir, destDir);
-		assertTrue(this.actual, "Directory should be renamed.");
+		RenameFileExtensions.moveFile(srcDir, destDir);
 
 	}
 
@@ -419,8 +416,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		final File destFile = new File(this.deeperDir, filePrefix1 + oldFileSuffix);
 
 		StoreFileExtensions.toFile(srcFile, "Its a beautifull day!!!");
-		this.actual = RenameFileExtensions.moveFile(srcFile, destFile);
-		assertTrue(this.actual, "File should be renamed.");
+		RenameFileExtensions.moveFile(srcFile, destFile);
 		this.actual = FileSearchExtensions.containsFile(this.deeperDir, destFile);
 		assertTrue(this.actual, "The renamed file should exist in this directory.");
 	}
@@ -775,7 +771,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 	@FunctionalInterface
 	interface MoveWithDelete
 	{
-		boolean move(File source, File destination) throws Exception;
+		void move(File source, File destination) throws Exception;
 	}
 
 	static Stream<Arguments> movesWithDelete()
@@ -843,7 +839,7 @@ public class RenameFileExtensionsTest extends FileTestCase
 		Path source = Files.writeString(tempDir.resolve("one.txt"), "first");
 		Path destination = Files.createDirectory(tempDir.resolve("target")).resolve("one.txt");
 
-		assertTrue(move.move(source.toFile(), destination.toFile()));
+		move.move(source.toFile(), destination.toFile());
 
 		assertFalse(Files.exists(source));
 		assertEquals("first", Files.readString(destination));
@@ -911,9 +907,8 @@ public class RenameFileExtensionsTest extends FileTestCase
 		Path otherDirectory = Files.createDirectory(tempDir.resolve("other"));
 		File targetFile = otherDirectory.resolve("arrived.txt").toFile();
 
-		boolean moved = RenameFileExtensions.moveFile(file, targetFile);
+		RenameFileExtensions.moveFile(file, targetFile);
 
-		assertTrue(moved);
 		assertEquals("hello", Files.readString(targetFile.toPath()));
 		assertFalse(file.exists());
 	}

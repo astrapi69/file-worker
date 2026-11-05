@@ -230,17 +230,15 @@ public interface Renameable
 	 *            the source file
 	 * @param destinationFile
 	 *            the destination file
-	 * @return true, the file was moved; a move that fails throws, it does not return false. See
-	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
 	 *             if an I/O exception occurs, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             if the source or destination is a directory
 	 */
-	default boolean forceToMoveFile(final File srcFile, final File destinationFile)
+	default void forceToMoveFile(final File srcFile, final File destinationFile)
 		throws IOException, FileIsADirectoryException
 	{
-		return renameFile(srcFile, destinationFile, true);
+		renameFile(srcFile, destinationFile, true);
 	}
 
 	/**
@@ -254,18 +252,16 @@ public interface Renameable
 	 *            the source file
 	 * @param destFile
 	 *            the destination file, the new path of the source file
-	 * @return true, the file was moved; a move that fails throws, it does not return false. See
-	 *         {@link #renameFile(File, File, boolean)} with delete
 	 * @throws IOException
 	 *             if an I/O exception occurs, for a copy or a delete that fails
 	 * @throws FileIsADirectoryException
 	 *             not thrown by the default methods of this interface, a move of a file onto an
 	 *             existing directory is refused with an {@link IllegalArgumentException}
 	 */
-	default boolean moveFile(final File srcFile, final File destFile)
+	default void moveFile(final File srcFile, final File destFile)
 		throws IOException, FileIsADirectoryException
 	{
-		return renameFile(srcFile, destFile, true);
+		renameFile(srcFile, destFile, true);
 	}
 
 	/**

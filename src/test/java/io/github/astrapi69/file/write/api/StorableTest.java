@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -171,9 +170,8 @@ public class StorableTest
 		String content = "foo bar äöü";
 		File destination = new File(tempDir.toFile(), "testStoreStringDefaultCharset.txt");
 
-		boolean written = storable.toFile(destination, content);
+		storable.toFile(destination, content);
 
-		assertTrue(written);
 		assertArrayEquals(content.getBytes(Charset.defaultCharset()),
 			Files.readAllBytes(destination.toPath()));
 	}
@@ -193,9 +191,8 @@ public class StorableTest
 		File destination = new File(tempDir.toFile(), "testStoreCollectionDefaultCharset.txt");
 		String expected = "foo bar" + System.lineSeparator() + "äöü" + System.lineSeparator();
 
-		boolean written = storable.toFile(destination, lines);
+		storable.toFile(destination, lines);
 
-		assertTrue(written);
 		assertArrayEquals(expected.getBytes(Charset.defaultCharset()),
 			Files.readAllBytes(destination.toPath()));
 	}
@@ -218,9 +215,8 @@ public class StorableTest
 		String content = "foo bar äöü";
 		File destination = new File(tempDir.toFile(), "testStoreString-" + charsetName + ".txt");
 
-		boolean written = storable.toFile(destination, content, charset);
+		storable.toFile(destination, content, charset);
 
-		assertTrue(written);
 		assertArrayEquals(content.getBytes(charset), Files.readAllBytes(destination.toPath()));
 	}
 
@@ -245,9 +241,8 @@ public class StorableTest
 			"testStoreCollection-" + charsetName + ".txt");
 		String expected = "foo bar" + System.lineSeparator() + "äöü" + System.lineSeparator();
 
-		boolean written = storable.toFile(destination, lines, charset);
+		storable.toFile(destination, lines, charset);
 
-		assertTrue(written);
 		assertArrayEquals(expected.getBytes(charset), Files.readAllBytes(destination.toPath()));
 	}
 

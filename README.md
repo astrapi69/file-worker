@@ -173,8 +173,8 @@ converts the text, and a copy of a `File` onto itself is refused with an `Illega
 List<File> failed = RenameFileExtensions.changeAllFilenameSuffix(notes, ".txt", ".md"); // []
 // notes holds a.md and old/b.md
 File a = new File(notes, "a.md");
-boolean moved = RenameFileExtensions.moveFile(a, new File(notes, "old/a.md")); // true
-boolean deleted = DeleteFileExtensions.delete(new File(notes, "old"));         // true
+RenameFileExtensions.moveFile(a, new File(notes, "old/a.md"));         // old/a.md
+boolean deleted = DeleteFileExtensions.delete(new File(notes, "old")); // true
 ```
 
 `changeAllFilenameSuffix` goes through the whole tree and returns the files it could not rename.

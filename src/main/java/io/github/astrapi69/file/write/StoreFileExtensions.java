@@ -75,8 +75,6 @@ public final class StoreFileExtensions
 	 *            The {@link File} object to write the given {@link String} object
 	 * @param stringToWrite
 	 *            The {@link String} object to write into the given {@link File} object
-	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
-	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
@@ -84,10 +82,10 @@ public final class StoreFileExtensions
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
 	 */
-	public static boolean toFile(final File file, final String stringToWrite)
+	public static void toFile(final File file, final String stringToWrite)
 		throws FileNotFoundException, IOException
 	{
-		return toFile(file, stringToWrite, (String)null);
+		toFile(file, stringToWrite, (String)null);
 	}
 
 	/**
@@ -97,16 +95,14 @@ public final class StoreFileExtensions
 	 *            The {@link File} object to write
 	 * @param lines
 	 *            The lines to write to file
-	 * @return {@code true} if the given lines were written to the given {@link File} object; a
-	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
 	 */
-	public static boolean toFile(final File file, final Collection<String> lines) throws IOException
+	public static void toFile(final File file, final Collection<String> lines) throws IOException
 	{
 		final String sb = concatenate(lines);
-		return StoreFileExtensions.toFile(file, sb);
+		StoreFileExtensions.toFile(file, sb);
 	}
 
 	private static String concatenate(Collection<String> lines)
@@ -130,17 +126,15 @@ public final class StoreFileExtensions
 	 *            The lines to write to file
 	 * @param encoding
 	 *            The encoding from the file as {@link String} object
-	 * @return {@code true} if the given lines were written to the given {@link File} object; a
-	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
 	 */
-	public static boolean toFile(final File file, final Collection<String> lines,
+	public static void toFile(final File file, final Collection<String> lines,
 		final String encoding) throws IOException
 	{
 		final String sb = concatenate(lines);
-		return StoreFileExtensions.toFile(file, sb, encoding);
+		StoreFileExtensions.toFile(file, sb, encoding);
 	}
 
 	/**
@@ -152,17 +146,15 @@ public final class StoreFileExtensions
 	 *            The lines to write to file
 	 * @param charset
 	 *            The charset from the file.
-	 * @return {@code true} if the given lines were written to the given {@link File} object; a
-	 *         failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
 	 */
-	public static boolean toFile(final File file, final Collection<String> lines,
+	public static void toFile(final File file, final Collection<String> lines,
 		final Charset charset) throws IOException
 	{
 		final String sb = concatenate(lines);
-		return StoreFileExtensions.toFile(file, sb, charset);
+		StoreFileExtensions.toFile(file, sb, charset);
 	}
 
 	/**
@@ -175,8 +167,6 @@ public final class StoreFileExtensions
 	 *            The {@link String} object to write into the given {@link File} object
 	 * @param encoding
 	 *            The encoding from the file as {@link String} object
-	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
-	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
@@ -184,14 +174,12 @@ public final class StoreFileExtensions
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
 	 */
-	public static boolean toFile(final File file, final String stringToWrite, final String encoding)
+	public static void toFile(final File file, final String stringToWrite, final String encoding)
 		throws FileNotFoundException, IOException
 	{
 		Optional<Charset> optionalCharset = CharsetExtensions.getCharset(encoding);
 
-		return optionalCharset.isPresent()
-			? toFile(file, stringToWrite, optionalCharset.get())
-			: toFile(file, stringToWrite, (Charset)null);
+		toFile(file, stringToWrite, optionalCharset.orElse(null));
 	}
 
 	/**
@@ -204,8 +192,6 @@ public final class StoreFileExtensions
 	 *            The {@link String} object to write into the given {@link File} object
 	 * @param charset
 	 *            The charset from the file.
-	 * @return {@code true} if the given {@link String} object was written to the given {@link File}
-	 *         object; a failure is reported by an {@link IOException}, never by {@code false}
 	 * @throws FileNotFoundException
 	 *             is thrown if an attempt to open the file denoted by a specified pathname has
 	 *             failed
@@ -213,7 +199,7 @@ public final class StoreFileExtensions
 	 *             Signals that an I/O exception has occurred, also if a write to the file or its
 	 *             close fails
 	 */
-	public static boolean toFile(final File file, final String stringToWrite, final Charset charset)
+	public static void toFile(final File file, final String stringToWrite, final Charset charset)
 		throws FileNotFoundException, IOException
 	{
 		try (FileOutputStream fos = new FileOutputStream(file);
@@ -224,7 +210,6 @@ public final class StoreFileExtensions
 		{
 			osw.write(stringToWrite);
 		}
-		return true;
 	}
 
 }

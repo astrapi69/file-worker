@@ -26,7 +26,6 @@ package io.github.astrapi69.file.write;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
@@ -84,7 +83,7 @@ class StorableLineEndTest
 	@FunctionalInterface
 	interface Write
 	{
-		boolean to(File file) throws IOException;
+		void to(File file) throws IOException;
 	}
 
 	/**
@@ -211,7 +210,7 @@ class StorableLineEndTest
 	{
 		File file = tempDir.resolve("written.txt").toFile();
 
-		assertTrue(write.to(file), name);
+		write.to(file);
 		assertEquals("a" + EOL + "b" + EOL, content(file), name);
 	}
 
@@ -222,7 +221,7 @@ class StorableLineEndTest
 		File byClass = tempDir.resolve("class.txt").toFile();
 		File byInterface = tempDir.resolve("interface.txt").toFile();
 
-		assertTrue(StoreFileExtensions.toFile(byClass, List.of("ä"), StandardCharsets.US_ASCII));
+		StoreFileExtensions.toFile(byClass, List.of("ä"), StandardCharsets.US_ASCII);
 		assertEquals("?" + EOL, content(byClass));
 		assertThrows(UnmappableCharacterException.class,
 			() -> storable.toFile(byInterface, List.of("ä"), StandardCharsets.US_ASCII));

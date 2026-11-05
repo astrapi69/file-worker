@@ -25,7 +25,6 @@
 package io.github.astrapi69.file.copy;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -168,7 +167,7 @@ public class CopyFileExtensionsByteCopyTest
 		final File source = newSource(content);
 		final File destination = tempDir.resolve("copy.bin").toFile();
 
-		assertTrue(CopyFileExtensions.copyFile(source, destination));
+		CopyFileExtensions.copyFile(source, destination);
 
 		assertArrayEquals(content, Files.readAllBytes(destination.toPath()));
 	}

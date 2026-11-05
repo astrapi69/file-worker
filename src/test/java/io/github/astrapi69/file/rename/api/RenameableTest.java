@@ -408,9 +408,8 @@ public class RenameableTest
 		Path otherDirectory = Files.createDirectory(tempDir.resolve("other"));
 		File destination = otherDirectory.resolve("arrived.txt").toFile();
 
-		boolean moved = renameable.forceToMoveFile(file, destination);
+		renameable.forceToMoveFile(file, destination);
 
-		assertTrue(moved);
 		assertEquals("content", Files.readString(destination.toPath()));
 		assertFalse(file.exists());
 	}
@@ -429,9 +428,8 @@ public class RenameableTest
 		Path destinationParent = Files.createDirectory(tempDir.resolve("parent"));
 		File destinationDirectory = destinationParent.resolve("destination").toFile();
 
-		boolean moved = renameable.moveFile(sourceDirectory.toFile(), destinationDirectory);
+		renameable.moveFile(sourceDirectory.toFile(), destinationDirectory);
 
-		assertTrue(moved);
 		assertEquals("inside",
 			Files.readString(destinationDirectory.toPath().resolve("inside.txt")));
 		assertFalse(Files.exists(sourceDirectory));
@@ -450,9 +448,8 @@ public class RenameableTest
 		Path otherDirectory = Files.createDirectory(tempDir.resolve("other"));
 		File targetFile = otherDirectory.resolve("arrived.txt").toFile();
 
-		boolean moved = renameable.moveFile(file, targetFile);
+		renameable.moveFile(file, targetFile);
 
-		assertTrue(moved);
 		assertEquals("hello", Files.readString(targetFile.toPath()));
 		assertFalse(file.exists());
 	}
