@@ -18,8 +18,9 @@ BREAKING:
   astrapi69/silly-io 5.0 did for `writeSerializedObjectToFile`: `CopyFileExtensions.copyFile` (all four overloads)
   and `copyFileToDirectory` (both), `CopyDirectoryExtensions.copyDirectory(Path, Path)`, the `Copyable` defaults
   `copyFile(File, File)`, `copyFile(Path, Path)` and `copyDirectory(Path, Path)`, every `StoreFileExtensions.toFile`
-  and `Storable.toFile` that returned a `boolean`, and `forceToMoveFile` and `moveFile` of `RenameFileExtensions` and
-  `Renameable`. The methods that can answer `false` keep their `boolean`: `renameFile(File, File, boolean)` without
+  and `Storable.toFile` that returned a `boolean`, `forceToMoveFile` and `moveFile` of `RenameFileExtensions` and
+  `Renameable`, and `newDirectory(Path, FileAttribute...)` of `DirectoryFactory` and `Createable` with
+  `DirectoryFactory.newDirectoryQuietly(Path, FileAttribute...)`. The methods that can answer `false` keep their `boolean`: `renameFile(File, File, boolean)` without
   delete, `changeFilenameSuffix`, the `File` overloads of `copyDirectory` and its filtered variants,
   `DeleteFileExtensions.delete` and `DirectoryFactory.newDirectories`. Migration: binary incompatible, so code
   compiled against 20.x fails with a `NoSuchMethodError` until it is compiled again; source that used the result

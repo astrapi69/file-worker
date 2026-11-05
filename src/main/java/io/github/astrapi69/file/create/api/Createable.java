@@ -82,16 +82,14 @@ public interface Createable
 	 *            the directory to create
 	 * @param attrs
 	 *            optional file attributes to set atomically when creating the directory
-	 * @return true, the directory was created; a directory that cannot be created throws, it does
-	 *         not return false
 	 * @throws java.nio.file.FileAlreadyExistsException
 	 *             if the path already exists, as a directory or as a file
 	 * @throws IOException
 	 *             Signals an I/O exception occurred
 	 */
-	default boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
+	default void newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
 	{
-		return DirectoryFactory.newDirectory(dir, attrs);
+		DirectoryFactory.newDirectory(dir, attrs);
 	}
 
 	/**
