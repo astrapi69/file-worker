@@ -4,6 +4,16 @@
 Version 20.2-SNAPSHOT
 -------------
 
+CHANGED:
+
+- a build of the same commit gives the same bytes: the manifest no longer carries the build time, the operating
+  system and the JDK's patch level (`Build-Jdk-Spec: 25` in their place); `javac --release 25` keeps the patch
+  level out of `module-info.class`; every archive has fixed entry times and a fixed entry order; and the local
+  Maven repository is used only with `-PuseMavenLocal`, since it came before Maven Central. The workflows build on
+  exactly the JDK `.sdkmanrc` names, Temurin 25.0.4+7, and check that they do, as the javadoc tool still writes
+  other HTML on another patch level. `scripts/check-reproducible.sh` builds the five published artifacts twice and
+  compares them (#97)
+
 Version 20.1
 -------------
 
