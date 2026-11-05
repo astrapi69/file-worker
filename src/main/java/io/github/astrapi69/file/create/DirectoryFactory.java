@@ -124,8 +124,6 @@ public final class DirectoryFactory
 	 *            the dir the directory to create
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return true, the directory was created; a directory that cannot be created throws, it does
-	 *         not return false
 	 * @throws java.nio.file.FileAlreadyExistsException
 	 *             if the path already exists, as a directory or as a file
 	 * @throws IOException
@@ -133,10 +131,9 @@ public final class DirectoryFactory
 	 *             directory
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
-	public static boolean newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
+	public static void newDirectory(Path dir, FileAttribute<?>... attrs) throws IOException
 	{
-		Path directory = Files.createDirectory(dir, attrs);
-		return Files.exists(directory);
+		Files.createDirectory(dir, attrs);
 	}
 
 	/**
@@ -151,17 +148,15 @@ public final class DirectoryFactory
 	 *            the dir the directory to create
 	 * @param attrs
 	 *            an optional list of file attributes to set atomically when creating the directory
-	 * @return true, the directory was created; a directory that cannot be created throws, it does
-	 *         not return false
 	 * @throws RuntimeException
 	 *             with the {@link IOException} of {@link #newDirectory(Path, FileAttribute...)} as
 	 *             its cause, for instance a {@link java.nio.file.FileAlreadyExistsException} if the
 	 *             path already exists
 	 * @see Files#createDirectory(Path, FileAttribute...)
 	 */
-	public static boolean newDirectoryQuietly(Path dir, FileAttribute<?>... attrs)
+	public static void newDirectoryQuietly(Path dir, FileAttribute<?>... attrs)
 	{
-		return RuntimeExceptionDecorator.decorate(() -> newDirectory(dir, attrs));
+		RuntimeExceptionDecorator.decorate(() -> newDirectory(dir, attrs));
 	}
 
 	/**

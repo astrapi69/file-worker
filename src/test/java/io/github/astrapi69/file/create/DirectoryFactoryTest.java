@@ -521,9 +521,8 @@ public class DirectoryFactoryTest extends FileTestCase
 		{
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
-		actual = DirectoryFactory.newDirectory(dirPath);
+		DirectoryFactory.newDirectory(dirPath);
 		expected = true;
-		assertEquals(expected, actual);
 
 		actual = Files.exists(dirPath);
 		assertEquals(expected, actual);
@@ -556,9 +555,8 @@ public class DirectoryFactoryTest extends FileTestCase
 		{
 			DeleteFileExtensions.delete(dirPath.toFile());
 		}
-		actual = DirectoryFactory.newDirectoryQuietly(dirPath);
+		DirectoryFactory.newDirectoryQuietly(dirPath);
 		expected = true;
-		assertEquals(expected, actual);
 
 		actual = Files.exists(dirPath);
 		assertEquals(expected, actual);
