@@ -462,7 +462,9 @@ public class ReadFileExtensionsTest extends FileTestCase
 	}
 
 	/**
-	 * Test method for {@link ReadFileExtensions#readLinesInList(InputStream)}.
+	 * Test method for {@link ReadFileExtensions#readLinesInList(InputStream)}: the stream is read
+	 * as UTF-8, so the fixture, which is Windows-1252, gives a {@link MalformedInputException}, and
+	 * its lines written in UTF-8 are read back as they are (#125).
 	 *
 	 * @throws FileNotFoundException
 	 *             is thrown if the given file is not found
@@ -473,16 +475,23 @@ public class ReadFileExtensionsTest extends FileTestCase
 	public void testReadLinesInListInputStream() throws FileNotFoundException, IOException
 	{
 		final File testFile = new File(this.test, "languages_iso639_1.csv");
-		final List<String> list;
 		// closed here, so that JUnit can delete the temporary directory, also on Windows
 		try (InputStream inputStream = new FileInputStream(testFile))
 		{
+			assertThrows(MalformedInputException.class,
+				() -> ReadFileExtensions.readLinesInList(inputStream));
+		}
+		final List<String> expected = ReadFileExtensions.readLinesInList(testFile,
+			Charset.forName("Windows-1252"));
+		assertEquals(185, expected.size());
+		final Path utf8File = tempRoot.resolve("languages_iso639_1-utf-8.csv");
+		Files.write(utf8File, expected, StandardCharsets.UTF_8);
+		final List<String> list;
+		try (InputStream inputStream = Files.newInputStream(utf8File))
+		{
 			list = ReadFileExtensions.readLinesInList(inputStream);
 		}
-		assertNotNull(list);
-		actual = list.size() == 185;
-		expected = true;
-		assertEquals(actual, expected);
+		assertEquals(expected, list);
 	}
 
 	/**
@@ -527,8 +536,9 @@ public class ReadFileExtensionsTest extends FileTestCase
 
 	/**
 	 * Test method for {@link ReadFileExtensions#readLinesInList(File, Charset)}: a file written in
-	 * ISO-8859-1 is read back with its umlauts when read with ISO-8859-1, and is not when read with
-	 * UTF-8, in which the same bytes are no valid characters.
+	 * ISO-8859-1 is read back with its umlauts when read with ISO-8859-1, and gives a
+	 * {@link MalformedInputException} when read with UTF-8, in which the same bytes are no valid
+	 * characters (#125).
 	 *
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
@@ -541,11 +551,8 @@ public class ReadFileExtensionsTest extends FileTestCase
 		Files.write(latin1File.toPath(), expected, StandardCharsets.ISO_8859_1);
 		assertEquals(expected,
 			ReadFileExtensions.readLinesInList(latin1File, StandardCharsets.ISO_8859_1));
-		final List<String> readAsUtf8 = ReadFileExtensions.readLinesInList(latin1File,
-			StandardCharsets.UTF_8);
-		assertEquals(expected.size(), readAsUtf8.size());
-		assertTrue(readAsUtf8.get(0).contains("\uFFFD"),
-			"ISO-8859-1 umlauts are no valid UTF-8 and must be replaced, but was " + readAsUtf8);
+		assertThrows(MalformedInputException.class,
+			() -> ReadFileExtensions.readLinesInList(latin1File, StandardCharsets.UTF_8));
 	}
 
 	/**

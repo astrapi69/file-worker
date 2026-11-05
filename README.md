@@ -144,7 +144,9 @@ String text = ReadFileExtensions.fromFile(names);               // the whole fil
 ```
 
 Each line is written with the line end of the platform, and `LineAppender` creates a missing file.
-The readers in the example read UTF-8; `fromFile` and `readLinesInList` also take a charset.
+The readers in the example read UTF-8; `fromFile` and `readLinesInList` also take a charset. Every
+reader of `ReadFileExtensions` decodes strictly: bytes that are not valid in the charset give a
+`MalformedInputException`, they are not replaced.
 `StoreFileExtensions` without a charset writes the JVM's default charset, which is UTF-8 unless the
 JVM is configured otherwise.
 
