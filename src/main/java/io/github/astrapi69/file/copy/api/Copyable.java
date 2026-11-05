@@ -50,16 +50,14 @@ public interface Copyable
 	 *            The source directory
 	 * @param destination
 	 *            The destination directory
-	 * @return true, the directory was copied; a copy that fails throws, it does not return false.
-	 *         See {@link CopyDirectoryExtensions#copyDirectory(Path, Path)}
 	 * @throws IllegalArgumentException
 	 *             if the source is not a directory
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
 	 */
-	default boolean copyDirectory(Path source, Path destination) throws IOException
+	default void copyDirectory(Path source, Path destination) throws IOException
 	{
-		return CopyDirectoryExtensions.copyDirectory(source, destination);
+		CopyDirectoryExtensions.copyDirectory(source, destination);
 	}
 
 	/**
@@ -98,16 +96,14 @@ public interface Copyable
 	 *            The source file
 	 * @param destination
 	 *            The destination file
-	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
-	 *         {@link CopyFileExtensions#copyFile(File, File)}
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
 	 * @throws IllegalArgumentException
 	 *             if the source or the destination is a directory, or both are the same file
 	 */
-	default boolean copyFile(File source, File destination) throws IOException
+	default void copyFile(File source, File destination) throws IOException
 	{
-		return CopyFileExtensions.copyFile(source, destination);
+		CopyFileExtensions.copyFile(source, destination);
 	}
 
 	/**
@@ -159,16 +155,14 @@ public interface Copyable
 	 *            The source path
 	 * @param destination
 	 *            The destination file path
-	 * @return true, the file was copied; a copy that fails throws, it does not return false. See
-	 *         {@link CopyFileExtensions#copyFile(Path, Path)}
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy
 	 * @throws IllegalArgumentException
 	 *             if the source is a directory
 	 */
-	default boolean copyFile(Path source, Path destination) throws IOException
+	default void copyFile(Path source, Path destination) throws IOException
 	{
-		return CopyFileExtensions.copyFile(source, destination);
+		CopyFileExtensions.copyFile(source, destination);
 	}
 
 	/**

@@ -82,7 +82,7 @@ public class CopyableTest
 		newFile("source/sub/b.txt", "beta");
 		final Path destination = notCreated("destination");
 
-		assertTrue(copyable.copyDirectory(tempDir.resolve("source"), destination));
+		copyable.copyDirectory(tempDir.resolve("source"), destination);
 
 		assertEquals("alpha", read(destination.resolve("a.txt")));
 		assertEquals("beta", read(destination.resolve("sub/b.txt")));
@@ -129,7 +129,7 @@ public class CopyableTest
 		final Path source = newFile("source.txt", "alpha");
 		final Path destination = notCreated("destination.txt");
 
-		assertTrue(copyable.copyFile(source.toFile(), destination.toFile()));
+		copyable.copyFile(source.toFile(), destination.toFile());
 
 		assertEquals("alpha", read(destination));
 	}
@@ -143,7 +143,7 @@ public class CopyableTest
 		final Path source = newFile("source.txt", "alpha");
 		final Path destination = notCreated("destination.txt");
 
-		assertTrue(copyable.copyFile(source, destination));
+		copyable.copyFile(source, destination);
 
 		assertEquals("alpha", read(destination));
 	}

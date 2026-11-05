@@ -67,14 +67,13 @@ public final class CopyDirectoryExtensions
 	 * @param destination
 	 *            The destination directory, created with its missing parents; files that exist in
 	 *            it are replaced
-	 * @return true, the directory was copied; a copy that fails throws, it does not return false
 	 * @throws IllegalArgumentException
 	 *             if the source is not a directory
 	 * @throws IOException
 	 *             if an I/O error occurs during the copy; the entries copied up to then stay in the
 	 *             destination
 	 */
-	public static boolean copyDirectory(Path source, Path destination) throws IOException
+	public static void copyDirectory(Path source, Path destination) throws IOException
 	{
 		Objects.requireNonNull(source, "source must not be null");
 		Objects.requireNonNull(destination, "destination must not be null");
@@ -102,7 +101,6 @@ public final class CopyDirectoryExtensions
 				return FileVisitResult.CONTINUE;
 			}
 		});
-		return true;
 	}
 
 	/**
@@ -343,7 +341,7 @@ public final class CopyDirectoryExtensions
 						}
 						else
 						{
-							copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+							CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 						}
 					} // otherwise do not copy the current file...
 				}
@@ -361,7 +359,7 @@ public final class CopyDirectoryExtensions
 					}
 					else
 					{
-						copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+						CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 					}
 				}
 			}
@@ -482,7 +480,7 @@ public final class CopyDirectoryExtensions
 						}
 						else
 						{
-							copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+							CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 						}
 					} // otherwise do not copy the current file...
 				}
@@ -500,7 +498,7 @@ public final class CopyDirectoryExtensions
 					}
 					else
 					{
-						copied &= CopyFileExtensions.copyFile(currentFile, copy, lastModified);
+						CopyFileExtensions.copyFile(currentFile, copy, lastModified);
 					}
 				}
 			}

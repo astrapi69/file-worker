@@ -25,7 +25,7 @@
 package io.github.astrapi69.file.copy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -253,22 +253,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 	@Test
 	public void testCopyFileFileFile() throws IOException
 	{
-		try
-		{
-			actual = CopyFileExtensions.copyFile(source, destination);
-			assertFalse(actual);
-		}
-		catch (final Exception fnfe)
-		{
-			actual = fnfe instanceof FileNotFoundException;
-			assertTrue(actual);
-		}
+		assertThrows(FileNotFoundException.class,
+			() -> CopyFileExtensions.copyFile(source, destination));
 		final String inputString = "Its a beautifull day!!!";
 		StoreFileExtensions.toFile(source, inputString);
 
-		actual = CopyFileExtensions.copyFile(source, destination);
-		assertTrue(actual, "Source file " + source.getName()
-			+ " was not copied in the destination file " + destination.getName() + ".");
+		CopyFileExtensions.copyFile(source, destination);
 		final String actual = ReadFileExtensions.fromFile(destination);
 		final String expected = inputString;
 		assertEquals(actual, expected);
@@ -283,22 +273,12 @@ public class CopyFileExtensionsTest extends FileTestCase
 	@Test
 	public void testCopyFileFileFileBoolean() throws IOException
 	{
-		try
-		{
-			actual = CopyFileExtensions.copyFile(source, destination, false);
-			assertFalse(actual);
-		}
-		catch (final Exception fnfe)
-		{
-			actual = fnfe instanceof FileNotFoundException;
-			assertTrue(actual);
-		}
+		assertThrows(FileNotFoundException.class,
+			() -> CopyFileExtensions.copyFile(source, destination, false));
 		final String inputString = "Its a beautifull day!!!";
 		StoreFileExtensions.toFile(source, inputString);
 
-		actual = CopyFileExtensions.copyFile(source, destination, false);
-		assertTrue(actual, "Source file " + source.getName()
-			+ " was not copied in the destination file " + destination.getName() + ".");
+		CopyFileExtensions.copyFile(source, destination, false);
 		final String actual = ReadFileExtensions.fromFile(destination);
 		final String expected = inputString;
 		assertEquals(actual, expected);
@@ -316,7 +296,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 	public void testCopyFileToDirectoryFileFile() throws FileIsNotADirectoryException, IOException
 	{
 		// Try to copy the file srcFile into the destination directory.
-		actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDeepDir);
+		CopyFileExtensions.copyFileToDirectory(srcFile, srcDeepDir);
 		final File expectedCopiedFile = new File(srcDeepDir, filePrefix + txtSuffix);
 		assertTrue(expectedCopiedFile.exists(),
 			"File " + expectedCopiedFile.getAbsolutePath() + " should be copied.");
@@ -339,7 +319,7 @@ public class CopyFileExtensionsTest extends FileTestCase
 		throws FileIsNotADirectoryException, IOException
 	{
 		// Try to copy the file srcFile into the destination directory.
-		actual = CopyFileExtensions.copyFileToDirectory(srcFile, srcDeepDir, false);
+		CopyFileExtensions.copyFileToDirectory(srcFile, srcDeepDir, false);
 		final File expectedCopiedFile = new File(srcDeepDir, filePrefix + txtSuffix);
 		assertTrue(expectedCopiedFile.exists(),
 			"File " + expectedCopiedFile.getAbsolutePath() + " should be copied.");
