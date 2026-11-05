@@ -569,6 +569,34 @@ public class DirectoryFactoryTest extends FileTestCase
 	}
 
 	/**
+	 * Test method for {@link DirectoryFactory#newDirectoryQuietly(String)}
+	 *
+	 * @param existsBefore
+	 *            whether the directory exists before the call
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred
+	 */
+	@ParameterizedTest(name = "existsBefore = {0}")
+	@ValueSource(booleans = { true, false })
+	public void newDirectoryQuietly_returnsTheDirectoryOfThePathAndCreatesItOnlyWhenMissing(
+		boolean existsBefore) throws IOException
+	{
+		Path expected = tempRoot.resolve("quiet-path");
+		Path marker = expected.resolve("marker.txt");
+		if (existsBefore)
+		{
+			Files.createDirectory(expected);
+			Files.writeString(marker, "kept");
+		}
+
+		File directory = DirectoryFactory.newDirectoryQuietly(expected.toString());
+
+		assertEquals(expected.toFile(), directory);
+		assertTrue(directory.isDirectory());
+		assertEquals(existsBefore, Files.exists(marker));
+	}
+
+	/**
 	 * Test method for {@link DirectoryFactory#newDirectoryQuietly(String, String)}
 	 *
 	 * @param existsBefore
