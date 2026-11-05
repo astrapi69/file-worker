@@ -41,6 +41,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -97,6 +99,10 @@ public class FileContentInfoTest
 			RuntimeExceptionDecorator.decorate(() -> ReadFileExtensions.readFileToBytearray(file)));
 
 		FileContentInfo anotherFileInfo = FileContentInfo.toFileContentInfo(file);
+		// toFileContentInfo writes the path with a separator at its end, the builder above without;
+		// equals compares the paths as FileInfo does, as strings (#123)
+		assertEquals(Path.of(fileContentInfo.getPath()), Path.of(anotherFileInfo.getPath()));
+		fileContentInfo.setPath(anotherFileInfo.getPath());
 		assertEquals(anotherFileInfo, fileContentInfo);
 
 		File anotherFile = FileContentInfo.toFile(anotherFileInfo);
@@ -120,10 +126,10 @@ public class FileContentInfoTest
 		assertNotNull(model);
 		String toString = model.toString();
 		assertNotNull(toString);
-		assertEquals(model, FileContentInfo.builder().name("foo.txt").path("").checksum(checksum)
-			.content(content).build());
-		int hashCode = model.hashCode();
-		assertTrue(0 < hashCode);
+		FileContentInfo same = FileContentInfo.builder().name("foo.txt").path("").checksum(checksum)
+			.content(content).build();
+		assertEquals(model, same);
+		assertEquals(model.hashCode(), same.hashCode());
 	}
 
 	/**
@@ -293,8 +299,8 @@ public class FileContentInfoTest
 
 	/**
 	 * Test method for {@link FileContentInfo#equals(Object)}: the checksum, the content or the type
-	 * differs. The name, the path and the directory flag take no part, as equals and hashCode do
-	 * not call those of {@link FileInfo} (#114), so no case varies them.
+	 * differs. The name, the path and the directory flag are compared as {@link FileInfo} compares
+	 * them; equals_isFalse_forTwoFilesWithTheSameContent varies them (#123).
 	 *
 	 * @param fileContentInfo
 	 *            the object to compare
@@ -307,6 +313,59 @@ public class FileContentInfoTest
 		FileContentInfo fileContentInfo, Object other)
 	{
 		assertFalse(fileContentInfo.equals(other));
+	}
+
+	private static FileContentInfo entry(final String name, final String path,
+		final boolean directory)
+	{
+		return FileContentInfo.builder().name(name).path(path).directory(directory)
+			.checksum(MD5_OF_CONTENT).content(new byte[] { 1, 2, 3 }).build();
+	}
+
+	static Stream<Arguments> entriesOfTwoFilesWithTheSameContent()
+	{
+		FileContentInfo entry = entry("a.txt", "/data/", false);
+		return Stream.of(argumentSet("another name", entry, entry("b.txt", "/data/", false)),
+			argumentSet("another path", entry, entry("a.txt", "/other/", false)),
+			argumentSet("a directory of that name", entry, entry("a.txt", "/data/", true)),
+			argumentSet("no name on the other side", entry, entry(null, "/data/", false)),
+			argumentSet("no path on this side", entry("a.txt", null, false), entry));
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#equals(Object)} and
+	 * {@link FileContentInfo#hashCode()}: two entries with the same checksum and content are still
+	 * two files, when the name, the path or the directory flag of {@link FileInfo} differs (#123)
+	 *
+	 * @param entry
+	 *            the entry to compare
+	 * @param other
+	 *            an entry with the same checksum and content of another file
+	 */
+	@ParameterizedTest
+	@MethodSource("entriesOfTwoFilesWithTheSameContent")
+	public void equals_isFalse_forTwoFilesWithTheSameContent(final FileContentInfo entry,
+		final FileContentInfo other)
+	{
+		assertFalse(entry.equals(other));
+		assertFalse(other.equals(entry));
+		assertEquals(2, new HashSet<>(List.of(entry, other)).size());
+	}
+
+	/**
+	 * Test method for {@link FileContentInfo#equals(Object)} and
+	 * {@link FileContentInfo#hashCode()}: the same file with the same content is equal, with an
+	 * equal hash code (#123)
+	 */
+	@Test
+	public void equals_isTrue_forTheSameFileWithTheSameContent()
+	{
+		FileContentInfo entry = entry("a.txt", "/data/", false);
+		FileContentInfo same = entry("a.txt", "/data/", false);
+
+		assertEquals(entry, same);
+		assertEquals(entry.hashCode(), same.hashCode());
+		assertEquals(1, new HashSet<>(List.of(entry, same)).size());
 	}
 
 	static Stream<Arguments> valuesOfEqualFileContentInfos()

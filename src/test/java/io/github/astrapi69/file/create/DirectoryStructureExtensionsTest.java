@@ -79,7 +79,10 @@ public class DirectoryStructureExtensionsTest
 		actual = DirectoryStructureTestData.newTestData(parentAbsolutePath);
 		Collection<File> files = DirectoryStructureFactory.newDirectoryStructure(actual);
 		expected = DirectoryStructureExtensions.getFileContentInfos(parentFile);
-		assertTrue(CollectionExtensions.isEqualCollection(actual, expected));
+		// the test data names the parent directory without a separator at its end,
+		// toFileContentInfo writes it with one; equals compares the paths as strings (#123)
+		assertTrue(CollectionExtensions.isEqualCollection(actual.stream()
+			.map(DirectoryStructureExtensionsTest::withTheSeparatorAtTheEnd).toList(), expected));
 		DeleteFileExtensions.delete(files);
 	}
 
@@ -142,5 +145,16 @@ public class DirectoryStructureExtensionsTest
 		assertEquals("a", Files.readString(target.toPath().resolve("a.txt")));
 		assertEquals("b", Files.readString(target.toPath().resolve("sub").resolve("b.txt")));
 		assertFalse(Files.exists(target.toPath().resolve("dangling"), LinkOption.NOFOLLOW_LINKS));
+	}
+
+	/**
+	 * The given entry with its path in the form {@link FileContentInfo#toFileContentInfo(File)}
+	 * writes it: the parent directory with a separator at its end
+	 */
+	private static FileContentInfo withTheSeparatorAtTheEnd(final FileContentInfo entry)
+	{
+		return FileContentInfo.builder().name(entry.getName())
+			.path(entry.getPath() + File.separator).directory(entry.isDirectory())
+			.checksum(entry.getChecksum()).content(entry.getContent()).build();
 	}
 }

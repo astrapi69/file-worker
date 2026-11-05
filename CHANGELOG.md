@@ -1,8 +1,19 @@
 ## Change log
 ----------------------
 
-Version 20.2-SNAPSHOT
+Version 21.0-SNAPSHOT
 -------------
+
+BREAKING:
+
+- `FileContentInfo.equals` and `hashCode` compare the name, the path and the directory flag, as `FileInfo` does,
+  besides the checksum and the content: two entries of different files with the same content were equal, so a
+  `Set` or the keys of a `Map` kept only one of them. The paths are compared as strings, and
+  `toFileContentInfo` writes the parent directory with a separator at its end, so an entry built with the same
+  directory written without it is not equal to one that `toFileContentInfo` or
+  `DirectoryStructureExtensions.getFileContentInfos` gives. Migration: code that looks for an entry by its content
+  compares `getChecksum()` and `getContent()` itself; code that compares an entry it built with one these methods
+  read writes the path in their form, `FileExtensions.getAbsolutPathWithoutFilename(File)` (#123)
 
 CHANGED:
 
