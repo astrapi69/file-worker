@@ -299,6 +299,13 @@ public class FileContentInfo extends FileInfo
 		private byte[] content;
 
 		/**
+		 * Creates a new builder without values, for the subclasses
+		 */
+		public FileContentInfoBuilder()
+		{
+		}
+
+		/**
 		 * Sets the checksum of the file content.
 		 *
 		 * @param checksum

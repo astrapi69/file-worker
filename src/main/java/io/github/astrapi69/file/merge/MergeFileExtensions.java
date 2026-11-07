@@ -106,6 +106,18 @@ public final class MergeFileExtensions
 
 	/**
 	 * Merges two files into a target file using the specified strategy (UTF-8 default).
+	 *
+	 * @param file1
+	 *            the first file
+	 * @param file2
+	 *            the second file
+	 * @param targetFile
+	 *            the target file
+	 * @param strategy
+	 *            the merge strategy
+	 * @return the targetFile
+	 * @throws IOException
+	 *             if an I/O error occurs
 	 */
 	public static File mergeAndGet(File file1, File file2, File targetFile,
 		MergeFileStrategy strategy) throws IOException
@@ -114,7 +126,19 @@ public final class MergeFileExtensions
 	}
 
 	/**
-	 * Existing void method for backward compatibility.
+	 * Existing void method for backward compatibility: merges two files into a target file using
+	 * the specified strategy (UTF-8 default).
+	 *
+	 * @param file1
+	 *            the first file
+	 * @param file2
+	 *            the second file
+	 * @param targetFile
+	 *            the target file
+	 * @param strategy
+	 *            the merge strategy
+	 * @throws IOException
+	 *             if an I/O error occurs
 	 */
 	public static void merge(File file1, File file2, File targetFile, MergeFileStrategy strategy)
 		throws IOException
@@ -161,6 +185,16 @@ public final class MergeFileExtensions
 
 	/**
 	 * Merges multiple files into a target file (UTF-8 default).
+	 *
+	 * @param files
+	 *            the list of files to merge
+	 * @param targetFile
+	 *            the target file
+	 * @param strategy
+	 *            the merge strategy
+	 * @return the targetFile
+	 * @throws IOException
+	 *             if an I/O error occurs
 	 */
 	public static File mergeAndGet(List<File> files, File targetFile, MergeFileStrategy strategy)
 		throws IOException
@@ -169,7 +203,17 @@ public final class MergeFileExtensions
 	}
 
 	/**
-	 * Existing void method for backward compatibility.
+	 * Existing void method for backward compatibility: merges multiple files into a target file
+	 * (UTF-8 default).
+	 *
+	 * @param files
+	 *            the list of files to merge
+	 * @param targetFile
+	 *            the target file
+	 * @param strategy
+	 *            the merge strategy
+	 * @throws IOException
+	 *             if an I/O error occurs
 	 */
 	public static void merge(List<File> files, File targetFile, MergeFileStrategy strategy)
 		throws IOException
@@ -391,13 +435,22 @@ public final class MergeFileExtensions
 	}
 
 	/**
-	 * Advanced method for merging by a specific key column.
-	 * 
+	 * Advanced method for merging by a specific key column. Blank lines are left out; a line with
+	 * fewer columns than the key index is its own key, and the last line of a key wins at the place
+	 * where that key first occurred.
+	 *
+	 * @param files
+	 *            the list of files to merge
+	 * @param charset
+	 *            the charset to read the files with
 	 * @param keyIndex
 	 *            the zero-based index of the column to use as the key
 	 * @param delimiter
 	 *            the string used to separate columns, taken as it is and not as a regular
 	 *            expression
+	 * @return the merged lines, one per key
+	 * @throws IOException
+	 *             if an I/O error occurs
 	 */
 	public static List<String> collectByKeyAdvanced(List<File> files, Charset charset, int keyIndex,
 		String delimiter) throws IOException
