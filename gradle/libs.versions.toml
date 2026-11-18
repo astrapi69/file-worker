@@ -2,7 +2,7 @@
 checksum-up-version = "3.2"
 commons-io-version = "2.22.0"
 commons-lang3-version = "3.21.0"
-comparator-extensions-version = "2"
+comparator-extensions-version = "3.1"
 crypt-api-version = "10.3"
 gradle-plugin-pitest-version = "1.19.0"
 gradle-plugin-spotless-version = "8.11.0"
