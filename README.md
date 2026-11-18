@@ -345,6 +345,10 @@ What a release consists of, in the order it is run:
    `master` is pushed, `git diff RELEASE-X.Y master` has to be empty; if it is not, nothing is
    pushed. Never a force push: `master` is always the latest release, nothing else.
 6. **Open the next cycle**: `projectVersion` to the next `-SNAPSHOT`.
+7. **Bump drafts in the consumers** (RL-127): in every repository of the family that declares
+   file-worker, a draft pull request that raises it to the release and shows the build before and
+   after it, so that a break shows the day the release appears; each is merged by RL-065, a runtime
+   major in a session of its own.
 
 ## Contributing
 
