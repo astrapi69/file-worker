@@ -40,6 +40,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.meanbean.test.BeanTester;
 
 /**
  * Uses JUnit 5 (`@Test`, `@TempDir`). Invokes `MergeWithTemplate.run(args, configFile)` with
@@ -543,5 +544,15 @@ class MergeWithTemplateTest
 		assertEquals(3_000L,
 			Files.getLastModifiedTime(dstBase.resolve("scripts/sub/y.txt")).toMillis());
 		assertEquals(destinationExists, Files.exists(dstBase.resolve("scripts/keep.txt")));
+	}
+
+	/**
+	 * Test method for {@link MergeWithTemplate}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(MergeWithTemplate.class);
 	}
 }

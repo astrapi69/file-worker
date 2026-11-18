@@ -41,6 +41,13 @@ import java.time.ZoneId;
 public class FileTimeExtensions
 {
 	/**
+	 * Creates a new {@link FileTimeExtensions} object; its methods are static, so it needs none
+	 */
+	public FileTimeExtensions()
+	{
+	}
+
+	/**
 	 * Gets the specified timestamp of the given File as a LocalDateTime
 	 *
 	 * @param file

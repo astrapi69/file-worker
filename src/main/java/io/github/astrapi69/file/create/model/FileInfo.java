@@ -299,6 +299,13 @@ public class FileInfo
 	public static abstract class FileInfoBuilder<C extends FileInfo, B extends FileInfoBuilder<C, B>>
 	{
 
+		/**
+		 * Creates a new builder without values, for the subclasses
+		 */
+		public FileInfoBuilder()
+		{
+		}
+
 		/** The name of the file. */
 		private String name;
 

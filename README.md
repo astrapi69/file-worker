@@ -25,8 +25,8 @@ smaller helpers it uses: streams, file names, and file and filename filters.
 With the JDK alone each of these is code of your own: copying a directory tree without some of its
 files, changing the suffix of every file in a tree, merging text files by a strategy or directory
 trees by the time their files were modified, comparing two files property by property, changing a
-file line by line. file-worker has a method for each, and its tests cover 99.3% of the lines and
-96.7% of the branches of 21.0, and detect 96% of the mutants PIT makes; the build fails below 98%,
+file line by line. file-worker has a method for each, and its tests cover 99.4% of the lines and
+96.7% of the branches of 21.1, and detect 96% of the mutants PIT makes; the build fails below 98%,
 93% and 94% ([Quality](#quality)).
 
 It is not small: it needs Java 25 and brings 13 jars at runtime, Apache Commons IO among them. If
@@ -65,7 +65,7 @@ on the runtime class path.
 
 ## Installation
 
-Latest release on Maven Central: 21.0
+Latest release on Maven Central: 21.1
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.astrapi69/file-worker.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.astrapi69/file-worker)
 
@@ -73,7 +73,7 @@ Latest release on Maven Central: 21.0
 
 ```toml
 [versions]
-file-worker-version = "21.0"
+file-worker-version = "21.1"
 
 [libraries]
 file-worker = { module = "io.github.astrapi69:file-worker", version.ref = "file-worker-version" }
@@ -89,7 +89,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation "io.github.astrapi69:file-worker:21.0"
+    implementation "io.github.astrapi69:file-worker:21.1"
 }
 ```
 
@@ -99,7 +99,7 @@ dependencies {
 <dependency>
     <groupId>io.github.astrapi69</groupId>
     <artifactId>file-worker</artifactId>
-    <version>21.0</version>
+    <version>21.1</version>
 </dependency>
 ```
 
@@ -286,13 +286,13 @@ the details.
 
 ## Quality
 
-As of 21.0, measured on the tree of `RELEASE-21.0` with JDK 25, by `./gradlew test --rerun`,
-`./gradlew build` and `./gradlew pitest --rerun-tasks`:
+As of 21.1, measured on the tree of `RELEASE-21.1` with JDK 25 by `./gradlew test --rerun` and
+`./gradlew build`, the mutants by the mutation testing of the CI build of develop, whose code is that of the tag:
 
 | | |
 |---|---|
-| tests | 1487 in 64 test classes, none failing; 36 are skipped: 34 disabled with `@Disabled`, 2 that run on Windows only |
-| line and branch coverage (JaCoCo) | 2168 of 2183 lines (99.3%), 945 of 977 branches (96.7%); the build fails below 98% of the lines or 93% of the branches |
+| tests | 1489 in 64 test classes, none failing; 36 are skipped: 34 disabled with `@Disabled`, 2 that run on Windows only |
+| line and branch coverage (JaCoCo) | 2174 of 2187 lines (99.4%), 945 of 977 branches (96.7%); the build fails below 98% of the lines or 93% of the branches |
 | mutation score (PIT 1.30.1) | 1131 of 1175 mutants detected (96%); the build fails below 94%, and `build.gradle` says what decides the 44 left |
 
 The CI build runs the tests, the coverage check and the mutation testing on every push to
@@ -318,7 +318,7 @@ subkey, is on keys.openpgp.org. Fetch it once, then verify the signature next to
 
 ```sh
 gpg --keyserver hkps://keys.openpgp.org --recv-keys 5B2FA6B11E298BC09287F423D8C403518C49CA75
-gpg --verify file-worker-21.0.jar.asc file-worker-21.0.jar
+gpg --verify file-worker-21.1.jar.asc file-worker-21.1.jar
 ```
 
 gpg answers `Good signature` and prints the `Primary key fingerprint`, and for a release signed by

@@ -69,6 +69,13 @@ public class MergeWithTemplate
 	public static final int USAGE_ERROR_EXIT_CODE = 2;
 
 	/**
+	 * Creates a new {@link MergeWithTemplate} object; its methods are static, so it needs none
+	 */
+	public MergeWithTemplate()
+	{
+	}
+
+	/**
 	 * The command line: runs {@link #run(String[])} and ends the JVM with
 	 * {@value #USAGE_ERROR_EXIT_CODE} on a usage error. A caller in the same JVM calls {@code run}
 	 * instead, which throws (#34).

@@ -35,6 +35,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.meanbean.test.BeanTester;
 
 class FileTimeExtensionsTest
 {
@@ -99,5 +100,15 @@ class FileTimeExtensionsTest
 			// Simulate an invalid enum (null for demonstration)
 			FileTimeExtensions.getTimestamp(testFile, null);
 		});
+	}
+
+	/**
+	 * Test method for {@link FileTimeExtensions}
+	 */
+	@Test
+	public void testWithBeanTester()
+	{
+		final BeanTester beanTester = new BeanTester();
+		beanTester.testBean(FileTimeExtensions.class);
 	}
 }
