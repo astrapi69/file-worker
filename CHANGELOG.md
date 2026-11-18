@@ -6,24 +6,35 @@ Version 21.1
 
 CHANGED:
 
-- the javadoc jar is the same on every machine: the javadoc task sets the locale of the javadoc JVM to English
+- the javadoc jar is the same in every locale: the javadoc task sets the locale of the javadoc JVM to English
   (`-Duser.language=en -Duser.country=US`) and `-locale en`, where a build in a German locale wrote `lang="de"` and
   German doclet text into 121 of its 207 entries. A javadoc warning fails the build (`-Werror`, `failOnError`, `check`
   depends on `javadoc`); the 28 warnings of 21.0 are fixed: the missing `@param`, `@return` and `@throws` of the
   `MergeFileExtensions` overloads and `collectByKeyAdvanced`, and comments for the public default constructors of
   `FileInfo.FileInfoBuilder`, `FileContentInfo.FileContentInfoBuilder`, `FileTimeExtensions` and `MergeWithTemplate`,
-  now written out (#153).
-  **Note:** the published javadoc does not change: the jar CI built before is byte for byte the jar every locale
-  builds now; the API stays as it was
+  now written out (#153). **Note:** the language of the published javadoc does not change, CI built it in English
+  before as well; the javadoc of 21.1 differs from the one of 21.0 in the pages of the five classes whose comments
+  were added and in the index; the API stays as it was
 - the runtime dependency silly-strings is 10 instead of 9.2 (#158, the maintainer's decision of 2026-11-18). It asks
-  for commons-text 1.15.0 where 9.2 asked for 1.12.0, and for silly-collection 29.0, which the runtime class path now
-  takes instead of the declared 28.3. No type of silly-strings or silly-collection is in the public API of
-  file-worker, and file-worker calls none of the four `StringExtensions` methods whose answers silly-strings 10
-  changes, so its behaviour stays as it was; its 1489 tests give the same results with both. **Note:** a project that
-  gets silly-strings, commons-text or silly-collection through file-worker gets the newer versions; one that uses the
-  changed `StringExtensions` methods (`getAttributName`, `getStringBeforeUnderscore`, `getIndex`, `getItemNumber`)
-  itself reads the BREAKING CHANGES of silly-strings 10, one that uses `SortedList`, `SortedUniqueList` or
-  `UniqueList` those of silly-collection 29.0
+  for commons-text 1.15.0 where 9.2 asked for 1.12.0, so the dependency graph no longer asks for the commons-lang3
+  3.17.0 of silly-strings 9.2 and the 3.14.0 of commons-text 1.12.0; 3.21.0 is resolved, as before. No type of
+  silly-strings is in the public API of file-worker. silly-strings 10 changes one method file-worker calls,
+  `CharsetExtensions.getCharset`: `StoreFileExtensions.toFile(File, String, String)` and
+  `toFile(File, Collection, String)`, and through them `SortFileExtensions.sort(File, Comparator, String)` and the
+  deprecated `WriteFileExtensions.writeLinesToFile(Collection, File, String)`, write in the default charset for an
+  illegal charset name such as `""`, as they did for an unknown one, where 21.0 threw an
+  `IllegalCharsetNameException` and wrote no file. **Note:** a caller that caught `IllegalCharsetNameException`
+  from these methods gets the file written instead; one that uses silly-strings itself reads the BREAKING and FIXED
+  entries of silly-strings 10
+- the runtime dependency silly-collection is 30.0 instead of 28.3 (#160, the maintainer's decision of 2026-11-18):
+  with silly-strings 10, Gradle resolved silly-collection 29.0 while the POM declared 28.3, so a Maven consumer kept
+  28.3 next to silly-strings 10; now both resolve 30.0, the graph the build of file-worker tests. Neither file-worker
+  nor silly-strings 10 calls one of the ten `MapFactory` methods 30.0 changes (`javap`: the five calls they make,
+  `ArrayExtensions.toList`, `ListFactory.newArrayList`, `PropertiesExtensions.export`, `MapFactory.newCounterMap`
+  and `MapFactory.newHashMap()`, keep their descriptors), and no type of silly-collection is in the public API of
+  file-worker. **Note:** a project that gets silly-collection through file-worker gets 30.0; one that uses
+  `MapFactory` with `KeyValuePair` or `SortedList`, `SortedUniqueList` or `UniqueList` itself reads the BREAKING
+  entries of silly-collection 29.0 and 30.0
 
 Version 21.0
 -------------

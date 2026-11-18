@@ -287,7 +287,7 @@ the details.
 ## Quality
 
 As of 21.1, measured on the tree of `RELEASE-21.1` with JDK 25 by `./gradlew test --rerun` and
-`./gradlew build`, the mutants by the mutation testing of the CI build of that tree:
+`./gradlew build`, the mutants by the mutation testing of the CI build of develop, whose code is that of the tag:
 
 | | |
 |---|---|
