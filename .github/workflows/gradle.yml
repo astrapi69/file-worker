@@ -24,11 +24,11 @@ jobs:
 
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # The JDK .sdkmanrc names (#97), as the full semver of Adoptium: with '25' or '25.0.4' setup-java takes
       # whatever matches first, which for 20.0 was 25.0.4.1 from the runner image and for 20.1 was 25.0.5
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
         with:
           java-version: '25.0.4+7.0.LTS'
           distribution: 'temurin'
@@ -40,10 +40,10 @@ jobs:
           echo ".sdkmanrc names Temurin $want; set up: $vendor $have"
           [ -n "$want" ] && [ "$have" = "$want" ] && [ "$vendor" = "Eclipse Adoptium" ]
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
       - name: Execute Gradle build
         run: ./gradlew build
-      - uses: codecov/codecov-action@v7
+      - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
       - name: Mutation testing (PIT, fails below mutationThreshold in build.gradle)
@@ -58,7 +58,7 @@ jobs:
           "$RUNNER_TEMP/badges/mutation-score-$GITHUB_REF_NAME.json"
       - name: Hand the badge to publish-badges
         if: ${{ !cancelled() && steps.badge.outcome == 'success' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: badges
           path: ${{ runner.temp }}/badges/
@@ -89,9 +89,9 @@ jobs:
 
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Take the badge of the build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: badges
           path: ${{ runner.temp }}/badges
