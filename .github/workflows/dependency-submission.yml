@@ -28,7 +28,9 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
       - name: Submit the dependency graph
-        # v5.0.2, not v6: GHSA-chpw-2mqm-95cc (fixed in 6.4.1) concerns only the two-workflow download-and-submit mode; this workflow submits in the same job
+        # v5.0.2, not v6: from v6 the action bundles a proprietary caching component (the maintainer's decision F2, 2026-11-20).
+        # v5.0.2 lies in the range of GHSA-chpw-2mqm-95cc (fixed in 6.4.1), which affects only the two-workflow
+        # download-and-submit setup; this workflow generates and submits in one job. Do not switch to download-and-submit.
         uses: gradle/actions/dependency-submission@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
         env:
           DEPENDENCY_GRAPH_RUNTIME_INCLUDE_CONFIGURATIONS: '^runtimeClasspath$'
